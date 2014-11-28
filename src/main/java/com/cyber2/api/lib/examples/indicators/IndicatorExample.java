@@ -120,7 +120,6 @@ public class IndicatorExample {
     private static void doAssociateTag(Connection conn) throws IOException, FailedResponseException {
 
         TagWriterAdapter tagWriter = WriterAdapterFactory.createTagWriter(conn);
-        AttributeWriterAdapter attWriter = WriterAdapterFactory.createAtts
 
         Tag t = new Tag();
         t.setName("testTag1");

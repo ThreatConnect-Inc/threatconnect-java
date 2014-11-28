@@ -116,6 +116,11 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
             protected String getUrlBasePrefix() {
                 return AbstractIndicatorReaderAdapter.this.getUrlBasePrefix();
             }
+
+            @Override
+            public String getUrlType() {
+                return AbstractIndicatorReaderAdapter.this.getUrlType();
+            }
         };
 
         indAssocReader = new AbstractIndicatorAssociateReaderAdapter<String>(
@@ -467,13 +472,13 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public SecurityLabel getAttributeSecurityLabel(String uniqueId, Integer attributeId, String securityLabelName) throws IOException, FailedResponseException {
-        return attribReader.getAttributeSecurityLabel(uniqueId, attributeId, securityLabelName);
+    public SecurityLabel getAttributeSecurityLabel(String uniqueId, Integer attributeId, String securityLabel) throws IOException, FailedResponseException {
+        return attribReader.getAttributeSecurityLabel(uniqueId, attributeId, securityLabel);
     }
 
     @Override
-    public SecurityLabel getAttributeSecurityLabel(String uniqueId, Integer attributeId, String securityLabelName, String ownerName) throws IOException, FailedResponseException {
-        return attribReader.getAttributeSecurityLabel(uniqueId, attributeId, securityLabelName, ownerName);
+    public SecurityLabel getAttributeSecurityLabel(String uniqueId, Integer attributeId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
+        return attribReader.getAttributeSecurityLabel(uniqueId, attributeId, securityLabel, ownerName);
     }
 
     @Override
@@ -612,13 +617,13 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public SecurityLabel getAssociatedSecurityLabel(String uniqueId, String securityLabelName) throws IOException, FailedResponseException {
-        return secLabelAssocReader.getAssociatedSecurityLabel(uniqueId, securityLabelName);
+    public SecurityLabel getAssociatedSecurityLabel(String uniqueId, String securityLabel) throws IOException, FailedResponseException {
+        return secLabelAssocReader.getAssociatedSecurityLabel(uniqueId, securityLabel);
     }
 
     @Override
-    public SecurityLabel getAssociatedSecurityLabel(String uniqueId, String securityLabelName, String ownerName) throws IOException, FailedResponseException {
-        return secLabelAssocReader.getAssociatedSecurityLabel(uniqueId, securityLabelName, ownerName);
+    public SecurityLabel getAssociatedSecurityLabel(String uniqueId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
+        return secLabelAssocReader.getAssociatedSecurityLabel(uniqueId, securityLabel, ownerName);
     }
 
     @Override

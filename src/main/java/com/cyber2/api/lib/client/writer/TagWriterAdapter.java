@@ -1,641 +1,503 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.cyber2.api.lib.client.writer;
 
+import com.cyber2.api.lib.client.UrlTypeable;
 import com.cyber2.api.lib.client.response.WriteListResponse;
+import com.cyber2.api.lib.client.writer.associate.AbstractGroupAssociateWriterAdapter;
+import com.cyber2.api.lib.client.writer.associate.AbstractIndicatorAssociateWriterAdapter;
+import com.cyber2.api.lib.client.writer.associate.GroupAssociateWritable;
+import com.cyber2.api.lib.client.writer.associate.IndicatorAssociateWritable;
 import com.cyber2.api.lib.conn.Connection;
 import com.cyber2.api.lib.conn.RequestExecutor;
 import com.cyber2.api.lib.exception.FailedResponseException;
-import com.cyber2.api.lib.server.entity.Address;
-import com.cyber2.api.lib.server.entity.Adversary;
-import com.cyber2.api.lib.server.entity.Email;
-import com.cyber2.api.lib.server.entity.EmailAddress;
-import com.cyber2.api.lib.server.entity.File;
-import com.cyber2.api.lib.server.entity.Host;
-import com.cyber2.api.lib.server.entity.Incident;
 import com.cyber2.api.lib.server.entity.Tag;
-import com.cyber2.api.lib.server.entity.Signature;
-import com.cyber2.api.lib.server.entity.Threat;
-import com.cyber2.api.lib.server.entity.Url;
-import com.cyber2.api.lib.server.response.entity.AddressListResponse;
-import com.cyber2.api.lib.server.response.entity.AddressResponse;
-import com.cyber2.api.lib.server.response.entity.AdversaryListResponse;
-import com.cyber2.api.lib.server.response.entity.AdversaryResponse;
-import com.cyber2.api.lib.server.response.entity.EmailAddressListResponse;
-import com.cyber2.api.lib.server.response.entity.EmailAddressResponse;
-import com.cyber2.api.lib.server.response.entity.EmailListResponse;
-import com.cyber2.api.lib.server.response.entity.EmailResponse;
-import com.cyber2.api.lib.server.response.entity.FileListResponse;
-import com.cyber2.api.lib.server.response.entity.FileResponse;
-import com.cyber2.api.lib.server.response.entity.HostListResponse;
-import com.cyber2.api.lib.server.response.entity.HostResponse;
-import com.cyber2.api.lib.server.response.entity.IncidentListResponse;
-import com.cyber2.api.lib.server.response.entity.IncidentResponse;
 import com.cyber2.api.lib.server.response.entity.TagResponse;
-import com.cyber2.api.lib.server.response.entity.TagListResponse;
-import com.cyber2.api.lib.server.response.entity.SignatureListResponse;
-import com.cyber2.api.lib.server.response.entity.SignatureResponse;
-import com.cyber2.api.lib.server.response.entity.ThreatListResponse;
-import com.cyber2.api.lib.server.response.entity.ThreatResponse;
-import com.cyber2.api.lib.server.response.entity.UrlListResponse;
-import com.cyber2.api.lib.server.response.entity.UrlResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
+ * TagWriterAdapter is the primary writer adapter for all Tag level objects.
+ * It uses the {@link Connection} object to execute requests against the {@link RequestExecutor} object.
+ * The responsibility of this class is to encapsulate all the low level ThreatConnect API calls
+ * specifically targeted at data under the Tag type.
+ * 
  *
  * @author dtineo
  */
-public class TagWriterAdapter extends AbstractWriterAdapter {
 
+public class TagWriterAdapter
+    extends AbstractBaseWriterAdapter<Tag,String>
+    implements UrlTypeable, GroupAssociateWritable<String>, IndicatorAssociateWritable<String> {
+
+    // composite pattern
+    private AbstractGroupAssociateWriterAdapter<Tag,String> groupAssocWriter;
+    private AbstractIndicatorAssociateWriterAdapter<Tag,String> indAssocWriter;
+
+    /**
+     * Package level constructor. Use the {@link WriterAdapterFactory} to access this object.
+     * @param conn      Primary connection object to the ThreatConnect API
+     * @param executor  Executor handling low level HTTPS calls to the ThreatConnect API
+     * 
+     * @see WriterAdapterFactory
+     */
     protected TagWriterAdapter(Connection conn, RequestExecutor executor) {
-        super(conn, executor);
-    }
-
-    public WriteListResponse<Tag> create(List<Tag> tagList) throws IOException, FailedResponseException {
-
-        WriteListResponse<Tag> data = createList("v2.tags", TagListResponse.class, tagList);
-
-        return data;
-    }
-
-    public Tag create(Tag tag) throws IOException, FailedResponseException {
-        return create(tag, null);
-    }
-
-    public Tag create(Tag tag, String ownerName)
-        throws IOException, FailedResponseException {
-
-        TagResponse item = createItem("v2.tags", TagResponse.class, ownerName, null, tag);
+        super(conn, executor, TagResponse.class, /*createReturnsObject=*/false);
 
-        return item.isSuccess() ? tag : null;
+        initComposite();
     }
 
-    public WriteListResponse<Tag> update(List<Tag> tagList) throws IOException, FailedResponseException {
+    private void initComposite() {
 
-        List<String> idList = new ArrayList<>();
-        for (Tag it : tagList) {
-            idList.add(it.getName());
-        }
-        WriteListResponse<Tag> data = updateListWithParam("v2.tags.byId", TagListResponse.class, null, null, "id", idList, tagList);
+        groupAssocWriter = new AbstractGroupAssociateWriterAdapter<Tag,String>(
+                            TagWriterAdapter.this.getConn()
+                          , TagWriterAdapter.this.executor
+                          , TagWriterAdapter.this.singleType
+            ) {
+            @Override
+            protected String getUrlBasePrefix() {
+                return TagWriterAdapter.this.getUrlBasePrefix();
+            }
 
-        return data;
-    }
-
-    public Tag update(Tag tag) throws IOException, FailedResponseException {
-        return update(tag, null);
-    }
+            @Override
+            public String getId(Tag item) {
+                return TagWriterAdapter.this.getId(item);
+            }
+        };
 
-    public Tag update(Tag tag, String ownerName)
-        throws IOException, FailedResponseException {
+        indAssocWriter = new AbstractIndicatorAssociateWriterAdapter<Tag,String>(
+                            TagWriterAdapter.this.getConn()
+                          , TagWriterAdapter.this.executor
+                          , TagWriterAdapter.this.singleType
+            ) {
+            @Override
+            protected String getUrlBasePrefix() {
+                return TagWriterAdapter.this.getUrlBasePrefix();
+            }
 
-        Map<String, Object> map = createParamMap("id", tag.getName());
-        TagResponse item = updateItem("v2.tags.byId", TagResponse.class, ownerName, map, tag);
+            @Override
+            public String getUrlType() {
+                return TagWriterAdapter.this.getUrlType();
+            }
 
-        return item.isSuccess() ? tag : null;
-    }
+            @Override
+            public String getId(Tag item) {
+                return TagWriterAdapter.this.getId(item);
+            }
+        };
 
-    public WriteListResponse<Tag> delete(List<String> tagNameList) throws IOException, FailedResponseException {
-        return delete(tagNameList, null);
     }
-
-    public WriteListResponse<Tag> delete(List<String> tagNameList, String ownerName) throws IOException, FailedResponseException {
-
-        List<String> idList = new ArrayList<>();
-        for (String it : tagNameList) {
-            idList.add(it);
-        }
-        WriteListResponse<Tag> data = deleteList("v2.tags.byId", TagListResponse.class, ownerName, null, "id", idList);
 
-        return data;
+    @Override
+    protected String getUrlBasePrefix() {
+        return "v2.tags";
     }
 
-    public void delete(String tagName) throws IOException, FailedResponseException {
-        delete(tagName, null);
+    @Override
+    public String getId(Tag item) {
+        return item.getName();
     }
 
-    public void delete(String tagName, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", tagName);
-        deleteItem("v2.tags.byId", TagResponse.class, ownerName, map);
-
+    @Override
+    public String getUrlType() {
+        return "tags";
     }
 
-    public WriteListResponse<Adversary> associateAdversaries(String tagName, List<Integer> associateAdversaryIdList) throws IOException {
-        return associateAdversaries(tagName, associateAdversaryIdList, null);
+   @Override
+    public WriteListResponse<Integer> associateGroupAdversaries(String uniqueId, List<Integer> adversaryIds) throws IOException {
+        return groupAssocWriter.associateGroupAdversaries(uniqueId, adversaryIds);
     }
-
-    public WriteListResponse<Adversary> associateAdversaries(String tagName, List<Integer> associateAdversaryIdList, String ownerName)
-        throws IOException {
 
-        Map<String, Object> map = createParamMap("id", tagName);
-        WriteListResponse data = createListWithParam("v2.tags.byId.groups.adversaries.byGroupId", AdversaryListResponse.class, ownerName, map, "groupId", associateAdversaryIdList);
-
-        return data;
+    @Override
+    public WriteListResponse<Integer> associateGroupAdversaries(String uniqueId, List<Integer> adversaryIds, String ownerName) throws IOException {
+        return groupAssocWriter.associateGroupAdversaries(uniqueId, adversaryIds, ownerName);
     }
 
-    public boolean associateAdversary(String tagName, Integer adversaryId) throws IOException, FailedResponseException {
-        return associateAdversary(tagName, adversaryId, null);
+    @Override
+    public boolean associateGroupAdversary(String uniqueId, Integer adversaryId) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupAdversary(uniqueId, adversaryId);
     }
-
-    public boolean associateAdversary(String tagName, Integer adversaryId, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", tagName, "groupId", adversaryId);
-        AdversaryResponse data = createItem("v2.tags.byId.groups.adversaries.byGroupId", AdversaryResponse.class, ownerName, map, null);
 
-        return data.isSuccess();
+    @Override
+    public boolean associateGroupAdversary(String uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupAdversary(uniqueId, adversaryId, ownerName);
     }
 
-    public WriteListResponse<Email> associateEmails(String tagName, List<Integer> associateEmailIdList) throws IOException {
-        return associateEmails(tagName, associateEmailIdList, null);
+    @Override
+    public WriteListResponse<Integer> associateGroupEmails(String uniqueId, List<Integer> emailIds) throws IOException {
+        return groupAssocWriter.associateGroupEmails(uniqueId, emailIds);
     }
 
-    public WriteListResponse<Email> associateEmails(String tagName, List<Integer> associateEmailIdList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", tagName);
-        WriteListResponse data = createListWithParam("v2.tags.byId.groups.emails.byGroupId", EmailListResponse.class, ownerName, map, "groupId", associateEmailIdList);
-
-        return data;
+    @Override
+    public WriteListResponse<Integer> associateGroupEmails(String uniqueId, List<Integer> emailIds, String ownerName) throws IOException {
+        return groupAssocWriter.associateGroupEmails(uniqueId, emailIds, ownerName);
     }
 
-    public boolean associateEmail(String tagName, Integer emailId) throws IOException, FailedResponseException {
-        return associateEmail(tagName, emailId, null);
+    @Override
+    public boolean associateGroupEmail(String uniqueId, Integer emailId) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupEmail(uniqueId, emailId);
     }
-
-    public boolean associateEmail(String tagName, Integer emailId, String ownerName)
-        throws IOException, FailedResponseException {
 
-        Map<String, Object> map = createParamMap("id", tagName, "groupId", emailId);
-        EmailResponse data = createItem("v2.tags.byId.groups.emails.byGroupId", EmailResponse.class, ownerName, map, null);
-
-        return data.isSuccess();
+    @Override
+    public boolean associateGroupEmail(String uniqueId, Integer emailId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupEmail(uniqueId, emailId, ownerName);
     }
 
-    public WriteListResponse<Incident> associateIncidents(String tagName, List<Integer> associateIncidentIdList) throws IOException {
-        return associateIncidents(tagName, associateIncidentIdList, null);
+    @Override
+    public WriteListResponse<Integer> associateGroupIncidents(String uniqueId, List<Integer> incidentIds) throws IOException {
+        return groupAssocWriter.associateGroupIncidents(uniqueId, incidentIds);
     }
-
-    public WriteListResponse<Incident> associateIncidents(String tagName, List<Integer> associateIncidentIdList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", tagName);
-        WriteListResponse data = createListWithParam("v2.tags.byId.groups.incidents.byGroupId", IncidentListResponse.class, ownerName, map, "groupId", associateIncidentIdList);
 
-        return data;
+    @Override
+    public WriteListResponse<Integer> associateGroupIncidents(String uniqueId, List<Integer> incidentIds, String ownerName) throws IOException {
+        return groupAssocWriter.associateGroupIncidents(uniqueId, incidentIds, ownerName);
     }
 
-    public boolean associateIncident(String tagName, Integer incidentId) throws IOException, FailedResponseException {
-        return associateIncident(tagName, incidentId, null);
+    @Override
+    public boolean associateGroupIncident(String uniqueId, Integer incidentId) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupIncident(uniqueId, incidentId);
     }
 
-    public boolean associateIncident(String tagName, Integer incidentId, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", tagName, "groupId", incidentId);
-        IncidentResponse data = createItem("v2.tags.byId.groups.incidents.byGroupId", IncidentResponse.class, ownerName, map, null);
-
-        return data.isSuccess();
+    @Override
+    public boolean associateGroupIncident(String uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupIncident(uniqueId, incidentId, ownerName);
     }
 
-    public WriteListResponse<Signature> associateSignatures(String tagName, List<Integer> associateSignatureIdList) throws IOException {
-        return associateSignatures(tagName, associateSignatureIdList, null);
+    @Override
+    public WriteListResponse<Integer> associateGroupSignatures(String uniqueId, List<Integer> signatureIds) throws IOException {
+        return groupAssocWriter.associateGroupSignatures(uniqueId, signatureIds);
     }
-
-    public WriteListResponse<Signature> associateSignatures(String tagName, List<Integer> associateSignatureIdList, String ownerName)
-        throws IOException {
 
-        Map<String, Object> map = createParamMap("id", tagName);
-        WriteListResponse data = createListWithParam("v2.tags.byId.groups.signatures.byGroupId", SignatureListResponse.class, ownerName, map, "groupId", associateSignatureIdList);
-
-        return data;
+    @Override
+    public WriteListResponse<Integer> associateGroupSignatures(String uniqueId, List<Integer> signatureIds, String ownerName) throws IOException {
+        return groupAssocWriter.associateGroupSignatures(uniqueId, signatureIds, ownerName);
     }
 
-    public Signature associateSignature(String tagName, Integer signatureId) throws IOException, FailedResponseException {
-        return associateSignature(tagName, signatureId, null);
+    @Override
+    public boolean associateGroupSignature(String uniqueId, Integer signatureId) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupSignature(uniqueId, signatureId);
     }
-
-    public Signature associateSignature(String tagName, Integer signatureId, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", tagName, "groupId", signatureId);
-        SignatureResponse data = createItem("v2.tags.byId.groups.signatures.byGroupId", SignatureResponse.class, ownerName, map, null);
 
-        return (Signature) data.getData().getData();
+    @Override
+    public boolean associateGroupSignature(String uniqueId, Integer signatureId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupSignature(uniqueId, signatureId, ownerName);
     }
 
-    public WriteListResponse<Threat> associateThreats(String tagName, List<Integer> associateThreatIdList) throws IOException {
-        return associateThreats(tagName, associateThreatIdList, null);
+    @Override
+    public WriteListResponse<Integer> associateGroupThreats(String uniqueId, List<Integer> threatIds) throws IOException {
+        return groupAssocWriter.associateGroupThreats(uniqueId, threatIds);
     }
 
-    public WriteListResponse<Threat> associateThreats(String tagName, List<Integer> associateThreatIdList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", tagName);
-        WriteListResponse data = createListWithParam("v2.tags.byId.groups.threats.byGroupId", ThreatListResponse.class, ownerName, map, "groupId", associateThreatIdList);
-
-        return data;
+    @Override
+    public WriteListResponse<Integer> associateGroupThreats(String uniqueId, List<Integer> threatIds, String ownerName) throws IOException {
+        return groupAssocWriter.associateGroupThreats(uniqueId, threatIds, ownerName);
     }
 
-    public Threat associateThreat(String tagName, Integer threatId) throws IOException, FailedResponseException {
-        return associateThreat(tagName, threatId, null);
+    @Override
+    public boolean associateGroupThreat(String uniqueId, Integer threatId) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupThreat(uniqueId, threatId);
     }
-
-    public Threat associateThreat(String tagName, Integer threatId, String ownerName)
-        throws IOException, FailedResponseException {
 
-        Map<String, Object> map = createParamMap("id", tagName, "groupId", threatId);
-        ThreatResponse data = createItem("v2.tags.byId.groups.threats.byGroupId", ThreatResponse.class, ownerName, map, null);
-
-        return (Threat) data.getData().getData();
+    @Override
+    public boolean associateGroupThreat(String uniqueId, Integer threatId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupThreat(uniqueId, threatId, ownerName);
     }
 
-    public WriteListResponse<Address> associateIndicatorAddresss(String tagName, List<String> associateAddressList) throws IOException {
-        return associateIndicatorAddresss(tagName, associateAddressList, null);
+    @Override
+    public WriteListResponse<String> associateIndicatorAddresses(String uniqueId, List<String> ipAddresses) throws IOException {
+        return indAssocWriter.associateIndicatorAddresses(uniqueId, ipAddresses);
     }
-
-    public WriteListResponse<Address> associateIndicatorAddresss(String tagName, List<String> associateAddressList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", tagName);
-        WriteListResponse<Address> data = createListWithParam("v2.tags.type.byId.indicators.addresses.byGroupId", AddressListResponse.class, ownerName, map, "tagName", associateAddressList);
 
-        return data;
+    @Override
+    public WriteListResponse<String> associateIndicatorAddresses(String uniqueId, List<String> ipAddresses, String ownerName) throws IOException {
+        return indAssocWriter.associateIndicatorAddresses(uniqueId, ipAddresses, ownerName);
     }
 
-    public Address associateIndicatorAddress(String tagName, String associateAddress) throws IOException, FailedResponseException {
-        return associateIndicatorAddress(tagName, associateAddress, null);
+    @Override
+    public boolean associateIndicatorAddress(String uniqueId, String ipAddress) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorAddress(uniqueId, ipAddress);
     }
 
-    public Address associateIndicatorAddress(String tagName, String associateAddress, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", tagName, "indicatorId", associateAddress);
-        AddressResponse data = createItem("v2.tags.type.byId.indicators.addresses.byIndicatorId", AddressResponse.class, ownerName, map, null);
-
-        return (Address) data.getData().getData();
+    @Override
+    public boolean associateIndicatorAddress(String uniqueId, String ipAddress, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorAddress(uniqueId, ipAddress, ownerName);
     }
 
-    public WriteListResponse<EmailAddress> associateIndicatorEmailAddresses(String tagName, List<String> associateEmailAddressList) throws IOException {
-        return associateIndicatorEmailAddresses(tagName, associateEmailAddressList, null);
+    @Override
+    public WriteListResponse<String> associateIndicatorEmailAddresses(String uniqueId, List<String> emailAddresses) throws IOException {
+        return indAssocWriter.associateIndicatorEmailAddresses(uniqueId, emailAddresses);
     }
-
-    public WriteListResponse<EmailAddress> associateIndicatorEmailAddresses(String tagName, List<String> associateEmailAddressList, String ownerName)
-        throws IOException {
 
-        Map<String, Object> map = createParamMap("id", tagName);
-        WriteListResponse<EmailAddress> data = createListWithParam("v2.tags.type.byId.indicators.emailAddresses.byIndicatorId", EmailAddressListResponse.class, ownerName, map, "tagName", associateEmailAddressList);
-
-        return data;
+    @Override
+    public WriteListResponse<String> associateIndicatorEmailAddresses(String uniqueId, List<String> emailAddresses, String ownerName) throws IOException {
+        return indAssocWriter.associateIndicatorEmailAddresses(uniqueId, emailAddresses, ownerName);
     }
 
-    public EmailAddress associateIndicatorEmailAddress(String tagName, String associateEmailAddress) throws IOException, FailedResponseException {
-        return associateIndicatorEmailAddress(tagName, associateEmailAddress, null);
+    @Override
+    public boolean associateIndicatorEmailAddress(String uniqueId, String emailAddress) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorEmailAddress(uniqueId, emailAddress);
     }
-
-    public EmailAddress associateIndicatorEmailAddress(String tagName, String associateEmailAddress, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", tagName, "indicatorId", associateEmailAddress);
-        EmailAddressResponse data = createItem("v2.tags.type.byId.indicators.emailAddresses.byIndicatorId", EmailAddressResponse.class, ownerName, map, null);
 
-        return (EmailAddress) data.getData().getData();
+    @Override
+    public boolean associateIndicatorEmailAddress(String uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorAddress(uniqueId, emailAddress, ownerName);
     }
 
-    public WriteListResponse<File> associateIndicatorFiles(String tagName, List<String> associateFileList) throws IOException {
-        return associateIndicatorFiles(tagName, associateFileList, null);
+    @Override
+    public WriteListResponse<String> associateIndicatorFiles(String uniqueId, List<String> fileHashes) throws IOException {
+        return indAssocWriter.associateIndicatorFiles(uniqueId, fileHashes);
     }
 
-    public WriteListResponse<File> associateIndicatorFiles(String tagName, List<String> associateFileList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", tagName);
-        WriteListResponse<File> data = createListWithParam("v2.tags.type.byId.indicators.files.byIndicatorId", FileListResponse.class, ownerName, map, "tagName", associateFileList);
-
-        return data;
+    @Override
+    public WriteListResponse<String> associateIndicatorFiles(String uniqueId, List<String> fileHashes, String ownerName) throws IOException {
+        return indAssocWriter.associateIndicatorFiles(uniqueId, fileHashes, ownerName);
     }
 
-    public File associateIndicatorFile(String tagName, String associateFile) throws IOException, FailedResponseException {
-        return associateIndicatorFile(tagName, associateFile, null);
+    @Override
+    public boolean associateIndicatorFile(String uniqueId, String fileHash) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorFile(uniqueId, fileHash);
     }
-
-    public File associateIndicatorFile(String tagName, String associateFile, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", tagName, "indicatorId", associateFile);
-        FileResponse data = createItem("v2.tags.type.byId.indicators.files.byIndicatorId", FileResponse.class, ownerName, map, null);
 
-        return (File) data.getData().getData();
+    @Override
+    public boolean associateIndicatorFile(String uniqueId, String fileHash, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorAddress(uniqueId, fileHash, ownerName);
     }
 
-    public WriteListResponse<Host> associateIndicatorHosts(String tagName, List<String> associateHostList) throws IOException {
-        return associateIndicatorHosts(tagName, associateHostList, null);
+    @Override
+    public WriteListResponse<String> associateIndicatorHosts(String uniqueId, List<String> hostNames) throws IOException {
+        return indAssocWriter.associateIndicatorHosts(uniqueId, hostNames);
     }
 
-    public WriteListResponse<Host> associateIndicatorHosts(String tagName, List<String> associateHostList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", tagName);
-        WriteListResponse<Host> data = createListWithParam("v2.tags.type.byId.indicators.hosts.byIndicatorId", HostListResponse.class, ownerName, map, "tagName", associateHostList);
-
-        return data;
+    @Override
+    public WriteListResponse<String> associateIndicatorHosts(String uniqueId, List<String> hostNames, String ownerName) throws IOException {
+        return indAssocWriter.associateIndicatorHosts(uniqueId, hostNames, ownerName);
     }
 
-    public Host associateIndicatorHost(String tagName, String associateHost) throws IOException, FailedResponseException {
-        return associateIndicatorHost(tagName, associateHost, null);
+    @Override
+    public boolean associateIndicatorHost(String uniqueId, String hostName) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorHost(uniqueId, hostName);
     }
-
-    public Host associateIndicatorHost(String tagName, String associateHost, String ownerName)
-        throws IOException, FailedResponseException {
 
-        Map<String, Object> map = createParamMap("id", tagName, "indicatorId", associateHost);
-        HostResponse data = createItem("v2.tags.type.byId.indicators.hosts.byIndicatorId", HostResponse.class, ownerName, map, null);
-
-        return (Host) data.getData().getData();
+    @Override
+    public boolean associateIndicatorHost(String uniqueId, String hostName, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorHost(uniqueId, hostName, ownerName);
     }
 
-    public WriteListResponse<Url> associateIndicatorUrls(String tagName, List<String> associateUrlList) throws IOException {
-        return associateIndicatorUrls(tagName, associateUrlList, null);
+    @Override
+    public WriteListResponse<String> associateIndicatorUrls(String uniqueId, List<String> urlTexts) throws IOException {
+        return indAssocWriter.associateIndicatorUrls(uniqueId, urlTexts);
     }
-
-    public WriteListResponse<Url> associateIndicatorUrls(String tagName, List<String> associateUrlList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", tagName);
-        WriteListResponse<Url> data = createListWithParam("v2.tags.type.byId.indicators.urls.byIndicatorId", UrlListResponse.class, ownerName, map, "tagName", associateUrlList);
 
-        return data;
+    @Override
+    public WriteListResponse<String> associateIndicatorUrls(String uniqueId, List<String> urlTexts, String ownerName) throws IOException {
+        return indAssocWriter.associateIndicatorUrls(uniqueId, urlTexts, ownerName);
     }
 
-    public Url associateIndicatorUrl(String tagName, String associateUrl) throws IOException, FailedResponseException {
-        return associateIndicatorUrl(tagName, associateUrl, null);
+    @Override
+    public boolean associateIndicatorUrl(String uniqueId, String urlText) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorUrl(uniqueId, urlText);
     }
 
-    public Url associateIndicatorUrl(String tagName, String associateUrl, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", tagName, "indicatorId", associateUrl);
-        UrlResponse data = createItem("v2.tags.type.byId.indicators.urls.byIndicatorId", UrlResponse.class, ownerName, map, null);
-
-        return (Url) data.getData().getData();
+    @Override
+    public boolean associateIndicatorUrl(String uniqueId, String urlText, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorUrl(uniqueId, urlText, ownerName);
     }
 
-    public WriteListResponse<Integer> deleteAssociationAdversaries(String tagName, List<Integer> associatedAdversaryIdList) throws IOException {
-        return deleteAssociationAdversaries(tagName, associatedAdversaryIdList, null);
+        @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupAdversaries(String uniqueId, List<Integer> adversaryIds) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupAdversaries(uniqueId, adversaryIds);
     }
-
-    public WriteListResponse<Integer> deleteAssociationAdversaries(String tagName, List<Integer> associatedAdversaryIdList, String ownerName)
-        throws IOException {
 
-        Map<String, Object> map = createParamMap("id", tagName);
-        WriteListResponse data = deleteList("v2.tags.byId.groups.adversaries.byGroupId", AdversaryListResponse.class, ownerName, map, "groupId", associatedAdversaryIdList);
-
-        return data;
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupAdversaries(String uniqueId, List<Integer> adversaryIds, String ownerName) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupAdversaries(uniqueId, adversaryIds, ownerName);
     }
 
-    public void deleteAssociationAdversary(String tagName, Integer adversaryId) throws IOException, FailedResponseException {
-        deleteAssociationAdversary(tagName, adversaryId, null);
+    @Override
+    public boolean deleteAssociatedGroupAdversary(String uniqueId, Integer adversaryId) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupAdversary(uniqueId, adversaryId);
     }
-
-    public void deleteAssociationAdversary(String tagName, Integer adversaryId, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", tagName, "groupId", adversaryId);
-        deleteItem("v2.tags.byId.groups.adversaries.byGroupId", AdversaryResponse.class, ownerName, map);
 
+    @Override
+    public boolean deleteAssociatedGroupAdversary(String uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupAdversary(uniqueId, adversaryId, ownerName);
     }
 
-    public WriteListResponse<Integer> deleteAssociationEmails(String tagName, List<Integer> associatedEmailIdList) throws IOException {
-        return deleteAssociationEmails(tagName, associatedEmailIdList, null);
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupEmails(String uniqueId, List<Integer> emailIds) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupEmails(uniqueId, emailIds);
     }
 
-    public WriteListResponse<Integer> deleteAssociationEmails(String tagName, List<Integer> associatedEmailIdList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", tagName);
-        WriteListResponse data = deleteList("v2.tags.byId.groups.emails.byGroupId", EmailListResponse.class, ownerName, map, "groupId", associatedEmailIdList);
-
-        return data;
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupEmails(String uniqueId, List<Integer> emailIds, String ownerName) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupEmails(uniqueId, emailIds, ownerName);
     }
 
-    public void deleteAssociationEmail(String tagName, Integer emailId) throws IOException, FailedResponseException {
-        deleteAssociationEmail(tagName, emailId, null);
+    @Override
+    public boolean deleteAssociatedGroupEmail(String uniqueId, Integer emailId) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupEmail(uniqueId, emailId);
     }
-
-    public void deleteAssociationEmail(String tagName, Integer emailId, String ownerName)
-        throws IOException, FailedResponseException {
 
-        Map<String, Object> map = createParamMap("id", tagName, "groupId", emailId);
-        deleteItem("v2.tags.byId.groups.emails.byGroupId", EmailResponse.class, ownerName, map);
-
+    @Override
+    public boolean deleteAssociatedGroupEmail(String uniqueId, Integer emailId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupEmail(uniqueId, emailId, ownerName);
     }
 
-    public WriteListResponse<Integer> deleteAssociationIncidents(String tagName, List<Integer> associatedIncidentIdList) throws IOException {
-        return deleteAssociationIncidents(tagName, associatedIncidentIdList, null);
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupIncidents(String uniqueId, List<Integer> incidentIds) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupIncidents(uniqueId, incidentIds);
     }
-
-    public WriteListResponse<Integer> deleteAssociationIncidents(String tagName, List<Integer> associatedIncidentIdList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", tagName);
-        WriteListResponse data = deleteList("v2.tags.byId.groups.incidents.byGroupId", IncidentListResponse.class, ownerName, map, "groupId", associatedIncidentIdList);
 
-        return data;
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupIncidents(String uniqueId, List<Integer> incidentIds, String ownerName) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupIncidents(uniqueId, incidentIds, ownerName);
     }
 
-    public void deleteAssociationIncident(String tagName, Integer incidentId) throws IOException, FailedResponseException {
-        deleteAssociationIncident(tagName, incidentId, null);
+    @Override
+    public boolean deleteAssociatedGroupIncident(String uniqueId, Integer incidentId) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupIncident(uniqueId, incidentId);
     }
 
-    public void deleteAssociationIncident(String tagName, Integer incidentId, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", tagName, "groupId", incidentId);
-        deleteItem("v2.tags.byId.groups.incidents.byGroupId", IncidentResponse.class, ownerName, map);
+    @Override
+    public boolean deleteAssociatedGroupIncident(String uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupIncident(uniqueId, incidentId, ownerName);
     }
 
-
-    public WriteListResponse<Integer> deleteAssociationSignatures(String tagName, List<Integer> associatedSignatureIdList) throws IOException {
-        return deleteAssociationSignatures(tagName, associatedSignatureIdList, null);
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupSignatures(String uniqueId, List<Integer> signatureIds) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupSignatures(uniqueId, signatureIds);
     }
-
-    public WriteListResponse<Integer> deleteAssociationSignatures(String tagName, List<Integer> associatedSignatureIdList, String ownerName)
-        throws IOException {
 
-        Map<String, Object> map = createParamMap("id", tagName);
-        WriteListResponse data = deleteList("v2.tags.byId.groups.signatures.byGroupId", SignatureListResponse.class, ownerName, map, "groupId", associatedSignatureIdList);
-
-        return data;
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupSignatures(String uniqueId, List<Integer> signatureIds, String ownerName) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupSignatures(uniqueId, signatureIds, ownerName);
     }
 
-    public void deleteAssociationSignature(String tagName, Integer signatureId) throws IOException, FailedResponseException {
-        deleteAssociationSignature(tagName, signatureId, null);
+    @Override
+    public boolean deleteAssociatedGroupSignature(String uniqueId, Integer signatureId) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupSignature(uniqueId, signatureId);
     }
-
-    public void deleteAssociationSignature(String tagName, Integer signatureId, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", tagName, "groupId", signatureId);
-        deleteItem("v2.tags.byId.groups.signatures.byGroupId", SignatureResponse.class, ownerName, map);
 
+    @Override
+    public boolean deleteAssociatedGroupSignature(String uniqueId, Integer signatureId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupSignature(uniqueId, signatureId, ownerName);
     }
 
-    public WriteListResponse<Integer> deleteAssociationThreats(String tagName, List<Integer> associatedThreatIdList) throws IOException {
-        return deleteAssociationThreats(tagName, associatedThreatIdList, null);
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupThreats(String uniqueId, List<Integer> threatIds) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupThreats(uniqueId, threatIds);
     }
 
-    public WriteListResponse<Integer> deleteAssociationThreats(String tagName, List<Integer> associatedThreatIdList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", tagName);
-        WriteListResponse data = deleteList("v2.tags.byId.groups.threats.byGroupId", ThreatListResponse.class, ownerName, map, "groupId", associatedThreatIdList);
-
-        return data;
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupThreats(String uniqueId, List<Integer> threatIds, String ownerName) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupThreats(uniqueId, threatIds, ownerName);
     }
 
-    public void deleteAssociationThreat(String tagName, Integer threatId) throws IOException, FailedResponseException {
-        deleteAssociationThreat(tagName, threatId, null);
+    @Override
+    public boolean deleteAssociatedGroupThreat(String uniqueId, Integer threatId) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupThreat(uniqueId, threatId);
     }
-
-    public void deleteAssociationThreat(String tagName, Integer threatId, String ownerName)
-        throws IOException, FailedResponseException {
 
-        Map<String, Object> map = createParamMap("id", tagName, "groupId", threatId);
-        deleteItem("v2.tags.byId.groups.threats.byGroupId", ThreatResponse.class, ownerName, map);
-
+    @Override
+    public boolean deleteAssociatedGroupThreat(String uniqueId, Integer threatId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupThreat(uniqueId, threatId, ownerName);
     }
 
-
-    public WriteListResponse<String> deleteAssociationIndicatorAddresses(String tagName, List<String> associateAddressList) throws IOException {
-        return deleteAssociationIndicatorAddresses(tagName, associateAddressList, null);
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorAddresses(String uniqueId, List<String> ipAddresses) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorAddresses(uniqueId, ipAddresses);
     }
-
-    public WriteListResponse<String> deleteAssociationIndicatorAddresses(String tagName, List<String> associateAddressList, String ownerName)
-        throws IOException {
 
-        Map<String, Object> map = createParamMap("id", tagName);
-        WriteListResponse<String> data = createListWithParam("v2.tags.type.byId.indicators.addresses.byIndicatorId", AddressListResponse.class, ownerName, map, "tagName", associateAddressList);
-
-        return data;
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorAddresses(String uniqueId, List<String> ipAddresses, String ownerName) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorAddresses(uniqueId, ipAddresses, ownerName);
     }
 
-    public void deleteAssociationIndicatorAddress(String tagName, String associateAddress) throws IOException, FailedResponseException {
-        deleteAssociationIndicatorAddress(tagName, associateAddress, null);
+    @Override
+    public boolean deleteAssociatedIndicatorAddress(String uniqueId, String ipAddress) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorAddress(uniqueId, ipAddress);
     }
-
-    public void deleteAssociationIndicatorAddress(String tagName, String associateAddress, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", tagName, "indicatorId", associateAddress);
-        deleteItem("v2.tags.type.byId.indicators.addresses.byIndicatorId", AddressResponse.class, ownerName, map);
 
+    @Override
+    public boolean deleteAssociatedIndicatorAddress(String uniqueId, String ipAddress, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorAddress(uniqueId, ipAddress, ownerName);
     }
 
-    public WriteListResponse<String> deleteAssociationIndicatorEmailAddresses(String tagName, List<String> associateEmailAddressList) throws IOException {
-        return deleteAssociationIndicatorEmailAddresses(tagName, associateEmailAddressList, null);
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorEmailAddresses(String uniqueId, List<String> emailAddresses) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorEmailAddresses(uniqueId, emailAddresses);
     }
 
-    public WriteListResponse<String> deleteAssociationIndicatorEmailAddresses(String tagName, List<String> associateEmailAddressList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", tagName);
-        WriteListResponse<String> data = createListWithParam("v2.tags.type.byId.indicators.emailAddresses.byIndicatorId", EmailAddressListResponse.class, ownerName, map, "tagName", associateEmailAddressList);
-
-        return data;
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorEmailAddresses(String uniqueId, List<String> emailAddresses, String ownerName) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorEmailAddresses(uniqueId, emailAddresses, ownerName);
     }
 
-    public void deleteAssociationIndicatorEmailAddress(String tagName, String associateEmailAddress) throws IOException, FailedResponseException {
-        deleteAssociationIndicatorEmailAddress(tagName, associateEmailAddress, null);
+    @Override
+    public boolean deleteAssociatedIndicatorEmailAddress(String uniqueId, String emailAddress) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorEmailAddress(uniqueId, emailAddress);
     }
-
-    public void deleteAssociationIndicatorEmailAddress(String tagName, String associateEmailAddress, String ownerName)
-        throws IOException, FailedResponseException {
 
-        Map<String, Object> map = createParamMap("id", tagName, "indicatorId", associateEmailAddress);
-        deleteItem("v2.tags.type.byId.indicators.emailAddresses.byIndicatorId", EmailAddressResponse.class, ownerName, map);
-
+    @Override
+    public boolean deleteAssociatedIndicatorEmailAddress(String uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorEmailAddress(uniqueId, emailAddress, ownerName);
     }
 
-    public WriteListResponse<String> deleteAssociationIndicatorFiles(String tagName, List<String> associateFileList) throws IOException {
-        return deleteAssociationIndicatorFiles(tagName, associateFileList, null);
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorFiles(String uniqueId, List<String> fileHashes) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorFiles(uniqueId, fileHashes);
     }
-
-    public WriteListResponse<String> deleteAssociationIndicatorFiles(String tagName, List<String> associateFileList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", tagName);
-        WriteListResponse<String> data = createListWithParam("v2.tags.type.byId.indicators.files.byIndicatorId", FileListResponse.class, ownerName, map, "tagName", associateFileList);
 
-        return data;
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorFiles(String uniqueId, List<String> fileHashes, String ownerName) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorFiles(uniqueId, fileHashes, ownerName);
     }
 
-    public void deleteAssociationIndicatorFile(String tagName, String associateFile) throws IOException, FailedResponseException {
-        deleteAssociationIndicatorFile(tagName, associateFile, null);
+    @Override
+    public boolean deleteAssociatedIndicatorFile(String uniqueId, String fileHash) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorFile(uniqueId, fileHash);
     }
 
-    public void deleteAssociationIndicatorFile(String tagName, String associateFile, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", tagName, "indicatorId", associateFile);
-        deleteItem("v2.tags.type.byId.indicators.files.byIndicatorId", FileResponse.class, ownerName, map);
-
+    @Override
+    public boolean deleteAssociatedIndicatorFile(String uniqueId, String fileHash, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorFile(uniqueId, fileHash, ownerName);
     }
 
-    public WriteListResponse<String> deleteAssociationIndicatorHosts(String tagName, List<String> associateHostList) throws IOException {
-        return deleteAssociationIndicatorHosts(tagName, associateHostList, null);
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorHosts(String uniqueId, List<String> hostNames) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorHosts(uniqueId, hostNames);
     }
-
-    public WriteListResponse<String> deleteAssociationIndicatorHosts(String tagName, List<String> associateHostList, String ownerName)
-        throws IOException {
 
-        Map<String, Object> map = createParamMap("id", tagName);
-        WriteListResponse<String> data = createListWithParam("v2.tags.type.byId.indicators.hosts.byIndicatorId", HostListResponse.class, ownerName, map, "tagName", associateHostList);
-
-        return data;
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorHosts(String uniqueId, List<String> hostNames, String ownerName) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorHosts(uniqueId, hostNames, ownerName);
     }
 
-    public void deleteAssociationIndicatorHost(String tagName, String associateHost) throws IOException, FailedResponseException {
-        deleteAssociationIndicatorHost(tagName, associateHost, null);
+    @Override
+    public boolean deleteAssociatedIndicatorHost(String uniqueId, String hostName) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorHost(uniqueId, hostName);
     }
-
-    public void deleteAssociationIndicatorHost(String tagName, String associateHost, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", tagName, "indicatorId", associateHost);
-        deleteItem("v2.tags.type.byId.indicators.hosts.byIndicatorId", HostResponse.class, ownerName, map);
 
+    @Override
+    public boolean deleteAssociatedIndicatorHost(String uniqueId, String hostName, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorHost(uniqueId, hostName, ownerName);
     }
 
-    
-    public WriteListResponse<String> deleteAssociationIndicatorUrls(String tagName, List<String> associateUrlList) throws IOException {
-        return deleteAssociationIndicatorUrls(tagName, associateUrlList, null);
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorUrls(String uniqueId, List<String> urlTexts) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorUrls(uniqueId, urlTexts);
     }
 
-    public WriteListResponse<String> deleteAssociationIndicatorUrls(String tagName, List<String> associateUrlList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", tagName);
-        WriteListResponse<String> data = createListWithParam("v2.tags.type.byId.indicators.urls.byIndicatorId", UrlListResponse.class, ownerName, map, "tagName", associateUrlList);
-
-        return data;
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorUrls(String uniqueId, List<String> urlTexts, String ownerName) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorUrls(uniqueId, urlTexts, ownerName);
     }
 
-    public void deleteAssociationIndicatorUrl(String tagName, String associateUrl) throws IOException, FailedResponseException {
-        deleteAssociationIndicatorUrl(tagName, associateUrl, null);
+    @Override
+    public boolean deleteAssociatedIndicatorUrl(String uniqueId, String urlText) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorUrl(uniqueId, urlText);
     }
-
-    public void deleteAssociationIndicatorUrl(String tagName, String associateUrl, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", tagName, "indicatorId", associateUrl);
-        deleteItem("v2.tags.type.byId.indicators.urls.byIndicatorId", UrlResponse.class, ownerName, map);
 
+    @Override
+    public boolean deleteAssociatedIndicatorUrl(String uniqueId, String urlText, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorUrl(uniqueId, urlText, ownerName);
     }
 }

@@ -24,8 +24,8 @@ public interface AttributeAssociateReadable<P> {
     public List<SecurityLabel> getAttributeSecurityLabels(P uniqueId, Integer attributeId, String ownerName)
         throws IOException, FailedResponseException;
 
-    public SecurityLabel getAttributeSecurityLabel(P uniqueId, Integer attributeId, String securityLabelName) throws IOException, FailedResponseException;
+    public SecurityLabel getAttributeSecurityLabel(P uniqueId, Integer attributeId, String securityLabel) throws IOException, FailedResponseException;
 
-    public SecurityLabel getAttributeSecurityLabel(P uniqueId, Integer attributeId, String securityLabelName, String ownerName)
+    public SecurityLabel getAttributeSecurityLabel(P uniqueId, Integer attributeId, String securityLabel, String ownerName)
         throws IOException, FailedResponseException;
 }

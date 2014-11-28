@@ -77,15 +77,15 @@ public abstract class AbstractAttributeAssociateReaderAdapter<P> extends Abstrac
     }
 
     @Override
-    public SecurityLabel getAttributeSecurityLabel(P uniqueId, Integer attributeId, String securityLabelName) throws IOException, FailedResponseException {
-        return getAttributeSecurityLabel(uniqueId, attributeId, securityLabelName, null);
+    public SecurityLabel getAttributeSecurityLabel(P uniqueId, Integer attributeId, String securityLabel) throws IOException, FailedResponseException {
+        return getAttributeSecurityLabel(uniqueId, attributeId, securityLabel, null);
     }
 
     @Override
-    public SecurityLabel getAttributeSecurityLabel(P uniqueId, Integer attributeId, String securityLabelName, String ownerName)
+    public SecurityLabel getAttributeSecurityLabel(P uniqueId, Integer attributeId, String securityLabel, String ownerName)
         throws IOException, FailedResponseException {
 
-        Map<String, Object> map = createParamMap("id", uniqueId, "attributeId", attributeId, "securityLabelName", securityLabelName);
+        Map<String, Object> map = createParamMap("id", uniqueId, "attributeId", attributeId, "securityLabel", securityLabel);
         SecurityLabelResponse data = getItem(getUrlBasePrefix() + ".byId.attributes.byId.securityLabels.byName", SecurityLabelResponse.class, ownerName, map);
 
         return (SecurityLabel) data.getData().getData();

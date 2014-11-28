@@ -105,6 +105,10 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
             protected String getUrlBasePrefix() {
                 return AbstractGroupReaderAdapter.this.getUrlBasePrefix();
             }
+            @Override
+            public String getUrlType() {
+                return AbstractGroupReaderAdapter.this.getUrlType();
+            }
         };
 
         indAssocReader = new AbstractIndicatorAssociateReaderAdapter<Integer>(
@@ -117,6 +121,7 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
             protected String getUrlBasePrefix() {
                 return AbstractGroupReaderAdapter.this.getUrlBasePrefix();
             }
+
             @Override
             public String getUrlType() {
                 return AbstractGroupReaderAdapter.this.getUrlType();
@@ -435,13 +440,13 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     }
 
     @Override
-    public SecurityLabel getAttributeSecurityLabel(Integer uniqueId, Integer attributeId, String securityLabelName) throws IOException, FailedResponseException {
-        return attribReader.getAttributeSecurityLabel(uniqueId, attributeId, securityLabelName);
+    public SecurityLabel getAttributeSecurityLabel(Integer uniqueId, Integer attributeId, String securityLabel) throws IOException, FailedResponseException {
+        return attribReader.getAttributeSecurityLabel(uniqueId, attributeId, securityLabel);
     }
 
     @Override
-    public SecurityLabel getAttributeSecurityLabel(Integer uniqueId, Integer attributeId, String securityLabelName, String ownerName) throws IOException, FailedResponseException {
-        return attribReader.getAttributeSecurityLabel(uniqueId, attributeId, securityLabelName, ownerName);
+    public SecurityLabel getAttributeSecurityLabel(Integer uniqueId, Integer attributeId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
+        return attribReader.getAttributeSecurityLabel(uniqueId, attributeId, securityLabel, ownerName);
     }
 
     @Override
@@ -580,13 +585,13 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     }
 
     @Override
-    public SecurityLabel getAssociatedSecurityLabel(Integer uniqueId, String securityLabelName) throws IOException, FailedResponseException {
-        return secLabelAssocReader.getAssociatedSecurityLabel(uniqueId, securityLabelName);
+    public SecurityLabel getAssociatedSecurityLabel(Integer uniqueId, String securityLabel) throws IOException, FailedResponseException {
+        return secLabelAssocReader.getAssociatedSecurityLabel(uniqueId, securityLabel);
     }
 
     @Override
-    public SecurityLabel getAssociatedSecurityLabel(Integer uniqueId, String securityLabelName, String ownerName) throws IOException, FailedResponseException {
-        return secLabelAssocReader.getAssociatedSecurityLabel(uniqueId, securityLabelName, ownerName);
+    public SecurityLabel getAssociatedSecurityLabel(Integer uniqueId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
+        return secLabelAssocReader.getAssociatedSecurityLabel(uniqueId, securityLabel, ownerName);
     }
 
 

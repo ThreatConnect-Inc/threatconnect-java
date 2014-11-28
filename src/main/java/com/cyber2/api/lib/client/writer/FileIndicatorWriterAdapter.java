@@ -66,7 +66,7 @@ public class FileIndicatorWriterAdapter extends AbstractIndicatorWriterAdapter<F
         Map<String, Object> map = createParamMap("id", fileHash);
         List<Integer> idList = new ArrayList<>();
         for(FileOccurrence it : fileOccurrences)    idList.add( it.getId() );
-        WriteListResponse<FileOccurrence> data = updateListWithParam("v2.indicators.type.byId.fileOccurrences.byFileOccurrenceId", FileOccurrenceListResponse.class, ownerName, map, "fileOccurrenceId", idList, fileOccurrences);
+        WriteListResponse<FileOccurrence> data = updateListWithParam(getUrlBasePrefix() + ".byId.fileOccurrences.byFileOccurrenceId", FileOccurrenceListResponse.class, ownerName, map, "fileOccurrenceId", idList, fileOccurrences);
 
         return data;
     }
@@ -79,7 +79,7 @@ public class FileIndicatorWriterAdapter extends AbstractIndicatorWriterAdapter<F
         throws IOException, FailedResponseException {
 
         Map<String, Object> map = createParamMap("id", fileHash, "fileOccurrenceId", fileOccurrence.getId());
-        FileOccurrenceResponse item = updateItem("v2.indicators.type.byId.fileOccurrences.byFileOccurrenceId"
+        FileOccurrenceResponse item = updateItem(getUrlBasePrefix() + ".type.byId.fileOccurrences.byFileOccurrenceId"
                                             , FileOccurrenceResponse.class, ownerName, map, fileOccurrence);
 
         return (FileOccurrence) item.getData().getData();

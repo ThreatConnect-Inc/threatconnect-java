@@ -61,6 +61,11 @@ public class TagReaderAdapter
             protected String getUrlBasePrefix() {
                 return TagReaderAdapter.this.getUrlBasePrefix();
             }
+
+            @Override
+            public String getUrlType() {
+                return TagReaderAdapter.this.getUrlType();
+            }
         };
 
         indAssocReader = new AbstractIndicatorAssociateReaderAdapter<String>(

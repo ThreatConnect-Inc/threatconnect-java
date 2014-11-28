@@ -1,501 +1,731 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.cyber2.api.lib.client.writer;
 
+import com.cyber2.api.lib.client.UrlTypeable;
 import com.cyber2.api.lib.client.response.WriteListResponse;
+import com.cyber2.api.lib.client.writer.associate.AbstractGroupAssociateWriterAdapter;
+import com.cyber2.api.lib.client.writer.associate.AbstractIndicatorAssociateWriterAdapter;
+import com.cyber2.api.lib.client.writer.associate.AbstractVictimAssetAssociateWriterAdapter;
+import com.cyber2.api.lib.client.writer.associate.GroupAssociateWritable;
+import com.cyber2.api.lib.client.writer.associate.IndicatorAssociateWritable;
+import com.cyber2.api.lib.client.writer.associate.VictimAssetAssociateWritable;
 import com.cyber2.api.lib.conn.Connection;
 import com.cyber2.api.lib.conn.RequestExecutor;
 import com.cyber2.api.lib.exception.FailedResponseException;
-import com.cyber2.api.lib.server.entity.Adversary;
-import com.cyber2.api.lib.server.entity.Email;
-import com.cyber2.api.lib.server.entity.EmailAddress;
-import com.cyber2.api.lib.server.entity.Incident;
 import com.cyber2.api.lib.server.entity.Victim;
-import com.cyber2.api.lib.server.entity.Signature;
-import com.cyber2.api.lib.server.entity.Threat;
-import com.cyber2.api.lib.server.entity.VictimEmailAddress;
-import com.cyber2.api.lib.server.entity.VictimNetworkAccount;
-import com.cyber2.api.lib.server.entity.VictimPhone;
-import com.cyber2.api.lib.server.entity.VictimSocialNetwork;
-import com.cyber2.api.lib.server.entity.VictimWebSite;
-import com.cyber2.api.lib.server.response.entity.AdversaryListResponse;
-import com.cyber2.api.lib.server.response.entity.AdversaryResponse;
-import com.cyber2.api.lib.server.response.entity.EmailAddressListResponse;
-import com.cyber2.api.lib.server.response.entity.EmailAddressResponse;
-import com.cyber2.api.lib.server.response.entity.EmailListResponse;
-import com.cyber2.api.lib.server.response.entity.EmailResponse;
-import com.cyber2.api.lib.server.response.entity.IncidentListResponse;
-import com.cyber2.api.lib.server.response.entity.IncidentResponse;
 import com.cyber2.api.lib.server.response.entity.VictimResponse;
-import com.cyber2.api.lib.server.response.entity.VictimListResponse;
-import com.cyber2.api.lib.server.response.entity.SignatureListResponse;
-import com.cyber2.api.lib.server.response.entity.SignatureResponse;
-import com.cyber2.api.lib.server.response.entity.ThreatListResponse;
-import com.cyber2.api.lib.server.response.entity.ThreatResponse;
-import com.cyber2.api.lib.server.response.entity.VictimEmailAddressListResponse;
-import com.cyber2.api.lib.server.response.entity.VictimEmailAddressResponse;
-import com.cyber2.api.lib.server.response.entity.VictimNetworkAccountListResponse;
-import com.cyber2.api.lib.server.response.entity.VictimNetworkAccountResponse;
-import com.cyber2.api.lib.server.response.entity.VictimPhoneListResponse;
-import com.cyber2.api.lib.server.response.entity.VictimPhoneResponse;
-import com.cyber2.api.lib.server.response.entity.VictimSocialNetworkListResponse;
-import com.cyber2.api.lib.server.response.entity.VictimSocialNetworkResponse;
-import com.cyber2.api.lib.server.response.entity.VictimWebSiteListResponse;
-import com.cyber2.api.lib.server.response.entity.VictimWebSiteResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
+ * VictimWriterAdapter is the primary writer adapter for all Victim level objects.
+ * It uses the {@link Connection} object to execute requests against the {@link RequestExecutor} object.
+ * The responsibility of this class is to encapsulate all the low level ThreatConnect API calls
+ * specifically targeted at data under the Victim type.
+ * 
  *
  * @author dtineo
  */
-public class VictimWriterAdapter extends AbstractWriterAdapter {
 
+public class VictimWriterAdapter
+    extends AbstractBaseWriterAdapter<Victim,Integer>
+    implements UrlTypeable, GroupAssociateWritable<Integer>
+    , IndicatorAssociateWritable<Integer>, VictimAssetAssociateWritable<Integer> {
+
+    // composite pattern
+    private AbstractGroupAssociateWriterAdapter<Victim,Integer> groupAssocWriter;
+    private AbstractIndicatorAssociateWriterAdapter<Victim,Integer> indAssocWriter;
+    private AbstractVictimAssetAssociateWriterAdapter<Victim,Integer> victimAssetAssocWriter;
+
+    /**
+     * Package level constructor. Use the {@link WriterAdapterFactory} to access this object.
+     * @param conn      Primary connection object to the ThreatConnect API
+     * @param executor  Executor handling low level HTTPS calls to the ThreatConnect API
+     * 
+     * @see WriterAdapterFactory
+     */
     protected VictimWriterAdapter(Connection conn, RequestExecutor executor) {
-        super(conn, executor);
+        super(conn, executor, VictimResponse.class, /*createReturnsObject=*/false);
+
+        initComposite();
     }
 
-    public WriteListResponse<Victim> create(List<Victim> victims) throws IOException, FailedResponseException {
+    private void initComposite() {
 
-        WriteListResponse data = createList("v2.victims", VictimListResponse.class, victims);
+        groupAssocWriter = new AbstractGroupAssociateWriterAdapter<Victim,Integer>(
+                            VictimWriterAdapter.this.getConn()
+                          , VictimWriterAdapter.this.executor
+                          , VictimWriterAdapter.this.singleType
+            ) {
+            @Override
+            protected String getUrlBasePrefix() {
+                return VictimWriterAdapter.this.getUrlBasePrefix();
+            }
 
-        return data;
+            @Override
+            public Integer getId(Victim item) {
+                return VictimWriterAdapter.this.getId(item);
+            }
+        };
+
+        indAssocWriter = new AbstractIndicatorAssociateWriterAdapter<Victim,Integer>(
+                            VictimWriterAdapter.this.getConn()
+                          , VictimWriterAdapter.this.executor
+                          , VictimWriterAdapter.this.singleType
+            ) {
+            @Override
+            protected String getUrlBasePrefix() {
+                return VictimWriterAdapter.this.getUrlBasePrefix();
+            }
+
+            @Override
+            public String getUrlType() {
+                return VictimWriterAdapter.this.getUrlType();
+            }
+
+            @Override
+            public Integer getId(Victim item) {
+                return VictimWriterAdapter.this.getId(item);
+            }
+        };
+
+        victimAssetAssocWriter = new AbstractVictimAssetAssociateWriterAdapter<Victim,Integer>(
+                            VictimWriterAdapter.this.getConn()
+                          , VictimWriterAdapter.this.executor
+                          , VictimWriterAdapter.this.singleType
+            ) {
+            @Override
+            protected String getUrlBasePrefix() {
+                return VictimWriterAdapter.this.getUrlBasePrefix();
+            }
+
+            @Override
+            public Integer getId(Victim item) {
+                return VictimWriterAdapter.this.getId(item);
+            }
+
+            @Override
+            public String getUrlType() {
+                return VictimWriterAdapter.this.getUrlType();
+            }
+
+        };
+
     }
 
-    public Victim create(Victim victim) throws IOException, FailedResponseException {
-        return create(victim, null);
+    @Override
+    protected String getUrlBasePrefix() {
+        return "v2.victims";
     }
 
-    public Victim create(Victim victim, String ownerName)
-        throws IOException, FailedResponseException {
+    @Override
+    public Integer getId(Victim item) {
+        return item.getId();
+    }
 
-        VictimResponse item = createItem("v2.victims", VictimResponse.class, ownerName, null, victim);
+    @Override
+    public String getUrlType() {
+        return "victims";
+    }
 
-        return (Victim) item.getData().getData();
+    @Override
+    public WriteListResponse<Integer> associateGroupAdversaries(Integer uniqueId, List<Integer> adversaryIds) throws IOException {
+        return groupAssocWriter.associateGroupAdversaries(uniqueId, adversaryIds);
+    }
+
+    @Override
+    public WriteListResponse<Integer> associateGroupAdversaries(Integer uniqueId, List<Integer> adversaryIds, String ownerName) throws IOException {
+        return groupAssocWriter.associateGroupAdversaries(uniqueId, adversaryIds, ownerName);
+    }
+
+    @Override
+    public boolean associateGroupAdversary(Integer uniqueId, Integer adversaryId) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupAdversary(uniqueId, adversaryId);
+    }
+
+    @Override
+    public boolean associateGroupAdversary(Integer uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupAdversary(uniqueId, adversaryId, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<Integer> associateGroupEmails(Integer uniqueId, List<Integer> emailIds) throws IOException {
+        return groupAssocWriter.associateGroupEmails(uniqueId, emailIds);
+    }
+
+    @Override
+    public WriteListResponse<Integer> associateGroupEmails(Integer uniqueId, List<Integer> emailIds, String ownerName) throws IOException {
+        return groupAssocWriter.associateGroupEmails(uniqueId, emailIds, ownerName);
+    }
+
+    @Override
+    public boolean associateGroupEmail(Integer uniqueId, Integer emailId) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupEmail(uniqueId, emailId);
+    }
+
+    @Override
+    public boolean associateGroupEmail(Integer uniqueId, Integer emailId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupEmail(uniqueId, emailId, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<Integer> associateGroupIncidents(Integer uniqueId, List<Integer> incidentIds) throws IOException {
+        return groupAssocWriter.associateGroupIncidents(uniqueId, incidentIds);
+    }
+
+    @Override
+    public WriteListResponse<Integer> associateGroupIncidents(Integer uniqueId, List<Integer> incidentIds, String ownerName) throws IOException {
+        return groupAssocWriter.associateGroupIncidents(uniqueId, incidentIds, ownerName);
+    }
+
+    @Override
+    public boolean associateGroupIncident(Integer uniqueId, Integer incidentId) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupIncident(uniqueId, incidentId);
+    }
+
+    @Override
+    public boolean associateGroupIncident(Integer uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupIncident(uniqueId, incidentId, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<Integer> associateGroupSignatures(Integer uniqueId, List<Integer> signatureIds) throws IOException {
+        return groupAssocWriter.associateGroupSignatures(uniqueId, signatureIds);
+    }
+
+    @Override
+    public WriteListResponse<Integer> associateGroupSignatures(Integer uniqueId, List<Integer> signatureIds, String ownerName) throws IOException {
+        return groupAssocWriter.associateGroupSignatures(uniqueId, signatureIds, ownerName);
+    }
+
+    @Override
+    public boolean associateGroupSignature(Integer uniqueId, Integer signatureId) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupSignature(uniqueId, signatureId);
+    }
+
+    @Override
+    public boolean associateGroupSignature(Integer uniqueId, Integer signatureId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupSignature(uniqueId, signatureId, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<Integer> associateGroupThreats(Integer uniqueId, List<Integer> threatIds) throws IOException {
+        return groupAssocWriter.associateGroupThreats(uniqueId, threatIds);
+    }
+
+    @Override
+    public WriteListResponse<Integer> associateGroupThreats(Integer uniqueId, List<Integer> threatIds, String ownerName) throws IOException {
+        return groupAssocWriter.associateGroupThreats(uniqueId, threatIds, ownerName);
+    }
+
+    @Override
+    public boolean associateGroupThreat(Integer uniqueId, Integer threatId) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupThreat(uniqueId, threatId);
+    }
+
+    @Override
+    public boolean associateGroupThreat(Integer uniqueId, Integer threatId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupThreat(uniqueId, threatId, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<String> associateIndicatorAddresses(Integer uniqueId, List<String> ipAddresses) throws IOException {
+        return indAssocWriter.associateIndicatorAddresses(uniqueId, ipAddresses);
+    }
+
+    @Override
+    public WriteListResponse<String> associateIndicatorAddresses(Integer uniqueId, List<String> ipAddresses, String ownerName) throws IOException {
+        return indAssocWriter.associateIndicatorAddresses(uniqueId, ipAddresses, ownerName);
+    }
+
+    @Override
+    public boolean associateIndicatorAddress(Integer uniqueId, String ipAddress) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorAddress(uniqueId, ipAddress);
+    }
+
+    @Override
+    public boolean associateIndicatorAddress(Integer uniqueId, String ipAddress, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorAddress(uniqueId, ipAddress, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<String> associateIndicatorEmailAddresses(Integer uniqueId, List<String> emailAddresses) throws IOException {
+        return indAssocWriter.associateIndicatorEmailAddresses(uniqueId, emailAddresses);
+    }
+
+    @Override
+    public WriteListResponse<String> associateIndicatorEmailAddresses(Integer uniqueId, List<String> emailAddresses, String ownerName) throws IOException {
+        return indAssocWriter.associateIndicatorEmailAddresses(uniqueId, emailAddresses, ownerName);
+    }
+
+    @Override
+    public boolean associateIndicatorEmailAddress(Integer uniqueId, String emailAddress) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorEmailAddress(uniqueId, emailAddress);
+    }
+
+    @Override
+    public boolean associateIndicatorEmailAddress(Integer uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorAddress(uniqueId, emailAddress, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<String> associateIndicatorFiles(Integer uniqueId, List<String> fileHashes) throws IOException {
+        return indAssocWriter.associateIndicatorFiles(uniqueId, fileHashes);
+    }
+
+    @Override
+    public WriteListResponse<String> associateIndicatorFiles(Integer uniqueId, List<String> fileHashes, String ownerName) throws IOException {
+        return indAssocWriter.associateIndicatorFiles(uniqueId, fileHashes, ownerName);
+    }
+
+    @Override
+    public boolean associateIndicatorFile(Integer uniqueId, String fileHash) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorFile(uniqueId, fileHash);
+    }
+
+    @Override
+    public boolean associateIndicatorFile(Integer uniqueId, String fileHash, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorAddress(uniqueId, fileHash, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<String> associateIndicatorHosts(Integer uniqueId, List<String> hostNames) throws IOException {
+        return indAssocWriter.associateIndicatorHosts(uniqueId, hostNames);
+    }
+
+    @Override
+    public WriteListResponse<String> associateIndicatorHosts(Integer uniqueId, List<String> hostNames, String ownerName) throws IOException {
+        return indAssocWriter.associateIndicatorHosts(uniqueId, hostNames, ownerName);
+    }
+
+    @Override
+    public boolean associateIndicatorHost(Integer uniqueId, String hostName) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorHost(uniqueId, hostName);
+    }
+
+    @Override
+    public boolean associateIndicatorHost(Integer uniqueId, String hostName, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorHost(uniqueId, hostName, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<String> associateIndicatorUrls(Integer uniqueId, List<String> urlTexts) throws IOException {
+        return indAssocWriter.associateIndicatorUrls(uniqueId, urlTexts);
+    }
+
+    @Override
+    public WriteListResponse<String> associateIndicatorUrls(Integer uniqueId, List<String> urlTexts, String ownerName) throws IOException {
+        return indAssocWriter.associateIndicatorUrls(uniqueId, urlTexts, ownerName);
+    }
+
+    @Override
+    public boolean associateIndicatorUrl(Integer uniqueId, String urlText) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorUrl(uniqueId, urlText);
+    }
+
+    @Override
+    public boolean associateIndicatorUrl(Integer uniqueId, String urlText, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorUrl(uniqueId, urlText, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<Integer> associateVictimAssetEmailAddresses(Integer uniqueId, List<Integer> assetIds) throws IOException {
+        return victimAssetAssocWriter.associateVictimAssetEmailAddresses(uniqueId, assetIds);
+    }
+
+    @Override
+    public WriteListResponse<Integer> associateVictimAssetEmailAddresses(Integer uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
+        return victimAssetAssocWriter. associateVictimAssetEmailAddresses(uniqueId, assetIds, ownerName);
+    }
+
+    @Override
+    public boolean associateVictimAssetEmailAddress(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.associateVictimAssetEmailAddress(uniqueId, assetId);
+    }
+
+    @Override
+    public boolean associateVictimAssetEmailAddress(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.associateVictimAssetEmailAddress(uniqueId, assetId, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<Integer> associateVictimAssetNetworkAccounts(Integer uniqueId, List<Integer> assetIds) throws IOException {
+        return victimAssetAssocWriter.associateVictimAssetNetworkAccounts(uniqueId, assetIds);
+    }
+
+    @Override
+    public WriteListResponse<Integer> associateVictimAssetNetworkAccounts(Integer uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
+        return victimAssetAssocWriter.associateVictimAssetNetworkAccounts(uniqueId, assetIds, ownerName);
+    }
+
+    @Override
+    public boolean associateVictimAssetNetworkAccount(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.associateVictimAssetNetworkAccount(uniqueId, assetId);
+    }
+
+    @Override
+    public boolean associateVictimAssetNetworkAccount(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.associateVictimAssetNetworkAccount(uniqueId, assetId, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<Integer> associateVictimAssetPhoneNumbers(Integer uniqueId, List<Integer> assetIds) throws IOException {
+        return victimAssetAssocWriter.associateVictimAssetPhoneNumbers(uniqueId, assetIds);
+    }
+
+    @Override
+    public WriteListResponse<Integer> associateVictimAssetPhoneNumbers(Integer uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
+        return victimAssetAssocWriter.associateVictimAssetPhoneNumbers(uniqueId, assetIds, ownerName);
+    }
+
+    @Override
+    public boolean associateVictimAssetPhoneNumber(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.associateVictimAssetPhoneNumber(uniqueId, assetId);
+    }
+
+    @Override
+    public boolean associateVictimAssetPhoneNumber(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.associateVictimAssetPhoneNumber(uniqueId, assetId, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<Integer> associateVictimAssetSocialNetworks(Integer uniqueId, List<Integer> assetIds) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.associateVictimAssetSocialNetworks(uniqueId, assetIds);
+    }
+
+    @Override
+    public WriteListResponse<Integer> associateVictimAssetSocialNetworks(Integer uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
+        return victimAssetAssocWriter.associateVictimAssetSocialNetworks(uniqueId, assetIds, ownerName);
+    }
+
+    @Override
+    public boolean associateVictimAssetSocialNetwork(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.associateVictimAssetSocialNetwork(uniqueId, assetId);
+    }
+
+    @Override
+    public boolean associateVictimAssetSocialNetwork(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.associateVictimAssetSocialNetwork(uniqueId, assetId, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<Integer> associateVictimAssetWebsites(Integer uniqueId, List<Integer> assetIds) throws IOException {
+        return victimAssetAssocWriter.associateVictimAssetWebsites(uniqueId, assetIds);
+    }
+
+    @Override
+    public WriteListResponse<Integer> associateVictimAssetWebsites(Integer uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
+        return victimAssetAssocWriter.associateVictimAssetWebsites(uniqueId, assetIds, ownerName);
+    }
+
+    @Override
+    public boolean associateVictimAssetWebsite(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.associateVictimAssetWebsite(uniqueId, assetId);
+    }
+
+    @Override
+    public boolean associateVictimAssetWebsite(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.associateVictimAssetWebsite(uniqueId, assetId, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupAdversaries(Integer uniqueId, List<Integer> adversaryIds) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupAdversaries(uniqueId, adversaryIds);
+    }
+
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupAdversaries(Integer uniqueId, List<Integer> adversaryIds, String ownerName) throws IOException {
+        return groupAssocWriter.associateGroupAdversaries(uniqueId, adversaryIds, ownerName);
+    }
+
+    @Override
+    public boolean deleteAssociatedGroupAdversary(Integer uniqueId, Integer adversaryId) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupAdversary(uniqueId, adversaryId);
+    }
+
+    @Override
+    public boolean deleteAssociatedGroupAdversary(Integer uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupAdversary(uniqueId, adversaryId, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupEmails(Integer uniqueId, List<Integer> emailIds) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupEmails(uniqueId, emailIds);
+    }
+
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupEmails(Integer uniqueId, List<Integer> emailIds, String ownerName) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupEmails(uniqueId, emailIds, ownerName);
+    }
+
+    @Override
+    public boolean deleteAssociatedGroupEmail(Integer uniqueId, Integer emailId) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupEmail(uniqueId, emailId);
+    }
+
+    @Override
+    public boolean deleteAssociatedGroupEmail(Integer uniqueId, Integer emailId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupEmail(uniqueId, emailId, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupIncidents(Integer uniqueId, List<Integer> incidentIds) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupIncidents(uniqueId, incidentIds);
+    }
+
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupIncidents(Integer uniqueId, List<Integer> incidentIds, String ownerName) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupIncidents(uniqueId, incidentIds, ownerName);
+    }
+
+    @Override
+    public boolean deleteAssociatedGroupIncident(Integer uniqueId, Integer incidentId) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupIncident(uniqueId, incidentId);
+    }
+
+    @Override
+    public boolean deleteAssociatedGroupIncident(Integer uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupIncident(uniqueId, incidentId, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupSignatures(Integer uniqueId, List<Integer> signatureIds) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupSignatures(uniqueId, signatureIds);
+    }
+
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupSignatures(Integer uniqueId, List<Integer> signatureIds, String ownerName) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupSignatures(uniqueId, signatureIds, ownerName);
+    }
+
+    @Override
+    public boolean deleteAssociatedGroupSignature(Integer uniqueId, Integer signatureId) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupSignature(uniqueId, signatureId);
+    }
+
+    @Override
+    public boolean deleteAssociatedGroupSignature(Integer uniqueId, Integer signatureId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupSignature(uniqueId, signatureId, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupThreats(Integer uniqueId, List<Integer> threatIds) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupThreats(uniqueId, threatIds);
+    }
+
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupThreats(Integer uniqueId, List<Integer> threatIds, String ownerName) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupThreats(uniqueId, threatIds, ownerName);
+    }
+
+    @Override
+    public boolean deleteAssociatedGroupThreat(Integer uniqueId, Integer threatId) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupThreat(uniqueId, threatId);
+    }
+
+    @Override
+    public boolean deleteAssociatedGroupThreat(Integer uniqueId, Integer threatId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupThreat(uniqueId, threatId, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorAddresses(Integer uniqueId, List<String> ipAddresses) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorAddresses(uniqueId, ipAddresses);
+    }
+
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorAddresses(Integer uniqueId, List<String> ipAddresses, String ownerName) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorAddresses(uniqueId, ipAddresses, ownerName);
+    }
+
+    @Override
+    public boolean deleteAssociatedIndicatorAddress(Integer uniqueId, String ipAddress) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorAddress(uniqueId, ipAddress);
+    }
+
+    @Override
+    public boolean deleteAssociatedIndicatorAddress(Integer uniqueId, String ipAddress, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorAddress(uniqueId, ipAddress, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorEmailAddresses(Integer uniqueId, List<String> emailAddresses) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorEmailAddresses(uniqueId, emailAddresses);
+    }
+
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorEmailAddresses(Integer uniqueId, List<String> emailAddresses, String ownerName) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorEmailAddresses(uniqueId, emailAddresses, ownerName);
+    }
+
+    @Override
+    public boolean deleteAssociatedIndicatorEmailAddress(Integer uniqueId, String emailAddress) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorEmailAddress(uniqueId, emailAddress);
+    }
+
+    @Override
+    public boolean deleteAssociatedIndicatorEmailAddress(Integer uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorEmailAddress(uniqueId, emailAddress, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorFiles(Integer uniqueId, List<String> fileHashes) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorFiles(uniqueId, fileHashes);
+    }
+
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorFiles(Integer uniqueId, List<String> fileHashes, String ownerName) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorFiles(uniqueId, fileHashes, ownerName);
+    }
+
+    @Override
+    public boolean deleteAssociatedIndicatorFile(Integer uniqueId, String fileHash) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorFile(uniqueId, fileHash);
+    }
+
+    @Override
+    public boolean deleteAssociatedIndicatorFile(Integer uniqueId, String fileHash, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorFile(uniqueId, fileHash, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorHosts(Integer uniqueId, List<String> hostNames) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorHosts(uniqueId, hostNames);
+    }
+
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorHosts(Integer uniqueId, List<String> hostNames, String ownerName) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorHosts(uniqueId, hostNames, ownerName);
+    }
+
+    @Override
+    public boolean deleteAssociatedIndicatorHost(Integer uniqueId, String hostName) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorHost(uniqueId, hostName);
+    }
+
+    @Override
+    public boolean deleteAssociatedIndicatorHost(Integer uniqueId, String hostName, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorHost(uniqueId, hostName, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorUrls(Integer uniqueId, List<String> urlTexts) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorUrls(uniqueId, urlTexts);
+    }
+
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorUrls(Integer uniqueId, List<String> urlTexts, String ownerName) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorUrls(uniqueId, urlTexts, ownerName);
+    }
+
+    @Override
+    public boolean deleteAssociatedIndicatorUrl(Integer uniqueId, String urlText) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorUrl(uniqueId, urlText);
+    }
+
+    @Override
+    public boolean deleteAssociatedIndicatorUrl(Integer uniqueId, String urlText, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorUrl(uniqueId, urlText, ownerName);
+    }
+
+   @Override
+    public WriteListResponse<Integer> deleteAssociatedVictimAssetEmailAddresses(Integer uniqueId, List<Integer> assetIds) throws IOException {
+        return victimAssetAssocWriter.deleteAssociatedVictimAssetEmailAddresses(uniqueId, assetIds);
+    }
+
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedVictimAssetEmailAddresses(Integer uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
+        return victimAssetAssocWriter.deleteAssociatedVictimAssetEmailAddresses(uniqueId, assetIds, ownerName);
+    }
+
+    @Override
+    public boolean deleteAssociatedVictimAssetEmailAddress(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.deleteAssociatedVictimAssetEmailAddress(uniqueId, assetId);
+    }
+
+    @Override
+    public boolean deleteAssociatedVictimAssetEmailAddress(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.deleteAssociatedVictimAssetEmailAddress(uniqueId, assetId, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedVictimAssetNetworkAccounts(Integer uniqueId, List<Integer> assetIds) throws IOException {
+        return victimAssetAssocWriter.deleteAssociatedVictimAssetNetworkAccounts(uniqueId, assetIds);
+    }
+
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedVictimAssetNetworkAccounts(Integer uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
+        return victimAssetAssocWriter.deleteAssociatedVictimAssetNetworkAccounts(uniqueId, assetIds, ownerName);
+    }
+
+    @Override
+    public boolean deleteAssociatedVictimAssetNetworkAccount(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.associateVictimAssetNetworkAccount(uniqueId, assetId);
+    }
+
+    @Override
+    public boolean deleteAssociatedVictimAssetNetworkAccount(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.deleteAssociatedVictimAssetNetworkAccount(uniqueId, assetId, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedVictimAssetPhoneNumbers(Integer uniqueId, List<Integer> assetIds) throws IOException {
+        return victimAssetAssocWriter.deleteAssociatedVictimAssetPhoneNumbers(uniqueId, assetIds);
+    }
+
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedVictimAssetPhoneNumbers(Integer uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
+        return victimAssetAssocWriter.deleteAssociatedVictimAssetPhoneNumbers(uniqueId, assetIds, ownerName);
+    }
+
+    @Override
+    public boolean deleteAssociatedVictimAssetPhoneNumber(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.deleteAssociatedVictimAssetPhoneNumber(uniqueId, assetId);
+    }
+
+    @Override
+    public boolean deleteAssociatedVictimAssetPhoneNumber(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.deleteAssociatedVictimAssetPhoneNumber(uniqueId, assetId, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedVictimAssetSocialNetworks(Integer uniqueId, List<Integer> assetIds) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.deleteAssociatedVictimAssetSocialNetworks(uniqueId, assetIds);
+    }
+
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedVictimAssetSocialNetworks(Integer uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
+        return victimAssetAssocWriter.deleteAssociatedVictimAssetSocialNetworks(uniqueId, assetIds, ownerName);
+    }
+
+    @Override
+    public boolean deleteAssociatedVictimAssetSocialNetwork(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.deleteAssociatedVictimAssetSocialNetwork(uniqueId, assetId);
+    }
+
+    @Override
+    public boolean deleteAssociatedVictimAssetSocialNetwork(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.deleteAssociatedVictimAssetSocialNetwork(uniqueId, assetId, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedVictimAssetWebsites(Integer uniqueId, List<Integer> assetIds) throws IOException {
+        return victimAssetAssocWriter.deleteAssociatedVictimAssetWebsites(uniqueId, assetIds);
+    }
+
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedVictimAssetWebsites(Integer uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
+        return victimAssetAssocWriter.deleteAssociatedVictimAssetWebsites(uniqueId, assetIds, ownerName);
+    }
+
+    @Override
+    public boolean deleteAssociatedVictimAssetWebsite(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.deleteAssociatedVictimAssetWebsite(uniqueId, assetId);
+    }
+
+    @Override
+    public boolean deleteAssociatedVictimAssetWebsite(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.deleteAssociatedVictimAssetWebsite(uniqueId, assetId, ownerName);
     }
 
 
-    public WriteListResponse<Victim> update(List<Victim> victimList) throws IOException, FailedResponseException {
-
-        List<Integer> idList = new ArrayList<>();
-        for(Victim it : victimList)    idList.add( it.getId() );
-        WriteListResponse<Victim> data = updateListWithParam("v2.victims.byId", VictimListResponse.class, null, null, "id", idList, victimList);
-
-        return data;
-    }
-
-    public Victim update(Victim victim) throws IOException, FailedResponseException {
-        return update(victim, null);
-    }
-
-    public Victim update(Victim victim, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String,Object> map = createParamMap("id", victim.getId());
-        VictimResponse item = updateItem("v2.victims.byId", VictimResponse.class, ownerName, map, victim);
-
-        return (Victim) item.getData().getData();
-    }
-
-    public WriteListResponse<Adversary> associateAdversaries(Integer victimId, List<Integer> adversaryIdList) throws IOException{
-        return associateAdversaries(victimId, adversaryIdList, null); 
-    }
-
-    public WriteListResponse<Adversary> associateAdversaries(Integer victimId, List<Integer> adversaryIdList, String ownerName) 
-            throws IOException {
-
-        Map<String,Object> map = createParamMap("id", victimId);
-        WriteListResponse<Adversary> data = createListWithParam("v2.victims.byId.groups.adversaries.byGroupId", AdversaryListResponse.class, ownerName, map, "groupId", adversaryIdList);
-
-        return data;
-    }
-
-    public Adversary associateAdversary(Integer victimId, Integer adversaryId) throws IOException, FailedResponseException {
-        return associateAdversary(victimId, adversaryId, null); 
-    }
-
-    public Adversary associateAdversary(Integer victimId, Integer adversaryId, String ownerName) 
-            throws IOException, FailedResponseException {
-
-        Map<String,Object> map = createParamMap("id", victimId, "groupId", adversaryId);
-        AdversaryResponse data = createItem("v2.victims.byId.groups.adversaries.byGroupId", AdversaryResponse.class, ownerName, map, null);
-
-        return (Adversary)data.getData().getData();
-    }
-
-    public WriteListResponse<Email> associateEmails(Integer victimId, List<Integer> emailIdList) throws IOException{
-        return associateEmails(victimId, emailIdList, null); 
-    }
-
-    public WriteListResponse<Email> associateEmails(Integer victimId, List<Integer> emailIdList, String ownerName) 
-            throws IOException {
-
-        Map<String,Object> map = createParamMap("id", victimId);
-        WriteListResponse<Email> data = createListWithParam("v2.victims.byId.groups.emails.byGroupId", EmailListResponse.class, ownerName, map, "groupId", emailIdList);
-
-        return data;
-    }
-
-    public Email associateEmail(Integer victimId, Integer emailId) throws IOException, FailedResponseException {
-        return associateEmail(victimId, emailId, null); 
-    }
-
-    public Email associateEmail(Integer victimId, Integer emailId, String ownerName) 
-            throws IOException, FailedResponseException {
-
-        Map<String,Object> map = createParamMap("id", victimId, "groupId", emailId);
-        EmailResponse data = createItem("v2.victims.byId.groups.emails.byGroupId", EmailResponse.class, ownerName, map, null);
-
-        return (Email)data.getData().getData();
-    }
-
-    public WriteListResponse<Incident> associateIncidents(Integer victimId, List<Integer> incidentIdList) throws IOException{
-        return associateIncidents(victimId, incidentIdList, null); 
-    }
-
-    public WriteListResponse<Incident> associateIncidents(Integer victimId, List<Integer> incidentIdList, String ownerName) 
-            throws IOException {
-
-        Map<String,Object> map = createParamMap("id", victimId);
-        WriteListResponse<Incident> data = createListWithParam("v2.victims.byId.groups.incidents.byGroupId", IncidentListResponse.class, ownerName, map, "groupId", incidentIdList);
-
-        return data;
-    }
-
-    public Incident associateIncident(Integer victimId, Integer incidentId) throws IOException, FailedResponseException {
-        return associateIncident(victimId, incidentId, null); 
-    }
-
-    public Incident associateIncident(Integer victimId, Integer incidentId, String ownerName) 
-            throws IOException, FailedResponseException {
-
-        Map<String,Object> map = createParamMap("id", victimId, "groupId", incidentId);
-        IncidentResponse data = createItem("v2.victims.byId.groups.incidents.byGroupId", IncidentResponse.class, ownerName, map, null);
-
-        return (Incident)data.getData().getData();
-    }
-
-    public WriteListResponse<Signature> associateSignatures(Integer victimId, List<Integer> signatureIdList) throws IOException{
-        return associateSignatures(victimId, signatureIdList, null); 
-    }
-
-    public WriteListResponse<Signature> associateSignatures(Integer victimId, List<Integer> signatureIdList, String ownerName) 
-            throws IOException {
-
-        Map<String,Object> map = createParamMap("id", victimId);
-        WriteListResponse<Signature> data = createListWithParam("v2.victims.byId.groups.signatures.byGroupId", SignatureListResponse.class, ownerName, map, "groupId", signatureIdList);
-
-        return data;
-    }
-
-    public Signature associateSignature(Integer victimId, Integer signatureId) throws IOException, FailedResponseException {
-        return associateSignature(victimId, signatureId, null); 
-    }
-
-    public Signature associateSignature(Integer victimId, Integer signatureId, String ownerName) 
-            throws IOException, FailedResponseException {
-
-        Map<String,Object> map = createParamMap("id", victimId, "groupId", signatureId);
-        SignatureResponse data = createItem("v2.victims.byId.groups.signatures.byGroupId", SignatureResponse.class, ownerName, map, null);
-
-        return (Signature)data.getData().getData();
-    }
-
-    
-    public WriteListResponse<Threat> associateThreats(Integer victimId, List<Integer> threatIdList) throws IOException{
-        return associateThreats(victimId, threatIdList, null); 
-    }
-
-    public WriteListResponse<Threat> associateThreats(Integer victimId, List<Integer> threatIdList, String ownerName) 
-            throws IOException {
-
-        Map<String,Object> map = createParamMap("id", victimId);
-        WriteListResponse<Threat> data = createListWithParam("v2.victims.byId.groups.threats.byGroupId", ThreatListResponse.class, ownerName, map, "groupId", threatIdList);
-
-        return data;
-    }
-
-    public Threat associateThreat(Integer victimId, Integer threatId) throws IOException, FailedResponseException {
-        return associateThreat(victimId, threatId, null); 
-    }
-
-    public Threat associateThreat(Integer victimId, Integer threatId, String ownerName) 
-            throws IOException, FailedResponseException {
-
-        Map<String,Object> map = createParamMap("id", victimId, "groupId", threatId);
-        ThreatResponse data = createItem("v2.victims.byId.groups.threats.byGroupId", ThreatResponse.class, ownerName, map, null);
-
-        return (Threat)data.getData().getData();
-    }
-
-
-    public WriteListResponse<VictimEmailAddress> createVictimAssetEmailAddresses(Integer victimId, List<VictimEmailAddress> victimEmailAddressList) throws IOException {
-        return createVictimAssetEmailAddresses(victimId, victimEmailAddressList, null); 
-    }
-
-    public WriteListResponse<VictimEmailAddress> createVictimAssetEmailAddresses(Integer victimId, List<VictimEmailAddress> victimEmailAddressList, String ownerName) 
-            throws IOException {
-
-        Map<String,Object> map = createParamMap("id", victimId);
-        WriteListResponse<VictimEmailAddress> data = createList("v2.victims.byId.victimAssets.emailAddresses", VictimEmailAddressListResponse.class, ownerName, map, victimEmailAddressList);
-
-        return data;
-    }
-
-    public VictimEmailAddress createVictimAssetEmailAddress(Integer victimId, VictimEmailAddress victimEmailAddress) throws IOException, FailedResponseException {
-        return createVictimAssetEmailAddress(victimId,victimEmailAddress, null); 
-    }
-            
-    public VictimEmailAddress createVictimAssetEmailAddress(Integer victimId, VictimEmailAddress victimEmailAddress, String ownerName)
-            throws IOException, FailedResponseException {
-        
-        Map<String,Object> map = createParamMap("id", victimId);
-        VictimEmailAddressResponse data = createItem("v2.victims.byId.victimAssets.emailAddresses"
-                                            , VictimEmailAddressResponse.class, ownerName, map, victimEmailAddress);
-
-        return (VictimEmailAddress)data.getData().getData();
-    }
-
-    public WriteListResponse<VictimNetworkAccount> createVictimAssetNetworkAccounts(Integer victimId, List<VictimNetworkAccount> victimNetworkAccountList) throws IOException {
-        return createVictimAssetNetworkAccounts(victimId, victimNetworkAccountList, null); 
-    }
-
-    public WriteListResponse<VictimNetworkAccount> createVictimAssetNetworkAccounts(Integer victimId, List<VictimNetworkAccount> victimNetworkAccountList, String ownerName) 
-            throws IOException {
-
-        Map<String,Object> map = createParamMap("id", victimId);
-        WriteListResponse<VictimNetworkAccount> data = createList("v2.victims.byId.victimAssets.networkAccounts", VictimNetworkAccountListResponse.class, ownerName, map, victimNetworkAccountList);
-
-        return data;
-    }
-
-    public VictimNetworkAccount createVictimAssetNetworkAccount(Integer victimId, VictimNetworkAccount victimNetworkAccount) throws IOException, FailedResponseException {
-        return createVictimAssetNetworkAccount(victimId,victimNetworkAccount, null); 
-    }
-            
-    public VictimNetworkAccount createVictimAssetNetworkAccount(Integer victimId, VictimNetworkAccount victimNetworkAccount, String ownerName)
-            throws IOException, FailedResponseException {
-        
-        Map<String,Object> map = createParamMap("id", victimId);
-        VictimNetworkAccountResponse data = createItem("v2.victims.byId.victimAssets.networkAccounts"
-                                            , VictimNetworkAccountResponse.class, ownerName, map, victimNetworkAccount);
-
-        return (VictimNetworkAccount)data.getData().getData();
-    }
-
-    public WriteListResponse<VictimPhone> createVictimAssetPhones(Integer victimId, List<VictimPhone> victimPhoneList) throws IOException {
-        return createVictimAssetPhones(victimId, victimPhoneList, null); 
-    }
-
-    public WriteListResponse<VictimPhone> createVictimAssetPhones(Integer victimId, List<VictimPhone> victimPhoneList, String ownerName) 
-            throws IOException {
-
-        Map<String,Object> map = createParamMap("id", victimId);
-        WriteListResponse<VictimPhone> data = createList("v2.victims.byId.victimAssets.phones", VictimPhoneListResponse.class, ownerName, map, victimPhoneList);
-
-        return data;
-    }
-
-    public VictimPhone createVictimAssetPhone(Integer victimId, VictimPhone victimPhone) throws IOException, FailedResponseException {
-        return createVictimAssetPhone(victimId,victimPhone, null); 
-    }
-            
-    public VictimPhone createVictimAssetPhone(Integer victimId, VictimPhone victimPhone, String ownerName)
-            throws IOException, FailedResponseException {
-        
-        Map<String,Object> map = createParamMap("id", victimId);
-        VictimPhoneResponse data = createItem("v2.victims.byId.victimAssets.phones"
-                                            , VictimPhoneResponse.class, ownerName, map, victimPhone);
-
-        return (VictimPhone)data.getData().getData();
-    }
-
-    public WriteListResponse<VictimSocialNetwork> createVictimAssetSocialNetworks(Integer victimId, List<VictimSocialNetwork> victimSocialNetworkList) throws IOException {
-        return createVictimAssetSocialNetworks(victimId, victimSocialNetworkList, null); 
-    }
-
-    public WriteListResponse<VictimSocialNetwork> createVictimAssetSocialNetworks(Integer victimId, List<VictimSocialNetwork> victimSocialNetworkList, String ownerName) 
-            throws IOException {
-
-        Map<String,Object> map = createParamMap("id", victimId);
-        WriteListResponse<VictimSocialNetwork> data = createList("v2.victims.byId.victimAssets.socialNetworks", VictimSocialNetworkListResponse.class, ownerName, map, victimSocialNetworkList);
-
-        return data;
-    }
-
-    public VictimSocialNetwork createVictimAssetSocialNetwork(Integer victimId, VictimSocialNetwork victimSocialNetwork) throws IOException, FailedResponseException {
-        return createVictimAssetSocialNetwork(victimId,victimSocialNetwork, null); 
-    }
-            
-    public VictimSocialNetwork createVictimAssetSocialNetwork(Integer victimId, VictimSocialNetwork victimSocialNetwork, String ownerName)
-            throws IOException, FailedResponseException {
-        
-        Map<String,Object> map = createParamMap("id", victimId);
-        VictimSocialNetworkResponse data = createItem("v2.victims.byId.victimAssets.socialNetworks"
-                                            , VictimSocialNetworkResponse.class, ownerName, map, victimSocialNetwork);
-
-        return (VictimSocialNetwork)data.getData().getData();
-    }
-
-    public WriteListResponse<VictimWebSite> createVictimAssetWebSites(Integer victimId, List<VictimWebSite> victimWebSiteList) throws IOException {
-        return createVictimAssetWebSites(victimId, victimWebSiteList, null); 
-    }
-
-    public WriteListResponse<VictimWebSite> createVictimAssetWebSites(Integer victimId, List<VictimWebSite> victimWebSiteList, String ownerName) 
-            throws IOException {
-
-        Map<String,Object> map = createParamMap("id", victimId);
-        WriteListResponse<VictimWebSite> data = createList("v2.victims.byId.victimAssets.websites", VictimWebSiteListResponse.class, ownerName, map, victimWebSiteList);
-
-        return data;
-    }
-
-    public VictimWebSite createVictimAssetWebSite(Integer victimId, VictimWebSite victimWebSite) throws IOException, FailedResponseException {
-        return createVictimAssetWebSite(victimId,victimWebSite, null); 
-    }
-            
-    public VictimWebSite createVictimAssetWebSite(Integer victimId, VictimWebSite victimWebSite, String ownerName)
-            throws IOException, FailedResponseException {
-        
-        Map<String,Object> map = createParamMap("id", victimId);
-        VictimWebSiteResponse data = createItem("v2.victims.byId.victimAssets.websites"
-                                            , VictimWebSiteResponse.class, ownerName, map, victimWebSite);
-
-        return (VictimWebSite)data.getData().getData();
-    }
-
-    public WriteListResponse<VictimEmailAddress> updateVictimAssetEmailAddresses(Integer victimId, List<VictimEmailAddress> emailAddressList)
-        throws IOException {
-        return updateVictimAssetEmailAddresses(victimId, emailAddressList, null);
-    }
-
-    public WriteListResponse<VictimEmailAddress> updateVictimAssetEmailAddresses(Integer victimId, List<VictimEmailAddress> emailAddressList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", victimId);
-        List<Integer> idList = new ArrayList<>();
-        for(VictimEmailAddress it : emailAddressList)    idList.add( it.getId() );
-        WriteListResponse<VictimEmailAddress> data = updateListWithParam("v2.victims.byId.victimAssets.emailAddresses.byAssetId", EmailAddressListResponse.class, ownerName, map, "assetId", idList, emailAddressList);
-
-        return data;
-    }
-
-    public VictimEmailAddress updateEmailAddress(Integer victimId, EmailAddress emailAddress) throws IOException, FailedResponseException {
-        return updateEmailAddress(victimId, emailAddress, null);
-    }
-
-    public VictimEmailAddress updateEmailAddress(Integer victimId, EmailAddress emailAddress, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", victimId);
-        EmailAddressResponse item = updateItem("v2.victims.byId.victimAssets.emailAddresses.byAssetId", EmailAddressResponse.class, ownerName, map, emailAddress);
-
-        return (VictimEmailAddress) item.getData().getData();
-    }
-
-    public WriteListResponse<VictimNetworkAccount> updateVictimAssetNetworkAccounts(Integer victimId, List<VictimNetworkAccount> networkAccountList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", victimId);
-        List<Integer> idList = new ArrayList<>();
-        for(VictimNetworkAccount it : networkAccountList)    idList.add( it.getId() );
-        WriteListResponse<VictimNetworkAccount> data = updateListWithParam("v2.victims.byId.victimAssets.networkAccounts.byAssetId", VictimNetworkAccountListResponse.class, ownerName, map, "assetId", idList, networkAccountList);
-
-        return data;
-    }
-
-    public VictimNetworkAccount updateVictimAssetNetworkAccount(Integer victimId, VictimNetworkAccount networkAccount) throws IOException, FailedResponseException {
-        return updateVictimAssetNetworkAccount(victimId, networkAccount, null);
-    }
-
-    public VictimNetworkAccount updateVictimAssetNetworkAccount(Integer victimId, VictimNetworkAccount networkAccount, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", victimId);
-        VictimNetworkAccountResponse item = updateItem("v2.victims.byId.victimAssets.networkAccounts.byAssetId", VictimNetworkAccountResponse.class, ownerName, map, networkAccount);
-
-        return (VictimNetworkAccount) item.getData().getData();
-    }
-
-
-    public WriteListResponse<VictimPhone> updateVictimAssetPhones(Integer victimId, List<VictimPhone> phoneNumberList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", victimId);
-        List<Integer> idList = new ArrayList<>();
-        for(VictimPhone it : phoneNumberList)    idList.add( it.getId() );
-        WriteListResponse<VictimPhone> data = updateListWithParam("v2.victims.byId.victimAssets.phoneNumbers.byAssetId", VictimPhoneListResponse.class, ownerName, map, "assetId", idList, phoneNumberList);
-
-        return data;
-    }
-
-    public VictimPhone updateVictimAssetPhone(Integer victimId, VictimPhone phoneNumber) throws IOException, FailedResponseException {
-        return updateVictimAssetPhone(victimId, phoneNumber, null);
-    }
-
-    public VictimPhone updateVictimAssetPhone(Integer victimId, VictimPhone phoneNumber, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", victimId);
-        VictimPhoneResponse item = updateItem("v2.victims.byId.victimAssets.phoneNumbers.byAssetId", VictimPhoneResponse.class, ownerName, map, phoneNumber);
-
-        return (VictimPhone) item.getData().getData();
-    }
-
-
-    public WriteListResponse<VictimSocialNetwork> updateVictimAssetSocialNetworks(Integer victimId, List<VictimSocialNetwork> socialNetworkList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", victimId);
-        List<Integer> idList = new ArrayList<>();
-        for(VictimSocialNetwork it : socialNetworkList)    idList.add( it.getId() );
-        WriteListResponse<VictimSocialNetwork> data = updateListWithParam("v2.victims.byId.victimAssets.socialNetworks.byAssetId", VictimSocialNetworkListResponse.class, ownerName, map, "assetId", idList, socialNetworkList);
-
-        return data;
-    }
-
-    public VictimSocialNetwork updateVictimAssetSocialNetwork(Integer victimId, VictimSocialNetwork socialNetwork) throws IOException, FailedResponseException {
-        return updateVictimAssetSocialNetwork(victimId, socialNetwork, null);
-    }
-
-    public VictimSocialNetwork updateVictimAssetSocialNetwork(Integer victimId, VictimSocialNetwork socialNetwork, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", victimId);
-        VictimSocialNetworkResponse item = updateItem("v2.victims.byId.victimAssets.socialNetworks.byAssetId", VictimSocialNetworkResponse.class, ownerName, map, socialNetwork);
-
-        return (VictimSocialNetwork) item.getData().getData();
-    }
-
-
-    public WriteListResponse<VictimWebSite> updateVictimAssetWebSites(Integer victimId, List<VictimWebSite> websiteList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", victimId);
-        List<Integer> idList = new ArrayList<>();
-        for(VictimWebSite it : websiteList)    idList.add( it.getId() );
-        WriteListResponse<VictimWebSite> data = updateListWithParam("v2.victims.byId.victimAssets.websites.byAssetId", VictimWebSiteListResponse.class, ownerName, map, "assetId", idList, websiteList);
-
-        return data;
-    }
-
-    public VictimWebSite updateVictimAssetWebSite(Integer victimId, VictimWebSite website) throws IOException, FailedResponseException {
-        return updateVictimAssetWebSite(victimId, website, null);
-    }
-
-    public VictimWebSite updateVictimAssetWebSite(Integer victimId, VictimWebSite website, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", victimId);
-        VictimWebSiteResponse item = updateItem("v2.victims.byId.victimAssets.websites.byAssetId", VictimWebSiteResponse.class, ownerName, map, website);
-
-        return (VictimWebSite) item.getData().getData();
-    }
-
-    
 }

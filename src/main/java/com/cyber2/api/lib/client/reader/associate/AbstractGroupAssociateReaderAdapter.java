@@ -5,6 +5,7 @@
  */
 package com.cyber2.api.lib.client.reader.associate;
 
+import com.cyber2.api.lib.client.UrlTypeable;
 import com.cyber2.api.lib.client.reader.AbstractBaseReaderAdapter;
 import com.cyber2.api.lib.conn.Connection;
 import com.cyber2.api.lib.conn.RequestExecutor;
@@ -34,7 +35,7 @@ import java.util.Map;
  *
  * @author dtineo
  */
-public abstract class AbstractGroupAssociateReaderAdapter<P> extends AbstractBaseReaderAdapter implements GroupAssociateReadable<P> {
+public abstract class AbstractGroupAssociateReaderAdapter<P> extends AbstractBaseReaderAdapter implements GroupAssociateReadable<P>, UrlTypeable {
 
     public AbstractGroupAssociateReaderAdapter(Connection conn, RequestExecutor executor, Class singleType, Class listType) {
         super(conn, executor, singleType, listType);

@@ -66,4 +66,54 @@ public interface IndicatorAssociateWritable<P> {
     public boolean associateIndicatorUrl(P uniqueId, String urlText, String ownerName)     
             throws IOException, FailedResponseException;
 
+    public WriteListResponse<String> deleteAssociatedIndicatorAddresses(P uniqueId, List<String> ipAddresses) throws IOException;
+
+    public WriteListResponse<String> deleteAssociatedIndicatorAddresses(P uniqueId, List<String> ipAddresses, String ownerName) 
+            throws IOException;
+
+    public boolean deleteAssociatedIndicatorAddress(P uniqueId, String ipAddress) throws IOException, FailedResponseException;
+
+    public boolean deleteAssociatedIndicatorAddress(P uniqueId, String ipAddress, String ownerName) 
+            throws IOException, FailedResponseException;
+
+    public WriteListResponse<String> deleteAssociatedIndicatorEmailAddresses(P uniqueId, List<String> emailAddresses) throws IOException;
+
+    public WriteListResponse<String> deleteAssociatedIndicatorEmailAddresses(P uniqueId, List<String> emailAddresses, String ownerName) 
+            throws IOException;
+
+    public boolean deleteAssociatedIndicatorEmailAddress(P uniqueId, String emailAddress) throws IOException, FailedResponseException;
+
+    public boolean deleteAssociatedIndicatorEmailAddress(P uniqueId, String emailAddress, String ownerName) 
+            throws IOException, FailedResponseException;
+
+    public WriteListResponse<String> deleteAssociatedIndicatorFiles(P uniqueId, List<String> fileHashes) throws IOException;
+
+    public WriteListResponse<String> deleteAssociatedIndicatorFiles(P uniqueId, List<String> fileHashes, String ownerName)   
+            throws IOException;
+
+    public boolean deleteAssociatedIndicatorFile(P uniqueId, String fileHash) throws IOException, FailedResponseException;
+
+    public boolean deleteAssociatedIndicatorFile(P uniqueId, String fileHash, String ownerName)   
+            throws IOException, FailedResponseException;
+
+    public WriteListResponse<String> deleteAssociatedIndicatorHosts(P uniqueId, List<String> hostNames) throws IOException;
+
+    public WriteListResponse<String> deleteAssociatedIndicatorHosts(P uniqueId, List<String> hostNames, String ownerName)   
+            throws IOException;
+
+    public boolean deleteAssociatedIndicatorHost(P uniqueId, String hostName) throws IOException, FailedResponseException;
+
+    public boolean deleteAssociatedIndicatorHost(P uniqueId, String hostName, String ownerName)   
+            throws IOException, FailedResponseException;
+
+    public WriteListResponse<String> deleteAssociatedIndicatorUrls(P uniqueId, List<String> urlTexts) throws IOException;
+
+    public WriteListResponse<String> deleteAssociatedIndicatorUrls(P uniqueId, List<String> urlTexts, String ownerName)     
+            throws IOException;
+
+    public boolean deleteAssociatedIndicatorUrl(P uniqueId, String urlText) throws IOException, FailedResponseException;
+
+    public boolean deleteAssociatedIndicatorUrl(P uniqueId, String urlText, String ownerName)     
+            throws IOException, FailedResponseException;
+
 }

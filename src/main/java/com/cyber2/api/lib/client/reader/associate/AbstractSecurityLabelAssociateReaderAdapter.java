@@ -10,8 +10,6 @@ import com.cyber2.api.lib.conn.Connection;
 import com.cyber2.api.lib.conn.RequestExecutor;
 import com.cyber2.api.lib.exception.FailedResponseException;
 import com.cyber2.api.lib.server.entity.SecurityLabel;
-import com.cyber2.api.lib.server.entity.SecurityLabel;
-import com.cyber2.api.lib.server.entity.SecurityLabel;
 import com.cyber2.api.lib.server.response.entity.SecurityLabelListResponse;
 import com.cyber2.api.lib.server.response.entity.SecurityLabelResponse;
 import java.io.IOException;
@@ -43,13 +41,13 @@ public abstract class AbstractSecurityLabelAssociateReaderAdapter<P> extends Abs
     }
 
     @Override
-    public SecurityLabel getAssociatedSecurityLabel(P uniqueId, String securityLabelName) throws IOException, FailedResponseException {
-        return getAssociatedSecurityLabel(uniqueId, securityLabelName, null);
+    public SecurityLabel getAssociatedSecurityLabel(P uniqueId, String securityLabel) throws IOException, FailedResponseException {
+        return getAssociatedSecurityLabel(uniqueId, securityLabel, null);
     }
 
     @Override
-    public SecurityLabel getAssociatedSecurityLabel(P uniqueId, String securityLabelName, String ownerName) throws IOException, FailedResponseException {
-       Map<String,Object> map = createParamMap("id", uniqueId, "securityLabelName", securityLabelName);
+    public SecurityLabel getAssociatedSecurityLabel(P uniqueId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
+       Map<String,Object> map = createParamMap("id", uniqueId, "securityLabel", securityLabel);
         SecurityLabelResponse data = getItem(getUrlBasePrefix() + ".byId.securityLabels.byName", SecurityLabelResponse.class, ownerName, map);
 
         return (SecurityLabel)data.getData().getData();

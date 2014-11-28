@@ -11,5 +11,5 @@ package com.cyber2.api.lib.client;
  * @param <T>
  */
 public interface Identifiable<T,P> {
-    public P getId(T indicator);
+    public P getId(T item);
 }

@@ -1,642 +1,504 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.cyber2.api.lib.client.writer;
 
+import com.cyber2.api.lib.client.UrlTypeable;
 import com.cyber2.api.lib.client.response.WriteListResponse;
+import com.cyber2.api.lib.client.writer.associate.AbstractGroupAssociateWriterAdapter;
+import com.cyber2.api.lib.client.writer.associate.AbstractIndicatorAssociateWriterAdapter;
+import com.cyber2.api.lib.client.writer.associate.GroupAssociateWritable;
+import com.cyber2.api.lib.client.writer.associate.IndicatorAssociateWritable;
 import com.cyber2.api.lib.conn.Connection;
 import com.cyber2.api.lib.conn.RequestExecutor;
 import com.cyber2.api.lib.exception.FailedResponseException;
-import com.cyber2.api.lib.server.entity.Address;
-import com.cyber2.api.lib.server.entity.Adversary;
-import com.cyber2.api.lib.server.entity.Email;
-import com.cyber2.api.lib.server.entity.EmailAddress;
-import com.cyber2.api.lib.server.entity.File;
-import com.cyber2.api.lib.server.entity.Host;
-import com.cyber2.api.lib.server.entity.Incident;
-import com.cyber2.api.lib.server.entity.Signature;
 import com.cyber2.api.lib.server.entity.SecurityLabel;
-import com.cyber2.api.lib.server.entity.Threat;
-import com.cyber2.api.lib.server.entity.Url;
-import com.cyber2.api.lib.server.response.entity.AddressListResponse;
-import com.cyber2.api.lib.server.response.entity.AddressResponse;
-import com.cyber2.api.lib.server.response.entity.AdversaryListResponse;
-import com.cyber2.api.lib.server.response.entity.AdversaryResponse;
-import com.cyber2.api.lib.server.response.entity.EmailAddressListResponse;
-import com.cyber2.api.lib.server.response.entity.EmailAddressResponse;
-import com.cyber2.api.lib.server.response.entity.EmailListResponse;
-import com.cyber2.api.lib.server.response.entity.EmailResponse;
-import com.cyber2.api.lib.server.response.entity.FileListResponse;
-import com.cyber2.api.lib.server.response.entity.FileResponse;
-import com.cyber2.api.lib.server.response.entity.HostListResponse;
-import com.cyber2.api.lib.server.response.entity.HostResponse;
-import com.cyber2.api.lib.server.response.entity.IncidentListResponse;
-import com.cyber2.api.lib.server.response.entity.IncidentResponse;
-import com.cyber2.api.lib.server.response.entity.SignatureListResponse;
-import com.cyber2.api.lib.server.response.entity.SignatureResponse;
-import com.cyber2.api.lib.server.response.entity.SecurityLabelListResponse;
 import com.cyber2.api.lib.server.response.entity.SecurityLabelResponse;
-import com.cyber2.api.lib.server.response.entity.ThreatListResponse;
-import com.cyber2.api.lib.server.response.entity.ThreatResponse;
-import com.cyber2.api.lib.server.response.entity.UrlListResponse;
-import com.cyber2.api.lib.server.response.entity.UrlResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
+ * SecurityLabelWriterAdapter is the primary writer adapter for all SecurityLabel level objects.
+ * It uses the {@link Connection} object to execute requests against the {@link RequestExecutor} object.
+ * The responsibility of this class is to encapsulate all the low level ThreatConnect API calls
+ * specifically targeted at data under the SecurityLabel type.
+ * 
  *
  * @author dtineo
  */
-public class SecurityLabelWriterAdapter extends AbstractWriterAdapter {
 
+public class SecurityLabelWriterAdapter
+    extends AbstractBaseWriterAdapter<SecurityLabel,String>
+    implements UrlTypeable, GroupAssociateWritable<String>, IndicatorAssociateWritable<String> {
+
+    // composite pattern
+    private AbstractGroupAssociateWriterAdapter<SecurityLabel,String> groupAssocWriter;
+    private AbstractIndicatorAssociateWriterAdapter<SecurityLabel,String> indAssocWriter;
+
+    /**
+     * Package level constructor. Use the {@link WriterAdapterFactory} to access this object.
+     * @param conn      Primary connection object to the ThreatConnect API
+     * @param executor  Executor handling low level HTTPS calls to the ThreatConnect API
+     * 
+     * @see WriterAdapterFactory
+     */
     protected SecurityLabelWriterAdapter(Connection conn, RequestExecutor executor) {
-        super(conn, executor);
-    }
-
-    public WriteListResponse<SecurityLabel> create(List<SecurityLabel> securityLabelList) throws IOException, FailedResponseException {
-
-        WriteListResponse<SecurityLabel> data = createList("v2.securityLabels", SecurityLabelListResponse.class, securityLabelList);
-
-        return data;
-    }
-
-    public SecurityLabel create(SecurityLabel securityLabel) throws IOException, FailedResponseException {
-        return create(securityLabel, null);
-    }
-
-    public SecurityLabel create(SecurityLabel securityLabel, String ownerName)
-        throws IOException, FailedResponseException {
-
-        SecurityLabelResponse item = createItem("v2.securityLabels", SecurityLabelResponse.class, ownerName, null, securityLabel);
+        super(conn, executor, SecurityLabelResponse.class, /*createReturnsObject=*/false);
 
-        return (SecurityLabel) item.getData().getData();
+        initComposite();
     }
 
-    public WriteListResponse<SecurityLabel> update(List<SecurityLabel> securityLabelList) throws IOException, FailedResponseException {
-        return update(securityLabelList, null);
-    }
+    private void initComposite() {
 
-    public WriteListResponse<SecurityLabel> update(List<SecurityLabel> securityLabelList, String ownerName) throws IOException, FailedResponseException {
-        List<String> idList = new ArrayList<>();
-        for (SecurityLabel it : securityLabelList) {
-            idList.add(it.getName());
-        }
-        WriteListResponse<SecurityLabel> data = updateListWithParam("v2.securityLabels.byId", SecurityLabelListResponse.class, null, null, "id", idList, securityLabelList);
+        groupAssocWriter = new AbstractGroupAssociateWriterAdapter<SecurityLabel,String>(
+                            SecurityLabelWriterAdapter.this.getConn()
+                          , SecurityLabelWriterAdapter.this.executor
+                          , SecurityLabelWriterAdapter.this.singleType
+            ) {
+            @Override
+            protected String getUrlBasePrefix() {
+                return SecurityLabelWriterAdapter.this.getUrlBasePrefix();
+            }
 
-        return data;
-    }
+            @Override
+            public String getId(SecurityLabel item) {
+                return SecurityLabelWriterAdapter.this.getId(item);
+            }
+        };
 
-    public WriteListResponse<SecurityLabel> delete(List<SecurityLabel> securityLabelList) throws IOException, FailedResponseException {
-        return delete(securityLabelList, null);
-    }
+        indAssocWriter = new AbstractIndicatorAssociateWriterAdapter<SecurityLabel,String>(
+                            SecurityLabelWriterAdapter.this.getConn()
+                          , SecurityLabelWriterAdapter.this.executor
+                          , SecurityLabelWriterAdapter.this.singleType
+            ) {
+            @Override
+            protected String getUrlBasePrefix() {
+                return SecurityLabelWriterAdapter.this.getUrlBasePrefix();
+            }
 
-    public WriteListResponse<SecurityLabel> delete(List<SecurityLabel> securityLabelList, String ownerName) throws IOException, FailedResponseException {
-        List<String> idList = new ArrayList<>();
-        for (SecurityLabel it : securityLabelList) {
-            idList.add(it.getName());
-        }
-        WriteListResponse<SecurityLabel> data = deleteList("v2.securityLabels.byId", SecurityLabelListResponse.class, ownerName, null, "id", idList);
+            @Override
+            public String getUrlType() {
+                return SecurityLabelWriterAdapter.this.getUrlType();
+            }
 
-        return data;
-    }
+            @Override
+            public String getId(SecurityLabel item) {
+                return SecurityLabelWriterAdapter.this.getId(item);
+            }
+        };
 
-    public SecurityLabel update(SecurityLabel securityLabel) throws IOException, FailedResponseException {
-        return update(securityLabel, null);
     }
-
-    public SecurityLabel update(SecurityLabel securityLabel, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", securityLabel.getName());
-        SecurityLabelResponse item = updateItem("v2.securityLabels.byId", SecurityLabelResponse.class, ownerName, map, securityLabel);
 
-        return (SecurityLabel) item.getData().getData();
+    @Override
+    protected String getUrlBasePrefix() {
+        return "v2.securityLabels";
     }
 
-    public void delete(SecurityLabel securityLabel) throws IOException, FailedResponseException {
-        delete(securityLabel, null);
+    @Override
+    public String getId(SecurityLabel item) {
+        return item.getName();
     }
 
-    public void delete(SecurityLabel securityLabel, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", securityLabel.getName());
-        deleteItem("v2.securityLabels.byId", SecurityLabelResponse.class, ownerName, map);
-
+    @Override
+    public String getUrlType() {
+        return "securityLabels";
     }
 
-    public WriteListResponse<Adversary> associateAdversaries(String securityLabelName, List<Integer> associateAdversaryIdList) throws IOException {
-        return associateAdversaries(securityLabelName, associateAdversaryIdList, null);
+   @Override
+    public WriteListResponse<Integer> associateGroupAdversaries(String uniqueId, List<Integer> adversaryIds) throws IOException {
+        return groupAssocWriter.associateGroupAdversaries(uniqueId, adversaryIds);
     }
-
-    public WriteListResponse<Adversary> associateAdversaries(String securityLabelName, List<Integer> associateAdversaryIdList, String ownerName)
-        throws IOException {
 
-        Map<String, Object> map = createParamMap("id", securityLabelName);
-        WriteListResponse data = createListWithParam("v2.securityLabels.byId.groups.adversaries.byGroupId", AdversaryListResponse.class, ownerName, map, "groupId", associateAdversaryIdList);
-
-        return data;
+    @Override
+    public WriteListResponse<Integer> associateGroupAdversaries(String uniqueId, List<Integer> adversaryIds, String ownerName) throws IOException {
+        return groupAssocWriter.associateGroupAdversaries(uniqueId, adversaryIds, ownerName);
     }
 
-    public Adversary associateAdversary(String securityLabelName, Integer adversaryId) throws IOException, FailedResponseException {
-        return associateAdversary(securityLabelName, adversaryId, null);
+    @Override
+    public boolean associateGroupAdversary(String uniqueId, Integer adversaryId) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupAdversary(uniqueId, adversaryId);
     }
-
-    public Adversary associateAdversary(String securityLabelName, Integer adversaryId, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", securityLabelName, "groupId", adversaryId);
-        AdversaryResponse data = createItem("v2.securityLabels.byId.groups.adversaries.byGroupId", AdversaryResponse.class, ownerName, map, null);
 
-        return (Adversary) data.getData().getData();
+    @Override
+    public boolean associateGroupAdversary(String uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupAdversary(uniqueId, adversaryId, ownerName);
     }
 
-    public WriteListResponse<Email> associateEmails(String securityLabelName, List<Integer> associateEmailIdList) throws IOException {
-        return associateEmails(securityLabelName, associateEmailIdList, null);
+    @Override
+    public WriteListResponse<Integer> associateGroupEmails(String uniqueId, List<Integer> emailIds) throws IOException{
+        return groupAssocWriter.associateGroupEmails(uniqueId, emailIds);
     }
 
-    public WriteListResponse<Email> associateEmails(String securityLabelName, List<Integer> associateEmailIdList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", securityLabelName);
-        WriteListResponse data = createListWithParam("v2.securityLabels.byId.groups.emails.byGroupId", EmailListResponse.class, ownerName, map, "groupId", associateEmailIdList);
-
-        return data;
+    @Override
+    public WriteListResponse<Integer> associateGroupEmails(String uniqueId, List<Integer> emailIds, String ownerName) throws IOException {
+        return groupAssocWriter.associateGroupEmails(uniqueId, emailIds, ownerName);
     }
 
-    public Email associateEmail(String securityLabelName, Integer emailId) throws IOException, FailedResponseException {
-        return associateEmail(securityLabelName, emailId, null);
+    @Override
+    public boolean associateGroupEmail(String uniqueId, Integer emailId) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupEmail(uniqueId, emailId);
     }
-
-    public Email associateEmail(String securityLabelName, Integer emailId, String ownerName)
-        throws IOException, FailedResponseException {
 
-        Map<String, Object> map = createParamMap("id", securityLabelName, "groupId", emailId);
-        EmailResponse data = createItem("v2.securityLabels.byId.groups.emails.byGroupId", EmailResponse.class, ownerName, map, null);
-
-        return (Email) data.getData().getData();
+    @Override
+    public boolean associateGroupEmail(String uniqueId, Integer emailId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupEmail(uniqueId, emailId, ownerName);
     }
 
-    public WriteListResponse<Incident> associateIncidents(String securityLabelName, List<Integer> associateIncidentIdList) throws IOException {
-        return associateIncidents(securityLabelName, associateIncidentIdList, null);
+    @Override
+    public WriteListResponse<Integer> associateGroupIncidents(String uniqueId, List<Integer> incidentIds) throws IOException {
+        return groupAssocWriter.associateGroupIncidents(uniqueId, incidentIds);
     }
-
-    public WriteListResponse<Incident> associateIncidents(String securityLabelName, List<Integer> associateIncidentIdList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", securityLabelName);
-        WriteListResponse data = createListWithParam("v2.securityLabels.byId.groups.incidents.byGroupId", IncidentListResponse.class, ownerName, map, "groupId", associateIncidentIdList);
 
-        return data;
+    @Override
+    public WriteListResponse<Integer> associateGroupIncidents(String uniqueId, List<Integer> incidentIds, String ownerName) throws IOException {
+        return groupAssocWriter.associateGroupIncidents(uniqueId, incidentIds, ownerName);
     }
 
-    public Incident associateIncident(String securityLabelName, Integer incidentId) throws IOException, FailedResponseException {
-        return associateIncident(securityLabelName, incidentId, null);
+    @Override
+    public boolean associateGroupIncident(String uniqueId, Integer incidentId) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupIncident(uniqueId, incidentId);
     }
 
-    public Incident associateIncident(String securityLabelName, Integer incidentId, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", securityLabelName, "groupId", incidentId);
-        IncidentResponse data = createItem("v2.securityLabels.byId.groups.incidents.byGroupId", IncidentResponse.class, ownerName, map, null);
-
-        return (Incident) data.getData().getData();
+    @Override
+    public boolean associateGroupIncident(String uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupIncident(uniqueId, incidentId, ownerName);
     }
 
-    public WriteListResponse<Signature> associateSignatures(String securityLabelName, List<Integer> associateSignatureIdList) throws IOException {
-        return associateSignatures(securityLabelName, associateSignatureIdList, null);
+    @Override
+    public WriteListResponse<Integer> associateGroupSignatures(String uniqueId, List<Integer> signatureIds) throws IOException {
+        return groupAssocWriter.associateGroupSignatures(uniqueId, signatureIds);
     }
-
-    public WriteListResponse<Signature> associateSignatures(String securityLabelName, List<Integer> associateSignatureIdList, String ownerName)
-        throws IOException {
 
-        Map<String, Object> map = createParamMap("id", securityLabelName);
-        WriteListResponse data = createListWithParam("v2.securityLabels.byId.groups.signatures.byGroupId", SignatureListResponse.class, ownerName, map, "groupId", associateSignatureIdList);
-
-        return data;
+    @Override
+    public WriteListResponse<Integer> associateGroupSignatures(String uniqueId, List<Integer> signatureIds, String ownerName) throws IOException {
+        return groupAssocWriter.associateGroupSignatures(uniqueId, signatureIds, ownerName);
     }
 
-    public Signature associateSignature(String securityLabelName, Integer signatureId) throws IOException, FailedResponseException {
-        return associateSignature(securityLabelName, signatureId, null);
+    @Override
+    public boolean associateGroupSignature(String uniqueId, Integer signatureId) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupSignature(uniqueId, signatureId);
     }
-
-    public Signature associateSignature(String securityLabelName, Integer signatureId, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", securityLabelName, "groupId", signatureId);
-        SignatureResponse data = createItem("v2.securityLabels.byId.groups.signatures.byGroupId", SignatureResponse.class, ownerName, map, null);
 
-        return (Signature) data.getData().getData();
+    @Override
+    public boolean associateGroupSignature(String uniqueId, Integer signatureId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupSignature(uniqueId, signatureId, ownerName);
     }
 
-    public WriteListResponse<Threat> associateThreats(String securityLabelName, List<Integer> associateThreatIdList) throws IOException {
-        return associateThreats(securityLabelName, associateThreatIdList, null);
+    @Override
+    public WriteListResponse<Integer> associateGroupThreats(String uniqueId, List<Integer> threatIds) throws IOException {
+        return groupAssocWriter.associateGroupThreats(uniqueId, threatIds);
     }
 
-    public WriteListResponse<Threat> associateThreats(String securityLabelName, List<Integer> associateThreatIdList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", securityLabelName);
-        WriteListResponse data = createListWithParam("v2.securityLabels.byId.groups.threats.byGroupId", ThreatListResponse.class, ownerName, map, "groupId", associateThreatIdList);
-
-        return data;
+    @Override
+    public WriteListResponse<Integer> associateGroupThreats(String uniqueId, List<Integer> threatIds, String ownerName) throws IOException {
+        return groupAssocWriter.associateGroupThreats(uniqueId, threatIds, ownerName);
     }
 
-    public Threat associateThreat(String securityLabelName, Integer threatId) throws IOException, FailedResponseException {
-        return associateThreat(securityLabelName, threatId, null);
+    @Override
+    public boolean associateGroupThreat(String uniqueId, Integer threatId) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupThreat(uniqueId, threatId);
     }
-
-    public Threat associateThreat(String securityLabelName, Integer threatId, String ownerName)
-        throws IOException, FailedResponseException {
 
-        Map<String, Object> map = createParamMap("id", securityLabelName, "groupId", threatId);
-        ThreatResponse data = createItem("v2.securityLabels.byId.groups.threats.byGroupId", ThreatResponse.class, ownerName, map, null);
-
-        return (Threat) data.getData().getData();
+    @Override
+    public boolean associateGroupThreat(String uniqueId, Integer threatId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupThreat(uniqueId, threatId, ownerName);
     }
 
-    public WriteListResponse<Address> associateIndicatorAddresss(String securityLabelName, List<String> associateAddressList) throws IOException {
-        return associateIndicatorAddresss(securityLabelName, associateAddressList, null);
+    @Override
+    public WriteListResponse<String> associateIndicatorAddresses(String uniqueId, List<String> ipAddresses) throws IOException {
+        return indAssocWriter.associateIndicatorAddresses(uniqueId, ipAddresses);
     }
-
-    public WriteListResponse<Address> associateIndicatorAddresss(String securityLabelName, List<String> associateAddressList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", securityLabelName);
-        WriteListResponse<Address> data = createListWithParam("v2.securityLabels.byId.indicators.addresses.byGroupId", AddressListResponse.class, ownerName, map, "securityLabelName", associateAddressList);
 
-        return data;
+    @Override
+    public WriteListResponse<String> associateIndicatorAddresses(String uniqueId, List<String> ipAddresses, String ownerName) throws IOException {
+        return indAssocWriter.associateIndicatorAddresses(uniqueId, ipAddresses, ownerName);
     }
 
-    public Address associateIndicatorAddress(String securityLabelName, String associateAddress) throws IOException, FailedResponseException {
-        return associateIndicatorAddress(securityLabelName, associateAddress, null);
+    @Override
+    public boolean associateIndicatorAddress(String uniqueId, String ipAddress) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorAddress(uniqueId, ipAddress);
     }
 
-    public Address associateIndicatorAddress(String securityLabelName, String associateAddress, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", securityLabelName, "indicatorId", associateAddress);
-        AddressResponse data = createItem("v2.securityLabels.byId.indicators.addresses.byIndicatorId", AddressResponse.class, ownerName, map, null);
-
-        return (Address) data.getData().getData();
+    @Override
+    public boolean associateIndicatorAddress(String uniqueId, String ipAddress, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorAddress(uniqueId, ipAddress, ownerName);
     }
 
-    public WriteListResponse<EmailAddress> associateIndicatorEmailAddresses(String securityLabelName, List<String> associateEmailAddressList) throws IOException {
-        return associateIndicatorEmailAddresses(securityLabelName, associateEmailAddressList, null);
+    @Override
+    public WriteListResponse<String> associateIndicatorEmailAddresses(String uniqueId, List<String> emailAddresses) throws IOException {
+        return indAssocWriter.associateIndicatorEmailAddresses(uniqueId, emailAddresses);
     }
-
-    public WriteListResponse<EmailAddress> associateIndicatorEmailAddresses(String securityLabelName, List<String> associateEmailAddressList, String ownerName)
-        throws IOException {
 
-        Map<String, Object> map = createParamMap("id", securityLabelName);
-        WriteListResponse<EmailAddress> data = createListWithParam("v2.securityLabels.byId.indicators.emailAddresses.byIndicatorId", EmailAddressListResponse.class, ownerName, map, "securityLabelName", associateEmailAddressList);
-
-        return data;
+    @Override
+    public WriteListResponse<String> associateIndicatorEmailAddresses(String uniqueId, List<String> emailAddresses, String ownerName) throws IOException {
+        return indAssocWriter.associateIndicatorEmailAddresses(uniqueId, emailAddresses, ownerName);
     }
 
-    public EmailAddress associateIndicatorEmailAddress(String securityLabelName, String associateEmailAddress) throws IOException, FailedResponseException {
-        return associateIndicatorEmailAddress(securityLabelName, associateEmailAddress, null);
+    @Override
+    public boolean associateIndicatorEmailAddress(String uniqueId, String emailAddress) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorEmailAddress(uniqueId, emailAddress);
     }
-
-    public EmailAddress associateIndicatorEmailAddress(String securityLabelName, String associateEmailAddress, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", securityLabelName, "indicatorId", associateEmailAddress);
-        EmailAddressResponse data = createItem("v2.securityLabels.byId.indicators.emailAddresses.byIndicatorId", EmailAddressResponse.class, ownerName, map, null);
 
-        return (EmailAddress) data.getData().getData();
+    @Override
+    public boolean associateIndicatorEmailAddress(String uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorAddress(uniqueId, emailAddress, ownerName);
     }
 
-    public WriteListResponse<File> associateIndicatorFiles(String securityLabelName, List<String> associateFileList) throws IOException {
-        return associateIndicatorFiles(securityLabelName, associateFileList, null);
+    @Override
+    public WriteListResponse<String> associateIndicatorFiles(String uniqueId, List<String> fileHashes) throws IOException {
+        return indAssocWriter.associateIndicatorFiles(uniqueId, fileHashes);
     }
 
-    public WriteListResponse<File> associateIndicatorFiles(String securityLabelName, List<String> associateFileList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", securityLabelName);
-        WriteListResponse<File> data = createListWithParam("v2.securityLabels.byId.indicators.files.byIndicatorId", FileListResponse.class, ownerName, map, "securityLabelName", associateFileList);
-
-        return data;
+    @Override
+    public WriteListResponse<String> associateIndicatorFiles(String uniqueId, List<String> fileHashes, String ownerName) throws IOException {
+        return indAssocWriter.associateIndicatorFiles(uniqueId, fileHashes, ownerName);
     }
 
-    public File associateIndicatorFile(String securityLabelName, String associateFile) throws IOException, FailedResponseException {
-        return associateIndicatorFile(securityLabelName, associateFile, null);
+    @Override
+    public boolean associateIndicatorFile(String uniqueId, String fileHash) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorFile(uniqueId, fileHash);
     }
-
-    public File associateIndicatorFile(String securityLabelName, String associateFile, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", securityLabelName, "indicatorId", associateFile);
-        FileResponse data = createItem("v2.securityLabels.byId.indicators.files.byIndicatorId", FileResponse.class, ownerName, map, null);
 
-        return (File) data.getData().getData();
+    @Override
+    public boolean associateIndicatorFile(String uniqueId, String fileHash, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorAddress(uniqueId, fileHash, ownerName);
     }
 
-    public WriteListResponse<Host> associateIndicatorHosts(String securityLabelName, List<String> associateHostList) throws IOException {
-        return associateIndicatorHosts(securityLabelName, associateHostList, null);
+    @Override
+    public WriteListResponse<String> associateIndicatorHosts(String uniqueId, List<String> hostNames) throws IOException {
+        return indAssocWriter.associateIndicatorHosts(uniqueId, hostNames);
     }
 
-    public WriteListResponse<Host> associateIndicatorHosts(String securityLabelName, List<String> associateHostList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", securityLabelName);
-        WriteListResponse<Host> data = createListWithParam("v2.securityLabels.byId.indicators.hosts.byIndicatorId", HostListResponse.class, ownerName, map, "securityLabelName", associateHostList);
-
-        return data;
+    @Override
+    public WriteListResponse<String> associateIndicatorHosts(String uniqueId, List<String> hostNames, String ownerName) throws IOException {
+        return indAssocWriter.associateIndicatorHosts(uniqueId, hostNames, ownerName);
     }
 
-    public Host associateIndicatorHost(String securityLabelName, String associateHost) throws IOException, FailedResponseException {
-        return associateIndicatorHost(securityLabelName, associateHost, null);
+    @Override
+    public boolean associateIndicatorHost(String uniqueId, String hostName) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorHost(uniqueId, hostName);
     }
-
-    public Host associateIndicatorHost(String securityLabelName, String associateHost, String ownerName)
-        throws IOException, FailedResponseException {
 
-        Map<String, Object> map = createParamMap("id", securityLabelName, "indicatorId", associateHost);
-        HostResponse data = createItem("v2.securityLabels.byId.indicators.hosts.byIndicatorId", HostResponse.class, ownerName, map, null);
-
-        return (Host) data.getData().getData();
+    @Override
+    public boolean associateIndicatorHost(String uniqueId, String hostName, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorHost(uniqueId, hostName, ownerName);
     }
 
-    public WriteListResponse<Url> associateIndicatorUrls(String securityLabelName, List<String> associateUrlList) throws IOException {
-        return associateIndicatorUrls(securityLabelName, associateUrlList, null);
+    @Override
+    public WriteListResponse<String> associateIndicatorUrls(String uniqueId, List<String> urlTexts) throws IOException {
+        return indAssocWriter.associateIndicatorUrls(uniqueId, urlTexts);
     }
-
-    public WriteListResponse<Url> associateIndicatorUrls(String securityLabelName, List<String> associateUrlList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", securityLabelName);
-        WriteListResponse<Url> data = createListWithParam("v2.securityLabels.byId.indicators.urls.byIndicatorId", UrlListResponse.class, ownerName, map, "securityLabelName", associateUrlList);
 
-        return data;
+    @Override
+    public WriteListResponse<String> associateIndicatorUrls(String uniqueId, List<String> urlTexts, String ownerName) throws IOException {
+        return indAssocWriter.associateIndicatorUrls(uniqueId, urlTexts, ownerName);
     }
 
-    public Url associateIndicatorUrl(String securityLabelName, String associateUrl) throws IOException, FailedResponseException {
-        return associateIndicatorUrl(securityLabelName, associateUrl, null);
+    @Override
+    public boolean associateIndicatorUrl(String uniqueId, String urlText) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorUrl(uniqueId, urlText);
     }
 
-    public Url associateIndicatorUrl(String securityLabelName, String associateUrl, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", securityLabelName, "indicatorId", associateUrl);
-        UrlResponse data = createItem("v2.securityLabels.byId.indicators.urls.byIndicatorId", UrlResponse.class, ownerName, map, null);
-
-        return (Url) data.getData().getData();
+    @Override
+    public boolean associateIndicatorUrl(String uniqueId, String urlText, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.associateIndicatorUrl(uniqueId, urlText, ownerName);
     }
 
-    public WriteListResponse<Integer> deleteAssociationAdversaries(String securityLabelName, List<Integer> associatedAdversaryIdList) throws IOException {
-        return deleteAssociationAdversaries(securityLabelName, associatedAdversaryIdList, null);
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupAdversaries(String uniqueId, List<Integer> adversaryIds) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupAdversaries(uniqueId, adversaryIds);
     }
-
-    public WriteListResponse<Integer> deleteAssociationAdversaries(String securityLabelName, List<Integer> associatedAdversaryIdList, String ownerName)
-        throws IOException {
 
-        Map<String, Object> map = createParamMap("id", securityLabelName);
-        WriteListResponse<Integer> data = deleteList("v2.securityLabels.byId.groups.adversaries.byGroupId", AdversaryListResponse.class, ownerName, map, "groupId", associatedAdversaryIdList);
-
-        return data;
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupAdversaries(String uniqueId, List<Integer> adversaryIds, String ownerName) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupAdversaries(uniqueId, adversaryIds, ownerName);
     }
 
-    public void deleteAssociationAdversary(String securityLabelName, Integer associatedAdversaryId) throws IOException, FailedResponseException {
-        deleteAssociationAdversary(securityLabelName, associatedAdversaryId, null);
+    @Override
+    public boolean deleteAssociatedGroupAdversary(String uniqueId, Integer adversaryId) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupAdversary(uniqueId, adversaryId);
     }
-
-    public void deleteAssociationAdversary(String securityLabelName, Integer associatedAdversaryId, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", securityLabelName, "groupId", associatedAdversaryId);
-        deleteItem("v2.securityLabels.byId.groups.adversaries.byGroupId", AdversaryResponse.class, ownerName, map);
 
+    @Override
+    public boolean deleteAssociatedGroupAdversary(String uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupAdversary(uniqueId, adversaryId, ownerName);
     }
 
-    public WriteListResponse<Integer> deleteAssociationEmails(String securityLabelName, List<Integer> associatedEmailIdList) throws IOException {
-        return deleteAssociationEmails(securityLabelName, associatedEmailIdList, null);
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupEmails(String uniqueId, List<Integer> emailIds) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupEmails(uniqueId, emailIds);
     }
 
-    public WriteListResponse<Integer> deleteAssociationEmails(String securityLabelName, List<Integer> associatedEmailIdList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", securityLabelName);
-        WriteListResponse<Integer> data = deleteList("v2.securityLabels.byId.groups.emails.byGroupId", EmailListResponse.class, ownerName, map, "groupId", associatedEmailIdList);
-
-        return data;
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupEmails(String uniqueId, List<Integer> emailIds, String ownerName) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupEmails(uniqueId, emailIds, ownerName);
     }
 
-    public void deleteAssociationEmail(String securityLabelName, Integer associatedEmailId) throws IOException, FailedResponseException {
-        deleteAssociationEmail(securityLabelName, associatedEmailId, null);
+    @Override
+    public boolean deleteAssociatedGroupEmail(String uniqueId, Integer emailId) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupEmail(uniqueId, emailId);
     }
-
-    public void deleteAssociationEmail(String securityLabelName, Integer associatedEmailId, String ownerName)
-        throws IOException, FailedResponseException {
 
-        Map<String, Object> map = createParamMap("id", securityLabelName, "groupId", associatedEmailId);
-        deleteItem("v2.securityLabels.byId.groups.emails.byGroupId", EmailResponse.class, ownerName, map);
-
+    @Override
+    public boolean deleteAssociatedGroupEmail(String uniqueId, Integer emailId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupEmail(uniqueId, emailId, ownerName);
     }
 
-    public WriteListResponse<Integer> deleteAssociationIncidents(String securityLabelName, List<Integer> associatedIncidentIdList) throws IOException {
-        return deleteAssociationIncidents(securityLabelName, associatedIncidentIdList, null);
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupIncidents(String uniqueId, List<Integer> incidentIds) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupIncidents(uniqueId, incidentIds);
     }
-
-    public WriteListResponse<Integer> deleteAssociationIncidents(String securityLabelName, List<Integer> associatedIncidentIdList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", securityLabelName);
-        WriteListResponse<Integer> data = deleteList("v2.securityLabels.byId.groups.incidents.byGroupId", IncidentListResponse.class, ownerName, map, "groupId", associatedIncidentIdList);
 
-        return data;
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupIncidents(String uniqueId, List<Integer> incidentIds, String ownerName) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupIncidents(uniqueId, incidentIds, ownerName);
     }
 
-    public void deleteAssociationIncident(String securityLabelName, Integer associatedIncidentId) throws IOException, FailedResponseException {
-        deleteAssociationIncident(securityLabelName, associatedIncidentId, null);
+    @Override
+    public boolean deleteAssociatedGroupIncident(String uniqueId, Integer incidentId) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupIncident(uniqueId, incidentId);
     }
 
-    public void deleteAssociationIncident(String securityLabelName, Integer associatedIncidentId, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", securityLabelName, "groupId", associatedIncidentId);
-        deleteItem("v2.securityLabels.byId.groups.incidents.byGroupId", IncidentResponse.class, ownerName, map);
-
+    @Override
+    public boolean deleteAssociatedGroupIncident(String uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupIncident(uniqueId, incidentId, ownerName);
     }
 
-    public WriteListResponse<Integer> deleteAssociationSignatures(String securityLabelName, List<Integer> associatedSignatureIdList) throws IOException {
-        return deleteAssociationSignatures(securityLabelName, associatedSignatureIdList, null);
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupSignatures(String uniqueId, List<Integer> signatureIds) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupSignatures(uniqueId, signatureIds);
     }
-
-    public WriteListResponse<Integer> deleteAssociationSignatures(String securityLabelName, List<Integer> associatedSignatureIdList, String ownerName)
-        throws IOException {
 
-        Map<String, Object> map = createParamMap("id", securityLabelName);
-        WriteListResponse<Integer> data = deleteList("v2.securityLabels.byId.groups.signatures.byGroupId", SignatureListResponse.class, ownerName, map, "groupId", associatedSignatureIdList);
-
-        return data;
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupSignatures(String uniqueId, List<Integer> signatureIds, String ownerName) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupSignatures(uniqueId, signatureIds, ownerName);
     }
 
-    public void deleteAssociationSignature(String securityLabelName, Integer associatedSignatureId) throws IOException, FailedResponseException {
-        deleteAssociationSignature(securityLabelName, associatedSignatureId, null);
+    @Override
+    public boolean deleteAssociatedGroupSignature(String uniqueId, Integer signatureId) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupSignature(uniqueId, signatureId);
     }
-
-    public void deleteAssociationSignature(String securityLabelName, Integer associatedSignatureId, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", securityLabelName, "groupId", associatedSignatureId);
-        deleteItem("v2.securityLabels.byId.groups.signatures.byGroupId", SignatureResponse.class, ownerName, map);
 
+    @Override
+    public boolean deleteAssociatedGroupSignature(String uniqueId, Integer signatureId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupSignature(uniqueId, signatureId, ownerName);
     }
 
-    public WriteListResponse<Integer> deleteAssociationThreats(String securityLabelName, List<Integer> associatedThreatIdList) throws IOException {
-        return deleteAssociationThreats(securityLabelName, associatedThreatIdList, null);
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupThreats(String uniqueId, List<Integer> threatIds) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupThreats(uniqueId, threatIds);
     }
 
-    public WriteListResponse<Integer> deleteAssociationThreats(String securityLabelName, List<Integer> associatedThreatIdList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", securityLabelName);
-        WriteListResponse<Integer> data = deleteList("v2.securityLabels.byId.groups.threats.byGroupId", ThreatListResponse.class, ownerName, map, "groupId", associatedThreatIdList);
-
-        return data;
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedGroupThreats(String uniqueId, List<Integer> threatIds, String ownerName) throws IOException {
+        return groupAssocWriter.deleteAssociatedGroupThreats(uniqueId, threatIds, ownerName);
     }
 
-    public void deleteAssociationThreat(String securityLabelName, Integer associatedThreatId) throws IOException, FailedResponseException {
-        deleteAssociationThreat(securityLabelName, associatedThreatId, null);
+    @Override
+    public boolean deleteAssociatedGroupThreat(String uniqueId, Integer threatId) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupThreat(uniqueId, threatId);
     }
-
-    public void deleteAssociationThreat(String securityLabelName, Integer associatedThreatId, String ownerName)
-        throws IOException, FailedResponseException {
 
-        Map<String, Object> map = createParamMap("id", securityLabelName, "groupId", associatedThreatId);
-        deleteItem("v2.securityLabels.byId.groups.threats.byGroupId", ThreatResponse.class, ownerName, map);
-
+    @Override
+    public boolean deleteAssociatedGroupThreat(String uniqueId, Integer threatId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.deleteAssociatedGroupThreat(uniqueId, threatId, ownerName);
     }
 
-    public WriteListResponse<String> deleteAssociationIndicatorAddresses(String securityLabelName, List<String> associatedAddressList) throws IOException {
-        return deleteAssociationIndicatorAddresses(securityLabelName, associatedAddressList, null);
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorAddresses(String uniqueId, List<String> ipAddresses) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorAddresses(uniqueId, ipAddresses);
     }
-
-    public WriteListResponse<String> deleteAssociationIndicatorAddresses(String securityLabelName, List<String> associatedAddressList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", securityLabelName);
-        WriteListResponse<String> data = deleteList("v2.securityLabels.byId.indicators.addresses.byGroupId", AddressListResponse.class, ownerName, map, "securityLabelName", associatedAddressList);
 
-        return data;
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorAddresses(String uniqueId, List<String> ipAddresses, String ownerName) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorAddresses(uniqueId, ipAddresses, ownerName);
     }
 
-    public void deleteAssociationIndicatorAddress(String securityLabelName, String associatedAddress) throws IOException, FailedResponseException {
-        deleteAssociationIndicatorAddress(securityLabelName, associatedAddress, null);
+    @Override
+    public boolean deleteAssociatedIndicatorAddress(String uniqueId, String ipAddress) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorAddress(uniqueId, ipAddress);
     }
 
-    public void deleteAssociationIndicatorAddress(String securityLabelName, String associatedAddress, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", securityLabelName, "indicatorId", associatedAddress);
-        deleteItem("v2.securityLabels.byId.indicators.addresses.byIndicatorId", AddressResponse.class, ownerName, map);
-
+    @Override
+    public boolean deleteAssociatedIndicatorAddress(String uniqueId, String ipAddress, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorAddress(uniqueId, ipAddress, ownerName);
     }
 
-    public WriteListResponse<String> deleteAssociationIndicatorEmailAddresses(String securityLabelName, List<String> associatedEmailAddressList) throws IOException {
-        return deleteAssociationIndicatorEmailAddresses(securityLabelName, associatedEmailAddressList, null);
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorEmailAddresses(String uniqueId, List<String> emailAddresses) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorEmailAddresses(uniqueId, emailAddresses);
     }
-
-    public WriteListResponse<String> deleteAssociationIndicatorEmailAddresses(String securityLabelName, List<String> associatedEmailAddressList, String ownerName)
-        throws IOException {
 
-        Map<String, Object> map = createParamMap("id", securityLabelName);
-        WriteListResponse<String> data = deleteList("v2.securityLabels.byId.indicators.emailAddresses.byGroupId", EmailAddressListResponse.class, ownerName, map, "securityLabelName", associatedEmailAddressList);
-
-        return data;
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorEmailAddresses(String uniqueId, List<String> emailAddresses, String ownerName) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorEmailAddresses(uniqueId, emailAddresses, ownerName);
     }
 
-    public void deleteAssociationIndicatorEmailAddress(String securityLabelName, String associatedEmailAddress) throws IOException, FailedResponseException {
-        deleteAssociationIndicatorEmailAddress(securityLabelName, associatedEmailAddress, null);
+    @Override
+    public boolean deleteAssociatedIndicatorEmailAddress(String uniqueId, String emailAddress) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorEmailAddress(uniqueId, emailAddress);
     }
-
-    public void deleteAssociationIndicatorEmailAddress(String securityLabelName, String associatedEmailAddress, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", securityLabelName, "indicatorId", associatedEmailAddress);
-        deleteItem("v2.securityLabels.byId.indicators.emailAddresses.byIndicatorId", EmailAddressResponse.class, ownerName, map);
 
+    @Override
+    public boolean deleteAssociatedIndicatorEmailAddress(String uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorEmailAddress(uniqueId, emailAddress, ownerName);
     }
 
-    public WriteListResponse<String> deleteAssociationIndicatorFilees(String securityLabelName, List<String> associatedFileHashList) throws IOException {
-        return deleteAssociationIndicatorFilees(securityLabelName, associatedFileHashList, null);
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorFiles(String uniqueId, List<String> fileHashes) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorFiles(uniqueId, fileHashes);
     }
 
-    public WriteListResponse<String> deleteAssociationIndicatorFilees(String securityLabelName, List<String> associatedFileHashList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", securityLabelName);
-        WriteListResponse<String> data = deleteList("v2.securityLabels.byId.indicators.files.byGroupId", FileListResponse.class, ownerName, map, "securityLabelName", associatedFileHashList);
-
-        return data;
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorFiles(String uniqueId, List<String> fileHashes, String ownerName) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorFiles(uniqueId, fileHashes, ownerName);
     }
 
-    public void deleteAssociationIndicatorFile(String securityLabelName, String associatedFileHash) throws IOException, FailedResponseException {
-        deleteAssociationIndicatorFile(securityLabelName, associatedFileHash, null);
+    @Override
+    public boolean deleteAssociatedIndicatorFile(String uniqueId, String fileHash) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorFile(uniqueId, fileHash);
     }
-
-    public void deleteAssociationIndicatorFile(String securityLabelName, String associatedFileHash, String ownerName)
-        throws IOException, FailedResponseException {
 
-        Map<String, Object> map = createParamMap("id", securityLabelName, "indicatorId", associatedFileHash);
-        deleteItem("v2.securityLabels.byId.indicators.files.byIndicatorId", FileResponse.class, ownerName, map);
-
+    @Override
+    public boolean deleteAssociatedIndicatorFile(String uniqueId, String fileHash, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorFile(uniqueId, fileHash, ownerName);
     }
 
-    public WriteListResponse<String> deleteAssociationIndicatorHosts(String securityLabelName, List<String> associatedHostList) throws IOException {
-        return deleteAssociationIndicatorHosts(securityLabelName, associatedHostList, null);
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorHosts(String uniqueId, List<String> hostNames) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorHosts(uniqueId, hostNames);
     }
-
-    public WriteListResponse<String> deleteAssociationIndicatorHosts(String securityLabelName, List<String> associatedHostList, String ownerName)
-        throws IOException {
-
-        Map<String, Object> map = createParamMap("id", securityLabelName);
-        WriteListResponse<String> data = deleteList("v2.securityLabels.byId.indicators.hosts.byGroupId", HostListResponse.class, ownerName, map, "securityLabelName", associatedHostList);
 
-        return data;
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorHosts(String uniqueId, List<String> hostNames, String ownerName) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorHosts(uniqueId, hostNames, ownerName);
     }
 
-    public void deleteAssociationIndicatorHost(String securityLabelName, String associatedHost) throws IOException, FailedResponseException {
-        deleteAssociationIndicatorHost(securityLabelName, associatedHost, null);
+    @Override
+    public boolean deleteAssociatedIndicatorHost(String uniqueId, String hostName) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorHost(uniqueId, hostName);
     }
 
-    public void deleteAssociationIndicatorHost(String securityLabelName, String associatedHost, String ownerName)
-        throws IOException, FailedResponseException {
-
-        Map<String, Object> map = createParamMap("id", securityLabelName, "indicatorId", associatedHost);
-        deleteItem("v2.securityLabels.byId.indicators.hosts.byIndicatorId", HostResponse.class, ownerName, map);
-
+    @Override
+    public boolean deleteAssociatedIndicatorHost(String uniqueId, String hostName, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorHost(uniqueId, hostName, ownerName);
     }
 
-    public WriteListResponse<String> deleteAssociationIndicatorUrls(String securityLabelName, List<String> associatedUrlList) throws IOException {
-        return deleteAssociationIndicatorUrls(securityLabelName, associatedUrlList, null);
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorUrls(String uniqueId, List<String> urlTexts) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorUrls(uniqueId, urlTexts);
     }
-
-    public WriteListResponse<String> deleteAssociationIndicatorUrls(String securityLabelName, List<String> associatedUrlList, String ownerName)
-        throws IOException {
 
-        Map<String, Object> map = createParamMap("id", securityLabelName);
-        WriteListResponse<String> data = deleteList("v2.securityLabels.byId.indicators.urls.byGroupId", UrlListResponse.class, ownerName, map, "securityLabelName", associatedUrlList);
-
-        return data;
+    @Override
+    public WriteListResponse<String> deleteAssociatedIndicatorUrls(String uniqueId, List<String> urlTexts, String ownerName) throws IOException {
+        return indAssocWriter.deleteAssociatedIndicatorUrls(uniqueId, urlTexts, ownerName);
     }
 
-    public void deleteAssociationIndicatorUrl(String securityLabelName, String associatedUrl) throws IOException, FailedResponseException {
-        deleteAssociationIndicatorUrl(securityLabelName, associatedUrl, null);
+    @Override
+    public boolean deleteAssociatedIndicatorUrl(String uniqueId, String urlText) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorUrl(uniqueId, urlText);
     }
-
-    public void deleteAssociationIndicatorUrl(String securityLabelName, String associatedUrl, String ownerName)
-        throws IOException, FailedResponseException {
 
-        Map<String, Object> map = createParamMap("id", securityLabelName, "indicatorId", associatedUrl);
-        deleteItem("v2.securityLabels.byId.indicators.urls.byIndicatorId", UrlResponse.class, ownerName, map);
-
+    @Override
+    public boolean deleteAssociatedIndicatorUrl(String uniqueId, String urlText, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.deleteAssociatedIndicatorUrl(uniqueId, urlText, ownerName);
     }
-
+    
 }

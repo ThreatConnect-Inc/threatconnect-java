@@ -15,7 +15,6 @@ import com.cyber2.api.lib.server.entity.File;
 import com.cyber2.api.lib.server.entity.Host;
 import com.cyber2.api.lib.server.entity.Incident;
 import com.cyber2.api.lib.server.entity.Signature;
-import com.cyber2.api.lib.server.entity.Tag;
 import com.cyber2.api.lib.server.entity.Threat;
 import com.cyber2.api.lib.server.entity.Url;
 import com.cyber2.api.lib.server.response.entity.AddressResponse;
@@ -139,7 +138,17 @@ public class WriterAdapterFactory {
         };
     }
 
+    public static SecurityLabelWriterAdapter createSecurityLabelWriter(Connection conn) {
+        return new SecurityLabelWriterAdapter(conn, new RequestExecutor(conn));
+    }
+
     public static TagWriterAdapter createTagWriter(Connection conn) {
         return new TagWriterAdapter(conn, new RequestExecutor(conn));
     }
+
+    public static VictimWriterAdapter createVictimWriter(Connection conn) {
+        return new VictimWriterAdapter(conn, new RequestExecutor(conn));
+    }
+
+
 }

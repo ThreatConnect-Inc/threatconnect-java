@@ -16,13 +16,13 @@ import java.util.List;
  */
 public interface SecurityLabelAssociateReadable<P> {
 
-   public List<SecurityLabel> getAssociatedSecurityLabels(P uniqueId) throws IOException, FailedResponseException;
+    public List<SecurityLabel> getAssociatedSecurityLabels(P uniqueId) throws IOException, FailedResponseException;
 
-   public List<SecurityLabel> getAssociatedSecurityLabels(P uniqueId, String ownerName) 
-            throws IOException, FailedResponseException;
+    public List<SecurityLabel> getAssociatedSecurityLabels(P uniqueId, String ownerName)
+        throws IOException, FailedResponseException;
 
-   public SecurityLabel getAssociatedSecurityLabel(P uniqueId, String tagName) throws IOException, FailedResponseException;
+    public SecurityLabel getAssociatedSecurityLabel(P uniqueId, String securityLabel) throws IOException, FailedResponseException;
 
-   public SecurityLabel getAssociatedSecurityLabel(P uniqueId, String tagName, String ownerName) 
-            throws IOException, FailedResponseException;
-} 
+    public SecurityLabel getAssociatedSecurityLabel(P uniqueId, String securityLabel, String ownerName)
+        throws IOException, FailedResponseException;
+}

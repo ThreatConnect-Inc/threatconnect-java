@@ -21,8 +21,8 @@ import com.cyber2.api.lib.server.entity.Group;
 import com.cyber2.api.lib.server.entity.Host;
 import com.cyber2.api.lib.server.entity.Incident;
 import com.cyber2.api.lib.server.entity.Indicator;
+import com.cyber2.api.lib.server.entity.SecurityLabel;
 import com.cyber2.api.lib.server.entity.Signature;
-import com.cyber2.api.lib.server.entity.Tag;
 import com.cyber2.api.lib.server.entity.Threat;
 import com.cyber2.api.lib.server.entity.Url;
 import com.cyber2.api.lib.server.response.entity.SecurityLabelListResponse;
@@ -35,7 +35,7 @@ import java.util.List;
  * @author dtineo
  */
 public class SecurityLabelReaderAdapter
-    extends AbstractBaseReaderAdapter<Tag,String> 
+    extends AbstractBaseReaderAdapter<SecurityLabel,String> 
     implements UrlTypeable, GroupAssociateReadable<String>, IndicatorAssociateReadable<String> {
 
     // composite pattern
@@ -60,6 +60,11 @@ public class SecurityLabelReaderAdapter
             @Override
             protected String getUrlBasePrefix() {
                 return SecurityLabelReaderAdapter.this.getUrlBasePrefix();
+            }
+
+            @Override
+            public String getUrlType() {
+                return SecurityLabelReaderAdapter.this.getUrlType();
             }
         };
 

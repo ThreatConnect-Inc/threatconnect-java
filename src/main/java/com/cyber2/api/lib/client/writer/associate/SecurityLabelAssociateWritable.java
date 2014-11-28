@@ -5,9 +5,8 @@
  */
 package com.cyber2.api.lib.client.writer.associate;
 
-import com.cyber2.api.lib.client.reader.associate.*;
+import com.cyber2.api.lib.client.response.WriteListResponse;
 import com.cyber2.api.lib.exception.FailedResponseException;
-import com.cyber2.api.lib.server.entity.SecurityLabel;
 import java.io.IOException;
 import java.util.List;
 
@@ -17,13 +16,26 @@ import java.util.List;
  */
 public interface SecurityLabelAssociateWritable<P> {
 
-   public List<SecurityLabel> getAssociatedSecurityLabels(P uniqueId) throws IOException, FailedResponseException;
+   public WriteListResponse<String> associateSecurityLabels(P uniqueId, List<String> securityLabels) throws IOException;
 
-   public List<SecurityLabel> getAssociatedSecurityLabels(P uniqueId, String ownerName) 
+   public WriteListResponse<String> associateSecurityLabels(P uniqueId, List<String> securityLabels, String ownerName) 
+            throws IOException;
+
+   public boolean associateSecurityLabel(P uniqueId, String securityLabel) throws IOException, FailedResponseException;
+
+   public boolean associateSecurityLabel(P uniqueId, String securityLabel, String ownerName) 
             throws IOException, FailedResponseException;
 
-   public SecurityLabel getAssociatedSecurityLabel(P uniqueId, String tagName) throws IOException, FailedResponseException;
+    public WriteListResponse<String> deleteAssociatedSecurityLabel(P uniqueId, List<String> securityLabels) 
+        throws IOException;
 
-   public SecurityLabel getAssociatedSecurityLabel(P uniqueId, String tagName, String ownerName) 
+    public WriteListResponse<String> deleteAssociatedSecurityLabel(P uniqueId, List<String> securityLabels, String ownerName) 
+        throws IOException;
+
+   public boolean deleteAssociatedSecurityLabel(P uniqueId, String securityLabel) throws IOException, FailedResponseException;
+
+   public boolean deleteAssociatedSecurityLabel(P uniqueId, String securityLabel, String ownerName) 
             throws IOException, FailedResponseException;
+
+
 } 
