@@ -1,2 +1,2 @@
 target/*
-!target/site/apidocs/
+!target/site/apidocs/*
