@@ -10,7 +10,7 @@ import com.cyber2.api.lib.client.writer.AbstractBaseWriterAdapter;
 import com.cyber2.api.lib.conn.Connection;
 import com.cyber2.api.lib.conn.RequestExecutor;
 import com.cyber2.api.lib.exception.FailedResponseException;
-import com.cyber2.api.lib.server.response.entity.VictimEmailAddressResponse;
+import com.cyber2.api.lib.server.response.entity.ApiEntitySingleResponse;
 import com.cyber2.api.lib.server.response.entity.VictimListResponse;
 import com.cyber2.api.lib.server.response.entity.VictimResponse;
 import java.io.IOException;
@@ -24,7 +24,7 @@ import java.util.Map;
 public abstract class AbstractVictimAssociateWriterAdapter<P> extends AbstractBaseWriterAdapter implements VictimAssociateWritable<P> {
 
     public AbstractVictimAssociateWriterAdapter(Connection conn, RequestExecutor executor, Class singleType, Class listType) {
-        super(conn, executor, singleType, /*createReturnsObject=*/false);
+        super(conn, executor, singleType );
     }
 
     @Override
@@ -42,16 +42,16 @@ public abstract class AbstractVictimAssociateWriterAdapter<P> extends AbstractBa
     }
 
     @Override
-    public boolean associateVictim(P uniqueId, Integer victimId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateVictim(P uniqueId, Integer victimId) throws IOException, FailedResponseException {
         return associateVictim(uniqueId, victimId, null);
     }
 
     @Override
-    public boolean associateVictim(P uniqueId, Integer victimId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateVictim(P uniqueId, Integer victimId, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "victimId", victimId);
         VictimResponse data = createItem( getUrlBasePrefix() + ".byId.victims.byVictimId", VictimResponse.class, ownerName, map, null);
 
-        return data.isSuccess();
+        return data;
     }
 
     @Override
@@ -69,17 +69,17 @@ public abstract class AbstractVictimAssociateWriterAdapter<P> extends AbstractBa
     }
 
     @Override
-    public boolean deleteAssociatedVictim(P uniqueId, Integer victimId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedVictim(P uniqueId, Integer victimId) throws IOException, FailedResponseException {
         return deleteAssociatedVictim(uniqueId, victimId, null);
     }
 
 
     @Override
-   public boolean deleteAssociatedVictim(P uniqueId, Integer victimId, String ownerName) throws IOException, FailedResponseException {
+   public ApiEntitySingleResponse deleteAssociatedVictim(P uniqueId, Integer victimId, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "victimId", victimId);
         VictimResponse item = deleteItem(getUrlBasePrefix() + ".type.byId.victim..byVictimId", VictimResponse.class, ownerName, map);
 
-        return item.isSuccess();
+        return item;
    }
 
 }

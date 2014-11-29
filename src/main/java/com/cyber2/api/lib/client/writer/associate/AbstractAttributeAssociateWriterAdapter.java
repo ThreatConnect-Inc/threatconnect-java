@@ -28,7 +28,7 @@ import java.util.Map;
 public abstract class AbstractAttributeAssociateWriterAdapter<T,P> extends AbstractBaseWriterAdapter<T,P> implements AttributeAssociateWritable<P> {
 
     public AbstractAttributeAssociateWriterAdapter(Connection conn, RequestExecutor executor, Class singleType) {
-        super(conn, executor, singleType, /*createReturnsObject=*/false);
+        super(conn, executor, singleType );
     }
 
     @Override
@@ -77,18 +77,18 @@ public abstract class AbstractAttributeAssociateWriterAdapter<T,P> extends Abstr
     }
 
     @Override
-    public boolean addAttributeSecurityLabel(P uniqueId, Integer attributeId, String securityLabel) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse addAttributeSecurityLabel(P uniqueId, Integer attributeId, String securityLabel) throws IOException, FailedResponseException {
         return addAttributeSecurityLabel(uniqueId, attributeId, securityLabel, null);
     }
 
     @Override
-    public boolean addAttributeSecurityLabel(P uniqueId, Integer attributeId, String securityLabel, String ownerName)
+    public ApiEntitySingleResponse addAttributeSecurityLabel(P uniqueId, Integer attributeId, String securityLabel, String ownerName)
         throws IOException, FailedResponseException {
 
         Map<String, Object> map = createParamMap("id", uniqueId, "attributeId", attributeId, "securityLabel", securityLabel);
         SecurityLabelResponse data = createItem(getUrlBasePrefix() + ".byId.attributes.byId.securityLabels.byName", SecurityLabelResponse.class, ownerName, map, null);
 
-        return data.isSuccess();
+        return data;
     }
 
     @Override
@@ -109,18 +109,18 @@ public abstract class AbstractAttributeAssociateWriterAdapter<T,P> extends Abstr
     }
 
     @Override
-    public boolean updateAttribute(P uniqueId, Attribute attribute) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse updateAttribute(P uniqueId, Attribute attribute) throws IOException, FailedResponseException {
         return updateAttribute(uniqueId, attribute, null);
     }
 
     @Override
-    public boolean updateAttribute(P uniqueId, Attribute attribute, String ownerName)
+    public ApiEntitySingleResponse updateAttribute(P uniqueId, Attribute attribute, String ownerName)
         throws IOException, FailedResponseException {
 
         Map<String, Object> map = createParamMap("id", uniqueId, "attributeId", attribute.getId() );
         AttributeResponse item = updateItem(getUrlBasePrefix() + "type.byId.attributes.byId", AttributeResponse.class, ownerName, map, attribute);
 
-        return item.isSuccess();
+        return item;
     }
 
     @Override
@@ -140,16 +140,16 @@ public abstract class AbstractAttributeAssociateWriterAdapter<T,P> extends Abstr
     }
 
     @Override
-    public boolean deleteAttribute(P uniqueId, Integer attribute) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAttribute(P uniqueId, Integer attribute) throws IOException, FailedResponseException {
         return deleteAttribute(uniqueId, attribute, null);
     }
 
     @Override
-    public boolean deleteAttribute(P uniqueId, Integer attribute, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAttribute(P uniqueId, Integer attribute, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "attributeId", attribute);
         ApiEntitySingleResponse item = deleteItem(getUrlBasePrefix() + ".type.byId.attributes.byId", AttributeResponse.class, ownerName, map);
 
-        return item.isSuccess();
+        return item;
     }
 
     @Override
@@ -167,16 +167,16 @@ public abstract class AbstractAttributeAssociateWriterAdapter<T,P> extends Abstr
     }
 
     @Override
-    public boolean deleteAttributeSecurityLabel(P uniqueId, Integer attributeId, String securityLabel) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAttributeSecurityLabel(P uniqueId, Integer attributeId, String securityLabel) throws IOException, FailedResponseException {
         return deleteAttributeSecurityLabel(uniqueId, attributeId, securityLabel, null);
     }
 
     @Override
-    public boolean deleteAttributeSecurityLabel(P uniqueId, Integer attributeId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAttributeSecurityLabel(P uniqueId, Integer attributeId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "securityLabel", securityLabel);
         ApiEntitySingleResponse item = deleteItem(getUrlBasePrefix() + ".type.byId.attributes.byId.securityLabels.byName", SecurityLabelResponse.class, ownerName, map);
 
-        return item.isSuccess();
+        return item;
 
     }
 

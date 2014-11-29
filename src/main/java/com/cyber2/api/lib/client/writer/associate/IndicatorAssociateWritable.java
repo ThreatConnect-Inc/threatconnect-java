@@ -7,6 +7,7 @@ package com.cyber2.api.lib.client.writer.associate;
 
 import com.cyber2.api.lib.client.response.WriteListResponse;
 import com.cyber2.api.lib.exception.FailedResponseException;
+import com.cyber2.api.lib.server.response.entity.ApiEntitySingleResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -21,9 +22,9 @@ public interface IndicatorAssociateWritable<P> {
     public WriteListResponse<String> associateIndicatorAddresses(P uniqueId, List<String> ipAddresses, String ownerName) 
             throws IOException;
 
-    public boolean associateIndicatorAddress(P uniqueId, String ipAddress) throws IOException, FailedResponseException;
+    public ApiEntitySingleResponse associateIndicatorAddress(P uniqueId, String ipAddress) throws IOException, FailedResponseException;
 
-    public boolean associateIndicatorAddress(P uniqueId, String ipAddress, String ownerName) 
+    public ApiEntitySingleResponse associateIndicatorAddress(P uniqueId, String ipAddress, String ownerName) 
             throws IOException, FailedResponseException;
 
     public WriteListResponse<String> associateIndicatorEmailAddresses(P uniqueId, List<String> emailAddresses) throws IOException;
@@ -31,9 +32,9 @@ public interface IndicatorAssociateWritable<P> {
     public WriteListResponse<String> associateIndicatorEmailAddresses(P uniqueId, List<String> emailAddresses, String ownerName) 
             throws IOException;
 
-    public boolean associateIndicatorEmailAddress(P uniqueId, String emailAddress) throws IOException, FailedResponseException;
+    public ApiEntitySingleResponse associateIndicatorEmailAddress(P uniqueId, String emailAddress) throws IOException, FailedResponseException;
 
-    public boolean associateIndicatorEmailAddress(P uniqueId, String emailAddress, String ownerName) 
+    public ApiEntitySingleResponse associateIndicatorEmailAddress(P uniqueId, String emailAddress, String ownerName) 
             throws IOException, FailedResponseException;
 
     public WriteListResponse<String> associateIndicatorFiles(P uniqueId, List<String> fileHashes) throws IOException;
@@ -41,9 +42,9 @@ public interface IndicatorAssociateWritable<P> {
     public WriteListResponse<String> associateIndicatorFiles(P uniqueId, List<String> fileHashes, String ownerName)   
             throws IOException;
 
-    public boolean associateIndicatorFile(P uniqueId, String fileHash) throws IOException, FailedResponseException;
+    public ApiEntitySingleResponse associateIndicatorFile(P uniqueId, String fileHash) throws IOException, FailedResponseException;
 
-    public boolean associateIndicatorFile(P uniqueId, String fileHash, String ownerName)   
+    public ApiEntitySingleResponse associateIndicatorFile(P uniqueId, String fileHash, String ownerName)   
             throws IOException, FailedResponseException;
 
     public WriteListResponse<String> associateIndicatorHosts(P uniqueId, List<String> hostNames) throws IOException;
@@ -51,9 +52,9 @@ public interface IndicatorAssociateWritable<P> {
     public WriteListResponse<String> associateIndicatorHosts(P uniqueId, List<String> hostNames, String ownerName)   
             throws IOException;
 
-    public boolean associateIndicatorHost(P uniqueId, String hostName) throws IOException, FailedResponseException;
+    public ApiEntitySingleResponse associateIndicatorHost(P uniqueId, String hostName) throws IOException, FailedResponseException;
 
-    public boolean associateIndicatorHost(P uniqueId, String hostName, String ownerName)   
+    public ApiEntitySingleResponse associateIndicatorHost(P uniqueId, String hostName, String ownerName)   
             throws IOException, FailedResponseException;
 
     public WriteListResponse<String> associateIndicatorUrls(P uniqueId, List<String> urlTexts) throws IOException;
@@ -61,9 +62,9 @@ public interface IndicatorAssociateWritable<P> {
     public WriteListResponse<String> associateIndicatorUrls(P uniqueId, List<String> urlTexts, String ownerName)     
             throws IOException;
 
-    public boolean associateIndicatorUrl(P uniqueId, String urlText) throws IOException, FailedResponseException;
+    public ApiEntitySingleResponse associateIndicatorUrl(P uniqueId, String urlText) throws IOException, FailedResponseException;
 
-    public boolean associateIndicatorUrl(P uniqueId, String urlText, String ownerName)     
+    public ApiEntitySingleResponse associateIndicatorUrl(P uniqueId, String urlText, String ownerName)     
             throws IOException, FailedResponseException;
 
     public WriteListResponse<String> deleteAssociatedIndicatorAddresses(P uniqueId, List<String> ipAddresses) throws IOException;
@@ -71,9 +72,9 @@ public interface IndicatorAssociateWritable<P> {
     public WriteListResponse<String> deleteAssociatedIndicatorAddresses(P uniqueId, List<String> ipAddresses, String ownerName) 
             throws IOException;
 
-    public boolean deleteAssociatedIndicatorAddress(P uniqueId, String ipAddress) throws IOException, FailedResponseException;
+    public ApiEntitySingleResponse deleteAssociatedIndicatorAddress(P uniqueId, String ipAddress) throws IOException, FailedResponseException;
 
-    public boolean deleteAssociatedIndicatorAddress(P uniqueId, String ipAddress, String ownerName) 
+    public ApiEntitySingleResponse deleteAssociatedIndicatorAddress(P uniqueId, String ipAddress, String ownerName) 
             throws IOException, FailedResponseException;
 
     public WriteListResponse<String> deleteAssociatedIndicatorEmailAddresses(P uniqueId, List<String> emailAddresses) throws IOException;
@@ -81,9 +82,9 @@ public interface IndicatorAssociateWritable<P> {
     public WriteListResponse<String> deleteAssociatedIndicatorEmailAddresses(P uniqueId, List<String> emailAddresses, String ownerName) 
             throws IOException;
 
-    public boolean deleteAssociatedIndicatorEmailAddress(P uniqueId, String emailAddress) throws IOException, FailedResponseException;
+    public ApiEntitySingleResponse deleteAssociatedIndicatorEmailAddress(P uniqueId, String emailAddress) throws IOException, FailedResponseException;
 
-    public boolean deleteAssociatedIndicatorEmailAddress(P uniqueId, String emailAddress, String ownerName) 
+    public ApiEntitySingleResponse deleteAssociatedIndicatorEmailAddress(P uniqueId, String emailAddress, String ownerName) 
             throws IOException, FailedResponseException;
 
     public WriteListResponse<String> deleteAssociatedIndicatorFiles(P uniqueId, List<String> fileHashes) throws IOException;
@@ -91,9 +92,9 @@ public interface IndicatorAssociateWritable<P> {
     public WriteListResponse<String> deleteAssociatedIndicatorFiles(P uniqueId, List<String> fileHashes, String ownerName)   
             throws IOException;
 
-    public boolean deleteAssociatedIndicatorFile(P uniqueId, String fileHash) throws IOException, FailedResponseException;
+    public ApiEntitySingleResponse deleteAssociatedIndicatorFile(P uniqueId, String fileHash) throws IOException, FailedResponseException;
 
-    public boolean deleteAssociatedIndicatorFile(P uniqueId, String fileHash, String ownerName)   
+    public ApiEntitySingleResponse deleteAssociatedIndicatorFile(P uniqueId, String fileHash, String ownerName)   
             throws IOException, FailedResponseException;
 
     public WriteListResponse<String> deleteAssociatedIndicatorHosts(P uniqueId, List<String> hostNames) throws IOException;
@@ -101,9 +102,9 @@ public interface IndicatorAssociateWritable<P> {
     public WriteListResponse<String> deleteAssociatedIndicatorHosts(P uniqueId, List<String> hostNames, String ownerName)   
             throws IOException;
 
-    public boolean deleteAssociatedIndicatorHost(P uniqueId, String hostName) throws IOException, FailedResponseException;
+    public ApiEntitySingleResponse deleteAssociatedIndicatorHost(P uniqueId, String hostName) throws IOException, FailedResponseException;
 
-    public boolean deleteAssociatedIndicatorHost(P uniqueId, String hostName, String ownerName)   
+    public ApiEntitySingleResponse deleteAssociatedIndicatorHost(P uniqueId, String hostName, String ownerName)   
             throws IOException, FailedResponseException;
 
     public WriteListResponse<String> deleteAssociatedIndicatorUrls(P uniqueId, List<String> urlTexts) throws IOException;
@@ -111,9 +112,9 @@ public interface IndicatorAssociateWritable<P> {
     public WriteListResponse<String> deleteAssociatedIndicatorUrls(P uniqueId, List<String> urlTexts, String ownerName)     
             throws IOException;
 
-    public boolean deleteAssociatedIndicatorUrl(P uniqueId, String urlText) throws IOException, FailedResponseException;
+    public ApiEntitySingleResponse deleteAssociatedIndicatorUrl(P uniqueId, String urlText) throws IOException, FailedResponseException;
 
-    public boolean deleteAssociatedIndicatorUrl(P uniqueId, String urlText, String ownerName)     
+    public ApiEntitySingleResponse deleteAssociatedIndicatorUrl(P uniqueId, String urlText, String ownerName)     
             throws IOException, FailedResponseException;
 
 }

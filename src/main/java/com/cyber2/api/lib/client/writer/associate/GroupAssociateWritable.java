@@ -7,6 +7,7 @@ package com.cyber2.api.lib.client.writer.associate;
 
 import com.cyber2.api.lib.client.response.WriteListResponse;
 import com.cyber2.api.lib.exception.FailedResponseException;
+import com.cyber2.api.lib.server.response.entity.ApiEntitySingleResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -22,10 +23,10 @@ public interface GroupAssociateWritable<P> {
     public WriteListResponse<Integer> associateGroupAdversaries(P uniqueId, List<Integer> adversaryIds, String ownerName) 
         throws IOException;
 
-    public boolean associateGroupAdversary(P uniqueId, Integer adversaryId) 
+    public ApiEntitySingleResponse associateGroupAdversary(P uniqueId, Integer adversaryId) 
         throws IOException, FailedResponseException;
     
-    public boolean associateGroupAdversary(P uniqueId, Integer adversaryId, String ownerName) 
+    public ApiEntitySingleResponse associateGroupAdversary(P uniqueId, Integer adversaryId, String ownerName) 
             throws IOException, FailedResponseException;
 
     public WriteListResponse<Integer> associateGroupEmails(P uniqueId, List<Integer> emailIds) 
@@ -34,10 +35,10 @@ public interface GroupAssociateWritable<P> {
     public WriteListResponse<Integer> associateGroupEmails(P uniqueId, List<Integer> emailIds, String ownerName) 
             throws IOException;
 
-    public boolean associateGroupEmail(P uniqueId, Integer emailId) 
+    public ApiEntitySingleResponse associateGroupEmail(P uniqueId, Integer emailId) 
         throws IOException, FailedResponseException;
     
-    public boolean associateGroupEmail(P uniqueId, Integer emailId, String ownerName) 
+    public ApiEntitySingleResponse associateGroupEmail(P uniqueId, Integer emailId, String ownerName) 
             throws IOException, FailedResponseException;
 
     public WriteListResponse<Integer> associateGroupIncidents(P uniqueId, List<Integer> incidentIds) 
@@ -46,10 +47,10 @@ public interface GroupAssociateWritable<P> {
     public WriteListResponse<Integer> associateGroupIncidents(P uniqueId, List<Integer> incidentIds, String ownerName) 
             throws IOException;
 
-    public boolean associateGroupIncident(P uniqueId, Integer incidentId) 
+    public ApiEntitySingleResponse associateGroupIncident(P uniqueId, Integer incidentId) 
         throws IOException, FailedResponseException;
     
-    public boolean associateGroupIncident(P uniqueId, Integer incidentId, String ownerName) 
+    public ApiEntitySingleResponse associateGroupIncident(P uniqueId, Integer incidentId, String ownerName) 
             throws IOException, FailedResponseException;
 
     public WriteListResponse<Integer> associateGroupSignatures(P uniqueId, List<Integer> signatureIds) 
@@ -58,10 +59,10 @@ public interface GroupAssociateWritable<P> {
     public WriteListResponse<Integer> associateGroupSignatures(P uniqueId, List<Integer> signatureIds, String ownerName) 
             throws IOException;
 
-    public boolean associateGroupSignature(P uniqueId, Integer signatureId) 
+    public ApiEntitySingleResponse associateGroupSignature(P uniqueId, Integer signatureId) 
         throws IOException, FailedResponseException;
     
-    public boolean associateGroupSignature(P uniqueId, Integer signatureId, String ownerName) 
+    public ApiEntitySingleResponse associateGroupSignature(P uniqueId, Integer signatureId, String ownerName) 
             throws IOException, FailedResponseException;
 
     public WriteListResponse<Integer> associateGroupThreats(P uniqueId, List<Integer> threatIds) 
@@ -70,10 +71,10 @@ public interface GroupAssociateWritable<P> {
     public WriteListResponse<Integer> associateGroupThreats(P uniqueId, List<Integer> threatIds, String ownerName) 
             throws IOException;
 
-    public boolean associateGroupThreat(P uniqueId, Integer threatId) 
+    public ApiEntitySingleResponse associateGroupThreat(P uniqueId, Integer threatId) 
         throws IOException, FailedResponseException;
     
-    public boolean associateGroupThreat(P uniqueId, Integer threatId, String ownerName) 
+    public ApiEntitySingleResponse associateGroupThreat(P uniqueId, Integer threatId, String ownerName) 
             throws IOException, FailedResponseException;
 
     public WriteListResponse<Integer> deleteAssociatedGroupAdversaries(P uniqueId, List<Integer> adversaryIds) 
@@ -82,10 +83,10 @@ public interface GroupAssociateWritable<P> {
     public WriteListResponse<Integer> deleteAssociatedGroupAdversaries(P uniqueId, List<Integer> adversaryIds, String ownerName) 
         throws IOException;
 
-    public boolean deleteAssociatedGroupAdversary(P uniqueId, Integer adversaryId) 
+    public ApiEntitySingleResponse deleteAssociatedGroupAdversary(P uniqueId, Integer adversaryId) 
         throws IOException, FailedResponseException;
     
-    public boolean deleteAssociatedGroupAdversary(P uniqueId, Integer adversaryId, String ownerName) 
+    public ApiEntitySingleResponse deleteAssociatedGroupAdversary(P uniqueId, Integer adversaryId, String ownerName) 
             throws IOException, FailedResponseException;
 
     public WriteListResponse<Integer> deleteAssociatedGroupEmails(P uniqueId, List<Integer> emailIds) 
@@ -94,10 +95,10 @@ public interface GroupAssociateWritable<P> {
     public WriteListResponse<Integer> deleteAssociatedGroupEmails(P uniqueId, List<Integer> emailIds, String ownerName) 
             throws IOException;
 
-    public boolean deleteAssociatedGroupEmail(P uniqueId, Integer emailId) 
+    public ApiEntitySingleResponse deleteAssociatedGroupEmail(P uniqueId, Integer emailId) 
         throws IOException, FailedResponseException;
     
-    public boolean deleteAssociatedGroupEmail(P uniqueId, Integer emailId, String ownerName) 
+    public ApiEntitySingleResponse deleteAssociatedGroupEmail(P uniqueId, Integer emailId, String ownerName) 
             throws IOException, FailedResponseException;
 
     public WriteListResponse<Integer> deleteAssociatedGroupIncidents(P uniqueId, List<Integer> incidentIds) 
@@ -106,10 +107,10 @@ public interface GroupAssociateWritable<P> {
     public WriteListResponse<Integer> deleteAssociatedGroupIncidents(P uniqueId, List<Integer> incidentIds, String ownerName) 
             throws IOException;
 
-    public boolean deleteAssociatedGroupIncident(P uniqueId, Integer incidentId) 
+    public ApiEntitySingleResponse deleteAssociatedGroupIncident(P uniqueId, Integer incidentId) 
         throws IOException, FailedResponseException;
     
-    public boolean deleteAssociatedGroupIncident(P uniqueId, Integer incidentId, String ownerName) 
+    public ApiEntitySingleResponse deleteAssociatedGroupIncident(P uniqueId, Integer incidentId, String ownerName) 
             throws IOException, FailedResponseException;
 
     public WriteListResponse<Integer> deleteAssociatedGroupSignatures(P uniqueId, List<Integer> signatureIds) 
@@ -118,10 +119,10 @@ public interface GroupAssociateWritable<P> {
     public WriteListResponse<Integer> deleteAssociatedGroupSignatures(P uniqueId, List<Integer> signatureIds, String ownerName) 
             throws IOException;
 
-    public boolean deleteAssociatedGroupSignature(P uniqueId, Integer signatureId) 
+    public ApiEntitySingleResponse deleteAssociatedGroupSignature(P uniqueId, Integer signatureId) 
         throws IOException, FailedResponseException;
     
-    public boolean deleteAssociatedGroupSignature(P uniqueId, Integer signatureId, String ownerName) 
+    public ApiEntitySingleResponse deleteAssociatedGroupSignature(P uniqueId, Integer signatureId, String ownerName) 
             throws IOException, FailedResponseException;
 
     public WriteListResponse<Integer> deleteAssociatedGroupThreats(P uniqueId, List<Integer> threatIds) 
@@ -130,10 +131,10 @@ public interface GroupAssociateWritable<P> {
     public WriteListResponse<Integer> deleteAssociatedGroupThreats(P uniqueId, List<Integer> threatIds, String ownerName) 
             throws IOException;
 
-    public boolean deleteAssociatedGroupThreat(P uniqueId, Integer threatId) 
+    public ApiEntitySingleResponse deleteAssociatedGroupThreat(P uniqueId, Integer threatId) 
         throws IOException, FailedResponseException;
     
-    public boolean deleteAssociatedGroupThreat(P uniqueId, Integer threatId, String ownerName) 
+    public ApiEntitySingleResponse deleteAssociatedGroupThreat(P uniqueId, Integer threatId, String ownerName) 
             throws IOException, FailedResponseException;
 
 }

@@ -12,52 +12,26 @@ import java.util.List;
 /**
  *
  * @author dtineo
+ * @param <ApiSingleEntityResponse>
  * @param <T>
  */
-public class WriteListResponse<T> {
-    private List<T> successList = new ArrayList<>();
-    private List<T> failureList = new ArrayList<>();
-    private List<String> failureMessageList = new ArrayList<>();
+public class WriteListResponse<ApiSingleEntityResponse> {
+    private List<ApiEntitySingleResponse> successList = new ArrayList<>();
+    private List<ApiEntitySingleResponse> failureList = new ArrayList<>();
 
     /**
      * @return the successList
      */
-    public List<T> getSuccessList() {
+    public List<ApiEntitySingleResponse> getSuccessList() {
         return successList;
-    }
-
-    /**
-     * @param successList the successList to set
-     */
-    public void setSuccessList(List<T> successList) {
-        this.successList = successList;
     }
 
     /**
      * @return the failureList
      */
-    public List<T> getFailureList() {
+    public List<ApiEntitySingleResponse> getFailureList() {
         return failureList;
     }
 
-    /**
-     * @param failureList the failureList to set
-     */
-    public void setFailureList(List<T> failureList) {
-        this.failureList = failureList;
-    }
 
-    /**
-     * @return the failureMessageList
-     */
-    public List<String> getFailureMessageList() {
-        return failureMessageList;
-    }
-
-    /**
-     * @param failureMessageList the failureMessageList to set
-     */
-    public void setFailureMessageList(List<String> failureMessageList) {
-        this.failureMessageList = failureMessageList;
-    }
 }

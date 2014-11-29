@@ -11,6 +11,7 @@ import com.cyber2.api.lib.client.writer.AbstractBaseWriterAdapter;
 import com.cyber2.api.lib.conn.Connection;
 import com.cyber2.api.lib.conn.RequestExecutor;
 import com.cyber2.api.lib.exception.FailedResponseException;
+import com.cyber2.api.lib.server.response.entity.ApiEntitySingleResponse;
 import com.cyber2.api.lib.server.response.entity.SecurityLabelListResponse;
 import com.cyber2.api.lib.server.response.entity.SecurityLabelResponse;
 import java.io.IOException;
@@ -24,7 +25,7 @@ import java.util.Map;
 public abstract class AbstractSecurityLabelAssociateWriterAdapter<T,P> extends AbstractBaseWriterAdapter<T,P> implements SecurityLabelAssociateWritable<P>, UrlTypeable {
 
     public AbstractSecurityLabelAssociateWriterAdapter(Connection conn, RequestExecutor executor, Class singleType) {
-        super(conn, executor, singleType, /*createReturnsObject=*/false);
+        super(conn, executor, singleType );
     }
 
     @Override
@@ -42,16 +43,16 @@ public abstract class AbstractSecurityLabelAssociateWriterAdapter<T,P> extends A
     }
 
     @Override
-    public boolean associateSecurityLabel(P uniqueId, String securityLabel) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateSecurityLabel(P uniqueId, String securityLabel) throws IOException, FailedResponseException {
         return associateSecurityLabel(uniqueId, securityLabel, null);
     }
 
     @Override
-    public boolean associateSecurityLabel(P uniqueId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateSecurityLabel(P uniqueId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "securityLabel", securityLabel);
         SecurityLabelResponse data = createItem( getUrlBasePrefix() + ".byId.securityLabels.byName", SecurityLabelResponse.class, ownerName, map, null);
 
-        return data.isSuccess();
+        return data;
     }
 
     @Override
@@ -69,16 +70,16 @@ public abstract class AbstractSecurityLabelAssociateWriterAdapter<T,P> extends A
     }
 
     @Override
-    public boolean deleteAssociatedSecurityLabel(P uniqueId, String securityLabel) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedSecurityLabel(P uniqueId, String securityLabel) throws IOException, FailedResponseException {
         return deleteAssociatedSecurityLabel(uniqueId, securityLabel, null);
     }
 
     @Override
-    public boolean deleteAssociatedSecurityLabel(P uniqueId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedSecurityLabel(P uniqueId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "securityLabel", securityLabel);
         SecurityLabelResponse item = deleteItem(getUrlBasePrefix() + ".type.byId.tags.byName", SecurityLabelResponse.class, ownerName, map);
 
-        return item.isSuccess();
+        return item;
     }
 
 

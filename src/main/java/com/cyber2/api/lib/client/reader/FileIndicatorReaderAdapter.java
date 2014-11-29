@@ -23,6 +23,7 @@ public class FileIndicatorReaderAdapter<File> extends AbstractIndicatorReaderAda
 
     public FileIndicatorReaderAdapter(Connection conn, RequestExecutor executor) {
         super(conn, executor, FileResponse.class, FileListResponse.class);
+
     }
 
     @Override

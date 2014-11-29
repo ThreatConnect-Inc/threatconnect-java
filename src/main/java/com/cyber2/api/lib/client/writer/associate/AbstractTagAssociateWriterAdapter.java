@@ -11,9 +11,9 @@ import com.cyber2.api.lib.client.writer.AbstractBaseWriterAdapter;
 import com.cyber2.api.lib.conn.Connection;
 import com.cyber2.api.lib.conn.RequestExecutor;
 import com.cyber2.api.lib.exception.FailedResponseException;
+import com.cyber2.api.lib.server.response.entity.ApiEntitySingleResponse;
 import com.cyber2.api.lib.server.response.entity.TagListResponse;
 import com.cyber2.api.lib.server.response.entity.TagResponse;
-import com.cyber2.api.lib.server.response.entity.VictimNetworkAccountResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +25,7 @@ import java.util.Map;
 public abstract class AbstractTagAssociateWriterAdapter<T,P> extends AbstractBaseWriterAdapter<T,P> implements TagAssociateWritable<P>, UrlTypeable {
 
     public AbstractTagAssociateWriterAdapter(Connection conn, RequestExecutor executor, Class singleType) {
-        super(conn, executor, singleType, /*createReturnsObject=*/false);
+        super(conn, executor, singleType);
     }
 
     @Override
@@ -42,16 +42,16 @@ public abstract class AbstractTagAssociateWriterAdapter<T,P> extends AbstractBas
     }
 
     @Override
-    public boolean associateTag(P uniqueId, String tagName) throws IOException, FailedResponseException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ApiEntitySingleResponse associateTag(P uniqueId, String tagName) throws IOException, FailedResponseException {
+        return associateTag(uniqueId, tagName, null);
     }
 
     @Override
-    public boolean associateTag(P uniqueId, String tagName, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateTag(P uniqueId, String tagName, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "tagName", tagName);
         TagResponse data = createItem( getUrlBasePrefix() + ".byId.tags.byName", TagResponse.class, ownerName, map, null);
 
-        return data.isSuccess();
+        return data;
     }
 
     @Override
@@ -68,16 +68,16 @@ public abstract class AbstractTagAssociateWriterAdapter<T,P> extends AbstractBas
     }
 
     @Override
-    public boolean deleteAssociatedTag(P uniqueId, String tagName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedTag(P uniqueId, String tagName) throws IOException, FailedResponseException {
         return deleteAssociatedTag(uniqueId, tagName, null);
     }
 
     @Override
-    public boolean deleteAssociatedTag(P uniqueId, String tagName, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedTag(P uniqueId, String tagName, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "tagName", tagName);
         TagResponse item = deleteItem(getUrlBasePrefix() + ".type.byId.tags.byName", TagResponse.class, ownerName, map);
 
-        return item.isSuccess();
+        return item;
     }
 
 }

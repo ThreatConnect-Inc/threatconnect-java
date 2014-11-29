@@ -7,6 +7,7 @@ package com.cyber2.api.lib.client.writer.associate;
 
 import com.cyber2.api.lib.client.response.WriteListResponse;
 import com.cyber2.api.lib.exception.FailedResponseException;
+import com.cyber2.api.lib.server.response.entity.ApiEntitySingleResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -21,9 +22,9 @@ public interface SecurityLabelAssociateWritable<P> {
    public WriteListResponse<String> associateSecurityLabels(P uniqueId, List<String> securityLabels, String ownerName) 
             throws IOException;
 
-   public boolean associateSecurityLabel(P uniqueId, String securityLabel) throws IOException, FailedResponseException;
+   public ApiEntitySingleResponse associateSecurityLabel(P uniqueId, String securityLabel) throws IOException, FailedResponseException;
 
-   public boolean associateSecurityLabel(P uniqueId, String securityLabel, String ownerName) 
+   public ApiEntitySingleResponse associateSecurityLabel(P uniqueId, String securityLabel, String ownerName) 
             throws IOException, FailedResponseException;
 
     public WriteListResponse<String> deleteAssociatedSecurityLabel(P uniqueId, List<String> securityLabels) 
@@ -32,9 +33,9 @@ public interface SecurityLabelAssociateWritable<P> {
     public WriteListResponse<String> deleteAssociatedSecurityLabel(P uniqueId, List<String> securityLabels, String ownerName) 
         throws IOException;
 
-   public boolean deleteAssociatedSecurityLabel(P uniqueId, String securityLabel) throws IOException, FailedResponseException;
+   public ApiEntitySingleResponse deleteAssociatedSecurityLabel(P uniqueId, String securityLabel) throws IOException, FailedResponseException;
 
-   public boolean deleteAssociatedSecurityLabel(P uniqueId, String securityLabel, String ownerName) 
+   public ApiEntitySingleResponse deleteAssociatedSecurityLabel(P uniqueId, String securityLabel, String ownerName) 
             throws IOException, FailedResponseException;
 
 

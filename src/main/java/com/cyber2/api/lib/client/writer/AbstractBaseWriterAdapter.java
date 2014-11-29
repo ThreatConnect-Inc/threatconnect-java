@@ -24,9 +24,8 @@ public abstract class AbstractBaseWriterAdapter<T,P> extends AbstractWriterAdapt
     protected final Class<? extends ApiEntitySingleResponse> singleType;
 
     protected AbstractBaseWriterAdapter(Connection conn, RequestExecutor executor
-                , Class<? extends ApiEntitySingleResponse> singleType
-                , boolean createReturnsObject ) { 
-        super(conn, executor, createReturnsObject);
+                , Class<? extends ApiEntitySingleResponse> singleType) { 
+        super(conn, executor);
 
         this.singleType = singleType;
     }
@@ -77,45 +76,40 @@ public abstract class AbstractBaseWriterAdapter<T,P> extends AbstractWriterAdapt
      * @throws com.cyber2.api.lib.exception.FailedResponseException When the API
      * responds with an error and the request is unsuccessful
      */
-    public T create(T item) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse create(T item) throws IOException, FailedResponseException {
         return create(item, null);
     }
 
-    public T create(T item, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse create(T item, String ownerName) throws IOException, FailedResponseException {
 
-        ApiEntitySingleResponse data = createItem(getUrlBasePrefix() + ".type.list", singleType, ownerName, null, item);
+        ApiEntitySingleResponse data = createItem(getUrlBasePrefix() + ".list", singleType, ownerName, null, item);
 
-        if ( createReturnsObject ) {
-            return (T) data.getData().getData();
-        } else {
-            return item;
-        }
-
+        return data;
     }
 
-    public boolean update(T item) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse update(T item) throws IOException, FailedResponseException {
         return update(item, null);
     }
 
-    public boolean update(T item, String ownerName)
+    public ApiEntitySingleResponse update(T item, String ownerName)
         throws IOException, FailedResponseException {
 
-        ApiEntitySingleResponse data = updateItem(getUrlBasePrefix() + ".type.list", singleType, ownerName, null, item);
+        ApiEntitySingleResponse data = updateItem(getUrlBasePrefix() + ".list", singleType, ownerName, null, item);
 
-        return data.isSuccess();
+        return data;
     }
 
     // delete on non-existent itemId returns 404
-   public boolean delete(P itemId) throws IOException, FailedResponseException {
+   public ApiEntitySingleResponse delete(P itemId) throws IOException, FailedResponseException {
         return delete(itemId, null);
     }
 
-    public boolean delete(P itemId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse delete(P itemId, String ownerName) throws IOException, FailedResponseException {
 
         Map<String, Object> map = createParamMap("id", itemId);
-        ApiEntitySingleResponse data = deleteItem(getUrlBasePrefix() + ".type.byId", singleType, ownerName, map);
+        ApiEntitySingleResponse data = deleteItem(getUrlBasePrefix() + ".byId", singleType, ownerName, map);
 
-        return data.isSuccess();
+        return data;
     }
 
 

@@ -7,6 +7,7 @@ package com.cyber2.api.lib.client.writer.associate;
 
 import com.cyber2.api.lib.client.response.WriteListResponse;
 import com.cyber2.api.lib.exception.FailedResponseException;
+import com.cyber2.api.lib.server.response.entity.ApiEntitySingleResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -21,9 +22,9 @@ public interface VictimAssociateWritable<P> {
    public WriteListResponse<Integer> associateVictims(P uniqueId, List<Integer> victimIds, String ownerName) 
             throws IOException;
 
-   public boolean associateVictim(P uniqueId, Integer victimId) throws IOException, FailedResponseException;
+   public ApiEntitySingleResponse associateVictim(P uniqueId, Integer victimId) throws IOException, FailedResponseException;
 
-   public boolean associateVictim(P uniqueId, Integer victimId, String ownerName) 
+   public ApiEntitySingleResponse associateVictim(P uniqueId, Integer victimId, String ownerName) 
             throws IOException, FailedResponseException;
     
    public WriteListResponse<Integer> deleteAssociatedVictims(P uniqueId, List<Integer> victimIds) throws IOException;
@@ -31,7 +32,7 @@ public interface VictimAssociateWritable<P> {
    public WriteListResponse<Integer> deleteAssociatedVictims(P uniqueId, List<Integer> victimIds, String ownerName) 
             throws IOException;
 
-   public boolean deleteAssociatedVictim(P uniqueId, Integer victimId) throws IOException, FailedResponseException;
+   public ApiEntitySingleResponse deleteAssociatedVictim(P uniqueId, Integer victimId) throws IOException, FailedResponseException;
 
-   public boolean deleteAssociatedVictim(P uniqueId, Integer victimId, String ownerName) throws IOException, FailedResponseException;
+   public ApiEntitySingleResponse deleteAssociatedVictim(P uniqueId, Integer victimId, String ownerName) throws IOException, FailedResponseException;
 }

@@ -10,6 +10,7 @@ import com.cyber2.api.lib.exception.FailedResponseException;
 import com.cyber2.api.lib.server.entity.Address;
 import com.cyber2.api.lib.server.entity.Indicator;
 import com.cyber2.api.lib.server.entity.Tag;
+import com.cyber2.api.lib.server.response.entity.ApiEntitySingleResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
@@ -149,8 +150,12 @@ public class IndicatorExample {
         Address address = createAddress("127.0.0.3");
 
         try {
-            Address saved = writer.create(address, "System");
-            System.out.println("Saved: " + saved.toString() );
+            ApiEntitySingleResponse response = writer.create(address, "System");
+            if ( response.isSuccess() ) {
+                System.out.println("Saved: " + response.getItem().toString() );
+            } else {
+                System.err.println("Error: " + response.getMessage()  );
+            }
             
         } catch (IOException | FailedResponseException ex) {
             System.err.println("Error: " + ex.toString());

@@ -12,6 +12,7 @@ import com.cyber2.api.lib.conn.Connection;
 import com.cyber2.api.lib.conn.RequestExecutor;
 import com.cyber2.api.lib.exception.FailedResponseException;
 import com.cyber2.api.lib.server.entity.Victim;
+import com.cyber2.api.lib.server.response.entity.ApiEntitySingleResponse;
 import com.cyber2.api.lib.server.response.entity.VictimResponse;
 import java.io.IOException;
 import java.util.List;
@@ -44,7 +45,7 @@ public class VictimWriterAdapter
      * @see WriterAdapterFactory
      */
     protected VictimWriterAdapter(Connection conn, RequestExecutor executor) {
-        super(conn, executor, VictimResponse.class, /*createReturnsObject=*/false);
+        super(conn, executor, VictimResponse.class );
 
         initComposite();
     }
@@ -138,12 +139,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean associateGroupAdversary(Integer uniqueId, Integer adversaryId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateGroupAdversary(Integer uniqueId, Integer adversaryId) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupAdversary(uniqueId, adversaryId);
     }
 
     @Override
-    public boolean associateGroupAdversary(Integer uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateGroupAdversary(Integer uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupAdversary(uniqueId, adversaryId, ownerName);
     }
 
@@ -158,12 +159,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean associateGroupEmail(Integer uniqueId, Integer emailId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateGroupEmail(Integer uniqueId, Integer emailId) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupEmail(uniqueId, emailId);
     }
 
     @Override
-    public boolean associateGroupEmail(Integer uniqueId, Integer emailId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateGroupEmail(Integer uniqueId, Integer emailId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupEmail(uniqueId, emailId, ownerName);
     }
 
@@ -178,12 +179,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean associateGroupIncident(Integer uniqueId, Integer incidentId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateGroupIncident(Integer uniqueId, Integer incidentId) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupIncident(uniqueId, incidentId);
     }
 
     @Override
-    public boolean associateGroupIncident(Integer uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateGroupIncident(Integer uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupIncident(uniqueId, incidentId, ownerName);
     }
 
@@ -198,12 +199,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean associateGroupSignature(Integer uniqueId, Integer signatureId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateGroupSignature(Integer uniqueId, Integer signatureId) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupSignature(uniqueId, signatureId);
     }
 
     @Override
-    public boolean associateGroupSignature(Integer uniqueId, Integer signatureId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateGroupSignature(Integer uniqueId, Integer signatureId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupSignature(uniqueId, signatureId, ownerName);
     }
 
@@ -218,12 +219,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean associateGroupThreat(Integer uniqueId, Integer threatId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateGroupThreat(Integer uniqueId, Integer threatId) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupThreat(uniqueId, threatId);
     }
 
     @Override
-    public boolean associateGroupThreat(Integer uniqueId, Integer threatId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateGroupThreat(Integer uniqueId, Integer threatId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupThreat(uniqueId, threatId, ownerName);
     }
 
@@ -238,12 +239,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean associateIndicatorAddress(Integer uniqueId, String ipAddress) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateIndicatorAddress(Integer uniqueId, String ipAddress) throws IOException, FailedResponseException {
         return indAssocWriter.associateIndicatorAddress(uniqueId, ipAddress);
     }
 
     @Override
-    public boolean associateIndicatorAddress(Integer uniqueId, String ipAddress, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateIndicatorAddress(Integer uniqueId, String ipAddress, String ownerName) throws IOException, FailedResponseException {
         return indAssocWriter.associateIndicatorAddress(uniqueId, ipAddress, ownerName);
     }
 
@@ -258,12 +259,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean associateIndicatorEmailAddress(Integer uniqueId, String emailAddress) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateIndicatorEmailAddress(Integer uniqueId, String emailAddress) throws IOException, FailedResponseException {
         return indAssocWriter.associateIndicatorEmailAddress(uniqueId, emailAddress);
     }
 
     @Override
-    public boolean associateIndicatorEmailAddress(Integer uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateIndicatorEmailAddress(Integer uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
         return indAssocWriter.associateIndicatorAddress(uniqueId, emailAddress, ownerName);
     }
 
@@ -278,12 +279,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean associateIndicatorFile(Integer uniqueId, String fileHash) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateIndicatorFile(Integer uniqueId, String fileHash) throws IOException, FailedResponseException {
         return indAssocWriter.associateIndicatorFile(uniqueId, fileHash);
     }
 
     @Override
-    public boolean associateIndicatorFile(Integer uniqueId, String fileHash, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateIndicatorFile(Integer uniqueId, String fileHash, String ownerName) throws IOException, FailedResponseException {
         return indAssocWriter.associateIndicatorAddress(uniqueId, fileHash, ownerName);
     }
 
@@ -298,12 +299,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean associateIndicatorHost(Integer uniqueId, String hostName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateIndicatorHost(Integer uniqueId, String hostName) throws IOException, FailedResponseException {
         return indAssocWriter.associateIndicatorHost(uniqueId, hostName);
     }
 
     @Override
-    public boolean associateIndicatorHost(Integer uniqueId, String hostName, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateIndicatorHost(Integer uniqueId, String hostName, String ownerName) throws IOException, FailedResponseException {
         return indAssocWriter.associateIndicatorHost(uniqueId, hostName, ownerName);
     }
 
@@ -318,12 +319,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean associateIndicatorUrl(Integer uniqueId, String urlText) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateIndicatorUrl(Integer uniqueId, String urlText) throws IOException, FailedResponseException {
         return indAssocWriter.associateIndicatorUrl(uniqueId, urlText);
     }
 
     @Override
-    public boolean associateIndicatorUrl(Integer uniqueId, String urlText, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateIndicatorUrl(Integer uniqueId, String urlText, String ownerName) throws IOException, FailedResponseException {
         return indAssocWriter.associateIndicatorUrl(uniqueId, urlText, ownerName);
     }
 
@@ -338,12 +339,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean associateVictimAssetEmailAddress(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateVictimAssetEmailAddress(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.associateVictimAssetEmailAddress(uniqueId, assetId);
     }
 
     @Override
-    public boolean associateVictimAssetEmailAddress(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateVictimAssetEmailAddress(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.associateVictimAssetEmailAddress(uniqueId, assetId, ownerName);
     }
 
@@ -358,12 +359,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean associateVictimAssetNetworkAccount(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateVictimAssetNetworkAccount(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.associateVictimAssetNetworkAccount(uniqueId, assetId);
     }
 
     @Override
-    public boolean associateVictimAssetNetworkAccount(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateVictimAssetNetworkAccount(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.associateVictimAssetNetworkAccount(uniqueId, assetId, ownerName);
     }
 
@@ -378,12 +379,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean associateVictimAssetPhoneNumber(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateVictimAssetPhoneNumber(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.associateVictimAssetPhoneNumber(uniqueId, assetId);
     }
 
     @Override
-    public boolean associateVictimAssetPhoneNumber(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateVictimAssetPhoneNumber(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.associateVictimAssetPhoneNumber(uniqueId, assetId, ownerName);
     }
 
@@ -398,12 +399,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean associateVictimAssetSocialNetwork(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateVictimAssetSocialNetwork(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.associateVictimAssetSocialNetwork(uniqueId, assetId);
     }
 
     @Override
-    public boolean associateVictimAssetSocialNetwork(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateVictimAssetSocialNetwork(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.associateVictimAssetSocialNetwork(uniqueId, assetId, ownerName);
     }
 
@@ -418,12 +419,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean associateVictimAssetWebsite(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateVictimAssetWebsite(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.associateVictimAssetWebsite(uniqueId, assetId);
     }
 
     @Override
-    public boolean associateVictimAssetWebsite(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateVictimAssetWebsite(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.associateVictimAssetWebsite(uniqueId, assetId, ownerName);
     }
 
@@ -438,12 +439,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean deleteAssociatedGroupAdversary(Integer uniqueId, Integer adversaryId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedGroupAdversary(Integer uniqueId, Integer adversaryId) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupAdversary(uniqueId, adversaryId);
     }
 
     @Override
-    public boolean deleteAssociatedGroupAdversary(Integer uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedGroupAdversary(Integer uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupAdversary(uniqueId, adversaryId, ownerName);
     }
 
@@ -458,12 +459,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean deleteAssociatedGroupEmail(Integer uniqueId, Integer emailId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedGroupEmail(Integer uniqueId, Integer emailId) throws IOException, FailedResponseException {
         return groupAssocWriter.deleteAssociatedGroupEmail(uniqueId, emailId);
     }
 
     @Override
-    public boolean deleteAssociatedGroupEmail(Integer uniqueId, Integer emailId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedGroupEmail(Integer uniqueId, Integer emailId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocWriter.deleteAssociatedGroupEmail(uniqueId, emailId, ownerName);
     }
 
@@ -478,12 +479,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean deleteAssociatedGroupIncident(Integer uniqueId, Integer incidentId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedGroupIncident(Integer uniqueId, Integer incidentId) throws IOException, FailedResponseException {
         return groupAssocWriter.deleteAssociatedGroupIncident(uniqueId, incidentId);
     }
 
     @Override
-    public boolean deleteAssociatedGroupIncident(Integer uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedGroupIncident(Integer uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocWriter.deleteAssociatedGroupIncident(uniqueId, incidentId, ownerName);
     }
 
@@ -498,12 +499,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean deleteAssociatedGroupSignature(Integer uniqueId, Integer signatureId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedGroupSignature(Integer uniqueId, Integer signatureId) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupSignature(uniqueId, signatureId);
     }
 
     @Override
-    public boolean deleteAssociatedGroupSignature(Integer uniqueId, Integer signatureId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedGroupSignature(Integer uniqueId, Integer signatureId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocWriter.deleteAssociatedGroupSignature(uniqueId, signatureId, ownerName);
     }
 
@@ -518,12 +519,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean deleteAssociatedGroupThreat(Integer uniqueId, Integer threatId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedGroupThreat(Integer uniqueId, Integer threatId) throws IOException, FailedResponseException {
         return groupAssocWriter.deleteAssociatedGroupThreat(uniqueId, threatId);
     }
 
     @Override
-    public boolean deleteAssociatedGroupThreat(Integer uniqueId, Integer threatId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedGroupThreat(Integer uniqueId, Integer threatId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocWriter.deleteAssociatedGroupThreat(uniqueId, threatId, ownerName);
     }
 
@@ -538,12 +539,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean deleteAssociatedIndicatorAddress(Integer uniqueId, String ipAddress) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedIndicatorAddress(Integer uniqueId, String ipAddress) throws IOException, FailedResponseException {
         return indAssocWriter.deleteAssociatedIndicatorAddress(uniqueId, ipAddress);
     }
 
     @Override
-    public boolean deleteAssociatedIndicatorAddress(Integer uniqueId, String ipAddress, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedIndicatorAddress(Integer uniqueId, String ipAddress, String ownerName) throws IOException, FailedResponseException {
         return indAssocWriter.deleteAssociatedIndicatorAddress(uniqueId, ipAddress, ownerName);
     }
 
@@ -558,12 +559,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean deleteAssociatedIndicatorEmailAddress(Integer uniqueId, String emailAddress) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedIndicatorEmailAddress(Integer uniqueId, String emailAddress) throws IOException, FailedResponseException {
         return indAssocWriter.deleteAssociatedIndicatorEmailAddress(uniqueId, emailAddress);
     }
 
     @Override
-    public boolean deleteAssociatedIndicatorEmailAddress(Integer uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedIndicatorEmailAddress(Integer uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
         return indAssocWriter.deleteAssociatedIndicatorEmailAddress(uniqueId, emailAddress, ownerName);
     }
 
@@ -578,12 +579,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean deleteAssociatedIndicatorFile(Integer uniqueId, String fileHash) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedIndicatorFile(Integer uniqueId, String fileHash) throws IOException, FailedResponseException {
         return indAssocWriter.deleteAssociatedIndicatorFile(uniqueId, fileHash);
     }
 
     @Override
-    public boolean deleteAssociatedIndicatorFile(Integer uniqueId, String fileHash, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedIndicatorFile(Integer uniqueId, String fileHash, String ownerName) throws IOException, FailedResponseException {
         return indAssocWriter.deleteAssociatedIndicatorFile(uniqueId, fileHash, ownerName);
     }
 
@@ -598,12 +599,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean deleteAssociatedIndicatorHost(Integer uniqueId, String hostName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedIndicatorHost(Integer uniqueId, String hostName) throws IOException, FailedResponseException {
         return indAssocWriter.deleteAssociatedIndicatorHost(uniqueId, hostName);
     }
 
     @Override
-    public boolean deleteAssociatedIndicatorHost(Integer uniqueId, String hostName, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedIndicatorHost(Integer uniqueId, String hostName, String ownerName) throws IOException, FailedResponseException {
         return indAssocWriter.deleteAssociatedIndicatorHost(uniqueId, hostName, ownerName);
     }
 
@@ -618,12 +619,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean deleteAssociatedIndicatorUrl(Integer uniqueId, String urlText) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedIndicatorUrl(Integer uniqueId, String urlText) throws IOException, FailedResponseException {
         return indAssocWriter.deleteAssociatedIndicatorUrl(uniqueId, urlText);
     }
 
     @Override
-    public boolean deleteAssociatedIndicatorUrl(Integer uniqueId, String urlText, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedIndicatorUrl(Integer uniqueId, String urlText, String ownerName) throws IOException, FailedResponseException {
         return indAssocWriter.deleteAssociatedIndicatorUrl(uniqueId, urlText, ownerName);
     }
 
@@ -638,12 +639,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean deleteAssociatedVictimAssetEmailAddress(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedVictimAssetEmailAddress(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.deleteAssociatedVictimAssetEmailAddress(uniqueId, assetId);
     }
 
     @Override
-    public boolean deleteAssociatedVictimAssetEmailAddress(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedVictimAssetEmailAddress(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.deleteAssociatedVictimAssetEmailAddress(uniqueId, assetId, ownerName);
     }
 
@@ -658,12 +659,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean deleteAssociatedVictimAssetNetworkAccount(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedVictimAssetNetworkAccount(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.associateVictimAssetNetworkAccount(uniqueId, assetId);
     }
 
     @Override
-    public boolean deleteAssociatedVictimAssetNetworkAccount(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedVictimAssetNetworkAccount(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.deleteAssociatedVictimAssetNetworkAccount(uniqueId, assetId, ownerName);
     }
 
@@ -678,12 +679,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean deleteAssociatedVictimAssetPhoneNumber(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedVictimAssetPhoneNumber(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.deleteAssociatedVictimAssetPhoneNumber(uniqueId, assetId);
     }
 
     @Override
-    public boolean deleteAssociatedVictimAssetPhoneNumber(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedVictimAssetPhoneNumber(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.deleteAssociatedVictimAssetPhoneNumber(uniqueId, assetId, ownerName);
     }
 
@@ -698,12 +699,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean deleteAssociatedVictimAssetSocialNetwork(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedVictimAssetSocialNetwork(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.deleteAssociatedVictimAssetSocialNetwork(uniqueId, assetId);
     }
 
     @Override
-    public boolean deleteAssociatedVictimAssetSocialNetwork(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedVictimAssetSocialNetwork(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.deleteAssociatedVictimAssetSocialNetwork(uniqueId, assetId, ownerName);
     }
 
@@ -718,12 +719,12 @@ public class VictimWriterAdapter
     }
 
     @Override
-    public boolean deleteAssociatedVictimAssetWebsite(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedVictimAssetWebsite(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.deleteAssociatedVictimAssetWebsite(uniqueId, assetId);
     }
 
     @Override
-    public boolean deleteAssociatedVictimAssetWebsite(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedVictimAssetWebsite(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.deleteAssociatedVictimAssetWebsite(uniqueId, assetId, ownerName);
     }
 

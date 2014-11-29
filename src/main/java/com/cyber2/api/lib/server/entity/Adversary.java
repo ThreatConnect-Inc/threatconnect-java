@@ -17,7 +17,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "Adversary")
-@ToString
+@ToString(callSuper = true)
 public class Adversary extends Group
 {
     public Adversary()

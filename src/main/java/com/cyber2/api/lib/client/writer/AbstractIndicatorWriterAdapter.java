@@ -57,7 +57,7 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
      */
     protected AbstractIndicatorWriterAdapter(Connection conn, RequestExecutor executor
                 , Class<? extends ApiEntitySingleResponse> singleType ) {
-        super(conn, executor, singleType, /*createReturnsObject=*/true);
+        super(conn, executor, singleType );
 
         initComposite();
     }
@@ -198,12 +198,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean associateGroupAdversary(String uniqueId, Integer adversaryId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateGroupAdversary(String uniqueId, Integer adversaryId) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupAdversary(uniqueId, adversaryId);
     }
 
     @Override
-    public boolean associateGroupAdversary(String uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateGroupAdversary(String uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupAdversary(uniqueId, adversaryId, ownerName);
     }
 
@@ -218,12 +218,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean associateGroupEmail(String uniqueId, Integer emailId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateGroupEmail(String uniqueId, Integer emailId) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupEmail(uniqueId, emailId);
     }
 
     @Override
-    public boolean associateGroupEmail(String uniqueId, Integer emailId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateGroupEmail(String uniqueId, Integer emailId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupEmail(uniqueId, emailId, ownerName);
     }
 
@@ -238,12 +238,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean associateGroupIncident(String uniqueId, Integer incidentId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateGroupIncident(String uniqueId, Integer incidentId) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupIncident(uniqueId, incidentId);
     }
 
     @Override
-    public boolean associateGroupIncident(String uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateGroupIncident(String uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupIncident(uniqueId, incidentId, ownerName);
     }
 
@@ -258,12 +258,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean associateGroupSignature(String uniqueId, Integer signatureId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateGroupSignature(String uniqueId, Integer signatureId) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupSignature(uniqueId, signatureId);
     }
 
     @Override
-    public boolean associateGroupSignature(String uniqueId, Integer signatureId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateGroupSignature(String uniqueId, Integer signatureId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupSignature(uniqueId, signatureId, ownerName);
     }
 
@@ -278,12 +278,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean associateGroupThreat(String uniqueId, Integer threatId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateGroupThreat(String uniqueId, Integer threatId) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupThreat(uniqueId, threatId);
     }
 
     @Override
-    public boolean associateGroupThreat(String uniqueId, Integer threatId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateGroupThreat(String uniqueId, Integer threatId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupThreat(uniqueId, threatId, ownerName);
     }
 
@@ -298,12 +298,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean associateIndicatorAddress(String uniqueId, String ipAddress) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateIndicatorAddress(String uniqueId, String ipAddress) throws IOException, FailedResponseException {
         return indAssocWriter.associateIndicatorAddress(uniqueId, ipAddress);
     }
 
     @Override
-    public boolean associateIndicatorAddress(String uniqueId, String ipAddress, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateIndicatorAddress(String uniqueId, String ipAddress, String ownerName) throws IOException, FailedResponseException {
         return indAssocWriter.associateIndicatorAddress(uniqueId, ipAddress, ownerName);
     }
 
@@ -318,12 +318,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean associateIndicatorEmailAddress(String uniqueId, String emailAddress) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateIndicatorEmailAddress(String uniqueId, String emailAddress) throws IOException, FailedResponseException {
         return indAssocWriter.associateIndicatorEmailAddress(uniqueId, emailAddress);
     }
 
     @Override
-    public boolean associateIndicatorEmailAddress(String uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateIndicatorEmailAddress(String uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
         return indAssocWriter.associateIndicatorAddress(uniqueId, emailAddress, ownerName);
     }
 
@@ -338,12 +338,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean associateIndicatorFile(String uniqueId, String fileHash) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateIndicatorFile(String uniqueId, String fileHash) throws IOException, FailedResponseException {
         return indAssocWriter.associateIndicatorFile(uniqueId, fileHash);
     }
 
     @Override
-    public boolean associateIndicatorFile(String uniqueId, String fileHash, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateIndicatorFile(String uniqueId, String fileHash, String ownerName) throws IOException, FailedResponseException {
         return indAssocWriter.associateIndicatorAddress(uniqueId, fileHash, ownerName);
     }
 
@@ -358,12 +358,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean associateIndicatorHost(String uniqueId, String hostName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateIndicatorHost(String uniqueId, String hostName) throws IOException, FailedResponseException {
         return indAssocWriter.associateIndicatorHost(uniqueId, hostName);
     }
 
     @Override
-    public boolean associateIndicatorHost(String uniqueId, String hostName, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateIndicatorHost(String uniqueId, String hostName, String ownerName) throws IOException, FailedResponseException {
         return indAssocWriter.associateIndicatorHost(uniqueId, hostName, ownerName);
     }
 
@@ -378,12 +378,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean associateIndicatorUrl(String uniqueId, String urlText) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateIndicatorUrl(String uniqueId, String urlText) throws IOException, FailedResponseException {
         return indAssocWriter.associateIndicatorUrl(uniqueId, urlText);
     }
 
     @Override
-    public boolean associateIndicatorUrl(String uniqueId, String urlText, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateIndicatorUrl(String uniqueId, String urlText, String ownerName) throws IOException, FailedResponseException {
         return indAssocWriter.associateIndicatorUrl(uniqueId, urlText, ownerName);
     }
 
@@ -418,12 +418,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean addAttributeSecurityLabel(String uniqueId, Integer attributeId, String securityLabel) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse addAttributeSecurityLabel(String uniqueId, Integer attributeId, String securityLabel) throws IOException, FailedResponseException {
         return attribWriter.addAttributeSecurityLabel(uniqueId, attributeId, securityLabel);
     }
 
     @Override
-    public boolean addAttributeSecurityLabel(String uniqueId, Integer attributeId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse addAttributeSecurityLabel(String uniqueId, Integer attributeId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
         return attribWriter.addAttributeSecurityLabel(uniqueId, attributeId, securityLabel, ownerName);
     }
 
@@ -438,12 +438,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean associateTag(String uniqueId, String tagName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateTag(String uniqueId, String tagName) throws IOException, FailedResponseException {
         return tagAssocWriter.associateTag(uniqueId, tagName);
     }
 
     @Override
-    public boolean associateTag(String uniqueId, String tagName, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateTag(String uniqueId, String tagName, String ownerName) throws IOException, FailedResponseException {
         return tagAssocWriter.associateTag(uniqueId, tagName, ownerName);
     }
 
@@ -458,12 +458,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean associateSecurityLabel(String uniqueId, String securityLabel) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateSecurityLabel(String uniqueId, String securityLabel) throws IOException, FailedResponseException {
         return secLabelAssocWriter.associateSecurityLabel(uniqueId, securityLabel);
     }
 
     @Override
-    public boolean associateSecurityLabel(String uniqueId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateSecurityLabel(String uniqueId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
         return secLabelAssocWriter.associateSecurityLabel(uniqueId, securityLabel, ownerName);
     }
 
@@ -478,12 +478,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean deleteAssociatedGroupAdversary(String uniqueId, Integer adversaryId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedGroupAdversary(String uniqueId, Integer adversaryId) throws IOException, FailedResponseException {
         return groupAssocWriter.deleteAssociatedGroupAdversary(uniqueId, adversaryId);
     }
 
     @Override
-    public boolean deleteAssociatedGroupAdversary(String uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedGroupAdversary(String uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocWriter.deleteAssociatedGroupAdversary(uniqueId, adversaryId, ownerName);
     }
 
@@ -498,12 +498,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean deleteAssociatedGroupEmail(String uniqueId, Integer emailId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedGroupEmail(String uniqueId, Integer emailId) throws IOException, FailedResponseException {
         return groupAssocWriter.deleteAssociatedGroupEmail(uniqueId, emailId);
     }
 
     @Override
-    public boolean deleteAssociatedGroupEmail(String uniqueId, Integer emailId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedGroupEmail(String uniqueId, Integer emailId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocWriter.deleteAssociatedGroupEmail(uniqueId, emailId, ownerName);
     }
 
@@ -518,12 +518,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean deleteAssociatedGroupIncident(String uniqueId, Integer incidentId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedGroupIncident(String uniqueId, Integer incidentId) throws IOException, FailedResponseException {
         return groupAssocWriter.deleteAssociatedGroupIncident(uniqueId, incidentId);
     }
 
     @Override
-    public boolean deleteAssociatedGroupIncident(String uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedGroupIncident(String uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocWriter.deleteAssociatedGroupIncident(uniqueId, incidentId, ownerName);
     }
 
@@ -538,12 +538,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean deleteAssociatedGroupSignature(String uniqueId, Integer signatureId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedGroupSignature(String uniqueId, Integer signatureId) throws IOException, FailedResponseException {
         return groupAssocWriter.deleteAssociatedGroupSignature(uniqueId, signatureId);
     }
 
     @Override
-    public boolean deleteAssociatedGroupSignature(String uniqueId, Integer signatureId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedGroupSignature(String uniqueId, Integer signatureId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocWriter.deleteAssociatedGroupSignature(uniqueId, signatureId, ownerName);
     }
 
@@ -558,12 +558,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean deleteAssociatedGroupThreat(String uniqueId, Integer threatId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedGroupThreat(String uniqueId, Integer threatId) throws IOException, FailedResponseException {
         return groupAssocWriter.deleteAssociatedGroupThreat(uniqueId, threatId);
     }
 
     @Override
-    public boolean deleteAssociatedGroupThreat(String uniqueId, Integer threatId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedGroupThreat(String uniqueId, Integer threatId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocWriter.deleteAssociatedGroupThreat(uniqueId, threatId, ownerName);
     }
 
@@ -578,12 +578,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean deleteAssociatedIndicatorAddress(String uniqueId, String ipAddress) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedIndicatorAddress(String uniqueId, String ipAddress) throws IOException, FailedResponseException {
         return indAssocWriter.deleteAssociatedIndicatorAddress(uniqueId, ipAddress);
     }
 
     @Override
-    public boolean deleteAssociatedIndicatorAddress(String uniqueId, String ipAddress, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedIndicatorAddress(String uniqueId, String ipAddress, String ownerName) throws IOException, FailedResponseException {
         return indAssocWriter.deleteAssociatedIndicatorAddress(uniqueId, ipAddress, ownerName);
     }
 
@@ -598,12 +598,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean deleteAssociatedIndicatorEmailAddress(String uniqueId, String emailAddress) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedIndicatorEmailAddress(String uniqueId, String emailAddress) throws IOException, FailedResponseException {
         return indAssocWriter.deleteAssociatedIndicatorEmailAddress(uniqueId, emailAddress);
     }
 
     @Override
-    public boolean deleteAssociatedIndicatorEmailAddress(String uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedIndicatorEmailAddress(String uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
         return indAssocWriter.deleteAssociatedIndicatorEmailAddress(uniqueId, emailAddress, ownerName);
     }
 
@@ -618,12 +618,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean deleteAssociatedIndicatorFile(String uniqueId, String fileHash) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedIndicatorFile(String uniqueId, String fileHash) throws IOException, FailedResponseException {
         return indAssocWriter.deleteAssociatedIndicatorFile(uniqueId, fileHash);
     }
 
     @Override
-    public boolean deleteAssociatedIndicatorFile(String uniqueId, String fileHash, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedIndicatorFile(String uniqueId, String fileHash, String ownerName) throws IOException, FailedResponseException {
         return indAssocWriter.deleteAssociatedIndicatorFile(uniqueId, fileHash, ownerName);
     }
 
@@ -638,12 +638,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean deleteAssociatedIndicatorHost(String uniqueId, String hostName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedIndicatorHost(String uniqueId, String hostName) throws IOException, FailedResponseException {
         return indAssocWriter.deleteAssociatedIndicatorHost(uniqueId, hostName);
     }
 
     @Override
-    public boolean deleteAssociatedIndicatorHost(String uniqueId, String hostName, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedIndicatorHost(String uniqueId, String hostName, String ownerName) throws IOException, FailedResponseException {
         return indAssocWriter.deleteAssociatedIndicatorHost(uniqueId, hostName, ownerName);
     }
 
@@ -658,12 +658,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean deleteAssociatedIndicatorUrl(String uniqueId, String urlText) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedIndicatorUrl(String uniqueId, String urlText) throws IOException, FailedResponseException {
         return indAssocWriter.deleteAssociatedIndicatorUrl(uniqueId, urlText);
     }
 
     @Override
-    public boolean deleteAssociatedIndicatorUrl(String uniqueId, String urlText, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedIndicatorUrl(String uniqueId, String urlText, String ownerName) throws IOException, FailedResponseException {
         return indAssocWriter.deleteAssociatedIndicatorUrl(uniqueId, urlText, ownerName);
     }
 
@@ -678,12 +678,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean updateAttribute(String uniqueId, Attribute attribute) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse updateAttribute(String uniqueId, Attribute attribute) throws IOException, FailedResponseException {
         return attribWriter.updateAttribute(uniqueId, attribute);
     }
 
     @Override
-    public boolean updateAttribute(String uniqueId, Attribute attribute, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse updateAttribute(String uniqueId, Attribute attribute, String ownerName) throws IOException, FailedResponseException {
         return attribWriter.updateAttribute(uniqueId, attribute, ownerName);
     }
 
@@ -698,12 +698,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean deleteAttribute(String uniqueId, Integer attribute) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAttribute(String uniqueId, Integer attribute) throws IOException, FailedResponseException {
         return attribWriter.deleteAttribute(uniqueId, attribute);
     }
 
     @Override
-    public boolean deleteAttribute(String uniqueId, Integer attribute, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAttribute(String uniqueId, Integer attribute, String ownerName) throws IOException, FailedResponseException {
         return attribWriter.deleteAttribute(uniqueId, attribute, ownerName);
     }
 
@@ -718,12 +718,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean deleteAttributeSecurityLabel(String uniqueId, Integer attributeId, String securityLabel) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAttributeSecurityLabel(String uniqueId, Integer attributeId, String securityLabel) throws IOException, FailedResponseException {
         return attribWriter.deleteAttributeSecurityLabel(uniqueId, attributeId, securityLabel);
     }
 
     @Override
-    public boolean deleteAttributeSecurityLabel(String uniqueId, Integer attributeId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAttributeSecurityLabel(String uniqueId, Integer attributeId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
         return attribWriter.deleteAttributeSecurityLabel(uniqueId, attributeId, securityLabel, ownerName);
     }
 
@@ -738,12 +738,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean deleteAssociatedVictimAssetEmailAddress(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedVictimAssetEmailAddress(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.deleteAssociatedVictimAssetEmailAddress(uniqueId, assetId);
     }
 
     @Override
-    public boolean deleteAssociatedVictimAssetEmailAddress(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedVictimAssetEmailAddress(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.deleteAssociatedVictimAssetEmailAddress(uniqueId, assetId, ownerName);
     }
 
@@ -758,12 +758,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean deleteAssociatedVictimAssetNetworkAccount(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedVictimAssetNetworkAccount(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.associateVictimAssetNetworkAccount(uniqueId, assetId);
     }
 
     @Override
-    public boolean deleteAssociatedVictimAssetNetworkAccount(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedVictimAssetNetworkAccount(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.deleteAssociatedVictimAssetNetworkAccount(uniqueId, assetId, ownerName);
     }
 
@@ -778,12 +778,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean deleteAssociatedVictimAssetPhoneNumber(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedVictimAssetPhoneNumber(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.deleteAssociatedVictimAssetPhoneNumber(uniqueId, assetId);
     }
 
     @Override
-    public boolean deleteAssociatedVictimAssetPhoneNumber(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedVictimAssetPhoneNumber(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.deleteAssociatedVictimAssetPhoneNumber(uniqueId, assetId, ownerName);
     }
 
@@ -798,12 +798,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean deleteAssociatedVictimAssetSocialNetwork(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedVictimAssetSocialNetwork(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.deleteAssociatedVictimAssetSocialNetwork(uniqueId, assetId);
     }
 
     @Override
-    public boolean deleteAssociatedVictimAssetSocialNetwork(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedVictimAssetSocialNetwork(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.deleteAssociatedVictimAssetSocialNetwork(uniqueId, assetId, ownerName);
     }
 
@@ -818,12 +818,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean deleteAssociatedVictimAssetWebsite(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedVictimAssetWebsite(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.deleteAssociatedVictimAssetWebsite(uniqueId, assetId);
     }
 
     @Override
-    public boolean deleteAssociatedVictimAssetWebsite(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedVictimAssetWebsite(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.deleteAssociatedVictimAssetWebsite(uniqueId, assetId, ownerName);
     }
 
@@ -838,12 +838,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean deleteAssociatedTag(String uniqueId, String tagName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedTag(String uniqueId, String tagName) throws IOException, FailedResponseException {
         return tagAssocWriter.deleteAssociatedTag(uniqueId, tagName);
     }
 
     @Override
-    public boolean deleteAssociatedTag(String uniqueId, String tagName, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedTag(String uniqueId, String tagName, String ownerName) throws IOException, FailedResponseException {
         return tagAssocWriter.deleteAssociatedTag(uniqueId, tagName, ownerName);
     }
 
@@ -858,12 +858,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean deleteAssociatedSecurityLabel(String uniqueId, String securityLabel) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedSecurityLabel(String uniqueId, String securityLabel) throws IOException, FailedResponseException {
         return secLabelAssocWriter.deleteAssociatedSecurityLabel(uniqueId, securityLabel);
     }
 
     @Override
-    public boolean deleteAssociatedSecurityLabel(String uniqueId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse deleteAssociatedSecurityLabel(String uniqueId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
         return secLabelAssocWriter.deleteAssociatedSecurityLabel(uniqueId, securityLabel, ownerName);
     }
 
@@ -878,12 +878,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean associateVictimAssetEmailAddress(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateVictimAssetEmailAddress(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.associateVictimAssetEmailAddress(uniqueId, assetId);
     }
 
     @Override
-    public boolean associateVictimAssetEmailAddress(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateVictimAssetEmailAddress(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.associateVictimAssetEmailAddress(uniqueId, assetId, ownerName);
     }
 
@@ -898,12 +898,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean associateVictimAssetNetworkAccount(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateVictimAssetNetworkAccount(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.associateVictimAssetNetworkAccount(uniqueId, assetId);
     }
 
     @Override
-    public boolean associateVictimAssetNetworkAccount(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateVictimAssetNetworkAccount(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.associateVictimAssetNetworkAccount(uniqueId, assetId, ownerName);
     }
 
@@ -918,12 +918,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean associateVictimAssetPhoneNumber(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateVictimAssetPhoneNumber(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.associateVictimAssetPhoneNumber(uniqueId, assetId);
     }
 
     @Override
-    public boolean associateVictimAssetPhoneNumber(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateVictimAssetPhoneNumber(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.associateVictimAssetPhoneNumber(uniqueId, assetId, ownerName);
     }
 
@@ -938,12 +938,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean associateVictimAssetSocialNetwork(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateVictimAssetSocialNetwork(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.associateVictimAssetSocialNetwork(uniqueId, assetId);
     }
 
     @Override
-    public boolean associateVictimAssetSocialNetwork(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateVictimAssetSocialNetwork(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.associateVictimAssetSocialNetwork(uniqueId, assetId, ownerName);
     }
 
@@ -958,12 +958,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public boolean associateVictimAssetWebsite(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateVictimAssetWebsite(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.associateVictimAssetWebsite(uniqueId, assetId);
     }
 
     @Override
-    public boolean associateVictimAssetWebsite(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateVictimAssetWebsite(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.associateVictimAssetWebsite(uniqueId, assetId, ownerName);
     }
 

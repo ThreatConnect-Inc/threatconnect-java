@@ -12,6 +12,7 @@ import com.cyber2.api.lib.server.entity.Group;
 import com.cyber2.api.lib.server.entity.Incident;
 import com.cyber2.api.lib.server.entity.Signature;
 import com.cyber2.api.lib.server.entity.Threat;
+import com.cyber2.api.lib.server.response.entity.ApiEntitySingleResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -26,17 +27,17 @@ public class GroupExample {
             System.getProperties().setProperty("threatconnect.api.config", "/config.properties");
             conn = new Connection();
 
-            doGet(conn);
+            //doGet(conn);
 
-            doGetById(conn);
+            //doGetById(conn);
 
             doCreate(conn);
 
-            doUpdate(conn);
+            //doUpdate(conn);
 
-            doDelete(conn);
+            //doDelete(conn);
 
-        } catch (IOException | FailedResponseException ex) {
+        } catch (IOException /*| FailedResponseException*/ ex) {
             System.err.println("Error: " + ex);
         } finally {
             if ( conn != null )     conn.disconnect();
@@ -107,8 +108,15 @@ public class GroupExample {
         adversary.setOwnerName("System");
 
         try {
-            Adversary savedAdversary = writer.create(adversary);
-            System.out.println("Saved: " + savedAdversary.toString() );
+            System.out.println("Before: " + adversary.toString() );
+            ApiEntitySingleResponse<Adversary,?> response = writer.create(adversary);
+            if ( response.isSuccess() ) {
+                Adversary savedAdversary = response.getItem();
+                System.out.println("Saved: " + savedAdversary.toString() );
+            } else {
+                System.err.println("Error: " + response.getMessage() );
+
+            }
             
         } catch (IOException | FailedResponseException ex) {
             System.err.println("Error: " + ex.toString());
@@ -124,9 +132,11 @@ public class GroupExample {
         adversary.setOwnerName("System");
 
         try {
-            Adversary savedAdversary = writer.create(adversary);
-            writer.delete( savedAdversary.getId() );
-            System.out.println("Deleted: " + savedAdversary.toString() );
+            ApiEntitySingleResponse<Adversary,?> response = writer.delete(adversary.getId());
+            if ( response.isSuccess() ) {
+                writer.delete( response.getItem().getId() );
+                System.out.println("Deleted: " + response.getItem().toString() );
+            }
             
         } catch (IOException | FailedResponseException ex) {
             System.err.println("Error: " + ex.toString());
@@ -142,10 +152,11 @@ public class GroupExample {
         adversary.setOwnerName("System");
 
         try {
-            Adversary savedAdversary = writer.create(adversary);
-
-            savedAdversary.setName("Updated: " + savedAdversary.getName() );
-            writer.update(savedAdversary);
+            ApiEntitySingleResponse<Adversary,?> response = writer.create(adversary);
+            if ( response.isSuccess() ) {
+                response.getItem().setName("Updated: " + response.getItem().getName() );
+                writer.update( response.getItem() );
+            }
             
         } catch (IOException | FailedResponseException ex) {
             System.err.println("Error: " + ex.toString());

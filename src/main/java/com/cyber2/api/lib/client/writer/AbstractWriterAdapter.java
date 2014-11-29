@@ -13,6 +13,7 @@ import com.cyber2.api.lib.conn.RequestExecutor;
 import com.cyber2.api.lib.conn.RequestExecutor.HttpMethod;
 import com.cyber2.api.lib.exception.FailedResponseException;
 import com.cyber2.api.lib.server.response.entity.ApiEntitySingleResponse;
+import com.cyber2.api.lib.server.response.entity.data.ApiEntitySingleResponseData;
 import java.io.EOFException;
 import java.io.IOException;
 import java.util.HashMap;
@@ -42,12 +43,10 @@ import org.apache.logging.log4j.Logger;
 public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
 
     private final Logger logger = LogManager.getLogger(AbstractWriterAdapter.class);
-    protected boolean createReturnsObject;
 
-    public AbstractWriterAdapter(Connection conn, RequestExecutor executor, boolean createReturnsObject) {
+    public AbstractWriterAdapter(Connection conn, RequestExecutor executor) {
         super(conn, executor);
 
-        this.createReturnsObject = createReturnsObject;
     }
 
    protected WriteListResponse createListWithParam(String propName, Class type, String paramName, List paramValue)
@@ -66,14 +65,9 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
                 pMap.putAll( createParamMap(paramName, o));
 
                 ApiEntitySingleResponse item = createItem(propName, type, ownerName, pMap, null);
-                if ( createReturnsObject ) {
-                    list.getSuccessList().add(item.getData().getData());
-                } else {
-                    list.getSuccessList().add(o);
-                }
+                list.getSuccessList().add( item );
             } catch (FailedResponseException ex) {
-                list.getFailureList().add(o);
-                list.getFailureMessageList().add(ex.getMessage());
+                list.getFailureList().add( wrapFailedResponse(ex, o) );
             }
         }
 
@@ -86,7 +80,7 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
         return updateListWithParam(propName, type, null, null, paramName, paramValue);
     }
 
-    protected WriteListResponse updateListWithParam(String propName, Class type, String ownerName, Map<String, Object> paramMap, String paramName, List paramValue) 
+    protected WriteListResponse<ApiEntitySingleResponse> updateListWithParam(String propName, Class type, String ownerName, Map<String, Object> paramMap, String paramName, List paramValue) 
         throws IOException {
 
         WriteListResponse list = new WriteListResponse();
@@ -96,14 +90,9 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
                 pMap.putAll( createParamMap(paramName, o));
 
                 ApiEntitySingleResponse item = modifyItem(propName, type, ownerName, pMap, null, HttpMethod.PUT);
-                if ( createReturnsObject ) {
-                    list.getSuccessList().add(item.getData().getData());
-                } else {
-                    list.getSuccessList().add( o );
-                }
+                list.getSuccessList().add(item);
             } catch (FailedResponseException | EOFException ex) {
-                list.getFailureList().add(o);
-                list.getFailureMessageList().add(ex.getMessage());
+                list.getFailureList().add( wrapFailedResponse(ex, o) );
             }
         }
 
@@ -122,19 +111,55 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
                 pMap.putAll( createParamMap(paramName, o));
 
                 ApiEntitySingleResponse item = modifyItem(propName, type, ownerName, pMap, updateObj, HttpMethod.PUT);
-                if ( createReturnsObject ) {
-                    list.getSuccessList().add(item.getData().getData());
-                } else {
-                    list.getSuccessList().add( o );
-                }
+                list.getSuccessList().add( item );
             } catch (FailedResponseException | EOFException ex) {
-                list.getFailureList().add(o);
-                list.getFailureMessageList().add(ex.getMessage());
+                list.getFailureList().add( wrapFailedResponse(ex, o) );
             }
         }
 
         return list;
     }
+
+    private static ApiEntitySingleResponse wrapFailedResponse(final Exception ex, final Object attemptedItem) {
+        return new ApiEntitySingleResponse () {
+             @Override
+             public String getMessage() { 
+                 return ex.getMessage(); 
+             }
+
+             @Override
+             public boolean isSuccess() { 
+                 return false; 
+             }
+
+             @Override
+             public Object getItem() {
+                 return attemptedItem;
+             }
+
+         };
+    }
+
+    private static ApiEntitySingleResponse wrapSuccessResponse(final Object attemptedItem) {
+        return new ApiEntitySingleResponse () {
+             @Override
+             public String getMessage() { 
+                 return null;
+             }
+
+             @Override
+             public boolean isSuccess() { 
+                 return true; 
+             }
+
+             @Override
+             public Object getItem() {
+                 return attemptedItem;
+             }
+
+         };
+    }
+
 
     protected WriteListResponse deleteList(String propName, Class type, String ownerName, Map<String, Object> paramMap, String paramName, List paramValue) throws IOException {
 
@@ -145,10 +170,9 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
                 pMap.putAll( createParamMap(paramName, o));
 
                 modifyItem(propName, type, ownerName, pMap, null, HttpMethod.DELETE);
-                list.getSuccessList().add(o);
+                list.getSuccessList().add( wrapSuccessResponse(o) );  // DELETE's don't return body, wrap original 
             } catch (FailedResponseException | EOFException ex) {
-                list.getFailureList().add(o);
-                list.getFailureMessageList().add(ex.getMessage());
+                list.getFailureList().add( wrapFailedResponse(ex, o) );
             }
         }
 
@@ -185,14 +209,9 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
         for (Object o : saveObjectList) {
             try {
                 ApiEntitySingleResponse item = modifyItem(propName, type, ownerName, paramMap, o, requestType);
-                if ( createReturnsObject ) {
-                    list.getSuccessList().add(item.getData().getData());
-                } else {
-                    list.getSuccessList().add(o);
-                }
+                list.getSuccessList().add( item );
             } catch (FailedResponseException | EOFException ex) {
-                list.getFailureList().add(o);
-                list.getFailureMessageList().add(ex.getMessage());
+                list.getFailureList().add( wrapFailedResponse(ex, o));
             }
         }
 
@@ -230,7 +249,9 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
     private <T extends ApiEntitySingleResponse> T modifyItem(String propName, Class<T> type, String ownerName, Map<String, Object> paramMap, Object saveObject, HttpMethod requestType)
         throws IOException, FailedResponseException {
 
+        logger.debug("Getting URL: " + propName);
         String url = getConn().getUrlConfig().getUrl(propName);
+        logger.debug("\tURL: " + url);
 
         if (ownerName != null) {
             url += "?owner=" + ownerName;
@@ -257,9 +278,6 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
             throw new FailedResponseException( ex.toString() ); // rethrow using local exception
         }
 
-        if (!result.isSuccess()) {
-            throw new FailedResponseException(result.getMessage());
-        }
         return result;
     }
 
