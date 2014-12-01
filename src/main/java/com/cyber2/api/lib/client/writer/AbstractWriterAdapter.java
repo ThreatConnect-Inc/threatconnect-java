@@ -13,7 +13,6 @@ import com.cyber2.api.lib.conn.RequestExecutor;
 import com.cyber2.api.lib.conn.RequestExecutor.HttpMethod;
 import com.cyber2.api.lib.exception.FailedResponseException;
 import com.cyber2.api.lib.server.response.entity.ApiEntitySingleResponse;
-import com.cyber2.api.lib.server.response.entity.data.ApiEntitySingleResponseData;
 import java.io.EOFException;
 import java.io.IOException;
 import java.util.HashMap;

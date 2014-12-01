@@ -94,7 +94,8 @@ public abstract class AbstractBaseWriterAdapter<T,P> extends AbstractWriterAdapt
     public ApiEntitySingleResponse update(T item, String ownerName)
         throws IOException, FailedResponseException {
 
-        ApiEntitySingleResponse data = updateItem(getUrlBasePrefix() + ".list", singleType, ownerName, null, item);
+        Map<String, Object> map = createParamMap("id", getId(item) );
+        ApiEntitySingleResponse data = updateItem(getUrlBasePrefix() + ".byId", singleType, ownerName, map, item);
 
         return data;
     }

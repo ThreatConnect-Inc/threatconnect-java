@@ -5,6 +5,8 @@
 package com.cyber2.api.lib.server.entity;
 
 import com.cyber2.api.lib.server.entity.format.DateSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -72,11 +74,13 @@ public class Group
         this.name = name;
     }
 
+    @JsonIgnore
     public Owner getOwner()
     {
         return owner;
     }
 
+    @JsonProperty("owner")
     public void setOwner(Owner owner)
     {
         this.owner = owner;
@@ -84,7 +88,7 @@ public class Group
 
     public String getOwnerName()
     {
-        return ownerName;
+        return (ownerName == null && this.owner != null) ? owner.getName() : ownerName;
     }
 
     public void setOwnerName(String ownerName)
@@ -94,7 +98,7 @@ public class Group
 
     public String getType()
     {
-        return type;
+        return type == null ? getClass().getSimpleName().toLowerCase() : type;
     }
 
     public void setType(String type)

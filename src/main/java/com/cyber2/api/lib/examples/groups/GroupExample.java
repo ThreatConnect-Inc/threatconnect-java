@@ -31,9 +31,9 @@ public class GroupExample {
 
             //doGetById(conn);
 
-            doCreate(conn);
+            //doCreate(conn);
 
-            //doUpdate(conn);
+            doUpdate(conn);
 
             //doDelete(conn);
 
@@ -132,10 +132,17 @@ public class GroupExample {
         adversary.setOwnerName("System");
 
         try {
-            ApiEntitySingleResponse<Adversary,?> response = writer.delete(adversary.getId());
-            if ( response.isSuccess() ) {
-                writer.delete( response.getItem().getId() );
-                System.out.println("Deleted: " + response.getItem().toString() );
+            ApiEntitySingleResponse<Adversary,?> createResponse = writer.create(adversary);
+            if ( createResponse.isSuccess() ) {
+                System.out.println("Saved: " + createResponse.getItem() );
+                ApiEntitySingleResponse<Adversary,?> deleteResponse = writer.delete( createResponse.getItem().getId() );
+                if ( deleteResponse.isSuccess() ) {
+                    System.out.println("Deleted: " + createResponse.getItem() );
+                } else {
+                    System.err.println("Delete Failed. Cause: " + deleteResponse.getMessage() );
+                }
+            } else {
+                System.err.println("Create Failed. Cause: " + createResponse.getMessage() );
             }
             
         } catch (IOException | FailedResponseException ex) {
@@ -152,10 +159,22 @@ public class GroupExample {
         adversary.setOwnerName("System");
 
         try {
-            ApiEntitySingleResponse<Adversary,?> response = writer.create(adversary);
-            if ( response.isSuccess() ) {
-                response.getItem().setName("Updated: " + response.getItem().getName() );
-                writer.update( response.getItem() );
+            ApiEntitySingleResponse<Adversary,?> createResponse = writer.create(adversary);
+            if ( createResponse.isSuccess() ) {
+                System.out.println("Created Adversary: " + createResponse.getItem() );
+
+                Adversary updatedAdversary = createResponse.getItem();
+                updatedAdversary.setName("UPDATED: " + createResponse.getItem().getName() );
+                System.out.println("Saving Updated Adversary: " + updatedAdversary );
+
+                ApiEntitySingleResponse<Adversary,?> updateResponse = writer.update( updatedAdversary );
+                if ( updateResponse.isSuccess() ) {
+                    System.out.println("Updated Adversary: " + updateResponse.getItem() );
+                } else {
+                    System.err.println("Failed to Update Adversary: " + updateResponse.getMessage() );
+                }
+            } else {
+                System.err.println("Failed to Create Adversary: " + createResponse.getMessage() );
             }
             
         } catch (IOException | FailedResponseException ex) {

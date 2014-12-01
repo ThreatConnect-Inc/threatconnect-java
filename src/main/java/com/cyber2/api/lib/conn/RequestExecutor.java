@@ -71,9 +71,10 @@ public class RequestExecutor {
         return null;
     }
 
-    private static void applyEntityAsJSON(HttpRequestBase httpBase, Object obj) throws JsonProcessingException {
-            String jsonData = StringUtil.toJSON(obj);
-            ((HttpEntityEnclosingRequestBase)httpBase).setEntity(new StringEntity(jsonData, ContentType.APPLICATION_JSON));
+    private void applyEntityAsJSON(HttpRequestBase httpBase, Object obj) throws JsonProcessingException {
+        String jsonData = StringUtil.toJSON(obj);
+        logger.debug("EntityAsJSON: " + jsonData);
+       ((HttpEntityEnclosingRequestBase)httpBase).setEntity(new StringEntity(jsonData, ContentType.APPLICATION_JSON));
     }
 
     public String execute(String path, HttpMethod type, Object obj) throws IOException {
@@ -83,9 +84,11 @@ public class RequestExecutor {
         }
 
         String fullPath = this.conn.getConfig().getTcApiUrl() + path;
+
         logger.debug("Calling " + type + ": " + fullPath);
         HttpRequestBase httpBase = getBase(fullPath, type);
         if ( obj != null )  applyEntityAsJSON( httpBase, obj );
+
         ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), path, null);
 
         logger.debug("Request: " + httpBase.getRequestLine());

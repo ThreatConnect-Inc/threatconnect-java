@@ -24,8 +24,8 @@ NOTES
 
 
 # Java API Library Effort Outline
-1. Implement API for GET/POST/PUT/DELETE (Code complete, need to test)
-2. Create Quick Start Developer Guide (In progress)
-3. Prepare Examples covering difference methods (In Progress)
-4. Package jar, javadoc, examples, dependencies, guide, and source??? in downloadable zip with README (Pending)
+1. Implement API for GET/POST/PUT/DELETE (CODE: Complete, TEST: In Progress)
+2. Create Quick Start Developer Guide (DRAFT Complete)
+3. Prepare Examples covering difference operations (IN PROGRESS)
+4. Package jar, javadoc, examples, dependencies, guide, and source??? in downloadable zip with README ( PENDING )
 
