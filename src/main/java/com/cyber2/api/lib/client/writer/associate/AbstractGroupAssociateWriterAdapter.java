@@ -5,6 +5,7 @@
  */
 package com.cyber2.api.lib.client.writer.associate;
 
+import com.cyber2.api.lib.client.UrlTypeable;
 import com.cyber2.api.lib.client.response.WriteListResponse;
 import com.cyber2.api.lib.client.writer.AbstractBaseWriterAdapter;
 import com.cyber2.api.lib.conn.Connection;
@@ -24,7 +25,8 @@ import java.util.Map;
  *
  * @author dtineo
  */
-public abstract class AbstractGroupAssociateWriterAdapter<T,P> extends AbstractBaseWriterAdapter<T,P> implements GroupAssociateWritable<P> {
+public abstract class AbstractGroupAssociateWriterAdapter<T,P> extends AbstractBaseWriterAdapter<T,P> 
+    implements GroupAssociateWritable<P>, UrlTypeable {
 
     public AbstractGroupAssociateWriterAdapter(Connection conn, RequestExecutor executor, Class singleType) {
         super(conn, executor, singleType);
@@ -39,7 +41,7 @@ public abstract class AbstractGroupAssociateWriterAdapter<T,P> extends AbstractB
     public WriteListResponse<Integer> associateGroupAdversaries(P uniqueId, List<Integer> adversaryIds, String ownerName) throws IOException {
 
         Map<String, Object> map = createParamMap("id", uniqueId);
-        WriteListResponse<Integer> data = createListWithParam(getUrlBasePrefix() + ".type.byId.groups.adversaries.byGroupId", AdversaryResponse.class, ownerName, map, "groupId", adversaryIds);
+        WriteListResponse<Integer> data = createListWithParam(getUrlBasePrefix() + ".byId.groups.adversaries.byGroupId", AdversaryResponse.class, ownerName, map, "groupId", adversaryIds);
 
         return data;
     }
@@ -53,7 +55,7 @@ public abstract class AbstractGroupAssociateWriterAdapter<T,P> extends AbstractB
     public ApiEntitySingleResponse associateGroupAdversary(P uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
         
         Map<String, Object> map = createParamMap("id", uniqueId, "groupId", adversaryId);
-        AdversaryResponse data = createItem(getUrlBasePrefix() + ".type.byId.groups.adversaries.byGroupId", AdversaryResponse.class, ownerName, map, null);
+        AdversaryResponse data = createItem(getUrlBasePrefix() + ".byId.groups.adversaries.byGroupId", AdversaryResponse.class, ownerName, map, null);
 
         return data;
     }
@@ -67,7 +69,7 @@ public abstract class AbstractGroupAssociateWriterAdapter<T,P> extends AbstractB
     public WriteListResponse<Integer> associateGroupEmails(P uniqueId, List<Integer> emailIds, String ownerName) throws IOException {
 
         Map<String, Object> map = createParamMap("id", uniqueId);
-        WriteListResponse<Integer> data = createListWithParam(getUrlBasePrefix() + ".type.byId.groups.emails.byGroupId", EmailResponse.class, ownerName, map, "groupId", emailIds);
+        WriteListResponse<Integer> data = createListWithParam(getUrlBasePrefix() + ".byId.groups.emails.byGroupId", EmailResponse.class, ownerName, map, "groupId", emailIds);
 
         return data;
     }
@@ -80,7 +82,7 @@ public abstract class AbstractGroupAssociateWriterAdapter<T,P> extends AbstractB
     @Override
     public ApiEntitySingleResponse associateGroupEmail(P uniqueId, Integer emailId, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "groupId", emailId);
-        EmailResponse data = createItem(getUrlBasePrefix() + ".type.byId.groups.emails.byGroupId", EmailResponse.class, ownerName, map, null);
+        EmailResponse data = createItem(getUrlBasePrefix() + ".byId.groups.emails.byGroupId", EmailResponse.class, ownerName, map, null);
 
         return data;
     }
@@ -93,7 +95,7 @@ public abstract class AbstractGroupAssociateWriterAdapter<T,P> extends AbstractB
     @Override
     public WriteListResponse<Integer> associateGroupIncidents(P uniqueId, List<Integer> incidentIds, String ownerName) throws IOException {
         Map<String, Object> map = createParamMap("id", uniqueId);
-        WriteListResponse<Integer> data = createListWithParam(getUrlBasePrefix() + ".type.byId.groups.incidents.byGroupId", IncidentResponse.class, ownerName, map, "groupId", incidentIds);
+        WriteListResponse<Integer> data = createListWithParam(getUrlBasePrefix() + ".byId.groups.incidents.byGroupId", IncidentResponse.class, ownerName, map, "groupId", incidentIds);
 
         return data;
     }
@@ -106,7 +108,7 @@ public abstract class AbstractGroupAssociateWriterAdapter<T,P> extends AbstractB
     @Override
     public ApiEntitySingleResponse associateGroupIncident(P uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "groupId", incidentId);
-        IncidentResponse data = createItem(getUrlBasePrefix() + ".type.byId.groups.incidents.byGroupId", IncidentResponse.class, ownerName, map, null);
+        IncidentResponse data = createItem(getUrlBasePrefix() + ".byId.groups.incidents.byGroupId", IncidentResponse.class, ownerName, map, null);
 
         return data;
     }
@@ -119,7 +121,7 @@ public abstract class AbstractGroupAssociateWriterAdapter<T,P> extends AbstractB
     @Override
     public WriteListResponse<Integer> associateGroupSignatures(P uniqueId, List<Integer> signatureIds, String ownerName) throws IOException {
         Map<String, Object> map = createParamMap("id", uniqueId);
-        WriteListResponse<Integer> data = createListWithParam(getUrlBasePrefix() + ".type.byId.groups.signatures.byGroupId", SignatureResponse.class, ownerName, map, "groupId", signatureIds);
+        WriteListResponse<Integer> data = createListWithParam(getUrlBasePrefix() + ".byId.groups.signatures.byGroupId", SignatureResponse.class, ownerName, map, "groupId", signatureIds);
 
         return data;
     }
@@ -132,7 +134,7 @@ public abstract class AbstractGroupAssociateWriterAdapter<T,P> extends AbstractB
     @Override
     public ApiEntitySingleResponse associateGroupSignature(P uniqueId, Integer signatureId, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "groupId", signatureId);
-        SignatureResponse data = createItem(getUrlBasePrefix() + ".type.byId.groups.signatures.byGroupId", SignatureResponse.class, ownerName, map, null);
+        SignatureResponse data = createItem(getUrlBasePrefix() + ".byId.groups.signatures.byGroupId", SignatureResponse.class, ownerName, map, null);
 
         return data;
     }
@@ -145,7 +147,7 @@ public abstract class AbstractGroupAssociateWriterAdapter<T,P> extends AbstractB
     @Override
     public WriteListResponse<Integer> associateGroupThreats(P uniqueId, List<Integer> threatIds, String ownerName) throws IOException {
         Map<String, Object> map = createParamMap("id", uniqueId);
-        WriteListResponse<Integer> data = createListWithParam(getUrlBasePrefix() + ".type.byId.groups.threats.byGroupId", ThreatResponse.class, ownerName, map, "groupId", threatIds);
+        WriteListResponse<Integer> data = createListWithParam(getUrlBasePrefix() + ".byId.groups.threats.byGroupId", ThreatResponse.class, ownerName, map, "groupId", threatIds);
 
         return data;
     }
@@ -158,7 +160,7 @@ public abstract class AbstractGroupAssociateWriterAdapter<T,P> extends AbstractB
     @Override
     public ApiEntitySingleResponse associateGroupThreat(P uniqueId, Integer threatId, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "groupId", threatId);
-        ThreatResponse data = createItem(getUrlBasePrefix() + ".type.byId.groups.threats.byGroupId", ThreatResponse.class, ownerName, map, null);
+        ThreatResponse data = createItem(getUrlBasePrefix() + ".byId.groups.threats.byGroupId", ThreatResponse.class, ownerName, map, null);
 
         return data;
     }
@@ -172,7 +174,7 @@ public abstract class AbstractGroupAssociateWriterAdapter<T,P> extends AbstractB
     public WriteListResponse<Integer> deleteAssociatedGroupAdversaries(P uniqueId, List<Integer> adversaryIds, String ownerName) throws IOException {
 
         Map<String, Object> map = createParamMap("id", uniqueId);
-        WriteListResponse<Integer> data = deleteList(getUrlBasePrefix() + ".type.byId.groups.adversaries.byGroupId", AdversaryResponse.class, ownerName, map, "groupId", adversaryIds);
+        WriteListResponse<Integer> data = deleteList(getUrlBasePrefix() + ".byId.groups.adversaries.byGroupId", AdversaryResponse.class, ownerName, map, "groupId", adversaryIds);
 
         return data;
     }
@@ -186,7 +188,7 @@ public abstract class AbstractGroupAssociateWriterAdapter<T,P> extends AbstractB
     public ApiEntitySingleResponse deleteAssociatedGroupAdversary(P uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
         
         Map<String, Object> map = createParamMap("id", uniqueId, "groupId", adversaryId);
-        AdversaryResponse data = deleteItem(getUrlBasePrefix() + ".type.byId.groups.adversaries.byGroupId", AdversaryResponse.class, ownerName, map);
+        AdversaryResponse data = deleteItem(getUrlBasePrefix() + ".byId.groups.adversaries.byGroupId", AdversaryResponse.class, ownerName, map);
 
         return data;
     }
@@ -200,7 +202,7 @@ public abstract class AbstractGroupAssociateWriterAdapter<T,P> extends AbstractB
     public WriteListResponse<Integer> deleteAssociatedGroupEmails(P uniqueId, List<Integer> emailIds, String ownerName) throws IOException {
 
         Map<String, Object> map = createParamMap("id", uniqueId);
-        WriteListResponse<Integer> data = deleteList(getUrlBasePrefix() + ".type.byId.groups.emails.byGroupId", EmailResponse.class, ownerName, map, "groupId", emailIds);
+        WriteListResponse<Integer> data = deleteList(getUrlBasePrefix() + ".byId.groups.emails.byGroupId", EmailResponse.class, ownerName, map, "groupId", emailIds);
 
         return data;
     }
@@ -213,7 +215,7 @@ public abstract class AbstractGroupAssociateWriterAdapter<T,P> extends AbstractB
     @Override
     public ApiEntitySingleResponse deleteAssociatedGroupEmail(P uniqueId, Integer emailId, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "groupId", emailId);
-        EmailResponse data = deleteItem(getUrlBasePrefix() + ".type.byId.groups.emails.byGroupId", EmailResponse.class, ownerName, map);
+        EmailResponse data = deleteItem(getUrlBasePrefix() + ".byId.groups.emails.byGroupId", EmailResponse.class, ownerName, map);
 
         return data;
     }
@@ -226,7 +228,7 @@ public abstract class AbstractGroupAssociateWriterAdapter<T,P> extends AbstractB
     @Override
     public WriteListResponse<Integer> deleteAssociatedGroupIncidents(P uniqueId, List<Integer> incidentIds, String ownerName) throws IOException {
         Map<String, Object> map = createParamMap("id", uniqueId);
-        WriteListResponse<Integer> data = deleteList(getUrlBasePrefix() + ".type.byId.groups.incidents.byGroupId", IncidentResponse.class, ownerName, map, "groupId", incidentIds);
+        WriteListResponse<Integer> data = deleteList(getUrlBasePrefix() + ".byId.groups.incidents.byGroupId", IncidentResponse.class, ownerName, map, "groupId", incidentIds);
 
         return data;
     }
@@ -239,7 +241,7 @@ public abstract class AbstractGroupAssociateWriterAdapter<T,P> extends AbstractB
     @Override
     public ApiEntitySingleResponse deleteAssociatedGroupIncident(P uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "groupId", incidentId);
-        IncidentResponse data = deleteItem(getUrlBasePrefix() + ".type.byId.groups.incidents.byGroupId", IncidentResponse.class, ownerName, map);
+        IncidentResponse data = deleteItem(getUrlBasePrefix() + ".byId.groups.incidents.byGroupId", IncidentResponse.class, ownerName, map);
 
         return data;
     }
@@ -252,7 +254,7 @@ public abstract class AbstractGroupAssociateWriterAdapter<T,P> extends AbstractB
     @Override
     public WriteListResponse<Integer> deleteAssociatedGroupSignatures(P uniqueId, List<Integer> signatureIds, String ownerName) throws IOException {
         Map<String, Object> map = createParamMap("id", uniqueId);
-        WriteListResponse<Integer> data = deleteList(getUrlBasePrefix() + ".type.byId.groups.signatures.byGroupId", SignatureResponse.class, ownerName, map, "groupId", signatureIds);
+        WriteListResponse<Integer> data = deleteList(getUrlBasePrefix() + ".byId.groups.signatures.byGroupId", SignatureResponse.class, ownerName, map, "groupId", signatureIds);
 
         return data;
     }
@@ -265,7 +267,7 @@ public abstract class AbstractGroupAssociateWriterAdapter<T,P> extends AbstractB
     @Override
     public ApiEntitySingleResponse deleteAssociatedGroupSignature(P uniqueId, Integer signatureId, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "groupId", signatureId);
-        SignatureResponse data = deleteItem(getUrlBasePrefix() + ".type.byId.groups.signatures.byGroupId", SignatureResponse.class, ownerName, map);
+        SignatureResponse data = deleteItem(getUrlBasePrefix() + ".byId.groups.signatures.byGroupId", SignatureResponse.class, ownerName, map);
 
         return data;
     }
@@ -278,7 +280,7 @@ public abstract class AbstractGroupAssociateWriterAdapter<T,P> extends AbstractB
     @Override
     public WriteListResponse<Integer> deleteAssociatedGroupThreats(P uniqueId, List<Integer> threatIds, String ownerName) throws IOException {
         Map<String, Object> map = createParamMap("id", uniqueId);
-        WriteListResponse<Integer> data = deleteList(getUrlBasePrefix() + ".type.byId.groups.threats.byGroupId", ThreatResponse.class, ownerName, map, "groupId", threatIds);
+        WriteListResponse<Integer> data = deleteList(getUrlBasePrefix() + ".byId.groups.threats.byGroupId", ThreatResponse.class, ownerName, map, "groupId", threatIds);
 
         return data;
     }
@@ -291,7 +293,7 @@ public abstract class AbstractGroupAssociateWriterAdapter<T,P> extends AbstractB
     @Override
     public ApiEntitySingleResponse deleteAssociatedGroupThreat(P uniqueId, Integer threatId, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "groupId", threatId);
-        ThreatResponse data = deleteItem(getUrlBasePrefix() + ".type.byId.groups.threats.byGroupId", ThreatResponse.class, ownerName, map);
+        ThreatResponse data = deleteItem(getUrlBasePrefix() + ".byId.groups.threats.byGroupId", ThreatResponse.class, ownerName, map);
 
         return data;
     }

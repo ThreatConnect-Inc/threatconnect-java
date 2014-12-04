@@ -5,6 +5,7 @@
  */
 package com.cyber2.api.lib.client.writer.associate;
 
+import com.cyber2.api.lib.client.UrlTypeable;
 import com.cyber2.api.lib.client.response.WriteListResponse;
 import com.cyber2.api.lib.client.writer.AbstractBaseWriterAdapter;
 import com.cyber2.api.lib.conn.Connection;
@@ -25,7 +26,8 @@ import java.util.Map;
  *
  * @author dtineo
  */
-public abstract class AbstractAttributeAssociateWriterAdapter<T,P> extends AbstractBaseWriterAdapter<T,P> implements AttributeAssociateWritable<P> {
+public abstract class AbstractAttributeAssociateWriterAdapter<T,P> extends AbstractBaseWriterAdapter<T,P> 
+    implements AttributeAssociateWritable<P>, UrlTypeable {
 
     public AbstractAttributeAssociateWriterAdapter(Connection conn, RequestExecutor executor, Class singleType) {
         super(conn, executor, singleType );
@@ -40,24 +42,24 @@ public abstract class AbstractAttributeAssociateWriterAdapter<T,P> extends Abstr
     public WriteListResponse<Attribute> addAttributes(P uniqueId, List<Attribute> attributes, String ownerName) throws IOException {
 
         Map<String, Object> map = createParamMap("id", uniqueId);
-        WriteListResponse data = createList(getUrlBasePrefix() + ".type.byId.attributes", AttributeListResponse.class, ownerName, map, attributes);
+        WriteListResponse data = createList(getUrlBasePrefix() + ".byId.attributes", AttributeListResponse.class, ownerName, map, attributes);
 
         return data;
     }
 
     @Override
-    public Attribute addAttribute(P uniqueId, Attribute attribute) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse addAttribute(P uniqueId, Attribute attribute) throws IOException, FailedResponseException {
         return addAttribute(uniqueId, attribute, null);
     }
 
     @Override
-    public Attribute addAttribute(P uniqueId, Attribute attribute, String ownerName)
+    public ApiEntitySingleResponse addAttribute(P uniqueId, Attribute attribute, String ownerName)
         throws IOException, FailedResponseException {
 
         Map<String, Object> map = createParamMap("id", uniqueId);
         AttributeResponse item = createItem(getUrlBasePrefix() + ".byId.attributes", AttributeResponse.class, ownerName, map, attribute);
 
-        return (Attribute)item.getData().getData();
+        return item;
     }
 
     @Override
@@ -103,7 +105,7 @@ public abstract class AbstractAttributeAssociateWriterAdapter<T,P> extends Abstr
         Map<String, Object> map = createParamMap("id", uniqueId);
         List<Integer> idList = new ArrayList<>();
         for( Attribute a : attributes )     idList.add( a.getId() );
-        WriteListResponse data = updateListWithParam(getUrlBasePrefix() + ".type.byId.attributes.byId", AttributeListResponse.class, ownerName, map, "attributeId", idList, attributes);
+        WriteListResponse data = updateListWithParam(getUrlBasePrefix() + ".byId.attributes.byId", AttributeListResponse.class, ownerName, map, "attributeId", idList, attributes);
 
         return data;
     }
@@ -133,7 +135,7 @@ public abstract class AbstractAttributeAssociateWriterAdapter<T,P> extends Abstr
         Map<String, Object> map = createParamMap("id", uniqueId);
         List<Integer> idList = new ArrayList<>();
         for(Integer it : attribute)    idList.add( it );
-        WriteListResponse<Integer> data = deleteList(getUrlBasePrefix() + ".type.byId.attributes.byId"
+        WriteListResponse<Integer> data = deleteList(getUrlBasePrefix() + ".byId.attributes.byId"
                 , AttributeResponse.class, ownerName, map, "attributeId", idList);
 
         return data;
@@ -147,7 +149,7 @@ public abstract class AbstractAttributeAssociateWriterAdapter<T,P> extends Abstr
     @Override
     public ApiEntitySingleResponse deleteAttribute(P uniqueId, Integer attribute, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "attributeId", attribute);
-        ApiEntitySingleResponse item = deleteItem(getUrlBasePrefix() + ".type.byId.attributes.byId", AttributeResponse.class, ownerName, map);
+        ApiEntitySingleResponse item = deleteItem(getUrlBasePrefix() + ".byId.attributes.byId", AttributeResponse.class, ownerName, map);
 
         return item;
     }
@@ -160,7 +162,7 @@ public abstract class AbstractAttributeAssociateWriterAdapter<T,P> extends Abstr
     @Override
     public WriteListResponse<String> deleteAttributeSecurityLabels(P uniqueId, Integer attributeId, List<String> securityLabels, String ownerName) throws IOException {
        Map<String, Object> map = createParamMap("id", uniqueId);
-       WriteListResponse<String> data = deleteList(getUrlBasePrefix() + ".type.byId.attributes.byId.securityLabels.byName"
+       WriteListResponse<String> data = deleteList(getUrlBasePrefix() + ".byId.attributes.byId.securityLabels.byName"
                 , SecurityLabelResponse.class, ownerName, map, "securityLabel", securityLabels);
 
         return data;
@@ -174,7 +176,7 @@ public abstract class AbstractAttributeAssociateWriterAdapter<T,P> extends Abstr
     @Override
     public ApiEntitySingleResponse deleteAttributeSecurityLabel(P uniqueId, Integer attributeId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "securityLabel", securityLabel);
-        ApiEntitySingleResponse item = deleteItem(getUrlBasePrefix() + ".type.byId.attributes.byId.securityLabels.byName", SecurityLabelResponse.class, ownerName, map);
+        ApiEntitySingleResponse item = deleteItem(getUrlBasePrefix() + ".byId.attributes.byId.securityLabels.byName", SecurityLabelResponse.class, ownerName, map);
 
         return item;
 

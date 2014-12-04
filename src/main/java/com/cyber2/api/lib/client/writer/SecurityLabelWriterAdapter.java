@@ -62,6 +62,12 @@ public class SecurityLabelWriterAdapter
             public String getId(SecurityLabel item) {
                 return SecurityLabelWriterAdapter.this.getId(item);
             }
+
+            @Override
+            public String getUrlType()
+            {
+                return SecurityLabelWriterAdapter.this.getUrlType();
+            }
         };
 
         indAssocWriter = new AbstractIndicatorAssociateWriterAdapter<SecurityLabel,String>(

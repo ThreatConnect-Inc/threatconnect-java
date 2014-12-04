@@ -62,6 +62,12 @@ public class TagWriterAdapter
             public String getId(Tag item) {
                 return TagWriterAdapter.this.getId(item);
             }
+
+            @Override
+            public String getUrlType()
+            {
+                return TagWriterAdapter.this.getUrlType();
+            }
         };
 
         indAssocWriter = new AbstractIndicatorAssociateWriterAdapter<Tag,String>(

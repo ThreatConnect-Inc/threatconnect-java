@@ -15,9 +15,9 @@ public interface AttributeAssociateWritable<P> {
     public WriteListResponse<Attribute> addAttributes(P uniqueId, List<Attribute> attribute, String ownerName)
         throws IOException;
 
-    public Attribute addAttribute(P uniqueId, Attribute attribute) throws IOException, FailedResponseException;
+    public ApiEntitySingleResponse addAttribute(P uniqueId, Attribute attribute) throws IOException, FailedResponseException;
 
-    public Attribute addAttribute(P uniqueId, Attribute attribute, String ownerName)
+    public ApiEntitySingleResponse addAttribute(P uniqueId, Attribute attribute, String ownerName)
         throws IOException, FailedResponseException;
 
     public WriteListResponse<String> addAttributeSecurityLabels(P uniqueId, Integer attributeId, List<String> securityLabels) throws IOException;

@@ -8,12 +8,14 @@ import com.cyber2.api.lib.client.writer.associate.AbstractIndicatorAssociateWrit
 import com.cyber2.api.lib.client.writer.associate.AbstractSecurityLabelAssociateWriterAdapter;
 import com.cyber2.api.lib.client.writer.associate.AbstractTagAssociateWriterAdapter;
 import com.cyber2.api.lib.client.writer.associate.AbstractVictimAssetAssociateWriterAdapter;
+import com.cyber2.api.lib.client.writer.associate.AbstractVictimAssociateWriterAdapter;
 import com.cyber2.api.lib.client.writer.associate.AttributeAssociateWritable;
 import com.cyber2.api.lib.client.writer.associate.GroupAssociateWritable;
 import com.cyber2.api.lib.client.writer.associate.IndicatorAssociateWritable;
 import com.cyber2.api.lib.client.writer.associate.SecurityLabelAssociateWritable;
 import com.cyber2.api.lib.client.writer.associate.TagAssociateWritable;
 import com.cyber2.api.lib.client.writer.associate.VictimAssetAssociateWritable;
+import com.cyber2.api.lib.client.writer.associate.VictimAssociateWritable;
 import com.cyber2.api.lib.conn.Connection;
 import com.cyber2.api.lib.conn.RequestExecutor;
 import com.cyber2.api.lib.exception.FailedResponseException;
@@ -24,10 +26,6 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * EmailWriterAdapter is the primary client adapter for all Email group level objects.
- * It uses the {@link Connection} object to execute requests against the {@link RequestExecutor} object.
- * The responsibility of this class is to encapsulate all the low level ThreatConnect API calls
- * specifically targeted at data under the Email group type.
  * 
  *
  * @author dtineo
@@ -37,7 +35,8 @@ public abstract class AbstractGroupWriterAdapter<T extends Group>
     extends AbstractBaseWriterAdapter<T,Integer> 
     implements UrlTypeable, GroupAssociateWritable<Integer>, IndicatorAssociateWritable<Integer>
              , AttributeAssociateWritable<Integer>, VictimAssetAssociateWritable<Integer>
-             , TagAssociateWritable<Integer>, SecurityLabelAssociateWritable<Integer>  {
+             , TagAssociateWritable<Integer>, SecurityLabelAssociateWritable<Integer>
+             , VictimAssociateWritable<Integer> {
 
     // composite pattern
     private AbstractAttributeAssociateWriterAdapter<T,Integer> attribWriter;
@@ -46,6 +45,7 @@ public abstract class AbstractGroupWriterAdapter<T extends Group>
     private AbstractSecurityLabelAssociateWriterAdapter<T,Integer> secLabelAssocWriter;
     private AbstractTagAssociateWriterAdapter<T,Integer> tagAssocWriter;
     private AbstractVictimAssetAssociateWriterAdapter<T,Integer> victimAssetAssocWriter;
+    private AbstractVictimAssociateWriterAdapter<T,Integer> victimAssocWriter;
 
     /**
      * Package level constructor. Use the {@link WriterAdapterFactory} to access this object.
@@ -78,6 +78,12 @@ public abstract class AbstractGroupWriterAdapter<T extends Group>
                 return AbstractGroupWriterAdapter.this.getId(item);
             }
 
+            @Override
+            public String getUrlType()
+            {
+                return AbstractGroupWriterAdapter.this.getUrlType();
+            }
+
         };
 
         groupAssocWriter = new AbstractGroupAssociateWriterAdapter<T,Integer>(
@@ -93,6 +99,12 @@ public abstract class AbstractGroupWriterAdapter<T extends Group>
             @Override
             public Integer getId(T item) {
                 return AbstractGroupWriterAdapter.this.getId(item);
+            }
+
+            @Override
+            public String getUrlType()
+            {
+                return AbstractGroupWriterAdapter.this.getUrlType();
             }
         };
 
@@ -181,6 +193,31 @@ public abstract class AbstractGroupWriterAdapter<T extends Group>
 
         };
         
+        victimAssocWriter = new AbstractVictimAssociateWriterAdapter<T,Integer>(
+                            AbstractGroupWriterAdapter.this.getConn()
+                          , AbstractGroupWriterAdapter.this.executor
+                          , AbstractGroupWriterAdapter.this.singleType
+            ) {
+
+            @Override
+            protected String getUrlBasePrefix()
+            {
+                return AbstractGroupWriterAdapter.this.getUrlBasePrefix();
+            }
+
+            @Override
+            public Integer getId(T item)
+            {
+                return AbstractGroupWriterAdapter.this.getId(item);
+            }
+
+            @Override
+            public String getUrlType()
+            {
+                return AbstractGroupWriterAdapter.this.getUrlType();
+            }
+        };
+
     }
 
     @Override
@@ -405,12 +442,12 @@ public abstract class AbstractGroupWriterAdapter<T extends Group>
     }
 
     @Override
-    public Attribute addAttribute(Integer uniqueId, Attribute attribute) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse addAttribute(Integer uniqueId, Attribute attribute) throws IOException, FailedResponseException {
         return attribWriter.addAttribute(uniqueId, attribute);
     }
 
     @Override
-    public Attribute addAttribute(Integer uniqueId, Attribute attribute, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse addAttribute(Integer uniqueId, Attribute attribute, String ownerName) throws IOException, FailedResponseException {
         return attribWriter.addAttribute(uniqueId, attribute, ownerName);
     }
 
@@ -972,6 +1009,45 @@ public abstract class AbstractGroupWriterAdapter<T extends Group>
     @Override
     public ApiEntitySingleResponse deleteAssociatedSecurityLabel(Integer uniqueId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
         return secLabelAssocWriter.deleteAssociatedSecurityLabel(uniqueId, securityLabel, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<Integer> associateVictims(Integer uniqueId, List<Integer> victimIds) throws IOException {
+        return victimAssocWriter.associateVictims(uniqueId, victimIds);
+    }
+
+    @Override
+    public WriteListResponse<Integer> associateVictims(Integer uniqueId, List<Integer> victimIds, String ownerName) throws IOException {
+        return victimAssocWriter.associateVictims(uniqueId, victimIds, ownerName);
+    }
+
+    @Override
+    public ApiEntitySingleResponse associateVictim(Integer uniqueId, Integer victimId) throws IOException, FailedResponseException {
+        return victimAssocWriter.associateVictim(uniqueId, victimId);
+    }
+
+    @Override
+    public ApiEntitySingleResponse associateVictim(Integer uniqueId, Integer victimId, String ownerName) throws IOException, FailedResponseException { return victimAssocWriter.associateVictim(uniqueId, victimId, ownerName);
+    }
+
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedVictims(Integer uniqueId, List<Integer> victimIds) throws IOException {
+        return victimAssocWriter.deleteAssociatedVictims(uniqueId, victimIds);
+    }
+
+    @Override
+    public WriteListResponse<Integer> deleteAssociatedVictims(Integer uniqueId, List<Integer> victimIds, String ownerName) throws IOException {
+        return victimAssocWriter.deleteAssociatedVictims(uniqueId, victimIds, ownerName);
+    }
+
+    @Override
+    public ApiEntitySingleResponse deleteAssociatedVictim(Integer uniqueId, Integer victimId) throws IOException, FailedResponseException {
+        return victimAssocWriter.deleteAssociatedVictim(uniqueId, victimId);
+    }
+
+    @Override
+    public ApiEntitySingleResponse deleteAssociatedVictim(Integer uniqueId, Integer victimId, String ownerName) throws IOException, FailedResponseException {
+        return victimAssocWriter.deleteAssociatedVictim(uniqueId, victimId, ownerName);
     }
 
 }

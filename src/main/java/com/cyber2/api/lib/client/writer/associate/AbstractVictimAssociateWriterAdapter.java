@@ -5,6 +5,7 @@
  */
 package com.cyber2.api.lib.client.writer.associate;
 
+import com.cyber2.api.lib.client.UrlTypeable;
 import com.cyber2.api.lib.client.response.WriteListResponse;
 import com.cyber2.api.lib.client.writer.AbstractBaseWriterAdapter;
 import com.cyber2.api.lib.conn.Connection;
@@ -21,9 +22,9 @@ import java.util.Map;
  *
  * @author dtineo
  */
-public abstract class AbstractVictimAssociateWriterAdapter<P> extends AbstractBaseWriterAdapter implements VictimAssociateWritable<P> {
+public abstract class AbstractVictimAssociateWriterAdapter<T,P> extends AbstractBaseWriterAdapter<T,P> implements VictimAssociateWritable<P>, UrlTypeable {
 
-    public AbstractVictimAssociateWriterAdapter(Connection conn, RequestExecutor executor, Class singleType, Class listType) {
+    public AbstractVictimAssociateWriterAdapter(Connection conn, RequestExecutor executor, Class singleType) {
         super(conn, executor, singleType );
     }
 
@@ -62,7 +63,7 @@ public abstract class AbstractVictimAssociateWriterAdapter<P> extends AbstractBa
     @Override
     public WriteListResponse<Integer> deleteAssociatedVictims(P uniqueId, List<Integer> victimIds, String ownerName) throws IOException {
       Map<String, Object> map = createParamMap("id", uniqueId);
-        WriteListResponse<Integer> data = deleteList(getUrlBasePrefix() + ".type.byId.victims.byVictimId", VictimResponse.class, ownerName, map, "victimId", victimIds);
+        WriteListResponse<Integer> data = deleteList(getUrlBasePrefix() + ".byId.victims.byVictimId", VictimResponse.class, ownerName, map, "victimId", victimIds);
 
         return data;
 
@@ -77,7 +78,7 @@ public abstract class AbstractVictimAssociateWriterAdapter<P> extends AbstractBa
     @Override
    public ApiEntitySingleResponse deleteAssociatedVictim(P uniqueId, Integer victimId, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "victimId", victimId);
-        VictimResponse item = deleteItem(getUrlBasePrefix() + ".type.byId.victim..byVictimId", VictimResponse.class, ownerName, map);
+        VictimResponse item = deleteItem(getUrlBasePrefix() + ".byId.victim..byVictimId", VictimResponse.class, ownerName, map);
 
         return item;
    }

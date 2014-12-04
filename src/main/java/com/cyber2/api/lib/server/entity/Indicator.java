@@ -5,7 +5,8 @@
 package com.cyber2.api.lib.server.entity;
 
 import com.cyber2.api.lib.server.entity.format.DateSerializer;
-import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -49,9 +50,9 @@ public class Indicator
     @XmlElement(name = "LastModified", required = false)
     private Date lastModified;
     @XmlElement(name = "Rating", required = false)
-    private BigDecimal rating;
+    private Double rating;
     @XmlElement(name = "Confidence", required = false)
-    private Short confidence;
+    private Double confidence;
     @XmlElement(name = "ThreatAssessRating", required = false)
     private Double threatAssessRating;
     @XmlElement(name = "ThreatAssessConfidence", required = false)
@@ -79,9 +80,21 @@ public class Indicator
         this.id = id;
     }
 
+    @JsonIgnore
+    public Owner getOwner()
+    {
+        return owner;
+    }
+
+    @JsonProperty("owner")
+    public void setOwner(Owner owner)
+    {
+        this.owner = owner;
+    }
+
     public String getOwnerName()
     {
-        return ownerName;
+        return (ownerName == null && this.owner != null) ? owner.getName() : ownerName;
     }
 
     public void setOwnerName(String ownerName)
@@ -89,19 +102,9 @@ public class Indicator
         this.ownerName = ownerName;
     }
 
-    public Owner getOwner()
-    {
-        return owner;
-    }
-
-    public void setOwner(Owner owner)
-    {
-        this.owner = owner;
-    }
-
     public String getType()
     {
-        return type;
+        return type == null ? getClass().getSimpleName().toLowerCase() : type;
     }
 
     public void setType(String type)
@@ -129,22 +132,22 @@ public class Indicator
         this.lastModified = lastModified;
     }
 
-    public BigDecimal getRating()
+    public Double getRating()
     {
         return rating;
     }
 
-    public void setRating(BigDecimal rating)
+    public void setRating(Double rating)
     {
         this.rating = rating;
     }
 
-    public Short getConfidence()
+    public Double getConfidence()
     {
         return confidence;
     }
 
-    public void setConfidence(Short confidence)
+    public void setConfidence(Double confidence)
     {
         this.confidence = confidence;
     }

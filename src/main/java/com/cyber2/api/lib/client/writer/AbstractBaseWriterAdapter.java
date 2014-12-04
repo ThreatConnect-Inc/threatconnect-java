@@ -33,7 +33,7 @@ public abstract class AbstractBaseWriterAdapter<T,P> extends AbstractWriterAdapt
     protected abstract String getUrlBasePrefix();
 
    public WriteListResponse<T> create(List<T> itemList) throws IOException {
-        return createList(getUrlBasePrefix() + ".type.list", singleType, itemList);
+        return createList(getUrlBasePrefix(), singleType, itemList);
     }
 
     public WriteListResponse<T> update(List<T> itemList) throws IOException {
@@ -43,7 +43,7 @@ public abstract class AbstractBaseWriterAdapter<T,P> extends AbstractWriterAdapt
     public WriteListResponse<T> update(List<T> itemList, String ownerName) throws IOException {
         List<P> idList = new ArrayList<>();
         for(T it : itemList)    idList.add( getId(it) );
-        WriteListResponse<T> data = updateListWithParam(getUrlBasePrefix() + ".type.byId", singleType, ownerName, null, "id", idList, itemList);
+        WriteListResponse<T> data = updateListWithParam(getUrlBasePrefix() + ".byId", singleType, ownerName, null, "id", idList, itemList);
 
         return data;
 
@@ -54,7 +54,7 @@ public abstract class AbstractBaseWriterAdapter<T,P> extends AbstractWriterAdapt
     }
 
     public WriteListResponse<P> delete(List<P> itemIds, String ownerName) throws IOException {
-        WriteListResponse<P> data = deleteList(getUrlBasePrefix() + ".type.byId", singleType, null, null, "id", itemIds);
+        WriteListResponse<P> data = deleteList(getUrlBasePrefix() + ".byId", singleType, null, null, "id", itemIds);
 
         return data;
     }
@@ -82,7 +82,7 @@ public abstract class AbstractBaseWriterAdapter<T,P> extends AbstractWriterAdapt
 
     public ApiEntitySingleResponse create(T item, String ownerName) throws IOException, FailedResponseException {
 
-        ApiEntitySingleResponse data = createItem(getUrlBasePrefix() + ".list", singleType, ownerName, null, item);
+        ApiEntitySingleResponse data = createItem(getUrlBasePrefix(), singleType, ownerName, null, item);
 
         return data;
     }

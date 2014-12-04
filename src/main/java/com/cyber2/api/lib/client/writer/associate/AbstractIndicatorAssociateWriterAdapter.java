@@ -45,7 +45,7 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     public WriteListResponse<String> associateIndicatorAddresses(P uniqueId, List<String> ipAddresses, String ownerName) throws IOException {
 
         Map<String, Object> map = createParamMap("id", uniqueId);
-        WriteListResponse<String> data = createListWithParam(getUrlBasePrefix() + ".type.byId.indicators.addresses.byIndicatorId", AddressListResponse.class, ownerName, map, "indicatorId", ipAddresses);
+        WriteListResponse<String> data = createListWithParam(getUrlBasePrefix() + ".byId.indicators.addresses.byIndicatorId", AddressListResponse.class, ownerName, map, "indicatorId", ipAddresses);
 
         return data;
     }
@@ -59,7 +59,7 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     public ApiEntitySingleResponse associateIndicatorAddress(P uniqueId, String ipAddress, String ownerName) throws IOException, FailedResponseException {
         
         Map<String, Object> map = createParamMap("id", uniqueId, "indicatorId", ipAddress);
-        AddressResponse data = createItem(getUrlBasePrefix() + ".type.byId.indicators.addresses.byIndicatorId", AddressResponse.class, ownerName, map, null);
+        AddressResponse data = createItem(getUrlBasePrefix() + ".byId.indicators.addresses.byIndicatorId", AddressResponse.class, ownerName, map, null);
 
         return data;
     }
@@ -73,7 +73,7 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     public WriteListResponse<String> associateIndicatorEmailAddresses(P uniqueId, List<String> emailAddresses, String ownerName) throws IOException {
 
         Map<String, Object> map = createParamMap("id", uniqueId);
-        WriteListResponse<String> data = createListWithParam(getUrlBasePrefix() + ".type.byId.indicators.emailAddresses.byIndicatorId", EmailAddressListResponse.class, ownerName, map, "indicatorId", emailAddresses);
+        WriteListResponse<String> data = createListWithParam(getUrlBasePrefix() + ".byId.indicators.emailAddresses.byIndicatorId", EmailAddressListResponse.class, ownerName, map, "indicatorId", emailAddresses);
 
         return data;
     }
@@ -86,7 +86,7 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     @Override
     public ApiEntitySingleResponse associateIndicatorEmailAddress(P uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "indicatorId", emailAddress);
-        EmailAddressResponse data = createItem(getUrlBasePrefix() + ".type.byId.indicators.emailAddresses.byIndicatorId", EmailAddressResponse.class, ownerName, map, null);
+        EmailAddressResponse data = createItem(getUrlBasePrefix() + ".byId.indicators.emailAddresses.byIndicatorId", EmailAddressResponse.class, ownerName, map, null);
 
         return data;
     }
@@ -99,7 +99,7 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     @Override
     public WriteListResponse<String> associateIndicatorFiles(P uniqueId, List<String> fileHashes, String ownerName) throws IOException {
         Map<String, Object> map = createParamMap("id", uniqueId);
-        WriteListResponse<String> data = createListWithParam(getUrlBasePrefix() + ".type.byId.indicators.files.byIndicatorId", FileListResponse.class, ownerName, map, "indicatorId", fileHashes);
+        WriteListResponse<String> data = createListWithParam(getUrlBasePrefix() + ".byId.indicators.files.byIndicatorId", FileListResponse.class, ownerName, map, "indicatorId", fileHashes);
 
         return data;
     }
@@ -112,7 +112,7 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     @Override
     public ApiEntitySingleResponse associateIndicatorFile(P uniqueId, String fileHash, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "indicatorId", fileHash);
-        FileResponse data = createItem(getUrlBasePrefix() + ".type.byId.indicators.files.byIndicatorId", FileResponse.class, ownerName, map, null);
+        FileResponse data = createItem(getUrlBasePrefix() + ".byId.indicators.files.byIndicatorId", FileResponse.class, ownerName, map, null);
 
         return data;
     }
@@ -125,7 +125,7 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     @Override
     public WriteListResponse<String> associateIndicatorHosts(P uniqueId, List<String> hostNames, String ownerName) throws IOException {
         Map<String, Object> map = createParamMap("id", uniqueId);
-        WriteListResponse<String> data = createListWithParam(getUrlBasePrefix() + ".type.byId.indicators.hosts.byIndicatorId", HostListResponse.class, ownerName, map, "indicatorId", hostNames);
+        WriteListResponse<String> data = createListWithParam(getUrlBasePrefix() + ".byId.indicators.hosts.byIndicatorId", HostListResponse.class, ownerName, map, "indicatorId", hostNames);
 
         return data;
     }
@@ -138,7 +138,7 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     @Override
     public ApiEntitySingleResponse associateIndicatorHost(P uniqueId, String hostName, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "indicatorId", hostName);
-        HostResponse data = createItem(getUrlBasePrefix() + ".type.byId.indicators.hosts.byIndicatorId", HostResponse.class, ownerName, map, null);
+        HostResponse data = createItem(getUrlBasePrefix() + ".byId.indicators.hosts.byIndicatorId", HostResponse.class, ownerName, map, null);
 
         return data;
     }
@@ -151,7 +151,7 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     @Override
     public WriteListResponse<String> associateIndicatorUrls(P uniqueId, List<String> urlTexts, String ownerName) throws IOException {
         Map<String, Object> map = createParamMap("id", uniqueId);
-        WriteListResponse<String> data = createListWithParam(getUrlBasePrefix() + ".type.byId.indicators.urls.byIndicatorId", UrlListResponse.class, ownerName, map, "indicatorId", urlTexts);
+        WriteListResponse<String> data = createListWithParam(getUrlBasePrefix() + ".byId.indicators.urls.byIndicatorId", UrlListResponse.class, ownerName, map, "indicatorId", urlTexts);
 
         return data;
     }
@@ -164,7 +164,7 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     @Override
     public ApiEntitySingleResponse associateIndicatorUrl(P uniqueId, String urlText, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "indicatorId", urlText);
-        UrlResponse data = createItem(getUrlBasePrefix() + ".type.byId.indicators.urls.byIndicatorId", UrlResponse.class, ownerName, map, null);
+        UrlResponse data = createItem(getUrlBasePrefix() + ".byId.indicators.urls.byIndicatorId", UrlResponse.class, ownerName, map, null);
 
         return data;
     }
@@ -177,7 +177,7 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     @Override
     public WriteListResponse<String> deleteAssociatedIndicatorAddresses(P uniqueId, List<String> ipAddresses, String ownerName) throws IOException {
         Map<String, Object> map = createParamMap("id", uniqueId);
-        WriteListResponse<String> data = deleteList(getUrlBasePrefix() + ".type.byId.indicators.addresses.byIndicatorId", AddressResponse.class, ownerName, map, "indicatorId", ipAddresses);
+        WriteListResponse<String> data = deleteList(getUrlBasePrefix() + ".byId.indicators.addresses.byIndicatorId", AddressResponse.class, ownerName, map, "indicatorId", ipAddresses);
 
         return data;
     }
@@ -190,7 +190,7 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     @Override
     public ApiEntitySingleResponse deleteAssociatedIndicatorAddress(P uniqueId, String ipAddress, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "indicatorId", ipAddress);
-        AddressResponse data = deleteItem(getUrlBasePrefix() + ".type.byId.indicators.addresses.byIndicatorId", AddressResponse.class, ownerName, map);
+        AddressResponse data = deleteItem(getUrlBasePrefix() + ".byId.indicators.addresses.byIndicatorId", AddressResponse.class, ownerName, map);
 
         return data;
     }
@@ -203,7 +203,7 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     @Override
     public WriteListResponse<String> deleteAssociatedIndicatorEmailAddresses(P uniqueId, List<String> emailAddresses, String ownerName) throws IOException {
         Map<String, Object> map = createParamMap("id", uniqueId);
-        WriteListResponse<String> data = deleteList(getUrlBasePrefix() + ".type.byId.indicators.emailAddresses.byIndicatorId", AddressResponse.class, ownerName, map, "indicatorId", emailAddresses);
+        WriteListResponse<String> data = deleteList(getUrlBasePrefix() + ".byId.indicators.emailAddresses.byIndicatorId", AddressResponse.class, ownerName, map, "indicatorId", emailAddresses);
 
         return data;
     }
@@ -216,7 +216,7 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     @Override
     public ApiEntitySingleResponse deleteAssociatedIndicatorEmailAddress(P uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "indicatorId", emailAddress);
-        EmailAddressResponse data = deleteItem(getUrlBasePrefix() + ".type.byId.indicators.emailAddresses.byIndicatorId", EmailAddressResponse.class, ownerName, map);
+        EmailAddressResponse data = deleteItem(getUrlBasePrefix() + ".byId.indicators.emailAddresses.byIndicatorId", EmailAddressResponse.class, ownerName, map);
 
         return data;
     }
@@ -229,7 +229,7 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     @Override
     public WriteListResponse<String> deleteAssociatedIndicatorFiles(P uniqueId, List<String> fileHashes, String ownerName) throws IOException {
         Map<String, Object> map = createParamMap("id", uniqueId);
-        WriteListResponse<String> data = deleteList(getUrlBasePrefix() + ".type.byId.indicators.files.byIndicatorId", FileResponse.class, ownerName, map, "indicatorId", fileHashes);
+        WriteListResponse<String> data = deleteList(getUrlBasePrefix() + ".byId.indicators.files.byIndicatorId", FileResponse.class, ownerName, map, "indicatorId", fileHashes);
 
         return data;
     }
@@ -242,7 +242,7 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     @Override
     public ApiEntitySingleResponse deleteAssociatedIndicatorFile(P uniqueId, String fileHash, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "indicatorId", fileHash);
-        FileResponse data = deleteItem(getUrlBasePrefix() + ".type.byId.indicators.files.byIndicatorId", FileResponse.class, ownerName, map);
+        FileResponse data = deleteItem(getUrlBasePrefix() + ".byId.indicators.files.byIndicatorId", FileResponse.class, ownerName, map);
 
         return data;
     }
@@ -256,7 +256,7 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     public WriteListResponse<String> deleteAssociatedIndicatorHosts(P uniqueId, List<String> hostNames, String ownerName) throws IOException {
 
         Map<String, Object> map = createParamMap("id", uniqueId);
-        WriteListResponse<String> data = deleteList(getUrlBasePrefix() + ".type.byId.indicators.hosts.byIndicatorId", HostResponse.class, ownerName, map, "indicatorId", hostNames);
+        WriteListResponse<String> data = deleteList(getUrlBasePrefix() + ".byId.indicators.hosts.byIndicatorId", HostResponse.class, ownerName, map, "indicatorId", hostNames);
 
         return data;
     }
@@ -269,7 +269,7 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     @Override
     public ApiEntitySingleResponse deleteAssociatedIndicatorHost(P uniqueId, String hostName, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "indicatorId", hostName);
-        HostResponse data = deleteItem(getUrlBasePrefix() + ".type.byId.indicators.hosts.byIndicatorId", HostResponse.class, ownerName, map);
+        HostResponse data = deleteItem(getUrlBasePrefix() + ".byId.indicators.hosts.byIndicatorId", HostResponse.class, ownerName, map);
 
         return data;
     }
@@ -282,7 +282,7 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     @Override
     public WriteListResponse<String> deleteAssociatedIndicatorUrls(P uniqueId, List<String> urlTexts, String ownerName) throws IOException {
         Map<String, Object> map = createParamMap("id", uniqueId);
-        WriteListResponse<String> data = deleteList(getUrlBasePrefix() + ".type.byId.indicators.urls.byIndicatorId", UrlResponse.class, ownerName, map, "indicatorId", urlTexts);
+        WriteListResponse<String> data = deleteList(getUrlBasePrefix() + ".byId.indicators.urls.byIndicatorId", UrlResponse.class, ownerName, map, "indicatorId", urlTexts);
 
         return data;
     }
@@ -295,7 +295,7 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     @Override
     public ApiEntitySingleResponse deleteAssociatedIndicatorUrl(P uniqueId, String urlText, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "indicatorId", urlText);
-        UrlResponse data = deleteItem(getUrlBasePrefix() + ".type.byId.indicators.urls.byIndicatorId", UrlResponse.class, ownerName, map);
+        UrlResponse data = deleteItem(getUrlBasePrefix() + ".byId.indicators.urls.byIndicatorId", UrlResponse.class, ownerName, map);
 
         return data;
     }

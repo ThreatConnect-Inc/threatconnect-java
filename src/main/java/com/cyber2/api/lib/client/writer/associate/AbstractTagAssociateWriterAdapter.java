@@ -62,7 +62,7 @@ public abstract class AbstractTagAssociateWriterAdapter<T,P> extends AbstractBas
     @Override
     public WriteListResponse<String> deleteAssociatedTags(P uniqueId, List<String> tagNames, String ownerName) throws IOException {
         Map<String, Object> map = createParamMap("id", uniqueId);
-        WriteListResponse<String> data = deleteList(getUrlBasePrefix() + ".type.byId.tags.byName", TagResponse.class, ownerName, map, "tagName", tagNames);
+        WriteListResponse<String> data = deleteList(getUrlBasePrefix() + ".byId.tags.byName", TagResponse.class, ownerName, map, "tagName", tagNames);
 
         return data;
     }
@@ -75,7 +75,7 @@ public abstract class AbstractTagAssociateWriterAdapter<T,P> extends AbstractBas
     @Override
     public ApiEntitySingleResponse deleteAssociatedTag(P uniqueId, String tagName, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "tagName", tagName);
-        TagResponse item = deleteItem(getUrlBasePrefix() + ".type.byId.tags.byName", TagResponse.class, ownerName, map);
+        TagResponse item = deleteItem(getUrlBasePrefix() + ".byId.tags.byName", TagResponse.class, ownerName, map);
 
         return item;
     }

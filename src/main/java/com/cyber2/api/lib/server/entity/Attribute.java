@@ -5,14 +5,12 @@
 package com.cyber2.api.lib.server.entity;
 
 import com.cyber2.api.lib.server.entity.format.DateSerializer;
-import com.cyber2.api.lib.server.entity.init.ApiEntityInit;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.ToString;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
@@ -22,6 +20,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "Attribute")
+@ToString
 public class Attribute
 {
     @XmlElement(name = "Id", required = true)
@@ -41,10 +40,6 @@ public class Attribute
     @XmlElement(name = "Displayed", required = false)
     private Boolean displayed;
     
-    protected Attribute()
-    {
-    }
-    
     public Integer getId()
     {
         return id;
@@ -57,7 +52,7 @@ public class Attribute
 
     public String getType()
     {
-        return type;
+        return type == null ? getClass().getSimpleName().toLowerCase() : type;
     }
 
     public void setType(String type)

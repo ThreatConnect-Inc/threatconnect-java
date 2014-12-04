@@ -63,7 +63,7 @@ public abstract class AbstractSecurityLabelAssociateWriterAdapter<T,P> extends A
     @Override
     public WriteListResponse<String> deleteAssociatedSecurityLabel(P uniqueId, List<String> securityLabels, String ownerName) throws IOException {
         Map<String, Object> map = createParamMap("id", uniqueId);
-        WriteListResponse<String> data = deleteList(getUrlBasePrefix() + ".type.byId.securityLabels.byName", SecurityLabelResponse.class, ownerName, map, "securityLabel", securityLabels);
+        WriteListResponse<String> data = deleteList(getUrlBasePrefix() + ".byId.securityLabels.byName", SecurityLabelResponse.class, ownerName, map, "securityLabel", securityLabels);
 
         return data;
 
@@ -77,7 +77,7 @@ public abstract class AbstractSecurityLabelAssociateWriterAdapter<T,P> extends A
     @Override
     public ApiEntitySingleResponse deleteAssociatedSecurityLabel(P uniqueId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "securityLabel", securityLabel);
-        SecurityLabelResponse item = deleteItem(getUrlBasePrefix() + ".type.byId.tags.byName", SecurityLabelResponse.class, ownerName, map);
+        SecurityLabelResponse item = deleteItem(getUrlBasePrefix() + ".byId.tags.byName", SecurityLabelResponse.class, ownerName, map);
 
         return item;
     }

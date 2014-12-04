@@ -15,6 +15,7 @@ import com.cyber2.api.lib.exception.FailedResponseException;
 import com.cyber2.api.lib.server.response.entity.ApiEntitySingleResponse;
 import java.io.EOFException;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -256,13 +257,15 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
             url += "?owner=" + ownerName;
         }
 
+
         if (this instanceof UrlTypeable) {
             url = url.replace("{type}", ((UrlTypeable) this).getUrlType());
         }
 
         if (paramMap != null) {
             for (Entry<String, Object> entry : paramMap.entrySet()) {
-                url = url.replace(String.format("{%s}", entry.getKey()), entry.getValue().toString());
+                String value = URLEncoder.encode( entry.getValue().toString(), "UTF-8");
+                url = url.replace(String.format("{%s}", entry.getKey()), value );
             }
         }
 

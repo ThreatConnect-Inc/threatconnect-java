@@ -66,6 +66,12 @@ public class VictimWriterAdapter
             public Integer getId(Victim item) {
                 return VictimWriterAdapter.this.getId(item);
             }
+
+            @Override
+            public String getUrlType()
+            {
+                return VictimWriterAdapter.this.getUrlType();
+            }
         };
 
         indAssocWriter = new AbstractIndicatorAssociateWriterAdapter<Victim,Integer>(
