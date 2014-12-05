@@ -9,10 +9,14 @@ NOTES
         |-> response  (Wrapper for collection based writes, see WriteListResponse )
     |-> config        (Configuration classes to load URLs and connection credentials)
     |-> conn          (Connection classes to manage interaction with API)
-    |-> examples      (Example classes using the API, this code would live outside the library)
+    |-> examples      (Example classes using the API)
     |-> exception     (Exception classes)
     |-> server        (Effectively a copy of ThreatConnect API entity library with un-needed dependencies excluded)
     |-> util          (Utility package)
+
+# Target Structure (target)
+
+    |-> 
 
 # Resources
     | -> src/main/resources  (holds configuration files for connection, urls, and log4j2
