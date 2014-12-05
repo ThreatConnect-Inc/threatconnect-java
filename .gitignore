@@ -1,4 +1,4 @@
 src/main/resources/rebel.xml
 target/*
-!target/*/threatconnect-java-api/*
-!target/*/threatconnect/tc-api-lib-0.5.0-bin.zip
+!target/threatconnect-java-api/*
+!target/tc-api-lib-0.5.0-bin.zip
