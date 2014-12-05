@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+<!-- 
+====================================
+TYPICAL COMMANDS FOR BUILD/PACKAGE PREP:
+====================================
+mvn clean javadoc:javadoc package
+-->
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.cyber2.api.lib</groupId>
-    <artifactId>tcApiLib</artifactId>
+    <artifactId>tc-api-lib</artifactId>
     <version>0.5.0</version>
     <packaging>jar</packaging>
     <properties>
@@ -74,7 +81,90 @@
             <version>2.5</version>
         </dependency>
 
-
     </dependencies>
+
+    <build>
+    <plugins>
+
+      <!-- javadoc -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.10.1</version>
+      </plugin>
+
+      <!-- don't include local config.properties in build -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.5</version>
+        <configuration>
+            <excludes>
+                <exclude>**/config.properties</exclude>
+            </excludes>
+        </configuration>
+      </plugin>
+
+      <!-- package lib, examples,  and docs -->
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.7</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <configuration>
+              <target>
+
+                <delete dir="${project.build.directory}/threatconnect-java-api" failonerror="false" />
+
+                <mkdir dir="${project.build.directory}/threatconnect-java-api/lib"/>
+                <mkdir dir="${project.build.directory}/threatconnect-java-api/third-party"/>
+                <mkdir dir="${project.build.directory}/threatconnect-java-api/doc"/>
+
+                <!-- jar file -->
+                <copy file="${project.build.directory}/${project.build.finalName}.jar" 
+                      tofile="${project.build.directory}/threatconnect-java-api/lib/${project.build.finalName}.jar"/>
+
+                <!-- examples -->
+                <copy file="${basedir}/src/main/resources/config.example.properties"
+                      tofile="${project.build.directory}/threatconnect-java-api/examples/resources/config.properties" />
+                <copy todir="${project.build.directory}/threatconnect-java-api/examples/com/cyber2/api/lib/examples" >  
+                    <fileset dir="${basedir}/src/main/java/com/cyber2/api/lib/examples" includes="**"/>  
+                </copy>
+
+                <!-- doc -->
+                <copy todir="${project.build.directory}/threatconnect-java-api/doc/apidocs" >  
+                    <fileset dir="${project.build.directory}/site/apidocs" includes="**"/>  
+                </copy>
+                <copy todir="${project.build.directory}/threatconnect-java-api/doc/guide" >  
+                    <fileset dir="${basedir}/guide" includes="**"/>  
+                </copy>
+
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- package third-party jar files -->
+          <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>package</phase>
+                <goals>
+                  <goal>copy-dependencies</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${project.build.directory}/threatconnect-java-api/third-party</outputDirectory>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+    </plugins>
+  </build>
 
 </project>

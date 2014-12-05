@@ -18,7 +18,7 @@ public class Configuration {
     private String tcApiAccessID;
     private String tcApiUserSecretKey;
 
-    private String contentType = ContentType.APPLICATION_JSON.getMimeType();
+    private final String contentType = ContentType.APPLICATION_JSON.getMimeType();
 
     public static Configuration build(Properties props) {
 
@@ -27,7 +27,6 @@ public class Configuration {
         cc.tcApiUrl = props.getProperty("connection.tcApiUrl");
         cc.tcApiAccessID = props.getProperty("connection.tcApiAccessID");
         cc.tcApiUserSecretKey = props.getProperty("connection.tcApiUserSecretKey");
-        cc.contentType = props.getProperty("connection.contentType");
 
         return cc;
     }
@@ -78,15 +77,9 @@ public class Configuration {
     /**
      * @return the contentType
      */
-    public String getContentType() {
+    public String getContentType()
+    {
         return contentType;
     }
 
-    /**
-     * @param contentType the contentType to set
-     */
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
-    
 }
