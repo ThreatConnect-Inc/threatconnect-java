@@ -1,7 +1,7 @@
 NOTES
 ===
 
-# Source Structure (src/main/java/com/cyber2/api/lib):
+## Source Structure (src/main/java/com/cyber2/api/lib):
 
     |-> client
         |-> reader    (Classes for reading from API, see ReaderAdapterFactory )
@@ -14,10 +14,10 @@ NOTES
     |-> server        (Effectively a copy of ThreatConnect API entity library with un-needed dependencies excluded)
     |-> util          (Utility package)
 
-# Resources
+## Resources
     | -> src/main/resources  (holds configuration files for connection, urls, and log4j2
 
-# Distribution Zip File (target/tc-api-lib-0.5.0-bin.zip)
+## Distribution Zip File (target/tc-api-lib-0.5.0-bin.zip)
 
     |-> lib           (Distribution library)
     |-> third-party   (Third Party dependencies)
@@ -25,14 +25,14 @@ NOTES
     |-> doc           (Quick start guide in PDF/HTML format)
 
 
-# Open Questions
+## Open Questions
 - Class com.cyber2.api.lib.examples.groups.GroupExample has some test examples. Would this be how developers use the API???
 
 - Are there any utility classes we can add to make it more useful? (i.e. export to csv, export to json)
 
 
 
-# Status
+## Status
 1. Implement API for GET/POST/PUT/DELETE (Complete)
 2. Create Quick Start Developer Guide (DRAFT Complete)
 3. Prepare Examples covering difference operations (Complete)
