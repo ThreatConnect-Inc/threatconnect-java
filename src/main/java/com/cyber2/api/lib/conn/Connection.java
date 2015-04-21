@@ -7,6 +7,8 @@ package com.cyber2.api.lib.conn;
 
 import com.cyber2.api.lib.config.Configuration;
 import com.cyber2.api.lib.config.URLConfiguration;
+
+import java.io.Closeable;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -25,7 +27,8 @@ import org.apache.logging.log4j.Logger;
  *
  * @author dtineo
  */
-public class Connection<T> {
+public class Connection<T> implements Closeable
+{
 
     private final Logger logger = LogManager.getLogger(Connection.class);
     private final CloseableHttpClient apiClient = createApiClient();
@@ -104,5 +107,16 @@ public class Connection<T> {
         } catch (IOException ex) {
             logger.error("Error disconnecting from httpClient", ex);
         }
+    }
+
+    /**
+     * Calls disconnect to close httpClient
+     *
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    public void close() throws IOException
+    {
+       this.disconnect();
     }
 }

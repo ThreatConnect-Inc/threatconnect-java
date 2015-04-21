@@ -13,6 +13,7 @@ import com.cyber2.api.lib.exception.FailedResponseException;
 import com.cyber2.api.lib.server.response.entity.ApiEntityListResponse;
 import com.cyber2.api.lib.server.response.entity.ApiEntitySingleResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.apache.logging.log4j.LogManager;
@@ -52,6 +53,27 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter {
 
         logger.debug("calling url=" + url);
         String content = executor.executeGet(url);
+        logger.debug("returning content=" + content);
+
+        return content;
+    }
+
+    protected InputStream getFile(String propName, String ownerName, Map<String,Object> paramMap) throws IOException
+    {
+        String url = getConn().getUrlConfig().getUrl(propName);
+
+        if (ownerName != null) {
+            url += "?owner=" + ownerName;
+        }
+
+        if (paramMap != null) {
+            for(Entry<String,Object> entry : paramMap.entrySet()) {
+                url = url.replace(String.format("{%s}", entry.getKey()), entry.getValue().toString() );
+            }
+        }
+
+        logger.debug("Calling url=" + url);
+        InputStream content = executor.executeDownloadByteStream(url);
         logger.debug("returning content=" + content);
 
         return content;

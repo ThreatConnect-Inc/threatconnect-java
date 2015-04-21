@@ -1,0 +1,1 @@
+A small file to test document uploading

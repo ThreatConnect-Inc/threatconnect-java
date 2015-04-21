@@ -14,7 +14,9 @@ import com.cyber2.api.lib.conn.RequestExecutor.HttpMethod;
 import com.cyber2.api.lib.exception.FailedResponseException;
 import com.cyber2.api.lib.server.response.entity.ApiEntitySingleResponse;
 import java.io.EOFException;
+import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
@@ -244,6 +246,27 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
         throws IOException, FailedResponseException {
 
         return modifyItem(propName, type, ownerName, paramMap, saveObject, HttpMethod.POST);
+    }
+
+    protected void uploadFile(String propName, File file, Map<String, Object> paramMap) throws FailedResponseException
+    {
+        logger.debug("Getting URL: " + propName);
+        String url = getConn().getUrlConfig().getUrl(propName);
+        logger.debug("\tURL: " + url);
+
+        try
+        {
+            if (paramMap != null) {
+                for (Entry<String, Object> entry : paramMap.entrySet()) {
+                    String value = URLEncoder.encode( entry.getValue().toString(), "UTF-8");
+                    url = url.replace(String.format("{%s}", entry.getKey()), value );
+                }
+            }
+            executor.executeUploadByteStream(url, file);
+        } catch (IOException e)
+        {
+            throw new FailedResponseException("Failed to upload file: " + e.getMessage());
+        }
     }
 
     private <T extends ApiEntitySingleResponse> T modifyItem(String propName, Class<T> type, String ownerName, Map<String, Object> paramMap, Object saveObject, HttpMethod requestType)

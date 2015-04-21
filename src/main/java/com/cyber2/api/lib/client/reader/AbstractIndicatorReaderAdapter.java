@@ -20,33 +20,18 @@ import com.cyber2.api.lib.client.UrlTypeable;
 import com.cyber2.api.lib.conn.Connection;
 import com.cyber2.api.lib.conn.RequestExecutor;
 import com.cyber2.api.lib.exception.FailedResponseException;
-import com.cyber2.api.lib.server.entity.Address;
-import com.cyber2.api.lib.server.entity.Adversary;
-import com.cyber2.api.lib.server.entity.Attribute;
-import com.cyber2.api.lib.server.entity.Email;
-import com.cyber2.api.lib.server.entity.File;
-import com.cyber2.api.lib.server.entity.Group;
-import com.cyber2.api.lib.server.entity.Host;
-import com.cyber2.api.lib.server.entity.Incident;
-import com.cyber2.api.lib.server.entity.Indicator;
-import com.cyber2.api.lib.server.entity.Owner;
-import com.cyber2.api.lib.server.entity.SecurityLabel;
-import com.cyber2.api.lib.server.entity.Signature;
-import com.cyber2.api.lib.server.entity.Tag;
-import com.cyber2.api.lib.server.entity.Threat;
-import com.cyber2.api.lib.server.entity.Url;
-import com.cyber2.api.lib.server.entity.Victim;
-import com.cyber2.api.lib.server.entity.VictimAsset;
-import com.cyber2.api.lib.server.entity.VictimEmailAddress;
-import com.cyber2.api.lib.server.entity.VictimNetworkAccount;
-import com.cyber2.api.lib.server.entity.VictimPhone;
-import com.cyber2.api.lib.server.entity.VictimSocialNetwork;
-import com.cyber2.api.lib.server.entity.VictimWebSite;
+import com.cyber2.api.lib.server.entity.*;
 import com.cyber2.api.lib.server.response.entity.ApiEntityListResponse;
 import com.cyber2.api.lib.server.response.entity.ApiEntitySingleResponse;
+import com.cyber2.api.lib.server.response.entity.BulkStatusResponse;
 import com.cyber2.api.lib.server.response.entity.IndicatorListResponse;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * AbstractIndicatorReaderAdapter is the primary client adapter for all Adversary group level objects.
@@ -209,6 +194,41 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     @Override
     protected String getUrlBasePrefix() {
         return "v2.indicators.type";
+    }
+
+
+    public BulkStatusResponse getBulkStatus(String ownerName) throws IOException, FailedResponseException
+    {
+        return getItem("v2.bulk", BulkStatusResponse.class, ownerName, null);
+    }
+
+    public void downloadBulkIndicatorJson(String ownerName, Path outputPath) throws IOException
+    {
+        Map<String, Object> param = new HashMap<>();
+        param.put("format", "json");
+
+        InputStream in = downloadBulkHelper(ownerName, param);
+
+        if (null != in) {
+            Files.copy(in, outputPath);
+        }
+    }
+
+    public void downloadBulkIndicatorCsv(String ownerName, Path outputPath) throws IOException
+    {
+        Map<String, Object> param = new HashMap<>();
+        param.put("format", "csv");
+
+        InputStream in = downloadBulkHelper(ownerName, param);
+
+        if (null != in) {
+            Files.copy(in, outputPath);
+        }
+    }
+
+    private InputStream downloadBulkHelper(String ownerName, Map<String, Object> param) throws IOException
+    {
+        return getFile("v2.bulk.download", ownerName, param);
     }
 
     public String getIndicatorsAsText() throws IOException {

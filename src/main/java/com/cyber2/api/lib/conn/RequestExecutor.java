@@ -7,7 +7,9 @@ package com.cyber2.api.lib.conn;
 
 import com.cyber2.api.lib.util.StringUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import java.io.IOException;
+
+import java.io.*;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
@@ -17,6 +19,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.ContentType;
+import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
@@ -90,7 +93,6 @@ public class RequestExecutor {
         if ( obj != null )  applyEntityAsJSON( httpBase, obj );
 
         ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), path, null);
-
         logger.debug("Request: " + httpBase.getRequestLine());
         CloseableHttpResponse response = this.conn.getApiClient().execute(httpBase);
         String result = null;
@@ -108,5 +110,73 @@ public class RequestExecutor {
         }
 
         return result;
+    }
+
+    /**
+     * Execute an HTTP request and return the raw input stream.  <i>Caller is responsible for closing InputStream.</i>
+     *
+     * @param path url to issue request to
+     * @return raw input stream from response
+     * @throws IOException
+     */
+    public InputStream executeDownloadByteStream(String path) throws IOException {
+        if (this.conn.getConfig() == null) {
+            throw new IllegalStateException("Can't execute HTTP request when configuration is undefined.");
+        }
+
+        InputStream stream = null;
+
+        String fullPath = this.conn.getConfig().getTcApiUrl() + path;
+
+        logger.debug("Calling GET: " + fullPath);
+        HttpRequestBase httpBase = getBase(fullPath, HttpMethod.GET);
+
+        ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), path, null);
+        httpBase.addHeader("Accept", "application/octet-stream");
+        logger.debug("Request: " + httpBase.getRequestLine());
+        CloseableHttpResponse response = this.conn.getApiClient().execute(httpBase);
+
+
+        logger.debug(response.getStatusLine());
+        HttpEntity entity = response.getEntity();
+        if (entity != null) {
+            stream = entity.getContent();
+            logger.debug(String.format("Result stream size: %d, encoding: %s",
+                                                entity.getContentLength(), entity.getContentEncoding()));
+        }
+        return stream;
+    }
+
+
+    public InputStream executeUploadByteStream(String path, File file) throws IOException
+    {
+        if (this.conn.getConfig() == null) {
+            throw new IllegalStateException("Can't execute HTTP request when configuration is undefined.");
+        }
+
+        InputStream stream = null;
+
+        String fullPath = this.conn.getConfig().getTcApiUrl() + path;
+
+        logger.debug("Calling POST: " + fullPath);
+        HttpPost httpBase = new HttpPost(fullPath);
+        httpBase.setEntity(new FileEntity(file));
+        ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), path, null);
+        httpBase.addHeader("Content-Type", "application/octet-stream");
+
+        logger.debug("Request: " + httpBase.getRequestLine());
+
+
+        CloseableHttpResponse response = this.conn.getApiClient().execute(httpBase);
+
+
+        logger.debug(response.getStatusLine());
+        HttpEntity entity = response.getEntity();
+        if (entity != null) {
+            stream = entity.getContent();
+            logger.debug(String.format("Result stream size: %d, encoding: %s",
+                    entity.getContentLength(), entity.getContentEncoding()));
+        }
+        return stream;
     }
 }

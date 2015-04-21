@@ -7,25 +7,8 @@ package com.cyber2.api.lib.client.writer;
 
 import com.cyber2.api.lib.conn.Connection;
 import com.cyber2.api.lib.conn.RequestExecutor;
-import com.cyber2.api.lib.server.entity.Address;
-import com.cyber2.api.lib.server.entity.Adversary;
-import com.cyber2.api.lib.server.entity.Email;
-import com.cyber2.api.lib.server.entity.EmailAddress;
-import com.cyber2.api.lib.server.entity.File;
-import com.cyber2.api.lib.server.entity.Host;
-import com.cyber2.api.lib.server.entity.Incident;
-import com.cyber2.api.lib.server.entity.Signature;
-import com.cyber2.api.lib.server.entity.Threat;
-import com.cyber2.api.lib.server.entity.Url;
-import com.cyber2.api.lib.server.response.entity.AddressResponse;
-import com.cyber2.api.lib.server.response.entity.AdversaryResponse;
-import com.cyber2.api.lib.server.response.entity.EmailAddressResponse;
-import com.cyber2.api.lib.server.response.entity.EmailResponse;
-import com.cyber2.api.lib.server.response.entity.HostResponse;
-import com.cyber2.api.lib.server.response.entity.IncidentResponse;
-import com.cyber2.api.lib.server.response.entity.SignatureResponse;
-import com.cyber2.api.lib.server.response.entity.ThreatResponse;
-import com.cyber2.api.lib.server.response.entity.UrlResponse;
+import com.cyber2.api.lib.server.entity.*;
+import com.cyber2.api.lib.server.response.entity.*;
 
 /**
  *
@@ -77,7 +60,7 @@ public class WriterAdapterFactory {
             }
         };
     }
-    
+
     public static AbstractIndicatorWriterAdapter<Address> createAddressIndicatorWriter(Connection conn) {
         return new AbstractIndicatorWriterAdapter<Address>(conn, new RequestExecutor(conn), AddressResponse.class) {
             @Override
@@ -150,5 +133,7 @@ public class WriterAdapterFactory {
         return new VictimWriterAdapter(conn, new RequestExecutor(conn));
     }
 
-
+    public static DocumentWriterAdapter createDocumentWriterAdapter(Connection conn) {
+        return new DocumentWriterAdapter(conn, new RequestExecutor(conn));
+    }
 }
