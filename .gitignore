@@ -2,3 +2,5 @@ src/main/resources/rebel.xml
 target/*
 !target/threatconnect-sdk/*
 !target/threatconnect-sdk-*
+.idea/*
+threatconnect-sdk.iml
