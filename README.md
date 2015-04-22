@@ -156,7 +156,7 @@ NOTES
 ## Resources
     | -> src/main/resources  (holds configuration files for connection, urls, and log4j2
 
-## Distribution Zip File (target/threatconnect-sdk-<version>.zip)
+## Distribution Zip File (target/threatconnect-sdk-&lt;version&gt;.zip)
 
     |-> lib           (Distribution library)
     |-> third-party   (Third Party dependencies)
