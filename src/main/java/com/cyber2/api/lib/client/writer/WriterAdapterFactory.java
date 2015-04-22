@@ -5,6 +5,7 @@
  */
 package com.cyber2.api.lib.client.writer;
 
+import com.cyber2.api.lib.client.reader.AbstractIndicatorReaderAdapter;
 import com.cyber2.api.lib.conn.Connection;
 import com.cyber2.api.lib.conn.RequestExecutor;
 import com.cyber2.api.lib.server.entity.*;
@@ -131,6 +132,35 @@ public class WriterAdapterFactory {
 
     public static VictimWriterAdapter createVictimWriter(Connection conn) {
         return new VictimWriterAdapter(conn, new RequestExecutor(conn));
+    }
+
+
+    public static AbstractIndicatorWriterAdapter getIndicatorWriter(String type, Connection conn) {
+        if (Character.isLowerCase(type.charAt(0))) {
+            String indType = Character.toLowerCase(type.charAt(0)) + type.substring(1);
+            return getIndicatorWriter(Indicator.Type.valueOf(indType), conn);
+        } else {
+            return getIndicatorWriter(Indicator.Type.valueOf(type), conn);
+        }
+
+    }
+
+    public static AbstractIndicatorWriterAdapter getIndicatorWriter(Indicator.Type type, Connection conn) {
+
+        switch (type) {
+            case Address:
+                return createAddressIndicatorWriter(conn);
+            case EmailAddress:
+                return createEmailAddressIndicatorWriter(conn);
+            case File:
+                return createFileIndicatorWriter(conn);
+            case Host:
+                return createHostIndicatorWriter(conn);
+            case Url:
+                return createUrlIndicatorWriter(conn);
+            default:
+                return null;
+        }
     }
 
     public static DocumentWriterAdapter createDocumentWriterAdapter(Connection conn) {
