@@ -77,64 +77,64 @@ public interface GroupAssociateWritable<P> {
     public ApiEntitySingleResponse associateGroupThreat(P uniqueId, Integer threatId, String ownerName) 
             throws IOException, FailedResponseException;
 
-    public WriteListResponse<Integer> deleteAssociatedGroupAdversaries(P uniqueId, List<Integer> adversaryIds) 
+    public WriteListResponse<Integer> dissociateGroupAdversaries(P uniqueId, List<Integer> adversaryIds)
         throws IOException;
 
-    public WriteListResponse<Integer> deleteAssociatedGroupAdversaries(P uniqueId, List<Integer> adversaryIds, String ownerName) 
+    public WriteListResponse<Integer> dissociateGroupAdversaries(P uniqueId, List<Integer> adversaryIds, String ownerName)
         throws IOException;
 
-    public ApiEntitySingleResponse deleteAssociatedGroupAdversary(P uniqueId, Integer adversaryId) 
+    public ApiEntitySingleResponse dissociateGroupAdversary(P uniqueId, Integer adversaryId)
         throws IOException, FailedResponseException;
     
-    public ApiEntitySingleResponse deleteAssociatedGroupAdversary(P uniqueId, Integer adversaryId, String ownerName) 
+    public ApiEntitySingleResponse dissociateGroupAdversary(P uniqueId, Integer adversaryId, String ownerName)
             throws IOException, FailedResponseException;
 
-    public WriteListResponse<Integer> deleteAssociatedGroupEmails(P uniqueId, List<Integer> emailIds) 
+    public WriteListResponse<Integer> dissociateGroupEmails(P uniqueId, List<Integer> emailIds)
         throws IOException;
 
-    public WriteListResponse<Integer> deleteAssociatedGroupEmails(P uniqueId, List<Integer> emailIds, String ownerName) 
+    public WriteListResponse<Integer> dissociateGroupEmails(P uniqueId, List<Integer> emailIds, String ownerName)
             throws IOException;
 
-    public ApiEntitySingleResponse deleteAssociatedGroupEmail(P uniqueId, Integer emailId) 
+    public ApiEntitySingleResponse dissociateGroupEmail(P uniqueId, Integer emailId)
         throws IOException, FailedResponseException;
     
-    public ApiEntitySingleResponse deleteAssociatedGroupEmail(P uniqueId, Integer emailId, String ownerName) 
+    public ApiEntitySingleResponse dissociateGroupEmail(P uniqueId, Integer emailId, String ownerName)
             throws IOException, FailedResponseException;
 
-    public WriteListResponse<Integer> deleteAssociatedGroupIncidents(P uniqueId, List<Integer> incidentIds) 
+    public WriteListResponse<Integer> dissociateGroupIncidents(P uniqueId, List<Integer> incidentIds)
         throws IOException;
 
-    public WriteListResponse<Integer> deleteAssociatedGroupIncidents(P uniqueId, List<Integer> incidentIds, String ownerName) 
+    public WriteListResponse<Integer> dissociateGroupIncidents(P uniqueId, List<Integer> incidentIds, String ownerName)
             throws IOException;
 
-    public ApiEntitySingleResponse deleteAssociatedGroupIncident(P uniqueId, Integer incidentId) 
+    public ApiEntitySingleResponse dissociateGroupIncident(P uniqueId, Integer incidentId)
         throws IOException, FailedResponseException;
     
-    public ApiEntitySingleResponse deleteAssociatedGroupIncident(P uniqueId, Integer incidentId, String ownerName) 
+    public ApiEntitySingleResponse dissociateGroupIncident(P uniqueId, Integer incidentId, String ownerName)
             throws IOException, FailedResponseException;
 
-    public WriteListResponse<Integer> deleteAssociatedGroupSignatures(P uniqueId, List<Integer> signatureIds) 
+    public WriteListResponse<Integer> dissociateGroupSignatures(P uniqueId, List<Integer> signatureIds)
         throws IOException;
 
-    public WriteListResponse<Integer> deleteAssociatedGroupSignatures(P uniqueId, List<Integer> signatureIds, String ownerName) 
+    public WriteListResponse<Integer> dissociateGroupSignatures(P uniqueId, List<Integer> signatureIds, String ownerName)
             throws IOException;
 
-    public ApiEntitySingleResponse deleteAssociatedGroupSignature(P uniqueId, Integer signatureId) 
+    public ApiEntitySingleResponse dissociateGroupSignature(P uniqueId, Integer signatureId)
         throws IOException, FailedResponseException;
     
-    public ApiEntitySingleResponse deleteAssociatedGroupSignature(P uniqueId, Integer signatureId, String ownerName) 
+    public ApiEntitySingleResponse dissociateGroupSignature(P uniqueId, Integer signatureId, String ownerName)
             throws IOException, FailedResponseException;
 
-    public WriteListResponse<Integer> deleteAssociatedGroupThreats(P uniqueId, List<Integer> threatIds) 
+    public WriteListResponse<Integer> dissociateGroupThreats(P uniqueId, List<Integer> threatIds)
         throws IOException;
 
-    public WriteListResponse<Integer> deleteAssociatedGroupThreats(P uniqueId, List<Integer> threatIds, String ownerName) 
+    public WriteListResponse<Integer> dissociateGroupThreats(P uniqueId, List<Integer> threatIds, String ownerName)
             throws IOException;
 
-    public ApiEntitySingleResponse deleteAssociatedGroupThreat(P uniqueId, Integer threatId) 
+    public ApiEntitySingleResponse dissociateGroupThreat(P uniqueId, Integer threatId)
         throws IOException, FailedResponseException;
     
-    public ApiEntitySingleResponse deleteAssociatedGroupThreat(P uniqueId, Integer threatId, String ownerName) 
+    public ApiEntitySingleResponse dissociateGroupThreat(P uniqueId, Integer threatId, String ownerName)
             throws IOException, FailedResponseException;
 
 }

@@ -50,7 +50,7 @@ public class EmailExample {
 
             doAssociateVictim(conn);
 
-            doRemoveAssociatedTag(conn);
+            doDissociateTag(conn);
 
         } catch (IOException ex ) {
             System.err.println("Error: " + ex);
@@ -399,7 +399,7 @@ public class EmailExample {
         }
     }
 
-    private static void doRemoveAssociatedTag(Connection conn) {
+    private static void doDissociateTag(Connection conn) {
 
         AbstractGroupWriterAdapter<Email> gWriter= WriterAdapterFactory.createEmailGroupWriter(conn);
         TagWriterAdapter tWriter = WriterAdapterFactory.createTagWriter(conn);
@@ -433,7 +433,7 @@ public class EmailExample {
                     // Delete Association
                     // -----------------------------------------------------------------------------------------------------------
                     ApiEntitySingleResponse deleteAssocResponse
-                        = gWriter.deleteAssociatedTag(createResponseEmail.getItem().getId(), createResponseTag.getItem().getName() );
+                        = gWriter.dissociateTag(createResponseEmail.getItem().getId(), createResponseTag.getItem().getName() );
 
                     if ( deleteAssocResponse.isSuccess() ) {
                         System.out.println("\tDeleted Associated Tag: " + createResponseTag.getItem().getName() );

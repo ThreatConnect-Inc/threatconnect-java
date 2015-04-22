@@ -56,12 +56,12 @@ public abstract class AbstractSecurityLabelAssociateWriterAdapter<T,P> extends A
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedSecurityLabel(P uniqueId, List<String> securityLabels) throws IOException {
-        return deleteAssociatedSecurityLabel(uniqueId, securityLabels, null);
+    public WriteListResponse<String> dissociateSecurityLabel(P uniqueId, List<String> securityLabels) throws IOException {
+        return dissociateSecurityLabel(uniqueId, securityLabels, null);
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedSecurityLabel(P uniqueId, List<String> securityLabels, String ownerName) throws IOException {
+    public WriteListResponse<String> dissociateSecurityLabel(P uniqueId, List<String> securityLabels, String ownerName) throws IOException {
         Map<String, Object> map = createParamMap("id", uniqueId);
         WriteListResponse<String> data = deleteList(getUrlBasePrefix() + ".byId.securityLabels.byName", SecurityLabelResponse.class, ownerName, map, "securityLabel", securityLabels);
 
@@ -70,12 +70,12 @@ public abstract class AbstractSecurityLabelAssociateWriterAdapter<T,P> extends A
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedSecurityLabel(P uniqueId, String securityLabel) throws IOException, FailedResponseException {
-        return deleteAssociatedSecurityLabel(uniqueId, securityLabel, null);
+    public ApiEntitySingleResponse dissociateSecurityLabel(P uniqueId, String securityLabel) throws IOException, FailedResponseException {
+        return dissociateSecurityLabel(uniqueId, securityLabel, null);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedSecurityLabel(P uniqueId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse dissociateSecurityLabel(P uniqueId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "securityLabel", securityLabel);
         SecurityLabelResponse item = deleteItem(getUrlBasePrefix() + ".byId.tags.byName", SecurityLabelResponse.class, ownerName, map);
 

@@ -55,12 +55,12 @@ public abstract class AbstractTagAssociateWriterAdapter<T,P> extends AbstractBas
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedTags(P uniqueId, List<String> tagNames) throws IOException {
-        return deleteAssociatedTags(uniqueId, tagNames, null);
+    public WriteListResponse<String> dissociateTags(P uniqueId, List<String> tagNames) throws IOException {
+        return dissociateTags(uniqueId, tagNames, null);
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedTags(P uniqueId, List<String> tagNames, String ownerName) throws IOException {
+    public WriteListResponse<String> dissociateTags(P uniqueId, List<String> tagNames, String ownerName) throws IOException {
         Map<String, Object> map = createParamMap("id", uniqueId);
         WriteListResponse<String> data = deleteList(getUrlBasePrefix() + ".byId.tags.byName", TagResponse.class, ownerName, map, "tagName", tagNames);
 
@@ -68,12 +68,12 @@ public abstract class AbstractTagAssociateWriterAdapter<T,P> extends AbstractBas
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedTag(P uniqueId, String tagName) throws IOException, FailedResponseException {
-        return deleteAssociatedTag(uniqueId, tagName, null);
+    public ApiEntitySingleResponse dissociateTag(P uniqueId, String tagName) throws IOException, FailedResponseException {
+        return dissociateTag(uniqueId, tagName, null);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedTag(P uniqueId, String tagName, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse dissociateTag(P uniqueId, String tagName, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "tagName", tagName);
         TagResponse item = deleteItem(getUrlBasePrefix() + ".byId.tags.byName", TagResponse.class, ownerName, map);
 

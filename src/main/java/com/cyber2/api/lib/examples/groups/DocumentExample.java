@@ -51,7 +51,7 @@ public class DocumentExample
 
             doAssociateVictim(conn);
 
-            doRemoveAssociatedTag(conn);
+            doDissociateTag(conn);
         } catch (IOException ex ) {
             System.err.println("Error: " + ex);
         }
@@ -342,7 +342,7 @@ public class DocumentExample
         }
     }
 
-    private static void doRemoveAssociatedTag(Connection conn) {
+    private static void doDissociateTag(Connection conn) {
 
         AbstractGroupWriterAdapter<Document> gWriter= WriterAdapterFactory.createDocumentWriterAdapter(conn);
         TagWriterAdapter tWriter = WriterAdapterFactory.createTagWriter(conn);
@@ -376,7 +376,7 @@ public class DocumentExample
                     // Delete Association
                     // -----------------------------------------------------------------------------------------------------------
                     ApiEntitySingleResponse deleteAssocResponse
-                            = gWriter.deleteAssociatedTag(createResponseDocument.getItem().getId(), createResponseTag.getItem().getName() );
+                            = gWriter.dissociateTag(createResponseDocument.getItem().getId(), createResponseTag.getItem().getName() );
 
                     if ( deleteAssocResponse.isSuccess() ) {
                         System.out.println("\tDeleted Associated Tag: " + createResponseTag.getItem().getName() );

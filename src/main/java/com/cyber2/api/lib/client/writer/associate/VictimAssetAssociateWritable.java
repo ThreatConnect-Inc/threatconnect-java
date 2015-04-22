@@ -68,55 +68,55 @@ public interface VictimAssetAssociateWritable<P> {
     public ApiEntitySingleResponse associateVictimAssetWebsite(P uniqueId, Integer assetId, String ownerName) 
             throws IOException, FailedResponseException;
     
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetEmailAddresses(P uniqueId, List<Integer> assetIds) throws IOException;
+    public WriteListResponse<Integer> dissociateVictimAssetEmailAddresses(P uniqueId, List<Integer> assetIds) throws IOException;
     
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetEmailAddresses(P uniqueId, List<Integer> assetIds, String ownerName) 
+    public WriteListResponse<Integer> dissociateVictimAssetEmailAddresses(P uniqueId, List<Integer> assetIds, String ownerName)
         throws IOException;
         
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetEmailAddress(P uniqueId, Integer assetId) 
+    public ApiEntitySingleResponse dissociateVictimAssetEmailAddress(P uniqueId, Integer assetId)
         throws IOException, FailedResponseException;
             
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetEmailAddress(P uniqueId, Integer assetId, String ownerName) 
+    public ApiEntitySingleResponse dissociateVictimAssetEmailAddress(P uniqueId, Integer assetId, String ownerName)
         throws IOException, FailedResponseException;
 
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetNetworkAccounts(P uniqueId, List<Integer> assetIds) throws IOException;
+    public WriteListResponse<Integer> dissociateVictimAssetNetworkAccounts(P uniqueId, List<Integer> assetIds) throws IOException;
     
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetNetworkAccounts(P uniqueId, List<Integer> assetIds, String ownerName) 
+    public WriteListResponse<Integer> dissociateVictimAssetNetworkAccounts(P uniqueId, List<Integer> assetIds, String ownerName)
         throws IOException;
         
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetNetworkAccount(P uniqueId, Integer assetId) throws IOException, FailedResponseException;
+    public ApiEntitySingleResponse dissociateVictimAssetNetworkAccount(P uniqueId, Integer assetId) throws IOException, FailedResponseException;
             
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetNetworkAccount(P uniqueId, Integer assetId, String ownerName) 
+    public ApiEntitySingleResponse dissociateVictimAssetNetworkAccount(P uniqueId, Integer assetId, String ownerName)
         throws IOException, FailedResponseException;
         
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetPhoneNumbers(P uniqueId, List<Integer> assetIds) throws IOException;
+    public WriteListResponse<Integer> dissociateVictimAssetPhoneNumbers(P uniqueId, List<Integer> assetIds) throws IOException;
     
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetPhoneNumbers(P uniqueId, List<Integer> assetIds, String ownerName)
+    public WriteListResponse<Integer> dissociateVictimAssetPhoneNumbers(P uniqueId, List<Integer> assetIds, String ownerName)
         throws IOException;
         
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetPhoneNumber(P uniqueId, Integer assetId) throws IOException, FailedResponseException;
+    public ApiEntitySingleResponse dissociateVictimAssetPhoneNumber(P uniqueId, Integer assetId) throws IOException, FailedResponseException;
             
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetPhoneNumber(P uniqueId, Integer assetId, String ownerName)
+    public ApiEntitySingleResponse dissociateVictimAssetPhoneNumber(P uniqueId, Integer assetId, String ownerName)
             throws IOException, FailedResponseException;
         
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetSocialNetworks(P uniqueId, List<Integer> assetIds) throws IOException, FailedResponseException;
+    public WriteListResponse<Integer> dissociateVictimAssetSocialNetworks(P uniqueId, List<Integer> assetIds) throws IOException, FailedResponseException;
     
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetSocialNetworks(P uniqueId, List<Integer> assetIds, String ownerName) 
+    public WriteListResponse<Integer> dissociateVictimAssetSocialNetworks(P uniqueId, List<Integer> assetIds, String ownerName)
             throws IOException;
         
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetSocialNetwork(P uniqueId, Integer assetId) throws IOException, FailedResponseException;
+    public ApiEntitySingleResponse dissociateVictimAssetSocialNetwork(P uniqueId, Integer assetId) throws IOException, FailedResponseException;
             
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetSocialNetwork(P uniqueId, Integer assetId, String ownerName) 
+    public ApiEntitySingleResponse dissociateVictimAssetSocialNetwork(P uniqueId, Integer assetId, String ownerName)
             throws IOException, FailedResponseException;
         
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetWebsites(P uniqueId, List<Integer> assetIds) throws IOException;
+    public WriteListResponse<Integer> dissociateVictimAssetWebsites(P uniqueId, List<Integer> assetIds) throws IOException;
     
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetWebsites(P uniqueId, List<Integer> assetIds, String ownerName) 
+    public WriteListResponse<Integer> dissociateVictimAssetWebsites(P uniqueId, List<Integer> assetIds, String ownerName)
             throws IOException;
         
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetWebsite(P uniqueId, Integer assetId) throws IOException, FailedResponseException;
+    public ApiEntitySingleResponse dissociateVictimAssetWebsite(P uniqueId, Integer assetId) throws IOException, FailedResponseException;
             
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetWebsite(P uniqueId, Integer assetId, String ownerName) 
+    public ApiEntitySingleResponse dissociateVictimAssetWebsite(P uniqueId, Integer assetId, String ownerName)
             throws IOException, FailedResponseException;
     
 }

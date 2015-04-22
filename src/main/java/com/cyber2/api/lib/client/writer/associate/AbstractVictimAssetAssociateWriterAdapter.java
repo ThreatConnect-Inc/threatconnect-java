@@ -168,12 +168,12 @@ public abstract class AbstractVictimAssetAssociateWriterAdapter<T,P> extends Abs
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetEmailAddresses(P uniqueId, List<Integer> assetIds) throws IOException {
-        return deleteAssociatedVictimAssetEmailAddresses(uniqueId, assetIds, null);
+    public WriteListResponse<Integer> dissociateVictimAssetEmailAddresses(P uniqueId, List<Integer> assetIds) throws IOException {
+        return dissociateVictimAssetEmailAddresses(uniqueId, assetIds, null);
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetEmailAddresses(P uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
+    public WriteListResponse<Integer> dissociateVictimAssetEmailAddresses(P uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
 
         Map<String, Object> map = createParamMap("id", uniqueId);
         WriteListResponse<Integer> data = deleteList(getUrlBasePrefix() + ".byId.victimAssets.emailAddresses.byAssetId", VictimEmailAddressResponse.class, ownerName, map, "assetId", assetIds);
@@ -182,12 +182,12 @@ public abstract class AbstractVictimAssetAssociateWriterAdapter<T,P> extends Abs
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetEmailAddress(P uniqueId, Integer assetId) throws IOException, FailedResponseException {
-        return deleteAssociatedVictimAssetEmailAddress(uniqueId, assetId, null);
+    public ApiEntitySingleResponse dissociateVictimAssetEmailAddress(P uniqueId, Integer assetId) throws IOException, FailedResponseException {
+        return dissociateVictimAssetEmailAddress(uniqueId, assetId, null);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetEmailAddress(P uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse dissociateVictimAssetEmailAddress(P uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
 
         Map<String, Object> map = createParamMap("id", uniqueId, "assetId", assetId);
         VictimEmailAddressResponse item = deleteItem(getUrlBasePrefix() + ".byId.victimAssets.emailAddresses.byAssetId", VictimEmailAddressResponse.class, ownerName, map);
@@ -196,12 +196,12 @@ public abstract class AbstractVictimAssetAssociateWriterAdapter<T,P> extends Abs
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetNetworkAccounts(P uniqueId, List<Integer> assetIds) throws IOException {
-        return deleteAssociatedVictimAssetNetworkAccounts(uniqueId, assetIds, null);
+    public WriteListResponse<Integer> dissociateVictimAssetNetworkAccounts(P uniqueId, List<Integer> assetIds) throws IOException {
+        return dissociateVictimAssetNetworkAccounts(uniqueId, assetIds, null);
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetNetworkAccounts(P uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
+    public WriteListResponse<Integer> dissociateVictimAssetNetworkAccounts(P uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
 
         Map<String, Object> map = createParamMap("id", uniqueId);
         WriteListResponse<Integer> data = deleteList(getUrlBasePrefix() + ".byId.victimAssets.networkAccounts.byAssetId", VictimNetworkAccountResponse.class, ownerName, map, "assetId", assetIds);
@@ -210,12 +210,12 @@ public abstract class AbstractVictimAssetAssociateWriterAdapter<T,P> extends Abs
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetNetworkAccount(P uniqueId, Integer assetId) throws IOException, FailedResponseException {
-        return deleteAssociatedVictimAssetNetworkAccount(uniqueId, assetId, null);
+    public ApiEntitySingleResponse dissociateVictimAssetNetworkAccount(P uniqueId, Integer assetId) throws IOException, FailedResponseException {
+        return dissociateVictimAssetNetworkAccount(uniqueId, assetId, null);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetNetworkAccount(P uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse dissociateVictimAssetNetworkAccount(P uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
 
         Map<String, Object> map = createParamMap("id", uniqueId, "assetId", assetId);
         VictimNetworkAccountResponse item = deleteItem(getUrlBasePrefix() + ".byId.victimAssets.networkAccounts.byAssetId", VictimNetworkAccountResponse.class, ownerName, map);
@@ -224,12 +224,12 @@ public abstract class AbstractVictimAssetAssociateWriterAdapter<T,P> extends Abs
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetPhoneNumbers(P uniqueId, List<Integer> assetIds) throws IOException {
-        return deleteAssociatedVictimAssetPhoneNumbers(uniqueId, assetIds, null);
+    public WriteListResponse<Integer> dissociateVictimAssetPhoneNumbers(P uniqueId, List<Integer> assetIds) throws IOException {
+        return dissociateVictimAssetPhoneNumbers(uniqueId, assetIds, null);
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetPhoneNumbers(P uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
+    public WriteListResponse<Integer> dissociateVictimAssetPhoneNumbers(P uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
 
         Map<String, Object> map = createParamMap("id", uniqueId);
         WriteListResponse<Integer> data = deleteList(getUrlBasePrefix() + ".byId.victimAssets.phoneNumbers.byAssetId", VictimPhoneResponse.class, ownerName, map, "assetId", assetIds);
@@ -238,12 +238,12 @@ public abstract class AbstractVictimAssetAssociateWriterAdapter<T,P> extends Abs
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetPhoneNumber(P uniqueId, Integer assetId) throws IOException, FailedResponseException {
-        return deleteAssociatedVictimAssetPhoneNumber(uniqueId, assetId, null);
+    public ApiEntitySingleResponse dissociateVictimAssetPhoneNumber(P uniqueId, Integer assetId) throws IOException, FailedResponseException {
+        return dissociateVictimAssetPhoneNumber(uniqueId, assetId, null);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetPhoneNumber(P uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse dissociateVictimAssetPhoneNumber(P uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
 
         Map<String, Object> map = createParamMap("id", uniqueId, "assetId", assetId);
         VictimPhoneResponse item = deleteItem(getUrlBasePrefix() + ".byId.victimAssets.phoneNumbers.byAssetId", VictimPhoneResponse.class, ownerName, map);
@@ -252,12 +252,12 @@ public abstract class AbstractVictimAssetAssociateWriterAdapter<T,P> extends Abs
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetSocialNetworks(P uniqueId, List<Integer> assetIds) throws IOException, FailedResponseException {
-        return deleteAssociatedVictimAssetSocialNetworks(uniqueId, assetIds, null);
+    public WriteListResponse<Integer> dissociateVictimAssetSocialNetworks(P uniqueId, List<Integer> assetIds) throws IOException, FailedResponseException {
+        return dissociateVictimAssetSocialNetworks(uniqueId, assetIds, null);
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetSocialNetworks(P uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
+    public WriteListResponse<Integer> dissociateVictimAssetSocialNetworks(P uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
         Map<String, Object> map = createParamMap("id", uniqueId);
         WriteListResponse<Integer> data = deleteList(getUrlBasePrefix() + ".byId.victimAssets.socialNetworks.byAssetId", VictimNetworkAccountResponse.class, ownerName, map, "assetId", assetIds);
 
@@ -265,12 +265,12 @@ public abstract class AbstractVictimAssetAssociateWriterAdapter<T,P> extends Abs
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetSocialNetwork(P uniqueId, Integer assetId) throws IOException, FailedResponseException {
-        return deleteAssociatedVictimAssetSocialNetwork(uniqueId, assetId, null);
+    public ApiEntitySingleResponse dissociateVictimAssetSocialNetwork(P uniqueId, Integer assetId) throws IOException, FailedResponseException {
+        return dissociateVictimAssetSocialNetwork(uniqueId, assetId, null);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetSocialNetwork(P uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse dissociateVictimAssetSocialNetwork(P uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "assetId", assetId);
         VictimSocialNetworkResponse item = deleteItem(getUrlBasePrefix() + ".byId.victimAssets.socialNetworks.byAssetId", VictimSocialNetworkResponse.class, ownerName, map);
 
@@ -278,12 +278,12 @@ public abstract class AbstractVictimAssetAssociateWriterAdapter<T,P> extends Abs
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetWebsites(P uniqueId, List<Integer> assetIds) throws IOException {
-        return deleteAssociatedVictimAssetWebsites(uniqueId, assetIds, null);
+    public WriteListResponse<Integer> dissociateVictimAssetWebsites(P uniqueId, List<Integer> assetIds) throws IOException {
+        return dissociateVictimAssetWebsites(uniqueId, assetIds, null);
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetWebsites(P uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
+    public WriteListResponse<Integer> dissociateVictimAssetWebsites(P uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
 
         Map<String, Object> map = createParamMap("id", uniqueId);
         WriteListResponse<Integer> data = deleteList(getUrlBasePrefix() + ".byId.victimAssets.websites.byAssetId", VictimWebSiteResponse.class, ownerName, map, "assetId", assetIds);
@@ -292,12 +292,12 @@ public abstract class AbstractVictimAssetAssociateWriterAdapter<T,P> extends Abs
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetWebsite(P uniqueId, Integer assetId) throws IOException, FailedResponseException {
-        return deleteAssociatedVictimAssetWebsite(uniqueId, assetId, null);
+    public ApiEntitySingleResponse dissociateVictimAssetWebsite(P uniqueId, Integer assetId) throws IOException, FailedResponseException {
+        return dissociateVictimAssetWebsite(uniqueId, assetId, null);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetWebsite(P uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse dissociateVictimAssetWebsite(P uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "assetId", assetId);
         VictimWebSiteResponse item = deleteItem(getUrlBasePrefix() + ".byId.victimAssets.website.byAssetId", VictimWebSiteResponse.class, ownerName, map);
 

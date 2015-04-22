@@ -50,7 +50,7 @@ public class SignatureExample {
 
             doAssociateVictim(conn);
 
-            doRemoveAssociatedTag(conn);
+            doDissociateTag(conn);
 
         } catch (IOException ex ) {
             System.err.println("Error: " + ex);
@@ -397,7 +397,7 @@ public class SignatureExample {
         }
     }
 
-    private static void doRemoveAssociatedTag(Connection conn) {
+    private static void doDissociateTag(Connection conn) {
 
         AbstractGroupWriterAdapter<Signature> gWriter= WriterAdapterFactory.createSignatureGroupWriter(conn);
         TagWriterAdapter tWriter = WriterAdapterFactory.createTagWriter(conn);
@@ -431,7 +431,7 @@ public class SignatureExample {
                     // Delete Association
                     // -----------------------------------------------------------------------------------------------------------
                     ApiEntitySingleResponse deleteAssocResponse
-                        = gWriter.deleteAssociatedTag(createResponseSignature.getItem().getId(), createResponseTag.getItem().getName() );
+                        = gWriter.dissociateTag(createResponseSignature.getItem().getId(), createResponseTag.getItem().getName() );
 
                     if ( deleteAssocResponse.isSuccess() ) {
                         System.out.println("\tDeleted Associated Tag: " + createResponseTag.getItem().getName() );

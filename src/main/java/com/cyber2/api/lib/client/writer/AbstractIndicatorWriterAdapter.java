@@ -505,203 +505,203 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedGroupAdversaries(String uniqueId, List<Integer> adversaryIds) throws IOException {
-        return groupAssocWriter.deleteAssociatedGroupAdversaries(uniqueId, adversaryIds);
+    public WriteListResponse<Integer> dissociateGroupAdversaries(String uniqueId, List<Integer> adversaryIds) throws IOException {
+        return groupAssocWriter.dissociateGroupAdversaries(uniqueId, adversaryIds);
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedGroupAdversaries(String uniqueId, List<Integer> adversaryIds, String ownerName) throws IOException {
-        return groupAssocWriter.deleteAssociatedGroupAdversaries(uniqueId, adversaryIds, ownerName);
+    public WriteListResponse<Integer> dissociateGroupAdversaries(String uniqueId, List<Integer> adversaryIds, String ownerName) throws IOException {
+        return groupAssocWriter.dissociateGroupAdversaries(uniqueId, adversaryIds, ownerName);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedGroupAdversary(String uniqueId, Integer adversaryId) throws IOException, FailedResponseException {
-        return groupAssocWriter.deleteAssociatedGroupAdversary(uniqueId, adversaryId);
+    public ApiEntitySingleResponse dissociateGroupAdversary(String uniqueId, Integer adversaryId) throws IOException, FailedResponseException {
+        return groupAssocWriter.dissociateGroupAdversary(uniqueId, adversaryId);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedGroupAdversary(String uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
-        return groupAssocWriter.deleteAssociatedGroupAdversary(uniqueId, adversaryId, ownerName);
+    public ApiEntitySingleResponse dissociateGroupAdversary(String uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.dissociateGroupAdversary(uniqueId, adversaryId, ownerName);
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedGroupEmails(String uniqueId, List<Integer> emailIds) throws IOException {
-        return groupAssocWriter.deleteAssociatedGroupEmails(uniqueId, emailIds);
+    public WriteListResponse<Integer> dissociateGroupEmails(String uniqueId, List<Integer> emailIds) throws IOException {
+        return groupAssocWriter.dissociateGroupEmails(uniqueId, emailIds);
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedGroupEmails(String uniqueId, List<Integer> emailIds, String ownerName) throws IOException {
-        return groupAssocWriter.deleteAssociatedGroupEmails(uniqueId, emailIds, ownerName);
+    public WriteListResponse<Integer> dissociateGroupEmails(String uniqueId, List<Integer> emailIds, String ownerName) throws IOException {
+        return groupAssocWriter.dissociateGroupEmails(uniqueId, emailIds, ownerName);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedGroupEmail(String uniqueId, Integer emailId) throws IOException, FailedResponseException {
-        return groupAssocWriter.deleteAssociatedGroupEmail(uniqueId, emailId);
+    public ApiEntitySingleResponse dissociateGroupEmail(String uniqueId, Integer emailId) throws IOException, FailedResponseException {
+        return groupAssocWriter.dissociateGroupEmail(uniqueId, emailId);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedGroupEmail(String uniqueId, Integer emailId, String ownerName) throws IOException, FailedResponseException {
-        return groupAssocWriter.deleteAssociatedGroupEmail(uniqueId, emailId, ownerName);
+    public ApiEntitySingleResponse dissociateGroupEmail(String uniqueId, Integer emailId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.dissociateGroupEmail(uniqueId, emailId, ownerName);
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedGroupIncidents(String uniqueId, List<Integer> incidentIds) throws IOException {
-        return groupAssocWriter.deleteAssociatedGroupIncidents(uniqueId, incidentIds);
+    public WriteListResponse<Integer> dissociateGroupIncidents(String uniqueId, List<Integer> incidentIds) throws IOException {
+        return groupAssocWriter.dissociateGroupIncidents(uniqueId, incidentIds);
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedGroupIncidents(String uniqueId, List<Integer> incidentIds, String ownerName) throws IOException {
-        return groupAssocWriter.deleteAssociatedGroupIncidents(uniqueId, incidentIds, ownerName);
+    public WriteListResponse<Integer> dissociateGroupIncidents(String uniqueId, List<Integer> incidentIds, String ownerName) throws IOException {
+        return groupAssocWriter.dissociateGroupIncidents(uniqueId, incidentIds, ownerName);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedGroupIncident(String uniqueId, Integer incidentId) throws IOException, FailedResponseException {
-        return groupAssocWriter.deleteAssociatedGroupIncident(uniqueId, incidentId);
+    public ApiEntitySingleResponse dissociateGroupIncident(String uniqueId, Integer incidentId) throws IOException, FailedResponseException {
+        return groupAssocWriter.dissociateGroupIncident(uniqueId, incidentId);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedGroupIncident(String uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
-        return groupAssocWriter.deleteAssociatedGroupIncident(uniqueId, incidentId, ownerName);
+    public ApiEntitySingleResponse dissociateGroupIncident(String uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.dissociateGroupIncident(uniqueId, incidentId, ownerName);
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedGroupSignatures(String uniqueId, List<Integer> signatureIds) throws IOException {
-        return groupAssocWriter.deleteAssociatedGroupSignatures(uniqueId, signatureIds);
+    public WriteListResponse<Integer> dissociateGroupSignatures(String uniqueId, List<Integer> signatureIds) throws IOException {
+        return groupAssocWriter.dissociateGroupSignatures(uniqueId, signatureIds);
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedGroupSignatures(String uniqueId, List<Integer> signatureIds, String ownerName) throws IOException {
-        return groupAssocWriter.deleteAssociatedGroupSignatures(uniqueId, signatureIds, ownerName);
+    public WriteListResponse<Integer> dissociateGroupSignatures(String uniqueId, List<Integer> signatureIds, String ownerName) throws IOException {
+        return groupAssocWriter.dissociateGroupSignatures(uniqueId, signatureIds, ownerName);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedGroupSignature(String uniqueId, Integer signatureId) throws IOException, FailedResponseException {
-        return groupAssocWriter.deleteAssociatedGroupSignature(uniqueId, signatureId);
+    public ApiEntitySingleResponse dissociateGroupSignature(String uniqueId, Integer signatureId) throws IOException, FailedResponseException {
+        return groupAssocWriter.dissociateGroupSignature(uniqueId, signatureId);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedGroupSignature(String uniqueId, Integer signatureId, String ownerName) throws IOException, FailedResponseException {
-        return groupAssocWriter.deleteAssociatedGroupSignature(uniqueId, signatureId, ownerName);
+    public ApiEntitySingleResponse dissociateGroupSignature(String uniqueId, Integer signatureId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.dissociateGroupSignature(uniqueId, signatureId, ownerName);
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedGroupThreats(String uniqueId, List<Integer> threatIds) throws IOException {
-        return groupAssocWriter.deleteAssociatedGroupThreats(uniqueId, threatIds);
+    public WriteListResponse<Integer> dissociateGroupThreats(String uniqueId, List<Integer> threatIds) throws IOException {
+        return groupAssocWriter.dissociateGroupThreats(uniqueId, threatIds);
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedGroupThreats(String uniqueId, List<Integer> threatIds, String ownerName) throws IOException {
-        return groupAssocWriter.deleteAssociatedGroupThreats(uniqueId, threatIds, ownerName);
+    public WriteListResponse<Integer> dissociateGroupThreats(String uniqueId, List<Integer> threatIds, String ownerName) throws IOException {
+        return groupAssocWriter.dissociateGroupThreats(uniqueId, threatIds, ownerName);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedGroupThreat(String uniqueId, Integer threatId) throws IOException, FailedResponseException {
-        return groupAssocWriter.deleteAssociatedGroupThreat(uniqueId, threatId);
+    public ApiEntitySingleResponse dissociateGroupThreat(String uniqueId, Integer threatId) throws IOException, FailedResponseException {
+        return groupAssocWriter.dissociateGroupThreat(uniqueId, threatId);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedGroupThreat(String uniqueId, Integer threatId, String ownerName) throws IOException, FailedResponseException {
-        return groupAssocWriter.deleteAssociatedGroupThreat(uniqueId, threatId, ownerName);
+    public ApiEntitySingleResponse dissociateGroupThreat(String uniqueId, Integer threatId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.dissociateGroupThreat(uniqueId, threatId, ownerName);
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedIndicatorAddresses(String uniqueId, List<String> ipAddresses) throws IOException {
-        return indAssocWriter.deleteAssociatedIndicatorAddresses(uniqueId, ipAddresses);
+    public WriteListResponse<String> dissociateIndicatorAddresses(String uniqueId, List<String> ipAddresses) throws IOException {
+        return indAssocWriter.dissociateIndicatorAddresses(uniqueId, ipAddresses);
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedIndicatorAddresses(String uniqueId, List<String> ipAddresses, String ownerName) throws IOException {
-        return indAssocWriter.deleteAssociatedIndicatorAddresses(uniqueId, ipAddresses, ownerName);
+    public WriteListResponse<String> dissociateIndicatorAddresses(String uniqueId, List<String> ipAddresses, String ownerName) throws IOException {
+        return indAssocWriter.dissociateIndicatorAddresses(uniqueId, ipAddresses, ownerName);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedIndicatorAddress(String uniqueId, String ipAddress) throws IOException, FailedResponseException {
-        return indAssocWriter.deleteAssociatedIndicatorAddress(uniqueId, ipAddress);
+    public ApiEntitySingleResponse dissociateIndicatorAddress(String uniqueId, String ipAddress) throws IOException, FailedResponseException {
+        return indAssocWriter.dissociateIndicatorAddress(uniqueId, ipAddress);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedIndicatorAddress(String uniqueId, String ipAddress, String ownerName) throws IOException, FailedResponseException {
-        return indAssocWriter.deleteAssociatedIndicatorAddress(uniqueId, ipAddress, ownerName);
+    public ApiEntitySingleResponse dissociateIndicatorAddress(String uniqueId, String ipAddress, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.dissociateIndicatorAddress(uniqueId, ipAddress, ownerName);
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedIndicatorEmailAddresses(String uniqueId, List<String> emailAddresses) throws IOException {
-        return indAssocWriter.deleteAssociatedIndicatorEmailAddresses(uniqueId, emailAddresses);
+    public WriteListResponse<String> dissociateIndicatorEmailAddresses(String uniqueId, List<String> emailAddresses) throws IOException {
+        return indAssocWriter.dissociateIndicatorEmailAddresses(uniqueId, emailAddresses);
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedIndicatorEmailAddresses(String uniqueId, List<String> emailAddresses, String ownerName) throws IOException {
-        return indAssocWriter.deleteAssociatedIndicatorEmailAddresses(uniqueId, emailAddresses, ownerName);
+    public WriteListResponse<String> dissociateIndicatorEmailAddresses(String uniqueId, List<String> emailAddresses, String ownerName) throws IOException {
+        return indAssocWriter.dissociateIndicatorEmailAddresses(uniqueId, emailAddresses, ownerName);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedIndicatorEmailAddress(String uniqueId, String emailAddress) throws IOException, FailedResponseException {
-        return indAssocWriter.deleteAssociatedIndicatorEmailAddress(uniqueId, emailAddress);
+    public ApiEntitySingleResponse dissociateIndicatorEmailAddress(String uniqueId, String emailAddress) throws IOException, FailedResponseException {
+        return indAssocWriter.dissociateIndicatorEmailAddress(uniqueId, emailAddress);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedIndicatorEmailAddress(String uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
-        return indAssocWriter.deleteAssociatedIndicatorEmailAddress(uniqueId, emailAddress, ownerName);
+    public ApiEntitySingleResponse dissociateIndicatorEmailAddress(String uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.dissociateIndicatorEmailAddress(uniqueId, emailAddress, ownerName);
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedIndicatorFiles(String uniqueId, List<String> fileHashes) throws IOException {
-        return indAssocWriter.deleteAssociatedIndicatorFiles(uniqueId, fileHashes);
+    public WriteListResponse<String> dissociateIndicatorFiles(String uniqueId, List<String> fileHashes) throws IOException {
+        return indAssocWriter.dissociateIndicatorFiles(uniqueId, fileHashes);
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedIndicatorFiles(String uniqueId, List<String> fileHashes, String ownerName) throws IOException {
-        return indAssocWriter.deleteAssociatedIndicatorFiles(uniqueId, fileHashes, ownerName);
+    public WriteListResponse<String> dissociateIndicatorFiles(String uniqueId, List<String> fileHashes, String ownerName) throws IOException {
+        return indAssocWriter.dissociateIndicatorFiles(uniqueId, fileHashes, ownerName);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedIndicatorFile(String uniqueId, String fileHash) throws IOException, FailedResponseException {
-        return indAssocWriter.deleteAssociatedIndicatorFile(uniqueId, fileHash);
+    public ApiEntitySingleResponse dissociateIndicatorFile(String uniqueId, String fileHash) throws IOException, FailedResponseException {
+        return indAssocWriter.dissociateIndicatorFile(uniqueId, fileHash);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedIndicatorFile(String uniqueId, String fileHash, String ownerName) throws IOException, FailedResponseException {
-        return indAssocWriter.deleteAssociatedIndicatorFile(uniqueId, fileHash, ownerName);
+    public ApiEntitySingleResponse dissociateIndicatorFile(String uniqueId, String fileHash, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.dissociateIndicatorFile(uniqueId, fileHash, ownerName);
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedIndicatorHosts(String uniqueId, List<String> hostNames) throws IOException {
-        return indAssocWriter.deleteAssociatedIndicatorHosts(uniqueId, hostNames);
+    public WriteListResponse<String> dissociateIndicatorHosts(String uniqueId, List<String> hostNames) throws IOException {
+        return indAssocWriter.dissociateIndicatorHosts(uniqueId, hostNames);
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedIndicatorHosts(String uniqueId, List<String> hostNames, String ownerName) throws IOException {
-        return indAssocWriter.deleteAssociatedIndicatorHosts(uniqueId, hostNames, ownerName);
+    public WriteListResponse<String> dissociateIndicatorHosts(String uniqueId, List<String> hostNames, String ownerName) throws IOException {
+        return indAssocWriter.dissociateIndicatorHosts(uniqueId, hostNames, ownerName);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedIndicatorHost(String uniqueId, String hostName) throws IOException, FailedResponseException {
-        return indAssocWriter.deleteAssociatedIndicatorHost(uniqueId, hostName);
+    public ApiEntitySingleResponse dissociateIndicatorHost(String uniqueId, String hostName) throws IOException, FailedResponseException {
+        return indAssocWriter.dissociateIndicatorHost(uniqueId, hostName);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedIndicatorHost(String uniqueId, String hostName, String ownerName) throws IOException, FailedResponseException {
-        return indAssocWriter.deleteAssociatedIndicatorHost(uniqueId, hostName, ownerName);
+    public ApiEntitySingleResponse dissociateIndicatorHost(String uniqueId, String hostName, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.dissociateIndicatorHost(uniqueId, hostName, ownerName);
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedIndicatorUrls(String uniqueId, List<String> urlTexts) throws IOException {
-        return indAssocWriter.deleteAssociatedIndicatorUrls(uniqueId, urlTexts);
+    public WriteListResponse<String> dissociateIndicatorUrls(String uniqueId, List<String> urlTexts) throws IOException {
+        return indAssocWriter.dissociateIndicatorUrls(uniqueId, urlTexts);
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedIndicatorUrls(String uniqueId, List<String> urlTexts, String ownerName) throws IOException {
-        return indAssocWriter.deleteAssociatedIndicatorUrls(uniqueId, urlTexts, ownerName);
+    public WriteListResponse<String> dissociateIndicatorUrls(String uniqueId, List<String> urlTexts, String ownerName) throws IOException {
+        return indAssocWriter.dissociateIndicatorUrls(uniqueId, urlTexts, ownerName);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedIndicatorUrl(String uniqueId, String urlText) throws IOException, FailedResponseException {
-        return indAssocWriter.deleteAssociatedIndicatorUrl(uniqueId, urlText);
+    public ApiEntitySingleResponse dissociateIndicatorUrl(String uniqueId, String urlText) throws IOException, FailedResponseException {
+        return indAssocWriter.dissociateIndicatorUrl(uniqueId, urlText);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedIndicatorUrl(String uniqueId, String urlText, String ownerName) throws IOException, FailedResponseException {
-        return indAssocWriter.deleteAssociatedIndicatorUrl(uniqueId, urlText, ownerName);
+    public ApiEntitySingleResponse dissociateIndicatorUrl(String uniqueId, String urlText, String ownerName) throws IOException, FailedResponseException {
+        return indAssocWriter.dissociateIndicatorUrl(uniqueId, urlText, ownerName);
     }
 
     @Override
@@ -765,143 +765,143 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetEmailAddresses(String uniqueId, List<Integer> assetIds) throws IOException {
-        return victimAssetAssocWriter.deleteAssociatedVictimAssetEmailAddresses(uniqueId, assetIds);
+    public WriteListResponse<Integer> dissociateVictimAssetEmailAddresses(String uniqueId, List<Integer> assetIds) throws IOException {
+        return victimAssetAssocWriter.dissociateVictimAssetEmailAddresses(uniqueId, assetIds);
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetEmailAddresses(String uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
-        return victimAssetAssocWriter.deleteAssociatedVictimAssetEmailAddresses(uniqueId, assetIds, ownerName);
+    public WriteListResponse<Integer> dissociateVictimAssetEmailAddresses(String uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
+        return victimAssetAssocWriter.dissociateVictimAssetEmailAddresses(uniqueId, assetIds, ownerName);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetEmailAddress(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
-        return victimAssetAssocWriter.deleteAssociatedVictimAssetEmailAddress(uniqueId, assetId);
+    public ApiEntitySingleResponse dissociateVictimAssetEmailAddress(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.dissociateVictimAssetEmailAddress(uniqueId, assetId);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetEmailAddress(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
-        return victimAssetAssocWriter.deleteAssociatedVictimAssetEmailAddress(uniqueId, assetId, ownerName);
+    public ApiEntitySingleResponse dissociateVictimAssetEmailAddress(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.dissociateVictimAssetEmailAddress(uniqueId, assetId, ownerName);
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetNetworkAccounts(String uniqueId, List<Integer> assetIds) throws IOException {
-        return victimAssetAssocWriter.deleteAssociatedVictimAssetNetworkAccounts(uniqueId, assetIds);
+    public WriteListResponse<Integer> dissociateVictimAssetNetworkAccounts(String uniqueId, List<Integer> assetIds) throws IOException {
+        return victimAssetAssocWriter.dissociateVictimAssetNetworkAccounts(uniqueId, assetIds);
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetNetworkAccounts(String uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
-        return victimAssetAssocWriter.deleteAssociatedVictimAssetNetworkAccounts(uniqueId, assetIds, ownerName);
+    public WriteListResponse<Integer> dissociateVictimAssetNetworkAccounts(String uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
+        return victimAssetAssocWriter.dissociateVictimAssetNetworkAccounts(uniqueId, assetIds, ownerName);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetNetworkAccount(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse dissociateVictimAssetNetworkAccount(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.associateVictimAssetNetworkAccount(uniqueId, assetId);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetNetworkAccount(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
-        return victimAssetAssocWriter.deleteAssociatedVictimAssetNetworkAccount(uniqueId, assetId, ownerName);
+    public ApiEntitySingleResponse dissociateVictimAssetNetworkAccount(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.dissociateVictimAssetNetworkAccount(uniqueId, assetId, ownerName);
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetPhoneNumbers(String uniqueId, List<Integer> assetIds) throws IOException {
-        return victimAssetAssocWriter.deleteAssociatedVictimAssetPhoneNumbers(uniqueId, assetIds);
+    public WriteListResponse<Integer> dissociateVictimAssetPhoneNumbers(String uniqueId, List<Integer> assetIds) throws IOException {
+        return victimAssetAssocWriter.dissociateVictimAssetPhoneNumbers(uniqueId, assetIds);
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetPhoneNumbers(String uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
-        return victimAssetAssocWriter.deleteAssociatedVictimAssetPhoneNumbers(uniqueId, assetIds, ownerName);
+    public WriteListResponse<Integer> dissociateVictimAssetPhoneNumbers(String uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
+        return victimAssetAssocWriter.dissociateVictimAssetPhoneNumbers(uniqueId, assetIds, ownerName);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetPhoneNumber(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
-        return victimAssetAssocWriter.deleteAssociatedVictimAssetPhoneNumber(uniqueId, assetId);
+    public ApiEntitySingleResponse dissociateVictimAssetPhoneNumber(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.dissociateVictimAssetPhoneNumber(uniqueId, assetId);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetPhoneNumber(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
-        return victimAssetAssocWriter.deleteAssociatedVictimAssetPhoneNumber(uniqueId, assetId, ownerName);
+    public ApiEntitySingleResponse dissociateVictimAssetPhoneNumber(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.dissociateVictimAssetPhoneNumber(uniqueId, assetId, ownerName);
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetSocialNetworks(String uniqueId, List<Integer> assetIds) throws IOException, FailedResponseException {
-        return victimAssetAssocWriter.deleteAssociatedVictimAssetSocialNetworks(uniqueId, assetIds);
+    public WriteListResponse<Integer> dissociateVictimAssetSocialNetworks(String uniqueId, List<Integer> assetIds) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.dissociateVictimAssetSocialNetworks(uniqueId, assetIds);
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetSocialNetworks(String uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
-        return victimAssetAssocWriter.deleteAssociatedVictimAssetSocialNetworks(uniqueId, assetIds, ownerName);
+    public WriteListResponse<Integer> dissociateVictimAssetSocialNetworks(String uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
+        return victimAssetAssocWriter.dissociateVictimAssetSocialNetworks(uniqueId, assetIds, ownerName);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetSocialNetwork(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
-        return victimAssetAssocWriter.deleteAssociatedVictimAssetSocialNetwork(uniqueId, assetId);
+    public ApiEntitySingleResponse dissociateVictimAssetSocialNetwork(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.dissociateVictimAssetSocialNetwork(uniqueId, assetId);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetSocialNetwork(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
-        return victimAssetAssocWriter.deleteAssociatedVictimAssetSocialNetwork(uniqueId, assetId, ownerName);
+    public ApiEntitySingleResponse dissociateVictimAssetSocialNetwork(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.dissociateVictimAssetSocialNetwork(uniqueId, assetId, ownerName);
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetWebsites(String uniqueId, List<Integer> assetIds) throws IOException {
-        return victimAssetAssocWriter.deleteAssociatedVictimAssetWebsites(uniqueId, assetIds);
+    public WriteListResponse<Integer> dissociateVictimAssetWebsites(String uniqueId, List<Integer> assetIds) throws IOException {
+        return victimAssetAssocWriter.dissociateVictimAssetWebsites(uniqueId, assetIds);
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedVictimAssetWebsites(String uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
-        return victimAssetAssocWriter.deleteAssociatedVictimAssetWebsites(uniqueId, assetIds, ownerName);
+    public WriteListResponse<Integer> dissociateVictimAssetWebsites(String uniqueId, List<Integer> assetIds, String ownerName) throws IOException {
+        return victimAssetAssocWriter.dissociateVictimAssetWebsites(uniqueId, assetIds, ownerName);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetWebsite(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
-        return victimAssetAssocWriter.deleteAssociatedVictimAssetWebsite(uniqueId, assetId);
+    public ApiEntitySingleResponse dissociateVictimAssetWebsite(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.dissociateVictimAssetWebsite(uniqueId, assetId);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedVictimAssetWebsite(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
-        return victimAssetAssocWriter.deleteAssociatedVictimAssetWebsite(uniqueId, assetId, ownerName);
+    public ApiEntitySingleResponse dissociateVictimAssetWebsite(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+        return victimAssetAssocWriter.dissociateVictimAssetWebsite(uniqueId, assetId, ownerName);
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedTags(String uniqueId, List<String> tagNames) throws IOException {
-        return tagAssocWriter.deleteAssociatedTags(uniqueId, tagNames);
+    public WriteListResponse<String> dissociateTags(String uniqueId, List<String> tagNames) throws IOException {
+        return tagAssocWriter.dissociateTags(uniqueId, tagNames);
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedTags(String uniqueId, List<String> tagNames, String ownerName) throws IOException {
-        return tagAssocWriter.deleteAssociatedTags(uniqueId, tagNames, ownerName);
+    public WriteListResponse<String> dissociateTags(String uniqueId, List<String> tagNames, String ownerName) throws IOException {
+        return tagAssocWriter.dissociateTags(uniqueId, tagNames, ownerName);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedTag(String uniqueId, String tagName) throws IOException, FailedResponseException {
-        return tagAssocWriter.deleteAssociatedTag(uniqueId, tagName);
+    public ApiEntitySingleResponse dissociateTag(String uniqueId, String tagName) throws IOException, FailedResponseException {
+        return tagAssocWriter.dissociateTag(uniqueId, tagName);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedTag(String uniqueId, String tagName, String ownerName) throws IOException, FailedResponseException {
-        return tagAssocWriter.deleteAssociatedTag(uniqueId, tagName, ownerName);
+    public ApiEntitySingleResponse dissociateTag(String uniqueId, String tagName, String ownerName) throws IOException, FailedResponseException {
+        return tagAssocWriter.dissociateTag(uniqueId, tagName, ownerName);
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedSecurityLabel(String uniqueId, List<String> securityLabels) throws IOException {
-        return secLabelAssocWriter.deleteAssociatedSecurityLabel(uniqueId, securityLabels);
+    public WriteListResponse<String> dissociateSecurityLabel(String uniqueId, List<String> securityLabels) throws IOException {
+        return secLabelAssocWriter.dissociateSecurityLabel(uniqueId, securityLabels);
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedSecurityLabel(String uniqueId, List<String> securityLabels, String ownerName) throws IOException {
-        return secLabelAssocWriter.deleteAssociatedSecurityLabel(uniqueId, securityLabels, ownerName);
+    public WriteListResponse<String> dissociateSecurityLabel(String uniqueId, List<String> securityLabels, String ownerName) throws IOException {
+        return secLabelAssocWriter.dissociateSecurityLabel(uniqueId, securityLabels, ownerName);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedSecurityLabel(String uniqueId, String securityLabel) throws IOException, FailedResponseException {
-        return secLabelAssocWriter.deleteAssociatedSecurityLabel(uniqueId, securityLabel);
+    public ApiEntitySingleResponse dissociateSecurityLabel(String uniqueId, String securityLabel) throws IOException, FailedResponseException {
+        return secLabelAssocWriter.dissociateSecurityLabel(uniqueId, securityLabel);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedSecurityLabel(String uniqueId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
-        return secLabelAssocWriter.deleteAssociatedSecurityLabel(uniqueId, securityLabel, ownerName);
+    public ApiEntitySingleResponse dissociateSecurityLabel(String uniqueId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
+        return secLabelAssocWriter.dissociateSecurityLabel(uniqueId, securityLabel, ownerName);
     }
 
         @Override
@@ -1024,22 +1024,22 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedVictims(String uniqueId, List<Integer> victimIds) throws IOException {
-        return victimAssocWriter.deleteAssociatedVictims(uniqueId, victimIds);
+    public WriteListResponse<Integer> dissociateVictims(String uniqueId, List<Integer> victimIds) throws IOException {
+        return victimAssocWriter.dissociateVictims(uniqueId, victimIds);
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedVictims(String uniqueId, List<Integer> victimIds, String ownerName) throws IOException {
-        return victimAssocWriter.deleteAssociatedVictims(uniqueId, victimIds, ownerName);
+    public WriteListResponse<Integer> dissociateVictims(String uniqueId, List<Integer> victimIds, String ownerName) throws IOException {
+        return victimAssocWriter.dissociateVictims(uniqueId, victimIds, ownerName);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedVictim(String uniqueId, Integer victimId) throws IOException, FailedResponseException {
-        return victimAssocWriter.deleteAssociatedVictim(uniqueId, victimId);
+    public ApiEntitySingleResponse dissociateVictim(String uniqueId, Integer victimId) throws IOException, FailedResponseException {
+        return victimAssocWriter.dissociateVictim(uniqueId, victimId);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedVictim(String uniqueId, Integer victimId, String ownerName) throws IOException, FailedResponseException {
-        return victimAssocWriter.deleteAssociatedVictim(uniqueId, victimId, ownerName);
+    public ApiEntitySingleResponse dissociateVictim(String uniqueId, Integer victimId, String ownerName) throws IOException, FailedResponseException {
+        return victimAssocWriter.dissociateVictim(uniqueId, victimId, ownerName);
     }
 }

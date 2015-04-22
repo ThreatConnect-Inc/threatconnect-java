@@ -170,12 +170,12 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedIndicatorAddresses(P uniqueId, List<String> ipAddresses) throws IOException {
-        return deleteAssociatedIndicatorAddresses(uniqueId, ipAddresses, null);
+    public WriteListResponse<String> dissociateIndicatorAddresses(P uniqueId, List<String> ipAddresses) throws IOException {
+        return dissociateIndicatorAddresses(uniqueId, ipAddresses, null);
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedIndicatorAddresses(P uniqueId, List<String> ipAddresses, String ownerName) throws IOException {
+    public WriteListResponse<String> dissociateIndicatorAddresses(P uniqueId, List<String> ipAddresses, String ownerName) throws IOException {
         Map<String, Object> map = createParamMap("id", uniqueId);
         WriteListResponse<String> data = deleteList(getUrlBasePrefix() + ".byId.indicators.addresses.byIndicatorId", AddressResponse.class, ownerName, map, "indicatorId", ipAddresses);
 
@@ -183,12 +183,12 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedIndicatorAddress(P uniqueId, String ipAddress) throws IOException, FailedResponseException {
-        return deleteAssociatedIndicatorAddress(uniqueId, ipAddress, null);
+    public ApiEntitySingleResponse dissociateIndicatorAddress(P uniqueId, String ipAddress) throws IOException, FailedResponseException {
+        return dissociateIndicatorAddress(uniqueId, ipAddress, null);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedIndicatorAddress(P uniqueId, String ipAddress, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse dissociateIndicatorAddress(P uniqueId, String ipAddress, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "indicatorId", ipAddress);
         AddressResponse data = deleteItem(getUrlBasePrefix() + ".byId.indicators.addresses.byIndicatorId", AddressResponse.class, ownerName, map);
 
@@ -196,12 +196,12 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedIndicatorEmailAddresses(P uniqueId, List<String> emailAddresses) throws IOException {
-        return deleteAssociatedIndicatorEmailAddresses(uniqueId, emailAddresses, null);
+    public WriteListResponse<String> dissociateIndicatorEmailAddresses(P uniqueId, List<String> emailAddresses) throws IOException {
+        return dissociateIndicatorEmailAddresses(uniqueId, emailAddresses, null);
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedIndicatorEmailAddresses(P uniqueId, List<String> emailAddresses, String ownerName) throws IOException {
+    public WriteListResponse<String> dissociateIndicatorEmailAddresses(P uniqueId, List<String> emailAddresses, String ownerName) throws IOException {
         Map<String, Object> map = createParamMap("id", uniqueId);
         WriteListResponse<String> data = deleteList(getUrlBasePrefix() + ".byId.indicators.emailAddresses.byIndicatorId", AddressResponse.class, ownerName, map, "indicatorId", emailAddresses);
 
@@ -209,12 +209,12 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedIndicatorEmailAddress(P uniqueId, String emailAddress) throws IOException, FailedResponseException {
-        return deleteAssociatedIndicatorEmailAddress(uniqueId, emailAddress, null);
+    public ApiEntitySingleResponse dissociateIndicatorEmailAddress(P uniqueId, String emailAddress) throws IOException, FailedResponseException {
+        return dissociateIndicatorEmailAddress(uniqueId, emailAddress, null);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedIndicatorEmailAddress(P uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse dissociateIndicatorEmailAddress(P uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "indicatorId", emailAddress);
         EmailAddressResponse data = deleteItem(getUrlBasePrefix() + ".byId.indicators.emailAddresses.byIndicatorId", EmailAddressResponse.class, ownerName, map);
 
@@ -222,12 +222,12 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedIndicatorFiles(P uniqueId, List<String> fileHashes) throws IOException {
-        return deleteAssociatedIndicatorFiles(uniqueId, fileHashes, null);
+    public WriteListResponse<String> dissociateIndicatorFiles(P uniqueId, List<String> fileHashes) throws IOException {
+        return dissociateIndicatorFiles(uniqueId, fileHashes, null);
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedIndicatorFiles(P uniqueId, List<String> fileHashes, String ownerName) throws IOException {
+    public WriteListResponse<String> dissociateIndicatorFiles(P uniqueId, List<String> fileHashes, String ownerName) throws IOException {
         Map<String, Object> map = createParamMap("id", uniqueId);
         WriteListResponse<String> data = deleteList(getUrlBasePrefix() + ".byId.indicators.files.byIndicatorId", FileResponse.class, ownerName, map, "indicatorId", fileHashes);
 
@@ -235,12 +235,12 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedIndicatorFile(P uniqueId, String fileHash) throws IOException, FailedResponseException {
-        return deleteAssociatedIndicatorFile(uniqueId, fileHash, null);
+    public ApiEntitySingleResponse dissociateIndicatorFile(P uniqueId, String fileHash) throws IOException, FailedResponseException {
+        return dissociateIndicatorFile(uniqueId, fileHash, null);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedIndicatorFile(P uniqueId, String fileHash, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse dissociateIndicatorFile(P uniqueId, String fileHash, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "indicatorId", fileHash);
         FileResponse data = deleteItem(getUrlBasePrefix() + ".byId.indicators.files.byIndicatorId", FileResponse.class, ownerName, map);
 
@@ -248,12 +248,12 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedIndicatorHosts(P uniqueId, List<String> hostNames) throws IOException {
-        return deleteAssociatedIndicatorHosts(uniqueId, hostNames, null);
+    public WriteListResponse<String> dissociateIndicatorHosts(P uniqueId, List<String> hostNames) throws IOException {
+        return dissociateIndicatorHosts(uniqueId, hostNames, null);
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedIndicatorHosts(P uniqueId, List<String> hostNames, String ownerName) throws IOException {
+    public WriteListResponse<String> dissociateIndicatorHosts(P uniqueId, List<String> hostNames, String ownerName) throws IOException {
 
         Map<String, Object> map = createParamMap("id", uniqueId);
         WriteListResponse<String> data = deleteList(getUrlBasePrefix() + ".byId.indicators.hosts.byIndicatorId", HostResponse.class, ownerName, map, "indicatorId", hostNames);
@@ -262,12 +262,12 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedIndicatorHost(P uniqueId, String hostName) throws IOException, FailedResponseException {
-        return deleteAssociatedIndicatorHost(uniqueId, hostName, null);
+    public ApiEntitySingleResponse dissociateIndicatorHost(P uniqueId, String hostName) throws IOException, FailedResponseException {
+        return dissociateIndicatorHost(uniqueId, hostName, null);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedIndicatorHost(P uniqueId, String hostName, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse dissociateIndicatorHost(P uniqueId, String hostName, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "indicatorId", hostName);
         HostResponse data = deleteItem(getUrlBasePrefix() + ".byId.indicators.hosts.byIndicatorId", HostResponse.class, ownerName, map);
 
@@ -275,12 +275,12 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedIndicatorUrls(P uniqueId, List<String> urlTexts) throws IOException {
-        return deleteAssociatedIndicatorUrls(uniqueId, urlTexts, null);
+    public WriteListResponse<String> dissociateIndicatorUrls(P uniqueId, List<String> urlTexts) throws IOException {
+        return dissociateIndicatorUrls(uniqueId, urlTexts, null);
     }
 
     @Override
-    public WriteListResponse<String> deleteAssociatedIndicatorUrls(P uniqueId, List<String> urlTexts, String ownerName) throws IOException {
+    public WriteListResponse<String> dissociateIndicatorUrls(P uniqueId, List<String> urlTexts, String ownerName) throws IOException {
         Map<String, Object> map = createParamMap("id", uniqueId);
         WriteListResponse<String> data = deleteList(getUrlBasePrefix() + ".byId.indicators.urls.byIndicatorId", UrlResponse.class, ownerName, map, "indicatorId", urlTexts);
 
@@ -288,12 +288,12 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedIndicatorUrl(P uniqueId, String urlText) throws IOException, FailedResponseException {
-        return deleteAssociatedIndicatorUrl(uniqueId, urlText, null);
+    public ApiEntitySingleResponse dissociateIndicatorUrl(P uniqueId, String urlText) throws IOException, FailedResponseException {
+        return dissociateIndicatorUrl(uniqueId, urlText, null);
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedIndicatorUrl(P uniqueId, String urlText, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse dissociateIndicatorUrl(P uniqueId, String urlText, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "indicatorId", urlText);
         UrlResponse data = deleteItem(getUrlBasePrefix() + ".byId.indicators.urls.byIndicatorId", UrlResponse.class, ownerName, map);
 

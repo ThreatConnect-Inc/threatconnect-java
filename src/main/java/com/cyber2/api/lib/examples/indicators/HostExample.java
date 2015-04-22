@@ -50,7 +50,7 @@ public class HostExample {
 
             doAssociateVictim(conn);
 
-            doRemoveAssociatedTag(conn);
+            doDissociateTag(conn);
 
         } catch (IOException ex ) {
             System.err.println("Error: " + ex);
@@ -396,7 +396,7 @@ public class HostExample {
         }
     }
 
-    private static void doRemoveAssociatedTag(Connection conn) {
+    private static void doDissociateTag(Connection conn) {
 
         AbstractIndicatorWriterAdapter<Host> gWriter= WriterAdapterFactory.createHostIndicatorWriter(conn);
         TagWriterAdapter tWriter = WriterAdapterFactory.createTagWriter(conn);
@@ -430,7 +430,7 @@ public class HostExample {
                     // Delete Association
                     // -----------------------------------------------------------------------------------------------------------
                     ApiEntitySingleResponse deleteAssocResponse
-                        = gWriter.deleteAssociatedTag(createResponseHost.getItem().getHostName(), createResponseTag.getItem().getName() );
+                        = gWriter.dissociateTag(createResponseHost.getItem().getHostName(), createResponseTag.getItem().getName() );
 
                     if ( deleteAssocResponse.isSuccess() ) {
                         System.out.println("\tDeleted Associated Tag: " + createResponseTag.getItem().getName() );

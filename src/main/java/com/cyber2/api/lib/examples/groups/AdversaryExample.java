@@ -50,7 +50,7 @@ public class AdversaryExample {
 
             doAssociateVictim(conn);
 
-            doRemoveAssociatedTag(conn);
+            doDissociateTag(conn);
 
         } catch (IOException ex ) {
             System.err.println("Error: " + ex);
@@ -394,7 +394,7 @@ public class AdversaryExample {
         }
     }
 
-    private static void doRemoveAssociatedTag(Connection conn) {
+    private static void doDissociateTag(Connection conn) {
 
         AbstractGroupWriterAdapter<Adversary> gWriter= WriterAdapterFactory.createAdversaryGroupWriter(conn);
         TagWriterAdapter tWriter = WriterAdapterFactory.createTagWriter(conn);
@@ -428,7 +428,7 @@ public class AdversaryExample {
                     // Delete Association
                     // -----------------------------------------------------------------------------------------------------------
                     ApiEntitySingleResponse deleteAssocResponse
-                        = gWriter.deleteAssociatedTag(createResponseAdversary.getItem().getId(), createResponseTag.getItem().getName() );
+                        = gWriter.dissociateTag(createResponseAdversary.getItem().getId(), createResponseTag.getItem().getName() );
 
                     if ( deleteAssocResponse.isSuccess() ) {
                         System.out.println("\tDeleted Associated Tag: " + createResponseTag.getItem().getName() );

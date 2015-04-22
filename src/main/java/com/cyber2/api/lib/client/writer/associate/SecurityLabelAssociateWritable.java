@@ -27,15 +27,15 @@ public interface SecurityLabelAssociateWritable<P> {
    public ApiEntitySingleResponse associateSecurityLabel(P uniqueId, String securityLabel, String ownerName) 
             throws IOException, FailedResponseException;
 
-    public WriteListResponse<String> deleteAssociatedSecurityLabel(P uniqueId, List<String> securityLabels) 
+    public WriteListResponse<String> dissociateSecurityLabel(P uniqueId, List<String> securityLabels)
         throws IOException;
 
-    public WriteListResponse<String> deleteAssociatedSecurityLabel(P uniqueId, List<String> securityLabels, String ownerName) 
+    public WriteListResponse<String> dissociateSecurityLabel(P uniqueId, List<String> securityLabels, String ownerName)
         throws IOException;
 
-   public ApiEntitySingleResponse deleteAssociatedSecurityLabel(P uniqueId, String securityLabel) throws IOException, FailedResponseException;
+   public ApiEntitySingleResponse dissociateSecurityLabel(P uniqueId, String securityLabel) throws IOException, FailedResponseException;
 
-   public ApiEntitySingleResponse deleteAssociatedSecurityLabel(P uniqueId, String securityLabel, String ownerName) 
+   public ApiEntitySingleResponse dissociateSecurityLabel(P uniqueId, String securityLabel, String ownerName)
             throws IOException, FailedResponseException;
 
 

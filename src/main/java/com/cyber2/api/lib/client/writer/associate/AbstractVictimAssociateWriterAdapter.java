@@ -56,12 +56,12 @@ public abstract class AbstractVictimAssociateWriterAdapter<T,P> extends Abstract
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedVictims(P uniqueId, List<Integer> victimIds) throws IOException {
-        return deleteAssociatedVictims(uniqueId, victimIds, null);
+    public WriteListResponse<Integer> dissociateVictims(P uniqueId, List<Integer> victimIds) throws IOException {
+        return dissociateVictims(uniqueId, victimIds, null);
     }
 
     @Override
-    public WriteListResponse<Integer> deleteAssociatedVictims(P uniqueId, List<Integer> victimIds, String ownerName) throws IOException {
+    public WriteListResponse<Integer> dissociateVictims(P uniqueId, List<Integer> victimIds, String ownerName) throws IOException {
       Map<String, Object> map = createParamMap("id", uniqueId);
         WriteListResponse<Integer> data = deleteList(getUrlBasePrefix() + ".byId.victims.byVictimId", VictimResponse.class, ownerName, map, "victimId", victimIds);
 
@@ -70,13 +70,13 @@ public abstract class AbstractVictimAssociateWriterAdapter<T,P> extends Abstract
     }
 
     @Override
-    public ApiEntitySingleResponse deleteAssociatedVictim(P uniqueId, Integer victimId) throws IOException, FailedResponseException {
-        return deleteAssociatedVictim(uniqueId, victimId, null);
+    public ApiEntitySingleResponse dissociateVictim(P uniqueId, Integer victimId) throws IOException, FailedResponseException {
+        return dissociateVictim(uniqueId, victimId, null);
     }
 
 
     @Override
-   public ApiEntitySingleResponse deleteAssociatedVictim(P uniqueId, Integer victimId, String ownerName) throws IOException, FailedResponseException {
+   public ApiEntitySingleResponse dissociateVictim(P uniqueId, Integer victimId, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "victimId", victimId);
         VictimResponse item = deleteItem(getUrlBasePrefix() + ".byId.victim..byVictimId", VictimResponse.class, ownerName, map);
 

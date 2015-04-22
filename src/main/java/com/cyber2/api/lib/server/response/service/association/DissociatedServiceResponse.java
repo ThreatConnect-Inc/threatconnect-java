@@ -12,19 +12,19 @@ import com.cyber2.api.lib.server.response.service.ApiServiceResponse;
  *
  * @author James
  */
-public class DissociatedServiceResponse extends ApiServiceResponse
+public class DissociateServiceResponse extends ApiServiceResponse
 {
-    public DissociatedServiceResponse(String type, String name, String modifier)
+    public DissociateServiceResponse(String type, String name, String modifier)
     {
         super(type + " \"" + name + "\" association removed from " + modifier, true);
     }
     
-    public DissociatedServiceResponse(String type, String name)
+    public DissociateServiceResponse(String type, String name)
     {
         super(type + " \"" + name + "\" association removed", true);
     }
     
-    public DissociatedServiceResponse(String type)
+    public DissociateServiceResponse(String type)
     {
         super(type + " association removed", true);
     }

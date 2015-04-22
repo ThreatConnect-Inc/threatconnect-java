@@ -27,14 +27,14 @@ public interface TagAssociateWritable<P> {
    public ApiEntitySingleResponse associateTag(P uniqueId, String tagName, String ownerName) 
             throws IOException, FailedResponseException;
     
-   public WriteListResponse<String> deleteAssociatedTags(P uniqueId, List<String> tagNames) throws IOException;
+   public WriteListResponse<String> dissociateTags(P uniqueId, List<String> tagNames) throws IOException;
 
-   public WriteListResponse<String> deleteAssociatedTags(P uniqueId, List<String> tagNames, String ownerName) 
+   public WriteListResponse<String> dissociateTags(P uniqueId, List<String> tagNames, String ownerName)
             throws IOException;
 
-   public ApiEntitySingleResponse deleteAssociatedTag(P uniqueId, String tagName) throws IOException, FailedResponseException;
+   public ApiEntitySingleResponse dissociateTag(P uniqueId, String tagName) throws IOException, FailedResponseException;
 
-   public ApiEntitySingleResponse deleteAssociatedTag(P uniqueId, String tagName, String ownerName) 
+   public ApiEntitySingleResponse dissociateTag(P uniqueId, String tagName, String ownerName)
             throws IOException, FailedResponseException;
 
 }

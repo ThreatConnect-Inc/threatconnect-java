@@ -67,54 +67,54 @@ public interface IndicatorAssociateWritable<P> {
     public ApiEntitySingleResponse associateIndicatorUrl(P uniqueId, String urlText, String ownerName)     
             throws IOException, FailedResponseException;
 
-    public WriteListResponse<String> deleteAssociatedIndicatorAddresses(P uniqueId, List<String> ipAddresses) throws IOException;
+    public WriteListResponse<String> dissociateIndicatorAddresses(P uniqueId, List<String> ipAddresses) throws IOException;
 
-    public WriteListResponse<String> deleteAssociatedIndicatorAddresses(P uniqueId, List<String> ipAddresses, String ownerName) 
+    public WriteListResponse<String> dissociateIndicatorAddresses(P uniqueId, List<String> ipAddresses, String ownerName)
             throws IOException;
 
-    public ApiEntitySingleResponse deleteAssociatedIndicatorAddress(P uniqueId, String ipAddress) throws IOException, FailedResponseException;
+    public ApiEntitySingleResponse dissociateIndicatorAddress(P uniqueId, String ipAddress) throws IOException, FailedResponseException;
 
-    public ApiEntitySingleResponse deleteAssociatedIndicatorAddress(P uniqueId, String ipAddress, String ownerName) 
+    public ApiEntitySingleResponse dissociateIndicatorAddress(P uniqueId, String ipAddress, String ownerName)
             throws IOException, FailedResponseException;
 
-    public WriteListResponse<String> deleteAssociatedIndicatorEmailAddresses(P uniqueId, List<String> emailAddresses) throws IOException;
+    public WriteListResponse<String> dissociateIndicatorEmailAddresses(P uniqueId, List<String> emailAddresses) throws IOException;
 
-    public WriteListResponse<String> deleteAssociatedIndicatorEmailAddresses(P uniqueId, List<String> emailAddresses, String ownerName) 
+    public WriteListResponse<String> dissociateIndicatorEmailAddresses(P uniqueId, List<String> emailAddresses, String ownerName)
             throws IOException;
 
-    public ApiEntitySingleResponse deleteAssociatedIndicatorEmailAddress(P uniqueId, String emailAddress) throws IOException, FailedResponseException;
+    public ApiEntitySingleResponse dissociateIndicatorEmailAddress(P uniqueId, String emailAddress) throws IOException, FailedResponseException;
 
-    public ApiEntitySingleResponse deleteAssociatedIndicatorEmailAddress(P uniqueId, String emailAddress, String ownerName) 
+    public ApiEntitySingleResponse dissociateIndicatorEmailAddress(P uniqueId, String emailAddress, String ownerName)
             throws IOException, FailedResponseException;
 
-    public WriteListResponse<String> deleteAssociatedIndicatorFiles(P uniqueId, List<String> fileHashes) throws IOException;
+    public WriteListResponse<String> dissociateIndicatorFiles(P uniqueId, List<String> fileHashes) throws IOException;
 
-    public WriteListResponse<String> deleteAssociatedIndicatorFiles(P uniqueId, List<String> fileHashes, String ownerName)   
+    public WriteListResponse<String> dissociateIndicatorFiles(P uniqueId, List<String> fileHashes, String ownerName)
             throws IOException;
 
-    public ApiEntitySingleResponse deleteAssociatedIndicatorFile(P uniqueId, String fileHash) throws IOException, FailedResponseException;
+    public ApiEntitySingleResponse dissociateIndicatorFile(P uniqueId, String fileHash) throws IOException, FailedResponseException;
 
-    public ApiEntitySingleResponse deleteAssociatedIndicatorFile(P uniqueId, String fileHash, String ownerName)   
+    public ApiEntitySingleResponse dissociateIndicatorFile(P uniqueId, String fileHash, String ownerName)
             throws IOException, FailedResponseException;
 
-    public WriteListResponse<String> deleteAssociatedIndicatorHosts(P uniqueId, List<String> hostNames) throws IOException;
+    public WriteListResponse<String> dissociateIndicatorHosts(P uniqueId, List<String> hostNames) throws IOException;
 
-    public WriteListResponse<String> deleteAssociatedIndicatorHosts(P uniqueId, List<String> hostNames, String ownerName)   
+    public WriteListResponse<String> dissociateIndicatorHosts(P uniqueId, List<String> hostNames, String ownerName)
             throws IOException;
 
-    public ApiEntitySingleResponse deleteAssociatedIndicatorHost(P uniqueId, String hostName) throws IOException, FailedResponseException;
+    public ApiEntitySingleResponse dissociateIndicatorHost(P uniqueId, String hostName) throws IOException, FailedResponseException;
 
-    public ApiEntitySingleResponse deleteAssociatedIndicatorHost(P uniqueId, String hostName, String ownerName)   
+    public ApiEntitySingleResponse dissociateIndicatorHost(P uniqueId, String hostName, String ownerName)
             throws IOException, FailedResponseException;
 
-    public WriteListResponse<String> deleteAssociatedIndicatorUrls(P uniqueId, List<String> urlTexts) throws IOException;
+    public WriteListResponse<String> dissociateIndicatorUrls(P uniqueId, List<String> urlTexts) throws IOException;
 
-    public WriteListResponse<String> deleteAssociatedIndicatorUrls(P uniqueId, List<String> urlTexts, String ownerName)     
+    public WriteListResponse<String> dissociateIndicatorUrls(P uniqueId, List<String> urlTexts, String ownerName)
             throws IOException;
 
-    public ApiEntitySingleResponse deleteAssociatedIndicatorUrl(P uniqueId, String urlText) throws IOException, FailedResponseException;
+    public ApiEntitySingleResponse dissociateIndicatorUrl(P uniqueId, String urlText) throws IOException, FailedResponseException;
 
-    public ApiEntitySingleResponse deleteAssociatedIndicatorUrl(P uniqueId, String urlText, String ownerName)     
+    public ApiEntitySingleResponse dissociateIndicatorUrl(P uniqueId, String urlText, String ownerName)
             throws IOException, FailedResponseException;
 
 }

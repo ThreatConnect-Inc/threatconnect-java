@@ -27,12 +27,12 @@ public interface VictimAssociateWritable<P> {
    public ApiEntitySingleResponse associateVictim(P uniqueId, Integer victimId, String ownerName) 
             throws IOException, FailedResponseException;
     
-   public WriteListResponse<Integer> deleteAssociatedVictims(P uniqueId, List<Integer> victimIds) throws IOException;
+   public WriteListResponse<Integer> dissociateVictims(P uniqueId, List<Integer> victimIds) throws IOException;
 
-   public WriteListResponse<Integer> deleteAssociatedVictims(P uniqueId, List<Integer> victimIds, String ownerName) 
+   public WriteListResponse<Integer> dissociateVictims(P uniqueId, List<Integer> victimIds, String ownerName)
             throws IOException;
 
-   public ApiEntitySingleResponse deleteAssociatedVictim(P uniqueId, Integer victimId) throws IOException, FailedResponseException;
+   public ApiEntitySingleResponse dissociateVictim(P uniqueId, Integer victimId) throws IOException, FailedResponseException;
 
-   public ApiEntitySingleResponse deleteAssociatedVictim(P uniqueId, Integer victimId, String ownerName) throws IOException, FailedResponseException;
+   public ApiEntitySingleResponse dissociateVictim(P uniqueId, Integer victimId, String ownerName) throws IOException, FailedResponseException;
 }
