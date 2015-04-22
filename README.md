@@ -137,7 +137,9 @@ Association types express realtionships between entities and are Adversaries, Do
 + Most entities are available through an association (e.g. from a threat you can retrieve an indicator, and from an incident you can get a security label).
 
 
-## Source Structure (src/main/java/com/cyber2/api/lib):
+## Source Structure
+
+**Location: src/main/java/com/cyber2/api/lib**
 
     |-> client
         |-> reader    (Classes for reading from API, see ReaderAdapterFactory )
