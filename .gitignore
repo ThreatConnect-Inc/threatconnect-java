@@ -1,4 +1,4 @@
 src/main/resources/rebel.xml
 target/*
 !target/threatconnect-sdk/*
-!target/threatconnect-sdk-1.0.0-pkg.zip
+!target/threatconnect-sdk-*
