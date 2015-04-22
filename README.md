@@ -163,9 +163,3 @@ NOTES
     |-> examples      (Examples)
     |-> doc           (Quick start guide in PDF/HTML format)
 
-## Status
-1. Implement API for GET/POST/PUT/DELETE (Complete)
-2. Create Quick Start Developer Guide (DRAFT Complete)
-3. Prepare Examples covering difference operations (Complete)
-4. Package jar, javadoc, examples, dependencies, guide, and source??? in downloadable zip with README ( Complete )
-
