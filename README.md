@@ -137,9 +137,6 @@ Association types express realtionships between entities and are Adversaries, Do
 + Most entities are available through an association (e.g. from a threat you can retrieve an indicator, and from an incident you can get a security label).
 
 
-NOTES
-===
-
 ## Source Structure (src/main/java/com/cyber2/api/lib):
 
     |-> client
@@ -156,10 +153,16 @@ NOTES
 ## Resources
     | -> src/main/resources  (holds configuration files for connection, urls, and log4j2
 
-## Distribution Zip File (target/threatconnect-sdk-&lt;version&gt;.zip)
+## Distribution Zip File
+**target/threatconnect-sdk-&lt;version&gt;.zip**
 
     |-> lib           (Distribution library)
     |-> third-party   (Third Party dependencies)
     |-> examples      (Examples)
     |-> doc           (Quick start guide in PDF/HTML format)
+
+
+## Contact
+
+If you have any questions, bugs, or requests please contact support@threatconnect.com
 
