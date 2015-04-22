@@ -126,29 +126,29 @@ mvn clean javadoc:javadoc package assembly:assembly
             <configuration>
               <target>
 
-                <delete dir="${project.build.directory}/threatconnect-java-api" failonerror="false" />
+                <delete dir="${project.build.directory}/threatconnect-sdk" failonerror="false" />
 
-                <mkdir dir="${project.build.directory}/threatconnect-java-api/lib"/>
-                <mkdir dir="${project.build.directory}/threatconnect-java-api/third-party"/>
-                <mkdir dir="${project.build.directory}/threatconnect-java-api/doc"/>
+                <mkdir dir="${project.build.directory}/threatconnect-sdk/lib"/>
+                <mkdir dir="${project.build.directory}/threatconnect-sdk/third-party"/>
+                <mkdir dir="${project.build.directory}/threatconnect-sdk/doc"/>
 
                 <!-- jar file -->
                 <copy file="${project.build.directory}/${project.build.finalName}.jar" 
-                      tofile="${project.build.directory}/threatconnect-java-api/lib/${project.build.finalName}.jar"/>
+                      tofile="${project.build.directory}/threatconnect-sdk/lib/${project.build.finalName}.jar"/>
 
                 <!-- examples -->
                 <copy file="${basedir}/src/main/resources/config.example.properties"
-                      tofile="${project.build.directory}/threatconnect-java-api/examples/resources/config.properties" />
-                <copy todir="${project.build.directory}/threatconnect-java-api/examples/com/cyber2/api/lib/examples" >  
+                      tofile="${project.build.directory}/threatconnect-sdk/examples/resources/config.properties" />
+                <copy todir="${project.build.directory}/threatconnect-sdk/examples/com/cyber2/api/lib/examples" >  
                     <fileset dir="${basedir}/src/main/java/com/cyber2/api/lib/examples" includes="**"/>  
                 </copy>
 
                 <!-- doc -->
                 <mkdir dir="${project.build.directory}/site/apidocs"></mkdir>
-                <copy todir="${project.build.directory}/threatconnect-java-api/doc/apidocs" >
+                <copy todir="${project.build.directory}/threatconnect-sdk/doc/apidocs" >
                     <fileset dir="${project.build.directory}/site/apidocs" includes="**"/>  
                 </copy>
-                <copy todir="${project.build.directory}/threatconnect-java-api/doc/guide" >  
+                <copy todir="${project.build.directory}/threatconnect-sdk/doc/guide" >  
                     <fileset dir="${basedir}/guide" includes="**"/>  
                 </copy>
 
@@ -170,7 +170,7 @@ mvn clean javadoc:javadoc package assembly:assembly
                   <goal>copy-dependencies</goal>
                 </goals>
                 <configuration>
-                  <outputDirectory>${project.build.directory}/threatconnect-java-api/third-party</outputDirectory>
+                  <outputDirectory>${project.build.directory}/threatconnect-sdk/third-party</outputDirectory>
                 </configuration>
               </execution>
             </executions>
