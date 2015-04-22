@@ -156,20 +156,12 @@ NOTES
 ## Resources
     | -> src/main/resources  (holds configuration files for connection, urls, and log4j2
 
-## Distribution Zip File (target/tc-api-lib-0.5.0-bin.zip)
+## Distribution Zip File (target/threatconnect-sdk-<version>.zip)
 
     |-> lib           (Distribution library)
     |-> third-party   (Third Party dependencies)
     |-> examples      (Examples)
     |-> doc           (Quick start guide in PDF/HTML format)
-
-
-## Open Questions
-- Class com.cyber2.api.lib.examples.groups.GroupExample has some test examples. Would this be how developers use the API???
-
-- Are there any utility classes we can add to make it more useful? (i.e. export to csv, export to json)
-
-
 
 ## Status
 1. Implement API for GET/POST/PUT/DELETE (Complete)
