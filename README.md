@@ -4,6 +4,11 @@
 This package exposes an SDK that wraps ThreatConnect's RESTful API and can be used
 to read and write entities tracked by ThreatConnect (indicators, threats, victims, etc.).
 
+## Building Library
+Run the following maven command to build source:
+<br/>
+`mvn clean javadoc:javadoc package assembly:assembly`
+
 ## Java SDK Architecture Overview
 The Java SDK divides operations into read(HTTP GET requests) and write(HTTP PUT, POST, and DELETE requests), and provides adpaters for each entity exposed by the ThreatConnect API.  Thus, you'll find classes like `TagReaderAdapter` and `FileIndicatorwriterAdapter`.  `ReaderAdapterFactory` and `WriterAdapterFactory` can instantiate all available readers and writers. Entities are represented by basic DTO classes: `Address`, `Document`, `Threat`, etc.
 
