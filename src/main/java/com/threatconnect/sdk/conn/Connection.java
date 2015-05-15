@@ -37,8 +37,6 @@ public class Connection<T> implements Closeable
     private final URLConfiguration urlConfig;
 
     public Connection() throws IOException {
-        this.config = new Configuration();
-
         String fileName = System.getProperties().getProperty("threatconnect.api.config");
         Properties props = ConnectionUtil.loadProperties(fileName);
         this.config = Configuration.build(props);

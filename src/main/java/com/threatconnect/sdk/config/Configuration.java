@@ -6,6 +6,7 @@
 package com.threatconnect.sdk.config;
 
 import java.util.Properties;
+
 import org.apache.http.entity.ContentType;
 
 /**
@@ -20,15 +21,21 @@ public class Configuration {
 
     private final String contentType = ContentType.APPLICATION_JSON.getMimeType();
 
+    public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey) {
+
+        this.tcApiUrl = tcApiUrl;
+        this.tcApiAccessID = tcApiAccessID;
+        this.tcApiUserSecretKey = tcApiUserSecretKey;
+
+    }
+
     public static Configuration build(Properties props) {
 
-        Configuration cc = new Configuration();
-        
-        cc.tcApiUrl = props.getProperty("connection.tcApiUrl");
-        cc.tcApiAccessID = props.getProperty("connection.tcApiAccessID");
-        cc.tcApiUserSecretKey = props.getProperty("connection.tcApiUserSecretKey");
+        String tcApiUrl = props.getProperty("connection.tcApiUrl");
+        String tcApiAccessID = props.getProperty("connection.tcApiAccessID");
+        String tcApiUserSecretKey = props.getProperty("connection.tcApiUserSecretKey");
 
-        return cc;
+        return new Configuration(tcApiUrl, tcApiAccessID, tcApiUserSecretKey);
     }
 
 
