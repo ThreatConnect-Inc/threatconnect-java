@@ -5,31 +5,31 @@
  */
 package com.threatconnect.sdk.client.writer;
 
-import com.threatconnect.sdk.client.response.WriteListResponse;
 import com.threatconnect.sdk.client.AbstractClientAdapter;
 import com.threatconnect.sdk.client.UrlTypeable;
+import com.threatconnect.sdk.client.response.WriteListResponse;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.conn.RequestExecutor;
 import com.threatconnect.sdk.conn.RequestExecutor.HttpMethod;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
+
 import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * <p>
- * Base client class used by {@link com.cyber2.api.lib.client.reader} and
- * {@link com.cyber2.api.lib.client.writer}. Conceptually works as an adapter
+ * Base client class used by {@link com.threatconnect.sdk.client.reader} and
+ * {@link com.threatconnect.sdk.client.writer}. Conceptually works as an adapter
  * with a {@link com.threatconnect.sdk.conn.Connection} and a
  * {@link com.threatconnect.sdk.conn.RequestExecutor}.
  * </p>
@@ -37,14 +37,14 @@ import org.apache.logging.log4j.Logger;
  * <p>
  * Implementing classes should abstract away low level API calls to the
  * {@link com.threatconnect.sdk.conn.RequestExecutor} and return high-level
- * {@link com.cyber2.api.lib.entities} style classes.
+ * {@link com.threatconnect.sdk.server.entity} style classes.
  * </p>
  *
  *
  */
 public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
 
-    private final Logger logger = LogManager.getLogger(AbstractWriterAdapter.class);
+    private final Logger logger = Logger.getLogger(getClass().getSimpleName());
 
     public AbstractWriterAdapter(Connection conn, RequestExecutor executor) {
         super(conn, executor);
@@ -250,9 +250,9 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
 
     protected void uploadFile(String propName, File file, Map<String, Object> paramMap) throws FailedResponseException
     {
-        logger.debug("Getting URL: " + propName);
+        logger.log(Level.FINEST, "Getting URL: " + propName);
         String url = getConn().getUrlConfig().getUrl(propName);
-        logger.debug("\tURL: " + url);
+        logger.log(Level.FINEST, "\tURL: " + url);
 
         try
         {
@@ -272,12 +272,12 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
     private <T extends ApiEntitySingleResponse> T modifyItem(String propName, Class<T> type, String ownerName, Map<String, Object> paramMap, Object saveObject, HttpMethod requestType)
         throws IOException, FailedResponseException {
 
-        logger.debug("Getting URL: " + propName);
+        logger.log(Level.FINEST, "Getting URL: " + propName);
         String url = getConn().getUrlConfig().getUrl(propName);
-        logger.debug("\tURL: " + url);
+        logger.log(Level.FINEST, "\tURL: " + url);
 
         if (ownerName != null) {
-            url += "?owner=" + ownerName;
+            url += "?owner=" + URLEncoder.encode(ownerName, "UTF-8");
         }
 
 
@@ -294,12 +294,12 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
 
         T result = null;
         try {
-            logger.debug("Calling url=" + url);
+            logger.log(Level.FINEST, "Calling url=" + url);
             String content = executor.execute(url, requestType, saveObject);
-            logger.debug("returning content=" + content);
+            logger.log(Level.FINEST, "returning content=" + content);
             result = (T) mapper.readValue(content, type);
         } catch ( EOFException ex ) {
-            logger.error( requestType + " Error ", ex);
+            logger.log(Level.SEVERE, requestType + " Error ", ex);
             throw new FailedResponseException( ex.toString() ); // rethrow using local exception
         }
 

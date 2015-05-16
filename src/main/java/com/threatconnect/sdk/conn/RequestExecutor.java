@@ -5,11 +5,8 @@
  */
 package com.threatconnect.sdk.conn;
 
-import com.threatconnect.sdk.util.StringUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-
-import java.io.*;
-
+import com.threatconnect.sdk.util.StringUtil;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
@@ -22,8 +19,12 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -31,7 +32,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class RequestExecutor {
 
-    private final Logger logger = LogManager.getLogger(RequestExecutor.class);
+    private final Logger logger = Logger.getLogger(getClass().getSimpleName());
     private final Connection conn;
 
     public static enum HttpMethod {
@@ -76,7 +77,7 @@ public class RequestExecutor {
 
     private void applyEntityAsJSON(HttpRequestBase httpBase, Object obj) throws JsonProcessingException {
         String jsonData = StringUtil.toJSON(obj);
-        logger.debug("EntityAsJSON: " + jsonData);
+        logger.log(Level.FINEST, "EntityAsJSON: " + jsonData);
        ((HttpEntityEnclosingRequestBase)httpBase).setEntity(new StringEntity(jsonData, ContentType.APPLICATION_JSON));
     }
 
@@ -86,23 +87,23 @@ public class RequestExecutor {
             throw new IllegalStateException("Can't execute HTTP request when configuration is undefined.");
         }
 
-        String fullPath = this.conn.getConfig().getTcApiUrl() + path;
+        String fullPath = this.conn.getConfig().getTcApiUrl() + path.replace("/api","");
 
-        logger.debug("Calling " + type + ": " + fullPath);
+        logger.log(Level.FINEST, "Calling " + type + ": " + fullPath);
         HttpRequestBase httpBase = getBase(fullPath, type);
         if ( obj != null )  applyEntityAsJSON( httpBase, obj );
 
         ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), path, null);
-        logger.debug("Request: " + httpBase.getRequestLine());
+        logger.log(Level.FINEST, "Request: " + httpBase.getRequestLine());
         CloseableHttpResponse response = this.conn.getApiClient().execute(httpBase);
         String result = null;
 
         try {
-            logger.debug(response.getStatusLine());
+            logger.log(Level.FINEST, response.getStatusLine().toString() );
             HttpEntity entity = response.getEntity();
             if (entity != null) {
                 result = EntityUtils.toString(entity);
-                logger.debug("Result:" + result);
+                logger.log(Level.FINEST, "Result:" + result);
                 EntityUtils.consume(entity);
             }
         } finally {
@@ -128,20 +129,20 @@ public class RequestExecutor {
 
         String fullPath = this.conn.getConfig().getTcApiUrl() + path;
 
-        logger.debug("Calling GET: " + fullPath);
+        logger.log(Level.FINEST, "Calling GET: " + fullPath);
         HttpRequestBase httpBase = getBase(fullPath, HttpMethod.GET);
 
         ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), path, null);
         httpBase.addHeader("Accept", "application/octet-stream");
-        logger.debug("Request: " + httpBase.getRequestLine());
+        logger.log(Level.FINEST, "Request: " + httpBase.getRequestLine());
         CloseableHttpResponse response = this.conn.getApiClient().execute(httpBase);
 
 
-        logger.debug(response.getStatusLine());
+        logger.log(Level.FINEST, response.getStatusLine().toString());
         HttpEntity entity = response.getEntity();
         if (entity != null) {
             stream = entity.getContent();
-            logger.debug(String.format("Result stream size: %d, encoding: %s",
+            logger.log(Level.FINEST, String.format("Result stream size: %d, encoding: %s",
                                                 entity.getContentLength(), entity.getContentEncoding()));
         }
         return stream;
@@ -158,23 +159,23 @@ public class RequestExecutor {
 
         String fullPath = this.conn.getConfig().getTcApiUrl() + path;
 
-        logger.debug("Calling POST: " + fullPath);
+        logger.log(Level.FINEST, "Calling POST: " + fullPath);
         HttpPost httpBase = new HttpPost(fullPath);
         httpBase.setEntity(new FileEntity(file));
         ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), path, null);
         httpBase.addHeader("Content-Type", "application/octet-stream");
 
-        logger.debug("Request: " + httpBase.getRequestLine());
+        logger.log(Level.FINEST, "Request: " + httpBase.getRequestLine());
 
 
         CloseableHttpResponse response = this.conn.getApiClient().execute(httpBase);
 
 
-        logger.debug(response.getStatusLine());
+        logger.log(Level.FINEST, response.getStatusLine().toString());
         HttpEntity entity = response.getEntity();
         if (entity != null) {
             stream = entity.getContent();
-            logger.debug(String.format("Result stream size: %d, encoding: %s",
+            logger.log(Level.FINEST, String.format("Result stream size: %d, encoding: %s",
                     entity.getContentLength(), entity.getContentEncoding()));
         }
         return stream;

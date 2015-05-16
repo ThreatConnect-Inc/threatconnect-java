@@ -7,21 +7,21 @@ package com.threatconnect.sdk.conn;
 
 import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.config.URLConfiguration;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLContexts;
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 
+import javax.net.ssl.SSLContext;
 import java.io.Closeable;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
-import javax.net.ssl.SSLContext;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.SSLContexts;
-import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -30,7 +30,8 @@ import org.apache.logging.log4j.Logger;
 public class Connection<T> implements Closeable
 {
 
-    private final Logger logger = LogManager.getLogger(Connection.class);
+    private final Logger logger = Logger.getLogger(getClass().getSimpleName());
+
     private final CloseableHttpClient apiClient = createApiClient();
     protected Configuration config;
 
@@ -82,7 +83,7 @@ public class Connection<T> implements Closeable
             httpClient = HttpClients.custom().setSSLSocketFactory(sslsf).build();
 
         } catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException ex) {
-            logger.error("Error creating httpClient", ex);
+            logger.log(Level.SEVERE, "Error creating httpClient", ex);
         }
 
         return httpClient;
@@ -103,7 +104,7 @@ public class Connection<T> implements Closeable
         if ( apiClient != null )    try {
             apiClient.close();
         } catch (IOException ex) {
-            logger.error("Error disconnecting from httpClient", ex);
+            logger.log(Level.SEVERE, "Error disconnecting from httpClient", ex);
         }
     }
 

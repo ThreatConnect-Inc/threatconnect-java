@@ -7,18 +7,17 @@ package com.threatconnect.sdk.client;
 
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.conn.RequestExecutor;
+import org.codehaus.jackson.map.ObjectMapper;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.codehaus.jackson.map.ObjectMapper;
+import java.util.logging.Logger;
 
 /**
  *
  * <p>
- * Base client class used by {@link com.cyber2.api.lib.client.reader} and
- * {@link com.cyber2.api.lib.client.writer}. Conceptually works as an adapter
+ * Base client class used by {@link com.threatconnect.sdk.client.reader} and
+ * {@link com.threatconnect.sdk.client.writer}. Conceptually works as an adapter
  * with a {@link com.threatconnect.sdk.conn.Connection} and a
  * {@link com.threatconnect.sdk.conn.RequestExecutor}.
  * </p>
@@ -26,14 +25,12 @@ import org.codehaus.jackson.map.ObjectMapper;
  * <p>
  * Implementing classes should abstract away low level API calls to the
  * {@link com.threatconnect.sdk.conn.RequestExecutor} and return high-level
- * {@link com.cyber2.api.lib.entities} style classes.
+ * {@link com.threatconnect.sdk.server.entity} style classes.
  * </p>
  *
  *
  */
 public abstract class AbstractClientAdapter {
-
-    private final Logger logger = LogManager.getLogger(AbstractClientAdapter.class);
 
     /**
      * Base {@link com.threatconnect.sdk.conn.Connection} to REST API interface

@@ -6,29 +6,29 @@
 package com.threatconnect.sdk.conn;
 
 import com.threatconnect.sdk.config.Configuration;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.http.message.AbstractHttpMessage;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-
-import com.threatconnect.sdk.config.Configuration;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.http.message.AbstractHttpMessage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- *
  * @author dtineo
  */
-public class ConnectionUtil {
+public class ConnectionUtil
+{
 
-    private static final Logger logger = LogManager.getLogger(ConnectionUtil.class);
+    private static final Logger logger = Logger.getLogger(ConnectionUtil.class.getSimpleName());
 
-    public static Properties loadProperties(String fileName) throws IOException {
+    public static Properties loadProperties(String fileName) throws IOException
+    {
 
         Properties props = new Properties();
         InputStream in = ConnectionUtil.class.getClass().getResourceAsStream(fileName);
@@ -38,10 +38,11 @@ public class ConnectionUtil {
     }
 
 
+    public static String getHmacSha256Signature(String signature, String apiSecretKey)
+    {
 
-    public static String getHmacSha256Signature(String signature, String apiSecretKey) {
-
-        try {
+        try
+        {
 
             String calculatedSignature;
             SecretKeySpec spec = new SecretKeySpec(apiSecretKey.getBytes(), "HmacSHA256");
@@ -52,26 +53,29 @@ public class ConnectionUtil {
 
             return calculatedSignature;
 
-        } catch (NoSuchAlgorithmException | InvalidKeyException | IllegalStateException ex) {
-            logger.error("Error creating HMAC SHA256 signature", ex);
+        } catch (NoSuchAlgorithmException | InvalidKeyException | IllegalStateException ex)
+        {
+            logger.log(Level.SEVERE, "Error creating HMAC SHA256 signature", ex);
             return null;
         }
 
     }
 
-    private static String getSignature(Long headerTimestamp, String httpMethod, String urlPath, String urlQuery) {
+    private static String getSignature(Long headerTimestamp, String httpMethod, String urlPath, String urlQuery)
+    {
         String query = (urlQuery == null ? "" : "?" + urlQuery);
         return String.format("%s%s:%s:%d", urlPath, query, httpMethod, headerTimestamp);
     }
 
-    static void applyHeaders(Configuration config, AbstractHttpMessage message, String httpMethod, String urlPath, String urlQuery) {
+    static void applyHeaders(Configuration config, AbstractHttpMessage message, String httpMethod, String urlPath, String urlQuery)
+    {
 
-        Long ts = System.currentTimeMillis()/1000L;
-        String sig = getSignature( ts, httpMethod, urlPath, urlQuery);
+        Long ts = System.currentTimeMillis() / 1000L;
+        String sig = getSignature(ts, httpMethod, urlPath, urlQuery);
         String hmacSig = getHmacSha256Signature(sig, config.getTcApiUserSecretKey());
         String auth = String.format("TC %s:%s", config.getTcApiAccessID(), hmacSig);
 
-        message.addHeader("timestamp", ""+ts);
+        message.addHeader("timestamp", "" + ts);
         message.addHeader("authorization", auth);
         message.addHeader("Accept", config.getContentType());
 
