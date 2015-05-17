@@ -4,13 +4,13 @@
  */
 package com.threatconnect.sdk.server.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.threatconnect.sdk.server.entity.format.DateSerializer;
 import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
  *

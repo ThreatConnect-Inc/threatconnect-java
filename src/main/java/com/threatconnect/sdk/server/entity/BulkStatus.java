@@ -11,8 +11,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.threatconnect.sdk.server.entity.format.DateSerializer;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
  *

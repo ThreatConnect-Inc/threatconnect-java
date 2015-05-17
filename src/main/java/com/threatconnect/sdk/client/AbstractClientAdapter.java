@@ -5,13 +5,12 @@
  */
 package com.threatconnect.sdk.client;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.conn.RequestExecutor;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  *

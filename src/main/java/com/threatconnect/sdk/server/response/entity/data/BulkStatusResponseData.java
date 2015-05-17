@@ -1,9 +1,8 @@
 package com.threatconnect.sdk.server.response.entity.data;
 
-import com.threatconnect.sdk.server.entity.Address;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.threatconnect.sdk.server.entity.BulkStatus;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

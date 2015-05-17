@@ -4,14 +4,14 @@
  */
 package com.threatconnect.sdk.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
-import org.codehaus.jackson.annotate.JsonSubTypes;
-import org.codehaus.jackson.annotate.JsonTypeInfo;
-import org.codehaus.jackson.annotate.JsonTypeInfo.As;
 
 /**
  *
@@ -20,7 +20,7 @@ import org.codehaus.jackson.annotate.JsonTypeInfo.As;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "Owner")
 @XmlSeeAlso({Community.class, Individual.class, Organization.class})
-@JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include=As.PROPERTY, property="type")
+@JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include= JsonTypeInfo.As.PROPERTY, property="type")
   @JsonSubTypes({
         @JsonSubTypes.Type(value=Community.class, name="Community"),
         @JsonSubTypes.Type(value=Individual.class, name="Individual"),

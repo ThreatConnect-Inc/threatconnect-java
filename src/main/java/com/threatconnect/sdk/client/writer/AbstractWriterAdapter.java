@@ -297,7 +297,7 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
             logger.log(Level.FINEST, "Calling url=" + url);
             String content = executor.execute(url, requestType, saveObject);
             logger.log(Level.FINEST, "returning content=" + content);
-            result = (T) mapper.readValue(content, type);
+            result = mapper.readValue(content, type);
         } catch ( EOFException ex ) {
             logger.log(Level.SEVERE, requestType + " Error ", ex);
             throw new FailedResponseException( ex.toString() ); // rethrow using local exception

@@ -4,16 +4,13 @@
  */
 package com.threatconnect.sdk.server.response.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.threatconnect.sdk.server.response.entity.data.ApiEntityListResponseData;
-import com.threatconnect.sdk.server.response.service.ApiServiceResponse;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
-
-import com.threatconnect.sdk.server.response.entity.data.ApiEntityListResponseData;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
  *

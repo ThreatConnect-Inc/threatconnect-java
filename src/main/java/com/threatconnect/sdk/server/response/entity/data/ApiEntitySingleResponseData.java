@@ -4,10 +4,11 @@
  */
 package com.threatconnect.sdk.server.response.entity.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
