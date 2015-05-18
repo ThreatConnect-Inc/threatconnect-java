@@ -95,7 +95,7 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     private AbstractVictimAssociateReaderAdapter<String> victimAssocReader;
 
     /**
-     * Package level constructor. Use the {@link ClientReaderAdapterFactory} to
+     * Package level constructor. Use the {@link ReaderAdapterFactory} to
      * access this object.
      *
      * @param conn Primary connection object to the ThreatConnect API

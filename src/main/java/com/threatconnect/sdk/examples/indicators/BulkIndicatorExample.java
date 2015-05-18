@@ -31,7 +31,7 @@ public class BulkIndicatorExample
     private static void doGetStatus(Connection conn)
     {
         AbstractIndicatorReaderAdapter<Address> reader =
-                ReaderAdapterFactory.getIndicatorReader(Indicator.Type.Address, conn);
+                ReaderAdapterFactory.createIndicatorReader(Indicator.Type.Address, conn);
 
         try
         {
@@ -48,7 +48,7 @@ public class BulkIndicatorExample
     private static void doDownloadJson(Connection conn)
     {
         AbstractIndicatorReaderAdapter<Address> reader =
-                ReaderAdapterFactory.getIndicatorReader(Indicator.Type.Address, conn);
+                ReaderAdapterFactory.createIndicatorReader(Indicator.Type.Address, conn);
 
         try
         {

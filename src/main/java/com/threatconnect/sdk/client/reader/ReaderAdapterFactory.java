@@ -169,17 +169,22 @@ public class ReaderAdapterFactory {
 
     }
 
-    public static AbstractIndicatorReaderAdapter getIndicatorReader(String type, Connection conn) {
+    public static AbstractIndicatorReaderAdapter createIndicatorReader(String type, Connection conn) {
         if (Character.isLowerCase(type.charAt(0))) {
             String indType = Character.toLowerCase(type.charAt(0)) + type.substring(1);
-            return getIndicatorReader(Indicator.Type.valueOf(indType), conn);
+            return createIndicatorReader(Indicator.Type.valueOf(indType), conn);
         } else {
-            return getIndicatorReader(Indicator.Type.valueOf(type), conn);
+            return createIndicatorReader(Indicator.Type.valueOf(type), conn);
         }
 
     }
 
-    public static AbstractIndicatorReaderAdapter getIndicatorReader(Indicator.Type type, Connection conn) {
+    public static AbstractIndicatorReaderAdapter createIndicatorReader(Indicator.Type type, Connection conn) {
+
+        if ( type == null )
+        {
+            return null;
+        }
 
         switch (type) {
             case Address:
