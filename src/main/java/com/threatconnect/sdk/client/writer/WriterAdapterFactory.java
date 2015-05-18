@@ -155,17 +155,17 @@ public class WriterAdapterFactory {
     }
 
 
-    public static AbstractIndicatorWriterAdapter getIndicatorWriter(String type, Connection conn) {
+    public static AbstractIndicatorWriterAdapter createIndicatorWriter(String type, Connection conn) {
         if (Character.isLowerCase(type.charAt(0))) {
             String indType = Character.toLowerCase(type.charAt(0)) + type.substring(1);
-            return getIndicatorWriter(Indicator.Type.valueOf(indType), conn);
+            return createIndicatorWriter(Indicator.Type.valueOf(indType), conn);
         } else {
-            return getIndicatorWriter(Indicator.Type.valueOf(type), conn);
+            return createIndicatorWriter(Indicator.Type.valueOf(type), conn);
         }
 
     }
 
-    public static AbstractIndicatorWriterAdapter getIndicatorWriter(Indicator.Type type, Connection conn) {
+    public static AbstractIndicatorWriterAdapter createIndicatorWriter(Indicator.Type type, Connection conn) {
 
         switch (type) {
             case Address:
