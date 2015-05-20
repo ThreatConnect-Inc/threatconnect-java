@@ -1,9 +1,9 @@
 # Java SDK for ThreatConnect
 
 ## Introduction
-This SDK wraps ThreatConnect's RESTful API and can be used to read and write entities within ThreatConnect (indicators, threats, victims, etc.).
+This SDK provides a high-level abstraction layer of the ThreatConnect&trade; RESTful API and can be used to read and write entities within ThreatConnect (indicators, threats, victims, etc.).
 
-> This README provides a quick-start on the Java SDK. For detailed documentation, visit the "Java Development" section of the ThreatConnect&trade; SDK documentation:<br/>https://threatconnect-inc.github.io/threatconnect-app-engine/
+> This README provides a quick-start on the Java SDK. For detailed documentation, visit the "Java Development" section of the ThreatConnect&trade; SDK documentation:<br/>https://threatconnect-inc.github.io/threatconnect-app-engine/java/sdk/start/
 
 ## Maven 
 Add the following entries to your pom file (git clone not required):
