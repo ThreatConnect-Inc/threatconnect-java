@@ -56,7 +56,7 @@ public abstract class AbstractBaseWriterAdapter<T,P> extends AbstractWriterAdapt
     }
 
     public WriteListResponse<P> delete(List<P> itemIds, String ownerName) throws IOException {
-        WriteListResponse<P> data = deleteList(getUrlBasePrefix() + ".byId", singleType, null, null, "id", itemIds);
+        WriteListResponse<P> data = deleteList(getUrlBasePrefix() + ".byId", singleType, ownerName, null, "id", itemIds);
 
         return data;
     }

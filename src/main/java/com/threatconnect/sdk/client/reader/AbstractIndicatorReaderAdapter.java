@@ -121,6 +121,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
                           , AbstractIndicatorReaderAdapter.this.listType
             ) {
             @Override
+            public String getUrlType()
+            {
+                return AbstractIndicatorReaderAdapter.this.getUrlType();
+            }
+
+            @Override
             protected String getUrlBasePrefix() {
                 return AbstractIndicatorReaderAdapter.this.getUrlBasePrefix();
             }

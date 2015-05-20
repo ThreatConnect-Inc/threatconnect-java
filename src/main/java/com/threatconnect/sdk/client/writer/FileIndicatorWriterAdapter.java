@@ -79,7 +79,7 @@ public class FileIndicatorWriterAdapter extends AbstractIndicatorWriterAdapter<F
         throws IOException, FailedResponseException {
 
         Map<String, Object> map = createParamMap("id", fileHash, "fileOccurrenceId", fileOccurrence.getId());
-        FileOccurrenceResponse item = updateItem(getUrlBasePrefix() + ".type.byId.fileOccurrences.byFileOccurrenceId"
+        FileOccurrenceResponse item = updateItem(getUrlBasePrefix() + ".byId.fileOccurrences.byFileOccurrenceId"
                                             , FileOccurrenceResponse.class, ownerName, map, fileOccurrence);
 
         return (FileOccurrence) item.getData().getData();

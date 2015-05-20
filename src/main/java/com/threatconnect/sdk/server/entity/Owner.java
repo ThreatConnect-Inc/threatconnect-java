@@ -24,7 +24,8 @@ import javax.xml.bind.annotation.XmlSeeAlso;
   @JsonSubTypes({
         @JsonSubTypes.Type(value=Community.class, name="Community"),
         @JsonSubTypes.Type(value=Individual.class, name="Individual"),
-        @JsonSubTypes.Type(value=Organization.class, name="Organization")
+        @JsonSubTypes.Type(value=Organization.class, name="Organization"),
+        @JsonSubTypes.Type(value=Source.class, name="Source")
 
     }) 
 public abstract class Owner

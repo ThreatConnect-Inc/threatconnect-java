@@ -5,6 +5,7 @@
  */
 package com.threatconnect.sdk.client.reader.associate;
 
+import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.reader.AbstractBaseReaderAdapter;
 import com.threatconnect.sdk.client.reader.associate.AttributeAssociateReadable;
 import com.threatconnect.sdk.conn.Connection;
@@ -28,7 +29,8 @@ import java.util.Map;
  *
  * @author dtineo
  */
-public abstract class AbstractAttributeAssociateReaderAdapter<P> extends AbstractBaseReaderAdapter implements AttributeAssociateReadable<P> {
+public abstract class AbstractAttributeAssociateReaderAdapter<P> extends AbstractBaseReaderAdapter implements AttributeAssociateReadable<P>, UrlTypeable
+{
 
     public AbstractAttributeAssociateReaderAdapter(Connection conn, RequestExecutor executor, Class singleType, Class listType) {
         super(conn, executor, singleType, listType);

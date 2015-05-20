@@ -122,7 +122,7 @@ public abstract class AbstractAttributeAssociateWriterAdapter<T,P> extends Abstr
         throws IOException, FailedResponseException {
 
         Map<String, Object> map = createParamMap("id", uniqueId, "attributeId", attribute.getId() );
-        AttributeResponse item = updateItem(getUrlBasePrefix() + "type.byId.attributes.byId", AttributeResponse.class, ownerName, map, attribute);
+        AttributeResponse item = updateItem(getUrlBasePrefix() + ".byId.attributes.byId", AttributeResponse.class, ownerName, map, attribute);
 
         return item;
     }

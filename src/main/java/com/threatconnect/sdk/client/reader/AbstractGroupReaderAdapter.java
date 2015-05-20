@@ -95,6 +95,11 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
             protected String getUrlBasePrefix() {
                 return AbstractGroupReaderAdapter.this.getUrlBasePrefix();
             }
+
+            @Override
+            public String getUrlType() {
+                return AbstractGroupReaderAdapter.this.getUrlType();
+            }
         };
 
         groupAssocReader = new AbstractGroupAssociateReaderAdapter<Integer>(

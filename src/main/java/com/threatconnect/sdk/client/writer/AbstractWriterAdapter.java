@@ -250,9 +250,9 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
 
     protected void uploadFile(String propName, File file, Map<String, Object> paramMap) throws FailedResponseException
     {
-        logger.log(Level.FINEST, "Getting URL: " + propName);
+        logger.log(Level.INFO, "Getting URL: " + propName);
         String url = getConn().getUrlConfig().getUrl(propName);
-        logger.log(Level.FINEST, "\tURL: " + url);
+        logger.log(Level.INFO, "\tURL: " + url);
 
         try
         {
@@ -272,9 +272,8 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
     private <T extends ApiEntitySingleResponse> T modifyItem(String propName, Class<T> type, String ownerName, Map<String, Object> paramMap, Object saveObject, HttpMethod requestType)
         throws IOException, FailedResponseException {
 
-        logger.log(Level.FINEST, "Getting URL: " + propName);
+        logger.log(Level.INFO, "Getting URL: " + propName);
         String url = getConn().getUrlConfig().getUrl(propName);
-        logger.log(Level.FINEST, "\tURL: " + url);
 
         if (ownerName != null) {
             url += "?owner=" + URLEncoder.encode(ownerName, "UTF-8");
@@ -294,9 +293,9 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
 
         T result = null;
         try {
-            logger.log(Level.FINEST, "Calling url=" + url);
+            logger.log(Level.INFO, "Calling url=" + url);
             String content = executor.execute(url, requestType, saveObject);
-            logger.log(Level.FINEST, "returning content=" + content);
+            logger.log(Level.INFO, "returning content=" + content);
             result = mapper.readValue(content, type);
         } catch ( EOFException ex ) {
             logger.log(Level.SEVERE, requestType + " Error ", ex);
