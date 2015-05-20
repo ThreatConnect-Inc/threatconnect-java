@@ -9,7 +9,7 @@ to read and write entities tracked by ThreatConnect (indicators, threats, victim
 ## Maven 
 Add the following entries to your pom file (git clone not required):
 <br/>
-```
+```xml
 <!-- repository entry -->
   <repositories>
       <repository>
