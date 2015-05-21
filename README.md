@@ -35,7 +35,7 @@ Add the following entries to your pom file (git clone not required):
 
 
 ## Java SDK Architecture Overview
-The Java SDK divides operations into read(HTTP GET requests) and write(HTTP PUT, POST, and DELETE requests), and provides adpaters for each entity exposed by the ThreatConnect API.  Thus, you'll find classes like `TagReaderAdapter` and `FileIndicatorwriterAdapter`.  `ReaderAdapterFactory` and `WriterAdapterFactory` can instantiate all available readers and writers. Entities are represented by basic DTO classes: `Address`, `Document`, `Threat`, etc.
+The Java SDK divides operations into read and write. It provides adapters for each entity exposed by the ThreatConnect API.  Thus, you'll find classes like `TagReaderAdapter` and `FileIndicatorwriterAdapter`.  `ReaderAdapterFactory` and `WriterAdapterFactory` can instantiate all available readers and writers. Entities are represented by basic DTO classes: `Address`, `Document`, `Threat`, etc.
 
 ## Required Configuration
 For the Java SDK to work, API calls must be allowed by ThreatConnect and an API
