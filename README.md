@@ -1,7 +1,7 @@
-# Java SDK for ThreatConnect
+# Java SDK for ThreatConnect&trade;
 
 ## Introduction
-This SDK provides a high-level abstraction layer of the ThreatConnect&trade; RESTful API and can be used to read and write entities within ThreatConnect (indicators, threats, victims, etc.).
+This SDK provides a high-level abstraction layer of the ThreatConnect&trade; RESTful API and can be used to read and write entities within ThreatConnect&trade; (indicators, threats, victims, etc.).
 
 > This README provides a quick-start on the Java SDK. For detailed documentation, visit the "Java Development" section of the ThreatConnect&trade; SDK documentation:<br/>https://threatconnect-inc.github.io/threatconnect-app-engine/java/sdk/start/
 
@@ -35,10 +35,10 @@ Add the following entries to your pom file (git clone not required):
 
 
 ## Java SDK Architecture Overview
-The Java SDK divides operations into read and write. It provides adapters for each entity exposed by the ThreatConnect API.  Thus, you'll find classes like `TagReaderAdapter` and `FileIndicatorwriterAdapter`.  `ReaderAdapterFactory` and `WriterAdapterFactory` can instantiate all available readers and writers. Entities are represented by basic DTO classes: `Address`, `Document`, `Threat`, etc.
+The Java SDK divides operations into read and write. It provides adapters for each entity exposed by the ThreatConnect&trade; API.  Thus, you'll find classes like `TagReaderAdapter` and `FileIndicatorwriterAdapter`.  `ReaderAdapterFactory` and `WriterAdapterFactory` can instantiate all available readers and writers. Entities are represented by basic DTO classes: `Address`, `Document`, `Threat`, etc.
 
 ## Required Configuration
-For the Java SDK to work, API calls must be allowed by ThreatConnect and an API
+For the Java SDK to work, API calls must be allowed by ThreatConnect&trade; and an API
 user must be created.  
 
 A configuration file must be made available to the Java SDK at runtime via the property
@@ -86,7 +86,7 @@ To delete an Address:
     writer.delete(newAddress.getIp())
 
 ## Example Working With Groups and Associations (i.e. pivoting)
-ThreatConnect provides the ability to establish associations between entities to better describe events, threats, etc.  For example, a single incident may be associated with
+ThreatConnect&trade; provides the ability to establish associations between entities to better describe events, threats, etc.  For example, a single incident may be associated with
 several indicators, victims, and e-mails.
 
 The following example finds the Threats associated with a host indicator:
@@ -179,7 +179,7 @@ Association types express realtionships between entities and are Adversaries, Do
     |-> conn          (Connection classes to manage interaction with API)
     |-> examples      (Example classes using the API)
     |-> exception     (Exception classes)
-    |-> server        (Effectively a copy of ThreatConnect API entity library with un-needed dependencies excluded)
+    |-> server        (ThreatConnect API entity library)
     |-> util          (Utility package)
 
 ## Resources
