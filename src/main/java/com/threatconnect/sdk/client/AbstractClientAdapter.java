@@ -7,7 +7,7 @@ package com.threatconnect.sdk.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,12 +18,12 @@ import java.util.Map;
  * Base client class used by {@link com.threatconnect.sdk.client.reader} and
  * {@link com.threatconnect.sdk.client.writer}. Conceptually works as an adapter
  * with a {@link com.threatconnect.sdk.conn.Connection} and a
- * {@link com.threatconnect.sdk.conn.RequestExecutor}.
+ * {@link com.threatconnect.sdk.conn.AbstractRequestExecutor}.
  * </p>
  *
  * <p>
  * Implementing classes should abstract away low level API calls to the
- * {@link com.threatconnect.sdk.conn.RequestExecutor} and return high-level
+ * {@link com.threatconnect.sdk.conn.AbstractRequestExecutor} and return high-level
  * {@link com.threatconnect.sdk.server.entity} style classes.
  * </p>
  *
@@ -36,10 +36,10 @@ public abstract class AbstractClientAdapter {
      */
     private Connection conn;
     /**
-     * {@link com.threatconnect.sdk.conn.RequestExecutor} used to interact with
+     * {@link com.threatconnect.sdk.conn.AbstractRequestExecutor} used to interact with
      * REST API
      */
-    protected RequestExecutor executor;
+    protected AbstractRequestExecutor executor;
     /**
      * ObjectMapper used to marshall and unmarshall data with the REST API
      */
@@ -49,11 +49,10 @@ public abstract class AbstractClientAdapter {
      * Base constructor with required fields to create a basic client adapter
      *
      * @param conn Main object managing API connection
-     * @param executor Manages low level REST calls
      */
-    public AbstractClientAdapter(Connection conn, RequestExecutor executor) {
+    public AbstractClientAdapter(Connection conn) {
         this.conn = conn;
-        this.executor = executor;
+        this.executor = conn.getExecutor();
 
     }
 

@@ -13,7 +13,7 @@ import com.threatconnect.sdk.client.reader.associate.AbstractIndicatorAssociateR
 import com.threatconnect.sdk.client.reader.associate.AbstractGroupAssociateReaderAdapter;
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Address;
 import com.threatconnect.sdk.server.entity.Adversary;
@@ -54,8 +54,8 @@ public class VictimReaderAdapter
     private AbstractVictimAssetAssociateReaderAdapter<Integer> victimAssetAssocReader;
 
 
-    protected VictimReaderAdapter(Connection conn, RequestExecutor executor) {
-        super(conn, executor, VictimResponse.class, VictimListResponse.class);
+    protected VictimReaderAdapter(Connection conn) {
+        super(conn, VictimResponse.class, VictimListResponse.class);
 
         initComposite();
     }
@@ -64,7 +64,6 @@ public class VictimReaderAdapter
 
         groupAssocReader = new AbstractGroupAssociateReaderAdapter<Integer>(
                             VictimReaderAdapter.this.getConn()
-                          , VictimReaderAdapter.this.executor
                           , VictimReaderAdapter.this.singleType
                           , VictimReaderAdapter.this.listType
             ) {
@@ -81,7 +80,6 @@ public class VictimReaderAdapter
 
         indAssocReader = new AbstractIndicatorAssociateReaderAdapter<Integer>(
                             VictimReaderAdapter.this.getConn()
-                          , VictimReaderAdapter.this.executor
                           , VictimReaderAdapter.this.singleType
                           , VictimReaderAdapter.this.listType
             ) {
@@ -97,7 +95,6 @@ public class VictimReaderAdapter
 
         victimAssetAssocReader = new AbstractVictimAssetAssociateReaderAdapter<Integer>(
                             VictimReaderAdapter.this.getConn()
-                          , VictimReaderAdapter.this.executor
                           , VictimReaderAdapter.this.singleType
                           , VictimReaderAdapter.this.listType
             ) {

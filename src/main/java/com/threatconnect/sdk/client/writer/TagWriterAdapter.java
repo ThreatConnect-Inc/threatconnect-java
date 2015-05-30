@@ -7,17 +7,8 @@ import com.threatconnect.sdk.client.writer.associate.AbstractIndicatorAssociateW
 import com.threatconnect.sdk.client.writer.associate.GroupAssociateWritable;
 import com.threatconnect.sdk.client.writer.associate.IndicatorAssociateWritable;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
-import com.threatconnect.sdk.server.entity.Tag;
-import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
-import com.threatconnect.sdk.server.response.entity.TagResponse;
-import com.threatconnect.sdk.client.UrlTypeable;
-import com.threatconnect.sdk.client.response.WriteListResponse;
-import com.threatconnect.sdk.client.writer.associate.AbstractGroupAssociateWriterAdapter;
-import com.threatconnect.sdk.client.writer.associate.GroupAssociateWritable;
-import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
 import com.threatconnect.sdk.server.entity.Tag;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.server.response.entity.TagResponse;
@@ -27,7 +18,7 @@ import java.util.List;
 
 /**
  * TagWriterAdapter is the primary writer adapter for all Tag level objects.
- * It uses the {@link com.threatconnect.sdk.conn.Connection} object to execute requests against the {@link com.threatconnect.sdk.conn.RequestExecutor} object.
+ * It uses the {@link com.threatconnect.sdk.conn.Connection} object to execute requests against the {@link com.threatconnect.sdk.conn.AbstractRequestExecutor} object.
  * The responsibility of this class is to encapsulate all the low level ThreatConnect API calls
  * specifically targeted at data under the Tag type.
  * 
@@ -46,12 +37,11 @@ public class TagWriterAdapter
     /**
      * Package level constructor. Use the {@link WriterAdapterFactory} to access this object.
      * @param conn      Primary connection object to the ThreatConnect API
-     * @param executor  Executor handling low level HTTPS calls to the ThreatConnect API
-     * 
+     *
      * @see WriterAdapterFactory
      */
-    protected TagWriterAdapter(Connection conn, RequestExecutor executor) {
-        super(conn, executor, TagResponse.class);
+    protected TagWriterAdapter(Connection conn) {
+        super(conn, TagResponse.class);
 
         initComposite();
     }
@@ -60,7 +50,6 @@ public class TagWriterAdapter
 
         groupAssocWriter = new AbstractGroupAssociateWriterAdapter<Tag,String>(
                             TagWriterAdapter.this.getConn()
-                          , TagWriterAdapter.this.executor
                           , TagWriterAdapter.this.singleType
             ) {
             @Override
@@ -82,7 +71,6 @@ public class TagWriterAdapter
 
         indAssocWriter = new AbstractIndicatorAssociateWriterAdapter<Tag,String>(
                             TagWriterAdapter.this.getConn()
-                          , TagWriterAdapter.this.executor
                           , TagWriterAdapter.this.singleType
             ) {
             @Override

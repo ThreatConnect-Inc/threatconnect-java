@@ -27,59 +27,59 @@ import java.util.List;
  */
 public interface IndicatorAssociateReadable<P> {
     
-    public List<Indicator> getAssociatedIndicators(P uniqueId) throws IOException, FailedResponseException;
+    public List<Indicator> getAssociatedIndicators(P uniqueId) throws Exception;
 
-    public List<Indicator> getAssociatedIndicators(P uniqueId, String ownerName) 
-            throws IOException, FailedResponseException;
+    public List<Indicator> getAssociatedIndicators(P uniqueId, String ownerName)
+            throws Exception;
 
-    public List<Address> getAssociatedIndicatorAddresses(P uniqueId) throws IOException, FailedResponseException;
+    public List<Address> getAssociatedIndicatorAddresses(P uniqueId) throws Exception;
 
-    public List<Address> getAssociatedIndicatorAddresses(P uniqueId, String ownerName) 
-            throws IOException, FailedResponseException;
+    public List<Address> getAssociatedIndicatorAddresses(P uniqueId, String ownerName)
+            throws Exception;
 
-    public Address getAssociatedIndicatorAddress(P uniqueId, String ipAddress) throws IOException, FailedResponseException;
+    public Address getAssociatedIndicatorAddress(P uniqueId, String ipAddress) throws Exception;
 
-    public Address getAssociatedIndicatorAddress(P uniqueId, String ipAddress, String ownerName) 
-            throws IOException, FailedResponseException;
+    public Address getAssociatedIndicatorAddress(P uniqueId, String ipAddress, String ownerName)
+            throws Exception;
 
-    public List<Email> getAssociatedIndicatorEmails(P uniqueId) throws IOException, FailedResponseException;
+    public List<Email> getAssociatedIndicatorEmails(P uniqueId) throws Exception;
 
-    public List<Email> getAssociatedIndicatorEmails(P uniqueId, String ownerName) 
-            throws IOException, FailedResponseException;
+    public List<Email> getAssociatedIndicatorEmails(P uniqueId, String ownerName)
+            throws Exception;
 
-    public Email getAssociatedIndicatorEmail(P uniqueId, String emailAddress) throws IOException, FailedResponseException;
+    public Email getAssociatedIndicatorEmail(P uniqueId, String emailAddress) throws Exception;
 
-    public Email getAssociatedIndicatorEmail(P uniqueId, String emailAddress, String ownerName) 
-            throws IOException, FailedResponseException;
+    public Email getAssociatedIndicatorEmail(P uniqueId, String emailAddress, String ownerName)
+            throws Exception;
 
-    public List<File> getAssociatedIndicatorFiles(P uniqueId) throws IOException, FailedResponseException;
+    public List<File> getAssociatedIndicatorFiles(P uniqueId) throws Exception;
 
-    public List<File> getAssociatedIndicatorFiles(P uniqueId, String ownerName)   
-            throws IOException, FailedResponseException;
+    public List<File> getAssociatedIndicatorFiles(P uniqueId, String ownerName)
+            throws Exception;
 
-    public File getAssociatedIndicatorFile(P uniqueId, String fileHash) throws IOException, FailedResponseException;
+    public File getAssociatedIndicatorFile(P uniqueId, String fileHash) throws Exception;
 
-    public File getAssociatedIndicatorFile(P uniqueId, String fileHash, String ownerName)   
-            throws IOException, FailedResponseException;
+    public File getAssociatedIndicatorFile(P uniqueId, String fileHash, String ownerName)
+            throws Exception;
 
-    public List<Host> getAssociatedIndicatorHosts(P uniqueId) throws IOException, FailedResponseException;
+    public List<Host> getAssociatedIndicatorHosts(P uniqueId) throws Exception;
 
-    public List<Host> getAssociatedIndicatorHosts(P uniqueId, String ownerName)   
-            throws IOException, FailedResponseException;
+    public List<Host> getAssociatedIndicatorHosts(P uniqueId, String ownerName)
+            throws Exception;
 
-    public Host getAssociatedIndicatorHost(P uniqueId, String hostName) throws IOException, FailedResponseException;
+    public Host getAssociatedIndicatorHost(P uniqueId, String hostName) throws Exception;
 
-    public Host getAssociatedIndicatorHost(P uniqueId, String hostName, String ownerName)   
-            throws IOException, FailedResponseException;
+    public Host getAssociatedIndicatorHost(P uniqueId, String hostName, String ownerName)
+            throws Exception;
 
-    public List<Url> getAssociatedIndicatorUrls(P uniqueId) throws IOException, FailedResponseException;
+    public List<Url> getAssociatedIndicatorUrls(P uniqueId) throws Exception;
 
-    public List<Url> getAssociatedIndicatorUrls(P uniqueId, String ownerName)     
-            throws IOException, FailedResponseException;
+    public List<Url> getAssociatedIndicatorUrls(P uniqueId, String ownerName)
+            throws Exception;
 
-    public Url getAssociatedIndicatorUrl(P uniqueId, String urlText) throws IOException, FailedResponseException;
+    public Url getAssociatedIndicatorUrl(P uniqueId, String urlText) throws Exception;
 
-    public Url getAssociatedIndicatorUrl(P uniqueId, String urlText, String ownerName)     
-            throws IOException, FailedResponseException;
+    public Url getAssociatedIndicatorUrl(P uniqueId, String urlText, String ownerName)
+            throws Exception;
 
 }

@@ -18,7 +18,7 @@ import com.threatconnect.sdk.client.reader.associate.AbstractIndicatorAssociateR
 import com.threatconnect.sdk.client.reader.associate.AbstractGroupAssociateReaderAdapter;
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Address;
 import com.threatconnect.sdk.server.entity.Adversary;
@@ -38,17 +38,6 @@ import com.threatconnect.sdk.server.response.entity.ApiEntityListResponse;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.server.response.entity.BulkStatusResponse;
 import com.threatconnect.sdk.server.response.entity.IndicatorListResponse;
-import com.threatconnect.sdk.client.UrlTypeable;
-import com.threatconnect.sdk.client.reader.associate.AbstractAttributeAssociateReaderAdapter;
-import com.threatconnect.sdk.client.reader.associate.AbstractGroupAssociateReaderAdapter;
-import com.threatconnect.sdk.client.reader.associate.AbstractIndicatorAssociateReaderAdapter;
-import com.threatconnect.sdk.client.reader.associate.AbstractOwnerAssociateReaderAdapter;
-import com.threatconnect.sdk.client.reader.associate.AbstractSecurityLabelAssociateReaderAdapter;
-import com.threatconnect.sdk.client.reader.associate.AbstractTagAssociateReaderAdapter;
-import com.threatconnect.sdk.client.reader.associate.AbstractVictimAssociateReaderAdapter;
-import com.threatconnect.sdk.client.reader.associate.VictimAssetAssociateReadable;
-import com.threatconnect.sdk.client.reader.associate.VictimAssociateReadable;
-import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.server.entity.Attribute;
 import com.threatconnect.sdk.server.entity.Group;
 import com.threatconnect.sdk.server.entity.Owner;
@@ -57,7 +46,6 @@ import com.threatconnect.sdk.server.entity.Victim;
 import com.threatconnect.sdk.server.entity.VictimAsset;
 import com.threatconnect.sdk.server.entity.VictimNetworkAccount;
 import com.threatconnect.sdk.server.entity.VictimPhone;
-import com.threatconnect.sdk.server.response.entity.BulkStatusResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -69,7 +57,7 @@ import java.util.Map;
 
 /**
  * AbstractIndicatorReaderAdapter is the primary client adapter for all Adversary group level objects.
- * It uses the {@link com.threatconnect.sdk.conn.Connection} object to execute requests against the {@link RequestExecutor} object.
+ * It uses the {@link com.threatconnect.sdk.conn.Connection} object to execute requests against the {@link com.threatconnect.sdk.conn.AbstractRequestExecutor} object.
  * The responsibility of this class is to encapsulate all the low level ThreatConnect API calls
  * specifically targeted at data under the Adversary group type.
  * 
@@ -99,16 +87,15 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
      * access this object.
      *
      * @param conn Primary connection object to the ThreatConnect API
-     * @param executor Executor handling low level HTTPS calls to the
      * ThreatConnect API
      * @param singleType
      * @param listType
      *
      * @see ReaderAdapterFactory
      */
-    public AbstractIndicatorReaderAdapter(Connection conn, RequestExecutor executor
+    public AbstractIndicatorReaderAdapter(Connection conn
                 , Class<? extends ApiEntitySingleResponse> singleType, Class<? extends ApiEntityListResponse> listType) { 
-        super(conn, executor, singleType, listType);
+        super(conn, singleType, listType);
 
         initComposite();
     }
@@ -116,7 +103,6 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     private void initComposite() {
         attribReader = new AbstractAttributeAssociateReaderAdapter<String>(
                             AbstractIndicatorReaderAdapter.this.getConn()
-                          , AbstractIndicatorReaderAdapter.this.executor
                           , AbstractIndicatorReaderAdapter.this.singleType
                           , AbstractIndicatorReaderAdapter.this.listType
             ) {
@@ -134,7 +120,6 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
 
         groupAssocReader = new AbstractGroupAssociateReaderAdapter<String>(
                             AbstractIndicatorReaderAdapter.this.getConn()
-                          , AbstractIndicatorReaderAdapter.this.executor
                           , AbstractIndicatorReaderAdapter.this.singleType
                           , AbstractIndicatorReaderAdapter.this.listType
             ) {
@@ -151,7 +136,6 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
 
         indAssocReader = new AbstractIndicatorAssociateReaderAdapter<String>(
                             AbstractIndicatorReaderAdapter.this.getConn()
-                          , AbstractIndicatorReaderAdapter.this.executor
                           , AbstractIndicatorReaderAdapter.this.singleType
                           , AbstractIndicatorReaderAdapter.this.listType
             ) {
@@ -168,7 +152,6 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
 
         secLabelAssocReader = new AbstractSecurityLabelAssociateReaderAdapter<String>(
                             AbstractIndicatorReaderAdapter.this.getConn()
-                          , AbstractIndicatorReaderAdapter.this.executor
                           , AbstractIndicatorReaderAdapter.this.singleType
                           , AbstractIndicatorReaderAdapter.this.listType
             ) {
@@ -180,7 +163,6 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
 
         tagAssocReader = new AbstractTagAssociateReaderAdapter<String>(
                             AbstractIndicatorReaderAdapter.this.getConn()
-                          , AbstractIndicatorReaderAdapter.this.executor
                           , AbstractIndicatorReaderAdapter.this.singleType
                           , AbstractIndicatorReaderAdapter.this.listType
             ) {
@@ -196,7 +178,6 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
 
         victimAssetAssocReader = new AbstractVictimAssetAssociateReaderAdapter<String>(
                             AbstractIndicatorReaderAdapter.this.getConn()
-                          , AbstractIndicatorReaderAdapter.this.executor
                           , AbstractIndicatorReaderAdapter.this.singleType
                           , AbstractIndicatorReaderAdapter.this.listType
             ) {
@@ -208,7 +189,6 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
         
         ownerAssocReader = new AbstractOwnerAssociateReaderAdapter<String>(
                             AbstractIndicatorReaderAdapter.this.getConn()
-                          , AbstractIndicatorReaderAdapter.this.executor
                           , AbstractIndicatorReaderAdapter.this.singleType
                           , AbstractIndicatorReaderAdapter.this.listType
             ) {
@@ -220,7 +200,6 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
 
         victimAssocReader = new AbstractVictimAssociateReaderAdapter<String>(
                             AbstractIndicatorReaderAdapter.this.getConn()
-                          , AbstractIndicatorReaderAdapter.this.executor
                           , AbstractIndicatorReaderAdapter.this.singleType
                           , AbstractIndicatorReaderAdapter.this.listType
             ) {

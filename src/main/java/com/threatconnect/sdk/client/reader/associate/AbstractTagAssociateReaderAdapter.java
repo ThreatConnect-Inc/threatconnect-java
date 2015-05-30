@@ -8,7 +8,7 @@ package com.threatconnect.sdk.client.reader.associate;
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.reader.AbstractBaseReaderAdapter;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Tag;
 import com.threatconnect.sdk.server.response.entity.TagListResponse;
@@ -23,8 +23,8 @@ import java.util.Map;
  */
 public abstract class AbstractTagAssociateReaderAdapter<P> extends AbstractBaseReaderAdapter implements TagAssociateReadable<P>, UrlTypeable {
 
-    public AbstractTagAssociateReaderAdapter(Connection conn, RequestExecutor executor, Class singleType, Class listType) {
-        super(conn, executor, singleType, listType);
+    public AbstractTagAssociateReaderAdapter(Connection conn, Class singleType, Class listType) {
+        super(conn, singleType, listType);
     }
 
     @Override

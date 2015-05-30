@@ -7,13 +7,10 @@ package com.threatconnect.sdk.client.reader.associate;
 
 import com.threatconnect.sdk.client.reader.AbstractBaseReaderAdapter;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Victim;
 import com.threatconnect.sdk.server.response.entity.VictimListResponse;
-import com.threatconnect.sdk.server.response.entity.VictimResponse;
-import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.server.entity.Victim;
 import com.threatconnect.sdk.server.response.entity.VictimResponse;
 
 import java.io.IOException;
@@ -27,8 +24,8 @@ import java.util.Map;
 public abstract class AbstractVictimAssociateReaderAdapter<P> 
     extends AbstractBaseReaderAdapter implements VictimAssociateReadable<P> {
 
-    public AbstractVictimAssociateReaderAdapter(Connection conn, RequestExecutor executor, Class singleType, Class listType) {
-        super(conn, executor, singleType, listType);
+    public AbstractVictimAssociateReaderAdapter(Connection conn, Class singleType, Class listType) {
+        super(conn, singleType, listType);
     }
 
     @Override

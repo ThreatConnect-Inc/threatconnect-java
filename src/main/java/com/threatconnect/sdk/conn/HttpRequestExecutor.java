@@ -24,39 +24,17 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author dtineo
  */
-public class RequestExecutor {
+public class HttpRequestExecutor extends AbstractRequestExecutor
+{
 
-    private final Logger logger = Logger.getLogger(getClass().getSimpleName());
-    private final Connection conn;
-
-    public static enum HttpMethod {
-        GET, PUT, DELETE, POST
-    };
-
-    public RequestExecutor(Connection conn) {
-        this.conn = conn;
-    }
-
-    public String executePut(String path, Object obj) throws IOException {
-        return execute(path, HttpMethod.PUT, obj);
-    }
-
-    public String executePost(String path, Object obj) throws IOException {
-        return execute(path, HttpMethod.POST, obj);
-    }
-
-    public String executeGet(String path) throws IOException {
-        return execute(path, HttpMethod.GET, null); 
-    }
-
-    public String executeDelete(String path) throws IOException {
-        return execute(path, HttpMethod.DELETE, null); 
+    public HttpRequestExecutor(Connection conn)
+    {
+        super(conn);
     }
 
     private static HttpRequestBase getBase(String fullPath, HttpMethod type) {
@@ -81,6 +59,7 @@ public class RequestExecutor {
        ((HttpEntityEnclosingRequestBase)httpBase).setEntity(new StringEntity(jsonData, ContentType.APPLICATION_JSON));
     }
 
+    @Override
     public String execute(String path, HttpMethod type, Object obj) throws IOException {
 
         if (this.conn.getConfig() == null) {
@@ -93,7 +72,7 @@ public class RequestExecutor {
         HttpRequestBase httpBase = getBase(fullPath, type);
         if ( obj != null )  applyEntityAsJSON( httpBase, obj );
 
-        ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), path, null);
+        ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, type.toString(), path);
         logger.log(Level.INFO, "Request: " + httpBase.getRequestLine());
         CloseableHttpResponse response = this.conn.getApiClient().execute(httpBase);
         String result = null;
@@ -120,6 +99,7 @@ public class RequestExecutor {
      * @return raw input stream from response
      * @throws IOException
      */
+    @Override
     public InputStream executeDownloadByteStream(String path) throws IOException {
         if (this.conn.getConfig() == null) {
             throw new IllegalStateException("Can't execute HTTP request when configuration is undefined.");
@@ -132,8 +112,7 @@ public class RequestExecutor {
         logger.log(Level.INFO, "Calling GET: " + fullPath);
         HttpRequestBase httpBase = getBase(fullPath, HttpMethod.GET);
 
-        ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), path, null);
-        httpBase.addHeader("Content-Type", ContentType.APPLICATION_OCTET_STREAM.toString());
+        ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), path, ContentType.APPLICATION_OCTET_STREAM.toString());
         logger.log(Level.INFO, "Request: " + httpBase.getRequestLine());
         CloseableHttpResponse response = this.conn.getApiClient().execute(httpBase);
 
@@ -149,6 +128,7 @@ public class RequestExecutor {
     }
 
 
+    @Override
     public InputStream executeUploadByteStream(String path, File file) throws IOException
     {
         if (this.conn.getConfig() == null) {
@@ -162,11 +142,9 @@ public class RequestExecutor {
         logger.log(Level.INFO, "Calling POST: " + fullPath);
         HttpPost httpBase = new HttpPost(fullPath);
         httpBase.setEntity(new FileEntity(file));
-        ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), path, null);
-        httpBase.addHeader("Content-Type", ContentType.APPLICATION_OCTET_STREAM.toString());
+        ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), path, ContentType.APPLICATION_OCTET_STREAM.toString());
 
         logger.log(Level.INFO, "Request: " + httpBase.getRequestLine());
-
 
         CloseableHttpResponse response = this.conn.getApiClient().execute(httpBase);
 

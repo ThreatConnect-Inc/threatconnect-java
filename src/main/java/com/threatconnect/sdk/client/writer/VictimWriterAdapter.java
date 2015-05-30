@@ -9,7 +9,7 @@ import com.threatconnect.sdk.client.writer.associate.GroupAssociateWritable;
 import com.threatconnect.sdk.client.writer.associate.IndicatorAssociateWritable;
 import com.threatconnect.sdk.client.writer.associate.VictimAssetAssociateWritable;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Victim;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * VictimWriterAdapter is the primary writer adapter for all Victim level objects.
- * It uses the {@link Connection} object to execute requests against the {@link RequestExecutor} object.
+ * It uses the {@link Connection} object to execute requests against the {@link com.threatconnect.sdk.conn.AbstractRequestExecutor} object.
  * The responsibility of this class is to encapsulate all the low level ThreatConnect API calls
  * specifically targeted at data under the Victim type.
  * 
@@ -40,12 +40,11 @@ public class VictimWriterAdapter
     /**
      * Package level constructor. Use the {@link WriterAdapterFactory} to access this object.
      * @param conn      Primary connection object to the ThreatConnect API
-     * @param executor  Executor handling low level HTTPS calls to the ThreatConnect API
-     * 
+     *
      * @see WriterAdapterFactory
      */
-    protected VictimWriterAdapter(Connection conn, RequestExecutor executor) {
-        super(conn, executor, VictimResponse.class );
+    protected VictimWriterAdapter(Connection conn) {
+        super(conn, VictimResponse.class );
 
         initComposite();
     }
@@ -54,7 +53,6 @@ public class VictimWriterAdapter
 
         groupAssocWriter = new AbstractGroupAssociateWriterAdapter<Victim,Integer>(
                             VictimWriterAdapter.this.getConn()
-                          , VictimWriterAdapter.this.executor
                           , VictimWriterAdapter.this.singleType
             ) {
             @Override
@@ -76,7 +74,6 @@ public class VictimWriterAdapter
 
         indAssocWriter = new AbstractIndicatorAssociateWriterAdapter<Victim,Integer>(
                             VictimWriterAdapter.this.getConn()
-                          , VictimWriterAdapter.this.executor
                           , VictimWriterAdapter.this.singleType
             ) {
             @Override
@@ -97,7 +94,6 @@ public class VictimWriterAdapter
 
         victimAssetAssocWriter = new AbstractVictimAssetAssociateWriterAdapter<Victim,Integer>(
                             VictimWriterAdapter.this.getConn()
-                          , VictimWriterAdapter.this.executor
                           , VictimWriterAdapter.this.singleType
             ) {
             @Override

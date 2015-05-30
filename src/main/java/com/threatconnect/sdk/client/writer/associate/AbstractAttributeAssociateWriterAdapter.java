@@ -9,7 +9,7 @@ import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.response.WriteListResponse;
 import com.threatconnect.sdk.client.writer.AbstractBaseWriterAdapter;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Attribute;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
@@ -17,7 +17,6 @@ import com.threatconnect.sdk.server.response.entity.AttributeListResponse;
 import com.threatconnect.sdk.server.response.entity.AttributeResponse;
 import com.threatconnect.sdk.server.response.entity.SecurityLabelListResponse;
 import com.threatconnect.sdk.server.response.entity.SecurityLabelResponse;
-import com.threatconnect.sdk.server.response.entity.AttributeListResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,8 +30,8 @@ import java.util.Map;
 public abstract class AbstractAttributeAssociateWriterAdapter<T,P> extends AbstractBaseWriterAdapter<T,P> 
     implements AttributeAssociateWritable<P>, UrlTypeable {
 
-    public AbstractAttributeAssociateWriterAdapter(Connection conn, RequestExecutor executor, Class singleType) {
-        super(conn, executor, singleType );
+    public AbstractAttributeAssociateWriterAdapter(Connection conn, Class singleType) {
+        super(conn, singleType );
     }
 
     @Override

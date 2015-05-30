@@ -8,7 +8,7 @@ package com.threatconnect.sdk.client.reader.associate;
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.reader.AbstractBaseReaderAdapter;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Adversary;
 import com.threatconnect.sdk.server.entity.Email;
@@ -27,12 +27,6 @@ import com.threatconnect.sdk.server.response.entity.SignatureListResponse;
 import com.threatconnect.sdk.server.response.entity.SignatureResponse;
 import com.threatconnect.sdk.server.response.entity.ThreatListResponse;
 import com.threatconnect.sdk.server.response.entity.ThreatResponse;
-import com.threatconnect.sdk.client.UrlTypeable;
-import com.threatconnect.sdk.server.entity.Group;
-import com.threatconnect.sdk.server.response.entity.AdversaryListResponse;
-import com.threatconnect.sdk.server.response.entity.AdversaryResponse;
-import com.threatconnect.sdk.server.response.entity.IncidentResponse;
-import com.threatconnect.sdk.server.response.entity.ThreatListResponse;
 
 import java.io.IOException;
 import java.util.List;
@@ -45,8 +39,8 @@ import java.util.Map;
 public abstract class AbstractGroupAssociateReaderAdapter<P> extends AbstractBaseReaderAdapter implements GroupAssociateReadable<P>, UrlTypeable
 {
 
-    public AbstractGroupAssociateReaderAdapter(Connection conn, RequestExecutor executor, Class singleType, Class listType) {
-        super(conn, executor, singleType, listType);
+    public AbstractGroupAssociateReaderAdapter(Connection conn, Class singleType, Class listType) {
+        super(conn, singleType, listType);
     }
 
     @Override

@@ -7,15 +7,9 @@ import com.threatconnect.sdk.client.writer.associate.AbstractIndicatorAssociateW
 import com.threatconnect.sdk.client.writer.associate.GroupAssociateWritable;
 import com.threatconnect.sdk.client.writer.associate.IndicatorAssociateWritable;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.SecurityLabel;
-import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
-import com.threatconnect.sdk.server.response.entity.SecurityLabelResponse;
-import com.threatconnect.sdk.client.UrlTypeable;
-import com.threatconnect.sdk.client.response.WriteListResponse;
-import com.threatconnect.sdk.client.writer.associate.GroupAssociateWritable;
-import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.server.response.entity.SecurityLabelResponse;
 
@@ -24,7 +18,7 @@ import java.util.List;
 
 /**
  * SecurityLabelWriterAdapter is the primary writer adapter for all SecurityLabel level objects.
- * It uses the {@link com.threatconnect.sdk.conn.Connection} object to execute requests against the {@link RequestExecutor} object.
+ * It uses the {@link com.threatconnect.sdk.conn.Connection} object to execute requests against the {@link com.threatconnect.sdk.conn.AbstractRequestExecutor} object.
  * The responsibility of this class is to encapsulate all the low level ThreatConnect API calls
  * specifically targeted at data under the SecurityLabel type.
  * 
@@ -47,8 +41,8 @@ public class SecurityLabelWriterAdapter
      * 
      * @see WriterAdapterFactory
      */
-    protected SecurityLabelWriterAdapter(Connection conn, RequestExecutor executor) {
-        super(conn, executor, SecurityLabelResponse.class);
+    protected SecurityLabelWriterAdapter(Connection conn) {
+        super(conn, SecurityLabelResponse.class);
 
         initComposite();
     }
@@ -57,7 +51,6 @@ public class SecurityLabelWriterAdapter
 
         groupAssocWriter = new AbstractGroupAssociateWriterAdapter<SecurityLabel,String>(
                             SecurityLabelWriterAdapter.this.getConn()
-                          , SecurityLabelWriterAdapter.this.executor
                           , SecurityLabelWriterAdapter.this.singleType
             ) {
             @Override
@@ -79,7 +72,6 @@ public class SecurityLabelWriterAdapter
 
         indAssocWriter = new AbstractIndicatorAssociateWriterAdapter<SecurityLabel,String>(
                             SecurityLabelWriterAdapter.this.getConn()
-                          , SecurityLabelWriterAdapter.this.executor
                           , SecurityLabelWriterAdapter.this.singleType
             ) {
             @Override

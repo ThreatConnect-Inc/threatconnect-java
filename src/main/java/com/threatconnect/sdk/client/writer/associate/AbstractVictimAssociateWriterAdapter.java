@@ -9,21 +9,12 @@ import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.response.WriteListResponse;
 import com.threatconnect.sdk.client.writer.AbstractBaseWriterAdapter;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.server.response.entity.VictimListResponse;
 import com.threatconnect.sdk.server.response.entity.VictimResponse;
 import com.threatconnect.sdk.client.AbstractClientAdapter;
-import com.threatconnect.sdk.client.UrlTypeable;
-import com.threatconnect.sdk.client.response.WriteListResponse;
-import com.threatconnect.sdk.client.writer.AbstractBaseWriterAdapter;
-import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
-import com.threatconnect.sdk.exception.FailedResponseException;
-import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
-import com.threatconnect.sdk.server.response.entity.VictimListResponse;
-import com.threatconnect.sdk.server.response.entity.VictimResponse;
 
 import java.io.IOException;
 import java.util.List;
@@ -36,8 +27,8 @@ import java.util.Map;
 public abstract class AbstractVictimAssociateWriterAdapter<T,P> extends AbstractBaseWriterAdapter<T,P> implements VictimAssociateWritable<P>, UrlTypeable
 {
 
-    public AbstractVictimAssociateWriterAdapter(Connection conn, RequestExecutor executor, Class singleType) {
-        super(conn, executor, singleType );
+    public AbstractVictimAssociateWriterAdapter(Connection conn, Class singleType) {
+        super(conn, singleType );
     }
 
     @Override

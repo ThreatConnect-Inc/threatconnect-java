@@ -7,18 +7,14 @@ package com.threatconnect.sdk.client.reader.associate;
 
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.reader.AbstractBaseReaderAdapter;
-import com.threatconnect.sdk.client.reader.associate.AttributeAssociateReadable;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Attribute;
 import com.threatconnect.sdk.server.entity.SecurityLabel;
 import com.threatconnect.sdk.server.response.entity.AttributeListResponse;
 import com.threatconnect.sdk.server.response.entity.AttributeResponse;
 import com.threatconnect.sdk.server.response.entity.SecurityLabelListResponse;
-import com.threatconnect.sdk.server.response.entity.SecurityLabelResponse;
-import com.threatconnect.sdk.server.entity.Attribute;
-import com.threatconnect.sdk.server.response.entity.AttributeListResponse;
 import com.threatconnect.sdk.server.response.entity.SecurityLabelResponse;
 
 import java.io.IOException;
@@ -32,8 +28,8 @@ import java.util.Map;
 public abstract class AbstractAttributeAssociateReaderAdapter<P> extends AbstractBaseReaderAdapter implements AttributeAssociateReadable<P>, UrlTypeable
 {
 
-    public AbstractAttributeAssociateReaderAdapter(Connection conn, RequestExecutor executor, Class singleType, Class listType) {
-        super(conn, executor, singleType, listType);
+    public AbstractAttributeAssociateReaderAdapter(Connection conn, Class singleType, Class listType) {
+        super(conn, singleType, listType);
     }
 
     @Override

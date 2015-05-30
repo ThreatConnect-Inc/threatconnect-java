@@ -9,7 +9,7 @@ import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.response.WriteListResponse;
 import com.threatconnect.sdk.client.writer.AbstractBaseWriterAdapter;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.response.entity.AddressListResponse;
 import com.threatconnect.sdk.server.response.entity.AddressResponse;
@@ -23,17 +23,6 @@ import com.threatconnect.sdk.server.response.entity.HostResponse;
 import com.threatconnect.sdk.server.response.entity.UrlListResponse;
 import com.threatconnect.sdk.server.response.entity.UrlResponse;
 import com.threatconnect.sdk.client.AbstractClientAdapter;
-import com.threatconnect.sdk.client.UrlTypeable;
-import com.threatconnect.sdk.client.response.WriteListResponse;
-import com.threatconnect.sdk.client.writer.AbstractBaseWriterAdapter;
-import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
-import com.threatconnect.sdk.server.response.entity.AddressListResponse;
-import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
-import com.threatconnect.sdk.server.response.entity.EmailAddressListResponse;
-import com.threatconnect.sdk.server.response.entity.EmailAddressResponse;
-import com.threatconnect.sdk.server.response.entity.FileListResponse;
-import com.threatconnect.sdk.server.response.entity.HostListResponse;
 
 import java.io.IOException;
 import java.util.List;
@@ -46,8 +35,8 @@ import java.util.Map;
 public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends AbstractBaseWriterAdapter<T,P> implements IndicatorAssociateWritable<P>, UrlTypeable
 {
 
-    public AbstractIndicatorAssociateWriterAdapter(Connection conn, RequestExecutor executor, Class singleType) {
-        super(conn, executor, singleType);
+    public AbstractIndicatorAssociateWriterAdapter(Connection conn, Class singleType) {
+        super(conn, singleType);
     }
 
     @Override

@@ -9,20 +9,12 @@ import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.response.WriteListResponse;
 import com.threatconnect.sdk.client.writer.AbstractBaseWriterAdapter;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.server.response.entity.SecurityLabelListResponse;
 import com.threatconnect.sdk.server.response.entity.SecurityLabelResponse;
 import com.threatconnect.sdk.client.AbstractClientAdapter;
-import com.threatconnect.sdk.client.UrlTypeable;
-import com.threatconnect.sdk.client.response.WriteListResponse;
-import com.threatconnect.sdk.client.writer.AbstractBaseWriterAdapter;
-import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
-import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
-import com.threatconnect.sdk.server.response.entity.SecurityLabelListResponse;
-import com.threatconnect.sdk.server.response.entity.SecurityLabelResponse;
 
 import java.io.IOException;
 import java.util.List;
@@ -35,8 +27,8 @@ import java.util.Map;
 public abstract class AbstractSecurityLabelAssociateWriterAdapter<T,P> extends AbstractBaseWriterAdapter<T,P> implements SecurityLabelAssociateWritable<P>, UrlTypeable
 {
 
-    public AbstractSecurityLabelAssociateWriterAdapter(Connection conn, RequestExecutor executor, Class singleType) {
-        super(conn, executor, singleType );
+    public AbstractSecurityLabelAssociateWriterAdapter(Connection conn, Class singleType) {
+        super(conn, singleType );
     }
 
     @Override

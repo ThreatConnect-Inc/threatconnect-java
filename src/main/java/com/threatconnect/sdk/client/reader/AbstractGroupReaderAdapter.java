@@ -14,7 +14,7 @@ import com.threatconnect.sdk.client.reader.associate.AbstractIndicatorAssociateR
 import com.threatconnect.sdk.client.reader.associate.AbstractGroupAssociateReaderAdapter;
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Address;
 import com.threatconnect.sdk.server.entity.Adversary;
@@ -39,14 +39,13 @@ import com.threatconnect.sdk.server.entity.VictimWebSite;
 import com.threatconnect.sdk.server.response.entity.ApiEntityListResponse;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.server.response.entity.GroupListResponse;
-import com.threatconnect.sdk.server.entity.Group;
 
 import java.io.IOException;
 import java.util.List;
 
 /**
  * EmailReaderAdapter is the primary client adapter for all Email group level objects.
- * It uses the {@link Connection} object to execute requests against the {@link RequestExecutor} object.
+ * It uses the {@link Connection} object to execute requests against the {@link com.threatconnect.sdk.conn.AbstractRequestExecutor} object.
  * The responsibility of this class is to encapsulate all the low level ThreatConnect API calls
  * specifically targeted at data under the Email group type.
  * 
@@ -71,15 +70,14 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     /**
      * Package level constructor. Use the {@link ReaderAdapterFactory} to access this object.
      * @param conn      Primary connection object to the ThreatConnect API
-     * @param executor  Executor handling low level HTTPS calls to the ThreatConnect API
      * @param singleType
      * @param listType
      * 
      * @see ReaderAdapterFactory
      */
-    protected AbstractGroupReaderAdapter(Connection conn, RequestExecutor executor
+    protected AbstractGroupReaderAdapter(Connection conn
                 , Class<? extends ApiEntitySingleResponse> singleType, Class<? extends ApiEntityListResponse> listType) { 
-        super(conn, executor, singleType, listType);
+        super(conn, singleType, listType);
 
         initComposite();
     }
@@ -87,7 +85,6 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     private void initComposite() {
         attribReader = new AbstractAttributeAssociateReaderAdapter<Integer>(
                             AbstractGroupReaderAdapter.this.getConn()
-                          , AbstractGroupReaderAdapter.this.executor
                           , AbstractGroupReaderAdapter.this.singleType
                           , AbstractGroupReaderAdapter.this.listType
             ) {
@@ -104,7 +101,6 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
 
         groupAssocReader = new AbstractGroupAssociateReaderAdapter<Integer>(
                             AbstractGroupReaderAdapter.this.getConn()
-                          , AbstractGroupReaderAdapter.this.executor
                           , AbstractGroupReaderAdapter.this.singleType
                           , AbstractGroupReaderAdapter.this.listType
             ) {
@@ -120,7 +116,6 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
 
         indAssocReader = new AbstractIndicatorAssociateReaderAdapter<Integer>(
                             AbstractGroupReaderAdapter.this.getConn()
-                          , AbstractGroupReaderAdapter.this.executor
                           , AbstractGroupReaderAdapter.this.singleType
                           , AbstractGroupReaderAdapter.this.listType
             ) {
@@ -137,7 +132,6 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
 
         secLabelAssocReader = new AbstractSecurityLabelAssociateReaderAdapter<Integer>(
                             AbstractGroupReaderAdapter.this.getConn()
-                          , AbstractGroupReaderAdapter.this.executor
                           , AbstractGroupReaderAdapter.this.singleType
                           , AbstractGroupReaderAdapter.this.listType
             ) {
@@ -149,7 +143,6 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
 
         tagAssocReader = new AbstractTagAssociateReaderAdapter<Integer>(
                             AbstractGroupReaderAdapter.this.getConn()
-                          , AbstractGroupReaderAdapter.this.executor
                           , AbstractGroupReaderAdapter.this.singleType
                           , AbstractGroupReaderAdapter.this.listType
             ) {
@@ -165,7 +158,6 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
 
         victimAssetAssocReader = new AbstractVictimAssetAssociateReaderAdapter<Integer>(
                             AbstractGroupReaderAdapter.this.getConn()
-                          , AbstractGroupReaderAdapter.this.executor
                           , AbstractGroupReaderAdapter.this.singleType
                           , AbstractGroupReaderAdapter.this.listType
             ) {

@@ -6,14 +6,11 @@
 package com.threatconnect.sdk.client.reader;
 
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.response.entity.ApiEntityListResponse;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.client.AbstractClientAdapter;
-import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
-import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,9 +24,9 @@ public abstract class AbstractBaseReaderAdapter<T,P> extends AbstractReaderAdapt
     protected final Class<? extends ApiEntitySingleResponse> singleType;
     protected final Class<? extends ApiEntityListResponse> listType;
 
-    protected AbstractBaseReaderAdapter(Connection conn, RequestExecutor executor
+    protected AbstractBaseReaderAdapter(Connection conn
                 , Class<? extends ApiEntitySingleResponse> singleType, Class<? extends ApiEntityListResponse> listType) { 
-        super(conn, executor);
+        super(conn);
 
         this.singleType = singleType;
         this.listType = listType;

@@ -11,7 +11,7 @@ import com.threatconnect.sdk.client.reader.associate.AbstractIndicatorAssociateR
 import com.threatconnect.sdk.client.reader.associate.AbstractGroupAssociateReaderAdapter;
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Address;
 import com.threatconnect.sdk.server.entity.Adversary;
@@ -20,27 +20,6 @@ import com.threatconnect.sdk.server.entity.File;
 import com.threatconnect.sdk.server.entity.Group;
 import com.threatconnect.sdk.server.entity.Host;
 import com.threatconnect.sdk.server.entity.Incident;
-import com.threatconnect.sdk.server.entity.Indicator;
-import com.threatconnect.sdk.server.entity.SecurityLabel;
-import com.threatconnect.sdk.server.entity.Signature;
-import com.threatconnect.sdk.server.entity.Threat;
-import com.threatconnect.sdk.server.entity.Url;
-import com.threatconnect.sdk.server.response.entity.SecurityLabelListResponse;
-import com.threatconnect.sdk.server.response.entity.SecurityLabelResponse;
-import com.threatconnect.sdk.client.UrlTypeable;
-import com.threatconnect.sdk.client.reader.associate.AbstractGroupAssociateReaderAdapter;
-import com.threatconnect.sdk.client.reader.associate.AbstractIndicatorAssociateReaderAdapter;
-import com.threatconnect.sdk.client.reader.associate.GroupAssociateReadable;
-import com.threatconnect.sdk.client.reader.associate.IndicatorAssociateReadable;
-import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
-import com.threatconnect.sdk.exception.FailedResponseException;
-import com.threatconnect.sdk.server.entity.Address;
-import com.threatconnect.sdk.server.entity.Adversary;
-import com.threatconnect.sdk.server.entity.Email;
-import com.threatconnect.sdk.server.entity.File;
-import com.threatconnect.sdk.server.entity.Group;
-import com.threatconnect.sdk.server.entity.Host;
 import com.threatconnect.sdk.server.entity.Indicator;
 import com.threatconnect.sdk.server.entity.SecurityLabel;
 import com.threatconnect.sdk.server.entity.Signature;
@@ -66,8 +45,8 @@ public class SecurityLabelReaderAdapter
     private AbstractIndicatorAssociateReaderAdapter<String> indAssocReader;
 
 
-    protected SecurityLabelReaderAdapter(Connection conn, RequestExecutor executor) {
-        super(conn, executor, SecurityLabelResponse.class, SecurityLabelListResponse.class);
+    protected SecurityLabelReaderAdapter(Connection conn) {
+        super(conn, SecurityLabelResponse.class, SecurityLabelListResponse.class);
 
         initComposite();
     }
@@ -76,7 +55,6 @@ public class SecurityLabelReaderAdapter
 
         groupAssocReader = new AbstractGroupAssociateReaderAdapter<String>(
                             SecurityLabelReaderAdapter.this.getConn()
-                          , SecurityLabelReaderAdapter.this.executor
                           , SecurityLabelReaderAdapter.this.singleType
                           , SecurityLabelReaderAdapter.this.listType
             ) {
@@ -93,7 +71,6 @@ public class SecurityLabelReaderAdapter
 
         indAssocReader = new AbstractIndicatorAssociateReaderAdapter<String>(
                             SecurityLabelReaderAdapter.this.getConn()
-                          , SecurityLabelReaderAdapter.this.executor
                           , SecurityLabelReaderAdapter.this.singleType
                           , SecurityLabelReaderAdapter.this.listType
             ) {

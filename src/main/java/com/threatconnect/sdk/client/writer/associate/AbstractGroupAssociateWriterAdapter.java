@@ -9,7 +9,7 @@ import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.response.WriteListResponse;
 import com.threatconnect.sdk.client.writer.AbstractBaseWriterAdapter;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.response.entity.AdversaryResponse;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
@@ -18,13 +18,6 @@ import com.threatconnect.sdk.server.response.entity.IncidentResponse;
 import com.threatconnect.sdk.server.response.entity.SignatureResponse;
 import com.threatconnect.sdk.server.response.entity.ThreatResponse;
 import com.threatconnect.sdk.client.AbstractClientAdapter;
-import com.threatconnect.sdk.client.UrlTypeable;
-import com.threatconnect.sdk.client.response.WriteListResponse;
-import com.threatconnect.sdk.client.writer.AbstractBaseWriterAdapter;
-import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.server.response.entity.AdversaryResponse;
-import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
-import com.threatconnect.sdk.server.response.entity.IncidentResponse;
 
 import java.io.IOException;
 import java.util.List;
@@ -38,8 +31,8 @@ public abstract class AbstractGroupAssociateWriterAdapter<T,P> extends AbstractB
     implements GroupAssociateWritable<P>, UrlTypeable
 {
 
-    public AbstractGroupAssociateWriterAdapter(Connection conn, RequestExecutor executor, Class singleType) {
-        super(conn, executor, singleType);
+    public AbstractGroupAssociateWriterAdapter(Connection conn, Class singleType) {
+        super(conn, singleType);
     }
 
     @Override

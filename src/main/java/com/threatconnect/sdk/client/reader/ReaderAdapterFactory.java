@@ -6,7 +6,7 @@
 package com.threatconnect.sdk.client.reader;
 
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.server.entity.Address;
 import com.threatconnect.sdk.server.entity.Adversary;
 import com.threatconnect.sdk.server.entity.Email;
@@ -45,7 +45,7 @@ import com.threatconnect.sdk.server.response.entity.UrlResponse;
 public class ReaderAdapterFactory {
 
     public static AbstractGroupReaderAdapter<Adversary> createAdversaryGroupReader(Connection conn) {
-        return new AbstractGroupReaderAdapter<Adversary>(conn, new RequestExecutor(conn), AdversaryResponse.class, AdversaryListResponse.class) {
+        return new AbstractGroupReaderAdapter<Adversary>(conn, AdversaryResponse.class, AdversaryListResponse.class) {
             @Override
             public String getUrlType() {
                 return "adversaries";
@@ -54,7 +54,7 @@ public class ReaderAdapterFactory {
     }
 
     public static AbstractGroupReaderAdapter<Email> createEmailGroupReader(Connection conn) {
-        return new AbstractGroupReaderAdapter<Email>(conn, new RequestExecutor(conn), EmailResponse.class, EmailListResponse.class) {
+        return new AbstractGroupReaderAdapter<Email>(conn, EmailResponse.class, EmailListResponse.class) {
             @Override
             public String getUrlType() {
                 return "emails";
@@ -63,7 +63,7 @@ public class ReaderAdapterFactory {
     }
 
     public static AbstractGroupReaderAdapter<Incident> createIncidentGroupReader(Connection conn) {
-        return new AbstractGroupReaderAdapter<Incident>(conn, new RequestExecutor(conn), IncidentResponse.class, IncidentListResponse.class) {
+        return new AbstractGroupReaderAdapter<Incident>(conn, IncidentResponse.class, IncidentListResponse.class) {
             @Override
             public String getUrlType() {
                 return "incidents";
@@ -72,7 +72,7 @@ public class ReaderAdapterFactory {
     }
 
     public static AbstractGroupReaderAdapter<Signature> createSignatureGroupReader(Connection conn) {
-        return new AbstractGroupReaderAdapter<Signature>(conn, new RequestExecutor(conn), SignatureResponse.class, SignatureListResponse.class) {
+        return new AbstractGroupReaderAdapter<Signature>(conn, SignatureResponse.class, SignatureListResponse.class) {
             @Override
             public String getUrlType() {
                 return "signatures";
@@ -81,7 +81,7 @@ public class ReaderAdapterFactory {
     }
 
     public static AbstractGroupReaderAdapter<Threat> createThreatGroupReader(Connection conn) {
-        return new AbstractGroupReaderAdapter<Threat>(conn, new RequestExecutor(conn), ThreatResponse.class, ThreatListResponse.class) {
+        return new AbstractGroupReaderAdapter<Threat>(conn, ThreatResponse.class, ThreatListResponse.class) {
             @Override
             public String getUrlType() {
                 return "threats";
@@ -90,7 +90,7 @@ public class ReaderAdapterFactory {
     }
 
     public static AbstractIndicatorReaderAdapter<Address> createAddressIndicatorReader(Connection conn) {
-        return new AbstractIndicatorReaderAdapter<Address>(conn, new RequestExecutor(conn), AddressResponse.class, AddressListResponse.class) {
+        return new AbstractIndicatorReaderAdapter<Address>(conn, AddressResponse.class, AddressListResponse.class) {
             @Override
             public String getUrlType() {
                 return "addresses";
@@ -99,7 +99,7 @@ public class ReaderAdapterFactory {
     }
 
     public static AbstractIndicatorReaderAdapter<EmailAddress> createEmailAddressIndicatorReader(Connection conn) {
-        return new AbstractIndicatorReaderAdapter<EmailAddress>(conn, new RequestExecutor(conn), EmailAddressResponse.class, EmailAddressListResponse.class) {
+        return new AbstractIndicatorReaderAdapter<EmailAddress>(conn, EmailAddressResponse.class, EmailAddressListResponse.class) {
             @Override
             public String getUrlType() {
                 return "emailAddresses";
@@ -108,11 +108,11 @@ public class ReaderAdapterFactory {
     }
 
     public static AbstractIndicatorReaderAdapter<File> createFileIndicatorReader(Connection conn) {
-        return new FileIndicatorReaderAdapter(conn, new RequestExecutor(conn));
+        return new FileIndicatorReaderAdapter(conn);
     }
 
     public static AbstractIndicatorReaderAdapter<Host> createHostIndicatorReader(Connection conn) {
-        return new AbstractIndicatorReaderAdapter<Host>(conn, new RequestExecutor(conn), HostResponse.class, HostListResponse.class) {
+        return new AbstractIndicatorReaderAdapter<Host>(conn, HostResponse.class, HostListResponse.class) {
             @Override
             public String getUrlType() {
                 return "hosts";
@@ -121,7 +121,7 @@ public class ReaderAdapterFactory {
     }
 
     public static AbstractIndicatorReaderAdapter<Url> createUrlIndicatorReader(Connection conn) {
-        return new AbstractIndicatorReaderAdapter<Url>(conn, new RequestExecutor(conn), UrlResponse.class, UrlListResponse.class) {
+        return new AbstractIndicatorReaderAdapter<Url>(conn, UrlResponse.class, UrlListResponse.class) {
             @Override
             public String getUrlType() {
                 return "urls";
@@ -130,20 +130,20 @@ public class ReaderAdapterFactory {
     }
 
     public static OwnerReaderAdapter createOwnerReader(Connection conn) {
-        return new OwnerReaderAdapter(conn, new RequestExecutor(conn)) {
+        return new OwnerReaderAdapter(conn) {
         };
     }
 
     public static SecurityLabelReaderAdapter createSecurityLabelReader(Connection conn) {
-        return new SecurityLabelReaderAdapter(conn, new RequestExecutor(conn) );
+        return new SecurityLabelReaderAdapter(conn);
     }
 
     public static TagReaderAdapter createTagReader(Connection conn) {
-        return new TagReaderAdapter(conn, new RequestExecutor(conn) );
+        return new TagReaderAdapter(conn);
     }
 
     public static VictimReaderAdapter createVictimReader(Connection conn) {
-        return new VictimReaderAdapter(conn, new RequestExecutor(conn));
+        return new VictimReaderAdapter(conn);
     }
 
     public static AbstractGroupReaderAdapter getGroupReader(String type, Connection conn) {
@@ -209,6 +209,6 @@ public class ReaderAdapterFactory {
      * @return and instance of DocumentReaderAdapter
      */
     public static DocumentReaderAdapter createDocumentReaderAdapter(Connection conn) {
-        return new DocumentReaderAdapter(conn, new RequestExecutor(conn));
+        return new DocumentReaderAdapter(conn);
     }
 }

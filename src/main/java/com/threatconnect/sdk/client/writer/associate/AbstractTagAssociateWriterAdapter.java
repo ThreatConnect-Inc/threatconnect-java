@@ -9,14 +9,11 @@ import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.response.WriteListResponse;
 import com.threatconnect.sdk.client.writer.AbstractBaseWriterAdapter;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.server.response.entity.TagListResponse;
 import com.threatconnect.sdk.server.response.entity.TagResponse;
-import com.threatconnect.sdk.client.UrlTypeable;
-import com.threatconnect.sdk.client.response.WriteListResponse;
-import com.threatconnect.sdk.client.writer.AbstractBaseWriterAdapter;
 
 import java.io.IOException;
 import java.util.List;
@@ -29,8 +26,8 @@ import java.util.Map;
 public abstract class AbstractTagAssociateWriterAdapter<T,P> extends AbstractBaseWriterAdapter<T,P> implements TagAssociateWritable<P>, UrlTypeable
 {
 
-    public AbstractTagAssociateWriterAdapter(Connection conn, RequestExecutor executor, Class singleType) {
-        super(conn, executor, singleType);
+    public AbstractTagAssociateWriterAdapter(Connection conn, Class singleType) {
+        super(conn, singleType);
     }
 
     @Override

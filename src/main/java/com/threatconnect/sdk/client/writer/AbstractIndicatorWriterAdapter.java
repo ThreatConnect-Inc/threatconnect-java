@@ -17,22 +17,10 @@ import com.threatconnect.sdk.client.writer.associate.TagAssociateWritable;
 import com.threatconnect.sdk.client.writer.associate.VictimAssetAssociateWritable;
 import com.threatconnect.sdk.client.writer.associate.VictimAssociateWritable;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Attribute;
 import com.threatconnect.sdk.server.entity.Indicator;
-import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
-import com.threatconnect.sdk.client.UrlTypeable;
-import com.threatconnect.sdk.client.response.WriteListResponse;
-import com.threatconnect.sdk.client.writer.associate.AbstractAttributeAssociateWriterAdapter;
-import com.threatconnect.sdk.client.writer.associate.AbstractGroupAssociateWriterAdapter;
-import com.threatconnect.sdk.client.writer.associate.AbstractTagAssociateWriterAdapter;
-import com.threatconnect.sdk.client.writer.associate.AttributeAssociateWritable;
-import com.threatconnect.sdk.client.writer.associate.GroupAssociateWritable;
-import com.threatconnect.sdk.client.writer.associate.TagAssociateWritable;
-import com.threatconnect.sdk.client.writer.associate.VictimAssetAssociateWritable;
-import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.server.entity.Attribute;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 
 import java.io.IOException;
@@ -40,7 +28,7 @@ import java.util.List;
 
 /**
  * AbstractIndicatorWriterAdapter is the primary writer adapter for all Indicator level objects.
- * It uses the {@link com.threatconnect.sdk.conn.Connection} object to execute requests against the {@link RequestExecutor} object.
+ * It uses the {@link com.threatconnect.sdk.conn.Connection} object to execute requests against the {@link com.threatconnect.sdk.conn.AbstractRequestExecutor} object.
  * The responsibility of this class is to encapsulate all the low level ThreatConnect API calls
  * specifically targeted at data under the Indicator T type.
  * 
@@ -67,14 +55,13 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     /**
      * Package level constructor. Use the {@link WriterAdapterFactory} to access this object.
      * @param conn      Primary connection object to the ThreatConnect API
-     * @param executor  Executor handling low level HTTPS calls to the ThreatConnect API
      * @param singleType
      * 
      * @see WriterAdapterFactory
      */
-    protected AbstractIndicatorWriterAdapter(Connection conn, RequestExecutor executor
+    protected AbstractIndicatorWriterAdapter(Connection conn
                 , Class<? extends ApiEntitySingleResponse> singleType ) {
-        super(conn, executor, singleType );
+        super(conn, singleType );
 
         initComposite();
     }
@@ -82,7 +69,6 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     private void initComposite() {
         attribWriter = new AbstractAttributeAssociateWriterAdapter<T,String>(
                             AbstractIndicatorWriterAdapter.this.getConn()
-                          , AbstractIndicatorWriterAdapter.this.executor
                           , AbstractIndicatorWriterAdapter.this.singleType
             ) {
             @Override
@@ -105,7 +91,6 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
 
         groupAssocWriter = new AbstractGroupAssociateWriterAdapter<T,String>(
                             AbstractIndicatorWriterAdapter.this.getConn()
-                          , AbstractIndicatorWriterAdapter.this.executor
                           , AbstractIndicatorWriterAdapter.this.singleType
             ) {
             @Override
@@ -127,7 +112,6 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
 
         indAssocWriter = new AbstractIndicatorAssociateWriterAdapter<T,String>(
                             AbstractIndicatorWriterAdapter.this.getConn()
-                          , AbstractIndicatorWriterAdapter.this.executor
                           , AbstractIndicatorWriterAdapter.this.singleType
             ) {
             @Override
@@ -148,7 +132,6 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
 
         secLabelAssocWriter = new AbstractSecurityLabelAssociateWriterAdapter<T,String>(
                             AbstractIndicatorWriterAdapter.this.getConn()
-                          , AbstractIndicatorWriterAdapter.this.executor
                           , AbstractIndicatorWriterAdapter.this.singleType
             ) {
             @Override
@@ -169,7 +152,6 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
 
         tagAssocWriter = new AbstractTagAssociateWriterAdapter<T,String>(
                             AbstractIndicatorWriterAdapter.this.getConn()
-                          , AbstractIndicatorWriterAdapter.this.executor
                           , AbstractIndicatorWriterAdapter.this.singleType
             ) {
             @Override
@@ -190,7 +172,6 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
 
         victimAssetAssocWriter = new AbstractVictimAssetAssociateWriterAdapter<T,String>(
                             AbstractIndicatorWriterAdapter.this.getConn()
-                          , AbstractIndicatorWriterAdapter.this.executor
                           , AbstractIndicatorWriterAdapter.this.singleType
             ) {
             @Override
@@ -211,7 +192,6 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
 
        victimAssocWriter = new AbstractVictimAssociateWriterAdapter<T,String>(
                             AbstractIndicatorWriterAdapter.this.getConn()
-                          , AbstractIndicatorWriterAdapter.this.executor
                           , AbstractIndicatorWriterAdapter.this.singleType
             ) {
 

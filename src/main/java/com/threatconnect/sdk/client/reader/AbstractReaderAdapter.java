@@ -8,7 +8,7 @@ package com.threatconnect.sdk.client.reader;
 import com.threatconnect.sdk.client.AbstractClientAdapter;
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.response.entity.ApiEntityListResponse;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
@@ -27,12 +27,12 @@ import java.util.logging.Logger;
  * Base client class used by {@link com.threatconnect.sdk.client.reader} and
  * {@link com.threatconnect.sdk.client.writer}. Conceptually works as an adapter
  * with a {@link com.threatconnect.sdk.conn.Connection} and a
- * {@link com.threatconnect.sdk.conn.RequestExecutor}.
+ * {@link com.threatconnect.sdk.conn.AbstractRequestExecutor}.
  * </p>
  *
  * <p>
  * Implementing classes should abstract away low level API calls to the
- * {@link com.threatconnect.sdk.conn.RequestExecutor} and return high-level
+ * {@link com.threatconnect.sdk.conn.AbstractRequestExecutor} and return high-level
  * {@link com.threatconnect.sdk.server.entity} style classes.
  * </p>
  *
@@ -43,8 +43,8 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
     private final Logger logger = Logger.getLogger(getClass().getSimpleName());
 
 
-    public AbstractReaderAdapter(Connection conn, RequestExecutor executor) {
-        super(conn, executor);
+    public AbstractReaderAdapter(Connection conn) {
+        super(conn);
     }
 
     protected String getAsText(String propName) throws IOException {
@@ -55,7 +55,7 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
         }
 
         logger.log(Level.INFO, "calling url=" + url);
-        String content = executor.executeGet(url);
+        String content = executor.execute(AbstractRequestExecutor.HttpMethod.GET, url);
         logger.log(Level.INFO, "returning content=" + content);
 
         return content;
@@ -108,7 +108,7 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
 
 
         logger.log(Level.INFO, "Calling url=" + url);
-        String content = executor.executeGet(url);
+        String content = executor.execute(AbstractRequestExecutor.HttpMethod.GET, url);
         logger.log(Level.INFO, "returning content=" + content);
 
         T result = (T) mapper.readValue(content, type);
@@ -144,7 +144,7 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
             }
         }
 
-        String content = executor.executeGet(url);
+        String content = executor.execute(AbstractRequestExecutor.HttpMethod.GET, url);
         logger.log(Level.INFO, "returning content=" + content);
 
         T result = (T) mapper.readValue(content, type);

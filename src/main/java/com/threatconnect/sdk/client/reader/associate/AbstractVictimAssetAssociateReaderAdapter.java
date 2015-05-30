@@ -7,7 +7,7 @@ package com.threatconnect.sdk.client.reader.associate;
 
 import com.threatconnect.sdk.client.reader.AbstractBaseReaderAdapter;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.VictimAsset;
 import com.threatconnect.sdk.server.entity.VictimEmailAddress;
@@ -26,24 +26,6 @@ import com.threatconnect.sdk.server.response.entity.VictimSocialNetworkListRespo
 import com.threatconnect.sdk.server.response.entity.VictimSocialNetworkResponse;
 import com.threatconnect.sdk.server.response.entity.VictimWebSiteListResponse;
 import com.threatconnect.sdk.server.response.entity.VictimWebSiteResponse;
-import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
-import com.threatconnect.sdk.server.entity.VictimAsset;
-import com.threatconnect.sdk.server.entity.VictimEmailAddress;
-import com.threatconnect.sdk.server.entity.VictimNetworkAccount;
-import com.threatconnect.sdk.server.entity.VictimPhone;
-import com.threatconnect.sdk.server.entity.VictimSocialNetwork;
-import com.threatconnect.sdk.server.entity.VictimWebSite;
-import com.threatconnect.sdk.server.response.entity.VictimAssetListResponse;
-import com.threatconnect.sdk.server.response.entity.VictimEmailAddressListResponse;
-import com.threatconnect.sdk.server.response.entity.VictimEmailAddressResponse;
-import com.threatconnect.sdk.server.response.entity.VictimNetworkAccountListResponse;
-import com.threatconnect.sdk.server.response.entity.VictimNetworkAccountResponse;
-import com.threatconnect.sdk.server.response.entity.VictimPhoneListResponse;
-import com.threatconnect.sdk.server.response.entity.VictimSocialNetworkListResponse;
-import com.threatconnect.sdk.server.response.entity.VictimSocialNetworkResponse;
-import com.threatconnect.sdk.server.response.entity.VictimWebSiteListResponse;
-import com.threatconnect.sdk.server.response.entity.VictimWebSiteResponse;
 
 import java.io.IOException;
 import java.util.List;
@@ -55,8 +37,8 @@ import java.util.Map;
  */
 public abstract class AbstractVictimAssetAssociateReaderAdapter<P> extends AbstractBaseReaderAdapter implements VictimAssetAssociateReadable<P> {
 
-    public AbstractVictimAssetAssociateReaderAdapter(Connection conn, RequestExecutor executor, Class singleType, Class listType) {
-        super(conn, executor, singleType, listType);
+    public AbstractVictimAssetAssociateReaderAdapter(Connection conn, Class singleType, Class listType) {
+        super(conn, singleType, listType);
     }
 
     @Override

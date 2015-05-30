@@ -6,7 +6,7 @@
 package com.threatconnect.sdk.client.reader;
 
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Owner;
 import com.threatconnect.sdk.server.response.entity.OwnerListResponse;
@@ -21,8 +21,8 @@ import java.util.Map;
  */
 public abstract class AbstractOwnerReaderAdapter<T> extends AbstractBaseReaderAdapter implements OwnerReadable<String> {
 
-    public AbstractOwnerReaderAdapter(Connection conn, RequestExecutor executor, Class singleType, Class listType) {
-        super(conn, executor, singleType, listType);
+    public AbstractOwnerReaderAdapter(Connection conn, Class singleType, Class listType) {
+        super(conn, singleType, listType);
     }
 
     @Override

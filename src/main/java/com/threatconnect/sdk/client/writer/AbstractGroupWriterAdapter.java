@@ -17,21 +17,11 @@ import com.threatconnect.sdk.client.writer.associate.TagAssociateWritable;
 import com.threatconnect.sdk.client.writer.associate.VictimAssetAssociateWritable;
 import com.threatconnect.sdk.client.writer.associate.VictimAssociateWritable;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Attribute;
 import com.threatconnect.sdk.server.entity.Group;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
-import com.threatconnect.sdk.client.UrlTypeable;
-import com.threatconnect.sdk.client.response.WriteListResponse;
-import com.threatconnect.sdk.client.writer.associate.AbstractAttributeAssociateWriterAdapter;
-import com.threatconnect.sdk.client.writer.associate.AbstractTagAssociateWriterAdapter;
-import com.threatconnect.sdk.client.writer.associate.AttributeAssociateWritable;
-import com.threatconnect.sdk.client.writer.associate.GroupAssociateWritable;
-import com.threatconnect.sdk.client.writer.associate.VictimAssetAssociateWritable;
-import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.server.entity.Attribute;
-import com.threatconnect.sdk.server.entity.Group;
 
 import java.io.IOException;
 import java.util.List;
@@ -61,14 +51,13 @@ public abstract class AbstractGroupWriterAdapter<T extends Group>
     /**
      * Package level constructor. Use the {@link WriterAdapterFactory} to access this object.
      * @param conn      Primary connection object to the ThreatConnect API
-     * @param executor  Executor handling low level HTTPS calls to the ThreatConnect API
      * @param singleType
      * 
      * @see WriterAdapterFactory
      */
-    protected AbstractGroupWriterAdapter(Connection conn, RequestExecutor executor
+    protected AbstractGroupWriterAdapter(Connection conn
                 , Class<? extends ApiEntitySingleResponse> singleType ) {
-        super(conn, executor, singleType );
+        super(conn, singleType );
 
         initComposite();
     }
@@ -76,7 +65,6 @@ public abstract class AbstractGroupWriterAdapter<T extends Group>
     private void initComposite() {
         attribWriter = new AbstractAttributeAssociateWriterAdapter<T,Integer>(
                             AbstractGroupWriterAdapter.this.getConn()
-                          , AbstractGroupWriterAdapter.this.executor
                           , AbstractGroupWriterAdapter.this.singleType
             ) {
             @Override
@@ -99,7 +87,6 @@ public abstract class AbstractGroupWriterAdapter<T extends Group>
 
         groupAssocWriter = new AbstractGroupAssociateWriterAdapter<T,Integer>(
                             AbstractGroupWriterAdapter.this.getConn()
-                          , AbstractGroupWriterAdapter.this.executor
                           , AbstractGroupWriterAdapter.this.singleType
             ) {
             @Override
@@ -121,7 +108,6 @@ public abstract class AbstractGroupWriterAdapter<T extends Group>
 
         indAssocWriter = new AbstractIndicatorAssociateWriterAdapter<T,Integer>(
                             AbstractGroupWriterAdapter.this.getConn()
-                          , AbstractGroupWriterAdapter.this.executor
                           , AbstractGroupWriterAdapter.this.singleType
             ) {
             @Override
@@ -142,7 +128,6 @@ public abstract class AbstractGroupWriterAdapter<T extends Group>
 
         secLabelAssocWriter = new AbstractSecurityLabelAssociateWriterAdapter<T,Integer>(
                             AbstractGroupWriterAdapter.this.getConn()
-                          , AbstractGroupWriterAdapter.this.executor
                           , AbstractGroupWriterAdapter.this.singleType
             ) {
             @Override
@@ -163,7 +148,6 @@ public abstract class AbstractGroupWriterAdapter<T extends Group>
 
         tagAssocWriter = new AbstractTagAssociateWriterAdapter<T,Integer>(
                             AbstractGroupWriterAdapter.this.getConn()
-                          , AbstractGroupWriterAdapter.this.executor
                           , AbstractGroupWriterAdapter.this.singleType
             ) {
             @Override
@@ -184,7 +168,6 @@ public abstract class AbstractGroupWriterAdapter<T extends Group>
 
         victimAssetAssocWriter = new AbstractVictimAssetAssociateWriterAdapter<T,Integer>(
                             AbstractGroupWriterAdapter.this.getConn()
-                          , AbstractGroupWriterAdapter.this.executor
                           , AbstractGroupWriterAdapter.this.singleType
             ) {
             @Override
@@ -206,7 +189,6 @@ public abstract class AbstractGroupWriterAdapter<T extends Group>
         
         victimAssocWriter = new AbstractVictimAssociateWriterAdapter<T,Integer>(
                             AbstractGroupWriterAdapter.this.getConn()
-                          , AbstractGroupWriterAdapter.this.executor
                           , AbstractGroupWriterAdapter.this.singleType
             ) {
 

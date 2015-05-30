@@ -7,7 +7,7 @@ package com.threatconnect.sdk.client.reader.associate;
 
 import com.threatconnect.sdk.client.reader.AbstractBaseReaderAdapter;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.SecurityLabel;
 import com.threatconnect.sdk.server.response.entity.SecurityLabelListResponse;
@@ -22,8 +22,8 @@ import java.util.Map;
  */
 public abstract class AbstractSecurityLabelAssociateReaderAdapter<P> extends AbstractBaseReaderAdapter implements SecurityLabelAssociateReadable<P> {
 
-    public AbstractSecurityLabelAssociateReaderAdapter(Connection conn, RequestExecutor executor, Class singleType, Class listType) {
-        super(conn, executor, singleType, listType);
+    public AbstractSecurityLabelAssociateReaderAdapter(Connection conn, Class singleType, Class listType) {
+        super(conn, singleType, listType);
     }
 
     @Override

@@ -5,11 +5,8 @@
  */
 package com.threatconnect.sdk.client.writer;
 
-import com.threatconnect.sdk.client.reader.AbstractIndicatorReaderAdapter;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
-import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.server.entity.Address;
 import com.threatconnect.sdk.server.entity.Adversary;
 import com.threatconnect.sdk.server.entity.Email;
@@ -38,7 +35,7 @@ import com.threatconnect.sdk.server.response.entity.UrlResponse;
 public class WriterAdapterFactory {
 
     public static AbstractGroupWriterAdapter<Adversary> createAdversaryGroupWriter(Connection conn) {
-        return new AbstractGroupWriterAdapter(conn, new RequestExecutor(conn), AdversaryResponse.class) {
+        return new AbstractGroupWriterAdapter<Adversary>(conn, AdversaryResponse.class) {
             @Override
             public String getUrlType() {
                 return "adversaries";
@@ -47,7 +44,7 @@ public class WriterAdapterFactory {
     }
 
     public static AbstractGroupWriterAdapter<Email> createEmailGroupWriter(Connection conn) {
-        return new AbstractGroupWriterAdapter(conn, new RequestExecutor(conn), EmailResponse.class) {
+        return new AbstractGroupWriterAdapter<Email>(conn, EmailResponse.class) {
             @Override
             public String getUrlType() {
                 return "emails";
@@ -56,7 +53,7 @@ public class WriterAdapterFactory {
     }
 
     public static AbstractGroupWriterAdapter<Incident> createIncidentGroupWriter(Connection conn) {
-        return new AbstractGroupWriterAdapter(conn, new RequestExecutor(conn), IncidentResponse.class) {
+        return new AbstractGroupWriterAdapter<Incident>(conn, IncidentResponse.class) {
             @Override
             public String getUrlType() {
                 return "incidents";
@@ -65,7 +62,7 @@ public class WriterAdapterFactory {
     }
 
     public static AbstractGroupWriterAdapter<Signature> createSignatureGroupWriter(Connection conn) {
-        return new AbstractGroupWriterAdapter(conn, new RequestExecutor(conn), SignatureResponse.class) {
+        return new AbstractGroupWriterAdapter<Signature>(conn, SignatureResponse.class) {
             @Override
             public String getUrlType() {
                 return "signatures";
@@ -74,7 +71,7 @@ public class WriterAdapterFactory {
     }
     
     public static AbstractGroupWriterAdapter<Threat> createThreatGroupWriter(Connection conn) {
-        return new AbstractGroupWriterAdapter(conn, new RequestExecutor(conn), ThreatResponse.class) {
+        return new AbstractGroupWriterAdapter<Threat>(conn, ThreatResponse.class) {
             @Override
             public String getUrlType() {
                 return "threats";
@@ -83,7 +80,7 @@ public class WriterAdapterFactory {
     }
 
     public static AbstractIndicatorWriterAdapter<Address> createAddressIndicatorWriter(Connection conn) {
-        return new AbstractIndicatorWriterAdapter<Address>(conn, new RequestExecutor(conn), AddressResponse.class) {
+        return new AbstractIndicatorWriterAdapter<Address>(conn, AddressResponse.class) {
             @Override
             public String getUrlType() {
                 return "addresses";
@@ -97,7 +94,7 @@ public class WriterAdapterFactory {
     }
 
     public static AbstractIndicatorWriterAdapter<EmailAddress> createEmailAddressIndicatorWriter(Connection conn) {
-        return new AbstractIndicatorWriterAdapter<EmailAddress>(conn, new RequestExecutor(conn), EmailAddressResponse.class) {
+        return new AbstractIndicatorWriterAdapter<EmailAddress>(conn, EmailAddressResponse.class) {
             @Override
             public String getUrlType() {
                 return "emailAddresses";
@@ -111,12 +108,12 @@ public class WriterAdapterFactory {
     }
     
     public static AbstractIndicatorWriterAdapter<File> createFileIndicatorWriter(Connection conn) {
-        return new FileIndicatorWriterAdapter(conn, new RequestExecutor(conn));
+        return new FileIndicatorWriterAdapter(conn);
  
     }
 
     public static AbstractIndicatorWriterAdapter<Host> createHostIndicatorWriter(Connection conn) {
-        return new AbstractIndicatorWriterAdapter<Host>(conn, new RequestExecutor(conn), HostResponse.class) {
+        return new AbstractIndicatorWriterAdapter<Host>(conn, HostResponse.class) {
             @Override
             public String getUrlType() {
                 return "hosts";
@@ -129,7 +126,7 @@ public class WriterAdapterFactory {
     }
 
     public static AbstractIndicatorWriterAdapter<Url> createUrlIndicatorWriter(Connection conn) {
-        return new AbstractIndicatorWriterAdapter<Url>(conn, new RequestExecutor(conn), UrlResponse.class) {
+        return new AbstractIndicatorWriterAdapter<Url>(conn, UrlResponse.class) {
             @Override
             public String getUrlType() {
                 return "urls";
@@ -143,15 +140,15 @@ public class WriterAdapterFactory {
     }
 
     public static SecurityLabelWriterAdapter createSecurityLabelWriter(Connection conn) {
-        return new SecurityLabelWriterAdapter(conn, new RequestExecutor(conn));
+        return new SecurityLabelWriterAdapter(conn);
     }
 
     public static TagWriterAdapter createTagWriter(Connection conn) {
-        return new TagWriterAdapter(conn, new RequestExecutor(conn));
+        return new TagWriterAdapter(conn);
     }
 
     public static VictimWriterAdapter createVictimWriter(Connection conn) {
-        return new VictimWriterAdapter(conn, new RequestExecutor(conn));
+        return new VictimWriterAdapter(conn);
     }
 
 
@@ -184,6 +181,6 @@ public class WriterAdapterFactory {
     }
 
     public static DocumentWriterAdapter createDocumentWriterAdapter(Connection conn) {
-        return new DocumentWriterAdapter(conn, new RequestExecutor(conn));
+        return new DocumentWriterAdapter(conn);
     }
 }

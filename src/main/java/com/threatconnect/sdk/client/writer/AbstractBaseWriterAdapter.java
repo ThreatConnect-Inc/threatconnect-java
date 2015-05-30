@@ -8,10 +8,9 @@ package com.threatconnect.sdk.client.writer;
 import com.threatconnect.sdk.client.Identifiable;
 import com.threatconnect.sdk.client.response.WriteListResponse;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
-import com.threatconnect.sdk.client.response.WriteListResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,9 +24,9 @@ import java.util.Map;
 public abstract class AbstractBaseWriterAdapter<T,P> extends AbstractWriterAdapter implements Identifiable<T,P> {
     protected final Class<? extends ApiEntitySingleResponse> singleType;
 
-    protected AbstractBaseWriterAdapter(Connection conn, RequestExecutor executor
+    protected AbstractBaseWriterAdapter(Connection conn
                 , Class<? extends ApiEntitySingleResponse> singleType) { 
-        super(conn, executor);
+        super(conn);
 
         this.singleType = singleType;
     }

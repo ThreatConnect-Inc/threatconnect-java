@@ -6,16 +6,12 @@
 package com.threatconnect.sdk.client.reader;
 
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.FileOccurrence;
 import com.threatconnect.sdk.server.response.entity.FileListResponse;
 import com.threatconnect.sdk.server.response.entity.FileOccurrenceResponse;
 import com.threatconnect.sdk.server.response.entity.FileResponse;
-import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.server.entity.FileOccurrence;
-import com.threatconnect.sdk.server.response.entity.FileListResponse;
-import com.threatconnect.sdk.server.response.entity.FileOccurrenceResponse;
 
 import java.io.IOException;
 import java.util.Map;
@@ -26,8 +22,8 @@ import java.util.Map;
  */
 public class FileIndicatorReaderAdapter<File> extends AbstractIndicatorReaderAdapter {
 
-    public FileIndicatorReaderAdapter(Connection conn, RequestExecutor executor) {
-        super(conn, executor, FileResponse.class, FileListResponse.class);
+    public FileIndicatorReaderAdapter(Connection conn) {
+        super(conn, FileResponse.class, FileListResponse.class);
 
     }
 

@@ -6,13 +6,7 @@
 package com.threatconnect.sdk.client.reader;
 
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
-import com.threatconnect.sdk.exception.FailedResponseException;
-import com.threatconnect.sdk.server.entity.Owner;
-import com.threatconnect.sdk.server.response.entity.OwnerListResponse;
-import com.threatconnect.sdk.server.response.entity.OwnerResponse;
-import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Owner;
 import com.threatconnect.sdk.server.response.entity.OwnerListResponse;
@@ -27,8 +21,8 @@ import java.util.List;
  */
 public class OwnerReaderAdapter extends AbstractReaderAdapter {
 
-    protected OwnerReaderAdapter(Connection conn, RequestExecutor executor) {
-        super(conn, executor);
+    protected OwnerReaderAdapter(Connection conn) {
+        super(conn);
     }
 
     public String getOwnerAsText() throws IOException {

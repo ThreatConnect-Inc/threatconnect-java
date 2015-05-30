@@ -34,6 +34,7 @@ public class Connection<T> implements Closeable
 
     private final CloseableHttpClient apiClient = createApiClient();
     protected Configuration config;
+    private AbstractRequestExecutor executor;
 
     private final URLConfiguration urlConfig;
 
@@ -48,6 +49,16 @@ public class Connection<T> implements Closeable
     public Connection(Configuration config) throws IOException {
         this.config = config;
         this.urlConfig = URLConfiguration.build();
+    }
+
+    public AbstractRequestExecutor getExecutor() {
+        if ( executor == null )
+        {
+            // TODO: Potentially return an "in memory" executor depending on ApiUrl
+            executor = new HttpRequestExecutor(this);
+        }
+
+        return executor;
     }
 
     /**
@@ -101,10 +112,13 @@ public class Connection<T> implements Closeable
     }
 
     public void disconnect() {
-        if ( apiClient != null )    try {
-            apiClient.close();
-        } catch (IOException ex) {
-            logger.log(Level.SEVERE, "Error disconnecting from httpClient", ex);
+        if ( apiClient != null )
+        {
+            try {
+                apiClient.close();
+            } catch (IOException ex) {
+                logger.log(Level.SEVERE, "Error disconnecting from httpClient", ex);
+            }
         }
     }
 

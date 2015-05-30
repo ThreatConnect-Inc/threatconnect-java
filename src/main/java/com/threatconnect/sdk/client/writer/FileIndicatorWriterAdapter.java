@@ -7,7 +7,7 @@ package com.threatconnect.sdk.client.writer;
 
 import com.threatconnect.sdk.client.response.WriteListResponse;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.FileOccurrence;
 import com.threatconnect.sdk.server.entity.File;
@@ -25,8 +25,8 @@ import java.util.Map;
  */
 public class FileIndicatorWriterAdapter extends AbstractIndicatorWriterAdapter<File> {
 
-    protected FileIndicatorWriterAdapter(Connection conn, RequestExecutor executor) {
-        super(conn, executor,FileResponse.class);
+    protected FileIndicatorWriterAdapter(Connection conn) {
+        super(conn, FileResponse.class);
     }
 
     @Override

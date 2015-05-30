@@ -9,7 +9,7 @@ import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.response.WriteListResponse;
 import com.threatconnect.sdk.client.writer.AbstractBaseWriterAdapter;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.server.response.entity.VictimEmailAddressResponse;
@@ -18,18 +18,6 @@ import com.threatconnect.sdk.server.response.entity.VictimPhoneResponse;
 import com.threatconnect.sdk.server.response.entity.VictimSocialNetworkResponse;
 import com.threatconnect.sdk.server.response.entity.VictimWebSiteResponse;
 import com.threatconnect.sdk.client.AbstractClientAdapter;
-import com.threatconnect.sdk.client.UrlTypeable;
-import com.threatconnect.sdk.client.response.WriteListResponse;
-import com.threatconnect.sdk.client.writer.AbstractBaseWriterAdapter;
-import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
-import com.threatconnect.sdk.exception.FailedResponseException;
-import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
-import com.threatconnect.sdk.server.response.entity.VictimEmailAddressResponse;
-import com.threatconnect.sdk.server.response.entity.VictimNetworkAccountResponse;
-import com.threatconnect.sdk.server.response.entity.VictimPhoneResponse;
-import com.threatconnect.sdk.server.response.entity.VictimSocialNetworkResponse;
-import com.threatconnect.sdk.server.response.entity.VictimWebSiteResponse;
 
 import java.io.IOException;
 import java.util.List;
@@ -42,8 +30,8 @@ import java.util.Map;
 public abstract class AbstractVictimAssetAssociateWriterAdapter<T,P> extends AbstractBaseWriterAdapter<T,P> implements VictimAssetAssociateWritable<P>, UrlTypeable
 {
 
-    public AbstractVictimAssetAssociateWriterAdapter(Connection conn, RequestExecutor executor, Class singleType) {
-        super(conn, executor, singleType);
+    public AbstractVictimAssetAssociateWriterAdapter(Connection conn, Class singleType) {
+        super(conn, singleType);
     }
 
     @Override

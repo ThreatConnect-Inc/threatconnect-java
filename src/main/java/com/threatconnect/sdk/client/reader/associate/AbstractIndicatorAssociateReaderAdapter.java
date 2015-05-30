@@ -8,7 +8,7 @@ package com.threatconnect.sdk.client.reader.associate;
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.reader.AbstractBaseReaderAdapter;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Address;
 import com.threatconnect.sdk.server.entity.Email;
@@ -27,7 +27,6 @@ import com.threatconnect.sdk.server.response.entity.HostResponse;
 import com.threatconnect.sdk.server.response.entity.IndicatorListResponse;
 import com.threatconnect.sdk.server.response.entity.UrlListResponse;
 import com.threatconnect.sdk.server.response.entity.UrlResponse;
-import com.threatconnect.sdk.server.response.entity.AddressListResponse;
 
 import java.io.IOException;
 import java.util.List;
@@ -39,8 +38,8 @@ import java.util.Map;
  */
 public abstract class AbstractIndicatorAssociateReaderAdapter<P> extends AbstractBaseReaderAdapter implements IndicatorAssociateReadable<P>, UrlTypeable {
 
-    public AbstractIndicatorAssociateReaderAdapter(Connection conn, RequestExecutor executor, Class singleType, Class listType) {
-        super(conn, executor, singleType, listType);
+    public AbstractIndicatorAssociateReaderAdapter(Connection conn, Class singleType, Class listType) {
+        super(conn, singleType, listType);
     }
 
     @Override

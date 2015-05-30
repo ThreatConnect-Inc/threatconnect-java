@@ -102,14 +102,14 @@ public interface VictimAssetAssociateWritable<P> {
     public WriteListResponse<Integer> dissociateVictimAssetSocialNetworks(P uniqueId, List<Integer> assetIds) throws IOException, FailedResponseException;
     
     public WriteListResponse<Integer> dissociateVictimAssetSocialNetworks(P uniqueId, List<Integer> assetIds, String ownerName)
-            throws IOException;
+            throws IOException, Exception;
         
     public ApiEntitySingleResponse dissociateVictimAssetSocialNetwork(P uniqueId, Integer assetId) throws IOException, FailedResponseException;
             
     public ApiEntitySingleResponse dissociateVictimAssetSocialNetwork(P uniqueId, Integer assetId, String ownerName)
             throws IOException, FailedResponseException;
         
-    public WriteListResponse<Integer> dissociateVictimAssetWebsites(P uniqueId, List<Integer> assetIds) throws IOException;
+    public WriteListResponse<Integer> dissociateVictimAssetWebsites(P uniqueId, List<Integer> assetIds) throws Exception;
     
     public WriteListResponse<Integer> dissociateVictimAssetWebsites(P uniqueId, List<Integer> assetIds, String ownerName)
             throws IOException;

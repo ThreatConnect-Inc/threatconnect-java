@@ -1,14 +1,12 @@
 package com.threatconnect.sdk.client.writer;
 
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Document;
-import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.server.response.entity.DocumentResponse;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,9 +15,9 @@ import java.util.Map;
  */
 public class DocumentWriterAdapter extends AbstractGroupWriterAdapter<Document>
 {
-    protected DocumentWriterAdapter(Connection conn, RequestExecutor executor)
+    protected DocumentWriterAdapter(Connection conn)
     {
-        super(conn, executor, DocumentResponse.class);
+        super(conn, DocumentResponse.class);
     }
 
     @Override

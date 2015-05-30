@@ -1,7 +1,7 @@
 package com.threatconnect.sdk.client.reader;
 
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.RequestExecutor;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Document;
 import com.threatconnect.sdk.server.response.entity.DocumentListResponse;
@@ -19,8 +19,8 @@ import java.util.Map;
  */
 public class DocumentReaderAdapter extends AbstractGroupReaderAdapter<Document> {
 
-    protected DocumentReaderAdapter(Connection conn, RequestExecutor executor) {
-        super(conn, executor, DocumentResponse.class, DocumentListResponse.class);
+    protected DocumentReaderAdapter(Connection conn) {
+        super(conn, DocumentResponse.class, DocumentListResponse.class);
     }
 
     @Override
