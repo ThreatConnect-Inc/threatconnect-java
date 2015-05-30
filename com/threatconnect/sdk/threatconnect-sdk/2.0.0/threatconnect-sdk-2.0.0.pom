@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.threatconnect.sdk</groupId>
+    <artifactId>threatconnect-sdk</artifactId>
+    <version>2.0.0</version>
+    <packaging>jar</packaging>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
+        <github.global.server>github</github.global.server>
+    </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>internal.repo</id>
+            <name>Temporary Staging Repository</name>
+            <url>file://${project.build.directory}/mvn-repo</url>
+        </repository>
+    </distributionManagement>
+    
+
+    <dependencies>
+
+        <!--dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.9</version>
+        </dependency-->
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.4.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.4.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.5.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.5.3</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+    <plugins>
+
+      <!-- zip distribution -->
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>2.2.1</version>
+          <configuration>
+              <descriptors>
+                  <descriptor>${basedir}/assembly/zip.xml</descriptor>
+              </descriptors>
+          </configuration>
+      </plugin>
+
+      <!-- javadoc -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.10.1</version>
+      </plugin>
+
+      <!-- don't include local config.properties in build -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.5</version>
+        <configuration>
+            <excludes>
+                <exclude>**/config.properties</exclude>
+            </excludes>
+        </configuration>
+      </plugin>
+
+      <!-- package lib, examples,  and docs -->
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.7</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <configuration>
+              <target>
+
+                <delete dir="${project.build.directory}/threatconnect-sdk" failonerror="false" />
+
+                <mkdir dir="${project.build.directory}/threatconnect-sdk/lib"/>
+                <mkdir dir="${project.build.directory}/threatconnect-sdk/third-party"/>
+                <mkdir dir="${project.build.directory}/threatconnect-sdk/doc"/>
+
+                <!-- jar file -->
+                <copy file="${project.build.directory}/${project.build.finalName}.jar" 
+                      tofile="${project.build.directory}/threatconnect-sdk/lib/${project.build.finalName}.jar"/>
+
+                <!-- examples -->
+                <copy file="${basedir}/src/main/resources/config.example.properties"
+                      tofile="${project.build.directory}/threatconnect-sdk/examples/resources/config.properties" />
+                <copy todir="${project.build.directory}/threatconnect-sdk/examples/com/threatconnect/sdk/examples" >
+                    <fileset dir="${basedir}/src/main/java/com/threatconnect/sdk/examples" includes="**"/>
+                </copy>
+
+                <!-- doc -->
+                <mkdir dir="${project.build.directory}/site/apidocs"></mkdir>
+                <copy todir="${project.build.directory}/threatconnect-sdk/doc/apidocs" >
+                    <fileset dir="${project.build.directory}/site/apidocs" includes="**"/>  
+                </copy>
+                <copy todir="${project.build.directory}/threatconnect-sdk/doc/guide" >  
+                    <fileset dir="${basedir}/guide" includes="**"/>  
+                </copy>
+
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- package third-party jar files -->
+          <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>package</phase>
+                <goals>
+                  <goal>copy-dependencies</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${project.build.directory}/threatconnect-sdk/third-party</outputDirectory>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        <plugin>
+            <artifactId>maven-deploy-plugin</artifactId>
+            <version>2.8.1</version>
+            <configuration>
+                <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>
+            </configuration>
+        </plugin>
+        <plugin>
+            <groupId>com.github.github</groupId>
+            <artifactId>site-maven-plugin</artifactId>
+            <version>0.11</version>
+            <dependencies>
+                <dependency>
+                    <groupId>org.eclipse.mylyn.github</groupId>
+                    <artifactId>org.eclipse.egit.github.core</artifactId>
+                    <version>2.1.5</version>
+                </dependency>
+            </dependencies>
+            <configuration>
+                <message>Maven artifacts for ${project.version}</message>  <!-- git commit message -->
+                <noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
+                <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory> <!-- matches distribution management repository url above -->
+                <branch>refs/heads/mvn-repo</branch>                       <!-- remote branch name -->
+                <includes><include>**/*</include></includes>
+                <repositoryName>threatconnect-java</repositoryName>      <!-- github repo name -->
+                <repositoryOwner>ThreatConnect-Inc</repositoryOwner>    <!-- github username  -->
+            </configuration>
+            <executions>
+              <!-- run site-maven-plugin's 'site' target as part of the build's normal 'deploy' phase -->
+              <execution>
+                <goals>
+                  <goal>site</goal>
+                </goals>
+                <phase>deploy</phase>
+              </execution>
+            </executions>
+        </plugin>
+
+    </plugins>
+  </build>
+
+</project>
