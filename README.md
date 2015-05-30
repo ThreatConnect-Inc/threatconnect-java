@@ -9,12 +9,18 @@ This SDK provides a high-level abstraction layer of the ThreatConnect&trade; RES
 Add the following entries to your pom file (git clone not required):
 <br/>
 ```xml
+
+   <properties>
+        <threatconnect-sdk.version>2.0.0</threatconnect-sdk.version>
+    </properties>
+
+
 <!-- repository entry -->
   <repositories>
       <repository>
           <id>threatconnect-java-mvn-repo</id>
-          <url>https://raw.github.com/ThreatConnect-Inc/threatconnect-java/mvn-repo/</url>
-          <snapshots>
+         <url>https://raw.github.com/ThreatConnect-Inc/threatconnect-java/mvn-repo-${threatconnect-sdk.version}/</url>
+           <snapshots>
               <enabled>true</enabled>
               <updatePolicy>always</updatePolicy>
           </snapshots>
@@ -27,8 +33,8 @@ Add the following entries to your pom file (git clone not required):
         <dependency>
             <groupId>com.threatconnect.sdk</groupId>
             <artifactId>threatconnect-sdk</artifactId>
-            <version>2.0.0</version>
-        </dependency>
+            <version>${threatconnect-sdk.version}</version>
+         </dependency>
     </dependencies>
 
 ```
