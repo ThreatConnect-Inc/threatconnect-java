@@ -138,8 +138,18 @@ public class IndicatorUtil
 
         } else if ( indicator instanceof  File )
         {
+            File file = (File)indicator;
 
-            return ((File) indicator).getMd5();
+            if ( file.getMd5() != null )
+            {
+                return file.getMd5();
+            } else if ( file.getSha1() != null )
+            {
+                return file.getSha1();
+            } else if ( file.getSha256() != null )
+            {
+                return file.getSha256();
+            }
 
         }
 

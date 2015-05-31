@@ -71,7 +71,8 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
 
         if (paramMap != null) {
             for(Entry<String,Object> entry : paramMap.entrySet()) {
-                url = url.replace(String.format("{%s}", entry.getKey()), entry.getValue().toString() );
+                String value = URLEncoder.encode( entry.getValue().toString(), "UTF-8");
+                url = url.replace(String.format("{%s}", entry.getKey()), value );
             }
         }
 
@@ -102,7 +103,8 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
 
         if (paramMap != null) {
             for(Entry<String,Object> entry : paramMap.entrySet()) {
-                url = url.replace(String.format("{%s}", entry.getKey()), entry.getValue().toString() );
+                String value = URLEncoder.encode( entry.getValue().toString(), "UTF-8");
+                url = url.replace(String.format("{%s}", entry.getKey()), value);
             }
         }
 
@@ -140,7 +142,8 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
         if (paramMap != null) {
             logger.log(Level.INFO, "paramMap=" + paramMap);
             for(Entry<String,Object> entry : paramMap.entrySet()) {
-                url = url.replace(String.format("{%s}", entry.getKey()), entry.getValue().toString() );
+                String value = URLEncoder.encode( entry.getValue().toString(), "UTF-8");
+                url = url.replace(String.format("{%s}", entry.getKey()), value);
             }
         }
 

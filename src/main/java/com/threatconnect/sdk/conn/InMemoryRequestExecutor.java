@@ -7,22 +7,9 @@ package com.threatconnect.sdk.conn;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.threatconnect.sdk.util.StringUtil;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.FileEntity;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.util.EntityUtils;
 import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.client.ClientResponse;
 import org.jboss.resteasy.client.core.executors.InMemoryClientExecutor;
-import org.jboss.resteasy.util.MediaTypeHelper;
 
 import javax.ws.rs.core.MediaType;
 import java.io.File;
@@ -40,24 +27,6 @@ public class InMemoryRequestExecutor extends AbstractRequestExecutor
     public InMemoryRequestExecutor(Connection conn)
     {
         super(conn);
-    }
-
-    private static HttpRequestBase getBase(String fullPath, HttpMethod type)
-    {
-
-        switch (type)
-        {
-            case GET:
-                return new HttpGet(fullPath);
-            case PUT:
-                return new HttpPut(fullPath);
-            case POST:
-                return new HttpPost(fullPath);
-            case DELETE:
-                return new HttpDelete(fullPath);
-        }
-
-        return null;
     }
 
     private void applyEntityAsJSON(ClientRequest request, Object obj) throws JsonProcessingException

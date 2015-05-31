@@ -54,8 +54,12 @@ public class Connection<T> implements Closeable
     public AbstractRequestExecutor getExecutor() {
         if ( executor == null )
         {
-            // TODO: Potentially return an "in memory" executor depending on ApiUrl
-            executor = new HttpRequestExecutor(this);
+            if ( config.getTcApiUrl().equalsIgnoreCase("embedded") )
+            {
+                executor = new InMemoryRequestExecutor(this);
+            } else {
+                executor = new HttpRequestExecutor(this);
+            }
         }
 
         return executor;

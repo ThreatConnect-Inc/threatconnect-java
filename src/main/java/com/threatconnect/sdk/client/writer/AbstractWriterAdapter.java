@@ -8,9 +8,8 @@ package com.threatconnect.sdk.client.writer;
 import com.threatconnect.sdk.client.AbstractClientAdapter;
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.response.WriteListResponse;
-import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.conn.AbstractRequestExecutor.HttpMethod;
+import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 
