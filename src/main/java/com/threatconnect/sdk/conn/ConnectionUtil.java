@@ -32,8 +32,17 @@ public class ConnectionUtil
     {
 
         Properties props = new Properties();
-        InputStream in = ConnectionUtil.class.getClass().getResourceAsStream(fileName);
-        props.load(in);
+        try
+        {
+            // check classloader, if running in container, this will fail on NPE
+            InputStream in = ConnectionUtil.class.getResourceAsStream(fileName);
+            props.load(in);
+        } catch(NullPointerException npe)
+        {
+            props = new Properties();
+            InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
+            props.load(in);
+        }
 
         return props;
     }
@@ -79,7 +88,7 @@ public class ConnectionUtil
         Long ts = System.currentTimeMillis() / 1000L;
         String sig = getSignature(ts, httpMethod, urlPath, null);
         String hmacSig = getHmacSha256Signature(sig, config.getTcApiUserSecretKey());
-        String auth = String.format("TC %s:%s", config.getTcApiAccessID(), hmacSig);
+        String auth = getAuthorizationText(config,hmacSig);
 
         message.addHeader("timestamp", "" + ts);
         message.addHeader("authorization", auth);
@@ -102,7 +111,7 @@ public class ConnectionUtil
         Long ts = System.currentTimeMillis() / 1000L;
         String sig = getSignature(ts, httpMethod, urlPath, null);
         String hmacSig = getHmacSha256Signature(sig, config.getTcApiUserSecretKey());
-        String auth = String.format("TC %s:%s", config.getTcApiAccessID(), hmacSig);
+        String auth = getAuthorizationText(config,hmacSig);
 
         message.header("timestamp", "" + ts);
         message.header("authorization", auth);
@@ -112,6 +121,11 @@ public class ConnectionUtil
             message.header("Content-Type", contentType);
         }
 
+    }
+
+    private static String getAuthorizationText(Configuration config, String hmacSig)
+    {
+        return String.format("TC %s:%s", config.getTcApiAccessID(), hmacSig);
     }
 
 }

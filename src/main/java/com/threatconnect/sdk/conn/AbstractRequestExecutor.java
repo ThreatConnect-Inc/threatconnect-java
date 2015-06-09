@@ -21,6 +21,11 @@ public abstract class AbstractRequestExecutor
 
     public AbstractRequestExecutor(Connection conn) {
         this.conn = conn;
+
+        if (this.conn.getConfig() == null) {
+            throw new IllegalStateException("Can't execute requests when configuration is undefined.");
+        }
+
     }
 
     public abstract String execute(String path, HttpMethod type, Object obj) throws IOException;

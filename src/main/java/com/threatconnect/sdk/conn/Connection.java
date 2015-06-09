@@ -12,6 +12,9 @@ import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.jboss.resteasy.core.Dispatcher;
+import org.jboss.resteasy.spi.Registry;
+import org.jboss.resteasy.spi.ResteasyProviderFactory;
 
 import javax.net.ssl.SSLContext;
 import java.io.Closeable;
@@ -32,7 +35,7 @@ public class Connection<T> implements Closeable
 
     private final Logger logger = Logger.getLogger(getClass().getSimpleName());
 
-    private final CloseableHttpClient apiClient = createApiClient();
+    private CloseableHttpClient apiClient;
     protected Configuration config;
     private AbstractRequestExecutor executor;
 
@@ -49,6 +52,31 @@ public class Connection<T> implements Closeable
     public Connection(Configuration config) throws IOException {
         this.config = config;
         this.urlConfig = URLConfiguration.build();
+    }
+
+    public void setInMemoryDispatcher(Object dispatcher)
+    {
+        if ( executor == null )
+        {
+            executor = new InMemoryRequestExecutor(this);
+        }
+
+        ((InMemoryRequestExecutor)executor).setDispatcher((Dispatcher) dispatcher);
+    }
+
+    public void setInMemoryProviderFactory(Object providerFactory)
+    {
+        if ( executor == null )
+        {
+            executor = new InMemoryRequestExecutor(this);
+        }
+
+        ((InMemoryRequestExecutor)executor).setResteasyProviderFactory((ResteasyProviderFactory)providerFactory);
+    }
+
+    public void setInMemoryRegistry(Object registry)
+    {
+        ((InMemoryRequestExecutor)executor).setRegistry((Registry)registry);
     }
 
     public AbstractRequestExecutor getExecutor() {
@@ -105,6 +133,10 @@ public class Connection<T> implements Closeable
     }
 
     CloseableHttpClient getApiClient() {
+        if ( apiClient == null )
+        {
+            apiClient = createApiClient();
+        }
         return apiClient;
     }
 

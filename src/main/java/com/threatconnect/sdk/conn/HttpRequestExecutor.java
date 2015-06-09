@@ -62,11 +62,16 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
     @Override
     public String execute(String path, HttpMethod type, Object obj) throws IOException {
 
-        if (this.conn.getConfig() == null) {
-            throw new IllegalStateException("Can't execute HTTP request when configuration is undefined.");
+        // TODO: pull elements from connection/config
+        if ( type == HttpMethod.GET )
+        {
+            path += "&resultStart=0&resultLimit=500";
         }
+        path += "&createActivityLog=false";
 
-        String fullPath = this.conn.getConfig().getTcApiUrl() + path.replace("/api","");
+        String fullPath = this.conn.getConfig().getTcApiUrl() + path.replace("/api/","/");
+
+
 
         logger.log(Level.INFO, "Calling " + type + ": " + fullPath);
         HttpRequestBase httpBase = getBase(fullPath, type);
@@ -107,7 +112,7 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 
         InputStream stream = null;
 
-        String fullPath = this.conn.getConfig().getTcApiUrl() + path.replace("/api","");
+        String fullPath = this.conn.getConfig().getTcApiUrl() + path.replace("/api/","/");
 
         logger.log(Level.INFO, "Calling GET: " + fullPath);
         HttpRequestBase httpBase = getBase(fullPath, HttpMethod.GET);
@@ -137,7 +142,7 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 
         InputStream stream = null;
 
-        String fullPath = this.conn.getConfig().getTcApiUrl() + path.replace("/api","");
+        String fullPath = this.conn.getConfig().getTcApiUrl() + path.replace("/api/","/");
 
         logger.log(Level.INFO, "Calling POST: " + fullPath);
         HttpPost httpBase = new HttpPost(fullPath);
