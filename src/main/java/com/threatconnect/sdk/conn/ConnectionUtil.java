@@ -8,7 +8,7 @@ package com.threatconnect.sdk.conn;
 import com.threatconnect.sdk.config.Configuration;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.message.AbstractHttpMessage;
-import org.jboss.resteasy.client.ClientRequest;
+//import org.jboss.resteasy.client.ClientRequest;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -100,6 +100,7 @@ public class ConnectionUtil
 
     }
 
+    /*
     static void applyHeaders(Configuration config, ClientRequest message, String httpMethod, String urlPath)
     {
         applyHeaders(config, message, httpMethod, urlPath, null);
@@ -122,6 +123,7 @@ public class ConnectionUtil
         }
 
     }
+    */
 
     private static String getAuthorizationText(Configuration config, String hmacSig)
     {

@@ -6,8 +6,8 @@
 package com.threatconnect.sdk.client.reader.associate;
 
 import com.threatconnect.sdk.client.reader.AbstractBaseReaderAdapter;
+import com.threatconnect.sdk.client.reader.IterableResponse;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.VictimAsset;
 import com.threatconnect.sdk.server.entity.VictimEmailAddress;
@@ -37,33 +37,29 @@ import java.util.Map;
  */
 public abstract class AbstractVictimAssetAssociateReaderAdapter<P> extends AbstractBaseReaderAdapter implements VictimAssetAssociateReadable<P> {
 
-    public AbstractVictimAssetAssociateReaderAdapter(Connection conn, Class singleType, Class listType) {
-        super(conn, singleType, listType);
+    public AbstractVictimAssetAssociateReaderAdapter(Connection conn, Class singleType, Class singleItemType, Class listType) {
+        super(conn, singleType, singleItemType, listType);
     }
 
     @Override
-    public List<VictimAsset> getAssociatedVictimAssets(P uniqueId, String ownerName)
+    public IterableResponse<VictimAsset> getAssociatedVictimAssets(P uniqueId, String ownerName)
         throws IOException, FailedResponseException {
 
         Map<String, Object> map = createParamMap("id", uniqueId);
-        VictimAssetListResponse data = getList(getUrlBasePrefix() + ".byId.victimAssets", VictimAssetListResponse.class, ownerName, map);
-
-        return (List<VictimAsset>) data.getData().getData();
+        return getItems(getUrlBasePrefix() + ".byId.victimAssets", VictimAssetListResponse.class, VictimAsset.class, ownerName, map);
     }
 
     @Override
-    public List<VictimEmailAddress> getAssociatedVictimAssetEmailAddresses(P uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<VictimEmailAddress> getAssociatedVictimAssetEmailAddresses(P uniqueId) throws IOException, FailedResponseException {
         return getAssociatedVictimAssetEmailAddresses(uniqueId, null);
     }
 
     @Override
-    public List<VictimEmailAddress> getAssociatedVictimAssetEmailAddresses(P uniqueId, String ownerName)
+    public IterableResponse<VictimEmailAddress> getAssociatedVictimAssetEmailAddresses(P uniqueId, String ownerName)
         throws IOException, FailedResponseException {
 
         Map<String, Object> map = createParamMap("id", uniqueId);
-        VictimEmailAddressListResponse data = getList(getUrlBasePrefix() + ".byId.victimAssets.emailAddresses", VictimEmailAddressListResponse.class, ownerName, map);
-
-        return (List<VictimEmailAddress>) data.getData().getData();
+        return getItems(getUrlBasePrefix() + ".byId.victimAssets.emailAddresses", VictimEmailAddressListResponse.class, VictimEmailAddress.class, ownerName, map);
     }
 
     @Override
@@ -82,18 +78,16 @@ public abstract class AbstractVictimAssetAssociateReaderAdapter<P> extends Abstr
     }
 
     @Override
-    public List<VictimNetworkAccount> getAssociatedVictimAssetNetworkAccounts(P uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<VictimNetworkAccount> getAssociatedVictimAssetNetworkAccounts(P uniqueId) throws IOException, FailedResponseException {
         return getAssociatedVictimAssetNetworkAccounts(uniqueId, null);
     }
 
     @Override
-    public List<VictimNetworkAccount> getAssociatedVictimAssetNetworkAccounts(P uniqueId, String ownerName)
+    public IterableResponse<VictimNetworkAccount> getAssociatedVictimAssetNetworkAccounts(P uniqueId, String ownerName)
         throws IOException, FailedResponseException {
 
         Map<String, Object> map = createParamMap("id", uniqueId);
-        VictimNetworkAccountListResponse data = getList(getUrlBasePrefix() + ".byId.victimAssets.networkAccounts", VictimNetworkAccountListResponse.class, ownerName, map);
-
-        return (List<VictimNetworkAccount>) data.getData().getData();
+        return getItems(getUrlBasePrefix() + ".byId.victimAssets.networkAccounts", VictimNetworkAccountListResponse.class, VictimNetworkAccount.class, ownerName, map);
     }
 
     @Override
@@ -112,18 +106,16 @@ public abstract class AbstractVictimAssetAssociateReaderAdapter<P> extends Abstr
     }
 
     @Override
-    public List<VictimPhone> getAssociatedVictimAssetPhoneNumbers(P uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<VictimPhone> getAssociatedVictimAssetPhoneNumbers(P uniqueId) throws IOException, FailedResponseException {
         return getAssociatedVictimAssetPhoneNumbers(uniqueId, null);
     }
 
     @Override
-    public List<VictimPhone> getAssociatedVictimAssetPhoneNumbers(P uniqueId, String ownerName)
+    public IterableResponse<VictimPhone> getAssociatedVictimAssetPhoneNumbers(P uniqueId, String ownerName)
         throws IOException, FailedResponseException {
 
         Map<String, Object> map = createParamMap("id", uniqueId);
-        VictimPhoneListResponse data = getList(getUrlBasePrefix() + ".byId.victimAssets.phoneNumbers", VictimPhoneListResponse.class, ownerName, map);
-
-        return (List<VictimPhone>) data.getData().getData();
+        return getItems(getUrlBasePrefix() + ".byId.victimAssets.phoneNumbers", VictimPhoneListResponse.class, VictimPhone.class, ownerName, map);
     }
 
     @Override
@@ -142,18 +134,16 @@ public abstract class AbstractVictimAssetAssociateReaderAdapter<P> extends Abstr
     }
 
     @Override
-    public List<VictimSocialNetwork> getAssociatedVictimAssetSocialNetworks(P uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<VictimSocialNetwork> getAssociatedVictimAssetSocialNetworks(P uniqueId) throws IOException, FailedResponseException {
         return getAssociatedVictimAssetSocialNetworks(uniqueId, null);
     }
 
     @Override
-    public List<VictimSocialNetwork> getAssociatedVictimAssetSocialNetworks(P uniqueId, String ownerName)
+    public IterableResponse<VictimSocialNetwork> getAssociatedVictimAssetSocialNetworks(P uniqueId, String ownerName)
         throws IOException, FailedResponseException {
 
         Map<String, Object> map = createParamMap("id", uniqueId);
-        VictimSocialNetworkListResponse data = getList(getUrlBasePrefix() + ".byId.victimAssets.socialNetworks", VictimSocialNetworkListResponse.class, ownerName, map);
-
-        return (List<VictimSocialNetwork>) data.getData().getData();
+        return getItems(getUrlBasePrefix() + ".byId.victimAssets.socialNetworks", VictimSocialNetworkListResponse.class, VictimSocialNetwork.class, ownerName, map);
     }
 
     @Override
@@ -172,18 +162,16 @@ public abstract class AbstractVictimAssetAssociateReaderAdapter<P> extends Abstr
     }
 
     @Override
-    public List<VictimWebSite> getAssociatedVictimAssetWebsites(P uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<VictimWebSite> getAssociatedVictimAssetWebsites(P uniqueId) throws IOException, FailedResponseException {
         return getAssociatedVictimAssetWebsites(uniqueId, null);
     }
 
     @Override
-    public List<VictimWebSite> getAssociatedVictimAssetWebsites(P uniqueId, String ownerName)
+    public IterableResponse<VictimWebSite> getAssociatedVictimAssetWebsites(P uniqueId, String ownerName)
         throws IOException, FailedResponseException {
 
         Map<String, Object> map = createParamMap("id", uniqueId);
-        VictimWebSiteListResponse data = getList(getUrlBasePrefix() + ".byId.victimAssets.websites", VictimWebSiteListResponse.class, ownerName, map);
-
-        return (List<VictimWebSite>) data.getData().getData();
+        return getItems(getUrlBasePrefix() + ".byId.victimAssets.websites", VictimWebSiteListResponse.class, VictimWebSite.class, ownerName, map);
     }
 
     @Override

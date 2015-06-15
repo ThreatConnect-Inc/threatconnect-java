@@ -7,8 +7,8 @@ package com.threatconnect.sdk.client.reader.associate;
 
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.reader.AbstractBaseReaderAdapter;
+import com.threatconnect.sdk.client.reader.IterableResponse;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Attribute;
 import com.threatconnect.sdk.server.entity.SecurityLabel;
@@ -28,24 +28,22 @@ import java.util.Map;
 public abstract class AbstractAttributeAssociateReaderAdapter<P> extends AbstractBaseReaderAdapter implements AttributeAssociateReadable<P>, UrlTypeable
 {
 
-    public AbstractAttributeAssociateReaderAdapter(Connection conn, Class singleType, Class listType) {
-        super(conn, singleType, listType);
+    public AbstractAttributeAssociateReaderAdapter(Connection conn, Class singleItemType, Class singleType, Class listType) {
+        super(conn, singleType, singleItemType, listType);
     }
 
     @Override
-    public List<Attribute> getAttributes(P uniqueId)
+    public IterableResponse<Attribute> getAttributes(P uniqueId)
         throws IOException, FailedResponseException {
         return getAttributes(uniqueId, null);
     }
 
     @Override
-    public List<Attribute> getAttributes(P uniqueId, String ownerName)
+    public IterableResponse<Attribute> getAttributes(P uniqueId, String ownerName)
         throws IOException, FailedResponseException {
 
         Map<String, Object> map = createParamMap("id", uniqueId);
-        AttributeListResponse item = getList(getUrlBasePrefix() + ".byId.attributes", AttributeListResponse.class, ownerName, map);
-
-        return (List<Attribute>) item.getData().getData();
+        return getItems(getUrlBasePrefix() + ".byId.attributes", AttributeListResponse.class, Attribute.class, ownerName, map);
     }
 
     @Override
@@ -64,18 +62,16 @@ public abstract class AbstractAttributeAssociateReaderAdapter<P> extends Abstrac
     }
 
     @Override
-    public List<SecurityLabel> getAttributeSecurityLabels(P uniqueId, Integer attributeId) throws IOException, FailedResponseException {
+    public IterableResponse<SecurityLabel> getAttributeSecurityLabels(P uniqueId, Integer attributeId) throws IOException, FailedResponseException {
         return getAttributeSecurityLabels(uniqueId, attributeId, null);
     }
 
     @Override
-    public List<SecurityLabel> getAttributeSecurityLabels(P uniqueId, Integer attributeId, String ownerName)
+    public IterableResponse<SecurityLabel> getAttributeSecurityLabels(P uniqueId, Integer attributeId, String ownerName)
         throws IOException, FailedResponseException {
 
         Map<String, Object> map = createParamMap("id", uniqueId, "attributeId", attributeId);
-        SecurityLabelListResponse data = getList(getUrlBasePrefix() + ".byId.attributes.byId.securityLabels", SecurityLabelListResponse.class, ownerName, map);
-
-        return (List<SecurityLabel>) data.getData().getData();
+        return getItems(getUrlBasePrefix() + ".byId.attributes.byId.securityLabels", SecurityLabelListResponse.class, SecurityLabel.class, ownerName, map);
     }
 
     @Override

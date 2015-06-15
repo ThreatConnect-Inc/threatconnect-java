@@ -15,6 +15,7 @@ import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -63,11 +64,7 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
 
     protected InputStream getFile(String propName, String ownerName, Map<String,Object> paramMap) throws IOException
     {
-        String url = getConn().getUrlConfig().getUrl(propName);
-
-        if (ownerName != null) {
-            url += "?owner=" + URLEncoder.encode(ownerName, "UTF-8");
-        }
+        String url = getUrl(propName, ownerName);
 
         if (paramMap != null) {
             for(Entry<String,Object> entry : paramMap.entrySet()) {
@@ -91,11 +88,7 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
     protected <T extends ApiEntitySingleResponse> T getItem(String propName, Class<T> type, String ownerName, Map<String,Object> paramMap)
         throws IOException, FailedResponseException {
 
-        String url = getConn().getUrlConfig().getUrl(propName);
-
-        if (ownerName != null) {
-            url += "?owner=" + URLEncoder.encode(ownerName, "UTF-8");
-        }
+        String url = getUrl(propName, ownerName);
 
         if (this instanceof UrlTypeable) {
             url = url.replace("{type}", ((UrlTypeable) this).getUrlType());
@@ -113,26 +106,23 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
         String content = executor.execute(AbstractRequestExecutor.HttpMethod.GET, url);
         logger.log(Level.INFO, "returning content=" + content);
 
-        T result = (T) mapper.readValue(content, type);
+        T result = mapper.readValue(content, type);
         if (!result.isSuccess()) {
             throw new FailedResponseException(result.getMessage());
         }
         return result;
     }
 
-    protected <T extends ApiEntityListResponse> T getList(String propName, Class<T> type)
+    protected IterableResponse getItems(String propName, Class responseType, Class itemType)
         throws IOException, FailedResponseException {
-        return getList(propName, type, null, null);
+        return getItems(propName, responseType, itemType, null, null);
     }
 
-    protected <T extends ApiEntityListResponse> T getList(String propName, Class<T> type, String ownerName, Map<String,Object> paramMap)
+    protected IterableResponse getItems(String propName, Class responseType, Class itemType, String ownerName, Map<String, Object> paramMap)
         throws IOException, FailedResponseException {
 
-        String url = getConn().getUrlConfig().getUrl(propName);
-
-        if (ownerName != null) {
-            url += "?owner=" + URLEncoder.encode(ownerName, "UTF-8");
-        }
+        Integer resultLimit = getConn().getConfig().getResultLimit();
+        String url = getUrl(propName, ownerName);
 
         if (this instanceof UrlTypeable) {
             url = url.replace("{type}", ((UrlTypeable) this).getUrlType());
@@ -147,14 +137,7 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
             }
         }
 
-        String content = executor.execute(AbstractRequestExecutor.HttpMethod.GET, url);
-        logger.log(Level.INFO, "returning content=" + content);
-
-        T result = (T) mapper.readValue(content, type);
-        if (!result.isSuccess()) {
-            throw new FailedResponseException(result.getMessage());
-        }
-        return result;
+        return new IterableResponse(executor, responseType, itemType, url, resultLimit);
     }
 
 }

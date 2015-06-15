@@ -5,10 +5,10 @@
  */
 package com.threatconnect.sdk.client.reader.associate;
 
+import com.threatconnect.sdk.client.reader.IterableResponse;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.SecurityLabel;
 import java.io.IOException;
-import java.util.List;
 
 /**
  *
@@ -16,9 +16,9 @@ import java.util.List;
  */
 public interface SecurityLabelAssociateReadable<P> {
 
-    public List<SecurityLabel> getAssociatedSecurityLabels(P uniqueId) throws IOException, FailedResponseException;
+    public IterableResponse<SecurityLabel> getAssociatedSecurityLabels(P uniqueId) throws IOException, FailedResponseException;
 
-    public List<SecurityLabel> getAssociatedSecurityLabels(P uniqueId, String ownerName)
+    public IterableResponse<SecurityLabel> getAssociatedSecurityLabels(P uniqueId, String ownerName)
         throws IOException, FailedResponseException;
 
     public SecurityLabel getAssociatedSecurityLabel(P uniqueId, String securityLabel) throws IOException, FailedResponseException;

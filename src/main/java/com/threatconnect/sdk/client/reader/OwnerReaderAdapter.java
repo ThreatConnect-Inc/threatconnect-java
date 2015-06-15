@@ -6,9 +6,9 @@
 package com.threatconnect.sdk.client.reader;
 
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Owner;
+import com.threatconnect.sdk.server.response.entity.ApiEntityListResponse;
 import com.threatconnect.sdk.server.response.entity.OwnerListResponse;
 import com.threatconnect.sdk.server.response.entity.OwnerResponse;
 
@@ -29,11 +29,9 @@ public class OwnerReaderAdapter extends AbstractReaderAdapter {
         return getAsText("v2.owners.list");
     }
 
-    public List<Owner> getOwners() throws IOException, FailedResponseException
+    public IterableResponse<Owner> getOwners() throws IOException, FailedResponseException
     {
-        OwnerListResponse data = getList("v2.owners.list", OwnerListResponse.class);
-
-        return (List<Owner>) data.getData().getData();
+        return getItems("v2.owners.list", OwnerListResponse.class, Owner.class);
     }
 
     public Owner getOwnerMine() throws IOException, FailedResponseException {

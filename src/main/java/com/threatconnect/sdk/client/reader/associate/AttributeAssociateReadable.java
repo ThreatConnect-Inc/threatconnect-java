@@ -1,21 +1,18 @@
 package com.threatconnect.sdk.client.reader.associate;
 
-import com.threatconnect.sdk.exception.FailedResponseException;
-import com.threatconnect.sdk.server.entity.Attribute;
-import com.threatconnect.sdk.server.entity.SecurityLabel;
+import com.threatconnect.sdk.client.reader.IterableResponse;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Attribute;
 import com.threatconnect.sdk.server.entity.SecurityLabel;
 
 import java.io.IOException;
-import java.util.List;
 
 public interface AttributeAssociateReadable<P> {
 
-    public List<Attribute> getAttributes(P uniqueId)
+    public IterableResponse<Attribute> getAttributes(P uniqueId)
         throws IOException, FailedResponseException;
 
-    public List<Attribute> getAttributes(P uniqueId, String ownerName)
+    public IterableResponse<Attribute> getAttributes(P uniqueId, String ownerName)
         throws IOException, FailedResponseException;
 
     public Attribute getAttribute(P uniqueId, Integer attributeId) throws IOException, FailedResponseException;
@@ -23,9 +20,9 @@ public interface AttributeAssociateReadable<P> {
     public Attribute getAttribute(P uniqueId, Integer attributeId, String ownerName)
         throws IOException, FailedResponseException;
 
-    public List<SecurityLabel> getAttributeSecurityLabels(P uniqueId, Integer attributeId) throws IOException, FailedResponseException;
+    public IterableResponse<SecurityLabel> getAttributeSecurityLabels(P uniqueId, Integer attributeId) throws IOException, FailedResponseException;
 
-    public List<SecurityLabel> getAttributeSecurityLabels(P uniqueId, Integer attributeId, String ownerName)
+    public IterableResponse<SecurityLabel> getAttributeSecurityLabels(P uniqueId, Integer attributeId, String ownerName)
         throws IOException, FailedResponseException;
 
     public SecurityLabel getAttributeSecurityLabel(P uniqueId, Integer attributeId, String securityLabel) throws IOException, FailedResponseException;

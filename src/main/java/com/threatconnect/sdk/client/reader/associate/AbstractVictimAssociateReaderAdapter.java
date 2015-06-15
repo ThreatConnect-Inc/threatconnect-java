@@ -6,15 +6,14 @@
 package com.threatconnect.sdk.client.reader.associate;
 
 import com.threatconnect.sdk.client.reader.AbstractBaseReaderAdapter;
+import com.threatconnect.sdk.client.reader.IterableResponse;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Victim;
 import com.threatconnect.sdk.server.response.entity.VictimListResponse;
 import com.threatconnect.sdk.server.response.entity.VictimResponse;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,21 +23,19 @@ import java.util.Map;
 public abstract class AbstractVictimAssociateReaderAdapter<P> 
     extends AbstractBaseReaderAdapter implements VictimAssociateReadable<P> {
 
-    public AbstractVictimAssociateReaderAdapter(Connection conn, Class singleType, Class listType) {
-        super(conn, singleType, listType);
+    public AbstractVictimAssociateReaderAdapter(Connection conn, Class singleType, Class singleItemType, Class listType) {
+        super(conn, singleType, singleItemType, listType);
     }
 
     @Override
-    public List<Victim> getAssociatedVictims(P uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Victim> getAssociatedVictims(P uniqueId) throws IOException, FailedResponseException {
         return getAssociatedVictims(uniqueId, null);
     }
 
     @Override
-    public List<Victim> getAssociatedVictims(P uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Victim> getAssociatedVictims(P uniqueId, String ownerName) throws IOException, FailedResponseException {
         Map<String,Object> map = createParamMap("id", uniqueId);
-        VictimListResponse data = getList(getUrlBasePrefix() + ".byId.victims", VictimListResponse.class, ownerName, map);
-
-        return (List<Victim>)data.getData().getData();
+        return getItems(getUrlBasePrefix() + ".byId.victims", VictimListResponse.class, Victim.class, ownerName, map);
     }
 
     @Override

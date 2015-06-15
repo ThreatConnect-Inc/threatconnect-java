@@ -1,6 +1,7 @@
 package com.threatconnect.sdk.examples.indicators;
 
 import com.threatconnect.sdk.client.reader.AbstractIndicatorReaderAdapter;
+import com.threatconnect.sdk.client.reader.IterableResponse;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
 import com.threatconnect.sdk.client.writer.AbstractGroupWriterAdapter;
 import com.threatconnect.sdk.client.writer.AbstractIndicatorWriterAdapter;
@@ -65,7 +66,7 @@ public class EmailAddressExample {
     private static void doGet(Connection conn) throws IOException {
 
         AbstractIndicatorReaderAdapter<EmailAddress> reader = ReaderAdapterFactory.createEmailAddressIndicatorReader(conn);
-        List<EmailAddress> data;
+        IterableResponse<EmailAddress> data;
         try {
             // -----------------------------------------------------------------------------------------------------------
             // Get EmailAddress

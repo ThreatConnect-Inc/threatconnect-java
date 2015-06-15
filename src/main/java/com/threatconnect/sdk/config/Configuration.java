@@ -18,15 +18,21 @@ public class Configuration {
     private String tcApiUrl;
     private String tcApiAccessID;
     private String tcApiUserSecretKey;
+    private Integer resultLimit;
+    private String defaultOwner;
 
     private final String contentType = ContentType.APPLICATION_JSON.getMimeType();
 
-    public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey) {
+    public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner) {
+        this(tcApiUrl, tcApiAccessID, tcApiUserSecretKey, defaultOwner, 500);
+    }
 
+    public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner, Integer resultLimit) {
         this.tcApiUrl = tcApiUrl;
         this.tcApiAccessID = tcApiAccessID;
         this.tcApiUserSecretKey = tcApiUserSecretKey;
-
+        this.defaultOwner = defaultOwner;
+        this.resultLimit = resultLimit;
     }
 
     public static Configuration build(Properties props) {
@@ -34,8 +40,10 @@ public class Configuration {
         String tcApiUrl = props.getProperty("connection.tcApiUrl");
         String tcApiAccessID = props.getProperty("connection.tcApiAccessID");
         String tcApiUserSecretKey = props.getProperty("connection.tcApiUserSecretKey");
+        String tcDefaultOwner = props.getProperty("connection.tcDefaultOwner");
+        Integer tcResultLimit = Integer.valueOf(props.getProperty("connection.tcResultLimit"));
 
-        return new Configuration(tcApiUrl, tcApiAccessID, tcApiUserSecretKey);
+        return new Configuration(tcApiUrl, tcApiAccessID, tcApiUserSecretKey, tcDefaultOwner, tcResultLimit);
     }
 
 
@@ -89,4 +97,23 @@ public class Configuration {
         return contentType;
     }
 
+    public Integer getResultLimit()
+    {
+        return resultLimit;
+    }
+
+    public void setResultLimit(Integer resultLimit)
+    {
+        this.resultLimit = resultLimit;
+    }
+
+    public String getDefaultOwner()
+    {
+        return defaultOwner;
+    }
+
+    public void setDefaultOwner(String defaultOwner)
+    {
+        this.defaultOwner = defaultOwner;
+    }
 }

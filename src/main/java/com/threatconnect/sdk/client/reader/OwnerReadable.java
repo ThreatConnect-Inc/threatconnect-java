@@ -9,12 +9,11 @@ import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Owner;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  *
  * @author dtineo
  */
 public interface OwnerReadable<P> {
-    public List<Owner> getOwners(P uniqueId) throws IOException, FailedResponseException;
+    public IterableResponse<Owner> getOwners(P uniqueId) throws IOException, FailedResponseException;
 }

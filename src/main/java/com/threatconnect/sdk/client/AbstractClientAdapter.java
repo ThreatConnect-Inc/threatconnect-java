@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -77,4 +79,13 @@ public abstract class AbstractClientAdapter {
         }
         return map;
     }
+
+    protected String getUrl(String propName, String ownerName) throws UnsupportedEncodingException
+    {
+
+        String defaultOwner = getConn().getConfig().getDefaultOwner();
+        String url = getConn().getUrlConfig().getUrl(propName);
+        return url + "?owner=" + URLEncoder.encode(ownerName == null ? defaultOwner : ownerName, "UTF-8");
+    }
+
 }

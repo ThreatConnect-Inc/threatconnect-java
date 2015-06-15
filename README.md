@@ -11,7 +11,7 @@ Add the following entries to your pom file (git clone not required):
 ```xml
 
    <properties>
-        <threatconnect-sdk.version>2.0.1</threatconnect-sdk.version>
+        <threatconnect-sdk.version>2.0.3</threatconnect-sdk.version>
     </properties>
 
 
@@ -43,16 +43,31 @@ Add the following entries to your pom file (git clone not required):
 ## Java SDK Architecture Overview
 The Java SDK divides operations into read and write. It provides adapters for each entity exposed by the ThreatConnect&trade; API.  Thus, you'll find classes like `TagReaderAdapter` and `FileIndicatorwriterAdapter`.  `ReaderAdapterFactory` and `WriterAdapterFactory` can instantiate all available readers and writers. Entities are represented by basic DTO classes: `Address`, `Document`, `Threat`, etc.
 
-## Required Configuration
-For the Java SDK to work, API calls must be allowed by ThreatConnect&trade; and an API
-user must be created.  
+>  For the Java SDK to communicate with the ThreatConnect&trade; platform, API access must be enabled and an API user must be created.  
 
-A configuration file must be made available to the Java SDK at runtime via the property
-threatconnect.api.config=config.properties with the following format:
+## API Configuration
+
+To connect to the API using the SDK, create a Configuration object with one of the following constructors:
+
+```
+   public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner);
+   public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner, Integer resultLimit);
+```
+
+Pass the `Configuration` object when creating a new `Connection` (see examples below).
+ 
+
+## Optional File Configuration
+
+An alternative method is to use a configuration file with predefined properties read in by the no-arg `Connection` constructor.
+
+A configuration file can be made available to the Java SDK at runtime via the property `threatconnect.api.config=config.properties` with the following format:
 
     connection.tcApiUrl=<URL to ThreatConnect instance>
     connection.tcApiAccessId=<API user's API access ID>
     connection.tcApiUserSecretKey=<API user's API secret>
+    connection.tcDefaultOwner=<API user's API secret>
+    connection.tcResultLimit=<API user's API secret>
 
 
 ## Example: Working with Addresses
@@ -64,7 +79,7 @@ The following example retrieves a list of address indicators:
 
     AbstractIndicatorReaderAdapter<Address> reader = ReaderAdapterFactory.createAddressIndicatorReader(conn);
 
-    List<Address> addresses = reader.getAll();
+    IterableResponse<Address> addresses = reader.getAll();
 
 To retrieve a single address by Id:
 
@@ -99,7 +114,7 @@ The following example finds the Threats associated with a host indicator:
 
     AbstractIndicatorReaderAdapter<Host> reader = ReaderAdapterFactory.createHostIndicatorReader(conn);
 
-    List<Threat> threats = reader.getAssociatedGroupThreats("www.bad.com");
+    IterableResponse<Threat> threats = reader.getAssociatedGroupThreats("www.bad.com");
 
 To associate an indicator with a threat:
 
@@ -114,11 +129,11 @@ Given an association it is possible to 'pivot' to find less-obvious connections 
 
     AbstractGroupReaderAdapter<Threat> threatReader = ReaderAdapterFactory.createThreatGroupReader(conn);
 
-    List<Address> addresses = threatReader.getAssociatedIndicatorsAddresses(threat.getId());
+    IterableResponse<Address> addresses = threatReader.getAssociatedIndicatorsAddresses(threat.getId());
 
     AbstractIndicatorReaderAdapter<Address> indicatorReader = ReaderAdapterFactory.createAddressindicatorReader(conn);
 
-    List<Threat> otherThreats = reader.getAssociatedGroupThreats(addresses.get(0).getIp());
+    IterableResponse<Threat> otherThreats = reader.getAssociatedGroupThreats(addresses.get(0).getIp());
 
 
 ## Commonly Used Components

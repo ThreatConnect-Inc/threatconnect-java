@@ -1,6 +1,7 @@
 package com.threatconnect.sdk.examples.groups;
 
 import com.threatconnect.sdk.client.reader.AbstractGroupReaderAdapter;
+import com.threatconnect.sdk.client.reader.IterableResponse;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
 import com.threatconnect.sdk.client.writer.AbstractGroupWriterAdapter;
 import com.threatconnect.sdk.client.writer.AbstractIndicatorWriterAdapter;
@@ -69,7 +70,7 @@ public class ThreatExample {
     private static void doGet(Connection conn) throws IOException {
 
         AbstractGroupReaderAdapter<Threat> reader = ReaderAdapterFactory.createThreatGroupReader(conn);
-        List<Threat> data;
+        IterableResponse<Threat> data;
         try {
             // -----------------------------------------------------------------------------------------------------------
             // Get Threats

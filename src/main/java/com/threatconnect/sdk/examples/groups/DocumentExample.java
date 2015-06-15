@@ -1,6 +1,7 @@
 package com.threatconnect.sdk.examples.groups;
 
 import com.threatconnect.sdk.client.reader.DocumentReaderAdapter;
+import com.threatconnect.sdk.client.reader.IterableResponse;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
 import com.threatconnect.sdk.client.writer.TagWriterAdapter;
 import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
@@ -79,10 +80,10 @@ public class DocumentExample
             // -----------------------------------------------------------------------------------------------------------
             // Get Documents
             // -----------------------------------------------------------------------------------------------------------
-            List<Document> data = reader.getAll();
+            IterableResponse<Document> data = reader.getAll();
 
-            if (data.size() > 0) {
-                reader.downloadFile(data.get(0).getId(), null, Paths.get("./testDownload.txt"));
+            if (data.hasNext() ) {
+                reader.downloadFile(data.next().getId(), null, Paths.get("./testDownload.txt"));
                 try (Scanner in = new Scanner(new FileInputStream("./testDownload.txt")))
                 {
                     while (in.hasNextLine())
@@ -128,7 +129,7 @@ public class DocumentExample
     private static void doGet(Connection conn) throws IOException {
 
         DocumentReaderAdapter reader = ReaderAdapterFactory.createDocumentReaderAdapter(conn);
-        List<Document> data;
+        IterableResponse<Document> data;
         try {
             // -----------------------------------------------------------------------------------------------------------
             // Get Documents
@@ -142,8 +143,8 @@ public class DocumentExample
             // -----------------------------------------------------------------------------------------------------------
             // Get a Document
             // -----------------------------------------------------------------------------------------------------------
-            if (data.size() > 0) {
-               Document d = reader.getById(data.get(0).getId());
+            if (data.hasNext()) {
+               Document d = reader.getById(data.next().getId());
                 System.out.println("Document: " + d.getFileName());
             }
         } catch (FailedResponseException ex) {

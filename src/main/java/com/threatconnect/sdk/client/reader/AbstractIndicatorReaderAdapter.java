@@ -18,7 +18,6 @@ import com.threatconnect.sdk.client.reader.associate.AbstractIndicatorAssociateR
 import com.threatconnect.sdk.client.reader.associate.AbstractGroupAssociateReaderAdapter;
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Address;
 import com.threatconnect.sdk.server.entity.Adversary;
@@ -52,7 +51,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -94,8 +92,9 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
      * @see ReaderAdapterFactory
      */
     public AbstractIndicatorReaderAdapter(Connection conn
-                , Class<? extends ApiEntitySingleResponse> singleType, Class<? extends ApiEntityListResponse> listType) { 
-        super(conn, singleType, listType);
+                , Class<? extends ApiEntitySingleResponse> singleType, Class singleItemType
+                , Class<? extends ApiEntityListResponse> listType) {
+        super(conn, singleType, singleItemType, listType);
 
         initComposite();
     }
@@ -104,6 +103,7 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
         attribReader = new AbstractAttributeAssociateReaderAdapter<String>(
                             AbstractIndicatorReaderAdapter.this.getConn()
                           , AbstractIndicatorReaderAdapter.this.singleType
+                          , AbstractIndicatorReaderAdapter.this.singleItemType
                           , AbstractIndicatorReaderAdapter.this.listType
             ) {
             @Override
@@ -121,8 +121,8 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
         groupAssocReader = new AbstractGroupAssociateReaderAdapter<String>(
                             AbstractIndicatorReaderAdapter.this.getConn()
                           , AbstractIndicatorReaderAdapter.this.singleType
-                          , AbstractIndicatorReaderAdapter.this.listType
-            ) {
+                          , AbstractIndicatorReaderAdapter.this.singleItemType
+                          , AbstractIndicatorReaderAdapter.this.listType) {
             @Override
             protected String getUrlBasePrefix() {
                 return AbstractIndicatorReaderAdapter.this.getUrlBasePrefix();
@@ -137,6 +137,7 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
         indAssocReader = new AbstractIndicatorAssociateReaderAdapter<String>(
                             AbstractIndicatorReaderAdapter.this.getConn()
                           , AbstractIndicatorReaderAdapter.this.singleType
+                          , AbstractIndicatorReaderAdapter.this.singleItemType
                           , AbstractIndicatorReaderAdapter.this.listType
             ) {
             @Override
@@ -153,8 +154,8 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
         secLabelAssocReader = new AbstractSecurityLabelAssociateReaderAdapter<String>(
                             AbstractIndicatorReaderAdapter.this.getConn()
                           , AbstractIndicatorReaderAdapter.this.singleType
-                          , AbstractIndicatorReaderAdapter.this.listType
-            ) {
+                          , AbstractIndicatorReaderAdapter.this.singleItemType
+                          , AbstractIndicatorReaderAdapter.this.listType) {
             @Override
             protected String getUrlBasePrefix() {
                 return AbstractIndicatorReaderAdapter.this.getUrlBasePrefix();
@@ -164,8 +165,8 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
         tagAssocReader = new AbstractTagAssociateReaderAdapter<String>(
                             AbstractIndicatorReaderAdapter.this.getConn()
                           , AbstractIndicatorReaderAdapter.this.singleType
-                          , AbstractIndicatorReaderAdapter.this.listType
-            ) {
+                          , AbstractIndicatorReaderAdapter.this.singleItemType
+                          , AbstractIndicatorReaderAdapter.this.listType) {
             @Override
             protected String getUrlBasePrefix() {
                 return AbstractIndicatorReaderAdapter.this.getUrlBasePrefix();
@@ -179,8 +180,8 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
         victimAssetAssocReader = new AbstractVictimAssetAssociateReaderAdapter<String>(
                             AbstractIndicatorReaderAdapter.this.getConn()
                           , AbstractIndicatorReaderAdapter.this.singleType
-                          , AbstractIndicatorReaderAdapter.this.listType
-            ) {
+                          , AbstractIndicatorReaderAdapter.this.singleItemType
+                          , AbstractIndicatorReaderAdapter.this.listType) {
             @Override
             protected String getUrlBasePrefix() {
                 return AbstractIndicatorReaderAdapter.this.getUrlBasePrefix();
@@ -190,8 +191,8 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
         ownerAssocReader = new AbstractOwnerAssociateReaderAdapter<String>(
                             AbstractIndicatorReaderAdapter.this.getConn()
                           , AbstractIndicatorReaderAdapter.this.singleType
-                          , AbstractIndicatorReaderAdapter.this.listType
-            ) {
+                          , AbstractIndicatorReaderAdapter.this.singleItemType
+                          , AbstractIndicatorReaderAdapter.this.listType) {
             @Override
             protected String getUrlBasePrefix() {
                 return AbstractIndicatorReaderAdapter.this.getUrlBasePrefix();
@@ -201,8 +202,8 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
         victimAssocReader = new AbstractVictimAssociateReaderAdapter<String>(
                             AbstractIndicatorReaderAdapter.this.getConn()
                           , AbstractIndicatorReaderAdapter.this.singleType
-                          , AbstractIndicatorReaderAdapter.this.listType
-            ) {
+                          , AbstractIndicatorReaderAdapter.this.singleItemType
+                          , AbstractIndicatorReaderAdapter.this.listType) {
             @Override
             protected String getUrlBasePrefix() {
                 return AbstractIndicatorReaderAdapter.this.getUrlBasePrefix();
@@ -255,29 +256,27 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
         return getAsText("v2.indicators.list");
     }
 
-    public List<Indicator> getIndicators() throws IOException, FailedResponseException {
-	    IndicatorListResponse data =  getList("v2.indicators.list", IndicatorListResponse.class);
-
-        return (List<Indicator>) data.getData().getData();
+    public IterableResponse<Indicator> getIndicators() throws IOException, FailedResponseException {
+	    return getItems("v2.indicators.list", IndicatorListResponse.class, Indicator.class);
     }
 
     @Override
-    public List<Group> getAssociatedGroups(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Group> getAssociatedGroups(String uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroups(uniqueId);
     }
 
     @Override
-    public List<Group> getAssociatedGroups(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Group> getAssociatedGroups(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroups(uniqueId,ownerName);
     }
 
     @Override
-    public List<Adversary> getAssociatedGroupAdversaries(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Adversary> getAssociatedGroupAdversaries(String uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupAdversaries(uniqueId);
     }
 
     @Override
-    public List<Adversary> getAssociatedGroupAdversaries(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Adversary> getAssociatedGroupAdversaries(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupAdversaries(uniqueId,ownerName);
     }
 
@@ -292,12 +291,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public List<Email> getAssociatedGroupEmails(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Email> getAssociatedGroupEmails(String uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupEmails(uniqueId);
     }
 
     @Override
-    public List<Email> getAssociatedGroupEmails(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Email> getAssociatedGroupEmails(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupEmails(uniqueId,ownerName);
     }
 
@@ -312,12 +311,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public List<Incident> getAssociatedGroupIncidents(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Incident> getAssociatedGroupIncidents(String uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupIncidents(uniqueId);
     }
 
     @Override
-    public List<Incident> getAssociatedGroupIncidents(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Incident> getAssociatedGroupIncidents(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupIncidents(uniqueId, ownerName);
     }
 
@@ -332,12 +331,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public List<Signature> getAssociatedGroupSignatures(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Signature> getAssociatedGroupSignatures(String uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupSignatures(uniqueId);
     }
 
     @Override
-    public List<Signature> getAssociatedGroupSignatures(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Signature> getAssociatedGroupSignatures(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupSignatures(uniqueId, ownerName);
     }
 
@@ -352,12 +351,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public List<Threat> getAssociatedGroupThreats(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Threat> getAssociatedGroupThreats(String uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupThreats(uniqueId);
     }
 
     @Override
-    public List<Threat> getAssociatedGroupThreats(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Threat> getAssociatedGroupThreats(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupThreats(uniqueId, ownerName);
     }
 
@@ -372,22 +371,22 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public List<Indicator> getAssociatedIndicators(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Indicator> getAssociatedIndicators(String uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicators(uniqueId);
     }
 
     @Override
-    public List<Indicator> getAssociatedIndicators(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Indicator> getAssociatedIndicators(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicators(uniqueId, ownerName);
     }
 
     @Override
-    public List<Address> getAssociatedIndicatorAddresses(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Address> getAssociatedIndicatorAddresses(String uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorAddresses(uniqueId);
     }
 
     @Override
-    public List<Address> getAssociatedIndicatorAddresses(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Address> getAssociatedIndicatorAddresses(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorAddresses(uniqueId, ownerName);
     }
 
@@ -402,12 +401,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public List<Email> getAssociatedIndicatorEmails(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Email> getAssociatedIndicatorEmails(String uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorEmails(uniqueId);
     }
 
     @Override
-    public List<Email> getAssociatedIndicatorEmails(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Email> getAssociatedIndicatorEmails(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorEmails(uniqueId, ownerName);
     }
 
@@ -422,12 +421,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public List<File> getAssociatedIndicatorFiles(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<File> getAssociatedIndicatorFiles(String uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorFiles(uniqueId);
     }
 
     @Override
-    public List<File> getAssociatedIndicatorFiles(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<File> getAssociatedIndicatorFiles(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorFiles(uniqueId, ownerName);
     }
 
@@ -442,12 +441,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public List<Host> getAssociatedIndicatorHosts(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Host> getAssociatedIndicatorHosts(String uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorHosts(uniqueId);
     }
 
     @Override
-    public List<Host> getAssociatedIndicatorHosts(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Host> getAssociatedIndicatorHosts(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorHosts(uniqueId, ownerName);
     }
 
@@ -462,12 +461,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public List<Url> getAssociatedIndicatorUrls(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Url> getAssociatedIndicatorUrls(String uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorUrls(uniqueId);
     }
 
     @Override
-    public List<Url> getAssociatedIndicatorUrls(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Url> getAssociatedIndicatorUrls(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorUrls(uniqueId, ownerName);
     }
 
@@ -482,12 +481,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public List<Attribute> getAttributes(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Attribute> getAttributes(String uniqueId) throws IOException, FailedResponseException {
         return attribReader.getAttributes(uniqueId);
     }
 
     @Override
-    public List<Attribute> getAttributes(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Attribute> getAttributes(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return attribReader.getAttributes(uniqueId, ownerName);
     }
 
@@ -502,12 +501,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public List<SecurityLabel> getAttributeSecurityLabels(String uniqueId, Integer attributeId) throws IOException, FailedResponseException {
+    public IterableResponse<SecurityLabel> getAttributeSecurityLabels(String uniqueId, Integer attributeId) throws IOException, FailedResponseException {
         return attribReader.getAttributeSecurityLabels(uniqueId, attributeId);
     }
 
     @Override
-    public List<SecurityLabel> getAttributeSecurityLabels(String uniqueId, Integer attributeId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<SecurityLabel> getAttributeSecurityLabels(String uniqueId, Integer attributeId, String ownerName) throws IOException, FailedResponseException {
         return attribReader.getAttributeSecurityLabels(uniqueId, attributeId, ownerName);
     }
 
@@ -522,17 +521,17 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public List<VictimAsset> getAssociatedVictimAssets(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<VictimAsset> getAssociatedVictimAssets(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssets(uniqueId, ownerName);
     }
 
     @Override
-    public List<VictimEmailAddress> getAssociatedVictimAssetEmailAddresses(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<VictimEmailAddress> getAssociatedVictimAssetEmailAddresses(String uniqueId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetEmailAddresses(uniqueId);
     }
 
     @Override
-    public List<VictimEmailAddress> getAssociatedVictimAssetEmailAddresses(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<VictimEmailAddress> getAssociatedVictimAssetEmailAddresses(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetEmailAddresses(uniqueId, ownerName);
     }
 
@@ -547,12 +546,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public List<VictimNetworkAccount> getAssociatedVictimAssetNetworkAccounts(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<VictimNetworkAccount> getAssociatedVictimAssetNetworkAccounts(String uniqueId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetNetworkAccounts(uniqueId);
     }
 
     @Override
-    public List<VictimNetworkAccount> getAssociatedVictimAssetNetworkAccounts(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<VictimNetworkAccount> getAssociatedVictimAssetNetworkAccounts(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetNetworkAccounts(uniqueId, ownerName);
     }
 
@@ -567,12 +566,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public List<VictimPhone> getAssociatedVictimAssetPhoneNumbers(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<VictimPhone> getAssociatedVictimAssetPhoneNumbers(String uniqueId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetPhoneNumbers(uniqueId);
     }
 
     @Override
-    public List<VictimPhone> getAssociatedVictimAssetPhoneNumbers(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<VictimPhone> getAssociatedVictimAssetPhoneNumbers(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetPhoneNumbers(uniqueId, ownerName);
     }
 
@@ -587,12 +586,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public List<VictimSocialNetwork> getAssociatedVictimAssetSocialNetworks(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<VictimSocialNetwork> getAssociatedVictimAssetSocialNetworks(String uniqueId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetSocialNetworks(uniqueId);
     }
 
     @Override
-    public List<VictimSocialNetwork> getAssociatedVictimAssetSocialNetworks(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<VictimSocialNetwork> getAssociatedVictimAssetSocialNetworks(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetSocialNetworks(uniqueId, ownerName);
     }
 
@@ -607,12 +606,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public List<VictimWebSite> getAssociatedVictimAssetWebsites(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<VictimWebSite> getAssociatedVictimAssetWebsites(String uniqueId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetWebsites(uniqueId);
     }
 
     @Override
-    public List<VictimWebSite> getAssociatedVictimAssetWebsites(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<VictimWebSite> getAssociatedVictimAssetWebsites(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetWebsites(uniqueId, ownerName);
     }
 
@@ -627,12 +626,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public List<Tag> getAssociatedTags(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Tag> getAssociatedTags(String uniqueId) throws IOException, FailedResponseException {
         return tagAssocReader.getAssociatedTags(uniqueId);
     }
 
     @Override
-    public List<Tag> getAssociatedTags(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Tag> getAssociatedTags(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return tagAssocReader.getAssociatedTags(uniqueId, ownerName);
     }
 
@@ -647,12 +646,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public List<SecurityLabel> getAssociatedSecurityLabels(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<SecurityLabel> getAssociatedSecurityLabels(String uniqueId) throws IOException, FailedResponseException {
         return secLabelAssocReader.getAssociatedSecurityLabels(uniqueId);
     }
 
     @Override
-    public List<SecurityLabel> getAssociatedSecurityLabels(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<SecurityLabel> getAssociatedSecurityLabels(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return secLabelAssocReader.getAssociatedSecurityLabels(uniqueId, ownerName);
     }
 
@@ -667,22 +666,22 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public List<Owner> getAssociatedOwners(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Owner> getAssociatedOwners(String uniqueId) throws IOException, FailedResponseException {
         return ownerAssocReader.getAssociatedOwners(uniqueId);
     }
 
     @Override
-    public List<Owner> getAssociatedOwners(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Owner> getAssociatedOwners(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return ownerAssocReader.getAssociatedOwners(uniqueId, ownerName);
     }
 
     @Override
-    public List<Victim> getAssociatedVictims(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Victim> getAssociatedVictims(String uniqueId) throws IOException, FailedResponseException {
         return victimAssocReader.getAssociatedVictims(uniqueId);
     }
 
     @Override
-    public List<Victim> getAssociatedVictims(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Victim> getAssociatedVictims(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return victimAssocReader.getAssociatedVictims(uniqueId, ownerName);
     }
 

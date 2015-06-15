@@ -12,9 +12,11 @@ import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+/*
 import org.jboss.resteasy.core.Dispatcher;
 import org.jboss.resteasy.spi.Registry;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
+*/
 
 import javax.net.ssl.SSLContext;
 import java.io.Closeable;
@@ -54,6 +56,7 @@ public class Connection<T> implements Closeable
         this.urlConfig = URLConfiguration.build();
     }
 
+    /*
     public void setInMemoryDispatcher(Object dispatcher)
     {
         if ( executor == null )
@@ -78,6 +81,7 @@ public class Connection<T> implements Closeable
     {
         ((InMemoryRequestExecutor)executor).setRegistry((Registry)registry);
     }
+    */
 
     public AbstractRequestExecutor getExecutor() {
         if ( executor == null )

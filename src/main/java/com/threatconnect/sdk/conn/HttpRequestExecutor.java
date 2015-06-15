@@ -62,15 +62,8 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
     @Override
     public String execute(String path, HttpMethod type, Object obj) throws IOException {
 
-        // TODO: pull elements from connection/config
-        if ( type == HttpMethod.GET )
-        {
-            path += "&resultStart=0&resultLimit=500";
-        }
         path += "&createActivityLog=false";
-
         String fullPath = this.conn.getConfig().getTcApiUrl() + path.replace("/api/","/");
-
 
 
         logger.log(Level.INFO, "Calling " + type + ": " + fullPath);

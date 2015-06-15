@@ -7,8 +7,8 @@ package com.threatconnect.sdk.client.reader.associate;
 
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.reader.AbstractBaseReaderAdapter;
+import com.threatconnect.sdk.client.reader.IterableResponse;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Address;
 import com.threatconnect.sdk.server.entity.Email;
@@ -38,38 +38,34 @@ import java.util.Map;
  */
 public abstract class AbstractIndicatorAssociateReaderAdapter<P> extends AbstractBaseReaderAdapter implements IndicatorAssociateReadable<P>, UrlTypeable {
 
-    public AbstractIndicatorAssociateReaderAdapter(Connection conn, Class singleType, Class listType) {
-        super(conn, singleType, listType);
+    public AbstractIndicatorAssociateReaderAdapter(Connection conn, Class singleType, Class singleItemType, Class listType) {
+        super(conn, singleType, singleItemType, listType);
     }
 
     @Override
-        public List<Indicator> getAssociatedIndicators(P uniqueId) throws IOException, FailedResponseException {
+        public IterableResponse<Indicator> getAssociatedIndicators(P uniqueId) throws IOException, FailedResponseException {
         return getAssociatedIndicators(uniqueId, null); 
     }
 
     @Override
-    public List<Indicator> getAssociatedIndicators(P uniqueId, String ownerName) 
+    public IterableResponse<Indicator> getAssociatedIndicators(P uniqueId, String ownerName)
             throws IOException, FailedResponseException {
 
         Map<String,Object> map = createParamMap("id", uniqueId);
-        IndicatorListResponse data = getList(getUrlBasePrefix() + ".byId.indicators", IndicatorListResponse.class, ownerName, map);
-
-        return (List<Indicator>)data.getData().getData();
+        return getItems(getUrlBasePrefix() + ".byId.indicators", IndicatorListResponse.class, Indicator.class, ownerName, map);
     }
 
     @Override
-    public List<Address> getAssociatedIndicatorAddresses(P uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Address> getAssociatedIndicatorAddresses(P uniqueId) throws IOException, FailedResponseException {
         return getAssociatedIndicatorAddresses(uniqueId, null); 
     }
 
     @Override
-    public List<Address> getAssociatedIndicatorAddresses(P uniqueId, String ownerName) 
+    public IterableResponse<Address> getAssociatedIndicatorAddresses(P uniqueId, String ownerName)
             throws IOException, FailedResponseException {
 
         Map<String,Object> map = createParamMap("id", uniqueId);
-        AddressListResponse data = getList(getUrlBasePrefix() + ".byId.indicators.addresses", AddressListResponse.class, ownerName, map);
-
-        return (List<Address>)data.getData().getData();
+        return getItems(getUrlBasePrefix() + ".byId.indicators.addresses", AddressListResponse.class, Address.class, ownerName, map);
     }
 
     @Override
@@ -88,18 +84,16 @@ public abstract class AbstractIndicatorAssociateReaderAdapter<P> extends Abstrac
     }
 
     @Override
-    public List<Email> getAssociatedIndicatorEmails(P uniqueId) throws IOException, FailedResponseException { 
+    public IterableResponse<Email> getAssociatedIndicatorEmails(P uniqueId) throws IOException, FailedResponseException {
         return getAssociatedIndicatorEmails(uniqueId, null); 
     }
 
     @Override
-    public List<Email> getAssociatedIndicatorEmails(P uniqueId, String ownerName) 
+    public IterableResponse<Email> getAssociatedIndicatorEmails(P uniqueId, String ownerName)
             throws IOException, FailedResponseException {
 
         Map<String,Object> map = createParamMap("id", uniqueId);
-        EmailListResponse data = getList(getUrlBasePrefix() + ".byId.indicators.emailAddresses", EmailListResponse.class, ownerName, map);
-
-        return (List<Email>)data.getData().getData();
+        return getItems(getUrlBasePrefix() + ".byId.indicators.emailAddresses", EmailListResponse.class, Email.class, ownerName, map);
     }
 
     @Override
@@ -118,18 +112,16 @@ public abstract class AbstractIndicatorAssociateReaderAdapter<P> extends Abstrac
     }
 
     @Override
-    public List<File> getAssociatedIndicatorFiles(P uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<File> getAssociatedIndicatorFiles(P uniqueId) throws IOException, FailedResponseException {
         return getAssociatedIndicatorFiles(uniqueId, null);  
     }
 
     @Override
-    public List<File> getAssociatedIndicatorFiles(P uniqueId, String ownerName)   
+    public IterableResponse<File> getAssociatedIndicatorFiles(P uniqueId, String ownerName)
             throws IOException, FailedResponseException {
 
         Map<String,Object> map = createParamMap("id", uniqueId);
-        FileListResponse data = getList(getUrlBasePrefix() + ".byId.indicators.files", FileListResponse.class, ownerName, map);
-
-        return (List<File>)data.getData().getData();
+        return getItems(getUrlBasePrefix() + ".byId.indicators.files", FileListResponse.class, File.class, ownerName, map);
     }
 
     @Override
@@ -148,18 +140,16 @@ public abstract class AbstractIndicatorAssociateReaderAdapter<P> extends Abstrac
     }
 
     @Override
-    public List<Host> getAssociatedIndicatorHosts(P uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Host> getAssociatedIndicatorHosts(P uniqueId) throws IOException, FailedResponseException {
         return getAssociatedIndicatorHosts(uniqueId, null);  
     }
 
     @Override
-    public List<Host> getAssociatedIndicatorHosts(P uniqueId, String ownerName)   
+    public IterableResponse<Host> getAssociatedIndicatorHosts(P uniqueId, String ownerName)
             throws IOException, FailedResponseException {
 
         Map<String,Object> map = createParamMap("id", uniqueId);
-        HostListResponse data = getList(getUrlBasePrefix() + ".byId.indicators.hosts", HostListResponse.class, ownerName, map);
-
-        return (List<Host>)data.getData().getData();
+        return getItems(getUrlBasePrefix() + ".byId.indicators.hosts", HostListResponse.class, Host.class, ownerName, map);
     }
 
     @Override
@@ -178,18 +168,16 @@ public abstract class AbstractIndicatorAssociateReaderAdapter<P> extends Abstrac
     }
 
     @Override
-    public List<Url> getAssociatedIndicatorUrls(P uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Url> getAssociatedIndicatorUrls(P uniqueId) throws IOException, FailedResponseException {
         return getAssociatedIndicatorUrls(uniqueId, null);   
     }
 
     @Override
-    public List<Url> getAssociatedIndicatorUrls(P uniqueId, String ownerName)     
+    public IterableResponse<Url> getAssociatedIndicatorUrls(P uniqueId, String ownerName)
             throws IOException, FailedResponseException {
 
         Map<String,Object> map = createParamMap("id", uniqueId);
-        UrlListResponse data = getList(getUrlBasePrefix() + ".byId.indicators.urls", UrlListResponse.class, ownerName, map);
-
-        return (List<Url>)data.getData().getData();
+        return getItems(getUrlBasePrefix() + ".byId.indicators.urls", UrlListResponse.class, Url.class, ownerName, map);
     }
 
     @Override

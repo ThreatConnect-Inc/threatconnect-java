@@ -1,6 +1,7 @@
 package com.threatconnect.sdk.examples.indicators;
 
 import com.threatconnect.sdk.client.reader.AbstractIndicatorReaderAdapter;
+import com.threatconnect.sdk.client.reader.IterableResponse;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
 import com.threatconnect.sdk.client.writer.AbstractGroupWriterAdapter;
 import com.threatconnect.sdk.client.writer.AbstractIndicatorWriterAdapter;
@@ -66,7 +67,7 @@ public class FileExample {
     private static void doGet(Connection conn) throws IOException {
 
         AbstractIndicatorReaderAdapter<File> reader = ReaderAdapterFactory.createFileIndicatorReader(conn);
-        List<File> data;
+        IterableResponse<File> data;
         try {
             // -----------------------------------------------------------------------------------------------------------
             // Get File

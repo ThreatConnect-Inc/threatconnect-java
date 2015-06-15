@@ -11,7 +11,6 @@ import com.threatconnect.sdk.client.reader.associate.AbstractIndicatorAssociateR
 import com.threatconnect.sdk.client.reader.associate.AbstractGroupAssociateReaderAdapter;
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Address;
 import com.threatconnect.sdk.server.entity.Adversary;
@@ -29,7 +28,6 @@ import com.threatconnect.sdk.server.response.entity.TagListResponse;
 import com.threatconnect.sdk.server.response.entity.TagResponse;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  *
@@ -46,7 +44,7 @@ public class TagReaderAdapter
 
 
     protected TagReaderAdapter(Connection conn) {
-        super(conn, TagResponse.class, TagListResponse.class);
+        super(conn, TagResponse.class, Tag.class, TagListResponse.class);
 
         initComposite();
     }
@@ -56,8 +54,8 @@ public class TagReaderAdapter
         groupAssocReader = new AbstractGroupAssociateReaderAdapter<String>(
                             TagReaderAdapter.this.getConn()
                           , TagReaderAdapter.this.singleType
-                          , TagReaderAdapter.this.listType
-            ) {
+                          , TagReaderAdapter.this.singleItemType
+                          , TagReaderAdapter.this.listType) {
             @Override
             protected String getUrlBasePrefix() {
                 return TagReaderAdapter.this.getUrlBasePrefix();
@@ -72,6 +70,7 @@ public class TagReaderAdapter
         indAssocReader = new AbstractIndicatorAssociateReaderAdapter<String>(
                             TagReaderAdapter.this.getConn()
                           , TagReaderAdapter.this.singleType
+                          , TagReaderAdapter.this.singleItemType
                           , TagReaderAdapter.this.listType
             ) {
             @Override
@@ -97,23 +96,23 @@ public class TagReaderAdapter
     }
 
     @Override
-    public List<Group> getAssociatedGroups(String uniqueId) throws IOException, FailedResponseException
+    public IterableResponse<Group> getAssociatedGroups(String uniqueId) throws IOException, FailedResponseException
     {
         return groupAssocReader.getAssociatedGroups(uniqueId);
     }
 
     @Override
-    public List<Group> getAssociatedGroups(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Group> getAssociatedGroups(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroups(uniqueId,ownerName);
     }
 
     @Override
-    public List<Adversary> getAssociatedGroupAdversaries(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Adversary> getAssociatedGroupAdversaries(String uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupAdversaries(uniqueId);
     }
 
     @Override
-    public List<Adversary> getAssociatedGroupAdversaries(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Adversary> getAssociatedGroupAdversaries(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupAdversaries(uniqueId,ownerName);
     }
 
@@ -128,12 +127,12 @@ public class TagReaderAdapter
     }
 
     @Override
-    public List<Email> getAssociatedGroupEmails(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Email> getAssociatedGroupEmails(String uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupEmails(uniqueId);
     }
 
     @Override
-    public List<Email> getAssociatedGroupEmails(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Email> getAssociatedGroupEmails(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupEmails(uniqueId,ownerName);
     }
 
@@ -148,12 +147,12 @@ public class TagReaderAdapter
     }
 
     @Override
-    public List<Incident> getAssociatedGroupIncidents(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Incident> getAssociatedGroupIncidents(String uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupIncidents(uniqueId);
     }
 
     @Override
-    public List<Incident> getAssociatedGroupIncidents(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Incident> getAssociatedGroupIncidents(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupIncidents(uniqueId, ownerName);
     }
 
@@ -168,12 +167,12 @@ public class TagReaderAdapter
     }
 
     @Override
-    public List<Signature> getAssociatedGroupSignatures(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Signature> getAssociatedGroupSignatures(String uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupSignatures(uniqueId);
     }
 
     @Override
-    public List<Signature> getAssociatedGroupSignatures(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Signature> getAssociatedGroupSignatures(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupSignatures(uniqueId, ownerName);
     }
 
@@ -188,12 +187,12 @@ public class TagReaderAdapter
     }
 
     @Override
-    public List<Threat> getAssociatedGroupThreats(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Threat> getAssociatedGroupThreats(String uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupThreats(uniqueId);
     }
 
     @Override
-    public List<Threat> getAssociatedGroupThreats(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Threat> getAssociatedGroupThreats(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupThreats(uniqueId, ownerName);
     }
 
@@ -208,22 +207,22 @@ public class TagReaderAdapter
     }
 
     @Override
-    public List<Indicator> getAssociatedIndicators(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Indicator> getAssociatedIndicators(String uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicators(uniqueId);
     }
 
     @Override
-    public List<Indicator> getAssociatedIndicators(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Indicator> getAssociatedIndicators(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicators(uniqueId, ownerName);
     }
 
     @Override
-    public List<Address> getAssociatedIndicatorAddresses(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Address> getAssociatedIndicatorAddresses(String uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorAddresses(uniqueId);
     }
 
     @Override
-    public List<Address> getAssociatedIndicatorAddresses(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Address> getAssociatedIndicatorAddresses(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorAddresses(uniqueId, ownerName);
     }
 
@@ -238,12 +237,12 @@ public class TagReaderAdapter
     }
 
     @Override
-    public List<Email> getAssociatedIndicatorEmails(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Email> getAssociatedIndicatorEmails(String uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorEmails(uniqueId);
     }
 
     @Override
-    public List<Email> getAssociatedIndicatorEmails(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Email> getAssociatedIndicatorEmails(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorEmails(uniqueId, ownerName);
     }
 
@@ -258,12 +257,12 @@ public class TagReaderAdapter
     }
 
     @Override
-    public List<File> getAssociatedIndicatorFiles(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<File> getAssociatedIndicatorFiles(String uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorFiles(uniqueId);
     }
 
     @Override
-    public List<File> getAssociatedIndicatorFiles(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<File> getAssociatedIndicatorFiles(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorFiles(uniqueId, ownerName);
     }
 
@@ -278,12 +277,12 @@ public class TagReaderAdapter
     }
 
     @Override
-    public List<Host> getAssociatedIndicatorHosts(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Host> getAssociatedIndicatorHosts(String uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorHosts(uniqueId);
     }
 
     @Override
-    public List<Host> getAssociatedIndicatorHosts(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Host> getAssociatedIndicatorHosts(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorHosts(uniqueId, ownerName);
     }
 
@@ -298,12 +297,12 @@ public class TagReaderAdapter
     }
 
     @Override
-    public List<Url> getAssociatedIndicatorUrls(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Url> getAssociatedIndicatorUrls(String uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorUrls(uniqueId);
     }
 
     @Override
-    public List<Url> getAssociatedIndicatorUrls(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Url> getAssociatedIndicatorUrls(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorUrls(uniqueId, ownerName);
     }
 

@@ -9,7 +9,7 @@ package com.threatconnect.sdk.exception;
  *
  * @author dtineo
  */
-public class FailedResponseException extends Exception {
+public class FailedResponseException extends RuntimeException {
     public FailedResponseException(String msg) {
         super(msg);
     }

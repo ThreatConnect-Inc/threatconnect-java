@@ -272,12 +272,7 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
         throws IOException, FailedResponseException {
 
         logger.log(Level.INFO, "Getting URL: " + propName);
-        String url = getConn().getUrlConfig().getUrl(propName);
-
-        if (ownerName != null) {
-            url += "?owner=" + URLEncoder.encode(ownerName, "UTF-8");
-        }
-
+        String url = getUrl(propName, ownerName);
 
         if (this instanceof UrlTypeable) {
             url = url.replace("{type}", ((UrlTypeable) this).getUrlType());

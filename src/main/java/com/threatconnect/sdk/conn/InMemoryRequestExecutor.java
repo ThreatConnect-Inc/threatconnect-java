@@ -5,6 +5,7 @@
  */
 package com.threatconnect.sdk.conn;
 
+/*
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.threatconnect.sdk.server.response.service.ApiDataServiceResponse;
 import com.threatconnect.sdk.util.StringUtil;
@@ -20,6 +21,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
+*/
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  *
@@ -27,6 +33,30 @@ import java.util.logging.Level;
  */
 public class InMemoryRequestExecutor extends AbstractRequestExecutor
 {
+    public InMemoryRequestExecutor(Connection conn)
+    {
+        super(conn);
+    }
+
+    @Override
+    public String execute(String path, HttpMethod type, Object obj) throws IOException
+    {
+        return null;
+    }
+
+    @Override
+    public InputStream executeUploadByteStream(String path, File file) throws IOException
+    {
+        return null;
+    }
+
+    @Override
+    public InputStream executeDownloadByteStream(String path) throws IOException
+    {
+        return null;
+    }
+/*
+
 
     private ResteasyProviderFactory resteasyProviderFactory;
     private Registry registry;
@@ -103,13 +133,6 @@ public class InMemoryRequestExecutor extends AbstractRequestExecutor
 
     }
 
-    /**
-     * Execute an HTTP request and return the raw input stream.  <i>Caller is responsible for closing InputStream.</i>
-     *
-     * @param path url to issue request to
-     * @return raw input stream from response
-     * @throws java.io.IOException
-     */
     @Override
     public InputStream executeDownloadByteStream(String path) throws IOException
     {
@@ -148,4 +171,5 @@ public class InMemoryRequestExecutor extends AbstractRequestExecutor
         this.dispatcher = dispatcher;
         this.executor = new InMemoryClientExecutor(dispatcher);
     }
+*/
 }

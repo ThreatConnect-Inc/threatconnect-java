@@ -45,7 +45,7 @@ import com.threatconnect.sdk.server.response.entity.UrlResponse;
 public class ReaderAdapterFactory {
 
     public static AbstractGroupReaderAdapter<Adversary> createAdversaryGroupReader(Connection conn) {
-        return new AbstractGroupReaderAdapter<Adversary>(conn, AdversaryResponse.class, AdversaryListResponse.class) {
+        return new AbstractGroupReaderAdapter<Adversary>(conn, AdversaryResponse.class, Adversary.class, AdversaryListResponse.class) {
             @Override
             public String getUrlType() {
                 return "adversaries";
@@ -54,7 +54,7 @@ public class ReaderAdapterFactory {
     }
 
     public static AbstractGroupReaderAdapter<Email> createEmailGroupReader(Connection conn) {
-        return new AbstractGroupReaderAdapter<Email>(conn, EmailResponse.class, EmailListResponse.class) {
+        return new AbstractGroupReaderAdapter<Email>(conn, EmailResponse.class, Email.class, EmailListResponse.class) {
             @Override
             public String getUrlType() {
                 return "emails";
@@ -63,7 +63,7 @@ public class ReaderAdapterFactory {
     }
 
     public static AbstractGroupReaderAdapter<Incident> createIncidentGroupReader(Connection conn) {
-        return new AbstractGroupReaderAdapter<Incident>(conn, IncidentResponse.class, IncidentListResponse.class) {
+        return new AbstractGroupReaderAdapter<Incident>(conn, IncidentResponse.class, Incident.class, IncidentListResponse.class) {
             @Override
             public String getUrlType() {
                 return "incidents";
@@ -72,7 +72,7 @@ public class ReaderAdapterFactory {
     }
 
     public static AbstractGroupReaderAdapter<Signature> createSignatureGroupReader(Connection conn) {
-        return new AbstractGroupReaderAdapter<Signature>(conn, SignatureResponse.class, SignatureListResponse.class) {
+        return new AbstractGroupReaderAdapter<Signature>(conn, SignatureResponse.class, Signature.class, SignatureListResponse.class) {
             @Override
             public String getUrlType() {
                 return "signatures";
@@ -81,7 +81,7 @@ public class ReaderAdapterFactory {
     }
 
     public static AbstractGroupReaderAdapter<Threat> createThreatGroupReader(Connection conn) {
-        return new AbstractGroupReaderAdapter<Threat>(conn, ThreatResponse.class, ThreatListResponse.class) {
+        return new AbstractGroupReaderAdapter<Threat>(conn, ThreatResponse.class, Threat.class, ThreatListResponse.class) {
             @Override
             public String getUrlType() {
                 return "threats";
@@ -90,7 +90,7 @@ public class ReaderAdapterFactory {
     }
 
     public static AbstractIndicatorReaderAdapter<Address> createAddressIndicatorReader(Connection conn) {
-        return new AbstractIndicatorReaderAdapter<Address>(conn, AddressResponse.class, AddressListResponse.class) {
+        return new AbstractIndicatorReaderAdapter<Address>(conn, AddressResponse.class, Address.class, AddressListResponse.class) {
             @Override
             public String getUrlType() {
                 return "addresses";
@@ -99,7 +99,7 @@ public class ReaderAdapterFactory {
     }
 
     public static AbstractIndicatorReaderAdapter<EmailAddress> createEmailAddressIndicatorReader(Connection conn) {
-        return new AbstractIndicatorReaderAdapter<EmailAddress>(conn, EmailAddressResponse.class, EmailAddressListResponse.class) {
+        return new AbstractIndicatorReaderAdapter<EmailAddress>(conn, EmailAddressResponse.class, EmailAddress.class, EmailAddressListResponse.class) {
             @Override
             public String getUrlType() {
                 return "emailAddresses";
@@ -112,7 +112,7 @@ public class ReaderAdapterFactory {
     }
 
     public static AbstractIndicatorReaderAdapter<Host> createHostIndicatorReader(Connection conn) {
-        return new AbstractIndicatorReaderAdapter<Host>(conn, HostResponse.class, HostListResponse.class) {
+        return new AbstractIndicatorReaderAdapter<Host>(conn, HostResponse.class, Host.class, HostListResponse.class) {
             @Override
             public String getUrlType() {
                 return "hosts";
@@ -121,7 +121,7 @@ public class ReaderAdapterFactory {
     }
 
     public static AbstractIndicatorReaderAdapter<Url> createUrlIndicatorReader(Connection conn) {
-        return new AbstractIndicatorReaderAdapter<Url>(conn, UrlResponse.class, UrlListResponse.class) {
+        return new AbstractIndicatorReaderAdapter<Url>(conn, UrlResponse.class, Url.class, UrlListResponse.class) {
             @Override
             public String getUrlType() {
                 return "urls";

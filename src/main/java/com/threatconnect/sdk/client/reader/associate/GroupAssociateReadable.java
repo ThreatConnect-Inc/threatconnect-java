@@ -5,6 +5,7 @@
  */
 package com.threatconnect.sdk.client.reader.associate;
 
+import com.threatconnect.sdk.client.reader.IterableResponse;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Adversary;
 import com.threatconnect.sdk.server.entity.Email;
@@ -12,11 +13,8 @@ import com.threatconnect.sdk.server.entity.Group;
 import com.threatconnect.sdk.server.entity.Incident;
 import com.threatconnect.sdk.server.entity.Signature;
 import com.threatconnect.sdk.server.entity.Threat;
-import com.threatconnect.sdk.server.entity.Adversary;
-import com.threatconnect.sdk.server.entity.Group;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  *
@@ -24,14 +22,14 @@ import java.util.List;
  */
 public interface GroupAssociateReadable<P> {
     
-    public List<Group> getAssociatedGroups(P uniqueId) throws IOException, FailedResponseException;
+    public IterableResponse<Group> getAssociatedGroups(P uniqueId) throws IOException, FailedResponseException;
 
-    public List<Group> getAssociatedGroups(P uniqueId, String ownerName) 
+    public IterableResponse<Group> getAssociatedGroups(P uniqueId, String ownerName)
             throws IOException, FailedResponseException;
 
-    public List<Adversary> getAssociatedGroupAdversaries(P uniqueId) throws IOException, FailedResponseException;
+    public IterableResponse<Adversary> getAssociatedGroupAdversaries(P uniqueId) throws IOException, FailedResponseException;
 
-    public List<Adversary> getAssociatedGroupAdversaries(P uniqueId, String ownerName) 
+    public IterableResponse<Adversary> getAssociatedGroupAdversaries(P uniqueId, String ownerName)
             throws IOException, FailedResponseException;
 
     public Adversary getAssociatedGroupAdversary(P uniqueId, Integer adversaryId) throws IOException, FailedResponseException;
@@ -39,9 +37,9 @@ public interface GroupAssociateReadable<P> {
     public Adversary getAssociatedGroupAdversary(P uniqueId, Integer adversaryId, String ownerName) 
             throws IOException, FailedResponseException;
 
-    public List<Email> getAssociatedGroupEmails(P uniqueId) throws IOException, FailedResponseException;
+    public IterableResponse<Email> getAssociatedGroupEmails(P uniqueId) throws IOException, FailedResponseException;
 
-    public List<Email> getAssociatedGroupEmails(P uniqueId, String ownerName) 
+    public IterableResponse<Email> getAssociatedGroupEmails(P uniqueId, String ownerName)
             throws IOException, FailedResponseException;
 
      public Email getAssociatedGroupEmail(P uniqueId, Integer emailId) throws IOException, FailedResponseException;
@@ -49,9 +47,9 @@ public interface GroupAssociateReadable<P> {
     public Email getAssociatedGroupEmail(P uniqueId, Integer emailId, String ownerName)
             throws IOException, FailedResponseException;
 
-    public List<Incident> getAssociatedGroupIncidents(P uniqueId) throws IOException, FailedResponseException;
+    public IterableResponse<Incident> getAssociatedGroupIncidents(P uniqueId) throws IOException, FailedResponseException;
 
-    public List<Incident> getAssociatedGroupIncidents(P uniqueId, String ownerName)
+    public IterableResponse<Incident> getAssociatedGroupIncidents(P uniqueId, String ownerName)
             throws IOException, FailedResponseException;
 
      public Incident getAssociatedGroupIncident(P uniqueId, Integer incidentId) throws IOException, FailedResponseException;
@@ -59,9 +57,9 @@ public interface GroupAssociateReadable<P> {
     public Incident getAssociatedGroupIncident(P uniqueId, Integer incidentId, String ownerName)
             throws IOException, FailedResponseException;
 
-    public List<Signature> getAssociatedGroupSignatures(P uniqueId) throws IOException, FailedResponseException;
+    public IterableResponse<Signature> getAssociatedGroupSignatures(P uniqueId) throws IOException, FailedResponseException;
 
-    public List<Signature> getAssociatedGroupSignatures(P uniqueId, String ownerName)
+    public IterableResponse<Signature> getAssociatedGroupSignatures(P uniqueId, String ownerName)
             throws IOException, FailedResponseException;
 
      public Signature getAssociatedGroupSignature(P uniqueId, Integer signatureId) throws IOException, FailedResponseException;
@@ -69,9 +67,9 @@ public interface GroupAssociateReadable<P> {
     public Signature getAssociatedGroupSignature(P uniqueId, Integer signatureId, String ownerName)
             throws IOException, FailedResponseException;
 
-    public List<Threat> getAssociatedGroupThreats(P uniqueId) throws IOException, FailedResponseException;
+    public IterableResponse<Threat> getAssociatedGroupThreats(P uniqueId) throws IOException, FailedResponseException;
 
-    public List<Threat> getAssociatedGroupThreats(P uniqueId, String ownerName) 
+    public IterableResponse<Threat> getAssociatedGroupThreats(P uniqueId, String ownerName)
             throws IOException, FailedResponseException;
 
      public Threat getAssociatedGroupThreat(P uniqueId, Integer threatId) throws IOException, FailedResponseException;

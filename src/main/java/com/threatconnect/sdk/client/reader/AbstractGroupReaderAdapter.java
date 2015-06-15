@@ -14,7 +14,6 @@ import com.threatconnect.sdk.client.reader.associate.AbstractIndicatorAssociateR
 import com.threatconnect.sdk.client.reader.associate.AbstractGroupAssociateReaderAdapter;
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Address;
 import com.threatconnect.sdk.server.entity.Adversary;
@@ -41,7 +40,6 @@ import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.server.response.entity.GroupListResponse;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * EmailReaderAdapter is the primary client adapter for all Email group level objects.
@@ -54,7 +52,7 @@ import java.util.List;
  * @param <T>
  */
 public abstract class AbstractGroupReaderAdapter<T extends Group>
-    extends AbstractBaseReaderAdapter<T,Integer> 
+    extends AbstractBaseReaderAdapter<T,Integer>
     implements UrlTypeable, GroupAssociateReadable<Integer>, IndicatorAssociateReadable<Integer>
              , AttributeAssociateReadable<Integer>, VictimAssetAssociateReadable<Integer>, TagAssociateReadable<Integer>
              , SecurityLabelAssociateReadable<Integer>  {
@@ -76,8 +74,9 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
      * @see ReaderAdapterFactory
      */
     protected AbstractGroupReaderAdapter(Connection conn
-                , Class<? extends ApiEntitySingleResponse> singleType, Class<? extends ApiEntityListResponse> listType) { 
-        super(conn, singleType, listType);
+                , Class<? extends ApiEntitySingleResponse> singleType, Class<T> singleItemType,
+                                         Class<? extends ApiEntityListResponse> listType) {
+        super(conn, singleType, singleItemType, listType);
 
         initComposite();
     }
@@ -86,6 +85,7 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
         attribReader = new AbstractAttributeAssociateReaderAdapter<Integer>(
                             AbstractGroupReaderAdapter.this.getConn()
                           , AbstractGroupReaderAdapter.this.singleType
+                            , AbstractGroupReaderAdapter.this.singleItemType
                           , AbstractGroupReaderAdapter.this.listType
             ) {
             @Override
@@ -102,8 +102,8 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
         groupAssocReader = new AbstractGroupAssociateReaderAdapter<Integer>(
                             AbstractGroupReaderAdapter.this.getConn()
                           , AbstractGroupReaderAdapter.this.singleType
-                          , AbstractGroupReaderAdapter.this.listType
-            ) {
+                          , AbstractGroupReaderAdapter.this.singleItemType
+                          , AbstractGroupReaderAdapter.this.listType) {
             @Override
             protected String getUrlBasePrefix() {
                 return AbstractGroupReaderAdapter.this.getUrlBasePrefix();
@@ -117,6 +117,7 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
         indAssocReader = new AbstractIndicatorAssociateReaderAdapter<Integer>(
                             AbstractGroupReaderAdapter.this.getConn()
                           , AbstractGroupReaderAdapter.this.singleType
+                          , AbstractGroupReaderAdapter.this.singleItemType
                           , AbstractGroupReaderAdapter.this.listType
             ) {
             @Override
@@ -133,8 +134,8 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
         secLabelAssocReader = new AbstractSecurityLabelAssociateReaderAdapter<Integer>(
                             AbstractGroupReaderAdapter.this.getConn()
                           , AbstractGroupReaderAdapter.this.singleType
-                          , AbstractGroupReaderAdapter.this.listType
-            ) {
+                          , AbstractGroupReaderAdapter.this.singleItemType
+                          , AbstractGroupReaderAdapter.this.listType) {
             @Override
             protected String getUrlBasePrefix() {
                 return AbstractGroupReaderAdapter.this.getUrlBasePrefix();
@@ -144,8 +145,8 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
         tagAssocReader = new AbstractTagAssociateReaderAdapter<Integer>(
                             AbstractGroupReaderAdapter.this.getConn()
                           , AbstractGroupReaderAdapter.this.singleType
-                          , AbstractGroupReaderAdapter.this.listType
-            ) {
+                          , AbstractGroupReaderAdapter.this.singleItemType
+                          , AbstractGroupReaderAdapter.this.listType) {
             @Override
             protected String getUrlBasePrefix() {
                 return AbstractGroupReaderAdapter.this.getUrlBasePrefix();
@@ -159,8 +160,8 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
         victimAssetAssocReader = new AbstractVictimAssetAssociateReaderAdapter<Integer>(
                             AbstractGroupReaderAdapter.this.getConn()
                           , AbstractGroupReaderAdapter.this.singleType
-                          , AbstractGroupReaderAdapter.this.listType
-            ) {
+                          , AbstractGroupReaderAdapter.this.singleItemType
+                          , AbstractGroupReaderAdapter.this.listType) {
             @Override
             protected String getUrlBasePrefix() {
                 return AbstractGroupReaderAdapter.this.getUrlBasePrefix();
@@ -178,33 +179,31 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
         return getAsText("v2.groups.list");
     }
 
-    public List<Group> getGroups() throws IOException, FailedResponseException {
+    public IterableResponse<Group> getGroups() throws IOException, FailedResponseException {
         return getGroups(null);
     }
 
-    public List<Group> getGroups(String ownerName) throws IOException, FailedResponseException {
-	    GroupListResponse data =  getList("v2.groups.list", GroupListResponse.class, ownerName, null);
-
-        return (List<Group>) data.getData().getData();
+    public IterableResponse<Group> getGroups(String ownerName) throws IOException, FailedResponseException {
+	    return getItems("v2.groups.list", GroupListResponse.class, Group.class, ownerName, null);
     }
 
     @Override
-    public List<Group> getAssociatedGroups(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Group> getAssociatedGroups(Integer uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroups(uniqueId);
     }
 
     @Override
-    public List<Group> getAssociatedGroups(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Group> getAssociatedGroups(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroups(uniqueId,ownerName);
     }
 
     @Override
-    public List<Adversary> getAssociatedGroupAdversaries(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Adversary> getAssociatedGroupAdversaries(Integer uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupAdversaries(uniqueId);
     }
 
     @Override
-    public List<Adversary> getAssociatedGroupAdversaries(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Adversary> getAssociatedGroupAdversaries(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupAdversaries(uniqueId,ownerName);
     }
 
@@ -219,12 +218,12 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     }
 
     @Override
-    public List<Email> getAssociatedGroupEmails(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Email> getAssociatedGroupEmails(Integer uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupEmails(uniqueId);
     }
 
     @Override
-    public List<Email> getAssociatedGroupEmails(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Email> getAssociatedGroupEmails(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupEmails(uniqueId,ownerName);
     }
 
@@ -239,12 +238,12 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     }
 
     @Override
-    public List<Incident> getAssociatedGroupIncidents(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Incident> getAssociatedGroupIncidents(Integer uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupIncidents(uniqueId);
     }
 
     @Override
-    public List<Incident> getAssociatedGroupIncidents(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Incident> getAssociatedGroupIncidents(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupIncidents(uniqueId, ownerName);
     }
 
@@ -259,12 +258,12 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     }
 
     @Override
-    public List<Signature> getAssociatedGroupSignatures(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Signature> getAssociatedGroupSignatures(Integer uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupSignatures(uniqueId);
     }
 
     @Override
-    public List<Signature> getAssociatedGroupSignatures(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Signature> getAssociatedGroupSignatures(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupSignatures(uniqueId, ownerName);
     }
 
@@ -279,12 +278,12 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     }
 
     @Override
-    public List<Threat> getAssociatedGroupThreats(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Threat> getAssociatedGroupThreats(Integer uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupThreats(uniqueId);
     }
 
     @Override
-    public List<Threat> getAssociatedGroupThreats(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Threat> getAssociatedGroupThreats(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupThreats(uniqueId, ownerName);
     }
 
@@ -299,22 +298,22 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     }
 
     @Override
-    public List<Indicator> getAssociatedIndicators(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Indicator> getAssociatedIndicators(Integer uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicators(uniqueId);
     }
 
     @Override
-    public List<Indicator> getAssociatedIndicators(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Indicator> getAssociatedIndicators(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicators(uniqueId, ownerName);
     }
 
     @Override
-    public List<Address> getAssociatedIndicatorAddresses(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Address> getAssociatedIndicatorAddresses(Integer uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorAddresses(uniqueId);
     }
 
     @Override
-    public List<Address> getAssociatedIndicatorAddresses(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Address> getAssociatedIndicatorAddresses(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorAddresses(uniqueId, ownerName);
     }
 
@@ -329,12 +328,12 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     }
 
     @Override
-    public List<Email> getAssociatedIndicatorEmails(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Email> getAssociatedIndicatorEmails(Integer uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorEmails(uniqueId);
     }
 
     @Override
-    public List<Email> getAssociatedIndicatorEmails(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Email> getAssociatedIndicatorEmails(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorEmails(uniqueId, ownerName);
     }
 
@@ -349,12 +348,12 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     }
 
     @Override
-    public List<File> getAssociatedIndicatorFiles(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<File> getAssociatedIndicatorFiles(Integer uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorFiles(uniqueId);
     }
 
     @Override
-    public List<File> getAssociatedIndicatorFiles(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<File> getAssociatedIndicatorFiles(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorFiles(uniqueId, ownerName);
     }
 
@@ -369,12 +368,12 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     }
 
     @Override
-    public List<Host> getAssociatedIndicatorHosts(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Host> getAssociatedIndicatorHosts(Integer uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorHosts(uniqueId);
     }
 
     @Override
-    public List<Host> getAssociatedIndicatorHosts(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Host> getAssociatedIndicatorHosts(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorHosts(uniqueId, ownerName);
     }
 
@@ -389,12 +388,12 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     }
 
     @Override
-    public List<Url> getAssociatedIndicatorUrls(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Url> getAssociatedIndicatorUrls(Integer uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorUrls(uniqueId);
     }
 
     @Override
-    public List<Url> getAssociatedIndicatorUrls(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Url> getAssociatedIndicatorUrls(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorUrls(uniqueId, ownerName);
     }
 
@@ -409,12 +408,12 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     }
 
     @Override
-    public List<Attribute> getAttributes(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Attribute> getAttributes(Integer uniqueId) throws IOException, FailedResponseException {
         return attribReader.getAttributes(uniqueId);
     }
 
     @Override
-    public List<Attribute> getAttributes(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Attribute> getAttributes(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return attribReader.getAttributes(uniqueId, ownerName);
     }
 
@@ -429,12 +428,12 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     }
 
     @Override
-    public List<SecurityLabel> getAttributeSecurityLabels(Integer uniqueId, Integer attributeId) throws IOException, FailedResponseException {
+    public IterableResponse<SecurityLabel> getAttributeSecurityLabels(Integer uniqueId, Integer attributeId) throws IOException, FailedResponseException {
         return attribReader.getAttributeSecurityLabels(uniqueId, attributeId);
     }
 
     @Override
-    public List<SecurityLabel> getAttributeSecurityLabels(Integer uniqueId, Integer attributeId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<SecurityLabel> getAttributeSecurityLabels(Integer uniqueId, Integer attributeId, String ownerName) throws IOException, FailedResponseException {
         return attribReader.getAttributeSecurityLabels(uniqueId, attributeId, ownerName);
     }
 
@@ -449,17 +448,17 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     }
 
     @Override
-    public List<VictimAsset> getAssociatedVictimAssets(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<VictimAsset> getAssociatedVictimAssets(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssets(uniqueId, ownerName);
     }
 
     @Override
-    public List<VictimEmailAddress> getAssociatedVictimAssetEmailAddresses(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<VictimEmailAddress> getAssociatedVictimAssetEmailAddresses(Integer uniqueId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetEmailAddresses(uniqueId);
     }
 
     @Override
-    public List<VictimEmailAddress> getAssociatedVictimAssetEmailAddresses(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<VictimEmailAddress> getAssociatedVictimAssetEmailAddresses(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetEmailAddresses(uniqueId, ownerName);
     }
 
@@ -474,12 +473,12 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     }
 
     @Override
-    public List<VictimNetworkAccount> getAssociatedVictimAssetNetworkAccounts(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<VictimNetworkAccount> getAssociatedVictimAssetNetworkAccounts(Integer uniqueId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetNetworkAccounts(uniqueId);
     }
 
     @Override
-    public List<VictimNetworkAccount> getAssociatedVictimAssetNetworkAccounts(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<VictimNetworkAccount> getAssociatedVictimAssetNetworkAccounts(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetNetworkAccounts(uniqueId, ownerName);
     }
 
@@ -494,12 +493,12 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     }
 
     @Override
-    public List<VictimPhone> getAssociatedVictimAssetPhoneNumbers(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<VictimPhone> getAssociatedVictimAssetPhoneNumbers(Integer uniqueId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetPhoneNumbers(uniqueId);
     }
 
     @Override
-    public List<VictimPhone> getAssociatedVictimAssetPhoneNumbers(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<VictimPhone> getAssociatedVictimAssetPhoneNumbers(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetPhoneNumbers(uniqueId, ownerName);
     }
 
@@ -514,12 +513,12 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     }
 
     @Override
-    public List<VictimSocialNetwork> getAssociatedVictimAssetSocialNetworks(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<VictimSocialNetwork> getAssociatedVictimAssetSocialNetworks(Integer uniqueId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetSocialNetworks(uniqueId);
     }
 
     @Override
-    public List<VictimSocialNetwork> getAssociatedVictimAssetSocialNetworks(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<VictimSocialNetwork> getAssociatedVictimAssetSocialNetworks(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetSocialNetworks(uniqueId, ownerName);
     }
 
@@ -534,12 +533,12 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     }
 
     @Override
-    public List<VictimWebSite> getAssociatedVictimAssetWebsites(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<VictimWebSite> getAssociatedVictimAssetWebsites(Integer uniqueId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetWebsites(uniqueId);
     }
 
     @Override
-    public List<VictimWebSite> getAssociatedVictimAssetWebsites(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<VictimWebSite> getAssociatedVictimAssetWebsites(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetWebsites(uniqueId, ownerName);
     }
 
@@ -554,12 +553,12 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     }
 
     @Override
-    public List<Tag> getAssociatedTags(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Tag> getAssociatedTags(Integer uniqueId) throws IOException, FailedResponseException {
         return tagAssocReader.getAssociatedTags(uniqueId);
     }
 
     @Override
-    public List<Tag> getAssociatedTags(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Tag> getAssociatedTags(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return tagAssocReader.getAssociatedTags(uniqueId, ownerName);
     }
 
@@ -574,12 +573,12 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     }
 
     @Override
-    public List<SecurityLabel> getAssociatedSecurityLabels(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<SecurityLabel> getAssociatedSecurityLabels(Integer uniqueId) throws IOException, FailedResponseException {
         return secLabelAssocReader.getAssociatedSecurityLabels(uniqueId);
     }
 
     @Override
-    public List<SecurityLabel> getAssociatedSecurityLabels(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<SecurityLabel> getAssociatedSecurityLabels(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return secLabelAssocReader.getAssociatedSecurityLabels(uniqueId, ownerName);
     }
 

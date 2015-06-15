@@ -5,12 +5,11 @@
  */
 package com.threatconnect.sdk.client.reader.associate;
 
+import com.threatconnect.sdk.client.reader.IterableResponse;
 import com.threatconnect.sdk.exception.FailedResponseException;
-import com.threatconnect.sdk.server.entity.Victim;
 import com.threatconnect.sdk.server.entity.Victim;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  *
@@ -18,9 +17,9 @@ import java.util.List;
  */
 public interface VictimAssociateReadable<P> {
 
-   public List<Victim> getAssociatedVictims(P uniqueId) throws IOException, FailedResponseException;
+   public IterableResponse<Victim> getAssociatedVictims(P uniqueId) throws IOException, FailedResponseException;
 
-   public List<Victim> getAssociatedVictims(P uniqueId, String ownerName) 
+   public IterableResponse<Victim> getAssociatedVictims(P uniqueId, String ownerName)
             throws IOException, FailedResponseException;
 
    public Victim getAssociatedVictim(P uniqueId, Integer victimId) throws IOException, FailedResponseException;

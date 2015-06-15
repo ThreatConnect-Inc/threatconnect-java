@@ -13,7 +13,6 @@ import com.threatconnect.sdk.client.reader.associate.AbstractIndicatorAssociateR
 import com.threatconnect.sdk.client.reader.associate.AbstractGroupAssociateReaderAdapter;
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Address;
 import com.threatconnect.sdk.server.entity.Adversary;
@@ -26,6 +25,7 @@ import com.threatconnect.sdk.server.entity.Indicator;
 import com.threatconnect.sdk.server.entity.Signature;
 import com.threatconnect.sdk.server.entity.Threat;
 import com.threatconnect.sdk.server.entity.Url;
+import com.threatconnect.sdk.server.entity.Victim;
 import com.threatconnect.sdk.server.entity.VictimAsset;
 import com.threatconnect.sdk.server.entity.VictimEmailAddress;
 import com.threatconnect.sdk.server.entity.VictimNetworkAccount;
@@ -36,7 +36,6 @@ import com.threatconnect.sdk.server.response.entity.VictimResponse;
 import com.threatconnect.sdk.server.response.entity.VictimListResponse;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  *
@@ -55,7 +54,7 @@ public class VictimReaderAdapter
 
 
     protected VictimReaderAdapter(Connection conn) {
-        super(conn, VictimResponse.class, VictimListResponse.class);
+        super(conn, VictimResponse.class, Victim.class, VictimListResponse.class);
 
         initComposite();
     }
@@ -65,8 +64,8 @@ public class VictimReaderAdapter
         groupAssocReader = new AbstractGroupAssociateReaderAdapter<Integer>(
                             VictimReaderAdapter.this.getConn()
                           , VictimReaderAdapter.this.singleType
-                          , VictimReaderAdapter.this.listType
-            ) {
+                          , VictimReaderAdapter.this.singleItemType
+                          , VictimReaderAdapter.this.listType) {
             @Override
             protected String getUrlBasePrefix() {
                 return VictimReaderAdapter.this.getUrlBasePrefix();
@@ -81,6 +80,7 @@ public class VictimReaderAdapter
         indAssocReader = new AbstractIndicatorAssociateReaderAdapter<Integer>(
                             VictimReaderAdapter.this.getConn()
                           , VictimReaderAdapter.this.singleType
+                          , VictimReaderAdapter.this.singleItemType
                           , VictimReaderAdapter.this.listType
             ) {
             @Override
@@ -96,8 +96,8 @@ public class VictimReaderAdapter
         victimAssetAssocReader = new AbstractVictimAssetAssociateReaderAdapter<Integer>(
                             VictimReaderAdapter.this.getConn()
                           , VictimReaderAdapter.this.singleType
-                          , VictimReaderAdapter.this.listType
-            ) {
+                          , VictimReaderAdapter.this.singleItemType
+                          , VictimReaderAdapter.this.listType) {
             @Override
             protected String getUrlBasePrefix() {
                 return VictimReaderAdapter.this.getUrlBasePrefix();
@@ -117,22 +117,22 @@ public class VictimReaderAdapter
     }
 
     @Override
-    public List<Group> getAssociatedGroups(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Group> getAssociatedGroups(Integer uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroups(uniqueId);
     }
 
     @Override
-    public List<Group> getAssociatedGroups(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Group> getAssociatedGroups(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroups(uniqueId,ownerName);
     }
 
     @Override
-    public List<Adversary> getAssociatedGroupAdversaries(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Adversary> getAssociatedGroupAdversaries(Integer uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupAdversaries(uniqueId);
     }
 
     @Override
-    public List<Adversary> getAssociatedGroupAdversaries(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Adversary> getAssociatedGroupAdversaries(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupAdversaries(uniqueId,ownerName);
     }
 
@@ -147,12 +147,12 @@ public class VictimReaderAdapter
     }
 
     @Override
-    public List<Email> getAssociatedGroupEmails(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Email> getAssociatedGroupEmails(Integer uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupEmails(uniqueId);
     }
 
     @Override
-    public List<Email> getAssociatedGroupEmails(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Email> getAssociatedGroupEmails(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupEmails(uniqueId,ownerName);
     }
 
@@ -167,12 +167,12 @@ public class VictimReaderAdapter
     }
 
     @Override
-    public List<Incident> getAssociatedGroupIncidents(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Incident> getAssociatedGroupIncidents(Integer uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupIncidents(uniqueId);
     }
 
     @Override
-    public List<Incident> getAssociatedGroupIncidents(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Incident> getAssociatedGroupIncidents(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupIncidents(uniqueId, ownerName);
     }
 
@@ -187,12 +187,12 @@ public class VictimReaderAdapter
     }
 
     @Override
-    public List<Signature> getAssociatedGroupSignatures(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Signature> getAssociatedGroupSignatures(Integer uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupSignatures(uniqueId);
     }
 
     @Override
-    public List<Signature> getAssociatedGroupSignatures(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Signature> getAssociatedGroupSignatures(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupSignatures(uniqueId, ownerName);
     }
 
@@ -207,12 +207,12 @@ public class VictimReaderAdapter
     }
 
     @Override
-    public List<Threat> getAssociatedGroupThreats(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Threat> getAssociatedGroupThreats(Integer uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupThreats(uniqueId);
     }
 
     @Override
-    public List<Threat> getAssociatedGroupThreats(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Threat> getAssociatedGroupThreats(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupThreats(uniqueId, ownerName);
     }
 
@@ -227,22 +227,22 @@ public class VictimReaderAdapter
     }
 
     @Override
-    public List<Indicator> getAssociatedIndicators(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Indicator> getAssociatedIndicators(Integer uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicators(uniqueId);
     }
 
     @Override
-    public List<Indicator> getAssociatedIndicators(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Indicator> getAssociatedIndicators(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicators(uniqueId, ownerName);
     }
 
     @Override
-    public List<Address> getAssociatedIndicatorAddresses(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Address> getAssociatedIndicatorAddresses(Integer uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorAddresses(uniqueId);
     }
 
     @Override
-    public List<Address> getAssociatedIndicatorAddresses(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Address> getAssociatedIndicatorAddresses(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorAddresses(uniqueId, ownerName);
     }
 
@@ -257,12 +257,12 @@ public class VictimReaderAdapter
     }
 
     @Override
-    public List<Email> getAssociatedIndicatorEmails(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Email> getAssociatedIndicatorEmails(Integer uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorEmails(uniqueId);
     }
 
     @Override
-    public List<Email> getAssociatedIndicatorEmails(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Email> getAssociatedIndicatorEmails(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorEmails(uniqueId, ownerName);
     }
 
@@ -277,12 +277,12 @@ public class VictimReaderAdapter
     }
 
     @Override
-    public List<File> getAssociatedIndicatorFiles(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<File> getAssociatedIndicatorFiles(Integer uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorFiles(uniqueId);
     }
 
     @Override
-    public List<File> getAssociatedIndicatorFiles(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<File> getAssociatedIndicatorFiles(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorFiles(uniqueId, ownerName);
     }
 
@@ -297,12 +297,12 @@ public class VictimReaderAdapter
     }
 
     @Override
-    public List<Host> getAssociatedIndicatorHosts(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Host> getAssociatedIndicatorHosts(Integer uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorHosts(uniqueId);
     }
 
     @Override
-    public List<Host> getAssociatedIndicatorHosts(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Host> getAssociatedIndicatorHosts(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorHosts(uniqueId, ownerName);
     }
 
@@ -317,12 +317,12 @@ public class VictimReaderAdapter
     }
 
     @Override
-    public List<Url> getAssociatedIndicatorUrls(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Url> getAssociatedIndicatorUrls(Integer uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorUrls(uniqueId);
     }
 
     @Override
-    public List<Url> getAssociatedIndicatorUrls(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Url> getAssociatedIndicatorUrls(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorUrls(uniqueId, ownerName);
     }
 
@@ -337,17 +337,17 @@ public class VictimReaderAdapter
     }
 
     @Override
-    public List<VictimAsset> getAssociatedVictimAssets(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<VictimAsset> getAssociatedVictimAssets(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssets(uniqueId, ownerName);
     }
 
     @Override
-    public List<VictimEmailAddress> getAssociatedVictimAssetEmailAddresses(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<VictimEmailAddress> getAssociatedVictimAssetEmailAddresses(Integer uniqueId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetEmailAddresses(uniqueId);
     }
 
     @Override
-    public List<VictimEmailAddress> getAssociatedVictimAssetEmailAddresses(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<VictimEmailAddress> getAssociatedVictimAssetEmailAddresses(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetEmailAddresses(uniqueId, ownerName);
     }
 
@@ -362,12 +362,12 @@ public class VictimReaderAdapter
     }
 
     @Override
-    public List<VictimNetworkAccount> getAssociatedVictimAssetNetworkAccounts(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<VictimNetworkAccount> getAssociatedVictimAssetNetworkAccounts(Integer uniqueId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetNetworkAccounts(uniqueId);
     }
 
     @Override
-    public List<VictimNetworkAccount> getAssociatedVictimAssetNetworkAccounts(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<VictimNetworkAccount> getAssociatedVictimAssetNetworkAccounts(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetNetworkAccounts(uniqueId, ownerName);
     }
 
@@ -382,12 +382,12 @@ public class VictimReaderAdapter
     }
 
     @Override
-    public List<VictimPhone> getAssociatedVictimAssetPhoneNumbers(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<VictimPhone> getAssociatedVictimAssetPhoneNumbers(Integer uniqueId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetPhoneNumbers(uniqueId);
     }
 
     @Override
-    public List<VictimPhone> getAssociatedVictimAssetPhoneNumbers(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<VictimPhone> getAssociatedVictimAssetPhoneNumbers(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetPhoneNumbers(uniqueId, ownerName);
     }
 
@@ -402,12 +402,12 @@ public class VictimReaderAdapter
     }
 
     @Override
-    public List<VictimSocialNetwork> getAssociatedVictimAssetSocialNetworks(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<VictimSocialNetwork> getAssociatedVictimAssetSocialNetworks(Integer uniqueId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetSocialNetworks(uniqueId);
     }
 
     @Override
-    public List<VictimSocialNetwork> getAssociatedVictimAssetSocialNetworks(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<VictimSocialNetwork> getAssociatedVictimAssetSocialNetworks(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetSocialNetworks(uniqueId, ownerName);
     }
 
@@ -422,12 +422,12 @@ public class VictimReaderAdapter
     }
 
     @Override
-    public List<VictimWebSite> getAssociatedVictimAssetWebsites(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<VictimWebSite> getAssociatedVictimAssetWebsites(Integer uniqueId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetWebsites(uniqueId);
     }
 
     @Override
-    public List<VictimWebSite> getAssociatedVictimAssetWebsites(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<VictimWebSite> getAssociatedVictimAssetWebsites(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetWebsites(uniqueId, ownerName);
     }
 

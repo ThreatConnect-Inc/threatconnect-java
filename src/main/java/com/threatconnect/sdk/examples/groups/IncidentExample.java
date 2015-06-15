@@ -1,6 +1,7 @@
 package com.threatconnect.sdk.examples.groups;
 
 import com.threatconnect.sdk.client.reader.AbstractGroupReaderAdapter;
+import com.threatconnect.sdk.client.reader.IterableResponse;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
 import com.threatconnect.sdk.client.writer.AbstractGroupWriterAdapter;
 import com.threatconnect.sdk.client.writer.AbstractIndicatorWriterAdapter;
@@ -10,23 +11,9 @@ import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Attribute;
+import com.threatconnect.sdk.server.entity.Group;
+import com.threatconnect.sdk.server.entity.Host;
 import com.threatconnect.sdk.server.entity.Incident;
-import com.threatconnect.sdk.server.entity.Group;
-import com.threatconnect.sdk.server.entity.Host;
-import com.threatconnect.sdk.server.entity.SecurityLabel;
-import com.threatconnect.sdk.server.entity.Tag;
-import com.threatconnect.sdk.server.entity.Threat;
-import com.threatconnect.sdk.server.entity.Victim;
-import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
-import com.threatconnect.sdk.client.reader.AbstractGroupReaderAdapter;
-import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
-import com.threatconnect.sdk.client.writer.AbstractGroupWriterAdapter;
-import com.threatconnect.sdk.client.writer.AbstractIndicatorWriterAdapter;
-import com.threatconnect.sdk.client.writer.VictimWriterAdapter;
-import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.server.entity.Attribute;
-import com.threatconnect.sdk.server.entity.Group;
-import com.threatconnect.sdk.server.entity.Host;
 import com.threatconnect.sdk.server.entity.SecurityLabel;
 import com.threatconnect.sdk.server.entity.Tag;
 import com.threatconnect.sdk.server.entity.Threat;
@@ -34,7 +21,6 @@ import com.threatconnect.sdk.server.entity.Victim;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 
 import java.io.IOException;
-import java.util.List;
 
 public class IncidentExample {
 
@@ -79,7 +65,7 @@ public class IncidentExample {
     private static void doGet(Connection conn) throws IOException {
 
         AbstractGroupReaderAdapter<Incident> reader = ReaderAdapterFactory.createIncidentGroupReader(conn);
-        List<Incident> data;
+        IterableResponse<Incident> data;
         try {
             // -----------------------------------------------------------------------------------------------------------
             // Get Incidents

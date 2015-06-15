@@ -5,6 +5,7 @@
  */
 package com.threatconnect.sdk.examples.owners;
 
+import com.threatconnect.sdk.client.reader.IterableResponse;
 import com.threatconnect.sdk.client.reader.OwnerReaderAdapter;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
 import com.threatconnect.sdk.config.Configuration;
@@ -31,7 +32,7 @@ public class OwnerExample {
             Connection conn = new Connection(config);
             OwnerReaderAdapter reader = ReaderAdapterFactory.createOwnerReader(conn);
 
-            List<Owner> data = reader.getOwners();
+            IterableResponse<Owner> data = reader.getOwners();
             for(Owner o : data) {
                 System.out.println("Owner: " + o.toString() );
             }

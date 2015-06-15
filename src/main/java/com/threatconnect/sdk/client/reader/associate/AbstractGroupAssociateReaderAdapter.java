@@ -7,8 +7,8 @@ package com.threatconnect.sdk.client.reader.associate;
 
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.reader.AbstractBaseReaderAdapter;
+import com.threatconnect.sdk.client.reader.IterableResponse;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Adversary;
 import com.threatconnect.sdk.server.entity.Email;
@@ -39,38 +39,34 @@ import java.util.Map;
 public abstract class AbstractGroupAssociateReaderAdapter<P> extends AbstractBaseReaderAdapter implements GroupAssociateReadable<P>, UrlTypeable
 {
 
-    public AbstractGroupAssociateReaderAdapter(Connection conn, Class singleType, Class listType) {
-        super(conn, singleType, listType);
+    public AbstractGroupAssociateReaderAdapter(Connection conn, Class singleType, Class singleItemType, Class listType) {
+        super(conn, singleType, singleItemType, listType);
     }
 
     @Override
-        public List<Group> getAssociatedGroups(P uniqueId) throws IOException, FailedResponseException {
+        public IterableResponse<Group> getAssociatedGroups(P uniqueId) throws IOException, FailedResponseException {
         return getAssociatedGroups(uniqueId, null); 
     }
 
     @Override
-    public List<Group> getAssociatedGroups(P uniqueId, String ownerName) 
+    public IterableResponse<Group> getAssociatedGroups(P uniqueId, String ownerName)
             throws IOException, FailedResponseException {
 
         Map<String,Object> map = createParamMap("id", uniqueId);
-        GroupListResponse data = getList(getUrlBasePrefix() + ".byId.groups", GroupListResponse.class, ownerName, map);
-
-        return (List<Group>)data.getData().getData();
+        return getItems(getUrlBasePrefix() + ".byId.groups", GroupListResponse.class, Group.class, ownerName, map);
     }
 
     @Override
-    public List<Adversary> getAssociatedGroupAdversaries(P uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Adversary> getAssociatedGroupAdversaries(P uniqueId) throws IOException, FailedResponseException {
         return getAssociatedGroupAdversaries(uniqueId, null); 
     }
 
     @Override
-    public List<Adversary> getAssociatedGroupAdversaries(P uniqueId, String ownerName) 
+    public IterableResponse<Adversary> getAssociatedGroupAdversaries(P uniqueId, String ownerName)
             throws IOException, FailedResponseException {
 
         Map<String,Object> map = createParamMap("id", uniqueId);
-        AdversaryListResponse data = getList(getUrlBasePrefix() + ".byId.groups.adversaries", AdversaryListResponse.class, ownerName, map);
-
-        return (List<Adversary>)data.getData().getData();
+        return getItems(getUrlBasePrefix() + ".byId.groups.adversaries", AdversaryListResponse.class, Adversary.class, ownerName, map);
     }
 
     @Override
@@ -89,18 +85,16 @@ public abstract class AbstractGroupAssociateReaderAdapter<P> extends AbstractBas
     }
 
     @Override
-    public List<Incident> getAssociatedGroupIncidents(P uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Incident> getAssociatedGroupIncidents(P uniqueId) throws IOException, FailedResponseException {
         return getAssociatedGroupIncidents(uniqueId, null); 
     }
 
     @Override
-    public List<Incident> getAssociatedGroupIncidents(P uniqueId, String ownerName)
+    public IterableResponse<Incident> getAssociatedGroupIncidents(P uniqueId, String ownerName)
             throws IOException, FailedResponseException {
 
         Map<String,Object> map = createParamMap("id", uniqueId);
-        IncidentListResponse data = getList(getUrlBasePrefix() + ".byId.groups.incidents", IncidentListResponse.class, ownerName, map);
-
-        return (List<Incident>)data.getData().getData();
+        return getItems(getUrlBasePrefix() + ".byId.groups.incidents", IncidentListResponse.class, Incident.class, ownerName, map);
     }
 
     @Override
@@ -119,18 +113,16 @@ public abstract class AbstractGroupAssociateReaderAdapter<P> extends AbstractBas
     }
 
     @Override
-    public List<Signature> getAssociatedGroupSignatures(P uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Signature> getAssociatedGroupSignatures(P uniqueId) throws IOException, FailedResponseException {
         return getAssociatedGroupSignatures(uniqueId, null);
     }
 
     @Override
-    public List<Signature> getAssociatedGroupSignatures(P uniqueId, String ownerName)
+    public IterableResponse<Signature> getAssociatedGroupSignatures(P uniqueId, String ownerName)
             throws IOException, FailedResponseException {
 
         Map<String,Object> map = createParamMap("id", uniqueId);
-        SignatureListResponse data = getList(getUrlBasePrefix() + ".byId.groups.signatures", SignatureListResponse.class, ownerName, map);
-
-        return (List<Signature>)data.getData().getData();
+        return getItems(getUrlBasePrefix() + ".byId.groups.signatures", SignatureListResponse.class, Signature.class, ownerName, map);
     }
 
     @Override
@@ -149,18 +141,16 @@ public abstract class AbstractGroupAssociateReaderAdapter<P> extends AbstractBas
     }
 
     @Override
-    public List<Threat> getAssociatedGroupThreats(P uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Threat> getAssociatedGroupThreats(P uniqueId) throws IOException, FailedResponseException {
         return getAssociatedGroupThreats(uniqueId, null); 
     }
 
     @Override
-    public List<Threat> getAssociatedGroupThreats(P uniqueId, String ownerName) 
+    public IterableResponse<Threat> getAssociatedGroupThreats(P uniqueId, String ownerName)
             throws IOException, FailedResponseException {
 
         Map<String,Object> map = createParamMap("id", uniqueId);
-        ThreatListResponse data = getList(getUrlBasePrefix() + ".byId.groups.threats", ThreatListResponse.class, ownerName, map);
-
-        return (List<Threat>)data.getData().getData();
+        return getItems(getUrlBasePrefix() + ".byId.groups.threats", ThreatListResponse.class, Threat.class, ownerName, map);
     }
 
     @Override
@@ -179,16 +169,14 @@ public abstract class AbstractGroupAssociateReaderAdapter<P> extends AbstractBas
     }
 
     @Override
-    public List<Email> getAssociatedGroupEmails(P uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Email> getAssociatedGroupEmails(P uniqueId) throws IOException, FailedResponseException {
         return getAssociatedGroupEmails(uniqueId,null);
     }
 
     @Override
-    public List<Email> getAssociatedGroupEmails(P uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Email> getAssociatedGroupEmails(P uniqueId, String ownerName) throws IOException, FailedResponseException {
         Map<String,Object> map = createParamMap("id", uniqueId);
-        EmailListResponse data = getList(getUrlBasePrefix() + ".byId.groups.emails", EmailListResponse.class, ownerName, map);
-
-        return (List<Email>)data.getData().getData();
+        return getItems(getUrlBasePrefix() + ".byId.groups.emails", EmailListResponse.class, Email.class, ownerName, map);
     }
 
     @Override

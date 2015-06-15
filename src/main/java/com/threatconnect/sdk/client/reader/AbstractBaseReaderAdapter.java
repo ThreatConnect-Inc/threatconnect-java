@@ -6,7 +6,6 @@
 package com.threatconnect.sdk.client.reader;
 
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.response.entity.ApiEntityListResponse;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
@@ -23,12 +22,15 @@ import java.util.Map;
 public abstract class AbstractBaseReaderAdapter<T,P> extends AbstractReaderAdapter {
     protected final Class<? extends ApiEntitySingleResponse> singleType;
     protected final Class<? extends ApiEntityListResponse> listType;
+    protected final Class singleItemType;
 
     protected AbstractBaseReaderAdapter(Connection conn
-                , Class<? extends ApiEntitySingleResponse> singleType, Class<? extends ApiEntityListResponse> listType) { 
+            , Class<? extends ApiEntitySingleResponse> singleType
+            , Class<T> singleItemType, Class<? extends ApiEntityListResponse> listType) {
         super(conn);
 
         this.singleType = singleType;
+        this.singleItemType = singleItemType;
         this.listType = listType;
     }
 
@@ -38,15 +40,13 @@ public abstract class AbstractBaseReaderAdapter<T,P> extends AbstractReaderAdapt
         return getAsText(getUrlBasePrefix() );
     }
 
-    public List<T> getAll() throws IOException, FailedResponseException {
+    public IterableResponse<T> getAll() throws IOException, FailedResponseException {
         return getAll(null);
     }
 
-    public List<T> getAll(String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<T> getAll(String ownerName) throws IOException, FailedResponseException {
 
-        ApiEntityListResponse data = getList(getUrlBasePrefix(), listType, ownerName, null);
-
-        return (List<T>) data.getData().getData();
+        return getItems(getUrlBasePrefix(), listType, singleItemType, ownerName, null);
     }
 
     public T getById(P uniqueId) throws IOException, FailedResponseException {

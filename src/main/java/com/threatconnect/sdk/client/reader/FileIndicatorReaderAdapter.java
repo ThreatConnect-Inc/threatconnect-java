@@ -8,6 +8,7 @@ package com.threatconnect.sdk.client.reader;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
+import com.threatconnect.sdk.server.entity.File;
 import com.threatconnect.sdk.server.entity.FileOccurrence;
 import com.threatconnect.sdk.server.response.entity.FileListResponse;
 import com.threatconnect.sdk.server.response.entity.FileOccurrenceResponse;
@@ -20,10 +21,10 @@ import java.util.Map;
  *
  * @author dtineo
  */
-public class FileIndicatorReaderAdapter<File> extends AbstractIndicatorReaderAdapter {
+public class FileIndicatorReaderAdapter extends AbstractIndicatorReaderAdapter {
 
     public FileIndicatorReaderAdapter(Connection conn) {
-        super(conn, FileResponse.class, FileListResponse.class);
+        super(conn, FileResponse.class, File.class, FileListResponse.class);
 
     }
 

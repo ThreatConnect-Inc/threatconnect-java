@@ -6,13 +6,11 @@
 package com.threatconnect.sdk.client.reader;
 
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Owner;
 import com.threatconnect.sdk.server.response.entity.OwnerListResponse;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,16 +19,14 @@ import java.util.Map;
  */
 public abstract class AbstractOwnerReaderAdapter<T> extends AbstractBaseReaderAdapter implements OwnerReadable<String> {
 
-    public AbstractOwnerReaderAdapter(Connection conn, Class singleType, Class listType) {
-        super(conn, singleType, listType);
+    public AbstractOwnerReaderAdapter(Connection conn, Class singleType, Class singleItemType, Class listType) {
+        super(conn, singleType, singleItemType, listType);
     }
 
     @Override
-    public List<Owner> getOwners(String uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Owner> getOwners(String uniqueId) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId);
-        OwnerListResponse data = getList(getUrlBasePrefix() + ".byId.owners", OwnerListResponse.class, null, map);
-
-        return (List<Owner>) data.getData().getData();
+        return getItems(getUrlBasePrefix() + ".byId.owners", OwnerListResponse.class, Owner.class, null, map);
     }
 
 }

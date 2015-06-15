@@ -5,12 +5,11 @@
  */
 package com.threatconnect.sdk.client.reader.associate;
 
+import com.threatconnect.sdk.client.reader.IterableResponse;
 import com.threatconnect.sdk.exception.FailedResponseException;
-import com.threatconnect.sdk.server.entity.Tag;
 import com.threatconnect.sdk.server.entity.Tag;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  *
@@ -18,9 +17,9 @@ import java.util.List;
  */
 public interface TagAssociateReadable<P> {
 
-   public List<Tag> getAssociatedTags(P uniqueId) throws IOException, FailedResponseException;
+   public IterableResponse<Tag> getAssociatedTags(P uniqueId) throws IOException, FailedResponseException;
 
-   public List<Tag> getAssociatedTags(P uniqueId, String ownerName) 
+   public IterableResponse<Tag> getAssociatedTags(P uniqueId, String ownerName)
             throws IOException, FailedResponseException;
 
    public Tag getAssociatedTag(P uniqueId, String tagName) throws IOException, FailedResponseException;

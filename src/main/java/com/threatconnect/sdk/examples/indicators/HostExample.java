@@ -1,6 +1,7 @@
 package com.threatconnect.sdk.examples.indicators;
 
 import com.threatconnect.sdk.client.reader.AbstractIndicatorReaderAdapter;
+import com.threatconnect.sdk.client.reader.IterableResponse;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
 import com.threatconnect.sdk.client.writer.AbstractGroupWriterAdapter;
 import com.threatconnect.sdk.client.writer.AbstractIndicatorWriterAdapter;
@@ -65,14 +66,15 @@ public class HostExample {
     private static void doGet(Connection conn) throws IOException {
 
         AbstractIndicatorReaderAdapter<Host> reader = ReaderAdapterFactory.createHostIndicatorReader(conn);
-        List<Host> data;
+        IterableResponse<Host> data = null;
         try {
             // -----------------------------------------------------------------------------------------------------------
             // Get Host
             // -----------------------------------------------------------------------------------------------------------
             data = reader.getAll();
-            for (Indicator g : data) {
-                System.out.println("Host: " + g);
+            for(Host h : data)
+            {
+                System.out.println("Host: " + h);
             }
         } catch (FailedResponseException ex) {
             System.err.println("Error: " + ex);

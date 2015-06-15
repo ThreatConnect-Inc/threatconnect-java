@@ -1,6 +1,7 @@
 package com.threatconnect.sdk.examples.groups;
 
 import com.threatconnect.sdk.client.reader.AbstractGroupReaderAdapter;
+import com.threatconnect.sdk.client.reader.IterableResponse;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
 import com.threatconnect.sdk.client.writer.AbstractGroupWriterAdapter;
 import com.threatconnect.sdk.client.writer.AbstractIndicatorWriterAdapter;
@@ -75,7 +76,7 @@ public class SignatureExample {
     private static void doGet(Connection conn) throws IOException {
 
         AbstractGroupReaderAdapter<Signature> reader = ReaderAdapterFactory.createSignatureGroupReader(conn);
-        List<Signature> data;
+        IterableResponse<Signature> data;
         try {
             // -----------------------------------------------------------------------------------------------------------
             // Get Signatures

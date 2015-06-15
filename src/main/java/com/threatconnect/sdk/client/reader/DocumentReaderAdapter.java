@@ -20,7 +20,7 @@ import java.util.Map;
 public class DocumentReaderAdapter extends AbstractGroupReaderAdapter<Document> {
 
     protected DocumentReaderAdapter(Connection conn) {
-        super(conn, DocumentResponse.class, DocumentListResponse.class);
+        super(conn, DocumentResponse.class, Document.class, DocumentListResponse.class);
     }
 
     @Override

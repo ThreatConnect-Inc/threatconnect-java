@@ -7,8 +7,8 @@ package com.threatconnect.sdk.client.reader.associate;
 
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.reader.AbstractBaseReaderAdapter;
+import com.threatconnect.sdk.client.reader.IterableResponse;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Tag;
 import com.threatconnect.sdk.server.response.entity.TagListResponse;
@@ -23,21 +23,19 @@ import java.util.Map;
  */
 public abstract class AbstractTagAssociateReaderAdapter<P> extends AbstractBaseReaderAdapter implements TagAssociateReadable<P>, UrlTypeable {
 
-    public AbstractTagAssociateReaderAdapter(Connection conn, Class singleType, Class listType) {
-        super(conn, singleType, listType);
+    public AbstractTagAssociateReaderAdapter(Connection conn, Class singleType, Class singleItemType, Class listType) {
+        super(conn, singleType, singleItemType, listType);
     }
 
     @Override
-    public List<Tag> getAssociatedTags(P uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Tag> getAssociatedTags(P uniqueId) throws IOException, FailedResponseException {
         return getAssociatedTags(uniqueId, null);
     }
 
     @Override
-    public List<Tag> getAssociatedTags(P uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Tag> getAssociatedTags(P uniqueId, String ownerName) throws IOException, FailedResponseException {
         Map<String,Object> map = createParamMap("id", uniqueId);
-        TagListResponse data = getList(getUrlBasePrefix() + ".byId.tags", TagListResponse.class, ownerName, map);
-
-        return (List<Tag>)data.getData().getData();
+        return getItems(getUrlBasePrefix() + ".byId.tags", TagListResponse.class, Tag.class, ownerName, map);
 
     }
 
