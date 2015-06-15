@@ -59,9 +59,9 @@ Pass the `Configuration` object when creating a new `Connection` (see examples b
 
 ## Optional File Configuration
 
-An alternative method is to use a configuration file with predefined properties read in by the no-arg `Connection` constructor.
+Alternatively, you can use a configuration file with predefined properties read in by the no-arg `Connection` constructor.
 
-A configuration file can be made available to the Java SDK at runtime via the property `threatconnect.api.config=config.properties` with the following format:
+A configuration file can be made available to the Java SDK at runtime via the property `-Dthreatconnect.api.config=config.properties` with the following format:
 
     connection.tcApiUrl=<URL to ThreatConnect instance>
     connection.tcApiAccessId=<API user's API access ID>
