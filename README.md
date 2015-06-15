@@ -63,11 +63,11 @@ Alternatively, you can use a configuration file with predefined properties read 
 
 A configuration file can be made available to the Java SDK at runtime via the property `-Dthreatconnect.api.config=config.properties` with the following format:
 
-    connection.tcApiUrl=<URL to ThreatConnect instance>
+    connection.tcApiUrl=<URL to ThreatConnect API instance>
     connection.tcApiAccessId=<API user's API access ID>
     connection.tcApiUserSecretKey=<API user's API secret>
-    connection.tcDefaultOwner=<API user's API secret>
-    connection.tcResultLimit=<API user's API secret>
+    connection.tcDefaultOwner=<Default Owner for All Read/Write Operations>
+    connection.tcResultLimit=<Read Paging Limits>
 
 
 ## Example: Working with Addresses
