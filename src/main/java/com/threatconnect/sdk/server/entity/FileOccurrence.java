@@ -35,7 +35,15 @@ public class FileOccurrence
     public FileOccurrence()
     {
     }
-    
+
+    public FileOccurrence(Integer id, String fileName, String path, Date date)
+    {
+        this.id = id;
+        this.fileName = fileName;
+        this.path = path;
+        this.date = date;
+    }
+
     public Integer getId()
     {
         return id;

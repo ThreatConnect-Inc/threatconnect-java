@@ -28,6 +28,24 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 public class Indicator
 {
 
+    public Indicator(Integer id, Owner owner, String ownerName, String type, Date dateAdded, Date lastModified, Double rating, Double confidence, Double threatAssessRating, Double threatAssessConfidence, String webLink, String source, String description, String summary)
+    {
+        this.id = id;
+        this.owner = owner;
+        this.ownerName = ownerName;
+        this.type = type;
+        this.dateAdded = dateAdded;
+        this.lastModified = lastModified;
+        this.rating = rating;
+        this.confidence = confidence;
+        this.threatAssessRating = threatAssessRating;
+        this.threatAssessConfidence = threatAssessConfidence;
+        this.webLink = webLink;
+        this.source = source;
+        this.description = description;
+        this.summary = summary;
+    }
+
     public static enum Type {
          Address
        , EmailAddress

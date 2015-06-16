@@ -26,11 +26,18 @@ public class Tag
     private String description;
     @XmlElement(name = "WebLink", required = false)
     private String webLink;
-    
+
+    public Tag(String name, String description, String webLink)
+    {
+        this.name = name;
+        this.description = description;
+        this.webLink = webLink;
+    }
+
     public Tag()
     {
     }
-    
+
     public String getName()
     {
         return name;

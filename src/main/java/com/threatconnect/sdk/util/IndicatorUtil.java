@@ -1,14 +1,18 @@
 package com.threatconnect.sdk.util;
 
+import com.threatconnect.sdk.client.fluent.AddressBuilder;
 import com.threatconnect.sdk.client.writer.AbstractIndicatorWriterAdapter;
-import com.threatconnect.sdk.client.writer.AbstractWriterAdapter;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Address;
 import com.threatconnect.sdk.server.entity.EmailAddress;
+import com.threatconnect.sdk.client.fluent.EmailAddressBuilder;
 import com.threatconnect.sdk.server.entity.File;
+import com.threatconnect.sdk.client.fluent.FileBuilder;
 import com.threatconnect.sdk.server.entity.Host;
+import com.threatconnect.sdk.client.fluent.HostBuilder;
 import com.threatconnect.sdk.server.entity.Indicator;
 import com.threatconnect.sdk.server.entity.Url;
+import com.threatconnect.sdk.client.fluent.UrlBuilder;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -101,15 +105,15 @@ public class IndicatorUtil
         switch(type)
         {
             case Host:
-                return new Host();
+                return new HostBuilder().createHost();
             case EmailAddress:
-                return new EmailAddress();
+                return new EmailAddressBuilder().createEmailAddress();
             case Address:
-                return new Address();
+                return new AddressBuilder().createAddress();
             case File:
-                return new File();
+                return new FileBuilder().createFile();
             case Url:
-                return new Url();
+                return new UrlBuilder().createUrl();
         }
 
         return null;

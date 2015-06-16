@@ -40,7 +40,19 @@ public class Victim
     public Victim()
     {
     }
-    
+
+    public Victim(Integer id, String name, String description, String org, String suborg, String workLocation, String nationality, String webLink)
+    {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.org = org;
+        this.suborg = suborg;
+        this.workLocation = workLocation;
+        this.nationality = nationality;
+        this.webLink = webLink;
+    }
+
     public Integer getId()
     {
         return id;

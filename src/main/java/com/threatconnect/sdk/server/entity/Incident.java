@@ -31,7 +31,13 @@ public class Incident extends Group
     {
         super();
     }
-    
+
+    public Incident(Integer id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink, Date eventDate)
+    {
+        super(id, name, type, owner, ownerName, dateAdded, webLink);
+        this.eventDate = eventDate;
+    }
+
     /**
      * @return the eventDate
      */

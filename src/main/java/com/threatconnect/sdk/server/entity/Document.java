@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Date;
 
 /**
  * Created by cblades on 4/20/2015.
@@ -23,6 +24,16 @@ public class Document extends Group
     @XmlElement(name = "status", required = false)
     private String status;
 
+    public Document() {
+    }
+
+    public Document(Integer id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink, String fileName, Long fileSize, String status)
+    {
+        super(id, name, type, owner, ownerName, dateAdded, webLink);
+        this.fileName = fileName;
+        this.fileSize = fileSize;
+        this.status = status;
+    }
 
     public String getFileName()
     {

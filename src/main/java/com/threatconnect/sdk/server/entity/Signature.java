@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Date;
 
 /**
  *
@@ -31,7 +32,15 @@ public class Signature extends Group
     {
         super();
     }
-    
+
+    public Signature(Integer id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink, String fileType, String fileName, String fileText)
+    {
+        super(id, name, type, owner, ownerName, dateAdded, webLink);
+        this.fileType = fileType;
+        this.fileName = fileName;
+        this.fileText = fileText;
+    }
+
     public String getFileType()
     {
         return fileType;

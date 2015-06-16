@@ -26,7 +26,13 @@ public class VictimWebSite extends VictimAsset
     public VictimWebSite()
     {
     }
-    
+
+    public VictimWebSite(Integer id, String name, String type, String webLink, String webSite)
+    {
+        super(id, name, type, webLink);
+        this.webSite = webSite;
+    }
+
     public String getWebSite()
     {
         return webSite;

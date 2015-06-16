@@ -37,7 +37,15 @@ public class VictimAsset
     public VictimAsset()
     {
     }
-    
+
+    public VictimAsset(Integer id, String name, String type, String webLink)
+    {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.webLink = webLink;
+    }
+
     public Integer getId()
     {
         return id;

@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Date;
 
 /**
  *
@@ -32,7 +33,18 @@ public class Email extends Group
     private String header;
     @XmlElement(name = "Body", required = true)
     private String body;
-    
+
+    public Email(Integer id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink, String to, String from, String subject, Integer score, String header, String body)
+    {
+        super(id, name, type, owner, ownerName, dateAdded, webLink);
+        this.to = to;
+        this.from = from;
+        this.subject = subject;
+        this.score = score;
+        this.header = header;
+        this.body = body;
+    }
+
     public Email()
     {
         super();

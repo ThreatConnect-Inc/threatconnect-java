@@ -24,6 +24,16 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 public class Group
 {
 
+    public Group(Integer id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink)
+    {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.owner = owner;
+        this.ownerName = ownerName;
+        this.dateAdded = dateAdded;
+        this.webLink = webLink;
+    }
 
     public static enum Type {
           Adversary

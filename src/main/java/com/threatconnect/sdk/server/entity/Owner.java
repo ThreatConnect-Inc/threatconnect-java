@@ -37,7 +37,18 @@ public abstract class Owner
     
     @XmlElement(name = "Type")
     private String type;
-    
+
+    public Owner()
+    {
+    }
+
+    public Owner(Integer id, String name, String type)
+    {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+    }
+
     public Integer getId()
     {
         return id;

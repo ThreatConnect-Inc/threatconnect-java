@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import java.util.Date;
 
 /**
  *
@@ -30,6 +31,15 @@ public class File extends Indicator
     public File()
     {
         super();
+    }
+
+    public File(Integer id, Owner owner, String ownerName, String type, Date dateAdded, Date lastModified, Double rating, Double confidence, Double threatAssessRating, Double threatAssessConfidence, String webLink, String source, String description, String summary, String md5, String sha1, String sha256, Integer size)
+    {
+        super(id, owner, ownerName, type, dateAdded, lastModified, rating, confidence, threatAssessRating, threatAssessConfidence, webLink, source, description, summary);
+        this.md5 = md5;
+        this.sha1 = sha1;
+        this.sha256 = sha256;
+        this.size = size;
     }
 
     public String getMd5()

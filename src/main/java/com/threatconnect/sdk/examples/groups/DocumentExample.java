@@ -1,5 +1,6 @@
 package com.threatconnect.sdk.examples.groups;
 
+import com.threatconnect.sdk.client.fluent.AttributeBuilder;
 import com.threatconnect.sdk.client.reader.DocumentReaderAdapter;
 import com.threatconnect.sdk.client.reader.IterableResponse;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
@@ -9,32 +10,25 @@ import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Attribute;
 import com.threatconnect.sdk.server.entity.Document;
+import com.threatconnect.sdk.client.fluent.DocumentBuilder;
 import com.threatconnect.sdk.server.entity.Host;
+import com.threatconnect.sdk.client.fluent.HostBuilder;
 import com.threatconnect.sdk.server.entity.Tag;
+import com.threatconnect.sdk.client.fluent.TagBuilder;
 import com.threatconnect.sdk.server.entity.Threat;
+import com.threatconnect.sdk.client.fluent.ThreatBuilder;
 import com.threatconnect.sdk.server.entity.Victim;
+import com.threatconnect.sdk.client.fluent.VictimBuilder;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
-import com.threatconnect.sdk.client.reader.DocumentReaderAdapter;
-import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
 import com.threatconnect.sdk.client.writer.AbstractGroupWriterAdapter;
 import com.threatconnect.sdk.client.writer.AbstractIndicatorWriterAdapter;
 import com.threatconnect.sdk.client.writer.DocumentWriterAdapter;
 import com.threatconnect.sdk.client.writer.VictimWriterAdapter;
-import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.server.entity.Attribute;
-import com.threatconnect.sdk.server.entity.Document;
-import com.threatconnect.sdk.server.entity.Host;
-import com.threatconnect.sdk.server.entity.Tag;
-import com.threatconnect.sdk.server.entity.Threat;
-import com.threatconnect.sdk.server.entity.Victim;
-import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -499,14 +493,14 @@ public class DocumentExample
 
     private static Document mockDocument()
     {
-        Document document = new Document();
+        Document document = new DocumentBuilder().createDocument();
         document.setFileName("testFile");
         document.setName("TestName");
         return document;
     }
 
     private static Attribute mockAttribute() {
-        Attribute attribute = new Attribute();
+        Attribute attribute = new AttributeBuilder().createAttribute();
         attribute.setSource("Test Source");
         attribute.setDisplayed(true);
         attribute.setType("Description");
@@ -516,7 +510,7 @@ public class DocumentExample
     }
 
     private static Threat mockThreat() {
-        Threat threat = new Threat();
+        Threat threat = new ThreatBuilder().createThreat();
         threat.setOwnerName("System");
         threat.setName("Test Threat");
 
@@ -525,7 +519,7 @@ public class DocumentExample
 
 
     private static Tag mockTag() {
-        Tag tag = new Tag();
+        Tag tag = new TagBuilder().createTag();
         tag.setName("Test-Tag");
         tag.setDescription("Test Tag Description");
 
@@ -533,7 +527,7 @@ public class DocumentExample
     }
 
     private static Host mockHost() {
-        Host host = new Host();
+        Host host = new HostBuilder().createHost();
         host.setOwnerName("System");
         host.setDescription("Test Host");
         host.setHostName("www.bad-hostname.com");
@@ -545,7 +539,7 @@ public class DocumentExample
 
 
     private static Victim mockVictim() {
-        Victim victim = new Victim();
+        Victim victim = new VictimBuilder().createVictim();
         victim.setOrg("System");
         victim.setName("Test API Victim");
         victim.setDescription("Test API Victim Description");

@@ -1,5 +1,7 @@
 package com.threatconnect.sdk.examples.indicators;
 
+import com.threatconnect.sdk.client.fluent.AddressBuilder;
+import com.threatconnect.sdk.client.fluent.AttributeBuilder;
 import com.threatconnect.sdk.client.reader.AbstractIndicatorReaderAdapter;
 import com.threatconnect.sdk.client.reader.IterableResponse;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
@@ -13,15 +15,18 @@ import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Address;
 import com.threatconnect.sdk.server.entity.Attribute;
 import com.threatconnect.sdk.server.entity.Host;
-import com.threatconnect.sdk.server.entity.Indicator;
+import com.threatconnect.sdk.client.fluent.HostBuilder;
 import com.threatconnect.sdk.server.entity.SecurityLabel;
+import com.threatconnect.sdk.client.fluent.SecurityLabelBuilder;
 import com.threatconnect.sdk.server.entity.Tag;
+import com.threatconnect.sdk.client.fluent.TagBuilder;
 import com.threatconnect.sdk.server.entity.Threat;
+import com.threatconnect.sdk.client.fluent.ThreatBuilder;
 import com.threatconnect.sdk.server.entity.Victim;
+import com.threatconnect.sdk.client.fluent.VictimBuilder;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 
 import java.io.IOException;
-import java.util.List;
 
 public class HostExample {
 
@@ -177,7 +182,7 @@ public class HostExample {
     }
 
     private static Attribute createTestAttribute() {
-        Attribute attribute = new Attribute();
+        Attribute attribute = new AttributeBuilder().createAttribute();
         attribute.setSource("Test Source");
         attribute.setDisplayed(true);
         attribute.setType("Description");
@@ -187,7 +192,7 @@ public class HostExample {
     }
 
     private static Host createTestHost() {
-        Host host = new Host();
+        Host host = new HostBuilder().createHost();
         host.setOwnerName("System");
         host.setDescription("Test Host");
         host.setHostName("www.bad-hostname.com");
@@ -198,7 +203,7 @@ public class HostExample {
     }
 
     private static Threat createTestThreat() {
-        Threat threat = new Threat();
+        Threat threat = new ThreatBuilder().createThreat();
         threat.setOwnerName("System");
         threat.setName("Test Threat");
 
@@ -206,7 +211,7 @@ public class HostExample {
     }
 
     private static Tag createTestTag() {
-        Tag tag = new Tag();
+        Tag tag = new TagBuilder().createTag();
         tag.setName("Test-Tag");
         tag.setDescription("Test Tag Description");
 
@@ -214,7 +219,7 @@ public class HostExample {
     }
 
     private static SecurityLabel createTestSecurityLabel() {
-        SecurityLabel securityLabel = new SecurityLabel();
+        SecurityLabel securityLabel = new SecurityLabelBuilder().createSecurityLabel();
         securityLabel.setName("Test-SecurityLabel");
         securityLabel.setDescription("Test SecurityLabel Description");
 
@@ -222,7 +227,7 @@ public class HostExample {
     }
 
     private static Victim createTestVictim() {
-        Victim victim = new Victim();
+        Victim victim = new VictimBuilder().createVictim();
         victim.setOrg("System");
         victim.setName("Test API Victim");
         victim.setDescription("Test API Victim Description");
@@ -267,7 +272,7 @@ public class HostExample {
     }
 
     private static Address createTestAddress() {
-        Address address = new Address();
+        Address address = new AddressBuilder().createAddress();
         address.setIp("127.0.0.1");
         address.setDescription("Test Address");
         address.setOwnerName("System");

@@ -16,6 +16,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Individual extends Owner
 {
+    public Individual(Integer id, String name, String type)
+    {
+        super(id, name, type);
+    }
+
     public Individual()
     {
         super();

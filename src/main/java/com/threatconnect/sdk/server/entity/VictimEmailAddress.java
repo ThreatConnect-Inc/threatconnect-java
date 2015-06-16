@@ -28,7 +28,14 @@ public class VictimEmailAddress extends VictimAsset
     public VictimEmailAddress()
     {
     }
-    
+
+    public VictimEmailAddress(Integer id, String name, String type, String webLink, String address, String addressType)
+    {
+        super(id, name, type, webLink);
+        this.address = address;
+        this.addressType = addressType;
+    }
+
     public String getAddress()
     {
         return address;

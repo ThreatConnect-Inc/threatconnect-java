@@ -1,5 +1,6 @@
 package com.threatconnect.sdk.examples.indicators;
 
+import com.threatconnect.sdk.client.fluent.AttributeBuilder;
 import com.threatconnect.sdk.client.reader.AbstractIndicatorReaderAdapter;
 import com.threatconnect.sdk.client.reader.IterableResponse;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
@@ -11,16 +12,20 @@ import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Attribute;
+import com.threatconnect.sdk.client.fluent.TagBuilder;
+import com.threatconnect.sdk.client.fluent.HostBuilder;
+import com.threatconnect.sdk.client.fluent.SecurityLabelBuilder;
+import com.threatconnect.sdk.client.fluent.ThreatBuilder;
 import com.threatconnect.sdk.server.entity.Url;
 import com.threatconnect.sdk.server.entity.Host;
-import com.threatconnect.sdk.server.entity.Indicator;
 import com.threatconnect.sdk.server.entity.SecurityLabel;
 import com.threatconnect.sdk.server.entity.Tag;
 import com.threatconnect.sdk.server.entity.Threat;
+import com.threatconnect.sdk.client.fluent.UrlBuilder;
 import com.threatconnect.sdk.server.entity.Victim;
+import com.threatconnect.sdk.client.fluent.VictimBuilder;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import java.io.IOException;
-import java.util.List;
 
 public class UrlExample {
 
@@ -175,7 +180,7 @@ public class UrlExample {
     }
 
     private static Url createTestUrl() {
-        Url url = new Url();
+        Url url = new UrlBuilder().createUrl();
         url.setText("http://www.badurl.com");
         url.setDescription("Test Url");
         url.setOwnerName("System");
@@ -187,7 +192,7 @@ public class UrlExample {
     }
 
     private static Attribute createTestAttribute() {
-        Attribute attribute = new Attribute();
+        Attribute attribute = new AttributeBuilder().createAttribute();
         attribute.setSource("Test Source");
         attribute.setDisplayed(true);
         attribute.setType("Description");
@@ -197,7 +202,7 @@ public class UrlExample {
     }
 
     private static Host createTestHost() {
-        Host host = new Host();
+        Host host = new HostBuilder().createHost();
         host.setOwnerName("System");
         host.setDescription("Test Host");
         host.setHostName("bad-hostname.com");
@@ -208,7 +213,7 @@ public class UrlExample {
     }
 
     private static Threat createTestThreat() {
-        Threat threat = new Threat();
+        Threat threat = new ThreatBuilder().createThreat();
         threat.setOwnerName("System");
         threat.setName("Test Threat");
 
@@ -216,7 +221,7 @@ public class UrlExample {
     }
 
     private static Tag createTestTag() {
-        Tag tag = new Tag();
+        Tag tag = new TagBuilder().createTag();
         tag.setName("Test-Tag");
         tag.setDescription("Test Tag Description");
 
@@ -224,7 +229,7 @@ public class UrlExample {
     }
 
     private static SecurityLabel createTestSecurityLabel() {
-        SecurityLabel securityLabel = new SecurityLabel();
+        SecurityLabel securityLabel = new SecurityLabelBuilder().createSecurityLabel();
         securityLabel.setName("Test-SecurityLabel");
         securityLabel.setDescription("Test SecurityLabel Description");
 
@@ -232,7 +237,7 @@ public class UrlExample {
     }
 
     private static Victim createTestVictim() {
-        Victim victim = new Victim();
+        Victim victim = new VictimBuilder().createVictim();
         victim.setOrg("System");
         victim.setName("Test API Victim");
         victim.setDescription("Test API Victim Description");

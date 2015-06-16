@@ -21,5 +21,9 @@ public class Community extends Owner
         super();
         super.setType("Community");
     }
-    
+
+    public Community(Integer id, String name, String type)
+    {
+        super(id, name, type);
+    }
 }

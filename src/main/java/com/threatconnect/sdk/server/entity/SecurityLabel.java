@@ -32,7 +32,14 @@ public class SecurityLabel
     public SecurityLabel()
     {
     }
-    
+
+    public SecurityLabel(String name, String description, Date dateAdded)
+    {
+        this.name = name;
+        this.description = description;
+        this.dateAdded = dateAdded;
+    }
+
     public String getName()
     {
         return name;

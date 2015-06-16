@@ -37,7 +37,21 @@ public class Attribute
     private Date lastModified;
     @XmlElement(name = "Displayed", required = false)
     private Boolean displayed;
-    
+
+    public Attribute() {
+    }
+
+    public Attribute(Integer id, String type, String value, String source, Date dateAdded, Date lastModified, Boolean displayed)
+    {
+        this.id = id;
+        this.type = type;
+        Value = value;
+        this.source = source;
+        this.dateAdded = dateAdded;
+        this.lastModified = lastModified;
+        this.displayed = displayed;
+    }
+
     public Integer getId()
     {
         return id;

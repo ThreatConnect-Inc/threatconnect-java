@@ -33,6 +33,12 @@ public class DnsResolution
     {
     }
 
+    public DnsResolution(Date resolutionDate, List<Address> addresses)
+    {
+        this.resolutionDate = resolutionDate;
+        this.addresses = addresses;
+    }
+
     public Date getResolutionDate()
     {
         return resolutionDate;

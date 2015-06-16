@@ -20,7 +20,12 @@ public class Source extends Owner
     {
         super();
     }
-    
+
+    public Source(Integer id, String name, String type)
+    {
+        super(id, name, type);
+    }
+
     @Override
     public String getType()
     {

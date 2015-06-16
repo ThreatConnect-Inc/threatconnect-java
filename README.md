@@ -11,7 +11,7 @@ Add the following entries to your pom file (git clone not required):
 ```xml
 
    <properties>
-        <threatconnect-sdk.version>2.0.2</threatconnect-sdk.version>
+        <threatconnect-sdk.version>2.0.3</threatconnect-sdk.version>
     </properties>
 
 
@@ -45,37 +45,23 @@ The Java SDK divides operations into read and write. It provides adapters for ea
 
 >  For the Java SDK to communicate with the ThreatConnect&trade; platform, API access must be enabled and an API user must be created.  
 
-## API Configuration
+## Connect to API
 
 To connect to the API using the SDK, create a Configuration object with one of the following constructors:
 
-```
+
    public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner);
    public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner, Integer resultLimit);
-```
 
 Pass the `Configuration` object when creating a new `Connection` (see examples below).
  
 
-## Optional File Configuration
+## Reading
 
-Alternatively, you can use a configuration file with predefined properties read in by the no-arg `Connection` constructor.
-
-A configuration file can be made available to the Java SDK at runtime via the property `-Dthreatconnect.api.config=config.properties` with the following format:
-
-    connection.tcApiUrl=<URL to ThreatConnect API instance>
-    connection.tcApiAccessId=<API user's API access ID>
-    connection.tcApiUserSecretKey=<API user's API secret>
-    connection.tcDefaultOwner=<Default Owner for All Read/Write Operations>
-    connection.tcResultLimit=<Read Paging Limits>
-
-
-## Example: Working with Addresses
 The following example retrieves a list of address indicators:
 
     // instantiate Connection object, which configures URLs and requires
-    // threatconnect.api.config property to be set to the location of config file
-    Connection conn = new Connection();
+    Connection conn = new Connection(/* your Configuration */);
 
     AbstractIndicatorReaderAdapter<Address> reader = ReaderAdapterFactory.createAddressIndicatorReader(conn);
 
@@ -85,7 +71,12 @@ To retrieve a single address by Id:
 
     // note that the unique identifier is different for every entity type.
     // for addresses, the unique identifier is the IP address
-    Address address = reader.getById(addresses.get(0).getIp());
+    if ( addresses.hasNext() )
+    {
+        Address address = reader.getById(addresses.next().getIp());
+    }
+
+## Writing 
 
 To update an address:
 
@@ -93,10 +84,10 @@ To update an address:
     address.setDescription("new description");
     writer.update(address);
 
-To create an Address:
+To create an Address (using fluent style):
 
-    Address newAddress = new Address();
-    newAddress.setDescription("New address");
+    Address newAddress = new AddressBuilder().withIp("123.4.5.678").withDescription("New address");
+
     ApiEntitySingleResponse<Address, ?> response = writer.create(newAddress);
     if (response.isSuccess()) {
       newAddress = response.getItem();
@@ -181,7 +172,7 @@ Association types express realtionships between entities and are Adversaries, Do
 + `OwnerAssociateReadable` & `OwnerAssociateWriteable` - Access to owners
 + `SecurityLabelReadable` & `SecurityLabelWriteable` - Access to entity security labels
 + `TagAssociateReadable` & `TagAssociateWriteable` - Access to tags
-+ `VictimAssociateReadable` & `VictimeAssociateWriteable` - Access to Victims
++ `VictimAssociateReadable` & `VictimAssociateWriteable` - Access to Victims
 
 **Entity**
 
@@ -204,15 +195,7 @@ Association types express realtionships between entities and are Adversaries, Do
     |-> util          (Utility package)
 
 ## Resources
-    | -> src/main/resources  (holds configuration files for connection, urls, and log4j2
-
-## Distribution Zip File
-**target/threatconnect-sdk-&lt;version&gt;.zip**
-
-    |-> lib           (Distribution library)
-    |-> third-party   (Third Party dependencies)
-    |-> examples      (Examples)
-    |-> doc           (Quick start guide in PDF/HTML format)
+    | -> src/main/resources  
 
 
 ## Contact
