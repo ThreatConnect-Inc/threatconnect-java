@@ -49,9 +49,10 @@ The Java SDK divides operations into read and write. It provides adapters for ea
 
 To connect to the API using the SDK, create a Configuration object with one of the following constructors:
 
-
+```
    public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner);
    public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner, Integer resultLimit);
+```
 
 Pass the `Configuration` object when creating a new `Connection` (see examples below).
  
