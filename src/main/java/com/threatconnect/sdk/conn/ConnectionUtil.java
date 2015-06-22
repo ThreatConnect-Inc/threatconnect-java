@@ -87,6 +87,7 @@ public class ConnectionUtil
 
         Long ts = System.currentTimeMillis() / 1000L;
         String sig = getSignature(ts, httpMethod, urlPath, null);
+        System.err.println("toSign=" + sig + ", secretKey=" + config.getTcApiUserSecretKey());
         String hmacSig = getHmacSha256Signature(sig, config.getTcApiUserSecretKey());
         String auth = getAuthorizationText(config,hmacSig);
 

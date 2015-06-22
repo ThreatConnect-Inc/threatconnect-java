@@ -158,6 +158,8 @@ public class Connection<T> implements Closeable
                 apiClient.close();
             } catch (IOException ex) {
                 logger.log(Level.SEVERE, "Error disconnecting from httpClient", ex);
+            } finally {
+                apiClient = null;
             }
         }
     }

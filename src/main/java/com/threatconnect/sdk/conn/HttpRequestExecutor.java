@@ -65,7 +65,6 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
         path += "&createActivityLog=false";
         String fullPath = this.conn.getConfig().getTcApiUrl() + path.replace("/api/","/");
 
-
         logger.log(Level.INFO, "Calling " + type + ": " + fullPath);
         HttpRequestBase httpBase = getBase(fullPath, type);
         if ( obj != null )  applyEntityAsJSON( httpBase, obj );

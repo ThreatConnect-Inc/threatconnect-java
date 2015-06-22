@@ -50,11 +50,18 @@ public class IterableResponse<V> implements Iterator<V>, Iterable<V>
     @Override
     public boolean hasNext()
     {
-        if (index != 0 && index%resultLimit == 0 )
+        index++;
+        if (index%resultLimit == 0 )
         {
             currentResponse = getNextResponse();
         }
-        return currentResponse != null && index%resultLimit < currentResponse.getData().getResultCount();
+
+        Integer resultCount = currentResponse.getData().getResultCount();
+        if ( resultCount == null )
+        {
+            resultCount = currentResponse.getData().getData().size();
+        }
+        return currentResponse != null && index%resultLimit < resultCount;
     }
 
     @Override
