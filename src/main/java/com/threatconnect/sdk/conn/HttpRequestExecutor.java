@@ -55,7 +55,7 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 
     private void applyEntityAsJSON(HttpRequestBase httpBase, Object obj) throws JsonProcessingException {
         String jsonData = StringUtil.toJSON(obj);
-        logger.log(Level.INFO, "entity : " + jsonData);
+        logger.log(Level.FINEST, "entity : " + jsonData);
        ((HttpEntityEnclosingRequestBase)httpBase).setEntity(new StringEntity(jsonData, ContentType.APPLICATION_JSON));
     }
 
@@ -65,21 +65,21 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
         path += "&createActivityLog=false";
         String fullPath = this.conn.getConfig().getTcApiUrl() + path.replace("/api/","/");
 
-        logger.log(Level.INFO, "Calling " + type + ": " + fullPath);
+        logger.log(Level.FINEST, "Calling " + type + ": " + fullPath);
         HttpRequestBase httpBase = getBase(fullPath, type);
         if ( obj != null )  applyEntityAsJSON( httpBase, obj );
 
         ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, type.toString(), path);
-        logger.log(Level.INFO, "Request: " + httpBase.getRequestLine());
+        logger.log(Level.FINEST, "Request: " + httpBase.getRequestLine());
         CloseableHttpResponse response = this.conn.getApiClient().execute(httpBase);
         String result = null;
 
         try {
-            logger.log(Level.INFO, response.getStatusLine().toString() );
+            logger.log(Level.FINEST, response.getStatusLine().toString() );
             HttpEntity entity = response.getEntity();
             if (entity != null) {
                 result = EntityUtils.toString(entity);
-                logger.log(Level.INFO, "Result:" + result);
+                logger.log(Level.FINEST, "Result:" + result);
                 EntityUtils.consume(entity);
             }
         } finally {
@@ -106,19 +106,19 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 
         String fullPath = this.conn.getConfig().getTcApiUrl() + path.replace("/api/","/");
 
-        logger.log(Level.INFO, "Calling GET: " + fullPath);
+        logger.log(Level.FINEST, "Calling GET: " + fullPath);
         HttpRequestBase httpBase = getBase(fullPath, HttpMethod.GET);
 
         ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), path, ContentType.APPLICATION_OCTET_STREAM.toString());
-        logger.log(Level.INFO, "Request: " + httpBase.getRequestLine());
+        logger.log(Level.FINEST, "Request: " + httpBase.getRequestLine());
         CloseableHttpResponse response = this.conn.getApiClient().execute(httpBase);
 
 
-        logger.log(Level.INFO, response.getStatusLine().toString());
+        logger.log(Level.FINEST, response.getStatusLine().toString());
         HttpEntity entity = response.getEntity();
         if (entity != null) {
             stream = entity.getContent();
-            logger.log(Level.INFO, String.format("Result stream size: %d, encoding: %s",
+            logger.log(Level.FINEST, String.format("Result stream size: %d, encoding: %s",
                                                 entity.getContentLength(), entity.getContentEncoding()));
         }
         return stream;
@@ -136,21 +136,21 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 
         String fullPath = this.conn.getConfig().getTcApiUrl() + path.replace("/api/","/");
 
-        logger.log(Level.INFO, "Calling POST: " + fullPath);
+        logger.log(Level.FINEST, "Calling POST: " + fullPath);
         HttpPost httpBase = new HttpPost(fullPath);
         httpBase.setEntity(new FileEntity(file));
         ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), path, ContentType.APPLICATION_OCTET_STREAM.toString());
 
-        logger.log(Level.INFO, "Request: " + httpBase.getRequestLine());
+        logger.log(Level.FINEST, "Request: " + httpBase.getRequestLine());
 
         CloseableHttpResponse response = this.conn.getApiClient().execute(httpBase);
 
 
-        logger.log(Level.INFO, response.getStatusLine().toString());
+        logger.log(Level.FINEST, response.getStatusLine().toString());
         HttpEntity entity = response.getEntity();
         if (entity != null) {
             stream = entity.getContent();
-            logger.log(Level.INFO, String.format("Result stream size: %d, encoding: %s",
+            logger.log(Level.FINEST, String.format("Result stream size: %d, encoding: %s",
                     entity.getContentLength(), entity.getContentEncoding()));
         }
         return stream;

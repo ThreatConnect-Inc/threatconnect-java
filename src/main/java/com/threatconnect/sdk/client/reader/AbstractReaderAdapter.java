@@ -55,9 +55,9 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
             url = url.replace("{type}", ((UrlTypeable) this).getUrlType());
         }
 
-        logger.log(Level.INFO, "calling url=" + url);
+        logger.log(Level.FINEST, "calling url=" + url);
         String content = executor.execute(AbstractRequestExecutor.HttpMethod.GET, url);
-        logger.log(Level.INFO, "returning content=" + content);
+        logger.log(Level.FINEST, "returning content=" + content);
 
         return content;
     }
@@ -73,9 +73,9 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
             }
         }
 
-        logger.log(Level.INFO, "Calling url=" + url);
+        logger.log(Level.FINEST, "Calling url=" + url);
         InputStream content = executor.executeDownloadByteStream(url);
-        logger.log(Level.INFO, "returning content=" + content);
+        logger.log(Level.FINEST, "returning content=" + content);
 
         return content;
     }
@@ -102,9 +102,9 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
         }
 
 
-        logger.log(Level.INFO, "Calling url=" + url);
+        logger.log(Level.FINEST, "Calling url=" + url);
         String content = executor.execute(AbstractRequestExecutor.HttpMethod.GET, url);
-        logger.log(Level.INFO, "returning content=" + content);
+        logger.log(Level.FINEST, "returning content=" + content);
 
         T result = mapper.readValue(content, type);
         if (!result.isSuccess()) {
@@ -128,9 +128,9 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
             url = url.replace("{type}", ((UrlTypeable) this).getUrlType());
         }
 
-        logger.log(Level.INFO, "Calling url=" + url);
+        logger.log(Level.FINEST, "Calling url=" + url);
         if (paramMap != null) {
-            logger.log(Level.INFO, "paramMap=" + paramMap);
+            logger.log(Level.FINEST, "paramMap=" + paramMap);
             for(Entry<String,Object> entry : paramMap.entrySet()) {
                 String value = URLEncoder.encode( entry.getValue().toString(), "UTF-8");
                 url = url.replace(String.format("{%s}", entry.getKey()), value);

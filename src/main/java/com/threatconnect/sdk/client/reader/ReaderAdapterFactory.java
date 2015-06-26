@@ -146,11 +146,11 @@ public class ReaderAdapterFactory {
         return new VictimReaderAdapter(conn);
     }
 
-    public static AbstractGroupReaderAdapter getGroupReader(String type, Connection conn) {
-        return getGroupReader(Group.Type.valueOf(type), conn);
+    public static AbstractGroupReaderAdapter createGroupReader(String type, Connection conn) {
+        return createGroupReader(Group.Type.valueOf(type), conn);
     }
 
-    public static AbstractGroupReaderAdapter getGroupReader(Group.Type type, Connection conn) {
+    public static AbstractGroupReaderAdapter createGroupReader(Group.Type type, Connection conn) {
 
         switch (type) {
             case Adversary:

@@ -73,7 +73,7 @@ public class InMemoryRequestExecutor extends AbstractRequestExecutor
     private void applyEntityAsJSON(ClientRequest request, Object obj) throws JsonProcessingException
     {
         String jsonData = StringUtil.toJSON(obj);
-        logger.log(Level.INFO, "entity: " + jsonData);
+        logger.log(Level.FINEST, "entity: " + jsonData);
         request.body(MediaType.APPLICATION_JSON_TYPE, jsonData);
     }
 
@@ -100,7 +100,7 @@ public class InMemoryRequestExecutor extends AbstractRequestExecutor
         //       To resolve this difference, use the basePath for signature in header
         ConnectionUtil.applyHeaders(this.conn.getConfig(), request, type.toString(), basePath);
 
-        logger.log(Level.INFO, "Calling " + type + ": " + basePath);
+        logger.log(Level.FINEST, "Calling " + type + ": " + basePath);
 
         ClientResponse result = null;
         try

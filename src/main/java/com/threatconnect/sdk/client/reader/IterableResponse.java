@@ -84,7 +84,7 @@ public class IterableResponse<V> implements Iterator<V>, Iterable<V>
         try
         {
             String content = executor.execute(AbstractRequestExecutor.HttpMethod.GET, url);
-            logger.log(Level.INFO, "returning content=" + content);
+            logger.log(Level.FINEST, "returning content=" + content);
             ApiEntityListResponse result = (ApiEntityListResponse) mapper.readValue(content, this.responseType);
             if (!result.isSuccess()) {
                 throw new FailedResponseException(result.getMessage());
