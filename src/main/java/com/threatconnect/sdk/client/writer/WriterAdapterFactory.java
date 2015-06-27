@@ -183,4 +183,15 @@ public class WriterAdapterFactory {
     public static DocumentWriterAdapter createDocumentWriterAdapter(Connection conn) {
         return new DocumentWriterAdapter(conn);
     }
+
+    public static AbstractBatchWriterAdapter<Indicator> createBatchIndicatorWriterAdapter(Connection conn) {
+        return new AbstractBatchWriterAdapter<Indicator>(conn)
+        {
+            @Override
+            public String getUrlType()
+            {
+                return "indicators";
+            }
+        };
+    }
 }

@@ -29,7 +29,7 @@ public abstract class AbstractRequestExecutor
     }
 
     public abstract String execute(String path, HttpMethod type, Object obj) throws IOException;
-    public abstract InputStream executeUploadByteStream(String path, File file) throws IOException;
+    public abstract String executeUploadByteStream(String path, File file) throws IOException;
     public abstract InputStream executeDownloadByteStream(String path) throws IOException;
 
     public String execute(HttpMethod method, String path) throws IOException

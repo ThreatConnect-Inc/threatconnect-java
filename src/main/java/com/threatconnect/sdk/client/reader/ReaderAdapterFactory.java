@@ -6,7 +6,6 @@
 package com.threatconnect.sdk.client.reader;
 
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.server.entity.Address;
 import com.threatconnect.sdk.server.entity.Adversary;
 import com.threatconnect.sdk.server.entity.Email;
@@ -210,5 +209,9 @@ public class ReaderAdapterFactory {
      */
     public static DocumentReaderAdapter createDocumentReaderAdapter(Connection conn) {
         return new DocumentReaderAdapter(conn);
+    }
+
+    public static BatchReaderAdapter<Indicator> createIndicatorBatchReaderAdapter(Connection conn) {
+        return new BatchReaderAdapter<>(conn);
     }
 }

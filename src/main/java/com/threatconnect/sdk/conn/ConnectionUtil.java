@@ -84,6 +84,11 @@ public class ConnectionUtil
 
     static void applyHeaders(Configuration config, AbstractHttpMessage message, String httpMethod, String urlPath, String contentType)
     {
+        applyHeaders(config, message, httpMethod, urlPath, contentType, config.getContentType());
+    }
+
+    static void applyHeaders(Configuration config, AbstractHttpMessage message, String httpMethod, String urlPath, String contentType, String acceptType)
+    {
 
         Long ts = System.currentTimeMillis() / 1000L;
         String sig = getSignature(ts, httpMethod, urlPath, null);
@@ -92,7 +97,7 @@ public class ConnectionUtil
 
         message.addHeader("timestamp", "" + ts);
         message.addHeader("authorization", auth);
-        message.addHeader("Accept", config.getContentType());
+        message.addHeader("Accept", acceptType);
         if ( contentType != null )
         {
             message.addHeader("Content-Type", contentType);

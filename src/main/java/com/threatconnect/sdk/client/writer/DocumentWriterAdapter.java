@@ -4,9 +4,11 @@ import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Document;
+import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.server.response.entity.DocumentResponse;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,10 +29,15 @@ public class DocumentWriterAdapter extends AbstractGroupWriterAdapter<Document>
     }
 
 
-    public void uploadFile(int uniqueId, File file) throws FailedResponseException
+    public ApiEntitySingleResponse uploadFile(int uniqueId, File file) throws IOException, FailedResponseException
+    {
+        return uploadFile(uniqueId, file, null);
+    }
+
+    public ApiEntitySingleResponse uploadFile(int uniqueId, File file, String ownerName) throws IOException, FailedResponseException
     {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("id", uniqueId);
-        uploadFile("v2.documents.upload", file, paramMap);
+        return uploadFile("v2.documents.upload", DocumentResponse.class, ownerName, file, paramMap);
     }
 }

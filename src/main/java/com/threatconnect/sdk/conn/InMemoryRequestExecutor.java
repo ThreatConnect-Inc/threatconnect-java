@@ -45,7 +45,7 @@ public class InMemoryRequestExecutor extends AbstractRequestExecutor
     }
 
     @Override
-    public InputStream executeUploadByteStream(String path, File file) throws IOException
+    public String executeUploadByteStream(String path, File file) throws IOException
     {
         return null;
     }

@@ -23,6 +23,7 @@ import org.apache.http.util.EntityUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.logging.Level;
 
 /**
@@ -109,8 +110,10 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
         logger.log(Level.FINEST, "Calling GET: " + fullPath);
         HttpRequestBase httpBase = getBase(fullPath, HttpMethod.GET);
 
-        ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), path, ContentType.APPLICATION_OCTET_STREAM.toString());
+        ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), path, conn.getConfig().getContentType()
+            , ContentType.APPLICATION_OCTET_STREAM.toString());
         logger.log(Level.FINEST, "Request: " + httpBase.getRequestLine());
+        logger.log(Level.FINEST, "Headers: " + Arrays.toString(httpBase.getAllHeaders()));
         CloseableHttpResponse response = this.conn.getApiClient().execute(httpBase);
 
 
@@ -126,13 +129,11 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 
 
     @Override
-    public InputStream executeUploadByteStream(String path, File file) throws IOException
+    public String executeUploadByteStream(String path, File file) throws IOException
     {
         if (this.conn.getConfig() == null) {
             throw new IllegalStateException("Can't execute HTTP request when configuration is undefined.");
         }
-
-        InputStream stream = null;
 
         String fullPath = this.conn.getConfig().getTcApiUrl() + path.replace("/api/","/");
 
@@ -144,15 +145,22 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
         logger.log(Level.FINEST, "Request: " + httpBase.getRequestLine());
 
         CloseableHttpResponse response = this.conn.getApiClient().execute(httpBase);
+        String result = null;
 
 
         logger.log(Level.FINEST, response.getStatusLine().toString());
         HttpEntity entity = response.getEntity();
         if (entity != null) {
-            stream = entity.getContent();
-            logger.log(Level.FINEST, String.format("Result stream size: %d, encoding: %s",
-                    entity.getContentLength(), entity.getContentEncoding()));
+            try {
+                result = EntityUtils.toString(entity);
+                logger.log(Level.FINEST, "Result:" + result);
+                EntityUtils.consume(entity);
+            } finally {
+                response.close();
+            }
+
         }
-        return stream;
+
+        return result;
     }
 }

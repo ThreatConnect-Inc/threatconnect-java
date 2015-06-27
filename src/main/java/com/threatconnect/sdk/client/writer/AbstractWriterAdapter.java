@@ -16,6 +16,7 @@ import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
@@ -247,12 +248,18 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
         return modifyItem(propName, type, ownerName, paramMap, saveObject, HttpMethod.POST);
     }
 
-    protected void uploadFile(String propName, File file, Map<String, Object> paramMap) throws FailedResponseException
+    protected <T extends ApiEntitySingleResponse> T uploadFile(String propName, Class<T> type, File file, Map<String, Object> paramMap) throws FailedResponseException, UnsupportedEncodingException
+    {
+        return uploadFile(propName, type, null, file, paramMap);
+    }
+
+    protected <T extends ApiEntitySingleResponse> T uploadFile(String propName, Class<T> type, String ownerName, File file, Map<String, Object> paramMap) throws FailedResponseException, UnsupportedEncodingException
     {
         logger.log(Level.FINEST, "Getting URL: " + propName);
-        String url = getConn().getUrlConfig().getUrl(propName);
+        String url = getUrl(propName, ownerName);
         logger.log(Level.FINEST, "\tURL: " + url);
 
+        T result = null;
         try
         {
             if (paramMap != null) {
@@ -261,11 +268,16 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
                     url = url.replace(String.format("{%s}", entry.getKey()), value );
                 }
             }
-            executor.executeUploadByteStream(url, file);
+            logger.log(Level.FINEST, "Calling url=" + url);
+            String content = executor.executeUploadByteStream(url, file);
+            logger.log(Level.FINEST, "returning content=" + content);
+            result = mapper.readValue(content, type);
         } catch (IOException e)
         {
             throw new FailedResponseException("Failed to upload file: " + e.getMessage());
         }
+
+        return result;
     }
 
     private <T extends ApiEntitySingleResponse> T modifyItem(String propName, Class<T> type, String ownerName, Map<String, Object> paramMap, Object saveObject, HttpMethod requestType)
