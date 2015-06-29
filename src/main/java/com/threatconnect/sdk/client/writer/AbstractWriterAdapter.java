@@ -264,7 +264,7 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
         {
             if (paramMap != null) {
                 for (Entry<String, Object> entry : paramMap.entrySet()) {
-                    String value = URLEncoder.encode( entry.getValue().toString(), "UTF-8");
+                    String value = URLEncoder.encode( entry.getValue().toString(), "UTF-8").replace("+", "%20");
                     url = url.replace(String.format("{%s}", entry.getKey()), value );
                 }
             }
@@ -292,7 +292,7 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
 
         if (paramMap != null) {
             for (Entry<String, Object> entry : paramMap.entrySet()) {
-                String value = URLEncoder.encode( entry.getValue().toString(), "UTF-8");
+                String value = URLEncoder.encode( entry.getValue().toString(), "UTF-8").replace("+", "%20");
                 url = url.replace(String.format("{%s}", entry.getKey()), value );
             }
         }

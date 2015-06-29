@@ -84,8 +84,12 @@ public abstract class AbstractClientAdapter {
     {
 
         String defaultOwner = getConn().getConfig().getDefaultOwner();
+        if( ownerName == null && defaultOwner == null )
+        {
+            throw new IllegalStateException("No owner or default api owner defined");
+        }
         String url = getConn().getUrlConfig().getUrl(propName);
-        return url + "?owner=" + URLEncoder.encode(ownerName == null ? defaultOwner : ownerName, "UTF-8");
+        return url + "?owner=" + URLEncoder.encode(ownerName == null ? defaultOwner : ownerName, "UTF-8").replace("+", "%20");
     }
 
 }

@@ -26,6 +26,7 @@ public class IterableResponse<V> implements Iterator<V>, Iterable<V>
     private int index = 0;
     private ApiEntityListResponse currentResponse = null;
     private final ObjectMapper mapper = new ObjectMapper();
+    private Integer resultCount;
 
     public IterableResponse(AbstractRequestExecutor executor, Class responseType, Class<V> responseItem, String path, int resultLimit)
     {
@@ -56,10 +57,13 @@ public class IterableResponse<V> implements Iterator<V>, Iterable<V>
             currentResponse = getNextResponse();
         }
 
-        Integer resultCount = currentResponse.getData().getResultCount();
         if ( resultCount == null )
         {
-            resultCount = currentResponse.getData().getData().size();
+            resultCount = currentResponse.getData().getResultCount();
+            if (resultCount == null)
+            {
+                resultCount = currentResponse.getData().getData().size();
+            }
         }
         return currentResponse != null && index%resultLimit < resultCount;
     }
@@ -81,6 +85,7 @@ public class IterableResponse<V> implements Iterator<V>, Iterable<V>
     {
 
         String url = String.format("%s&resultStart=%d&resultLimit=%d", this.path, this.index, this.resultLimit);
+        System.err.println("url=" + url);
         try
         {
             String content = executor.execute(AbstractRequestExecutor.HttpMethod.GET, url);
@@ -99,4 +104,8 @@ public class IterableResponse<V> implements Iterator<V>, Iterable<V>
 
     }
 
+    public Integer getResultCount()
+    {
+        return resultCount;
+    }
 }
