@@ -77,7 +77,7 @@ public class IterableResponse<V> implements Iterator<V>, Iterable<V>
         throw new UnsupportedOperationException();
     }
 
-    public ApiEntityListResponse getNextResponse()
+    private ApiEntityListResponse getNextResponse()
     {
 
         String url = String.format("%s&resultStart=%d&resultLimit=%d", this.path, this.index, this.resultLimit);
