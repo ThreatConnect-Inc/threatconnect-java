@@ -1,4 +1,4 @@
-package com.threatconnect.sdk.client.reader;
+package com.threatconnect.sdk.client.response;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.threatconnect.sdk.conn.AbstractRequestExecutor;
@@ -85,7 +85,7 @@ public class IterableResponse<V> implements Iterator<V>, Iterable<V>
     {
 
         String url = String.format("%s&resultStart=%d&resultLimit=%d", this.path, this.index, this.resultLimit);
-        System.err.println("url=" + url);
+        //System.err.println("url=" + url);
         try
         {
             String content = executor.execute(AbstractRequestExecutor.HttpMethod.GET, url);

@@ -5,6 +5,7 @@
  */
 package com.threatconnect.sdk.client.reader;
 
+import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.response.entity.ApiEntityListResponse;
@@ -12,7 +13,6 @@ import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.client.AbstractClientAdapter;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 /**

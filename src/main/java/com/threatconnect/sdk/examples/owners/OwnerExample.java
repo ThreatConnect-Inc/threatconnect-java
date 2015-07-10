@@ -5,7 +5,7 @@
  */
 package com.threatconnect.sdk.examples.owners;
 
-import com.threatconnect.sdk.client.reader.IterableResponse;
+import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.client.reader.OwnerReaderAdapter;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
 import com.threatconnect.sdk.config.Configuration;
@@ -15,7 +15,6 @@ import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Owner;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Properties;
 
 /**

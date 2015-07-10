@@ -2,7 +2,7 @@ package com.threatconnect.sdk.app;
 
 import com.threatconnect.sdk.client.fluent.AttributeBuilder;
 import com.threatconnect.sdk.client.reader.AbstractIndicatorReaderAdapter;
-import com.threatconnect.sdk.client.reader.IterableResponse;
+import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
 import com.threatconnect.sdk.client.writer.AbstractIndicatorWriterAdapter;
 import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
@@ -56,12 +56,17 @@ public abstract class App
 
     public App()
     {
-        this(null);
+        this(AppUtil.getSystemInstance());
     }
 
     public App(Map<String, String> parameterMap)
     {
-        this.appUtil = parameterMap == null ? AppUtil.getSystemInstance() : AppUtil.getMapInstance(parameterMap);
+        this(parameterMap == null ? AppUtil.getSystemInstance() : AppUtil.getMapInstance(parameterMap) );
+    }
+
+    public App(AppUtil appUtil)
+    {
+        this.appUtil = appUtil;
         this.config = new Configuration(this.appUtil.getTcApiPath(), this.appUtil.getTcApiAccessID(),
                 this.appUtil.getTcApiUserSecretKey(), this.appUtil.getApiDefaultOrg(),
                 this.appUtil.getApiMaxResults(getResultLimit()));

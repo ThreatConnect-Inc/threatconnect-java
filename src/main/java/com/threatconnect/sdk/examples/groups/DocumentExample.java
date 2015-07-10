@@ -2,7 +2,7 @@ package com.threatconnect.sdk.examples.groups;
 
 import com.threatconnect.sdk.client.fluent.AttributeBuilder;
 import com.threatconnect.sdk.client.reader.DocumentReaderAdapter;
-import com.threatconnect.sdk.client.reader.IterableResponse;
+import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
 import com.threatconnect.sdk.client.writer.TagWriterAdapter;
 import com.threatconnect.sdk.client.writer.WriterAdapterFactory;

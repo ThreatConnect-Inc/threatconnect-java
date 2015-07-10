@@ -5,7 +5,7 @@
  */
 package com.threatconnect.sdk.client.reader.associate;
 
-import com.threatconnect.sdk.client.reader.IterableResponse;
+import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.server.entity.Address;
 import com.threatconnect.sdk.server.entity.Email;
 import com.threatconnect.sdk.server.entity.File;

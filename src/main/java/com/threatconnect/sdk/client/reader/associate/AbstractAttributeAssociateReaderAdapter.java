@@ -7,7 +7,7 @@ package com.threatconnect.sdk.client.reader.associate;
 
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.reader.AbstractBaseReaderAdapter;
-import com.threatconnect.sdk.client.reader.IterableResponse;
+import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Attribute;
@@ -18,7 +18,6 @@ import com.threatconnect.sdk.server.response.entity.SecurityLabelListResponse;
 import com.threatconnect.sdk.server.response.entity.SecurityLabelResponse;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 /**

@@ -10,6 +10,7 @@ import com.threatconnect.sdk.client.reader.associate.GroupAssociateReadable;
 import com.threatconnect.sdk.client.reader.associate.AbstractIndicatorAssociateReaderAdapter;
 import com.threatconnect.sdk.client.reader.associate.AbstractGroupAssociateReaderAdapter;
 import com.threatconnect.sdk.client.UrlTypeable;
+import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Address;
