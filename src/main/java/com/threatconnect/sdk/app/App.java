@@ -1,15 +1,18 @@
 package com.threatconnect.sdk.app;
 
 import com.threatconnect.sdk.client.fluent.AttributeBuilder;
+import com.threatconnect.sdk.client.reader.AbstractGroupReaderAdapter;
 import com.threatconnect.sdk.client.reader.AbstractIndicatorReaderAdapter;
 import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
+import com.threatconnect.sdk.client.writer.AbstractGroupWriterAdapter;
 import com.threatconnect.sdk.client.writer.AbstractIndicatorWriterAdapter;
 import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
 import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Attribute;
+import com.threatconnect.sdk.server.entity.Group;
 import com.threatconnect.sdk.server.entity.Indicator;
 import com.threatconnect.sdk.server.entity.Tag;
 import com.threatconnect.sdk.util.IndicatorUtil;
@@ -45,8 +48,10 @@ public abstract class App
     private String owner;
     private AppUtil appUtil;
     private int resultLimit = 500;
-    private Map<Indicator.Type, AbstractIndicatorReaderAdapter> readerMap = new HashMap<>();
-    private Map<Indicator.Type, AbstractIndicatorWriterAdapter> writerMap = new HashMap<>();
+    private Map<Indicator.Type, AbstractIndicatorReaderAdapter> indReaderMap = new HashMap<>();
+    private Map<Indicator.Type, AbstractIndicatorWriterAdapter> indWriterMap = new HashMap<>();
+    private Map<Group.Type, AbstractGroupReaderAdapter> groupReaderMap = new HashMap<>();
+    private Map<Group.Type, AbstractGroupWriterAdapter> groupWriterMap = new HashMap<>();
     private int maxRetries = 3;
     private int retrySleepMs = 5000;
 
@@ -154,11 +159,11 @@ public abstract class App
 
     protected AbstractIndicatorReaderAdapter getReader(Indicator.Type type)
     {
-        AbstractIndicatorReaderAdapter reader = readerMap.get(type);
+        AbstractIndicatorReaderAdapter reader = indReaderMap.get(type);
         if (reader == null)
         {
             reader = ReaderAdapterFactory.createIndicatorReader(type, getConn());
-            readerMap.put(type, reader);
+            indReaderMap.put(type, reader);
         }
 
         return reader;
@@ -166,15 +171,40 @@ public abstract class App
 
     protected AbstractIndicatorWriterAdapter getWriter(Indicator.Type type)
     {
-        AbstractIndicatorWriterAdapter writer = writerMap.get(type);
+        AbstractIndicatorWriterAdapter writer = indWriterMap.get(type);
         if (writer == null)
         {
             writer = WriterAdapterFactory.createIndicatorWriter(type, getConn());
-            writerMap.put(type, writer);
+            indWriterMap.put(type, writer);
         }
 
         return writer;
     }
+
+    protected AbstractGroupReaderAdapter getReader(Group.Type type)
+    {
+        AbstractGroupReaderAdapter reader = groupReaderMap.get(type);
+        if (reader == null)
+        {
+            reader = ReaderAdapterFactory.createGroupReader(type, getConn());
+            groupReaderMap.put(type, reader);
+        }
+
+        return reader;
+    }
+
+    protected AbstractGroupWriterAdapter getWriter(Group.Type type)
+    {
+        AbstractGroupWriterAdapter writer = groupWriterMap.get(type);
+        if (writer == null)
+        {
+            writer = WriterAdapterFactory.createGroupWriter(type, getConn());
+            groupWriterMap.put(type, writer);
+        }
+
+        return writer;
+    }
+
 
     public int getMaxRetries()
     {

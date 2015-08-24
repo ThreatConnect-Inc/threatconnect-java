@@ -7,6 +7,7 @@ import com.threatconnect.sdk.server.response.entity.ApiEntityListResponse;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,6 +28,7 @@ public class IterableResponse<V> implements Iterator<V>, Iterable<V>
     private ApiEntityListResponse currentResponse = null;
     private final ObjectMapper mapper = new ObjectMapper();
     private Integer resultCount;
+    private V nextItem;
 
     public IterableResponse(AbstractRequestExecutor executor, Class responseType, Class<V> responseItem, String path, int resultLimit)
     {
@@ -57,6 +59,33 @@ public class IterableResponse<V> implements Iterator<V>, Iterable<V>
             currentResponse = getNextResponse();
         }
 
+        prepareResultCount();
+
+        return prepareNext();
+    }
+
+    private boolean prepareNext()
+    {
+        boolean hasNext = currentResponse != null && index%resultLimit < resultCount;
+        if ( hasNext )
+        {
+            int nextIndex = index%resultLimit;
+            List dataList = currentResponse.getData().getData();
+            if ( dataList == null || nextIndex >= dataList.size() )
+            {
+                hasNext = false;
+            }
+            else
+            {
+                nextItem = responseItem.cast(dataList.get(index % resultLimit));
+            }
+        }
+
+        return hasNext;
+    }
+
+    private void prepareResultCount()
+    {
         if ( resultCount == null )
         {
             resultCount = currentResponse.getData().getResultCount();
@@ -65,14 +94,13 @@ public class IterableResponse<V> implements Iterator<V>, Iterable<V>
                 resultCount = currentResponse.getData().getData().size();
             }
         }
-        return currentResponse != null && index%resultLimit < resultCount;
     }
 
     @Override
     public V next()
     {
 
-        return responseItem.cast(currentResponse.getData().getData().get(index%resultLimit));
+        return nextItem;
     }
 
     @Override
