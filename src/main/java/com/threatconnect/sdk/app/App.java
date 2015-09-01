@@ -1,30 +1,49 @@
 package com.threatconnect.sdk.app;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.threatconnect.sdk.client.fluent.AdversaryBuilder;
 import com.threatconnect.sdk.client.fluent.AttributeBuilder;
+import com.threatconnect.sdk.client.fluent.TagBuilder;
+import com.threatconnect.sdk.client.fluent.ThreatBuilder;
 import com.threatconnect.sdk.client.reader.AbstractGroupReaderAdapter;
 import com.threatconnect.sdk.client.reader.AbstractIndicatorReaderAdapter;
+import com.threatconnect.sdk.client.reader.TagReaderAdapter;
 import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
 import com.threatconnect.sdk.client.writer.AbstractGroupWriterAdapter;
 import com.threatconnect.sdk.client.writer.AbstractIndicatorWriterAdapter;
+import com.threatconnect.sdk.client.writer.TagWriterAdapter;
 import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
 import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
+import com.threatconnect.sdk.server.entity.Adversary;
 import com.threatconnect.sdk.server.entity.Attribute;
 import com.threatconnect.sdk.server.entity.Group;
 import com.threatconnect.sdk.server.entity.Indicator;
 import com.threatconnect.sdk.server.entity.Tag;
+import com.threatconnect.sdk.server.entity.Threat;
+import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.util.IndicatorUtil;
+import com.threatconnect.sdk.util.StringUtil;
+import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -54,6 +73,11 @@ public abstract class App
     private Map<Group.Type, AbstractGroupWriterAdapter> groupWriterMap = new HashMap<>();
     private int maxRetries = 3;
     private int retrySleepMs = 5000;
+
+    private Map<String, Threat> threatMap;
+    private Map<String, Adversary> adversaryMap;
+    private TagWriterAdapter tagWriter;
+    private Map<String, Tag> tagMap;
 
     public abstract ExitStatus process() throws IOException;
 
@@ -246,6 +270,11 @@ public abstract class App
         return getHttpResponse(url, headerMap, getMaxRetries(), 0);
     }
 
+    protected HttpResponse getHttpResponse(String url, Map<String, String> headerMap, Object entity)
+    {
+        return getHttpResponse(url, headerMap, getMaxRetries(), 0, entity);
+    }
+
     protected HttpResponse getHttpResponse(String url, Map<String, String> headerMap, int retryNum)
     {
         return getHttpResponse(url, headerMap, getMaxRetries(), retryNum);
@@ -253,6 +282,10 @@ public abstract class App
 
     protected void addHeaders(HttpRequest request, Map<String, String> headerMap)
     {
+        if ( request instanceof HttpEntityEnclosingRequest )
+        {
+            request.addHeader("Accept", ContentType.APPLICATION_JSON.toString());
+        }
         for (Map.Entry<String, String> entry : headerMap.entrySet())
         {
             request.setHeader(entry.getKey(), entry.getValue());
@@ -262,12 +295,42 @@ public abstract class App
 
     protected HttpResponse getHttpResponse(String url, Map<String, String> headerMap, int maxRetries, int retryNum)
     {
+        HttpRequestBase request = new HttpGet(url);
+        return getHttpResponse(url, headerMap, maxRetries, retryNum, request);
+    }
 
+    protected HttpResponse getHttpResponse(String url, Map<String, String> headerMap, int maxRetries, int retryNum, Object entity)
+    {
+        if ( entity != null )
+        {
+            HttpEntityEnclosingRequestBase request = new HttpPost(url);
+            String jsonData;
+            try
+            {
+                jsonData = StringUtil.toJSON(entity);
+                debug("jsonEntity=%s", jsonData);
+            } catch (JsonProcessingException e)
+            {
+                error(e, "Failed to convert entity to JSON: %s", entity);
+                throw new RuntimeException("Failed to convert entity to JSON: %s" + entity);
+            }
+            request.setEntity(new StringEntity(jsonData, ContentType.APPLICATION_JSON));
+            return getHttpResponse(url, headerMap, maxRetries, retryNum, request);
+        }
+        else
+        {
+            return getHttpResponse(url, headerMap, maxRetries, retryNum);
+        }
+    }
+
+
+    private HttpResponse getHttpResponse(String url, Map<String, String> headerMap, int maxRetries, int retryNum, HttpRequestBase request)
+    {
         MetricUtil.tick("getResponse");
         debug("getResponse.URL=%s, retryNum=%d", url, retryNum);
+        //debug("getResponse.headers=%s", headerMap);
 
         HttpClient client = HttpClientBuilder.create().build();
-        HttpGet request = new HttpGet(url);
         addHeaders(request, headerMap);
         HttpResponse response;
 
@@ -296,7 +359,7 @@ public abstract class App
 
         MetricUtil.tockUpdate("getResponse");
         debug("URL failed to return data: response_code=" + response.getStatusLine().getStatusCode()
-                + " reason=" + response.getStatusLine().getReasonPhrase());
+                + " response=" + response.toString() );
         throw new RuntimeException("URL failed to return data: response_code=" + response.getStatusLine().getStatusCode()
                 + "reason=" + response.getStatusLine().getReasonPhrase());
     }
@@ -439,6 +502,387 @@ public abstract class App
         return ind;
     }
 
+
+    protected void addTags(AbstractGroupWriterAdapter<Group> writer, Integer groupId, List<String> tagLabels)
+    {
+
+        if ( tagMap == null )
+        {
+            loadTagMap();
+        }
+
+        for (String tagLabel : tagLabels)
+        {
+            if (tagLabel.toLowerCase().contains("unknown"))
+            {
+                continue;
+            }
+
+            tagLabel = tagLabel.replace("/", "-");
+
+
+            Tag tag = tagMap.get(tagLabel);
+            if (tag == null)
+            {
+                createTag(tagLabel);
+                tagMap.put(tagLabel, tag);
+            }
+
+            try
+            {
+                writer.associateTag(groupId, tagLabel, getOwner());
+            } catch (IOException | FailedResponseException e)
+            {
+                warn("Failed to associated tag %s to group id %d", tagLabel, groupId);
+            }
+        }
+
+    }
+
+    protected void addTags(AbstractIndicatorWriterAdapter<Indicator> writer, Indicator indicator, List<String> tagLabels)
+    {
+
+        if ( tagMap == null )
+        {
+            loadTagMap();
+        }
+
+        String uniqueId = getUniqueId(indicator);
+
+        for (String tagLabel : tagLabels)
+        {
+            if (tagLabel.toLowerCase().contains("unknown"))
+            {
+                continue;
+            }
+
+            tagLabel = tagLabel.replace("/", "-");
+
+
+            Tag tag = tagMap.get(tagLabel);
+            if (tag == null)
+            {
+                createTag(tagLabel);
+                tagMap.put(tagLabel, tag);
+            }
+
+            try
+            {
+                if (uniqueId != null)
+                {
+                    writer.associateTag(uniqueId, tagLabel, getOwner());
+                }
+            } catch (IOException | FailedResponseException e)
+            {
+                warn("Failed to associated tag %s to indicator %s", tagLabel, uniqueId);
+            }
+        }
+
+    }
+
+    protected Tag createTag(String tagLabel)
+    {
+
+
+        if (tagWriter == null)
+        {
+            tagWriter = WriterAdapterFactory.createTagWriter(getConn());
+        }
+
+        Tag tag = new TagBuilder().withName(tagLabel).createTag();
+        try
+        {
+            ApiEntitySingleResponse response = tagWriter.create(tag, getOwner());
+            if (response.isSuccess())
+            {
+                return (Tag) response.getItem();
+            }
+
+        } catch (IOException | FailedResponseException e)
+        {
+            // ignore
+        }
+
+        return null;
+    }
+
+    private void loadTagMap()
+    {
+        tagMap = new HashMap<>();
+        TagReaderAdapter tagReader = ReaderAdapterFactory.createTagReader(getConn());
+        try
+        {
+            for (Tag t : tagReader.getAll(getOwner()))
+            {
+                tagMap.put(t.getName(), t);
+            }
+        } catch (IOException | FailedResponseException e)
+        {
+            warn("Unable to cache tagMap");
+        }
+
+    }
+
+    protected void associateThreat(AbstractIndicatorReaderAdapter<Indicator> reader, AbstractIndicatorWriterAdapter<Indicator> writer, Indicator indicator, List<String> actors)
+    {
+        if (threatMap == null)
+        {
+            loadThreatMap();
+        }
+
+        String uniqueId = getUniqueId(indicator);
+
+        for (String actor : actors)
+        {
+
+            if (actor == null || actor.equalsIgnoreCase("unknown"))
+            {
+                continue;
+            }
+
+            Threat threat = threatMap.get(actor);
+            if (threat == null)
+            {
+                threat = createThreat(actor);
+                if (threat == null)
+                {
+                    continue;
+                }
+                threatMap.put(threat.getName(), threat);
+            }
+
+            try
+            {
+                if (uniqueId != null)
+                {
+                    info("Associating threat %s [id=%d] to indicator %s", threat.getName(), threat.getId(), uniqueId);
+                    writer.associateGroupThreat(uniqueId, threat.getId());
+                }
+            } catch (IOException | FailedResponseException e)
+            {
+                warn("Unable to associate threat %s to indicator %s", threat.getName(), uniqueId);
+            }
+        }
+
+    }
+
+    protected Threat createThreat(String actor)
+    {
+        AbstractGroupWriterAdapter threatWriter = getWriter(Group.Type.Threat);
+        if (threatWriter == null)
+        {
+            threatWriter = WriterAdapterFactory.createThreatGroupWriter(getConn());
+        }
+
+        Threat threat = new ThreatBuilder().withOwnerName(getOwner()).withName(actor).withDateAdded(new Date()).createThreat();
+
+        try
+        {
+            ApiEntitySingleResponse response = threatWriter.create(threat, getOwner());
+            threat = null;
+            if (response.isSuccess())
+            {
+                threat = (Threat) response.getItem();
+            }
+        } catch (IOException | FailedResponseException e)
+        {
+            warn("Unable to create threat %s", actor);
+            return null;
+        }
+
+        return threat;
+    }
+
+    private void loadThreatMap()
+    {
+        threatMap = new HashMap<>();
+        AbstractGroupReaderAdapter<Threat> threatReader = ReaderAdapterFactory.createThreatGroupReader(getConn());
+        try
+        {
+            for (Threat t : threatReader.getAll(getOwner()))
+            {
+                threatMap.put(t.getName(), t);
+            }
+        } catch (IOException | FailedResponseException e)
+        {
+            warn("Unable to cache threatMap");
+        }
+
+    }
+
+    protected void associateThreat(AbstractGroupReaderAdapter<Group> reader, AbstractGroupWriterAdapter<Group> writer, Integer groupId, List<String> actors)
+    {
+        if (threatMap == null)
+        {
+            loadThreatMap();
+        }
+
+        for (String actor : actors)
+        {
+
+            if (actor == null || actor.equalsIgnoreCase("unknown"))
+            {
+                continue;
+            }
+
+            Threat threat = threatMap.get(actor);
+            if (threat == null)
+            {
+                threat = createThreat(actor);
+                if (threat == null)
+                {
+                    continue;
+                }
+                threatMap.put(threat.getName(), threat);
+            }
+
+            try
+            {
+                info("Associating threat %s [id=%d] to group id %d", threat.getName(), threat.getId(), groupId);
+                writer.associateGroupThreat(groupId, threat.getId());
+            } catch (IOException | FailedResponseException e)
+            {
+                warn("Unable to associate threat %s to group id %d", threat.getName(), groupId);
+            }
+        }
+
+    }
+
+
+
+    protected Adversary createAdversary(String actor)
+    {
+        AbstractGroupWriterAdapter adversaryWriter = getWriter(Group.Type.Adversary);
+        if (adversaryWriter== null)
+        {
+            adversaryWriter = WriterAdapterFactory.createAdversaryGroupWriter(getConn());
+        }
+
+        Adversary adversary = new AdversaryBuilder()
+                .withOwnerName(getOwner())
+                .withName(actor)
+                .withDateAdded(new Date())
+                .createAdversary();
+
+        try
+        {
+            ApiEntitySingleResponse response = adversaryWriter.create(adversary, getOwner());
+            adversary = null;
+            if (response.isSuccess())
+            {
+                adversary = (Adversary) response.getItem();
+            }
+        } catch (IOException | FailedResponseException e)
+        {
+            warn("Unable to create adversary %s", actor);
+            return null;
+        }
+
+        return adversary;
+    }
+
+    private void loadAdversaryMap()
+    {
+        adversaryMap = new HashMap<>();
+        AbstractGroupReaderAdapter<Adversary> adversaryReader = ReaderAdapterFactory.createAdversaryGroupReader(getConn());
+        try
+        {
+            for (Adversary a : adversaryReader.getAll(getOwner()))
+            {
+                adversaryMap.put(a.getName(), a);
+            }
+        } catch (IOException | FailedResponseException e)
+        {
+            warn("Unable to cache adversaryMap");
+        }
+
+    }
+
+    protected void associateAdversary(AbstractGroupReaderAdapter<Group> reader, AbstractGroupWriterAdapter<Group> writer, Integer groupId, List<String> actors)
+    {
+        if (adversaryMap == null)
+        {
+            loadAdversaryMap();
+        }
+
+        for (String actor : actors)
+        {
+
+            if (actor == null || actor.equalsIgnoreCase("unknown"))
+            {
+                continue;
+            }
+
+            Adversary adversary = adversaryMap.get(actor);
+            if (adversary == null)
+            {
+                adversary = createAdversary(actor);
+                if (adversary == null)
+                {
+                    continue;
+                }
+                adversaryMap.put(adversary.getName(), adversary);
+            }
+
+            try
+            {
+                info("Associating adversary %s [id=%d] to group id %d", adversary.getName(), adversary.getId(), groupId);
+                writer.associateGroupAdversary(groupId, adversary.getId());
+            } catch (IOException | FailedResponseException e)
+            {
+                warn("Unable to associate adversary %s to group id %d", adversary.getName(), groupId);
+            }
+        }
+
+    }
+
+
+    public Map<String, Threat> getThreatMap()
+    {
+        if ( threatMap == null )
+        {
+            loadThreatMap();
+        }
+
+        return threatMap;
+    }
+
+    public void setThreatMap(Map<String, Threat> threatMap)
+    {
+        this.threatMap = threatMap;
+    }
+
+    public Map<String, Adversary> getAdversaryMap()
+    {
+        if ( adversaryMap == null )
+        {
+            loadAdversaryMap();
+        }
+
+        return adversaryMap;
+    }
+
+    public void setAdversaryMap(Map<String, Adversary> adversaryMap)
+    {
+        this.adversaryMap = adversaryMap;
+    }
+
+    public void writeMessageTc(String message)
+    {
+        String fileName = getAppUtil().getTcOutPath() + File.separator + "message.tc";
+        PrintWriter writer = null;
+        try
+        {
+            writer = new PrintWriter(fileName, "UTF-8");
+        } catch (FileNotFoundException | UnsupportedEncodingException e)
+        {
+            warn("Failed to write message.tc file");
+            e.printStackTrace();
+        }
+
+        writer.println(message);
+        writer.close();
+    }
 
 
 }

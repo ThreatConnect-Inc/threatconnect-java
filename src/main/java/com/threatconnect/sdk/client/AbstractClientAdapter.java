@@ -53,6 +53,10 @@ public abstract class AbstractClientAdapter {
      * @param conn Main object managing API connection
      */
     public AbstractClientAdapter(Connection conn) {
+        if ( conn == null )
+        {
+            throw new IllegalStateException("Client doesn't have valid connection.");
+        }
         this.conn = conn;
         this.executor = conn.getExecutor();
 
