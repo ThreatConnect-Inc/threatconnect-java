@@ -187,6 +187,10 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
             protected String getUrlBasePrefix() {
                 return AbstractIndicatorReaderAdapter.this.getUrlBasePrefix();
             }
+            @Override
+            public String getUrlType() {
+                return AbstractIndicatorReaderAdapter.this.getUrlType();
+            }
         };
         
         ownerAssocReader = new AbstractOwnerAssociateReaderAdapter<String>(
@@ -208,6 +212,10 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
             @Override
             protected String getUrlBasePrefix() {
                 return AbstractIndicatorReaderAdapter.this.getUrlBasePrefix();
+            }
+            @Override
+            public String getUrlType() {
+                return AbstractIndicatorReaderAdapter.this.getUrlType();
             }
         };
         

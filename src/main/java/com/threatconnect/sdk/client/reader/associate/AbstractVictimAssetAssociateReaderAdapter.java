@@ -5,6 +5,7 @@
  */
 package com.threatconnect.sdk.client.reader.associate;
 
+import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.reader.AbstractBaseReaderAdapter;
 import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.conn.Connection;
@@ -34,7 +35,8 @@ import java.util.Map;
  *
  * @author dtineo
  */
-public abstract class AbstractVictimAssetAssociateReaderAdapter<P> extends AbstractBaseReaderAdapter implements VictimAssetAssociateReadable<P> {
+public abstract class AbstractVictimAssetAssociateReaderAdapter<P> extends AbstractBaseReaderAdapter implements VictimAssetAssociateReadable<P>, UrlTypeable
+{
 
     public AbstractVictimAssetAssociateReaderAdapter(Connection conn, Class singleType, Class singleItemType, Class listType) {
         super(conn, singleType, singleItemType, listType);
@@ -44,7 +46,7 @@ public abstract class AbstractVictimAssetAssociateReaderAdapter<P> extends Abstr
     public IterableResponse<VictimAsset> getAssociatedVictimAssets(P uniqueId, String ownerName)
         throws IOException, FailedResponseException {
 
-        Map<String, Object> map = createParamMap("id", uniqueId);
+        Map<String, Object> map = createParamMap("id", uniqueId, "type", getUrlType());
         return getItems(getUrlBasePrefix() + ".byId.victimAssets", VictimAssetListResponse.class, VictimAsset.class, ownerName, map);
     }
 
@@ -57,7 +59,7 @@ public abstract class AbstractVictimAssetAssociateReaderAdapter<P> extends Abstr
     public IterableResponse<VictimEmailAddress> getAssociatedVictimAssetEmailAddresses(P uniqueId, String ownerName)
         throws IOException, FailedResponseException {
 
-        Map<String, Object> map = createParamMap("id", uniqueId);
+        Map<String, Object> map = createParamMap("id", uniqueId, "type", getUrlType());
         return getItems(getUrlBasePrefix() + ".byId.victimAssets.emailAddresses", VictimEmailAddressListResponse.class, VictimEmailAddress.class, ownerName, map);
     }
 
@@ -70,7 +72,7 @@ public abstract class AbstractVictimAssetAssociateReaderAdapter<P> extends Abstr
     public VictimEmailAddress getAssociatedVictimAssetEmailAddress(P uniqueId, Integer assetId, String ownerName)
         throws IOException, FailedResponseException {
 
-        Map<String, Object> map = createParamMap("id", uniqueId, "assetId", assetId);
+        Map<String, Object> map = createParamMap("id", uniqueId, "assetId", assetId, "type", getUrlType());
         VictimEmailAddressResponse data = getItem(getUrlBasePrefix() + ".byId.victimAssets.emailAddresses.byAssetId", VictimEmailAddressResponse.class, ownerName, map);
 
         return (VictimEmailAddress) data.getData().getData();
@@ -85,7 +87,7 @@ public abstract class AbstractVictimAssetAssociateReaderAdapter<P> extends Abstr
     public IterableResponse<VictimNetworkAccount> getAssociatedVictimAssetNetworkAccounts(P uniqueId, String ownerName)
         throws IOException, FailedResponseException {
 
-        Map<String, Object> map = createParamMap("id", uniqueId);
+        Map<String, Object> map = createParamMap("id", uniqueId, "type", getUrlType());
         return getItems(getUrlBasePrefix() + ".byId.victimAssets.networkAccounts", VictimNetworkAccountListResponse.class, VictimNetworkAccount.class, ownerName, map);
     }
 
@@ -98,7 +100,7 @@ public abstract class AbstractVictimAssetAssociateReaderAdapter<P> extends Abstr
     public VictimNetworkAccount getAssociatedVictimAssetNetworkAccount(P uniqueId, Integer assetId, String ownerName)
         throws IOException, FailedResponseException {
 
-        Map<String, Object> map = createParamMap("id", uniqueId, "assetId", assetId);
+        Map<String, Object> map = createParamMap("id", uniqueId, "assetId", assetId, "type", getUrlType());
         VictimNetworkAccountResponse data = getItem(getUrlBasePrefix() + ".byId.victimAssets.networkAccounts.byAssetId", VictimNetworkAccountResponse.class, ownerName, map);
 
         return (VictimNetworkAccount) data.getData().getData();
@@ -113,7 +115,7 @@ public abstract class AbstractVictimAssetAssociateReaderAdapter<P> extends Abstr
     public IterableResponse<VictimPhone> getAssociatedVictimAssetPhoneNumbers(P uniqueId, String ownerName)
         throws IOException, FailedResponseException {
 
-        Map<String, Object> map = createParamMap("id", uniqueId);
+        Map<String, Object> map = createParamMap("id", uniqueId, "type", getUrlType());
         return getItems(getUrlBasePrefix() + ".byId.victimAssets.phoneNumbers", VictimPhoneListResponse.class, VictimPhone.class, ownerName, map);
     }
 
@@ -126,7 +128,7 @@ public abstract class AbstractVictimAssetAssociateReaderAdapter<P> extends Abstr
     public VictimPhone getAssociatedVictimAssetPhoneNumber(P uniqueId, Integer assetId, String ownerName)
         throws IOException, FailedResponseException {
 
-        Map<String, Object> map = createParamMap("id", uniqueId, "assetId", assetId);
+        Map<String, Object> map = createParamMap("id", uniqueId, "assetId", assetId, "type", getUrlType());
         VictimPhoneResponse data = getItem(getUrlBasePrefix() + ".byId.victimAssets.phoneNumbers.byAssetId", VictimPhoneResponse.class, ownerName, map);
 
         return (VictimPhone) data.getData().getData();
@@ -141,7 +143,7 @@ public abstract class AbstractVictimAssetAssociateReaderAdapter<P> extends Abstr
     public IterableResponse<VictimSocialNetwork> getAssociatedVictimAssetSocialNetworks(P uniqueId, String ownerName)
         throws IOException, FailedResponseException {
 
-        Map<String, Object> map = createParamMap("id", uniqueId);
+        Map<String, Object> map = createParamMap("id", uniqueId, "type", getUrlType());
         return getItems(getUrlBasePrefix() + ".byId.victimAssets.socialNetworks", VictimSocialNetworkListResponse.class, VictimSocialNetwork.class, ownerName, map);
     }
 
@@ -154,7 +156,7 @@ public abstract class AbstractVictimAssetAssociateReaderAdapter<P> extends Abstr
     public VictimSocialNetwork getAssociatedVictimAssetSocialNetwork(P uniqueId, Integer assetId, String ownerName)
         throws IOException, FailedResponseException {
 
-        Map<String, Object> map = createParamMap("id", uniqueId, "assetId", assetId);
+        Map<String, Object> map = createParamMap("id", uniqueId, "assetId", assetId, "type", getUrlType());
         VictimSocialNetworkResponse data = getItem(getUrlBasePrefix() + ".byId.victimAssets.socialNetworks.byAssetId", VictimSocialNetworkResponse.class, ownerName, map);
 
         return (VictimSocialNetwork) data.getData().getData();
@@ -169,7 +171,7 @@ public abstract class AbstractVictimAssetAssociateReaderAdapter<P> extends Abstr
     public IterableResponse<VictimWebSite> getAssociatedVictimAssetWebsites(P uniqueId, String ownerName)
         throws IOException, FailedResponseException {
 
-        Map<String, Object> map = createParamMap("id", uniqueId);
+        Map<String, Object> map = createParamMap("id", uniqueId, "type", getUrlType());
         return getItems(getUrlBasePrefix() + ".byId.victimAssets.websites", VictimWebSiteListResponse.class, VictimWebSite.class, ownerName, map);
     }
 
@@ -182,7 +184,7 @@ public abstract class AbstractVictimAssetAssociateReaderAdapter<P> extends Abstr
     public VictimWebSite getAssociatedVictimAssetWebsite(P uniqueId, Integer assetId, String ownerName)
         throws IOException, FailedResponseException {
 
-        Map<String, Object> map = createParamMap("id", uniqueId, "assetId", assetId);
+        Map<String, Object> map = createParamMap("id", uniqueId, "assetId", assetId, "type", getUrlType());
         VictimWebSiteResponse data = getItem(getUrlBasePrefix() + ".byId.victimAssets.websites.byAssetId", VictimWebSiteResponse.class, ownerName, map);
 
         return (VictimWebSite) data.getData().getData();

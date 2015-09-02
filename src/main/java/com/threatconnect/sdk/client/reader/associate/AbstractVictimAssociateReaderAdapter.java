@@ -5,6 +5,7 @@
  */
 package com.threatconnect.sdk.client.reader.associate;
 
+import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.reader.AbstractBaseReaderAdapter;
 import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.conn.Connection;
@@ -21,7 +22,8 @@ import java.util.Map;
  * @author dtineo
  */
 public abstract class AbstractVictimAssociateReaderAdapter<P> 
-    extends AbstractBaseReaderAdapter implements VictimAssociateReadable<P> {
+    extends AbstractBaseReaderAdapter implements VictimAssociateReadable<P>, UrlTypeable
+{
 
     public AbstractVictimAssociateReaderAdapter(Connection conn, Class singleType, Class singleItemType, Class listType) {
         super(conn, singleType, singleItemType, listType);
@@ -34,7 +36,7 @@ public abstract class AbstractVictimAssociateReaderAdapter<P>
 
     @Override
     public IterableResponse<Victim> getAssociatedVictims(P uniqueId, String ownerName) throws IOException, FailedResponseException {
-        Map<String,Object> map = createParamMap("id", uniqueId);
+        Map<String,Object> map = createParamMap("id", uniqueId, "type", getUrlType());
         return getItems(getUrlBasePrefix() + ".byId.victims", VictimListResponse.class, Victim.class, ownerName, map);
     }
 
@@ -45,7 +47,7 @@ public abstract class AbstractVictimAssociateReaderAdapter<P>
 
     @Override
     public Victim getAssociatedVictim(P uniqueId, Integer victimId, String ownerName) throws IOException, FailedResponseException {
-        Map<String,Object> map = createParamMap("id", uniqueId, "victimId", victimId);
+        Map<String,Object> map = createParamMap("id", uniqueId, "victimId", victimId, "type", getUrlType());
         VictimResponse data = getItem(getUrlBasePrefix() + ".byId.victims.byVictimId", VictimResponse.class, ownerName, map);
 
         return (Victim)data.getData().getData();

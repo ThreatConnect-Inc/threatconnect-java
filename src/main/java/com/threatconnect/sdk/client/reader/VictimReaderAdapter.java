@@ -103,6 +103,10 @@ public class VictimReaderAdapter
             protected String getUrlBasePrefix() {
                 return VictimReaderAdapter.this.getUrlBasePrefix();
             }
+            @Override
+            public String getUrlType() {
+                return VictimReaderAdapter.this.getUrlType();
+            }
         };
 
     }
