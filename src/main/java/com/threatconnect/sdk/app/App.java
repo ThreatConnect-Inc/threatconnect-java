@@ -73,6 +73,8 @@ public abstract class App
     private Map<Group.Type, AbstractGroupWriterAdapter> groupWriterMap = new HashMap<>();
     private int maxRetries = 3;
     private int retrySleepMs = 5000;
+    private int requestTimerCounter = 0;
+    private long requestLimitExpireTimeMs = 0;
 
     private Map<String, Threat> threatMap;
     private Map<String, Adversary> adversaryMap;
@@ -82,6 +84,10 @@ public abstract class App
     public abstract ExitStatus process() throws IOException;
 
     public abstract String getLogFilename();
+
+    protected Integer getRateLimit() {
+        return Integer.MAX_VALUE;
+    }
 
     public App()
     {
@@ -323,7 +329,6 @@ public abstract class App
         }
     }
 
-
     private HttpResponse getHttpResponse(String url, Map<String, String> headerMap, int maxRetries, int retryNum, HttpRequestBase request)
     {
         MetricUtil.tick("getResponse");
@@ -333,6 +338,8 @@ public abstract class App
         HttpClient client = HttpClientBuilder.create().build();
         addHeaders(request, headerMap);
         HttpResponse response;
+
+        checkRateLimit();
 
         try
         {
@@ -362,6 +369,32 @@ public abstract class App
                 + " response=" + response.toString() );
         throw new RuntimeException("URL failed to return data: response_code=" + response.getStatusLine().getStatusCode()
                 + "reason=" + response.getStatusLine().getReasonPhrase());
+    }
+
+    private void checkRateLimit()
+    {
+
+        requestTimerCounter++;
+
+        if ( requestTimerCounter == 1 )
+        {
+            requestLimitExpireTimeMs = System.currentTimeMillis() + (60 * 1000L);
+            return;
+        }
+
+        if ( requestTimerCounter >= getRateLimit() )
+        {
+            try
+            {
+                Thread.sleep( requestLimitExpireTimeMs - System.currentTimeMillis() );
+            } catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+
+            requestTimerCounter = 0;
+        }
+
     }
 
     protected void dissociateTags(AbstractIndicatorReaderAdapter reader, AbstractIndicatorWriterAdapter writer, Indicator indicator)

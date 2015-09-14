@@ -214,4 +214,8 @@ public class ReaderAdapterFactory {
     public static BatchReaderAdapter<Indicator> createIndicatorBatchReaderAdapter(Connection conn) {
         return new BatchReaderAdapter<>(conn);
     }
+
+    public static ExchangeReaderAdapter createExchangeReaderAdapter(Connection conn) {
+        return new ExchangeReaderAdapter(conn);
+    }
 }
