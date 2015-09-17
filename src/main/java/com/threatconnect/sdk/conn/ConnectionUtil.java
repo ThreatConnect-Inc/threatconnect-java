@@ -92,7 +92,10 @@ public class ConnectionUtil
 
         Long ts = System.currentTimeMillis() / 1000L;
         String sig = getSignature(ts, httpMethod, urlPath, null);
+        //logger.finest("sig=" + sig);
+        //logger.finest("userKey=" + config.getTcApiUserSecretKey());
         String hmacSig = getHmacSha256Signature(sig, config.getTcApiUserSecretKey());
+        //logger.finest("calcSig=" + hmacSig);
         String auth = getAuthorizationText(config,hmacSig);
 
         message.addHeader("timestamp", "" + ts);
@@ -104,31 +107,6 @@ public class ConnectionUtil
         }
 
     }
-
-    /*
-    static void applyHeaders(Configuration config, ClientRequest message, String httpMethod, String urlPath)
-    {
-        applyHeaders(config, message, httpMethod, urlPath, null);
-    }
-
-    static void applyHeaders(Configuration config, ClientRequest message, String httpMethod, String urlPath, String contentType)
-    {
-
-        Long ts = System.currentTimeMillis() / 1000L;
-        String sig = getSignature(ts, httpMethod, urlPath, null);
-        String hmacSig = getHmacSha256Signature(sig, config.getTcApiUserSecretKey());
-        String auth = getAuthorizationText(config,hmacSig);
-
-        message.header("timestamp", "" + ts);
-        message.header("authorization", auth);
-        message.header("Accept", config.getContentType());
-        if ( contentType != null )
-        {
-            message.header("Content-Type", contentType);
-        }
-
-    }
-    */
 
     private static String getAuthorizationText(Configuration config, String hmacSig)
     {

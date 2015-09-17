@@ -73,6 +73,8 @@ public abstract class App
     private Map<Group.Type, AbstractGroupWriterAdapter> groupWriterMap = new HashMap<>();
     private int maxRetries = 3;
     private int retrySleepMs = 5000;
+    private int requestTimerCounter = 0;
+    private long requestLimitResetTimeMs = 0;
 
     private Map<String, Threat> threatMap;
     private Map<String, Adversary> adversaryMap;
@@ -82,6 +84,10 @@ public abstract class App
     public abstract ExitStatus process() throws IOException;
 
     public abstract String getLogFilename();
+
+    protected Integer getRateLimit() {
+        return Integer.MAX_VALUE;
+    }
 
     public App()
     {
@@ -140,7 +146,7 @@ public abstract class App
         logger.log(Level.SEVERE, String.format(msg, fmtArgs), e);
     }
 
-    protected void sleep(int millis)
+    protected void sleep(long millis)
     {
         try
         {
@@ -323,7 +329,6 @@ public abstract class App
         }
     }
 
-
     private HttpResponse getHttpResponse(String url, Map<String, String> headerMap, int maxRetries, int retryNum, HttpRequestBase request)
     {
         MetricUtil.tick("getResponse");
@@ -333,6 +338,8 @@ public abstract class App
         HttpClient client = HttpClientBuilder.create().build();
         addHeaders(request, headerMap);
         HttpResponse response;
+
+        checkRateLimit();
 
         try
         {
@@ -362,6 +369,35 @@ public abstract class App
                 + " response=" + response.toString() );
         throw new RuntimeException("URL failed to return data: response_code=" + response.getStatusLine().getStatusCode()
                 + "reason=" + response.getStatusLine().getReasonPhrase());
+    }
+
+    private void checkRateLimit()
+    {
+
+        requestTimerCounter++;
+        System.out.println(new Date() + " - Request counter=" + requestTimerCounter);
+
+        if ( requestTimerCounter == 1 )
+        {
+            requestLimitResetTimeMs = System.currentTimeMillis() + (60 * 1000L);
+            System.out.println("On first counter, set request expire to: " + new Date(requestLimitResetTimeMs));
+            return;
+        }
+
+        if ( requestTimerCounter >= getRateLimit() )
+        {
+            long sleepMs = requestLimitResetTimeMs - System.currentTimeMillis();
+            if ( sleepMs >= 0 )
+            {
+                System.out.printf("RequestTimer hit rate limit, throttling requests. Limit=%d, Now=%s, ResetTime=%s, SleepMs=%d\n",
+                        getRateLimit(), new Date(), new Date(requestLimitResetTimeMs), sleepMs);
+
+                sleep(sleepMs);
+            }
+
+            requestTimerCounter = 0;
+        }
+
     }
 
     protected void dissociateTags(AbstractIndicatorReaderAdapter reader, AbstractIndicatorWriterAdapter writer, Indicator indicator)
@@ -422,7 +458,7 @@ public abstract class App
     }
 
     protected void setAttribute(AbstractIndicatorWriterAdapter writer, Indicator indicator, Attribute currentAttribute,
-                              String type, String value)
+                                String type, String value)
     {
 
         if (currentAttribute == null)
@@ -580,9 +616,31 @@ public abstract class App
 
     }
 
+    protected boolean deleteTag(String tagLabel)
+    {
+        if (tagWriter == null)
+        {
+            tagWriter = WriterAdapterFactory.createTagWriter(getConn());
+        }
+
+        try
+        {
+            ApiEntitySingleResponse response = tagWriter.delete(tagLabel, getOwner());
+            if (response.isSuccess())
+            {
+                return true;
+            }
+
+        } catch (IOException | FailedResponseException e)
+        {
+            // ignore
+        }
+
+        return false;
+    }
+
     protected Tag createTag(String tagLabel)
     {
-
 
         if (tagWriter == null)
         {
@@ -884,5 +942,11 @@ public abstract class App
         writer.close();
     }
 
+    public String basicEncoded(String user, String password)
+    {
+        String encoded = new sun.misc.BASE64Encoder().encode( String.format("%s:%s", user, password).getBytes() );
+
+        return "Basic " + encoded;
+    }
 
 }

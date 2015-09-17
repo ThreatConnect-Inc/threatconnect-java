@@ -64,13 +64,20 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
     public String execute(String path, HttpMethod type, Object obj) throws IOException {
 
         path += "&createActivityLog=false";
+        logger.log(Level.FINEST, "Path: " + path);
         String fullPath = this.conn.getConfig().getTcApiUrl() + path.replace("/api/","/");
 
-        logger.log(Level.FINEST, "Calling " + type + ": " + fullPath);
+        logger.log(Level.FINEST, "Full: " + type + ": " + fullPath);
         HttpRequestBase httpBase = getBase(fullPath, type);
         if ( obj != null )  applyEntityAsJSON( httpBase, obj );
 
-        ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, type.toString(), path);
+        logger.log(Level.FINEST, "RawPath: " + httpBase.getURI().getPath());
+        logger.log(Level.FINEST, "Query: " + httpBase.getURI().getRawQuery());
+        logger.log(Level.FINEST, "Path: " + path);
+
+        String headerPath = httpBase.getURI().getRawPath() + "?" + httpBase.getURI().getRawQuery();
+        logger.log(Level.FINEST, "HeaderPath: " + headerPath);
+        ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, type.toString(), headerPath);
         logger.log(Level.FINEST, "Request: " + httpBase.getRequestLine());
         CloseableHttpResponse response = this.conn.getApiClient().execute(httpBase);
         String result = null;
@@ -110,7 +117,8 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
         logger.log(Level.FINEST, "Calling GET: " + fullPath);
         HttpRequestBase httpBase = getBase(fullPath, HttpMethod.GET);
 
-        ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), path, conn.getConfig().getContentType()
+        String headerPath = httpBase.getURI().getRawPath() + "?" + httpBase.getURI().getRawQuery();
+        ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), headerPath, conn.getConfig().getContentType()
             , ContentType.APPLICATION_OCTET_STREAM.toString());
         logger.log(Level.FINEST, "Request: " + httpBase.getRequestLine());
         logger.log(Level.FINEST, "Headers: " + Arrays.toString(httpBase.getAllHeaders()));
@@ -140,7 +148,8 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
         logger.log(Level.FINEST, "Calling POST: " + fullPath);
         HttpPost httpBase = new HttpPost(fullPath);
         httpBase.setEntity(new FileEntity(file));
-        ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), path, ContentType.APPLICATION_OCTET_STREAM.toString());
+        String headerPath = httpBase.getURI().getRawPath() + "?" + httpBase.getURI().getRawQuery();
+        ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), headerPath, ContentType.APPLICATION_OCTET_STREAM.toString());
 
         logger.log(Level.FINEST, "Request: " + httpBase.getRequestLine());
 
