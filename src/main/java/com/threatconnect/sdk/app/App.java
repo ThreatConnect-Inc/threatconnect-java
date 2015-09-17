@@ -74,7 +74,7 @@ public abstract class App
     private int maxRetries = 3;
     private int retrySleepMs = 5000;
     private int requestTimerCounter = 0;
-    private long requestLimitExpireTimeMs = 0;
+    private long requestLimitResetTimeMs = 0;
 
     private Map<String, Threat> threatMap;
     private Map<String, Adversary> adversaryMap;
@@ -146,7 +146,7 @@ public abstract class App
         logger.log(Level.SEVERE, String.format(msg, fmtArgs), e);
     }
 
-    protected void sleep(int millis)
+    protected void sleep(long millis)
     {
         try
         {
@@ -375,21 +375,24 @@ public abstract class App
     {
 
         requestTimerCounter++;
+        System.out.println(new Date() + " - Request counter=" + requestTimerCounter);
 
         if ( requestTimerCounter == 1 )
         {
-            requestLimitExpireTimeMs = System.currentTimeMillis() + (60 * 1000L);
+            requestLimitResetTimeMs = System.currentTimeMillis() + (60 * 1000L);
+            System.out.println("On first counter, set request expire to: " + new Date(requestLimitResetTimeMs));
             return;
         }
 
         if ( requestTimerCounter >= getRateLimit() )
         {
-            try
+            long sleepMs = requestLimitResetTimeMs - System.currentTimeMillis();
+            if ( sleepMs >= 0 )
             {
-                Thread.sleep( requestLimitExpireTimeMs - System.currentTimeMillis() );
-            } catch (InterruptedException e)
-            {
-                e.printStackTrace();
+                System.out.printf("RequestTimer hit rate limit, throttling requests. Limit=%d, Now=%s, ResetTime=%s, SleepMs=%d\n",
+                        getRateLimit(), new Date(), new Date(requestLimitResetTimeMs), sleepMs);
+
+                sleep(sleepMs);
             }
 
             requestTimerCounter = 0;
@@ -455,7 +458,7 @@ public abstract class App
     }
 
     protected void setAttribute(AbstractIndicatorWriterAdapter writer, Indicator indicator, Attribute currentAttribute,
-                              String type, String value)
+                                String type, String value)
     {
 
         if (currentAttribute == null)
@@ -613,9 +616,31 @@ public abstract class App
 
     }
 
+    protected boolean deleteTag(String tagLabel)
+    {
+        if (tagWriter == null)
+        {
+            tagWriter = WriterAdapterFactory.createTagWriter(getConn());
+        }
+
+        try
+        {
+            ApiEntitySingleResponse response = tagWriter.delete(tagLabel, getOwner());
+            if (response.isSuccess())
+            {
+                return true;
+            }
+
+        } catch (IOException | FailedResponseException e)
+        {
+            // ignore
+        }
+
+        return false;
+    }
+
     protected Tag createTag(String tagLabel)
     {
-
 
         if (tagWriter == null)
         {
@@ -917,5 +942,11 @@ public abstract class App
         writer.close();
     }
 
+    public String basicEncoded(String user, String password)
+    {
+        String encoded = new sun.misc.BASE64Encoder().encode( String.format("%s:%s", user, password).getBytes() );
+
+        return "Basic " + encoded;
+    }
 
 }
