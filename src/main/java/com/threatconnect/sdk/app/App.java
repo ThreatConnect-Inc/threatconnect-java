@@ -425,7 +425,7 @@ public abstract class App
                 writer.dissociateTag(uniqueId, tag.getName());
             } catch (IOException | FailedResponseException e)
             {
-                // ignore
+                e.printStackTrace();
             }
         }
 
@@ -453,7 +453,9 @@ public abstract class App
         try
         {
             writer.deleteAttributes(getUniqueId(indicator), list, this.owner);
-        } catch (IOException e) { }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -485,6 +487,7 @@ public abstract class App
         } catch (IOException | FailedResponseException e)
         {
             warn("Failed to add attribute: %s, error: %s", currentAttribute.getType(), e.toString());
+            e.printStackTrace();
         }
     }
 
@@ -510,6 +513,7 @@ public abstract class App
         } catch (IOException | FailedResponseException e)
         {
             warn("Failed to add attribute: %s, error: %s", attribute.getType(), e.toString());
+            e.printStackTrace();
         }
     }
 
@@ -522,7 +526,9 @@ public abstract class App
             info("Found indicator: text=%s, ind=%s", indText, indicator);
             return indicator;
 
-        } catch (IOException | FailedResponseException e) {}
+        } catch (IOException | FailedResponseException e) {
+            e.printStackTrace();
+        }
 
         return null;
     }
@@ -569,7 +575,8 @@ public abstract class App
                 writer.associateTag(groupId, tagLabel, getOwner());
             } catch (IOException | FailedResponseException e)
             {
-                warn("Failed to associated tag %s to group id %d", tagLabel, groupId);
+                warn("Failed to associate tag %s to group id %d", tagLabel, groupId);
+                e.printStackTrace();
             }
         }
 
@@ -610,7 +617,8 @@ public abstract class App
                 }
             } catch (IOException | FailedResponseException e)
             {
-                warn("Failed to associated tag %s to indicator %s", tagLabel, uniqueId);
+                warn("Failed to associate tag %s to indicator %s", tagLabel, uniqueId);
+                e.printStackTrace();
             }
         }
 

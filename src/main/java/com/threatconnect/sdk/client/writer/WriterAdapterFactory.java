@@ -213,4 +213,8 @@ public class WriterAdapterFactory {
             }
         };
     }
+
+    public static ExchangeWriterAdapter createExchangeWriterAdapter(Connection conn) {
+        return new ExchangeWriterAdapter(conn);
+    }
 }

@@ -1,5 +1,6 @@
-package com.threatconnect.sdk.client.reader;
+package com.threatconnect.sdk.client.writer;
 
+import com.threatconnect.sdk.client.reader.AbstractReaderAdapter;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.SpaceState;
@@ -16,25 +17,27 @@ import java.util.Map;
 /**
  * Created by dtineo on 9/12/15.
  */
-public class ExchangeReaderAdapter extends AbstractReaderAdapter
+public class ExchangeWriterAdapter extends AbstractWriterAdapter
 {
 
-    public ExchangeReaderAdapter(Connection conn)
+    public ExchangeWriterAdapter(Connection conn)
     {
         super(conn);
     }
 
-    public void downloadSpacesFile(int spaceId, String fileName, Path outputPath) throws FailedResponseException
+    /*
+    public void uploadSpacesFile(int spaceId, String fileName, Path inputPath) throws FailedResponseException
     {
-        downloadSpacesFile(spaceId, fileName, null, outputPath);
+        uploadSpacesFile(spaceId, fileName, null, inputPath);
     }
 
-    public void downloadSpacesFile(int spaceId, String fileName, String ownerName, Path outputPath) throws FailedResponseException
+    public void uploadSpacesFile(int spaceId, String fileName, String ownerName, Path inputPath) throws FailedResponseException
     {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("id", spaceId);
         paramMap.put("fileName", fileName);
-        try (InputStream in = getFile("v2.spaces.file", ownerName, paramMap))
+
+        try (InputStream in = uploadFile("v2.spaces.file", SpaceStateResponse.class, ownerName, paramMap))
         {
             Files.copy(in, outputPath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e)
@@ -43,12 +46,13 @@ public class ExchangeReaderAdapter extends AbstractReaderAdapter
             throw new FailedResponseException("Failed to download file");
         }
     }
+    */
 
-    public SpaceState getSpaceState(int spaceId, String ownerName) throws IOException, FailedResponseException {
+    public SpaceState saveSpaceState(SpaceState spaceState, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("id", spaceId);
+        paramMap.put("id", spaceState.getSpaceId());
 
-        SpaceStateResponse data = getItem("v2.spaces.state", SpaceStateResponse.class, ownerName, paramMap);
+        SpaceStateResponse data = createItem("v2.spaces.state", SpaceStateResponse.class, ownerName, paramMap, spaceState);
 
         return (SpaceState) data.getData().getData();
     }
