@@ -55,6 +55,15 @@ To connect to the API using the SDK, create a Configuration object with one of t
 ```
 
 Pass the `Configuration` object when creating a new `Connection` (see examples below).
+
+## Using a Proxy
+
+Assuming a Configuration object has been defined above, call the following method on that object:
+
+```
+   Configuration conf = new Configuration( /* tcApi credentials */ );
+   conf.setProxy( "<proxy-host>", <proxy-port>);
+```
  
 
 ## Reading
