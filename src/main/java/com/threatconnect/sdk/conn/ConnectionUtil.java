@@ -105,7 +105,6 @@ public class ConnectionUtil
         {
             message.addHeader("Content-Type", contentType);
         }
-
     }
 
     private static String getAuthorizationText(Configuration config, String hmacSig)

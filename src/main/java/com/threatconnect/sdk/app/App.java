@@ -547,36 +547,49 @@ public abstract class App
 
     protected void addTags(AbstractGroupWriterAdapter<Group> writer, Integer groupId, List<String> tagLabels)
     {
+        List<Tag> tags = new ArrayList<>();
+        for(String label : tagLabels)
+        {
+            Tag tag = new Tag();
+            tag.setName( label );
+            tags.add(tag);
+        }
+
+        addFullTags(writer, groupId, tags);
+    }
+
+    protected void addFullTags(AbstractGroupWriterAdapter<Group> writer, Integer groupId, List<Tag> tags)
+    {
 
         if ( tagMap == null )
         {
             loadTagMap();
         }
 
-        for (String tagLabel : tagLabels)
+        for (Tag tag : tags)
         {
-            if (tagLabel.toLowerCase().contains("unknown"))
+            if (tag.getName().toLowerCase().contains("unknown"))
             {
                 continue;
             }
 
-            tagLabel = tagLabel.replace("/", "-");
+            tag.setName(tag.getName().replace("/", "-"));
 
 
-            Tag tag = tagMap.get(tagLabel);
-            if (tag == null)
+            Tag oldTag = tagMap.get(tag.getName());
+            if (oldTag == null)
             {
-                createTag(tagLabel);
-                tagMap.put(tagLabel, tag);
+                createTag(tag);
+                tagMap.put(tag.getName(), tag);
             }
 
             try
             {
-                writer.associateTag(groupId, tagLabel, getOwner());
+                writer.associateTag(groupId, tag.getName(), getOwner());
             } catch (IOException | FailedResponseException e)
             {
-                warn("Failed to associate tag %s to group id %d", tagLabel, groupId);
-                e.printStackTrace();
+                warn("Failed to associate tag %s to group id %d", tag.getName(), groupId);
+				e.printStackTrace();
             }
         }
 
@@ -618,7 +631,7 @@ public abstract class App
             } catch (IOException | FailedResponseException e)
             {
                 warn("Failed to associate tag %s to indicator %s", tagLabel, uniqueId);
-                e.printStackTrace();
+				e.printStackTrace();
             }
         }
 
@@ -649,13 +662,18 @@ public abstract class App
 
     protected Tag createTag(String tagLabel)
     {
+        Tag tag = new TagBuilder().withName(tagLabel).createTag();
+        return createTag( tag );
+    }
+
+    protected Tag createTag(Tag tag)
+    {
 
         if (tagWriter == null)
         {
             tagWriter = WriterAdapterFactory.createTagWriter(getConn());
         }
 
-        Tag tag = new TagBuilder().withName(tagLabel).createTag();
         try
         {
             ApiEntitySingleResponse response = tagWriter.create(tag, getOwner());
@@ -666,7 +684,7 @@ public abstract class App
 
         } catch (IOException | FailedResponseException e)
         {
-            // ignore
+            e.printStackTrace();
         }
 
         return null;
@@ -957,4 +975,8 @@ public abstract class App
         return "Basic " + encoded;
     }
 
+    public Map<String, Tag> getTagMap()
+    {
+        return tagMap;
+    }
 }

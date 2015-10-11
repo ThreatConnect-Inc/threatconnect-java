@@ -21,6 +21,9 @@ public class Configuration {
     private Integer resultLimit;
     private String defaultOwner;
 
+    private String proxyHost;
+    private Integer proxyPort;
+
     private final String contentType = ContentType.APPLICATION_JSON.getMimeType();
 
     public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner) {
@@ -35,6 +38,12 @@ public class Configuration {
         this.resultLimit = resultLimit;
     }
 
+    public void setProxy(String host, Integer port)
+    {
+        this.proxyHost = host;
+        this.proxyPort = port;
+    }
+
     public static Configuration build(Properties props) {
 
         String tcApiUrl = props.getProperty("connection.tcApiUrl");
@@ -42,8 +51,21 @@ public class Configuration {
         String tcApiUserSecretKey = props.getProperty("connection.tcApiUserSecretKey");
         String tcDefaultOwner = props.getProperty("connection.tcDefaultOwner");
         Integer tcResultLimit = Integer.valueOf(props.getProperty("connection.tcResultLimit"));
+        Configuration conf = new Configuration(tcApiUrl, tcApiAccessID, tcApiUserSecretKey, tcDefaultOwner, tcResultLimit);
 
-        return new Configuration(tcApiUrl, tcApiAccessID, tcApiUserSecretKey, tcDefaultOwner, tcResultLimit);
+        if ( props.getProperty("connection.tcProxyHost") != null  )
+        {
+            String tcProxyHost = props.getProperty("connection.tcProxyHost");
+            Integer tcProxyPort = Integer.valueOf(props.getProperty("connection.tcProxyPort"));
+            conf.setProxy(tcProxyHost, tcProxyPort);
+        }
+
+        return conf;
+    }
+
+    public boolean hasProxySettings()
+    {
+        return this.proxyHost != null && this.proxyPort != null;
     }
 
 
@@ -116,4 +138,15 @@ public class Configuration {
     {
         this.defaultOwner = defaultOwner;
     }
+
+    public String getProxyHost()
+    {
+        return proxyHost;
+    }
+
+    public Integer getProxyPort()
+    {
+        return proxyPort;
+    }
+
 }
