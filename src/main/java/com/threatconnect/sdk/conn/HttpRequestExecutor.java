@@ -23,6 +23,8 @@ import org.apache.http.util.EntityUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.logging.Level;
 
@@ -85,8 +87,10 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
         try {
             logger.log(Level.FINEST, response.getStatusLine().toString() );
             HttpEntity entity = response.getEntity();
+            logger.log(Level.FINEST, "Response Headers: " + Arrays.toString(response.getAllHeaders()));
+            logger.log(Level.FINEST, "Content Encoding: " + entity.getContentEncoding());
             if (entity != null) {
-                result = EntityUtils.toString(entity);
+                result = EntityUtils.toString(entity, StandardCharsets.UTF_8);
                 logger.log(Level.FINEST, "Result:" + result);
                 EntityUtils.consume(entity);
             }
@@ -161,7 +165,7 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
         HttpEntity entity = response.getEntity();
         if (entity != null) {
             try {
-                result = EntityUtils.toString(entity);
+                result = EntityUtils.toString(entity, "iso-8859-1");
                 logger.log(Level.FINEST, "Result:" + result);
                 EntityUtils.consume(entity);
             } finally {

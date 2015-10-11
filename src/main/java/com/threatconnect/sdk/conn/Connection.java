@@ -7,10 +7,12 @@ package com.threatconnect.sdk.conn;
 
 import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.config.URLConfiguration;
+import org.apache.http.HttpHost;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 /*
 import org.jboss.resteasy.core.Dispatcher;
@@ -127,7 +129,14 @@ public class Connection<T> implements Closeable
                 null,
                 SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
 
-            httpClient = HttpClients.custom().setSSLSocketFactory(sslsf).build();
+
+            HttpClientBuilder builder = HttpClients.custom().setSSLSocketFactory(sslsf);
+            if ( getConfig().hasProxySettings() )
+            {
+                builder.setProxy(new HttpHost( getConfig().getProxyHost(), getConfig().getProxyPort() ));
+            }
+
+            httpClient = builder.build();
 
         } catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException ex) {
             logger.log(Level.SEVERE, "Error creating httpClient", ex);
