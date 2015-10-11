@@ -18,6 +18,8 @@ public class Configuration {
     private String tcApiUrl;
     private String tcApiAccessID;
     private String tcApiUserSecretKey;
+
+    private String tcApiToken;
     private Integer resultLimit;
     private String defaultOwner;
 
@@ -34,6 +36,13 @@ public class Configuration {
         this.tcApiUrl = tcApiUrl;
         this.tcApiAccessID = tcApiAccessID;
         this.tcApiUserSecretKey = tcApiUserSecretKey;
+        this.defaultOwner = defaultOwner;
+        this.resultLimit = resultLimit;
+    }
+
+    public Configuration(String tcApiUrl, String tcApiToken, String defaultOwner, Integer resultLimit) {
+        this.tcApiUrl = tcApiUrl;
+        this.tcApiToken = tcApiToken;
         this.defaultOwner = defaultOwner;
         this.resultLimit = resultLimit;
     }
@@ -147,6 +156,16 @@ public class Configuration {
     public Integer getProxyPort()
     {
         return proxyPort;
+    }
+
+    public String getTcApiToken()
+    {
+        return tcApiToken;
+    }
+
+    public void setTcApiToken(String tcApiToken)
+    {
+        this.tcApiToken = tcApiToken;
     }
 
 }

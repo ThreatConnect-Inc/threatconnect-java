@@ -62,7 +62,6 @@ public abstract class App
 {
 
     private Logger logger = Logger.getGlobal();
-    private Configuration config;
     private Connection conn;
     private String owner;
     private AppUtil appUtil;
@@ -102,9 +101,19 @@ public abstract class App
     public App(AppUtil appUtil)
     {
         this.appUtil = appUtil;
-        this.config = new Configuration(this.appUtil.getTcApiPath(), this.appUtil.getTcApiAccessID(),
-                this.appUtil.getTcApiUserSecretKey(), this.appUtil.getApiDefaultOrg(),
-                this.appUtil.getApiMaxResults(getResultLimit()));
+
+        Configuration config;
+        if ( this.appUtil.getTcApiToken() != null )
+        {
+            config = new Configuration(this.appUtil.getTcApiPath(), this.appUtil.getTcApiToken(),
+                            this.appUtil.getApiDefaultOrg(), this.appUtil.getApiMaxResults(getResultLimit()));
+        }
+        else
+        {
+            config = new Configuration(this.appUtil.getTcApiPath(), this.appUtil.getTcApiAccessID(),
+                    this.appUtil.getTcApiUserSecretKey(), this.appUtil.getApiDefaultOrg(),
+                    this.appUtil.getApiMaxResults(getResultLimit()));
+        }
 
         this.owner = this.appUtil.getOwner();
 
@@ -114,7 +123,7 @@ public abstract class App
             AppUtil.configureLogger(this.appUtil.getTcLogPath() + File.separator + getLogFilename(),
                     this.appUtil.getTcLogLevel());
 
-            conn = new Connection(this.config);
+            conn = new Connection(config);
 
         } catch (IOException e)
         {

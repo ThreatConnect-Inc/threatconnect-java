@@ -76,6 +76,11 @@ public class AppUtil
         return p("api_secret_key");
     }
 
+    public String getTcApiToken() {
+        return p("tc_api_token");
+    }
+
+
    public String getApiDefaultOrg() {
         return p("api_default_org");
     }

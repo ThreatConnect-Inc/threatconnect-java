@@ -90,16 +90,21 @@ public class ConnectionUtil
     static void applyHeaders(Configuration config, AbstractHttpMessage message, String httpMethod, String urlPath, String contentType, String acceptType)
     {
 
-        Long ts = System.currentTimeMillis() / 1000L;
-        String sig = getSignature(ts, httpMethod, urlPath, null);
-        //logger.finest("sig=" + sig);
-        //logger.finest("userKey=" + config.getTcApiUserSecretKey());
-        String hmacSig = getHmacSha256Signature(sig, config.getTcApiUserSecretKey());
-        //logger.finest("calcSig=" + hmacSig);
-        String auth = getAuthorizationText(config,hmacSig);
+        if ( config.getTcApiToken() != null )
+        {
+            message.addHeader("authorization", "TC-Token " + config.getTcApiToken() );
+        }
+        else
+        {
+            Long ts = System.currentTimeMillis() / 1000L;
+            String sig = getSignature(ts, httpMethod, urlPath, null);
+            String hmacSig = getHmacSha256Signature(sig, config.getTcApiUserSecretKey());
+            String auth = getAuthorizationText(config, hmacSig);
 
-        message.addHeader("timestamp", "" + ts);
-        message.addHeader("authorization", auth);
+            message.addHeader("timestamp", "" + ts);
+            message.addHeader("authorization", auth);
+        }
+
         message.addHeader("Accept", acceptType);
         if ( contentType != null )
         {
