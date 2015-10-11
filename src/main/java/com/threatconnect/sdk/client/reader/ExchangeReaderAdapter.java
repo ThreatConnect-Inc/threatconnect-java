@@ -26,15 +26,10 @@ public class ExchangeReaderAdapter extends AbstractReaderAdapter
 
     public void downloadSpacesFile(int spaceId, String fileName, Path outputPath) throws FailedResponseException
     {
-        downloadSpacesFile(spaceId, fileName, null, outputPath);
-    }
-
-    public void downloadSpacesFile(int spaceId, String fileName, String ownerName, Path outputPath) throws FailedResponseException
-    {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("id", spaceId);
         paramMap.put("fileName", fileName);
-        try (InputStream in = getFile("v2.spaces.file", ownerName, paramMap))
+        try (InputStream in = getFile("v2.spaces.file", /*owner=*/null, paramMap, /*bypassOwnerCheck=*/true))
         {
             Files.copy(in, outputPath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e)
@@ -44,11 +39,11 @@ public class ExchangeReaderAdapter extends AbstractReaderAdapter
         }
     }
 
-    public SpaceState getSpaceState(int spaceId, String ownerName) throws IOException, FailedResponseException {
+    public SpaceState getSpaceState(int spaceId) throws IOException, FailedResponseException {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("id", spaceId);
 
-        SpaceStateResponse data = getItem("v2.spaces.state", SpaceStateResponse.class, ownerName, paramMap);
+        SpaceStateResponse data = getItem("v2.spaces.state", SpaceStateResponse.class, /*owner=*/null, paramMap, /*bypassOwnerCheck=*/true);
 
         return (SpaceState) data.getData().getData();
     }

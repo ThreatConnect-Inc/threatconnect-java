@@ -16,8 +16,10 @@ public class SpaceState
     @XmlElement(name = "spaceId", required = true)
     private Integer spaceId;
 
+    /*
     @XmlElement(name = "parameters", required = false)
     private List<JobParameter> parameters;
+    */
 
     @XmlElement(name = "stateText", required = false)
     private String stateText;
@@ -36,6 +38,7 @@ public class SpaceState
         this.spaceId = spaceId;
     }
 
+    /*
     public List<JobParameter> getParameters()
     {
         return parameters;
@@ -45,6 +48,7 @@ public class SpaceState
     {
         this.parameters = parameters;
     }
+    */
 
     public String getStateText()
     {

@@ -86,14 +86,27 @@ public abstract class AbstractClientAdapter {
 
     protected String getUrl(String propName, String ownerName) throws UnsupportedEncodingException
     {
+        return getUrl(propName, ownerName, false);
+    }
+
+    protected String getUrl(String propName, String ownerName, boolean bypassOwnerCheck) throws UnsupportedEncodingException
+    {
 
         String defaultOwner = getConn().getConfig().getDefaultOwner();
-        if( ownerName == null && defaultOwner == null )
+        if( !bypassOwnerCheck && ownerName == null && defaultOwner == null )
         {
             throw new IllegalStateException("No owner or default api owner defined");
         }
         String url = getConn().getUrlConfig().getUrl(propName);
-        return url + "?owner=" + URLEncoder.encode(ownerName == null ? defaultOwner : ownerName, "UTF-8").replace("+", "%20");
+
+        if ( bypassOwnerCheck )
+        {
+            return url;
+        }
+        else
+        {
+            return url + "?owner=" + URLEncoder.encode(ownerName == null ? defaultOwner : ownerName, "UTF-8").replace("+", "%20");
+        }
     }
 
 }

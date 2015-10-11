@@ -63,7 +63,12 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
 
     protected InputStream getFile(String propName, String ownerName, Map<String,Object> paramMap) throws IOException
     {
-        String url = getUrl(propName, ownerName);
+        return getFile(propName, ownerName, paramMap, false);
+    }
+
+    protected InputStream getFile(String propName, String ownerName, Map<String,Object> paramMap, boolean bypassOwnerCheck) throws IOException
+    {
+        String url = getUrl(propName, ownerName, bypassOwnerCheck);
 
         if (paramMap != null) {
             for(Entry<String,Object> entry : paramMap.entrySet()) {
@@ -86,8 +91,14 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
 
     protected <T extends ApiEntitySingleResponse> T getItem(String propName, Class<T> type, String ownerName, Map<String,Object> paramMap)
         throws IOException, FailedResponseException {
+        return getItem(propName, type, null, null, false);
+    }
 
-        String url = getUrl(propName, ownerName);
+    protected <T extends ApiEntitySingleResponse> T getItem(String propName, Class<T> type, String ownerName, Map<String,Object> paramMap,
+                                                            boolean bypassOwnerCheck)
+        throws IOException, FailedResponseException {
+
+        String url = getUrl(propName, ownerName, bypassOwnerCheck);
 
         if (this instanceof UrlTypeable) {
             url = url.replace("{type}", ((UrlTypeable) this).getUrlType());
