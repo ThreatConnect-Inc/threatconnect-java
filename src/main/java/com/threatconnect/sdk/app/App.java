@@ -648,14 +648,9 @@ public abstract class App
 
     protected boolean deleteTag(String tagLabel)
     {
-        if (tagWriter == null)
-        {
-            tagWriter = WriterAdapterFactory.createTagWriter(getConn());
-        }
-
         try
         {
-            ApiEntitySingleResponse response = tagWriter.delete(tagLabel, getOwner());
+            ApiEntitySingleResponse response = getTagWriter().delete(tagLabel, getOwner());
             if (response.isSuccess())
             {
                 return true;
@@ -675,17 +670,22 @@ public abstract class App
         return createTag( tag );
     }
 
-    protected Tag createTag(Tag tag)
+    protected TagWriterAdapter getTagWriter()
     {
-
         if (tagWriter == null)
         {
             tagWriter = WriterAdapterFactory.createTagWriter(getConn());
         }
 
+        return tagWriter;
+    }
+
+    protected Tag createTag(Tag tag)
+    {
+
         try
         {
-            ApiEntitySingleResponse response = tagWriter.create(tag, getOwner());
+            ApiEntitySingleResponse response = getTagWriter().create(tag, getOwner());
             if (response.isSuccess())
             {
                 return (Tag) response.getItem();
