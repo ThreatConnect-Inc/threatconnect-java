@@ -103,9 +103,9 @@ public abstract class App
         this.appUtil = appUtil;
 
         Configuration config;
-        if ( this.appUtil.getTcApiToken() != null )
+        if ( this.appUtil.getTcApiTokenKey() != null )
         {
-            config = new Configuration(this.appUtil.getTcApiPath(), this.appUtil.getTcApiToken(),
+            config = new Configuration(this.appUtil.getTcApiPath(), this.appUtil.getTcApiTokenKey(),
                             this.appUtil.getApiDefaultOrg(), this.appUtil.getApiMaxResults(getResultLimit()));
         }
         else

@@ -76,8 +76,8 @@ public class AppUtil
         return p("api_secret_key");
     }
 
-    public String getTcApiToken() {
-        return p("tc_api_token");
+    public String getTcApiTokenKey() {
+        return p("tc_api_token_key");
     }
 
 
