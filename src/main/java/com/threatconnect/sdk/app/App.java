@@ -666,11 +666,21 @@ public abstract class App
     protected Tag createTag(Tag tag)
     {
 
+        ApiEntitySingleResponse response;
         try
         {
-            ApiEntitySingleResponse response = getTagWriter().create(tag, getOwner());
+            if ( getTagMap().containsKey(tag.getName()) )
+            {
+                response = getTagWriter().update(tag, getOwner());
+            }
+            else
+            {
+                response = getTagWriter().create(tag, getOwner());
+            }
+
             if (response.isSuccess())
             {
+                getTagMap().put(tag.getName(), tag);
                 return (Tag) response.getItem();
             }
 
