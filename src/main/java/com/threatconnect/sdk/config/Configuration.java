@@ -26,6 +26,8 @@ public class Configuration {
     private String proxyHost;
     private Integer proxyPort;
 
+    private boolean activityLogEnabled;
+
     private final String contentType = ContentType.APPLICATION_JSON.getMimeType();
 
     public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner) {
@@ -168,4 +170,13 @@ public class Configuration {
         this.tcApiToken = tcApiToken;
     }
 
+    public boolean isActivityLogEnabled()
+    {
+        return activityLogEnabled;
+    }
+
+    public void setActivityLogEnabled(boolean activityLogEnabled)
+    {
+        this.activityLogEnabled = activityLogEnabled;
+    }
 }

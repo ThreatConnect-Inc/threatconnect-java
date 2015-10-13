@@ -4,6 +4,7 @@
  */
 package com.threatconnect.sdk.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.threatconnect.sdk.server.entity.format.DateSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,6 +21,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
  * @author James
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlSeeAlso(
         {

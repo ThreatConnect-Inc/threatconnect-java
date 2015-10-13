@@ -105,11 +105,13 @@ public abstract class App
         Configuration config;
         if ( this.appUtil.getTcApiTokenKey() != null )
         {
+            info("Connecting using API Token");
             config = new Configuration(this.appUtil.getTcApiPath(), this.appUtil.getTcApiTokenKey(),
                             this.appUtil.getApiDefaultOrg(), this.appUtil.getApiMaxResults(getResultLimit()));
         }
         else
         {
+            info("Connecting using API Key");
             config = new Configuration(this.appUtil.getTcApiPath(), this.appUtil.getTcApiAccessID(),
                     this.appUtil.getTcApiUserSecretKey(), this.appUtil.getApiDefaultOrg(),
                     this.appUtil.getApiMaxResults(getResultLimit()));
@@ -635,6 +637,7 @@ public abstract class App
             {
                 if (uniqueId != null)
                 {
+                    debug("Associating uniqueId " + uniqueId + " to tag: " + tagLabel);
                     writer.associateTag(uniqueId, tagLabel, getOwner());
                 }
             } catch (IOException | FailedResponseException e)
