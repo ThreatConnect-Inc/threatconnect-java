@@ -88,6 +88,10 @@ public abstract class App
         return Integer.MAX_VALUE;
     }
 
+    protected Long getRateLimitIntervalMs() {
+        return 60*1000L;
+    }
+
     public App()
     {
         this(AppUtil.getSystemInstance());
@@ -386,21 +390,21 @@ public abstract class App
     {
 
         requestTimerCounter++;
-        System.out.println(new Date() + " - Request counter=" + requestTimerCounter);
+        info("Request counter=%d", requestTimerCounter);
 
         if ( requestTimerCounter == 1 )
         {
-            requestLimitResetTimeMs = System.currentTimeMillis() + (60 * 1000L);
-            System.out.println("On first counter, set request expire to: " + new Date(requestLimitResetTimeMs));
+            requestLimitResetTimeMs = System.currentTimeMillis() + getRateLimitIntervalMs();
+            info("On first counter, set request expire to: %s", new Date(requestLimitResetTimeMs));
             return;
         }
 
         if ( requestTimerCounter >= getRateLimit() )
         {
-            long sleepMs = requestLimitResetTimeMs - System.currentTimeMillis();
+            long sleepMs = requestLimitResetTimeMs - System.currentTimeMillis() + getRateLimitIntervalMs();
             if ( sleepMs >= 0 )
             {
-                System.out.printf("RequestTimer hit rate limit, throttling requests. Limit=%d, Now=%s, ResetTime=%s, SleepMs=%d\n",
+                info("RequestTimer hit rate limit, throttling requests. Limit=%d, Now=%s, ResetTime=%s, SleepMs=%d",
                         getRateLimit(), new Date(), new Date(requestLimitResetTimeMs), sleepMs);
 
                 sleep(sleepMs);
@@ -686,11 +690,21 @@ public abstract class App
     protected Tag createTag(Tag tag)
     {
 
+        ApiEntitySingleResponse response;
         try
         {
-            ApiEntitySingleResponse response = getTagWriter().create(tag, getOwner());
+            if ( getTagMap().containsKey(tag.getName()) )
+            {
+                response = getTagWriter().update(tag, getOwner());
+            }
+            else
+            {
+                response = getTagWriter().create(tag, getOwner());
+            }
+
             if (response.isSuccess())
             {
+                getTagMap().put(tag.getName(), tag);
                 return (Tag) response.getItem();
             }
 
