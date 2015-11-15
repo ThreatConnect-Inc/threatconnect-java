@@ -199,11 +199,11 @@ public class WriterAdapterFactory {
         }
     }
 
-    public static DocumentWriterAdapter createDocumentWriterAdapter(Connection conn) {
+    public static DocumentWriterAdapter createDocumentWriter(Connection conn) {
         return new DocumentWriterAdapter(conn);
     }
 
-    public static AbstractBatchWriterAdapter<Indicator> createBatchIndicatorWriterAdapter(Connection conn) {
+    public static AbstractBatchWriterAdapter<Indicator> createBatchIndicatorWriter(Connection conn) {
         return new AbstractBatchWriterAdapter<Indicator>(conn)
         {
             @Override
@@ -214,7 +214,7 @@ public class WriterAdapterFactory {
         };
     }
 
-    public static ExchangeWriterAdapter createExchangeWriterAdapter(Connection conn) {
+    public static ExchangeWriterAdapter createExchangeWriter(Connection conn) {
         return new ExchangeWriterAdapter(conn);
     }
 }
