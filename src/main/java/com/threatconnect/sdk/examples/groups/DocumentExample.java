@@ -69,7 +69,7 @@ public class DocumentExample
 
     private static void doDownload(Connection conn)
     {
-        DocumentReaderAdapter reader = ReaderAdapterFactory.createDocumentReaderAdapter(conn);
+        DocumentReaderAdapter reader = ReaderAdapterFactory.createDocumentReader(conn);
         try {
             // -----------------------------------------------------------------------------------------------------------
             // Get Documents
@@ -94,7 +94,7 @@ public class DocumentExample
     }
 
     private static void doUpload(Connection conn) {
-        DocumentWriterAdapter writer = WriterAdapterFactory.createDocumentWriterAdapter(conn);
+        DocumentWriterAdapter writer = WriterAdapterFactory.createDocumentWriter(conn);
 
         try
         {
@@ -122,7 +122,7 @@ public class DocumentExample
 
     private static void doGet(Connection conn) throws IOException {
 
-        DocumentReaderAdapter reader = ReaderAdapterFactory.createDocumentReaderAdapter(conn);
+        DocumentReaderAdapter reader = ReaderAdapterFactory.createDocumentReader(conn);
         IterableResponse<Document> data;
         try {
             // -----------------------------------------------------------------------------------------------------------
@@ -148,7 +148,7 @@ public class DocumentExample
 
     private static void doCreate(Connection conn)
     {
-        AbstractGroupWriterAdapter<Document> writer = WriterAdapterFactory.createDocumentWriterAdapter(conn);
+        AbstractGroupWriterAdapter<Document> writer = WriterAdapterFactory.createDocumentWriter(conn);
 
         try
         {
@@ -172,7 +172,7 @@ public class DocumentExample
 
     private static void doUpdate(Connection conn)
     {
-        AbstractGroupWriterAdapter<Document> writer = WriterAdapterFactory.createDocumentWriterAdapter(conn);
+        AbstractGroupWriterAdapter<Document> writer = WriterAdapterFactory.createDocumentWriter(conn);
 
         try
         {
@@ -205,7 +205,7 @@ public class DocumentExample
 
     private static void doDelete(Connection conn)
     {
-        AbstractGroupWriterAdapter<Document> writer = WriterAdapterFactory.createDocumentWriterAdapter(conn);
+        AbstractGroupWriterAdapter<Document> writer = WriterAdapterFactory.createDocumentWriter(conn);
 
         try
         {
@@ -237,7 +237,7 @@ public class DocumentExample
 
     private static void doAddAttribute(Connection conn)
     {
-        AbstractGroupWriterAdapter<Document> writer = WriterAdapterFactory.createDocumentWriterAdapter(conn);
+        AbstractGroupWriterAdapter<Document> writer = WriterAdapterFactory.createDocumentWriter(conn);
 
         try
         {
@@ -270,7 +270,7 @@ public class DocumentExample
     }
 
     private static void doAssociateGroup(Connection conn) {
-        AbstractGroupWriterAdapter<Document> gWriter = WriterAdapterFactory.createDocumentWriterAdapter(conn);
+        AbstractGroupWriterAdapter<Document> gWriter = WriterAdapterFactory.createDocumentWriter(conn);
         AbstractGroupWriterAdapter<Threat> tWriter = WriterAdapterFactory.createThreatGroupWriter(conn);
 
         Document document = mockDocument();
@@ -311,7 +311,7 @@ public class DocumentExample
 
 
     private static void doAssociateTag(Connection conn) {
-        AbstractGroupWriterAdapter<Document> gWriter= WriterAdapterFactory.createDocumentWriterAdapter(conn);
+        AbstractGroupWriterAdapter<Document> gWriter= WriterAdapterFactory.createDocumentWriter(conn);
         TagWriterAdapter tWriter = WriterAdapterFactory.createTagWriter(conn);
 
         Document document = mockDocument();
@@ -354,7 +354,7 @@ public class DocumentExample
 
     private static void doDissociateTag(Connection conn) {
 
-        AbstractGroupWriterAdapter<Document> gWriter= WriterAdapterFactory.createDocumentWriterAdapter(conn);
+        AbstractGroupWriterAdapter<Document> gWriter= WriterAdapterFactory.createDocumentWriter(conn);
         TagWriterAdapter tWriter = WriterAdapterFactory.createTagWriter(conn);
 
         Document document = mockDocument();
@@ -410,7 +410,7 @@ public class DocumentExample
     }
 
     private static void doAssociateIndicator(Connection conn) {
-        AbstractGroupWriterAdapter<Document> gWriter= WriterAdapterFactory.createDocumentWriterAdapter(conn);
+        AbstractGroupWriterAdapter<Document> gWriter= WriterAdapterFactory.createDocumentWriter(conn);
         AbstractIndicatorWriterAdapter<Host> hWriter = WriterAdapterFactory.createHostIndicatorWriter(conn);
 
         Document document = mockDocument();
@@ -452,7 +452,7 @@ public class DocumentExample
 
 
     private static void doAssociateVictim(Connection conn) {
-        AbstractGroupWriterAdapter<Document> gWriter= WriterAdapterFactory.createDocumentWriterAdapter(conn);
+        AbstractGroupWriterAdapter<Document> gWriter= WriterAdapterFactory.createDocumentWriter(conn);
         VictimWriterAdapter vWriter = WriterAdapterFactory.createVictimWriter(conn);
 
         Document document = mockDocument();
