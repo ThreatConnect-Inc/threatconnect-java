@@ -34,7 +34,7 @@ import java.util.logging.Logger;
  *
  * @author dtineo
  */
-public class Connection<T> implements Closeable
+public class Connection implements Closeable
 {
 
     private final Logger logger = Logger.getLogger(getClass().getSimpleName());
