@@ -65,7 +65,9 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
     @Override
     public String execute(String path, HttpMethod type, Object obj) throws IOException {
 
-        path += "&createActivityLog=false";
+        path +=  ( path.contains("?") ? "&" : "?" );
+        path += "createActivityLog=" + this.conn.getConfig().isActivityLogEnabled();
+
         logger.log(Level.FINEST, "Path: " + path);
         String fullPath = this.conn.getConfig().getTcApiUrl() + path.replace("/api/","/");
 

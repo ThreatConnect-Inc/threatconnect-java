@@ -61,6 +61,13 @@ public class AppUtil
         return p("tc_api_path");
     }
 
+    public Integer getTcSpaceElementId() {
+
+        String id = p("tc_space_element_id");
+
+        return id == null ? null : Integer.valueOf(id);
+    }
+
     public String getTcApiAccessID() {
         return p("api_access_id");
     }
@@ -68,6 +75,11 @@ public class AppUtil
     public String getTcApiUserSecretKey() {
         return p("api_secret_key");
     }
+
+    public String getTcApiTokenKey() {
+        return p("tc_api_token_key");
+    }
+
 
    public String getApiDefaultOrg() {
         return p("api_default_org");

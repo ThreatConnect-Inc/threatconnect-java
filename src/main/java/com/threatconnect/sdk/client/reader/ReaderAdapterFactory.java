@@ -207,11 +207,15 @@ public class ReaderAdapterFactory {
      * @param conn connection defining api urls
      * @return and instance of DocumentReaderAdapter
      */
-    public static DocumentReaderAdapter createDocumentReaderAdapter(Connection conn) {
+    public static DocumentReaderAdapter createDocumentReader(Connection conn) {
         return new DocumentReaderAdapter(conn);
     }
 
-    public static BatchReaderAdapter<Indicator> createIndicatorBatchReaderAdapter(Connection conn) {
+    public static BatchReaderAdapter<Indicator> createIndicatorBatchReader(Connection conn) {
         return new BatchReaderAdapter<>(conn);
+    }
+
+    public static ExchangeReaderAdapter createExchangeReader(Connection conn) {
+        return new ExchangeReaderAdapter(conn);
     }
 }

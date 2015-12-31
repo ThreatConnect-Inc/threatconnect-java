@@ -62,7 +62,6 @@ public abstract class App
 {
 
     private Logger logger = Logger.getGlobal();
-    private Configuration config;
     private Connection conn;
     private String owner;
     private AppUtil appUtil;
@@ -106,9 +105,21 @@ public abstract class App
     public App(AppUtil appUtil)
     {
         this.appUtil = appUtil;
-        this.config = new Configuration(this.appUtil.getTcApiPath(), this.appUtil.getTcApiAccessID(),
-                this.appUtil.getTcApiUserSecretKey(), this.appUtil.getApiDefaultOrg(),
-                this.appUtil.getApiMaxResults(getResultLimit()));
+
+        Configuration config;
+        if ( this.appUtil.getTcApiTokenKey() != null )
+        {
+            info("Connecting using API Token");
+            config = new Configuration(this.appUtil.getTcApiPath(), this.appUtil.getTcApiTokenKey(),
+                            this.appUtil.getApiDefaultOrg(), this.appUtil.getApiMaxResults(getResultLimit()));
+        }
+        else
+        {
+            info("Connecting using API Key");
+            config = new Configuration(this.appUtil.getTcApiPath(), this.appUtil.getTcApiAccessID(),
+                    this.appUtil.getTcApiUserSecretKey(), this.appUtil.getApiDefaultOrg(),
+                    this.appUtil.getApiMaxResults(getResultLimit()));
+        }
 
         this.owner = this.appUtil.getOwner();
 
@@ -118,7 +129,7 @@ public abstract class App
             AppUtil.configureLogger(this.appUtil.getTcLogPath() + File.separator + getLogFilename(),
                     this.appUtil.getTcLogLevel());
 
-            conn = new Connection(this.config);
+            conn = new Connection(config);
 
         } catch (IOException e)
         {
@@ -429,7 +440,7 @@ public abstract class App
                 writer.dissociateTag(uniqueId, tag.getName());
             } catch (IOException | FailedResponseException e)
             {
-                // ignore
+                e.printStackTrace();
             }
         }
 
@@ -457,7 +468,9 @@ public abstract class App
         try
         {
             writer.deleteAttributes(getUniqueId(indicator), list, this.owner);
-        } catch (IOException e) { }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -489,6 +502,7 @@ public abstract class App
         } catch (IOException | FailedResponseException e)
         {
             warn("Failed to add attribute: %s, error: %s", currentAttribute.getType(), e.toString());
+            e.printStackTrace();
         }
     }
 
@@ -514,6 +528,7 @@ public abstract class App
         } catch (IOException | FailedResponseException e)
         {
             warn("Failed to add attribute: %s, error: %s", attribute.getType(), e.toString());
+            e.printStackTrace();
         }
     }
 
@@ -526,7 +541,9 @@ public abstract class App
             info("Found indicator: text=%s, ind=%s", indText, indicator);
             return indicator;
 
-        } catch (IOException | FailedResponseException e) {}
+        } catch (IOException | FailedResponseException e) {
+            e.printStackTrace();
+        }
 
         return null;
     }
@@ -587,6 +604,7 @@ public abstract class App
             } catch (IOException | FailedResponseException e)
             {
                 warn("Failed to associate tag %s to group id %d", tag.getName(), groupId);
+				e.printStackTrace();
             }
         }
 
@@ -623,11 +641,13 @@ public abstract class App
             {
                 if (uniqueId != null)
                 {
+                    debug("Associating uniqueId " + uniqueId + " to tag: " + tagLabel);
                     writer.associateTag(uniqueId, tagLabel, getOwner());
                 }
             } catch (IOException | FailedResponseException e)
             {
                 warn("Failed to associate tag %s to indicator %s", tagLabel, uniqueId);
+				e.printStackTrace();
             }
         }
 
