@@ -8,10 +8,12 @@ package com.threatconnect.sdk.client.reader;
 import com.threatconnect.sdk.client.AbstractClientAdapter;
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.response.IterableResponse;
-import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.conn.AbstractRequestExecutor;
+import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
+import com.threatconnect.sdk.util.ApiFilterParser;
+import com.threatconnect.sdk.util.ApiFilterType;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -118,6 +120,12 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
     }
 
     protected IterableResponse getItems(String propName, Class responseType, Class itemType, String ownerName, Map<String, Object> paramMap)
+            throws IOException, FailedResponseException {
+        return getItems(propName, responseType, itemType, null, null, null, false);
+    }
+
+
+    protected IterableResponse getItems(String propName, Class responseType, Class itemType, String ownerName, Map<String, Object> paramMap, ApiFilterType[] filters, boolean orParams)
         throws IOException, FailedResponseException {
 
         Integer resultLimit = getConn().getConfig().getResultLimit();
@@ -135,8 +143,14 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
                 url = url.replace(String.format("{%s}", entry.getKey()), value);
             }
         }
+        String filtersString = null;
 
-        return new IterableResponse(executor, responseType, itemType, url, resultLimit);
+        if (filters != null && filters.length > 0)
+        {
+            filtersString = ApiFilterParser.ParseApiFilters(filters);
+        }
+
+        return new IterableResponse(executor, responseType, itemType, url, resultLimit, filtersString, orParams);
     }
 
 }

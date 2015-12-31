@@ -6,6 +6,8 @@ import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.response.entity.ApiEntityListResponse;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -29,8 +31,10 @@ public class IterableResponse<V> implements Iterator<V>, Iterable<V>
     private final ObjectMapper mapper = new ObjectMapper();
     private Integer resultCount;
     private V nextItem;
+    private String filters;
+    private boolean orParams = false;
 
-    public IterableResponse(AbstractRequestExecutor executor, Class responseType, Class<V> responseItem, String path, int resultLimit)
+    public IterableResponse(AbstractRequestExecutor executor, Class responseType, Class<V> responseItem, String path, int resultLimit, String filters, boolean orParams)
     {
         this.executor = executor;
         this.responseType = responseType;
@@ -42,6 +46,8 @@ public class IterableResponse<V> implements Iterator<V>, Iterable<V>
         }
         this.resultLimit = resultLimit;
         this.index = -1;
+        this.filters = filters;
+        this.orParams = orParams;
     }
 
     @Override
@@ -113,7 +119,22 @@ public class IterableResponse<V> implements Iterator<V>, Iterable<V>
     {
 
         String url = String.format("%s&resultStart=%d&resultLimit=%d", this.path, this.index, this.resultLimit);
-        //System.err.println("url=" + url);
+        if (this.filters != null)
+        {
+            try
+            {
+                url = String.format("%s&filters=%s", url, URLEncoder.encode(this.filters, "UTF-8"));
+
+                if (this.orParams)
+                {
+                    url = String.format("%s&orParams=true", url);
+                }
+            } catch (UnsupportedEncodingException e)
+            {
+                logger.warning("Unknown encoding escaping filter string.");
+            }
+        }
+
         try
         {
             String content = executor.execute(AbstractRequestExecutor.HttpMethod.GET, url);

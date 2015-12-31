@@ -86,6 +86,7 @@ public class TagReaderAdapter
 
     }
 
+
     @Override
     public String getUrlType() {
         return "tags";

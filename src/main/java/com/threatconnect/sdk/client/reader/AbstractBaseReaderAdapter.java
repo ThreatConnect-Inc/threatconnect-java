@@ -5,12 +5,13 @@
  */
 package com.threatconnect.sdk.client.reader;
 
+import com.threatconnect.sdk.client.AbstractClientAdapter;
 import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.response.entity.ApiEntityListResponse;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
-import com.threatconnect.sdk.client.AbstractClientAdapter;
+import com.threatconnect.sdk.util.ApiFilterType;
 
 import java.io.IOException;
 import java.util.Map;
@@ -47,6 +48,10 @@ public abstract class AbstractBaseReaderAdapter<T,P> extends AbstractReaderAdapt
     public IterableResponse<T> getAll(String ownerName) throws IOException, FailedResponseException {
 
         return getItems(getUrlBasePrefix(), listType, singleItemType, ownerName, null);
+    }
+
+    public IterableResponse<T> getForFilters(String owner, boolean orParams, ApiFilterType...filters) throws IOException, FailedResponseException {
+        return getItems(getUrlBasePrefix(), listType, singleItemType, owner, null, filters, orParams);
     }
 
     public T getById(P uniqueId) throws IOException, FailedResponseException {
