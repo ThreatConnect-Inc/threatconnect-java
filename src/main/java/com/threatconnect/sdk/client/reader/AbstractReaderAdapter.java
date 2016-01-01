@@ -132,7 +132,7 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
 
     protected IterableResponse getItems(String propName, Class responseType, Class itemType, String ownerName, Map<String, Object> paramMap)
             throws IOException, FailedResponseException {
-        return getItems(propName, responseType, itemType, null, null, null, false);
+        return getItems(propName, responseType, itemType, ownerName, paramMap, null, false);
     }
 
 

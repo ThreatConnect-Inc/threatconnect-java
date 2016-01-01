@@ -19,7 +19,7 @@ public abstract class ApiFilterType <T> {
     private OPERATOR operator;
 
     public enum OPERATOR {
-        GT(">"), LT("<"), EQ("="), NOT("^");
+        GT(">"), LT("<"), EQ("="), STARTS_WITH("^");
 
         public String representation;
 
@@ -72,9 +72,9 @@ public abstract class ApiFilterType <T> {
         return this;
     }
 
-    private ApiFilterType not(T value)
+    private ApiFilterType startsWith(T value)
     {
-        this.operator = OPERATOR.NOT;
+        this.operator = OPERATOR.STARTS_WITH;
         this.value = stringifyValue(value);
 
         return this;
@@ -115,9 +115,9 @@ public abstract class ApiFilterType <T> {
 
     }
 
-    public static _EQNOTFilter<String> filterSummary()
+    public static _STARTSWITHFilter<String> filterSummary()
     {
-        return new _EQNOTFilter<>("summary");
+        return new _STARTSWITHFilter<>("summary");
 
     }
 
@@ -161,9 +161,9 @@ public abstract class ApiFilterType <T> {
 
     }
 
-    public static _EQNOTFilter<String> filterName()
+    public static _STARTSWITHFilter<String> filterName()
     {
-        return new _EQNOTFilter<>("name");
+        return new _STARTSWITHFilter<>("name");
 
     }
 
@@ -231,9 +231,9 @@ public abstract class ApiFilterType <T> {
         }
     }
 
-    public static class _EQNOTFilter<T> extends ApiFilterType<T>
+    public static class _STARTSWITHFilter<T> extends ApiFilterType<T>
     {
-        public _EQNOTFilter(String filterName)
+        public _STARTSWITHFilter(String filterName)
         {
             super(filterName);
         }
@@ -243,9 +243,9 @@ public abstract class ApiFilterType <T> {
             return super.equal(value);
         }
 
-        public ApiFilterType not(T value)
+        public ApiFilterType startsWith(T value)
         {
-            return super.not(value);
+            return super.startsWith(value);
         }
     }
 
