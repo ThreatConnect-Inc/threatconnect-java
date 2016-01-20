@@ -12,12 +12,15 @@ import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Address;
 import com.threatconnect.sdk.server.entity.Email;
+import com.threatconnect.sdk.server.entity.EmailAddress;
 import com.threatconnect.sdk.server.entity.File;
 import com.threatconnect.sdk.server.entity.Host;
 import com.threatconnect.sdk.server.entity.Indicator;
 import com.threatconnect.sdk.server.entity.Url;
 import com.threatconnect.sdk.server.response.entity.AddressListResponse;
 import com.threatconnect.sdk.server.response.entity.AddressResponse;
+import com.threatconnect.sdk.server.response.entity.EmailAddressListResponse;
+import com.threatconnect.sdk.server.response.entity.EmailAddressResponse;
 import com.threatconnect.sdk.server.response.entity.EmailListResponse;
 import com.threatconnect.sdk.server.response.entity.EmailResponse;
 import com.threatconnect.sdk.server.response.entity.FileListResponse;
@@ -83,31 +86,31 @@ public abstract class AbstractIndicatorAssociateReaderAdapter<P> extends Abstrac
     }
 
     @Override
-    public IterableResponse<Email> getAssociatedIndicatorEmails(P uniqueId) throws IOException, FailedResponseException {
-        return getAssociatedIndicatorEmails(uniqueId, null); 
+    public IterableResponse<EmailAddress> getAssociatedIndicatorEmailAddresses(P uniqueId) throws IOException, FailedResponseException {
+        return getAssociatedIndicatorEmailAddresses(uniqueId, null);
     }
 
     @Override
-    public IterableResponse<Email> getAssociatedIndicatorEmails(P uniqueId, String ownerName)
+    public IterableResponse<EmailAddress> getAssociatedIndicatorEmailAddresses(P uniqueId, String ownerName)
             throws IOException, FailedResponseException {
 
         Map<String,Object> map = createParamMap("id", uniqueId);
-        return getItems(getUrlBasePrefix() + ".byId.indicators.emailAddresses", EmailListResponse.class, Email.class, ownerName, map);
+        return getItems(getUrlBasePrefix() + ".byId.indicators.emailAddresses", EmailAddressListResponse.class, Email.class, ownerName, map);
     }
 
     @Override
-    public Email getAssociatedIndicatorEmail(P uniqueId, String emailAddress) throws IOException, FailedResponseException { 
-        return getAssociatedIndicatorEmail(uniqueId, emailAddress, null); 
+    public EmailAddress getAssociatedIndicatorEmailAddress(P uniqueId, String emailAddress) throws IOException, FailedResponseException {
+        return getAssociatedIndicatorEmailAddress(uniqueId, emailAddress, null);
     }
 
     @Override
-    public Email getAssociatedIndicatorEmail(P uniqueId, String emailAddress, String ownerName) 
+    public EmailAddress getAssociatedIndicatorEmailAddress(P uniqueId, String emailAddress, String ownerName)
             throws IOException, FailedResponseException {
 
         Map<String,Object> map = createParamMap("id", uniqueId, "indicatorId", emailAddress);
-        EmailResponse data = getItem(getUrlBasePrefix() + ".byId.indicators.emailAddresses.byIndicatorId", EmailResponse.class, ownerName, map);
+        EmailAddressResponse data = getItem(getUrlBasePrefix() + ".byId.indicators.emailAddresses.byIndicatorId", EmailAddressResponse.class, ownerName, map);
 
-        return (Email)data.getData().getData();
+        return (EmailAddress)data.getData().getData();
     }
 
     @Override

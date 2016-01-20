@@ -5,14 +5,20 @@
  */
 package com.threatconnect.sdk.client.reader;
 
+import com.threatconnect.sdk.client.AbstractClientAdapter;
 import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Owner;
+import com.threatconnect.sdk.server.entity.OwnerMetric;
+import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.server.response.entity.OwnerListResponse;
+import com.threatconnect.sdk.server.response.entity.OwnerMetricListResponse;
+import com.threatconnect.sdk.server.response.entity.OwnerMetricResponse;
 import com.threatconnect.sdk.server.response.entity.OwnerResponse;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  *
@@ -37,6 +43,18 @@ public class OwnerReaderAdapter extends AbstractReaderAdapter {
         OwnerResponse data = getItem("v2.owners.mine", OwnerResponse.class);
 
         return (Owner) data.getData().getData();
+    }
+
+    public IterableResponse<OwnerMetric> getOwnerMetrics() throws IOException, FailedResponseException
+    {
+        return getItems("v2.owners.metrics", OwnerMetricListResponse.class, OwnerMetric.class);
+    }
+
+    public IterableResponse<OwnerMetric> getOwnerMetrics(Integer id) throws IOException, FailedResponseException
+    {
+        Map<String, Object> map = AbstractClientAdapter.createParamMap("id", id);
+
+        return getItems("v2.owners.byId.metrics", OwnerMetricListResponse.class, OwnerMetric.class, null, map);
     }
 
 }

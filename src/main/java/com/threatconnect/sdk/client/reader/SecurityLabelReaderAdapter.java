@@ -16,6 +16,7 @@ import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Address;
 import com.threatconnect.sdk.server.entity.Adversary;
 import com.threatconnect.sdk.server.entity.Email;
+import com.threatconnect.sdk.server.entity.EmailAddress;
 import com.threatconnect.sdk.server.entity.File;
 import com.threatconnect.sdk.server.entity.Group;
 import com.threatconnect.sdk.server.entity.Host;
@@ -238,23 +239,23 @@ public class SecurityLabelReaderAdapter
     }
 
     @Override
-    public IterableResponse<Email> getAssociatedIndicatorEmails(String uniqueId) throws IOException, FailedResponseException {
-        return indAssocReader.getAssociatedIndicatorEmails(uniqueId);
+    public IterableResponse<EmailAddress> getAssociatedIndicatorEmailAddresses(String uniqueId) throws IOException, FailedResponseException {
+        return indAssocReader.getAssociatedIndicatorEmailAddresses(uniqueId);
     }
 
     @Override
-    public IterableResponse<Email> getAssociatedIndicatorEmails(String uniqueId, String ownerName) throws IOException, FailedResponseException {
-        return indAssocReader.getAssociatedIndicatorEmails(uniqueId, ownerName);
+    public IterableResponse<EmailAddress> getAssociatedIndicatorEmailAddresses(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+        return indAssocReader.getAssociatedIndicatorEmailAddresses(uniqueId, ownerName);
     }
 
     @Override
-    public Email getAssociatedIndicatorEmail(String uniqueId, String emailAddress) throws IOException, FailedResponseException {
-        return indAssocReader.getAssociatedIndicatorEmail(uniqueId, emailAddress);
+    public EmailAddress getAssociatedIndicatorEmailAddress(String uniqueId, String emailAddress) throws IOException, FailedResponseException {
+        return indAssocReader.getAssociatedIndicatorEmailAddress(uniqueId, emailAddress);
     }
 
     @Override
-    public Email getAssociatedIndicatorEmail(String uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
-        return indAssocReader.getAssociatedIndicatorEmail(uniqueId, emailAddress, ownerName);
+    public EmailAddress getAssociatedIndicatorEmailAddress(String uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
+        return indAssocReader.getAssociatedIndicatorEmailAddress(uniqueId, emailAddress, ownerName);
     }
 
     @Override

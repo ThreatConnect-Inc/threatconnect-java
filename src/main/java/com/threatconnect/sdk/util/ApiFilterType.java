@@ -29,7 +29,7 @@ public abstract class ApiFilterType <T> {
         }
     }
 
-    private ApiFilterType(String filterName)
+    protected ApiFilterType(String filterName)
     {
         name = filterName;
     }
@@ -49,14 +49,14 @@ public abstract class ApiFilterType <T> {
     }
 
 
-    private ApiFilterType greaterThan(T value)
+    protected ApiFilterType greaterThan(T value)
     {
         this.operator = OPERATOR.GT;
         this.value = stringifyValue(value);
         return this;
     }
 
-    private ApiFilterType lessThan(T value)
+    protected ApiFilterType lessThan(T value)
     {
         this.operator = OPERATOR.LT;
         this.value = stringifyValue(value);
@@ -64,7 +64,7 @@ public abstract class ApiFilterType <T> {
         return this;
     }
 
-    private ApiFilterType equal(T value)
+    protected ApiFilterType equal(T value)
     {
         this.operator = OPERATOR.EQ;
         this.value = stringifyValue(value);
@@ -72,7 +72,7 @@ public abstract class ApiFilterType <T> {
         return this;
     }
 
-    private ApiFilterType startsWith(T value)
+    protected ApiFilterType startsWith(T value)
     {
         this.operator = OPERATOR.STARTS_WITH;
         this.value = stringifyValue(value);
@@ -80,7 +80,7 @@ public abstract class ApiFilterType <T> {
         return this;
     }
 
-    private String stringifyValue(T value)
+    protected String stringifyValue(T value)
     {
         if (value instanceof Date)
         {

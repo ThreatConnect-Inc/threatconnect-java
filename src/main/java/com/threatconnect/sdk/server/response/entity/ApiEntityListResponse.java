@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlSeeAlso({AddressListResponse.class, AdversaryListResponse.class, AttributeListResponse.class, DnsResolutionListResponse.class, EmailAddressListResponse.class, EmailListResponse.class, FileListResponse.class, 
     HostListResponse.class, GroupListResponse.class, IncidentListResponse.class, IndicatorListResponse.class, OwnerListResponse.class, TagListResponse.class, SecurityLabelListResponse.class, ThreatListResponse.class, 
-    UrlListResponse.class, VictimListResponse.class})
+    UrlListResponse.class, VictimListResponse.class, ObservationListResponse.class, OwnerMetricListResponse.class})
 public abstract class ApiEntityListResponse<T, S extends ApiEntityListResponseData<T>>
 {
     @XmlElement(name = "Status", required = true)

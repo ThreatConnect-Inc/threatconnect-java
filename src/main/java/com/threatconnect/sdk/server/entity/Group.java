@@ -10,6 +10,9 @@ import com.threatconnect.sdk.server.entity.format.DateSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -23,7 +26,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlAccessorType(XmlAccessType.FIELD)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @XmlSeeAlso({Adversary.class, Email.class, Incident.class, Signature.class, Threat.class})
-public class Group
+public class Group implements AttributeHolder
 {
 
     public Group(Integer id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink)
@@ -36,6 +39,7 @@ public class Group
         this.dateAdded = dateAdded;
         this.webLink = webLink;
     }
+
 
     public static enum Type {
           Adversary
@@ -60,7 +64,9 @@ public class Group
     private Date dateAdded;
     @XmlElement(name = "WebLink", required = false)
     private String webLink;
-    
+
+    private Map<String,String> attributes = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+
     protected Group()
     {
     }
@@ -135,6 +141,12 @@ public class Group
     public void setWebLink(String webLink)
     {
         this.webLink = webLink;
+    }
+
+    @Override
+    public Map<String, String> getAttributes()
+    {
+        return attributes;
     }
 
     @Override

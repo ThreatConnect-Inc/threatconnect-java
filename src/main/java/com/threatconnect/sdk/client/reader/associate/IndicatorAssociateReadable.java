@@ -8,6 +8,7 @@ package com.threatconnect.sdk.client.reader.associate;
 import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.server.entity.Address;
 import com.threatconnect.sdk.server.entity.Email;
+import com.threatconnect.sdk.server.entity.EmailAddress;
 import com.threatconnect.sdk.server.entity.File;
 import com.threatconnect.sdk.server.entity.Host;
 import com.threatconnect.sdk.server.entity.Indicator;
@@ -34,14 +35,14 @@ public interface IndicatorAssociateReadable<P> {
     public Address getAssociatedIndicatorAddress(P uniqueId, String ipAddress, String ownerName)
             throws Exception;
 
-    public IterableResponse<Email> getAssociatedIndicatorEmails(P uniqueId) throws Exception;
+    public IterableResponse<EmailAddress> getAssociatedIndicatorEmailAddresses(P uniqueId) throws Exception;
 
-    public IterableResponse<Email> getAssociatedIndicatorEmails(P uniqueId, String ownerName)
+    public IterableResponse<EmailAddress> getAssociatedIndicatorEmailAddresses(P uniqueId, String ownerName)
             throws Exception;
 
-    public Email getAssociatedIndicatorEmail(P uniqueId, String emailAddress) throws Exception;
+    public EmailAddress getAssociatedIndicatorEmailAddress(P uniqueId, String emailAddress) throws Exception;
 
-    public Email getAssociatedIndicatorEmail(P uniqueId, String emailAddress, String ownerName)
+    public EmailAddress getAssociatedIndicatorEmailAddress(P uniqueId, String emailAddress, String ownerName)
             throws Exception;
 
     public IterableResponse<File> getAssociatedIndicatorFiles(P uniqueId) throws Exception;

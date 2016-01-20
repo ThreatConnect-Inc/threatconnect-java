@@ -4,6 +4,8 @@ package com.threatconnect.sdk.conn;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -14,6 +16,7 @@ public abstract class AbstractRequestExecutor
 
     protected final Logger logger = Logger.getLogger(getClass().getSimpleName());
     protected final Connection conn;
+    protected List<ApiCallListener> apiCallListeners = new ArrayList<>();
 
     public static enum HttpMethod {
         GET, PUT, DELETE, POST
@@ -37,5 +40,14 @@ public abstract class AbstractRequestExecutor
         return execute(path, method, null);
     }
 
+    public void addApiCallListener(ApiCallListener listener)
+    {
+        apiCallListeners.add(listener);
+    }
+
+    public boolean removeApiCallListener(ApiCallListener listener)
+    {
+        return apiCallListeners.remove(listener);
+    }
 
 }

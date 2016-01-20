@@ -9,7 +9,13 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.threatconnect.sdk.server.entity.format.DateSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.threatconnect.sdk.server.entity.format.DateTimeSerializer;
+
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -17,7 +23,6 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 
 
 /**
- *
  * @author James
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -25,9 +30,9 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlSeeAlso(
         {
-            Address.class, EmailAddress.class, File.class, Host.class, Url.class
+                Address.class, EmailAddress.class, File.class, Host.class, Url.class
         })
-public class Indicator
+public class Indicator implements AttributeHolder
 {
 
     public Indicator(Integer id, Owner owner, String ownerName, String type, Date dateAdded, Date lastModified, Double rating, Double confidence, Double threatAssessRating, Double threatAssessConfidence, String webLink, String source, String description, String summary)
@@ -48,12 +53,11 @@ public class Indicator
         this.summary = summary;
     }
 
-    public static enum Type {
-         Address
-       , EmailAddress
-       , File
-       , Host
-       , Url
+
+
+    public static enum Type
+    {
+        Address, EmailAddress, File, Host, Url
     }
 
     @XmlElement(name = "Id", required = false)
@@ -86,6 +90,25 @@ public class Indicator
     private String description;
     @XmlElement(name = "Summary", required = false)
     private String summary;
+
+   /*
+    @XmlElement(name = "Attributes", required = false)
+    private List<Attribute> attribute = null;
+    */
+
+    @XmlElement(name = "observationCount", required = false)
+    private Integer observationCount = null;
+
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+    @XmlElement(name = "falsePositiveCount", required = false)
+    private Integer falsePositiveCount;
+
+    @JsonSerialize(using = DateTimeSerializer.class, include = JsonSerialize.Inclusion.NON_NULL)
+    @XmlElement(name = "falsePositiveLastReported", required = false)
+    private Date falsePositiveLastReported;
+
+
+    private Map<String, String> attributes = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
     public Indicator()
     {
@@ -233,4 +256,40 @@ public class Indicator
         this.summary = summary;
     }
 
+    public Integer getObservationCount()
+    {
+        return observationCount;
+    }
+
+    public void setObservationCount(Integer observationCount)
+    {
+        this.observationCount = observationCount;
+    }
+
+    public Integer getFalsePositiveCount()
+    {
+        return falsePositiveCount;
+    }
+
+    public void setFalsePositiveCount(Integer falsePositiveCount)
+    {
+        this.falsePositiveCount = falsePositiveCount;
+    }
+
+    public Date getFalsePositiveLastReported()
+    {
+        return falsePositiveLastReported;
+    }
+
+    public void setFalsePositiveLastReported(Date falsePositiveLastReported)
+    {
+        this.falsePositiveLastReported = falsePositiveLastReported;
+    }
+
+    @Override
+    @JsonIgnore
+    public Map<String, String> getAttributes()
+    {
+        return attributes;
+    }
 }

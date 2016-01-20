@@ -40,7 +40,7 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
         super(conn);
     }
 
-    private static HttpRequestBase getBase(String fullPath, HttpMethod type) {
+    private HttpRequestBase getBase(String fullPath, HttpMethod type) {
 
         switch(type) {
             case GET:
@@ -52,6 +52,7 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
             case DELETE:
                 return new HttpDelete(fullPath);
         }
+
 
         return null;
     }
@@ -83,7 +84,9 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
         logger.log(Level.FINEST, "HeaderPath: " + headerPath);
         ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, type.toString(), headerPath);
         logger.log(Level.FINEST, "Request: " + httpBase.getRequestLine());
+        long startMs = System.currentTimeMillis();
         CloseableHttpResponse response = this.conn.getApiClient().execute(httpBase);
+        notifyListeners( type, fullPath, (System.currentTimeMillis()-startMs));
         String result = null;
 
         try {
@@ -101,6 +104,14 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
         }
 
         return result;
+    }
+
+    private void notifyListeners(HttpMethod type, String fullPath, long ms)
+    {
+        for(ApiCallListener l : apiCallListeners)
+        {
+            l.apiCall(type.toString(), fullPath, ms);
+        }
     }
 
     /**

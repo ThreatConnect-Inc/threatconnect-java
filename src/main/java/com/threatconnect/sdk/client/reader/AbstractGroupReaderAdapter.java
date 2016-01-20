@@ -303,23 +303,23 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     }
 
     @Override
-    public IterableResponse<Email> getAssociatedIndicatorEmails(Integer uniqueId) throws IOException, FailedResponseException {
-        return indAssocReader.getAssociatedIndicatorEmails(uniqueId);
+    public IterableResponse<EmailAddress> getAssociatedIndicatorEmailAddresses(Integer uniqueId) throws IOException, FailedResponseException {
+        return indAssocReader.getAssociatedIndicatorEmailAddresses(uniqueId);
     }
 
     @Override
-    public IterableResponse<Email> getAssociatedIndicatorEmails(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
-        return indAssocReader.getAssociatedIndicatorEmails(uniqueId, ownerName);
+    public IterableResponse<EmailAddress> getAssociatedIndicatorEmailAddresses(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+        return indAssocReader.getAssociatedIndicatorEmailAddresses(uniqueId, ownerName);
     }
 
     @Override
-    public Email getAssociatedIndicatorEmail(Integer uniqueId, String emailAddress) throws IOException, FailedResponseException {
-        return indAssocReader.getAssociatedIndicatorEmail(uniqueId, emailAddress);
+    public EmailAddress getAssociatedIndicatorEmailAddress(Integer uniqueId, String emailAddress) throws IOException, FailedResponseException {
+        return indAssocReader.getAssociatedIndicatorEmailAddress(uniqueId, emailAddress);
     }
 
     @Override
-    public Email getAssociatedIndicatorEmail(Integer uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
-        return indAssocReader.getAssociatedIndicatorEmail(uniqueId, emailAddress, ownerName);
+    public EmailAddress getAssociatedIndicatorEmailAddress(Integer uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
+        return indAssocReader.getAssociatedIndicatorEmailAddress(uniqueId, emailAddress, ownerName);
     }
 
     @Override

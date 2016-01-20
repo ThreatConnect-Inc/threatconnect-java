@@ -297,7 +297,7 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
             }
         }
 
-        T result = null;
+        T result;
         try {
             logger.log(Level.FINEST, "Calling url=" + url);
             String content = executor.execute(url, requestType, saveObject);
