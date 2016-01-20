@@ -191,7 +191,7 @@ Association types express realtionships between entities and are Adversaries, Do
 
 ## Source Structure
 
-**Location: src/main/java/com/cyber2/api/lib**
+**Location: src/main/java/com/threatconnect/sdk**
 
     |-> client
         |-> reader    (Classes for reading from API, see ReaderAdapterFactory )
