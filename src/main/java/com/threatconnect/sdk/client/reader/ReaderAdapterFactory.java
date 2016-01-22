@@ -106,7 +106,7 @@ public class ReaderAdapterFactory {
         };
     }
 
-    public static AbstractIndicatorReaderAdapter<File> createFileIndicatorReader(Connection conn) {
+    public static FileIndicatorReaderAdapter createFileIndicatorReader(Connection conn) {
         return new FileIndicatorReaderAdapter(conn);
     }
 

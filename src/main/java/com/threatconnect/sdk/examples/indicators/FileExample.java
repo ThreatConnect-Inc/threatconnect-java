@@ -2,10 +2,12 @@ package com.threatconnect.sdk.examples.indicators;
 
 import com.threatconnect.sdk.client.fluent.AttributeBuilder;
 import com.threatconnect.sdk.client.reader.AbstractIndicatorReaderAdapter;
+import com.threatconnect.sdk.client.reader.FileIndicatorReaderAdapter;
 import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
 import com.threatconnect.sdk.client.writer.AbstractGroupWriterAdapter;
 import com.threatconnect.sdk.client.writer.AbstractIndicatorWriterAdapter;
+import com.threatconnect.sdk.client.writer.FileIndicatorWriterAdapter;
 import com.threatconnect.sdk.client.writer.TagWriterAdapter;
 import com.threatconnect.sdk.client.writer.VictimWriterAdapter;
 import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
@@ -14,6 +16,7 @@ import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Attribute;
 import com.threatconnect.sdk.server.entity.File;
 import com.threatconnect.sdk.client.fluent.FileBuilder;
+import com.threatconnect.sdk.server.entity.FileOccurrence;
 import com.threatconnect.sdk.server.entity.Host;
 import com.threatconnect.sdk.client.fluent.HostBuilder;
 import com.threatconnect.sdk.server.entity.Indicator;
@@ -28,15 +31,19 @@ import com.threatconnect.sdk.client.fluent.VictimBuilder;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Random;
 
-public class FileExample {
+public class FileExample
+{
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
 
         Connection conn = null;
 
-        try {
+        try
+        {
 
             System.getProperties().setProperty("threatconnect.api.config", "/config.properties");
             conn = new Connection();
@@ -61,102 +68,158 @@ public class FileExample {
 
             doDissociateTag(conn);
 
-        } catch (IOException ex ) {
+            doFileOccurrences(conn);
+
+        } catch (IOException ex)
+        {
             System.err.println("Error: " + ex);
-        } finally {
-            if (conn != null) {
+        } finally
+        {
+            if (conn != null)
+            {
                 conn.disconnect();
             }
         }
     }
 
-    private static void doGet(Connection conn) throws IOException {
+    private static void doFileOccurrences(Connection conn) throws IOException
+    {
+        FileIndicatorReaderAdapter reader = ReaderAdapterFactory.createFileIndicatorReader(conn);
+        FileIndicatorWriterAdapter writer = WriterAdapterFactory.createFileIndicatorWriter(conn);
+
+        String md5 = "5BA4BE3E74278220DE5EF41E61EB95B6";
+
+        FileOccurrence occurrence = new FileOccurrence();
+        occurrence.setFileName("bad.exe");
+        occurrence.setDate(new Date());
+        occurrence.setPath("c:\\temp\\bad.exe");
+
+        occurrence = writer.createFileOccurrence(md5, occurrence, "System");
+        System.err.println("fileOccurrence created, id=" + occurrence.getId());
+
+        occurrence = reader.getFileOccurrence(md5, occurrence.getId());
+        System.err.println("fileOccurrence read, id=" + occurrence.getId());
+
+        for (FileOccurrence fo : reader.getFileOccurrences(md5))
+        {
+            System.err.println("fileOccurrences read, id=" + fo.getId());
+        }
+
+        occurrence.setPath("c:\\temp\\new-directory2\\bad.exe");
+        occurrence = writer.updateFileOccurrence(md5, occurrence);
+        System.err.println("fileOccurrence updated, id=" + occurrence.getId());
+
+        ApiEntitySingleResponse response = writer.deleteFileOccurrence(md5, occurrence);
+        System.err.println("fileOccurrence deleted, successful? " + response.isSuccess());
+
+    }
+
+    private static void doGet(Connection conn) throws IOException
+    {
 
         AbstractIndicatorReaderAdapter<File> reader = ReaderAdapterFactory.createFileIndicatorReader(conn);
         IterableResponse<File> data;
-        try {
+        try
+        {
             // -----------------------------------------------------------------------------------------------------------
             // Get File
             // -----------------------------------------------------------------------------------------------------------
             data = reader.getAll();
-            for (Indicator g : data) {
+            for (Indicator g : data)
+            {
                 System.out.println("File: " + g);
             }
-        } catch (FailedResponseException ex) {
+        } catch (FailedResponseException ex)
+        {
             System.err.println("Error: " + ex);
         }
     }
 
-    private static void doCreate(Connection conn) {
+    private static void doCreate(Connection conn)
+    {
         AbstractIndicatorWriterAdapter<File> writer = WriterAdapterFactory.createFileIndicatorWriter(conn);
 
         File file = createTestFile();
 
-        try {
+        try
+        {
             // -----------------------------------------------------------------------------------------------------------
             // Create File
             // -----------------------------------------------------------------------------------------------------------
             System.out.println("Before: " + file.toString());
             ApiEntitySingleResponse<File, ?> response = writer.create(file);
 
-            if (response.isSuccess()) {
+            if (response.isSuccess())
+            {
                 File savedFile = response.getItem();
                 System.out.println("Saved: " + savedFile.toString());
 
-            } else {
+            } else
+            {
                 System.err.println("Error: " + response.getMessage());
 
             }
 
-        } catch (IOException | FailedResponseException ex) {
+        } catch (IOException | FailedResponseException ex)
+        {
             System.err.println("Error: " + ex.toString());
         }
 
     }
 
-    private static void doDelete(Connection conn) {
+    private static void doDelete(Connection conn)
+    {
         AbstractIndicatorWriterAdapter<File> writer = WriterAdapterFactory.createFileIndicatorWriter(conn);
 
         File file = createTestFile();
 
-        try {
+        try
+        {
             // -----------------------------------------------------------------------------------------------------------
             // Update File
             // -----------------------------------------------------------------------------------------------------------
             ApiEntitySingleResponse<File, ?> createResponse = writer.create(file);
-            if (createResponse.isSuccess()) {
+            if (createResponse.isSuccess())
+            {
                 System.out.println("Saved: " + createResponse.getItem());
 
                 // -----------------------------------------------------------------------------------------------------------
                 // Delete File
                 // -----------------------------------------------------------------------------------------------------------
                 ApiEntitySingleResponse<File, ?> deleteResponse = writer.delete(createResponse.getItem().getMd5());
-                if (deleteResponse.isSuccess()) {
+                if (deleteResponse.isSuccess())
+                {
                     System.out.println("Deleted: " + createResponse.getItem());
-                } else {
+                } else
+                {
                     System.err.println("Delete Failed. Cause: " + deleteResponse.getMessage());
                 }
-            } else {
+            } else
+            {
                 System.err.println("Create Failed. Cause: " + createResponse.getMessage());
             }
 
-        } catch (IOException | FailedResponseException ex) {
+        } catch (IOException | FailedResponseException ex)
+        {
             System.err.println("Error: " + ex.toString());
         }
 
     }
 
-    private static void doUpdate(Connection conn) {
+    private static void doUpdate(Connection conn)
+    {
         AbstractIndicatorWriterAdapter<File> writer = WriterAdapterFactory.createFileIndicatorWriter(conn);
 
         File file = createTestFile();
 
-        try {
+        try
+        {
             // -----------------------------------------------------------------------------------------------------------
             // Create File
             // -----------------------------------------------------------------------------------------------------------
             ApiEntitySingleResponse<File, ?> createResponse = writer.create(file);
-            if (createResponse.isSuccess()) {
+            if (createResponse.isSuccess())
+            {
                 System.out.println("Created File: " + createResponse.getItem());
 
                 // -----------------------------------------------------------------------------------------------------------
@@ -167,22 +230,27 @@ public class FileExample {
                 System.out.println("Saving Updated File: " + updatedFile);
 
                 ApiEntitySingleResponse<File, ?> updateResponse = writer.update(updatedFile);
-                if (updateResponse.isSuccess()) {
+                if (updateResponse.isSuccess())
+                {
                     System.out.println("Updated File: " + updateResponse.getItem());
-                } else {
+                } else
+                {
                     System.err.println("Failed to Update File: " + updateResponse.getMessage());
                 }
-            } else {
+            } else
+            {
                 System.err.println("Failed to Create File: " + createResponse.getMessage());
             }
 
-        } catch (IOException | FailedResponseException ex) {
+        } catch (IOException | FailedResponseException ex)
+        {
             System.err.println("Error: " + ex.toString());
         }
 
     }
 
-    private static File createTestFile() {
+    private static File createTestFile()
+    {
         Integer pseudoRand = (new Random().nextInt(1000));
         File file = new FileBuilder().createFile();
         file.setMd5(pseudoRand + "f44fec1e92a71d3e9e77456ba80d1");
@@ -193,7 +261,8 @@ public class FileExample {
         return file;
     }
 
-    private static Attribute createTestAttribute() {
+    private static Attribute createTestAttribute()
+    {
         Attribute attribute = new AttributeBuilder().createAttribute();
         attribute.setSource("Test Source");
         attribute.setDisplayed(true);
@@ -203,18 +272,20 @@ public class FileExample {
         return attribute;
     }
 
-    private static Host createTestHost() {
+    private static Host createTestHost()
+    {
         Host host = new HostBuilder().createHost();
         host.setOwnerName("System");
         host.setDescription("Test Host");
         host.setHostName("www.bad-hostname.com");
-        host.setRating( 5.0 );
+        host.setRating(5.0);
         host.setConfidence(98.0);
 
         return host;
     }
 
-    private static Threat createTestThreat() {
+    private static Threat createTestThreat()
+    {
         Threat threat = new ThreatBuilder().createThreat();
         threat.setOwnerName("System");
         threat.setName("Test Threat");
@@ -222,7 +293,8 @@ public class FileExample {
         return threat;
     }
 
-    private static Tag createTestTag() {
+    private static Tag createTestTag()
+    {
         Tag tag = new TagBuilder().createTag();
         tag.setName("Test-Tag");
         tag.setDescription("Test Tag Description");
@@ -230,7 +302,8 @@ public class FileExample {
         return tag;
     }
 
-    private static SecurityLabel createTestSecurityLabel() {
+    private static SecurityLabel createTestSecurityLabel()
+    {
         SecurityLabel securityLabel = new SecurityLabelBuilder().createSecurityLabel();
         securityLabel.setName("Test-SecurityLabel");
         securityLabel.setDescription("Test SecurityLabel Description");
@@ -238,7 +311,8 @@ public class FileExample {
         return securityLabel;
     }
 
-    private static Victim createTestVictim() {
+    private static Victim createTestVictim()
+    {
         Victim victim = new VictimBuilder().createVictim();
         victim.setOrg("System");
         victim.setName("Test API Victim");
@@ -246,58 +320,68 @@ public class FileExample {
 
         return victim;
     }
- 
-    private static void doAddAttribute(Connection conn) {
+
+    private static void doAddAttribute(Connection conn)
+    {
         AbstractIndicatorWriterAdapter<File> writer = WriterAdapterFactory.createFileIndicatorWriter(conn);
 
         File file = createTestFile();
         Attribute attribute = createTestAttribute();
 
-        try {
+        try
+        {
             // -----------------------------------------------------------------------------------------------------------
             // Create File
             // -----------------------------------------------------------------------------------------------------------
             ApiEntitySingleResponse<File, ?> createResponse = writer.create(file);
-            if (createResponse.isSuccess()) {
+            if (createResponse.isSuccess())
+            {
                 System.out.println("Created File: " + createResponse.getItem());
 
                 // -----------------------------------------------------------------------------------------------------------
                 // Add Attribute
                 // -----------------------------------------------------------------------------------------------------------
                 ApiEntitySingleResponse<Attribute, ?> attribResponse
-                    = writer.addAttribute( createResponse.getItem().getMd5(), attribute );
+                        = writer.addAttribute(createResponse.getItem().getMd5(), attribute);
 
-                if ( attribResponse.isSuccess() ) {
-                    System.out.println("\tAdded Attribute: " + attribResponse.getItem() );
-                } else {
+                if (attribResponse.isSuccess())
+                {
+                    System.out.println("\tAdded Attribute: " + attribResponse.getItem());
+                } else
+                {
                     System.err.println("Failed to Add Attribute: " + attribResponse.getMessage());
                 }
 
-            } else {
+            } else
+            {
                 System.err.println("Failed to Create File: " + createResponse.getMessage());
             }
 
-        } catch (IOException | FailedResponseException ex) {
+        } catch (IOException | FailedResponseException ex)
+        {
             System.err.println("Error: " + ex.toString());
         }
 
     }
 
-    private static void doAssociateIndicator(Connection conn) {
-        AbstractIndicatorWriterAdapter<File> gWriter= WriterAdapterFactory.createFileIndicatorWriter(conn);
+    private static void doAssociateIndicator(Connection conn)
+    {
+        AbstractIndicatorWriterAdapter<File> gWriter = WriterAdapterFactory.createFileIndicatorWriter(conn);
         AbstractIndicatorWriterAdapter<Host> hWriter = WriterAdapterFactory.createHostIndicatorWriter(conn);
 
         File file = createTestFile();
         Host host = createTestHost();
 
-        try {
+        try
+        {
 
             // -----------------------------------------------------------------------------------------------------------
             // Create File and Host
             // -----------------------------------------------------------------------------------------------------------
             ApiEntitySingleResponse<File, ?> createResponseFile = gWriter.create(file);
             ApiEntitySingleResponse<Host, ?> createResponseHost = hWriter.create(host);
-            if (createResponseFile.isSuccess() && createResponseHost.isSuccess() ) {
+            if (createResponseFile.isSuccess() && createResponseHost.isSuccess())
+            {
                 System.out.println("Created File: " + createResponseFile.getItem());
                 System.out.println("Created Host: " + createResponseHost.getItem());
 
@@ -305,39 +389,48 @@ public class FileExample {
                 // Associate Host
                 // -----------------------------------------------------------------------------------------------------------
                 ApiEntitySingleResponse assocResponse
-                    = gWriter.associateIndicatorHost(createResponseFile.getItem().getMd5(), createResponseHost.getItem().getHostName() );
+                        = gWriter.associateIndicatorHost(createResponseFile.getItem().getMd5(), createResponseHost.getItem().getHostName());
 
-                if ( assocResponse.isSuccess() ) {
-                    System.out.println("\tAssociated Host: " + createResponseHost.getItem().getHostName() );
-                } else {
+                if (assocResponse.isSuccess())
+                {
+                    System.out.println("\tAssociated Host: " + createResponseHost.getItem().getHostName());
+                } else
+                {
                     System.err.println("Failed to Add Attribute: " + assocResponse.getMessage());
                 }
 
-            } else {
-                if ( !createResponseFile.isSuccess() ) System.err.println("Failed to Create File: " + createResponseFile.getMessage());
-                if ( !createResponseHost.isSuccess() ) System.err.println("Failed to Create Host: " + createResponseHost.getMessage());
+            } else
+            {
+                if (!createResponseFile.isSuccess())
+                    System.err.println("Failed to Create File: " + createResponseFile.getMessage());
+                if (!createResponseHost.isSuccess())
+                    System.err.println("Failed to Create Host: " + createResponseHost.getMessage());
             }
 
-        } catch (IOException | FailedResponseException ex) {
+        } catch (IOException | FailedResponseException ex)
+        {
             System.err.println("Error: " + ex.toString());
         }
 
     }
 
-    private static void doAssociateGroup(Connection conn) {
-        AbstractIndicatorWriterAdapter<File> gWriter= WriterAdapterFactory.createFileIndicatorWriter(conn);
+    private static void doAssociateGroup(Connection conn)
+    {
+        AbstractIndicatorWriterAdapter<File> gWriter = WriterAdapterFactory.createFileIndicatorWriter(conn);
         AbstractGroupWriterAdapter<Threat> tWriter = WriterAdapterFactory.createThreatGroupWriter(conn);
 
         File file = createTestFile();
         Threat threat = createTestThreat();
 
-        try {
+        try
+        {
             // -----------------------------------------------------------------------------------------------------------
             // Create File and Threat
             // -----------------------------------------------------------------------------------------------------------
             ApiEntitySingleResponse<File, ?> createResponseFile = gWriter.create(file);
             ApiEntitySingleResponse<Threat, ?> createResponseThreat = tWriter.create(threat);
-            if (createResponseFile.isSuccess() && createResponseThreat.isSuccess() ) {
+            if (createResponseFile.isSuccess() && createResponseThreat.isSuccess())
+            {
                 System.out.println("Created File: " + createResponseFile.getItem());
                 System.out.println("Created Threat: " + createResponseThreat.getItem());
 
@@ -345,33 +438,41 @@ public class FileExample {
                 // Associate Threat
                 // -----------------------------------------------------------------------------------------------------------
                 ApiEntitySingleResponse assocResponse
-                    = gWriter.associateGroupThreat(createResponseFile.getItem().getMd5(), createResponseThreat.getItem().getId());
+                        = gWriter.associateGroupThreat(createResponseFile.getItem().getMd5(), createResponseThreat.getItem().getId());
 
-                if ( assocResponse.isSuccess() ) {
-                    System.out.println("\tAssociated Threat: " + createResponseThreat.getItem().getId() );
-                } else {
+                if (assocResponse.isSuccess())
+                {
+                    System.out.println("\tAssociated Threat: " + createResponseThreat.getItem().getId());
+                } else
+                {
                     System.err.println("Failed to Associate Threat: " + assocResponse.getMessage());
                 }
 
-            } else {
-                if ( !createResponseFile.isSuccess() ) System.err.println("Failed to Create File: " + createResponseFile.getMessage());
-                if ( !createResponseThreat.isSuccess() ) System.err.println("Failed to Create Threat: " + createResponseThreat.getMessage());
+            } else
+            {
+                if (!createResponseFile.isSuccess())
+                    System.err.println("Failed to Create File: " + createResponseFile.getMessage());
+                if (!createResponseThreat.isSuccess())
+                    System.err.println("Failed to Create Threat: " + createResponseThreat.getMessage());
             }
 
-        } catch (IOException | FailedResponseException ex) {
+        } catch (IOException | FailedResponseException ex)
+        {
             System.err.println("Error: " + ex.toString());
         }
 
     }
 
-    private static void doAssociateTag(Connection conn) {
-        AbstractIndicatorWriterAdapter<File> gWriter= WriterAdapterFactory.createFileIndicatorWriter(conn);
+    private static void doAssociateTag(Connection conn)
+    {
+        AbstractIndicatorWriterAdapter<File> gWriter = WriterAdapterFactory.createFileIndicatorWriter(conn);
         TagWriterAdapter tWriter = WriterAdapterFactory.createTagWriter(conn);
 
         File file = createTestFile();
         Tag tag = createTestTag();
 
-        try {
+        try
+        {
             // -----------------------------------------------------------------------------------------------------------
             // Create File and Tag 
             // -----------------------------------------------------------------------------------------------------------
@@ -379,7 +480,8 @@ public class FileExample {
             tWriter.delete(tag.getName()); // delete if it exists
             ApiEntitySingleResponse<Tag, ?> createResponseTag = tWriter.create(tag);
 
-            if (createResponseFile.isSuccess() && createResponseTag.isSuccess() ) {
+            if (createResponseFile.isSuccess() && createResponseTag.isSuccess())
+            {
                 System.out.println("Created File: " + createResponseFile.getItem());
                 System.out.println("Created Tag: " + createResponseTag.getItem());
 
@@ -387,34 +489,42 @@ public class FileExample {
                 // Associate Tag
                 // -----------------------------------------------------------------------------------------------------------
                 ApiEntitySingleResponse assocResponse
-                    = gWriter.associateTag(createResponseFile.getItem().getMd5()
-                                         , createResponseTag.getItem().getName() );
+                        = gWriter.associateTag(createResponseFile.getItem().getMd5()
+                        , createResponseTag.getItem().getName());
 
-                if ( assocResponse.isSuccess() ) {
-                    System.out.println("\tAssociated Tag: " + createResponseTag.getItem().getName() );
-                } else {
+                if (assocResponse.isSuccess())
+                {
+                    System.out.println("\tAssociated Tag: " + createResponseTag.getItem().getName());
+                } else
+                {
                     System.err.println("Failed to Associate Tag: " + assocResponse.getMessage());
                 }
 
-            } else {
-                if ( !createResponseFile.isSuccess() ) System.err.println("Failed to Create File: " + createResponseFile.getMessage());
-                if ( !createResponseTag.isSuccess() ) System.err.println("Failed to Create Tag: " + createResponseTag.getMessage());
+            } else
+            {
+                if (!createResponseFile.isSuccess())
+                    System.err.println("Failed to Create File: " + createResponseFile.getMessage());
+                if (!createResponseTag.isSuccess())
+                    System.err.println("Failed to Create Tag: " + createResponseTag.getMessage());
             }
 
-        } catch (IOException | FailedResponseException ex) {
+        } catch (IOException | FailedResponseException ex)
+        {
             System.err.println("Error: " + ex.toString());
         }
     }
 
-    private static void doDissociateTag(Connection conn) {
+    private static void doDissociateTag(Connection conn)
+    {
 
-        AbstractIndicatorWriterAdapter<File> gWriter= WriterAdapterFactory.createFileIndicatorWriter(conn);
+        AbstractIndicatorWriterAdapter<File> gWriter = WriterAdapterFactory.createFileIndicatorWriter(conn);
         TagWriterAdapter tWriter = WriterAdapterFactory.createTagWriter(conn);
 
         File file = createTestFile();
         Tag tag = createTestTag();
 
-        try {
+        try
+        {
             // -----------------------------------------------------------------------------------------------------------
             // Create File and Tag 
             // -----------------------------------------------------------------------------------------------------------
@@ -422,7 +532,8 @@ public class FileExample {
             tWriter.delete(tag.getName()); // delete if it exists
             ApiEntitySingleResponse<Tag, ?> createResponseTag = tWriter.create(tag);
 
-            if (createResponseFile.isSuccess() && createResponseTag.isSuccess() ) {
+            if (createResponseFile.isSuccess() && createResponseTag.isSuccess())
+            {
                 System.out.println("Created File: " + createResponseFile.getItem());
                 System.out.println("Created Tag: " + createResponseTag.getItem());
 
@@ -430,53 +541,64 @@ public class FileExample {
                 // Associate Tag
                 // -----------------------------------------------------------------------------------------------------------
                 ApiEntitySingleResponse assocResponse
-                    = gWriter.associateTag(createResponseFile.getItem().getMd5()
-                                         , createResponseTag.getItem().getName() );
+                        = gWriter.associateTag(createResponseFile.getItem().getMd5()
+                        , createResponseTag.getItem().getName());
 
-                if ( assocResponse.isSuccess() ) {
-                    System.out.println("\tAssociated Tag: " + createResponseTag.getItem().getName() );
+                if (assocResponse.isSuccess())
+                {
+                    System.out.println("\tAssociated Tag: " + createResponseTag.getItem().getName());
 
                     // -----------------------------------------------------------------------------------------------------------
                     // Delete Association
                     // -----------------------------------------------------------------------------------------------------------
                     ApiEntitySingleResponse deleteAssocResponse
-                        = gWriter.dissociateTag(createResponseFile.getItem().getMd5(), createResponseTag.getItem().getName() );
+                            = gWriter.dissociateTag(createResponseFile.getItem().getMd5(), createResponseTag.getItem().getName());
 
-                    if ( deleteAssocResponse.isSuccess() ) {
-                        System.out.println("\tDeleted Associated Tag: " + createResponseTag.getItem().getName() );
-                    } else {
+                    if (deleteAssocResponse.isSuccess())
+                    {
+                        System.out.println("\tDeleted Associated Tag: " + createResponseTag.getItem().getName());
+                    } else
+                    {
                         System.err.println("Failed to delete Associated Tag: " + deleteAssocResponse.getMessage());
                     }
 
-                } else {
+                } else
+                {
                     System.err.println("Failed to Associate Tag: " + assocResponse.getMessage());
                 }
 
-            } else {
-                if ( !createResponseFile.isSuccess() ) System.err.println("Failed to Create File: " + createResponseFile.getMessage());
-                if ( !createResponseTag.isSuccess() ) System.err.println("Failed to Create Tag: " + createResponseTag.getMessage());
+            } else
+            {
+                if (!createResponseFile.isSuccess())
+                    System.err.println("Failed to Create File: " + createResponseFile.getMessage());
+                if (!createResponseTag.isSuccess())
+                    System.err.println("Failed to Create Tag: " + createResponseTag.getMessage());
             }
 
-        } catch (IOException | FailedResponseException ex) {
+        } catch (IOException | FailedResponseException ex)
+        {
             System.err.println("Error: " + ex.toString());
         }
-        
+
     }
 
-    private static void doAssociateVictim(Connection conn) {
-        AbstractIndicatorWriterAdapter<File> gWriter= WriterAdapterFactory.createFileIndicatorWriter(conn);
+    private static void doAssociateVictim(Connection conn)
+    {
+        AbstractIndicatorWriterAdapter<File> gWriter = WriterAdapterFactory.createFileIndicatorWriter(conn);
         VictimWriterAdapter vWriter = WriterAdapterFactory.createVictimWriter(conn);
 
         File file = createTestFile();
         Victim victim = createTestVictim();
 
-        try {
+        try
+        {
             // -----------------------------------------------------------------------------------------------------------
             // Create File and Victim
             // -----------------------------------------------------------------------------------------------------------
             ApiEntitySingleResponse<File, ?> createResponseFile = gWriter.create(file);
             ApiEntitySingleResponse<Victim, ?> createResponseVictim = vWriter.create(victim);
-            if (createResponseFile.isSuccess() && createResponseVictim.isSuccess() ) {
+            if (createResponseFile.isSuccess() && createResponseVictim.isSuccess())
+            {
                 System.out.println("Created File: " + createResponseFile.getItem());
                 System.out.println("Created Victim: " + createResponseVictim.getItem());
 
@@ -484,23 +606,29 @@ public class FileExample {
                 // Associate Victim
                 // -----------------------------------------------------------------------------------------------------------
                 ApiEntitySingleResponse assocResponse
-                    = gWriter.associateVictim(createResponseFile.getItem().getMd5(), createResponseVictim.getItem().getId());
+                        = gWriter.associateVictim(createResponseFile.getItem().getMd5(), createResponseVictim.getItem().getId());
 
-                if ( assocResponse.isSuccess() ) {
-                    System.out.println("\tAssociated Victim: " + createResponseVictim.getItem().getId() );
-                } else {
+                if (assocResponse.isSuccess())
+                {
+                    System.out.println("\tAssociated Victim: " + createResponseVictim.getItem().getId());
+                } else
+                {
                     System.err.println("Failed to Associate Victim: " + assocResponse.getMessage());
                 }
 
-            } else {
-                if ( !createResponseFile.isSuccess() ) System.err.println("Failed to Create File: " + createResponseFile.getMessage());
-                if ( !createResponseVictim.isSuccess() ) System.err.println("Failed to Create Victim: " + createResponseVictim.getMessage());
+            } else
+            {
+                if (!createResponseFile.isSuccess())
+                    System.err.println("Failed to Create File: " + createResponseFile.getMessage());
+                if (!createResponseVictim.isSuccess())
+                    System.err.println("Failed to Create Victim: " + createResponseVictim.getMessage());
             }
 
-        } catch (IOException | FailedResponseException ex) {
+        } catch (IOException | FailedResponseException ex)
+        {
             System.err.println("Error: " + ex.toString());
         }
-        
+
     }
 
 }

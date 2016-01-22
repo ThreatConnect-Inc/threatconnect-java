@@ -93,7 +93,7 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
 
     protected <T extends ApiEntitySingleResponse> T getItem(String propName, Class<T> type, String ownerName, Map<String,Object> paramMap)
         throws IOException, FailedResponseException {
-        return getItem(propName, type, null, null, false);
+        return getItem(propName, type, ownerName, paramMap, false);
     }
 
     protected <T extends ApiEntitySingleResponse> T getItem(String propName, Class<T> type, String ownerName, Map<String,Object> paramMap,

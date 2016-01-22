@@ -259,7 +259,7 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
         String url = getUrl(propName, ownerName);
         logger.log(Level.FINEST, "\tURL: " + url);
 
-        T result = null;
+        T result;
         try
         {
             if (paramMap != null) {

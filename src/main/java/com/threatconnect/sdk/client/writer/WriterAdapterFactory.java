@@ -108,7 +108,7 @@ public class WriterAdapterFactory {
         };
     }
     
-    public static AbstractIndicatorWriterAdapter<File> createFileIndicatorWriter(Connection conn) {
+    public static FileIndicatorWriterAdapter createFileIndicatorWriter(Connection conn) {
         return new FileIndicatorWriterAdapter(conn);
  
     }

@@ -11,6 +11,7 @@ import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.FileOccurrence;
 import com.threatconnect.sdk.server.entity.File;
+import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.server.response.entity.FileOccurrenceListResponse;
 import com.threatconnect.sdk.server.response.entity.FileOccurrenceResponse;
 import com.threatconnect.sdk.server.response.entity.FileResponse;
@@ -35,8 +36,7 @@ public class FileIndicatorWriterAdapter extends AbstractIndicatorWriterAdapter<F
     }
 
     @Override
-    public String getId(File indicator) {
-        File file = ((File) indicator);
+    public String getId(File file) {
         String hash = file.getMd5();
         if (hash != null) {
             return hash;
@@ -85,4 +85,31 @@ public class FileIndicatorWriterAdapter extends AbstractIndicatorWriterAdapter<F
         return (FileOccurrence) item.getData().getData();
     }
 
+    public FileOccurrence createFileOccurrence(String fileHash, FileOccurrence fileOccurrence) throws IOException, FailedResponseException {
+        return createFileOccurrence(fileHash, fileOccurrence, null);
+    }
+
+    public FileOccurrence createFileOccurrence(String fileHash, FileOccurrence fileOccurrence, String ownerName)
+            throws IOException, FailedResponseException {
+
+        Map<String, Object> map = createParamMap("id", fileHash);
+        FileOccurrenceResponse item = createItem(getUrlBasePrefix() + ".byId.fileOccurrences"
+                , FileOccurrenceResponse.class, ownerName, map, fileOccurrence);
+
+        return (FileOccurrence) item.getData().getData();
+    }
+
+    public ApiEntitySingleResponse deleteFileOccurrence(String fileHash, FileOccurrence fileOccurrence) throws IOException, FailedResponseException {
+        return deleteFileOccurrence(fileHash, fileOccurrence, null);
+    }
+
+    public ApiEntitySingleResponse deleteFileOccurrence(String fileHash, FileOccurrence fileOccurrence, String ownerName)
+            throws IOException, FailedResponseException {
+
+        Map<String, Object> map = createParamMap("id", fileHash, "fileOccurrenceId", fileOccurrence.getId());
+        ApiEntitySingleResponse item = deleteItem(getUrlBasePrefix() + ".byId.fileOccurrences.byFileOccurrenceId"
+                , FileOccurrenceResponse.class, ownerName, map);
+
+        return item;
+    }
 }

@@ -15,12 +15,17 @@ import com.threatconnect.sdk.util.ApiFilterType;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author dtineo
  */
 public abstract class AbstractBaseReaderAdapter<T,P> extends AbstractReaderAdapter {
+
+    private final Logger logger = Logger.getLogger(getClass().getSimpleName());
+
     protected final Class<? extends ApiEntitySingleResponse> singleType;
     protected final Class<? extends ApiEntityListResponse> listType;
     protected final Class singleItemType;
@@ -62,6 +67,7 @@ public abstract class AbstractBaseReaderAdapter<T,P> extends AbstractReaderAdapt
         throws IOException, FailedResponseException {
 
         Map<String, Object> map = AbstractClientAdapter.createParamMap("id", uniqueId);
+        logger.log(Level.FINEST, String.format("getById() uniqueId=%s, ownerName=%s, paramMap=%s", uniqueId, ownerName, map));
         ApiEntitySingleResponse item = getItem(getUrlBasePrefix() + ".byId", singleType, ownerName, map);
 
         return (T) item.getData().getData();

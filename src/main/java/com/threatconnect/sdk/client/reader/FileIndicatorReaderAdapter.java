@@ -5,25 +5,28 @@
  */
 package com.threatconnect.sdk.client.reader;
 
+import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.File;
 import com.threatconnect.sdk.server.entity.FileOccurrence;
 import com.threatconnect.sdk.server.response.entity.FileListResponse;
+import com.threatconnect.sdk.server.response.entity.FileOccurrenceListResponse;
 import com.threatconnect.sdk.server.response.entity.FileOccurrenceResponse;
 import com.threatconnect.sdk.server.response.entity.FileResponse;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  *
  * @author dtineo
  */
-public class FileIndicatorReaderAdapter extends AbstractIndicatorReaderAdapter {
+public class FileIndicatorReaderAdapter extends AbstractIndicatorReaderAdapter<File> {
 
-    public FileIndicatorReaderAdapter(Connection conn) {
+    protected FileIndicatorReaderAdapter(Connection conn) {
         super(conn, FileResponse.class, File.class, FileListResponse.class);
 
     }
@@ -39,8 +42,19 @@ public class FileIndicatorReaderAdapter extends AbstractIndicatorReaderAdapter {
 
     public FileOccurrence getFileOccurrence(String uniqueId, Integer fileOccurrencId, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "fileOccurrenceId", fileOccurrencId);
-        FileOccurrenceResponse data = getItem(getUrlBasePrefix() + ".byId.fileOcurrences.byFileOccurrenceId", FileOccurrenceResponse.class, ownerName, map);
+        FileOccurrenceResponse data = getItem(getUrlBasePrefix() + ".byId.fileOccurrences.byFileOccurrenceId", FileOccurrenceResponse.class, ownerName, map);
 
         return (FileOccurrence) data.getData().getData();
     }
+
+    public IterableResponse<FileOccurrence> getFileOccurrences(String fileHash) throws IOException, FailedResponseException {
+        return getFileOccurrences(fileHash, null);
+    }
+
+    public IterableResponse<FileOccurrence> getFileOccurrences(String fileHash, String ownerName) throws IOException, FailedResponseException {
+        Map<String, Object> map = createParamMap("id", fileHash);
+
+        return getItems(getUrlBasePrefix() + ".byId.fileOccurrences", FileOccurrenceListResponse.class, FileOccurrence.class, ownerName, map);
+    }
+
 }
