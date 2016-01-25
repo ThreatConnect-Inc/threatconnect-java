@@ -5,22 +5,6 @@
  */
 package com.threatconnect.sdk.conn;
 
-import com.threatconnect.sdk.config.Configuration;
-import com.threatconnect.sdk.config.URLConfiguration;
-import org.apache.http.HttpHost;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.SSLContexts;
-import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
-/*
-import org.jboss.resteasy.core.Dispatcher;
-import org.jboss.resteasy.spi.Registry;
-import org.jboss.resteasy.spi.ResteasyProviderFactory;
-*/
-
-import javax.net.ssl.SSLContext;
 import java.io.Closeable;
 import java.io.IOException;
 import java.security.KeyManagementException;
@@ -30,11 +14,24 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.net.ssl.SSLContext;
+
+import org.apache.http.HttpHost;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLContexts;
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
+
+import com.threatconnect.sdk.config.Configuration;
+import com.threatconnect.sdk.config.URLConfiguration;
+
 /**
  *
  * @author dtineo
  */
-public class Connection<T> implements Closeable
+public class Connection implements Closeable
 {
 
     private final Logger logger = Logger.getLogger(getClass().getSimpleName());
