@@ -144,6 +144,7 @@ public class Group implements AttributeHolder
     }
 
     @Override
+    @JsonIgnore
     public Map<String, String> getAttributes()
     {
         return attributes;
