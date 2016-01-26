@@ -26,7 +26,7 @@ public class Attribute
     @XmlElement(name = "Type", required = true)
     private String type;
     @XmlElement(name = "Value", required = true)
-    private String Value;
+    private String value;
     @XmlElement(name = "Source", required = false)
     private String source;
     @JsonSerialize(using = DateSerializer.class)
@@ -45,7 +45,7 @@ public class Attribute
     {
         this.id = id;
         this.type = type;
-        Value = value;
+        this.value = value;
         this.source = source;
         this.dateAdded = dateAdded;
         this.lastModified = lastModified;
@@ -74,12 +74,12 @@ public class Attribute
 
     public String getValue()
     {
-        return Value;
+        return value;
     }
 
     public void setValue(String value)
     {
-        this.Value = value;
+        this.value = value;
     }
 
     public String getSource()
@@ -128,7 +128,7 @@ public class Attribute
         return "Attribute{" +
                 "id=" + id +
                 ", type='" + type + '\'' +
-                ", Value='" + Value + '\'' +
+                ", Value='" + value + '\'' +
                 ", source='" + source + '\'' +
                 ", dateAdded=" + dateAdded +
                 ", lastModified=" + lastModified +
