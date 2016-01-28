@@ -17,9 +17,14 @@ import java.util.logging.Logger;
 import javax.net.ssl.SSLContext;
 
 import org.apache.http.HttpHost;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.Credentials;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
+import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
@@ -31,153 +36,159 @@ import com.threatconnect.sdk.config.URLConfiguration;
  *
  * @author dtineo
  */
-public class Connection implements Closeable
-{
+public class Connection implements Closeable {
 
-    private final Logger logger = Logger.getLogger(getClass().getSimpleName());
+	private final Logger logger = Logger.getLogger(getClass().getSimpleName());
 
-    private CloseableHttpClient apiClient;
-    protected Configuration config;
-    private AbstractRequestExecutor executor;
+	private CloseableHttpClient apiClient;
+	protected Configuration config;
+	private AbstractRequestExecutor executor;
 
-    private final URLConfiguration urlConfig;
+	private final URLConfiguration urlConfig;
 
-    public Connection() throws IOException {
-        String fileName = System.getProperties().getProperty("threatconnect.api.config");
-        Properties props = ConnectionUtil.loadProperties(fileName);
-        this.config = Configuration.build(props);
+	public Connection() throws IOException {
+		String fileName = System.getProperties().getProperty("threatconnect.api.config");
+		Properties props = ConnectionUtil.loadProperties(fileName);
+		this.config = Configuration.build(props);
 
-        this.urlConfig = URLConfiguration.build();
-    }
+		this.urlConfig = URLConfiguration.build();
+	}
 
-    public Connection(Configuration config) throws IOException {
-        this.config = config;
-        this.urlConfig = URLConfiguration.build();
-    }
+	public Connection(Configuration config) throws IOException {
+		this.config = config;
+		this.urlConfig = URLConfiguration.build();
+	}
 
-    /*
-    public void setInMemoryDispatcher(Object dispatcher)
-    {
-        if ( executor == null )
-        {
-            executor = new InMemoryRequestExecutor(this);
-        }
+	/*
+	 * public void setInMemoryDispatcher(Object dispatcher) { if ( executor ==
+	 * null ) { executor = new InMemoryRequestExecutor(this); }
+	 * 
+	 * ((InMemoryRequestExecutor)executor).setDispatcher((Dispatcher)
+	 * dispatcher); }
+	 * 
+	 * public void setInMemoryProviderFactory(Object providerFactory) { if (
+	 * executor == null ) { executor = new InMemoryRequestExecutor(this); }
+	 * 
+	 * ((InMemoryRequestExecutor)executor).setResteasyProviderFactory((
+	 * ResteasyProviderFactory)providerFactory); }
+	 * 
+	 * public void setInMemoryRegistry(Object registry) {
+	 * ((InMemoryRequestExecutor)executor).setRegistry((Registry)registry); }
+	 */
 
-        ((InMemoryRequestExecutor)executor).setDispatcher((Dispatcher) dispatcher);
-    }
+	public AbstractRequestExecutor getExecutor() {
+		if (executor == null) {
+			if (config.getTcApiUrl().equalsIgnoreCase("embedded")) {
+				executor = new InMemoryRequestExecutor(this);
+			} else {
+				executor = new HttpRequestExecutor(this);
+			}
+		}
 
-    public void setInMemoryProviderFactory(Object providerFactory)
-    {
-        if ( executor == null )
-        {
-            executor = new InMemoryRequestExecutor(this);
-        }
+		return executor;
+	}
 
-        ((InMemoryRequestExecutor)executor).setResteasyProviderFactory((ResteasyProviderFactory)providerFactory);
-    }
+	/**
+	 * @return the config
+	 */
+	public Configuration getConfig() {
+		return config;
+	}
 
-    public void setInMemoryRegistry(Object registry)
-    {
-        ((InMemoryRequestExecutor)executor).setRegistry((Registry)registry);
-    }
-    */
+	/**
+	 * @param config
+	 *            to set
+	 */
+	public void setConfig(Configuration config) {
+		this.config = config;
+	}
 
-    public AbstractRequestExecutor getExecutor() {
-        if ( executor == null )
-        {
-            if ( config.getTcApiUrl().equalsIgnoreCase("embedded") )
-            {
-                executor = new InMemoryRequestExecutor(this);
-            } else {
-                executor = new HttpRequestExecutor(this);
-            }
-        }
+	private CloseableHttpClient createApiClient() {
 
-        return executor;
-    }
+		SSLContext sslcontext;
+		CloseableHttpClient httpClient = null;
 
-    /**
-     * @return the config
-     */
-    public Configuration getConfig() {
-        return config;
-    }
+		try {
+			sslcontext = SSLContexts.custom().loadTrustMaterial(null, new TrustSelfSignedStrategy()).build();
 
-    /**
-     * @param config to set
-     */
-    public void setConfig(Configuration config) {
-        this.config = config;
-    }
+			SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslcontext, new String[] { "TLSv1" },
+					null, SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
 
-    private CloseableHttpClient createApiClient() {
+			HttpClientBuilder builder = HttpClients.custom().setSSLSocketFactory(sslsf);
+			// add code here to handle proxy authentication
+			// tcproxyhost, tcproxyport, tcproxyusername, tcproxypassword,
+			//
+			String proxyHost = System.getProperty("tcproxyhost");
+			String proxyPort = System.getProperty("tcproxyport");
+			String proxyUserName = System.getProperty("tcproxyusername");
+			String proxyPassword = System.getProperty("tcproxypassword");
+			if (proxyUserName != null) // authentication required
+			{
+				// we need to check the whether the following parameters exists
+				if (proxyHost == null || proxyPort == null || proxyPassword == null)
+					logger.log(Level.WARNING,
+							"Error: proxyHost == null || proxyPort == null || proxyPassword == null");
+				else // add authentication info to builder
+				{
+					Credentials credentials = new UsernamePasswordCredentials(proxyUserName, proxyPassword);
+					AuthScope authScope = new AuthScope(proxyHost, Integer.parseInt(proxyPort));
+					CredentialsProvider credsProvider = new BasicCredentialsProvider();
+					credsProvider.setCredentials(authScope, credentials);
 
-        SSLContext sslcontext;
-        CloseableHttpClient httpClient = null;
+					builder.setProxy(new HttpHost(proxyHost, Integer.parseInt(proxyPort)))
+							.setDefaultCredentialsProvider(credsProvider);
+				}
+			} else if (proxyHost != null && proxyPort != null) 
+			{
+				// no username,no authentication
+				builder.setProxy(new HttpHost(proxyHost, Integer.parseInt(proxyPort)));
+			} else if (getConfig().hasProxySettings())
+			{
+				 // old way if applicable
+				builder.setProxy(new HttpHost(getConfig().getProxyHost(), getConfig().getProxyPort()));
+			}
+			httpClient = builder.build();
+		} catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException ex) {
+			logger.log(Level.SEVERE, "Error creating httpClient", ex);
+		}
 
-        try {
-            sslcontext = SSLContexts.custom()
-                .loadTrustMaterial(null, new TrustSelfSignedStrategy())
-                .build();
+		return httpClient;
+	}
 
-            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
-                sslcontext,
-                new String[]{"TLSv1"},
-                null,
-                SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+	CloseableHttpClient getApiClient() {
+		if (apiClient == null) {
+			apiClient = createApiClient();
+		}
+		return apiClient;
+	}
 
+	/**
+	 * @return the urlConfig
+	 */
+	public URLConfiguration getUrlConfig() {
+		return urlConfig;
+	}
 
-            HttpClientBuilder builder = HttpClients.custom().setSSLSocketFactory(sslsf);
-            if ( getConfig().hasProxySettings() )
-            {
-                builder.setProxy(new HttpHost( getConfig().getProxyHost(), getConfig().getProxyPort() ));
-            }
+	public void disconnect() {
+		if (apiClient != null) {
+			try {
+				apiClient.close();
+			} catch (IOException ex) {
+				logger.log(Level.SEVERE, "Error disconnecting from httpClient", ex);
+			} finally {
+				apiClient = null;
+			}
+		}
+	}
 
-            httpClient = builder.build();
-
-        } catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException ex) {
-            logger.log(Level.SEVERE, "Error creating httpClient", ex);
-        }
-
-        return httpClient;
-    }
-
-    CloseableHttpClient getApiClient() {
-        if ( apiClient == null )
-        {
-            apiClient = createApiClient();
-        }
-        return apiClient;
-    }
-
-    /**
-     * @return the urlConfig
-     */
-    public URLConfiguration getUrlConfig() {
-        return urlConfig;
-    }
-
-    public void disconnect() {
-        if ( apiClient != null )
-        {
-            try {
-                apiClient.close();
-            } catch (IOException ex) {
-                logger.log(Level.SEVERE, "Error disconnecting from httpClient", ex);
-            } finally {
-                apiClient = null;
-            }
-        }
-    }
-
-    /**
-     * Calls disconnect to close httpClient
-     *
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    public void close() throws IOException
-    {
-       this.disconnect();
-    }
+	/**
+	 * Calls disconnect to close httpClient
+	 *
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
+	@Override
+	public void close() throws IOException {
+		this.disconnect();
+	}
 }
