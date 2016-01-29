@@ -121,7 +121,7 @@ public class Connection implements Closeable {
 			String proxyHost = System.getProperty("tc_proxy_host");
 			String proxyPort = System.getProperty("tc_proxy_port");
 			String proxyUserName = System.getProperty("tc_proxy_username");
-			String proxyPassword = System.getProperty("tc_proxyp_assword");
+			String proxyPassword = System.getProperty("tc_proxy_password");
 			if (proxyUserName != null) // authentication required
 			{
 				// we need to check the whether the following parameters exists
