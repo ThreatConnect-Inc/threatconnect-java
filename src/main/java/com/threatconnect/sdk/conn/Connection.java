@@ -118,10 +118,10 @@ public class Connection implements Closeable {
 			// add code here to handle proxy authentication
 			// tcproxyhost, tcproxyport, tcproxyusername, tcproxypassword,
 			//
-			String proxyHost = System.getProperty("tcproxyhost");
-			String proxyPort = System.getProperty("tcproxyport");
-			String proxyUserName = System.getProperty("tcproxyusername");
-			String proxyPassword = System.getProperty("tcproxypassword");
+			String proxyHost = System.getProperty("tcp_roxy_host");
+			String proxyPort = System.getProperty("tcp_roxy_port");
+			String proxyUserName = System.getProperty("tc_proxy_username");
+			String proxyPassword = System.getProperty("tcp_roxyp_assword");
 			if (proxyUserName != null) // authentication required
 			{
 				// we need to check the whether the following parameters exists
