@@ -3,10 +3,7 @@ package com.threatconnect.sdk.server.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 import java.util.Date;
 
 /**
@@ -23,16 +20,22 @@ public class Document extends Group
     private Long fileSize;
     @XmlElement(name = "status", required = false)
     private String status;
+    @XmlTransient
+    private Boolean malware;
+    @XmlTransient
+    private String password;
 
     public Document() {
     }
 
-    public Document(Integer id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink, String fileName, Long fileSize, String status)
+    public Document(Integer id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink, String fileName, Long fileSize, String status, Boolean malware, String password)
     {
         super(id, name, type, owner, ownerName, dateAdded, webLink);
         this.fileName = fileName;
         this.fileSize = fileSize;
         this.status = status;
+        this.malware = malware;
+        this.password = password;
     }
 
     public String getFileName()
@@ -53,6 +56,26 @@ public class Document extends Group
     public void setFileSize(Long fileSize)
     {
         this.fileSize = fileSize;
+    }
+
+    public Boolean getMalware()
+    {
+        return malware;
+    }
+
+    public void setMalware(Boolean malware)
+    {
+        this.malware = malware;
+    }
+
+    public String getPassword()
+    {
+        return password;
+    }
+
+    public void setPassword(String password)
+    {
+        this.password = password;
     }
 
     /**

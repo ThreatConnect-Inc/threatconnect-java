@@ -7,11 +7,11 @@ package com.threatconnect.sdk.server.entity;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.threatconnect.sdk.server.entity.format.DateSerializer;
 
-import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Date;
 
 /**
  *
@@ -83,16 +83,4 @@ public class FileOccurrence
     {
         this.date = date;
     }
-
-    public boolean equals(Object object)
-    {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        if (!super.equals(object)) return false;
-        FileOccurrence that = (FileOccurrence) object;
-        return java.util.Objects.equals(fileName, that.fileName) &&
-                java.util.Objects.equals(path, that.path) &&
-                java.util.Objects.equals(date, that.date);
-    }
-
 }

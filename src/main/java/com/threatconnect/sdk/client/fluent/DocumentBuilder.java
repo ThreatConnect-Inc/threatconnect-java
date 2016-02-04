@@ -17,6 +17,8 @@ public class DocumentBuilder
     private String fileName;
     private Long fileSize;
     private String status;
+    private boolean malware = false;
+    private String password;
 
     public DocumentBuilder withId(Integer id)
     {
@@ -78,8 +80,18 @@ public class DocumentBuilder
         return this;
     }
 
+    public DocumentBuilder isMalware() {
+        this.malware = true;
+        return this;
+    }
+
+    public DocumentBuilder withPassword(String password) {
+        this.password = password;
+        return this;
+    }
+
     public Document createDocument()
     {
-        return new Document(id, name, type, owner, ownerName, dateAdded, webLink, fileName, fileSize, status);
+        return new Document(id, name, type, owner, ownerName, dateAdded, webLink, fileName, fileSize, status, malware, password);
     }
 }
