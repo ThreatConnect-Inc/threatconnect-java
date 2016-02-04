@@ -83,5 +83,16 @@ public class FileOccurrence
     {
         this.date = date;
     }
-    
+
+    public boolean equals(Object object)
+    {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        if (!super.equals(object)) return false;
+        FileOccurrence that = (FileOccurrence) object;
+        return java.util.Objects.equals(fileName, that.fileName) &&
+                java.util.Objects.equals(path, that.path) &&
+                java.util.Objects.equals(date, that.date);
+    }
+
 }
