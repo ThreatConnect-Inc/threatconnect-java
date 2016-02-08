@@ -4,6 +4,3 @@ target/
 !target/threatconnect-sdk-*
 .idea/*
 threatconnect-sdk.iml
-.classpath
-.settings
-.project
