@@ -22,7 +22,7 @@
 		<version.apache-http>4.4.1</version.apache-http>
 		<version.jackson>2.5.3</version.jackson>
 	</properties>
-	
+
 	<distributionManagement>
 		<repository>
 			<id>internal.repo</id>
