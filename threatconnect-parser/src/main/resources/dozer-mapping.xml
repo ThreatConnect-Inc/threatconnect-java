@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<configuration>
+		<map-null>false</map-null>
+		<map-empty-string>false</map-empty-string>
+	</configuration>
+
+	<mapping map-null="false">
+		<class-a>com.threatconnect.sdk.parser.model.Attribute</class-a>
+		<class-b>com.threatconnect.sdk.server.entity.Attribute</class-b>
+		<field>
+			<a>key</a>
+			<b>type</b>
+		</field>
+	</mapping>
+
+</mappings> 
