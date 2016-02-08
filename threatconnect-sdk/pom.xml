@@ -12,14 +12,6 @@
 	<name>Core Java ThreatConnect SDK</name>
 	<packaging>jar</packaging>
 
-	<distributionManagement>
-		<repository>
-			<id>internal.repo</id>
-			<name>Temporary Staging Repository</name>
-			<url>file://${project.build.directory}/mvn-repo-${project.version}</url>
-		</repository>
-	</distributionManagement>
-
 	<dependencies>
 		<dependency>
 			<groupId>commons-codec</groupId>
@@ -50,7 +42,6 @@
 			<artifactId>jackson-databind</artifactId>
 			<version>${version.jackson}</version>
 		</dependency>
-
 	</dependencies>
 
 	<build>
