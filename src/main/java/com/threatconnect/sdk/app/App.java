@@ -474,70 +474,73 @@ public abstract class App
 
     }
 
-    protected void setAttribute(AbstractIndicatorWriterAdapter writer, Indicator indicator, Attribute currentAttribute,
+    protected Attribute setAttribute(AbstractIndicatorWriterAdapter writer, Indicator indicator, Attribute currentAttribute,
                                 String type, String value)
     {
 
         if (currentAttribute == null)
         {
             info("CREATE attribute: %s=%s", type, value);
-            addAttribute(writer, indicator, type, value);
+            return addAttribute(writer, indicator, type, value);
         } else
         {
             currentAttribute.setValue(value);
             info("UPDATE attribute: %s", currentAttribute);
-            updateAttribute(writer, indicator, currentAttribute);
+            return updateAttribute(writer, indicator, currentAttribute);
         }
     }
 
-    protected void setAttribute(AbstractGroupWriterAdapter writer, Group group, Attribute currentAttribute,
+    protected Attribute setAttribute(AbstractGroupWriterAdapter writer, Group group, Attribute currentAttribute,
                                 String type, String value)
     {
 
         if (currentAttribute == null)
         {
             info("CREATE attribute: %s=%s", type, value);
-            addAttribute(writer, group, type, value);
+            return addAttribute(writer, group, type, value);
         } else
         {
             currentAttribute.setValue(value);
             info("UPDATE attribute: %s", currentAttribute);
-            updateAttribute(writer, group, currentAttribute);
+            return updateAttribute(writer, group, currentAttribute);
         }
     }
 
-    protected void updateAttribute(AbstractIndicatorWriterAdapter writer, Indicator indicator, Attribute currentAttribute)
+    protected Attribute updateAttribute(AbstractIndicatorWriterAdapter writer, Indicator indicator, Attribute currentAttribute)
     {
         try
         {
             String uniqueId = getUniqueId(indicator);
             if (uniqueId != null)
             {
-                writer.updateAttribute(uniqueId, currentAttribute);
+                return (Attribute) writer.updateAttribute(uniqueId, currentAttribute).getItem();
             }
         } catch (IOException | FailedResponseException e)
         {
             warn("Failed to add attribute: %s, error: %s", currentAttribute.getType(), e.toString());
             e.printStackTrace();
         }
+        return null;
     }
 
-    protected void updateAttribute(AbstractGroupWriterAdapter writer, Group group, Attribute currentAttribute)
+    protected Attribute updateAttribute(AbstractGroupWriterAdapter writer, Group group, Attribute currentAttribute)
     {
         try
         {
             Integer uniqueId = group.getId();
             if (uniqueId != null)
             {
-                writer.updateAttribute(uniqueId, currentAttribute);
+                return (Attribute) writer.updateAttribute(uniqueId, currentAttribute).getItem();
             }
         } catch (IOException | FailedResponseException e)
         {
             warn("Failed to add attribute: %s, error: %s", currentAttribute.getType(), e.toString());
             e.printStackTrace();
         }
+
+        return null;
     }
-    protected void addAttribute(AbstractGroupWriterAdapter writer, Group group, String type, String value)
+    protected Attribute addAttribute(AbstractGroupWriterAdapter writer, Group group, String type, String value)
     {
 
         Attribute attribute = new AttributeBuilder()
@@ -554,16 +557,17 @@ public abstract class App
             Integer uniqueId = group.getId();
             if (uniqueId != null)
             {
-                writer.addAttribute(uniqueId, attribute, getOwner());
+                return (Attribute) writer.addAttribute(uniqueId, attribute, getOwner()).getItem();
             }
         } catch (IOException | FailedResponseException e)
         {
             warn("Failed to add attribute: %s, error: %s", attribute.getType(), e.toString());
             e.printStackTrace();
         }
+        return null;
     }
 
-    protected void addAttribute(AbstractIndicatorWriterAdapter writer, Indicator indicator, String type, String value)
+    protected Attribute addAttribute(AbstractIndicatorWriterAdapter writer, Indicator indicator, String type, String value)
     {
 
         Attribute attribute = new AttributeBuilder()
@@ -580,13 +584,15 @@ public abstract class App
             String uniqueId = getUniqueId(indicator);
             if (uniqueId != null)
             {
-                writer.addAttribute(uniqueId, attribute, getOwner());
+                return (Attribute) writer.addAttribute(uniqueId, attribute, getOwner()).getItem();
             }
         } catch (IOException | FailedResponseException e)
         {
             warn("Failed to add attribute: %s, error: %s", attribute.getType(), e.toString());
             e.printStackTrace();
         }
+
+        return null;
     }
 
     protected Indicator getIndicator(AbstractIndicatorReaderAdapter reader, String indText)
