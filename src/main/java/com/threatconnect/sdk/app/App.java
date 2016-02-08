@@ -1057,6 +1057,26 @@ public abstract class App
         writer.close();
     }
 
+    public void writeResultsTc(Map<String, String> results)
+    {
+        String fileName = getAppUtil().getTcOutPath() + File.separator + "results.tc";
+        PrintWriter writer = null;
+        try
+        {
+            writer = new PrintWriter(fileName, "UTF-8");
+        } catch (FileNotFoundException | UnsupportedEncodingException e)
+        {
+            warn("Failed to write message.tc file");
+            e.printStackTrace();
+        }
+
+        for (Map.Entry<String, String> entry : results.entrySet())
+        {
+            writer.println(String.format("%s = %s", entry.getKey(), entry.getValue()));
+        }
+        writer.close();
+    }
+
     public String basicEncoded(String user, String password)
     {
         String encoded = new sun.misc.BASE64Encoder().encode( String.format("%s:%s", user, password).getBytes() );
