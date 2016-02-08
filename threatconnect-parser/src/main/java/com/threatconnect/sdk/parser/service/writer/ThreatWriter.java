@@ -1,4 +1,4 @@
-package com.threatconnect.sdk.parser.writer;
+package com.threatconnect.sdk.parser.service.writer;
 
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.parser.model.Threat;

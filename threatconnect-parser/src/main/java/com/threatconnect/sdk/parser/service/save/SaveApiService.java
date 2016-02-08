@@ -21,19 +21,19 @@ import com.threatconnect.sdk.parser.model.Item;
 import com.threatconnect.sdk.parser.model.Signature;
 import com.threatconnect.sdk.parser.model.Threat;
 import com.threatconnect.sdk.parser.model.Url;
-import com.threatconnect.sdk.parser.writer.AddressWriter;
-import com.threatconnect.sdk.parser.writer.AdversaryWriter;
-import com.threatconnect.sdk.parser.writer.EmailAddressWriter;
-import com.threatconnect.sdk.parser.writer.EmailWriter;
-import com.threatconnect.sdk.parser.writer.FileWriter;
-import com.threatconnect.sdk.parser.writer.GroupWriter;
-import com.threatconnect.sdk.parser.writer.HostWriter;
-import com.threatconnect.sdk.parser.writer.IncidentWriter;
-import com.threatconnect.sdk.parser.writer.IndicatorWriter;
-import com.threatconnect.sdk.parser.writer.SignatureWriter;
-import com.threatconnect.sdk.parser.writer.ThreatWriter;
-import com.threatconnect.sdk.parser.writer.UrlWriter;
-import com.threatconnect.sdk.parser.writer.Writer;
+import com.threatconnect.sdk.parser.service.writer.AddressWriter;
+import com.threatconnect.sdk.parser.service.writer.AdversaryWriter;
+import com.threatconnect.sdk.parser.service.writer.EmailAddressWriter;
+import com.threatconnect.sdk.parser.service.writer.EmailWriter;
+import com.threatconnect.sdk.parser.service.writer.FileWriter;
+import com.threatconnect.sdk.parser.service.writer.GroupWriter;
+import com.threatconnect.sdk.parser.service.writer.HostWriter;
+import com.threatconnect.sdk.parser.service.writer.IncidentWriter;
+import com.threatconnect.sdk.parser.service.writer.IndicatorWriter;
+import com.threatconnect.sdk.parser.service.writer.SignatureWriter;
+import com.threatconnect.sdk.parser.service.writer.ThreatWriter;
+import com.threatconnect.sdk.parser.service.writer.UrlWriter;
+import com.threatconnect.sdk.parser.service.writer.Writer;
 
 /**
  * Responsible for saving the model to the server using the threatconnect sdk

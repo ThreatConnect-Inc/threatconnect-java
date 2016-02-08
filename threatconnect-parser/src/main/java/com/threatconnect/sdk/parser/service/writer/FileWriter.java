@@ -1,4 +1,4 @@
-package com.threatconnect.sdk.parser.writer;
+package com.threatconnect.sdk.parser.service.writer;
 
 import java.io.IOException;
 
