@@ -490,6 +490,22 @@ public abstract class App
         }
     }
 
+    protected void setAttribute(AbstractGroupWriterAdapter writer, Group group, Attribute currentAttribute,
+                                String type, String value)
+    {
+
+        if (currentAttribute == null)
+        {
+            info("CREATE attribute: %s=%s", type, value);
+            addAttribute(writer, group, type, value);
+        } else
+        {
+            currentAttribute.setValue(value);
+            info("UPDATE attribute: %s", currentAttribute);
+            updateAttribute(writer, group, currentAttribute);
+        }
+    }
+
     protected void updateAttribute(AbstractIndicatorWriterAdapter writer, Indicator indicator, Attribute currentAttribute)
     {
         try
@@ -502,6 +518,47 @@ public abstract class App
         } catch (IOException | FailedResponseException e)
         {
             warn("Failed to add attribute: %s, error: %s", currentAttribute.getType(), e.toString());
+            e.printStackTrace();
+        }
+    }
+
+    protected void updateAttribute(AbstractGroupWriterAdapter writer, Group group, Attribute currentAttribute)
+    {
+        try
+        {
+            Integer uniqueId = group.getId();
+            if (uniqueId != null)
+            {
+                writer.updateAttribute(uniqueId, currentAttribute);
+            }
+        } catch (IOException | FailedResponseException e)
+        {
+            warn("Failed to add attribute: %s, error: %s", currentAttribute.getType(), e.toString());
+            e.printStackTrace();
+        }
+    }
+    protected void addAttribute(AbstractGroupWriterAdapter writer, Group group, String type, String value)
+    {
+
+        Attribute attribute = new AttributeBuilder()
+                .withDisplayed(true)
+                .withType(type)
+                .withDateAdded(new Date())
+                .withLastModified(new Date())
+                .withValue(value)
+                .createAttribute();
+
+        try
+        {
+
+            Integer uniqueId = group.getId();
+            if (uniqueId != null)
+            {
+                writer.addAttribute(uniqueId, attribute, getOwner());
+            }
+        } catch (IOException | FailedResponseException e)
+        {
+            warn("Failed to add attribute: %s, error: %s", attribute.getType(), e.toString());
             e.printStackTrace();
         }
     }
