@@ -1,6 +1,6 @@
 package com.threatconnect.sdk.app;
 
-import java.util.logging.Level;
+import org.apache.log4j.Level;
 
 public class AppConfig
 {
@@ -14,10 +14,10 @@ public class AppConfig
 	public static final String TC_API_SECRET = "api_secret_key";
 	public static final String TC_API_TOKEN_KEY = "tc_api_token_key";
 	public static final String TC_API_DEFAULT_ORG = "api_default_org";
-	private static final String TC_PROXY_HOST = "tc_proxy_host";
-	private static final String TC_PROXY_PORT = "tc_proxy_port";
-	private static final String TC_PROXY_USERNAME = "tc_proxy_username";
-	private static final String TC_PROXY_PASSWORD = "tc_proxy_password";
+	public static final String TC_PROXY_HOST = "tc_proxy_host";
+	public static final String TC_PROXY_PORT = "tc_proxy_port";
+	public static final String TC_PROXY_USERNAME = "tc_proxy_username";
+	public static final String TC_PROXY_PASSWORD = "tc_proxy_password";
 	public static final String TC_API_MAX_RESULT = "api_max_results";
 	public static final String TC_OWNER = "owner";
 	public static final String TC_LOG_LEVEL = "tc_log_level";
@@ -119,7 +119,7 @@ public class AppConfig
 	public Level getTcLogLevel(String defaultLevel)
 	{
 		String level = getString(TC_LOG_LEVEL);
-		return null == level ? Level.parse(defaultLevel) : Level.parse(level.toUpperCase());
+		return null == level ? Level.toLevel(defaultLevel) : Level.toLevel(level.toUpperCase());
 	}
 	
 	/**

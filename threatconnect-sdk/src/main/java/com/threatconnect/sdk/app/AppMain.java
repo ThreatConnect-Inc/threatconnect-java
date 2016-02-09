@@ -1,10 +1,13 @@
 package com.threatconnect.sdk.app;
 
+import java.lang.reflect.Modifier;
 import java.util.Set;
 
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.threatconnect.sdk.app.exception.AppInstantiationException;
 
 public final class AppMain
 {
@@ -13,7 +16,7 @@ public final class AppMain
 	public static void main(String[] args)
 	{
 		// holds the most recent exit status from the app
-		ExitStatus exitStatus = ExitStatus.Success;
+		ExitStatus exitStatus = null;
 		
 		try
 		{
@@ -24,11 +27,22 @@ public final class AppMain
 			if (null != appConfig.getTcMainAppClass() && !appConfig.getTcMainAppClass().isEmpty())
 			{
 				// load the class by name
-				@SuppressWarnings("unchecked")
-				Class<? extends App> appClass = (Class<? extends App>) Class.forName(appConfig.getTcMainAppClass());
+				Class<?> clazz = Class.forName(appConfig.getTcMainAppClass());
 				
-				// execute this app
-				exitStatus = configureAndExecuteApp(appClass, appConfig);
+				try
+				{
+					// cast the app class
+					@SuppressWarnings("unchecked")
+					Class<? extends App> appClass = (Class<? extends App>) clazz;
+					
+					// execute this app
+					exitStatus = configureAndExecuteApp(appClass, appConfig);
+				}
+				catch (ClassCastException e)
+				{
+					String message = "The main class " + clazz.getName() + " does not extend " + App.class + ".";
+					throw new ClassCastException(message);
+				}
 			}
 			// scan for all app classes and execute them while the status is successful
 			else
@@ -39,17 +53,27 @@ public final class AppMain
 				// for each of the classes
 				for (Class<? extends App> appClass : subTypes)
 				{
-					// execute this app
-					exitStatus = configureAndExecuteApp(appClass, appConfig);
-					
-					// check to see if this app was not successful
-					if (exitStatus != ExitStatus.Success)
+					// make sure that this is not an abstract class
+					if (!Modifier.isAbstract(appClass.getModifiers()))
 					{
-						// stop executing the apps
-						return;
+						// execute this app
+						exitStatus = configureAndExecuteApp(appClass, appConfig);
+						
+						// check to see if this app was not successful
+						if (exitStatus != ExitStatus.Success)
+						{
+							// stop executing the apps
+							return;
+						}
 					}
 				}
 			}
+		}
+		catch (AppInstantiationException e)
+		{
+			logger.error(e.getMessage(), e);
+			LoggerUtil.logErr(e.getMessage());
+			exitStatus = ExitStatus.Failure;
 		}
 		catch (Exception e)
 		{
@@ -59,6 +83,13 @@ public final class AppMain
 		}
 		finally
 		{
+			// ensure that the exit status is not null. This should not normally happen
+			if (null == exitStatus)
+			{
+				LoggerUtil.logErr("Exit status is null.");
+				exitStatus = ExitStatus.Failure;
+			}
+			
 			// exit the app with this exit status
 			System.exit(exitStatus.getExitCode());
 		}
@@ -74,17 +105,24 @@ public final class AppMain
 	private static ExitStatus configureAndExecuteApp(final Class<? extends App> appClass, final AppConfig appConfig)
 		throws Exception
 	{
-		// instantiate a new app class
-		App app = appClass.newInstance();
-		
-		// add the app config for this app
-		app.setAppConfig(appConfig);
-		
-		// reconfigure the log file for this app
-		LoggerUtil.reconfigureGlobalLogger(app.getAppLogFile(), appConfig);
-		
-		// execute this app
-		return app.execute(appConfig);
+		try
+		{
+			// instantiate a new app class
+			App app = appClass.newInstance();
+			
+			// add the app config for this app
+			app.setAppConfig(appConfig);
+			
+			// reconfigure the log file for this app
+			LoggerUtil.reconfigureGlobalLogger(app.getAppLogFile(), appConfig);
+			
+			// execute this app
+			return app.execute(appConfig);
+		}
+		catch (IllegalAccessException | InstantiationException e)
+		{
+			throw new AppInstantiationException(e, appClass);
+		}
 	}
 	
 	private static Set<Class<? extends App>> scanForAppClasses()

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.threatconnect.sdk</groupId>
 	<artifactId>threatconnect-sdk-parent</artifactId>
-	<version>2.3.2</version>
+	<version>3.0</version>
 	<packaging>pom</packaging>
 	<name>ThreatConnect SDK Parent</name>
 
@@ -19,7 +19,7 @@
 		<github.global.server>github</github.global.server>
 
 		<!-- ThreatConnect SDK Version -->
-		<version.this>2.3.2</version.this>
+		<version.this>3.0</version.this>
 
 		<!-- Dependency Versions -->
 		<version.commons-io>2.4</version.commons-io>
@@ -48,8 +48,21 @@
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${version.slf4j}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
 			<version>${version.slf4j}</version>
+		</dependency>
+
+		<!-- Test -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${version.junit}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

@@ -2,10 +2,11 @@ package com.threatconnect.sdk.app;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.FileHandler;
-import java.util.logging.Formatter;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
+
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.FileAppender;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
 
 public class LoggerUtil
 {
@@ -20,8 +21,8 @@ public class LoggerUtil
 	 */
 	public static void reconfigureGlobalLogger(final File logFile, final AppConfig appConfig) throws IOException
 	{
-		// retrieve the global JCL logger
-		Logger logger = Logger.getGlobal();
+		// retrieve the root logger
+		Logger logger = Logger.getRootLogger();
 		
 		reconfigureLogger(logger, logFile, appConfig);
 	}
@@ -42,16 +43,13 @@ public class LoggerUtil
 	{
 		// set the log level for this logger
 		logger.setLevel(appConfig.getTcLogLevel());
+		logger.removeAllAppenders();
 		
-		// create a new file handler to output the logs
-		FileHandler fileHandler = new FileHandler(logFile.getAbsolutePath());
+		// Define log pattern layout
+		PatternLayout layout = new PatternLayout("%-5p %d{HH:mm:ss} %c - %m%n");
 		
-		// create a simple formatter for the log file
-		Formatter formatterTxt = new SimpleFormatter();
-		fileHandler.setFormatter(formatterTxt);
-		
-		// add the file handler to the logger
-		logger.addHandler(fileHandler);
+		// Add the appender to root logger
+		logger.addAppender(new FileAppender(layout, logFile.getAbsolutePath()));
 	}
 	
 	/**
