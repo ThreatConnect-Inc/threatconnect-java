@@ -19,7 +19,7 @@
 		<github.global.server>github</github.global.server>
 
 		<!-- ThreatConnect SDK Version -->
-		<version.this>2.3</version.this>
+		<version.this>2.3.1</version.this>
 
 		<!-- Dependency Versions -->
 		<version.commons-codec>1.9</version.commons-codec>
