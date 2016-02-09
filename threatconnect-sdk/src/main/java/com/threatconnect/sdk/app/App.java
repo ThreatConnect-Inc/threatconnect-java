@@ -281,22 +281,22 @@ public abstract class App
         this.resultLimit = resultLimit;
     }
 
-    protected HttpResponse getHttpResponse(String url)
+    public HttpResponse getHttpResponse(String url)
     {
-        return getHttpResponse(url, null, getMaxRetries(), 0);
+        return getHttpResponse(url, new HashMap<String, String>(), getMaxRetries(), 0);
     }
 
-    protected HttpResponse getHttpResponse(String url, Map<String, String> headerMap)
+    public HttpResponse getHttpResponse(String url, Map<String, String> headerMap)
     {
         return getHttpResponse(url, headerMap, getMaxRetries(), 0);
     }
 
-    protected HttpResponse getHttpResponse(String url, Map<String, String> headerMap, Object entity)
+    public HttpResponse getHttpResponse(String url, Map<String, String> headerMap, Object entity)
     {
         return getHttpResponse(url, headerMap, getMaxRetries(), 0, entity);
     }
 
-    protected HttpResponse getHttpResponse(String url, Map<String, String> headerMap, int retryNum)
+    public HttpResponse getHttpResponse(String url, Map<String, String> headerMap, int retryNum)
     {
         return getHttpResponse(url, headerMap, getMaxRetries(), retryNum);
     }
