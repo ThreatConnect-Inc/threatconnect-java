@@ -39,6 +39,20 @@
 		<version.test-beangen>2.5-RELEASE</version.test-beangen>
 	</properties>
 
+	<dependencies>
+		<!-- Logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${version.slf4j}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${version.slf4j}</version>
+		</dependency>
+	</dependencies>
+
 	<distributionManagement>
 		<repository>
 			<id>internal.repo</id>
