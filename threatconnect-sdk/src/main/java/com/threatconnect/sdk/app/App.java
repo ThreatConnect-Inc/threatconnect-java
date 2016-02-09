@@ -202,7 +202,7 @@ public abstract class App
         this.conn = conn;
     }
 
-    protected AbstractIndicatorReaderAdapter getReader(Indicator.Type type)
+    public AbstractIndicatorReaderAdapter getReader(Indicator.Type type)
     {
         AbstractIndicatorReaderAdapter reader = indReaderMap.get(type);
         if (reader == null)
@@ -214,7 +214,7 @@ public abstract class App
         return reader;
     }
 
-    protected AbstractIndicatorWriterAdapter getWriter(Indicator.Type type)
+    public AbstractIndicatorWriterAdapter getWriter(Indicator.Type type)
     {
         AbstractIndicatorWriterAdapter writer = indWriterMap.get(type);
         if (writer == null)
@@ -226,7 +226,7 @@ public abstract class App
         return writer;
     }
 
-    protected AbstractGroupReaderAdapter getReader(Group.Type type)
+    public AbstractGroupReaderAdapter getReader(Group.Type type)
     {
         AbstractGroupReaderAdapter reader = groupReaderMap.get(type);
         if (reader == null)
@@ -238,7 +238,7 @@ public abstract class App
         return reader;
     }
 
-    protected AbstractGroupWriterAdapter getWriter(Group.Type type)
+    public AbstractGroupWriterAdapter getWriter(Group.Type type)
     {
         AbstractGroupWriterAdapter writer = groupWriterMap.get(type);
         if (writer == null)
@@ -281,22 +281,22 @@ public abstract class App
         this.resultLimit = resultLimit;
     }
 
-    protected HttpResponse getHttpResponse(String url)
+    public HttpResponse getHttpResponse(String url)
     {
-        return getHttpResponse(url, null, getMaxRetries(), 0);
+        return getHttpResponse(url, new HashMap<String, String>(), getMaxRetries(), 0);
     }
 
-    protected HttpResponse getHttpResponse(String url, Map<String, String> headerMap)
+    public HttpResponse getHttpResponse(String url, Map<String, String> headerMap)
     {
         return getHttpResponse(url, headerMap, getMaxRetries(), 0);
     }
 
-    protected HttpResponse getHttpResponse(String url, Map<String, String> headerMap, Object entity)
+    public HttpResponse getHttpResponse(String url, Map<String, String> headerMap, Object entity)
     {
         return getHttpResponse(url, headerMap, getMaxRetries(), 0, entity);
     }
 
-    protected HttpResponse getHttpResponse(String url, Map<String, String> headerMap, int retryNum)
+    public HttpResponse getHttpResponse(String url, Map<String, String> headerMap, int retryNum)
     {
         return getHttpResponse(url, headerMap, getMaxRetries(), retryNum);
     }
@@ -415,7 +415,7 @@ public abstract class App
 
     }
 
-    protected void dissociateTags(AbstractIndicatorReaderAdapter reader, AbstractIndicatorWriterAdapter writer, Indicator indicator)
+    public void dissociateTags(AbstractIndicatorReaderAdapter reader, AbstractIndicatorWriterAdapter writer, Indicator indicator)
     {
 
         String uniqueId = getUniqueId(indicator);
@@ -474,7 +474,7 @@ public abstract class App
 
     }
 
-    protected Attribute setAttribute(AbstractIndicatorWriterAdapter writer, Indicator indicator, Attribute currentAttribute,
+    public Attribute setAttribute(AbstractIndicatorWriterAdapter writer, Indicator indicator, Attribute currentAttribute,
                                 String type, String value)
     {
 
@@ -490,7 +490,7 @@ public abstract class App
         }
     }
 
-    protected Attribute setAttribute(AbstractGroupWriterAdapter writer, Group group, Attribute currentAttribute,
+    public Attribute setAttribute(AbstractGroupWriterAdapter writer, Group group, Attribute currentAttribute,
                                 String type, String value)
     {
 
@@ -506,7 +506,7 @@ public abstract class App
         }
     }
 
-    protected Attribute updateAttribute(AbstractIndicatorWriterAdapter writer, Indicator indicator, Attribute currentAttribute)
+    public Attribute updateAttribute(AbstractIndicatorWriterAdapter writer, Indicator indicator, Attribute currentAttribute)
     {
         try
         {
@@ -523,7 +523,7 @@ public abstract class App
         return null;
     }
 
-    protected Attribute updateAttribute(AbstractGroupWriterAdapter writer, Group group, Attribute currentAttribute)
+    public Attribute updateAttribute(AbstractGroupWriterAdapter writer, Group group, Attribute currentAttribute)
     {
         try
         {
@@ -540,7 +540,7 @@ public abstract class App
 
         return null;
     }
-    protected Attribute addAttribute(AbstractGroupWriterAdapter writer, Group group, String type, String value)
+    public Attribute addAttribute(AbstractGroupWriterAdapter writer, Group group, String type, String value)
     {
 
         Attribute attribute = new AttributeBuilder()
@@ -567,7 +567,7 @@ public abstract class App
         return null;
     }
 
-    protected Attribute addAttribute(AbstractIndicatorWriterAdapter writer, Indicator indicator, String type, String value)
+    public Attribute addAttribute(AbstractIndicatorWriterAdapter writer, Indicator indicator, String type, String value)
     {
 
         Attribute attribute = new AttributeBuilder()
@@ -595,7 +595,7 @@ public abstract class App
         return null;
     }
 
-    protected Indicator getIndicator(AbstractIndicatorReaderAdapter reader, String indText)
+    public Indicator getIndicator(AbstractIndicatorReaderAdapter reader, String indText)
     {
 
         try
@@ -611,7 +611,7 @@ public abstract class App
         return null;
     }
 
-    protected Indicator createIndicator(Indicator.Type type, String indText, double rating)
+    public Indicator createIndicator(Indicator.Type type, String indText, double rating)
     {
         Indicator ind = IndicatorUtil.createIndicator(type);
         setUniqueId(ind, indText);
@@ -623,7 +623,7 @@ public abstract class App
     }
 
 
-    protected void addTags(AbstractGroupWriterAdapter<Group> writer, Integer groupId, List<String> tagLabels)
+    public void addTags(AbstractGroupWriterAdapter<Group> writer, Integer groupId, List<String> tagLabels)
     {
         List<Tag> tags = new ArrayList<>();
         for(String label : tagLabels)
@@ -636,7 +636,7 @@ public abstract class App
         addFullTags(writer, groupId, tags);
     }
 
-    protected void addFullTags(AbstractGroupWriterAdapter<Group> writer, Integer groupId, List<Tag> tags)
+    public void addFullTags(AbstractGroupWriterAdapter<Group> writer, Integer groupId, List<Tag> tags)
     {
 
         if ( tagMap == null )
@@ -673,7 +673,7 @@ public abstract class App
 
     }
 
-    protected void addTags(AbstractIndicatorWriterAdapter<Indicator> writer, Indicator indicator, List<String> tagLabels)
+    public void addTags(AbstractIndicatorWriterAdapter<Indicator> writer, Indicator indicator, List<String> tagLabels)
     {
 
         if ( tagMap == null )
@@ -716,7 +716,7 @@ public abstract class App
 
     }
 
-    protected boolean deleteTag(String tagLabel)
+    public boolean deleteTag(String tagLabel)
     {
         try
         {
@@ -734,7 +734,7 @@ public abstract class App
         return false;
     }
 
-    protected Tag createTag(String tagLabel)
+    public Tag createTag(String tagLabel)
     {
         Tag tag = new TagBuilder().withName(tagLabel).createTag();
         return createTag( tag );
@@ -750,7 +750,7 @@ public abstract class App
         return tagWriter;
     }
 
-    protected Tag createTag(Tag tag)
+    public Tag createTag(Tag tag)
     {
 
         ApiEntitySingleResponse response;
