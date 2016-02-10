@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" name="TCArcSightApp"
+	packages="">
+	<Appenders>
+		<!-- console appender -->
+		<Console name="console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %m%n" />
+		</Console>
+		<!-- file appender -->
+		<RollingFile name="filelogger" fileName="${sys:tc_log_path}/tc2arcsight.log"
+			filePattern="${sys:tc_log_path}/tc2arcsight-%d{MM-dd-yyyy}.log.gz">
+			<PatternLayout>
+				<pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %m%n</pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+			</Policies>
+		</RollingFile>
+		<!-- 
+	    <TLSSyslog name="bsd" host="localhost" port="6514">
+	      <SSL>
+	        <KeyStore location="log4j2-keystore.jks" password="changeme"/>
+	        <TrustStore location="truststore.jks" password="changeme"/>
+	      </SSL>
+	    </TLSSyslog>
+	    <TLSSyslog name="syslogger" host="${sys:syslogHostName}" port="${sys:syslogPort}" facility="${sys:syslogFacility}">
+	      <SSL>
+	        <KeyStore location="${sys:syslogTLSKeystore}" password="${sys:syslogTLSKeystorePassword}"/>
+	        <TrustStore location="/cert/truststore.jks" password="password"/>
+	        	        <TrustStore location="${sys:syslogTLSTruststore" password="${sys:syslogTLSTruststorePassword}"/>
+	        
+	      </SSL>
+	    </TLSSyslog>
+		-->
+
+		<!-- syslog appender -->
+	    <Syslog name="syslogger" protocol="${sys:syslogprotocol}" host="${sys:sysloghostname}" port="${sys:syslogport}" facility="${sys:syslogfacility}">
+	      <SSL>
+	        <KeyStore location="${sys:syslogtlskeystore}" password="${sys:syslogtlskeystorepassword}"/>
+	        <TrustStore location="${sys:syslogtlstruststore}" password="${sys:syslogtlstruststorepassword}"/>
+	      </SSL>
+	    </Syslog>
+
+
+
+<!--  
+		<Syslog name="syslogger" format="RFC5424" host="${sys:syslogHostName}"
+			port="${sys:syslogPort}" protocol="${sys:syslogProtocol}" appName="tc"
+			includeMDC="true" facility="${sys:syslogFacility}" enterpriseNumber="51818"
+			newLine="true" messageId="Audit" id="tc" />
+-->
+	</Appenders>
+	<Loggers>
+		<Root level="error">
+			<AppenderRef ref="console" />
+			<AppenderRef ref="filelogger" />
+		</Root>
+		<Logger name="com.tc" level="INFO" additivity="false">
+			<AppenderRef ref="console" />
+			<AppenderRef ref="filelogger" />
+		</Logger>
+		<Logger name="com.tc.syslog" level="INFO" additivity="false">
+			<AppenderRef ref="syslogger" />
+			<AppenderRef ref="console" />
+			<AppenderRef ref="filelogger" />
+		</Logger>
+	</Loggers>
+</Configuration>

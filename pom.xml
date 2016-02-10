@@ -10,6 +10,7 @@
 	<modules>
 		<module>threatconnect-sdk</module>
 		<module>threatconnect-parser</module>
+		<module>app-package-plugin</module>
 	</modules>
 
 	<properties>
