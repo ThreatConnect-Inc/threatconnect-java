@@ -1,5 +1,6 @@
 package com.threatconnect.sdk.parser.util;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.threatconnect.sdk.parser.model.Address;
@@ -84,7 +85,7 @@ public class IndicatorUtil
 		{
 			// create an address indicator
 			Address address = new Address();
-			address.setIp(ipAddressOrHostName);
+			address.setIp(cleanIP(ipAddressOrHostName));
 			return address;
 		}
 		else
@@ -93,6 +94,31 @@ public class IndicatorUtil
 			Host host = new Host();
 			host.setHostName(ipAddressOrHostName);
 			return host;
+		}
+	}
+	
+	/**
+	 * Cleans an IP address.<br />
+	 * 1. Strips all leading 0s that are not necessary
+	 * 
+	 * @return
+	 */
+	public static String cleanIP(final String ip)
+	{
+		// create a matcher for this ip
+		Matcher matcher = Pattern.compile(RegexUtil.REGEX_LEADING_ZEROS).matcher(ip);
+		
+		// check to see if there are any matches
+		if (matcher.find())
+		{
+			// remove all of the leading zeros and recursively call this again to ensure that the ip
+			// is now clean
+			return cleanIP(ip.replaceAll(RegexUtil.REGEX_LEADING_ZEROS, ""));
+		}
+		else
+		{
+			// the ip address is good
+			return ip;
 		}
 	}
 }

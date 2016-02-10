@@ -24,6 +24,11 @@ public class RegexUtil
 	public static final String REGEX_IP_EXTRACT = "([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3})";
 	
 	/**
+	 * Identifies any unnecessary leading zeros in an ip address
+	 */
+	public static final String REGEX_LEADING_ZEROS = "^0+(?=[0-9])|(?<=\\.)0+(?=[0-9])";
+	
+	/**
 	 * Matches text that is an MD5 hash
 	 */
 	public static final String REGEX_MD5 = "^[a-fA-F0-9]{32}$";
