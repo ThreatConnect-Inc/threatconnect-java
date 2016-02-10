@@ -21,7 +21,7 @@ public final class AppMain
 		try
 		{
 			// create the app config object
-			AppConfig appConfig = new AppConfig();
+			AppConfig appConfig = AppConfig.getInstance();
 			
 			// check to see if there is an app class specified
 			if (null != appConfig.getTcMainAppClass() && !appConfig.getTcMainAppClass().isEmpty())

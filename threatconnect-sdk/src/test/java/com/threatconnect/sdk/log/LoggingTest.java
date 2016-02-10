@@ -20,7 +20,7 @@ public class LoggingTest
 		File logFile = new File(LOG_FILE);
 		logFile.delete();
 		
-		AppConfig appConfig = new AppConfig();
+		AppConfig appConfig = AppConfig.getInstance();
 		
 		LoggerUtil.reconfigureGlobalLogger(logFile, appConfig);
 		

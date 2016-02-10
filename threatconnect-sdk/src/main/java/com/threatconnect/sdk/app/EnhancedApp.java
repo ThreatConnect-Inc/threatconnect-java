@@ -3,11 +3,7 @@ package com.threatconnect.sdk.app;
 import static com.threatconnect.sdk.util.IndicatorUtil.getUniqueId;
 import static com.threatconnect.sdk.util.IndicatorUtil.setUniqueId;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -86,7 +82,7 @@ public abstract class EnhancedApp extends App
 
     public EnhancedApp()
     {
-        this(new AppConfig());
+        this(AppConfig.getInstance());
     }
 
     public EnhancedApp(AppConfig appConfig)

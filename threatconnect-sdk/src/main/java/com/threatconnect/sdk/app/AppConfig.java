@@ -2,7 +2,7 @@ package com.threatconnect.sdk.app;
 
 import org.apache.log4j.Level;
 
-public class AppConfig
+public final class AppConfig
 {
 	public static final String TC_MAIN_APP_CLASS = "tc_main_app_class";
 	public static final String TC_LOG_PATH = "tc_log_path";
@@ -24,6 +24,14 @@ public class AppConfig
 	
 	public static final int DEFAULT_MAX_RESULTS = 350;
 	public static final String DEFAULT_LOG_LEVEL = "INFO";
+	
+	// holds the instance of this singleton
+	private static AppConfig instance;
+	
+	private AppConfig()
+	{
+	
+	}
 	
 	public String getTcMainAppClass()
 	{
@@ -196,5 +204,21 @@ public class AppConfig
 	{
 		Double value = getDouble(key);
 		return value == null ? defaultValue : value;
+	}
+	
+	/**
+	 * Retrieves the instance of this singleton
+	 * 
+	 * @return
+	 */
+	public static synchronized AppConfig getInstance()
+	{
+		// check to see if the instance is null
+		if (null == instance)
+		{
+			instance = new AppConfig();
+		}
+		
+		return instance;
 	}
 }
