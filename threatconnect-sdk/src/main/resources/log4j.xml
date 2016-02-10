@@ -14,14 +14,8 @@
 		<appender-ref ref="console" />
 	</logger>
 	
-	<logger name="com.threatconnect.sdk.app" additivity="false">
-		<level value="info" />
-		<appender-ref ref="console" />
-	</logger>
-	
 	<root>
 		<priority value="info" />
 		<appender-ref ref="console" />
 	</root>
-
 </log4j:configuration>
