@@ -17,4 +17,11 @@ public interface Parser
 	 * @throws ParserException
 	 */
 	public List<Item> parseData(Date startDate) throws ParserException;
+	
+	/**
+	 * Returns a unique user-friendly name to identify this parser.
+	 * 
+	 * @return
+	 */
+	public String getUniqueName();
 }
