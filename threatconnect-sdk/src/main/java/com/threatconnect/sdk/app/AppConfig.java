@@ -100,10 +100,9 @@ public class AppConfig
 		return getApiMaxResults(DEFAULT_MAX_RESULTS);
 	}
 	
-	public Integer getApiMaxResults(int defaultMax)
+	public int getApiMaxResults(int defaultMax)
 	{
-		Integer maxResults = getInteger(TC_API_MAX_RESULT);
-		return null == maxResults ? defaultMax : maxResults;
+		return getInteger(TC_API_MAX_RESULT, defaultMax);
 	}
 	
 	public String getOwner()
@@ -153,6 +152,20 @@ public class AppConfig
 	}
 	
 	/**
+	 * Returns a system property as an integer. Returns the defaultValue if the key does not exist
+	 * or if the value is not an integer
+	 * 
+	 * @param key
+	 * @param defaultValue
+	 * @return
+	 */
+	public int getInteger(final String key, final int defaultValue)
+	{
+		Integer value = getInteger(key);
+		return value == null ? defaultValue : value;
+	}
+	
+	/**
 	 * Returns a system property as an integer. Returns null if the key does not exist or if the
 	 * value is not an double
 	 * 
@@ -169,5 +182,19 @@ public class AppConfig
 		{
 			return null;
 		}
+	}
+	
+	/**
+	 * Returns a system property as an double. Returns the defaultValue if the key does not exist
+	 * or if the value is not a double
+	 * 
+	 * @param key
+	 * @param defaultValue
+	 * @return
+	 */
+	public double getDouble(final String key, final double defaultValue)
+	{
+		Double value = getDouble(key);
+		return value == null ? defaultValue : value;
 	}
 }
