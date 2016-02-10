@@ -49,42 +49,46 @@ public abstract class ParserApp extends App
 				// for each of the parsers
 				for (Parser parser : parsers)
 				{
-					try
+					// make sure that this parser is not null
+					if (null != parser)
 					{
-						// parse the data
-						List<Item> items = parser.parseData(getParserStartDate(appConfig));
-						getLogger().info("Successfully parsed {} records", items.size());
-						
-						// allow child classes to do something with the parsed data
-						onParsingFinished(items);
-						
-						// create a save service that to write the data
-						SaveService saveService = getSaveService(appConfig);
-						
-						// save the list of items
-						SaveResults saveResults = saveService.saveItems(items);
-						parserSaveResults.put(parser.getUniqueName(), saveResults);
-						
-						// add up all of the indicators and groups
-						Count count =
-							new Count(count(items, ItemType.INDICATOR, true), count(items, ItemType.GROUP, true));
-						parserCountMap.put(parser.getUniqueName(), count);
-						
-						// add up the totals
-						totalIndicatorsFound += count.getIndicators();
-						totalGroupsFound += count.getGroups();
-						
-						totalIndicatorsSaved +=
-							count.getIndicators() - saveResults.countFailedItems(ItemType.INDICATOR);
-						totalGroupsSaved += count.getGroups() - saveResults.countFailedItems(ItemType.GROUP);
-					}
-					catch (ParserException e)
-					{
-						getLogger().error(e.getMessage(), e);
-					}
-					catch (Exception e)
-					{
-						getLogger().error(e.getMessage(), e);
+						try
+						{
+							// parse the data
+							List<Item> items = parser.parseData(getParserStartDate(appConfig));
+							getLogger().info("Successfully parsed {} records", items.size());
+							
+							// allow child classes to do something with the parsed data
+							onParsingFinished(items);
+							
+							// create a save service that to write the data
+							SaveService saveService = getSaveService(appConfig);
+							
+							// save the list of items
+							SaveResults saveResults = saveService.saveItems(items);
+							parserSaveResults.put(parser.getUniqueName(), saveResults);
+							
+							// add up all of the indicators and groups
+							Count count =
+								new Count(count(items, ItemType.INDICATOR, true), count(items, ItemType.GROUP, true));
+							parserCountMap.put(parser.getUniqueName(), count);
+							
+							// add up the totals
+							totalIndicatorsFound += count.getIndicators();
+							totalGroupsFound += count.getGroups();
+							
+							totalIndicatorsSaved +=
+								count.getIndicators() - saveResults.countFailedItems(ItemType.INDICATOR);
+							totalGroupsSaved += count.getGroups() - saveResults.countFailedItems(ItemType.GROUP);
+						}
+						catch (ParserException e)
+						{
+							getLogger().error(e.getMessage(), e);
+						}
+						catch (Exception e)
+						{
+							getLogger().error(e.getMessage(), e);
+						}
 					}
 				}
 				
