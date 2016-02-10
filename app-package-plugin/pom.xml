@@ -5,10 +5,14 @@
 		<artifactId>threatconnect-sdk-parent</artifactId>
 		<version>3.0</version>
 	</parent>
-	
+
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>app-package-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
+
+	<properties>
+		<main.basedir>${project.parent.basedir}</main.basedir>
+	</properties>
 
 	<dependencies>
 		<dependency>
