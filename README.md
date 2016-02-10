@@ -1,4 +1,5 @@
 # Java SDK for ThreatConnect
+Click on any of the projects above to view more detailed information.
 
 ## threatconnect-sdk
 This SDK provides a high-level abstraction layer of the ThreatConnect&trade; RESTful API and can be used to read and write entities within ThreatConnect&trade; (indicators, threats, victims, etc.).
