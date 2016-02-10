@@ -1,5 +1,10 @@
 package com.threatconnect.sdk.app;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Pattern;
+
 import org.apache.log4j.Level;
 
 public final class AppConfig
@@ -141,6 +146,29 @@ public final class AppConfig
 	}
 	
 	/**
+	 * Returns a value as a list by splitting the string using the delimiter
+	 * 
+	 * @param key
+	 * @param delimiter
+	 * @return
+	 */
+	public List<String> getStringList(final String key, final String delimiter)
+	{
+		String value = getString(key);
+		
+		// make sure that the value is not null
+		if (null != value && !value.isEmpty())
+		{
+			String[] array = value.split(Pattern.quote(delimiter));
+			return Arrays.asList(array);
+		}
+		else
+		{
+			return new ArrayList<String>();
+		}
+	}
+	
+	/**
 	 * Returns a system property as an integer. Returns null if the key does not exist or if the
 	 * value is not an integer
 	 * 
@@ -153,7 +181,7 @@ public final class AppConfig
 		{
 			return Integer.parseInt(getString(key));
 		}
-		catch (NumberFormatException e)
+		catch (NullPointerException | NumberFormatException e)
 		{
 			return null;
 		}
@@ -186,7 +214,7 @@ public final class AppConfig
 		{
 			return Double.parseDouble(getString(key));
 		}
-		catch (NumberFormatException e)
+		catch (NullPointerException | NumberFormatException e)
 		{
 			return null;
 		}

@@ -60,17 +60,11 @@ public class AttributeHelper
 	 * 
 	 * @param item
 	 * @param value
+	 * @param displayed
 	 */
 	public static void addSourceAttribute(final Item item, final String value, final Boolean displayed)
 	{
-		// create a new attribute
-		Attribute attribute = new Attribute();
-		attribute.setKey(ATTRIBUTE_SOURCE);
-		attribute.setValue(value);
-		attribute.setDisplayed(displayed);
-		
-		// add the attribute to the item
-		item.getAttributes().add(attribute);
+		addAttribute(item, ATTRIBUTE_SOURCE, value, displayed);
 	}
 	
 	/**
@@ -81,10 +75,36 @@ public class AttributeHelper
 	 */
 	public static void addAdditionalAnalysisAndContext(final Item item, final String value)
 	{
+		addAttribute(item, ATTRIBUTE_AAC, value);
+	}
+	
+	/**
+	 * Adds an attribute to the item
+	 * 
+	 * @param item
+	 * @param key
+	 * @param value
+	 */
+	public static void addAttribute(final Item item, final String key, final String value)
+	{
+		addAttribute(item, key, value, null);
+	}
+	
+	/**
+	 * Adds an attribute to the item
+	 * 
+	 * @param item
+	 * @param key
+	 * @param value
+	 * @param displayed
+	 */
+	public static void addAttribute(final Item item, final String key, final String value, final Boolean displayed)
+	{
 		// create a new attribute
 		Attribute attribute = new Attribute();
-		attribute.setKey(ATTRIBUTE_AAC);
+		attribute.setKey(key);
 		attribute.setValue(value);
+		attribute.setDisplayed(displayed);
 		
 		// add the attribute to the item
 		item.getAttributes().add(attribute);
