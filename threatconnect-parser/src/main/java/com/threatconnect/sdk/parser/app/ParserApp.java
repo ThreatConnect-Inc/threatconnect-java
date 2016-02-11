@@ -59,7 +59,7 @@ public abstract class ParserApp extends App
 							getLogger().info("Successfully parsed {} records", items.size());
 							
 							// allow child classes to do something with the parsed data
-							onParsingFinished(items);
+							onParsingFinished(items, parser);
 							
 							// create a save service that to write the data
 							SaveService saveService = getSaveService(appConfig);
@@ -233,7 +233,7 @@ public abstract class ParserApp extends App
 	 * 
 	 * @param items
 	 */
-	protected void onParsingFinished(final List<Item> items)
+	protected void onParsingFinished(final List<Item> items, final Parser parser)
 	{
 	
 	}
