@@ -16,9 +16,16 @@ public class Host extends Indicator
 		return hostName;
 	}
 	
-	public void setHostName(String hostName)
+	public void setHostName(final String hostName)
 	{
-		this.hostName = hostName;
+		if (null != hostName)
+		{
+			this.hostName = hostName.toLowerCase();
+		}
+		else
+		{
+			this.hostName = null;
+		}
 	}
 	
 	public String getDnsActive()
@@ -26,7 +33,7 @@ public class Host extends Indicator
 		return dnsActive;
 	}
 	
-	public void setDnsActive(String dnsActive)
+	public void setDnsActive(final String dnsActive)
 	{
 		this.dnsActive = dnsActive;
 	}
@@ -36,7 +43,7 @@ public class Host extends Indicator
 		return whoisActive;
 	}
 	
-	public void setWhoisActive(String whoisActive)
+	public void setWhoisActive(final String whoisActive)
 	{
 		this.whoisActive = whoisActive;
 	}

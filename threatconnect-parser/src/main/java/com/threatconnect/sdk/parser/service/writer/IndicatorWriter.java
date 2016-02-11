@@ -144,6 +144,7 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 		{
 			// create a new indicator writer to do the association
 			AbstractIndicatorWriterAdapter<T> writer = createWriterAdapter();
+			ApiEntitySingleResponse<?, ?> response = null;
 			
 			// holds the uniqueid of this indicator
 			final String uniqueID = buildID();
@@ -152,22 +153,30 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 			switch (groupType)
 			{
 				case ADVERSARY:
-					writer.associateGroupAdversary(uniqueID, savedID);
+					response = writer.associateGroupAdversary(uniqueID, savedID);
 					break;
 				case EMAIL:
-					writer.associateGroupEmail(uniqueID, savedID);
+					response = writer.associateGroupEmail(uniqueID, savedID);
 					break;
 				case INCIDENT:
-					writer.associateGroupIncident(uniqueID, savedID);
+					response = writer.associateGroupIncident(uniqueID, savedID);
 					break;
 				case SIGNATURE:
-					writer.associateGroupSignature(uniqueID, savedID);
+					response = writer.associateGroupSignature(uniqueID, savedID);
 					break;
 				case THREAT:
-					writer.associateGroupThreat(uniqueID, savedID);
+					response = writer.associateGroupThreat(uniqueID, savedID);
 					break;
 				default:
+					response = null;
 					break;
+			}
+			
+			// check to see if this was not successful
+			if (null != response && !response.isSuccess())
+			{
+				logger.warn("Failed to associate group id \"{}\" with indicator: {}", savedID, uniqueID);
+				logger.warn(response.getMessage());
 			}
 		}
 		catch (FailedResponseException e)
@@ -184,6 +193,8 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 		{
 			// create a new indicator writer to do the association
 			AbstractIndicatorWriterAdapter<T> writer = createWriterAdapter();
+			ApiEntitySingleResponse<?, ?> response = null;
+			String indicatorID = null;
 			
 			// holds the uniqueid of this indicator
 			final String uniqueID = buildID();
@@ -192,10 +203,12 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 			switch (indicator.getIndicatorType())
 			{
 				case ADDRESS:
-					writer.associateIndicatorAddress(uniqueID, ((Address) indicator).getIp());
+					indicatorID = ((Address) indicator).getIp();
+					response = writer.associateIndicatorAddress(uniqueID, indicatorID);
 					break;
 				case EMAIL_ADDRESS:
-					writer.associateIndicatorEmailAddress(uniqueID, ((EmailAddress) indicator).getAddress());
+					indicatorID = ((EmailAddress) indicator).getAddress();
+					response = writer.associateIndicatorEmailAddress(uniqueID, indicatorID);
 					break;
 				case FILE:
 					File file = (File) indicator;
@@ -213,18 +226,30 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 						// make sure the hash is not null or empty
 						if (null != hash && !hash.isEmpty())
 						{
-							writer.associateIndicatorFile(uniqueID, hash);
+							indicatorID = hash;
+							response = writer.associateIndicatorFile(uniqueID, indicatorID);
 						}
 					}
 					break;
 				case HOST:
-					writer.associateIndicatorHost(uniqueID, ((Host) indicator).getHostName());
+					indicatorID = ((Host) indicator).getHostName();
+					response = writer.associateIndicatorHost(uniqueID, indicatorID);
 					break;
 				case URL:
-					writer.associateIndicatorUrl(uniqueID, ((Url) indicator).getText());
+					indicatorID = ((Url) indicator).getText();
+					response = writer.associateIndicatorUrl(uniqueID, indicatorID);
 					break;
 				default:
+					indicatorID = null;
+					response = null;
 					break;
+			}
+			
+			// check to see if this was not successful
+			if (null != response && !response.isSuccess())
+			{
+				logger.warn("Failed to associate indicator \"{}\" with indicator: {}", indicatorID, uniqueID);
+				logger.warn(response.getMessage());
 			}
 		}
 		catch (FailedResponseException e)

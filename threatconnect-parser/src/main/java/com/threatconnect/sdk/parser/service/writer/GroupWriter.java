@@ -81,8 +81,16 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 					for (Attribute attribute : groupSource.getAttributes())
 					{
 						// save the attributes for this group
-						writer.addAttribute(getSavedGroupID(),
+						ApiEntitySingleResponse<?, ?> attrResponse = writer.addAttribute(getSavedGroupID(),
 							mapper.map(attribute, com.threatconnect.sdk.server.entity.Attribute.class));
+							
+						// check to see if this was not successful
+						if (!attrResponse.isSuccess())
+						{
+							logger.warn("Failed to save attribute \"{}\" for group id: {}", attribute.getKey(),
+								getSavedGroupID());
+							logger.warn(attrResponse.getMessage());
+						}
 					}
 				}
 				
@@ -93,7 +101,14 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 					for (String tag : groupSource.getTags())
 					{
 						// save the tag for this group
-						writer.associateTag(getSavedGroupID(), tag);
+						ApiEntitySingleResponse<?, ?> tagResponse = writer.associateTag(getSavedGroupID(), tag);
+						
+						// check to see if this was not successful
+						if (!tagResponse.isSuccess())
+						{
+							logger.warn("Failed to save tag \"{}\" for group id: {}", tag, getSavedGroupID());
+							logger.warn(tagResponse.getMessage());
+						}
 					}
 				}
 				
@@ -126,27 +141,36 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 		{
 			// create a new group writer to do the association
 			AbstractGroupWriterAdapter<T> writer = createWriterAdapter();
+			ApiEntitySingleResponse<?, ?> response = null;
 			
 			// switch based on the group type
 			switch (groupType)
 			{
 				case ADVERSARY:
-					writer.associateGroupAdversary(getSavedGroupID(), savedID);
+					response = writer.associateGroupAdversary(getSavedGroupID(), savedID);
 					break;
 				case EMAIL:
-					writer.associateGroupEmail(getSavedGroupID(), savedID);
+					response = writer.associateGroupEmail(getSavedGroupID(), savedID);
 					break;
 				case INCIDENT:
-					writer.associateGroupIncident(getSavedGroupID(), savedID);
+					response = writer.associateGroupIncident(getSavedGroupID(), savedID);
 					break;
 				case SIGNATURE:
-					writer.associateGroupSignature(getSavedGroupID(), savedID);
+					response = writer.associateGroupSignature(getSavedGroupID(), savedID);
 					break;
 				case THREAT:
-					writer.associateGroupThreat(getSavedGroupID(), savedID);
+					response = writer.associateGroupThreat(getSavedGroupID(), savedID);
 					break;
 				default:
+					response = null;
 					break;
+			}
+			
+			// check to see if this was not successful
+			if (null != response && !response.isSuccess())
+			{
+				logger.warn("Failed to associate group id \"{}\" with group id: {}", savedID, getSavedGroupID());
+				logger.warn(response.getMessage());
 			}
 		}
 		catch (FailedResponseException e)
@@ -171,15 +195,19 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 		{
 			// create a new group writer to do the association
 			AbstractGroupWriterAdapter<T> writer = createWriterAdapter();
+			ApiEntitySingleResponse<?, ?> response = null;
+			String indicatorID = null;
 			
 			// switch based on the indicator type
 			switch (indicator.getIndicatorType())
 			{
 				case ADDRESS:
-					writer.associateIndicatorAddress(getSavedGroupID(), ((Address) indicator).getIp());
+					indicatorID = ((Address) indicator).getIp();
+					response = writer.associateIndicatorAddress(getSavedGroupID(), indicatorID);
 					break;
 				case EMAIL_ADDRESS:
-					writer.associateIndicatorEmailAddress(getSavedGroupID(), ((EmailAddress) indicator).getAddress());
+					indicatorID = ((EmailAddress) indicator).getAddress();
+					response = writer.associateIndicatorEmailAddress(getSavedGroupID(), indicatorID);
 					break;
 				case FILE:
 					File file = (File) indicator;
@@ -189,26 +217,37 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 					});
 					
 					// :TODO: the plural version of this method throws an internal sdk error so we
-					// have
-					// to use the single method and loop through the hashes
-					// for each of the hashes
+					// have to use the single method and loop through the hashes for each of the
+					// hashes
 					for (String hash : hashes)
 					{
 						// make sure the hash is not null or empty
 						if (null != hash && !hash.isEmpty())
 						{
-							writer.associateIndicatorFile(getSavedGroupID(), hash);
+							indicatorID = hash;
+							response = writer.associateIndicatorFile(getSavedGroupID(), indicatorID);
 						}
 					}
 					break;
 				case HOST:
-					writer.associateIndicatorHost(getSavedGroupID(), ((Host) indicator).getHostName());
+					indicatorID = ((Host) indicator).getHostName();
+					response = writer.associateIndicatorHost(getSavedGroupID(), indicatorID);
 					break;
 				case URL:
-					writer.associateIndicatorUrl(getSavedGroupID(), ((Url) indicator).getText());
+					indicatorID = ((Url) indicator).getText();
+					response = writer.associateIndicatorUrl(getSavedGroupID(), indicatorID);
 					break;
 				default:
+					indicatorID = null;
+					response = null;
 					break;
+			}
+			
+			// check to see if this was not successful
+			if (null != response && !response.isSuccess())
+			{
+				logger.warn("Failed to associate indicator \"{}\" with group id: {}", indicatorID, getSavedGroupID());
+				logger.warn(response.getMessage());
 			}
 		}
 		catch (FailedResponseException e)

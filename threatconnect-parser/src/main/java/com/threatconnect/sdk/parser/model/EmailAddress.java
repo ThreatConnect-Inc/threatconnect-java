@@ -14,8 +14,15 @@ public class EmailAddress extends Indicator
 		return address;
 	}
 	
-	public void setAddress(String address)
+	public void setAddress(final String address)
 	{
-		this.address = address;
+		if (null != address)
+		{
+			this.address = address.toLowerCase();
+		}
+		else
+		{
+			this.address = null;
+		}
 	}
 }

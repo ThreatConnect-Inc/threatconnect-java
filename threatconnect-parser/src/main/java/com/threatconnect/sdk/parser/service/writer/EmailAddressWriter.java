@@ -14,14 +14,6 @@ public class EmailAddressWriter extends IndicatorWriter<EmailAddress, com.threat
 	@Override
 	protected String buildID()
 	{
-		// make sure that the address is not null
-		if (null != indicatorSource.getAddress())
-		{
-			return indicatorSource.getAddress().toLowerCase();
-		}
-		else
-		{
-			return null;
-		}
+		return indicatorSource.getAddress();
 	}
 }

@@ -14,14 +14,6 @@ public class HostWriter extends IndicatorWriter<Host, com.threatconnect.sdk.serv
 	@Override
 	protected String buildID()
 	{
-		// make sure that the host name is not null
-		if (null != indicatorSource.getHostName())
-		{
-			return indicatorSource.getHostName().toLowerCase();
-		}
-		else
-		{
-			return null;
-		}
+		return indicatorSource.getHostName();
 	}
 }
