@@ -6,12 +6,10 @@
 package com.threatconnect.sdk.client.writer;
 
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.server.entity.Address;
 import com.threatconnect.sdk.server.entity.Adversary;
 import com.threatconnect.sdk.server.entity.Email;
 import com.threatconnect.sdk.server.entity.EmailAddress;
-import com.threatconnect.sdk.server.entity.File;
 import com.threatconnect.sdk.server.entity.Group;
 import com.threatconnect.sdk.server.entity.Host;
 import com.threatconnect.sdk.server.entity.Incident;
@@ -186,6 +184,8 @@ public class WriterAdapterFactory {
         switch (type) {
             case Adversary:
                 return createAdversaryGroupWriter(conn);
+            case Document:
+            	return createDocumentWriter(conn);
             case Email:
                 return createEmailGroupWriter(conn);
             case Incident:

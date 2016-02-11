@@ -231,6 +231,16 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     public ApiEntitySingleResponse associateGroupAdversary(String uniqueId, Integer adversaryId) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupAdversary(uniqueId, adversaryId);
     }
+    
+    @Override
+    public ApiEntitySingleResponse associateGroupDocument(String uniqueId, Integer adversaryId) throws IOException, FailedResponseException {
+    	 return groupAssocWriter.associateGroupDocument(uniqueId, adversaryId);
+    }
+    
+    @Override
+    public ApiEntitySingleResponse associateGroupDocument(String uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
+    	return groupAssocWriter.associateGroupDocument(uniqueId, adversaryId);
+    }
 
     @Override
     public ApiEntitySingleResponse associateGroupAdversary(String uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {

@@ -13,6 +13,7 @@ import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.response.entity.AdversaryResponse;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
+import com.threatconnect.sdk.server.response.entity.DocumentResponse;
 import com.threatconnect.sdk.server.response.entity.EmailResponse;
 import com.threatconnect.sdk.server.response.entity.IncidentResponse;
 import com.threatconnect.sdk.server.response.entity.SignatureResponse;
@@ -59,6 +60,23 @@ public abstract class AbstractGroupAssociateWriterAdapter<T,P> extends AbstractB
         
         Map<String, Object> map = AbstractClientAdapter.createParamMap("id", uniqueId, "groupId", adversaryId);
         AdversaryResponse data = createItem(getUrlBasePrefix() + ".byId.groups.adversaries.byGroupId", AdversaryResponse.class, ownerName, map, null);
+
+        return data;
+    }
+    
+    @Override
+    public ApiEntitySingleResponse associateGroupDocument(P uniqueId, Integer documentId)
+    	throws IOException, FailedResponseException
+    {
+    	return associateGroupDocument(uniqueId, documentId, null);
+    }
+    
+    @Override
+    public ApiEntitySingleResponse associateGroupDocument(P uniqueId, Integer documentId, String ownerName)
+    	throws IOException, FailedResponseException
+    {
+    	Map<String, Object> map = AbstractClientAdapter.createParamMap("id", uniqueId, "groupId", documentId);
+    	DocumentResponse data = createItem(getUrlBasePrefix() + ".byId.groups.documents.byGroupId", DocumentResponse.class, ownerName, map, null);
 
         return data;
     }

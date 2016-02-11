@@ -28,6 +28,12 @@ public interface GroupAssociateWritable<P> {
     
     public ApiEntitySingleResponse associateGroupAdversary(P uniqueId, Integer adversaryId, String ownerName) 
             throws IOException, FailedResponseException;
+    
+    public ApiEntitySingleResponse associateGroupDocument(P uniqueId, Integer documentId) 
+        throws IOException, FailedResponseException;
+    
+    public ApiEntitySingleResponse associateGroupDocument(P uniqueId, Integer documentId, String ownerName) 
+        throws IOException, FailedResponseException;
 
     public WriteListResponse<Integer> associateGroupEmails(P uniqueId, List<Integer> emailIds) 
         throws IOException;

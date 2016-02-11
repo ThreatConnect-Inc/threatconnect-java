@@ -127,6 +127,16 @@ public class TagWriterAdapter
     }
 
     @Override
+    public ApiEntitySingleResponse associateGroupDocument(String uniqueId, Integer documentId) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupDocument(uniqueId, documentId);
+    }
+
+    @Override
+    public ApiEntitySingleResponse associateGroupDocument(String uniqueId, Integer documentId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupDocument(uniqueId, documentId, ownerName);
+    }
+    
+    @Override
     public WriteListResponse<Integer> associateGroupEmails(String uniqueId, List<Integer> emailIds) throws IOException {
         return groupAssocWriter.associateGroupEmails(uniqueId, emailIds);
     }

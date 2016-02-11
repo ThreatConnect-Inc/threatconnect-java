@@ -43,6 +43,7 @@ public class Group implements AttributeHolder
 
     public static enum Type {
           Adversary
+        , Document
         , Email
         , Incident
         , Signature

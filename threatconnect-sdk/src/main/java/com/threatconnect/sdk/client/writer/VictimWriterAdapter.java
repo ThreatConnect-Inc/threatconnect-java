@@ -149,7 +149,17 @@ public class VictimWriterAdapter
     public ApiEntitySingleResponse associateGroupAdversary(Integer uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupAdversary(uniqueId, adversaryId, ownerName);
     }
+    
+    @Override
+	public ApiEntitySingleResponse associateGroupDocument(Integer uniqueId, Integer documentId) throws IOException, FailedResponseException	{
+    	return groupAssocWriter.associateGroupDocument(uniqueId, documentId);
+	}
 
+	@Override
+	public ApiEntitySingleResponse associateGroupDocument(Integer uniqueId, Integer documentId, String ownerName) throws IOException, FailedResponseException {
+		return groupAssocWriter.associateGroupDocument(uniqueId, documentId, ownerName);
+	}
+    
     @Override
     public WriteListResponse<Integer> associateGroupEmails(Integer uniqueId, List<Integer> emailIds) throws IOException {
         return groupAssocWriter.associateGroupEmails(uniqueId, emailIds);
@@ -729,6 +739,4 @@ public class VictimWriterAdapter
     public ApiEntitySingleResponse dissociateVictimAssetWebsite(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.dissociateVictimAssetWebsite(uniqueId, assetId, ownerName);
     }
-
-
 }

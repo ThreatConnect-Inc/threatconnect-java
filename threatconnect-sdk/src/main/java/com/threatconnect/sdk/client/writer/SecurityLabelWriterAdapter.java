@@ -126,6 +126,16 @@ public class SecurityLabelWriterAdapter
     public ApiEntitySingleResponse associateGroupAdversary(String uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupAdversary(uniqueId, adversaryId, ownerName);
     }
+    
+    @Override
+    public ApiEntitySingleResponse associateGroupDocument(String uniqueId, Integer documentId) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupDocument(uniqueId, documentId);
+    }
+
+    @Override
+    public ApiEntitySingleResponse associateGroupDocument(String uniqueId, Integer documentId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupDocument(uniqueId, documentId, ownerName);
+    }
 
     @Override
     public WriteListResponse<Integer> associateGroupEmails(String uniqueId, List<Integer> emailIds) throws IOException{

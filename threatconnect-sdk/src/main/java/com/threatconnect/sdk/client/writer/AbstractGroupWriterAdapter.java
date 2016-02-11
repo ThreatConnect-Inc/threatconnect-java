@@ -1,5 +1,8 @@
 package com.threatconnect.sdk.client.writer;
 
+import java.io.IOException;
+import java.util.List;
+
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.response.WriteListResponse;
 import com.threatconnect.sdk.client.writer.associate.AbstractAttributeAssociateWriterAdapter;
@@ -17,14 +20,10 @@ import com.threatconnect.sdk.client.writer.associate.TagAssociateWritable;
 import com.threatconnect.sdk.client.writer.associate.VictimAssetAssociateWritable;
 import com.threatconnect.sdk.client.writer.associate.VictimAssociateWritable;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Attribute;
 import com.threatconnect.sdk.server.entity.Group;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
-
-import java.io.IOException;
-import java.util.List;
 
 /**
  * 
@@ -242,6 +241,16 @@ public abstract class AbstractGroupWriterAdapter<T extends Group>
     @Override
     public ApiEntitySingleResponse associateGroupAdversary(Integer uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupAdversary(uniqueId, adversaryId, ownerName);
+    }
+    
+    @Override
+    public ApiEntitySingleResponse associateGroupDocument(Integer uniqueId, Integer adversaryId) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupDocument(uniqueId, adversaryId);
+    }
+    
+    @Override
+    public ApiEntitySingleResponse associateGroupDocument(Integer uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocWriter.associateGroupDocument(uniqueId, adversaryId, ownerName);
     }
 
     @Override
