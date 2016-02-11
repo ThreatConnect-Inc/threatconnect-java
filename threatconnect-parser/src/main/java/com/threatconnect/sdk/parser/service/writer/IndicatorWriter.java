@@ -93,8 +93,15 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 					for (Attribute attribute : indicatorSource.getAttributes())
 					{
 						// save the attributes for this indicator
-						writer.addAttribute(buildID(),
+						ApiEntitySingleResponse<?, ?> attrResponse = writer.addAttribute(buildID(),
 							mapper.map(attribute, com.threatconnect.sdk.server.entity.Attribute.class));
+							
+						// check to see if this was not successful
+						if (!attrResponse.isSuccess())
+						{
+							logger.warn("Failed to save attribute \"{}\" for: {}", attribute.getKey(), buildID());
+							logger.warn(attrResponse.getMessage());
+						}
 					}
 				}
 				
@@ -105,7 +112,14 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 					for (String tag : indicatorSource.getTags())
 					{
 						// save the tag for this indicator
-						writer.associateTag(buildID(), tag);
+						ApiEntitySingleResponse<?, ?> tagResponse = writer.associateTag(buildID(), tag);
+						
+						// check to see if this was not successful
+						if (!tagResponse.isSuccess())
+						{
+							logger.warn("Failed to save tag \"{}\" for: {}", tag, buildID());
+							logger.warn(tagResponse.getMessage());
+						}
 					}
 				}
 				
