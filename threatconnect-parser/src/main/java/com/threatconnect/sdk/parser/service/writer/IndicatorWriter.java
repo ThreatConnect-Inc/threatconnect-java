@@ -155,6 +155,9 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 				case ADVERSARY:
 					response = writer.associateGroupAdversary(uniqueID, savedID);
 					break;
+				case DOCUMENT:
+					response = writer.associateGroupDocument(uniqueID, savedID);
+					break;
 				case EMAIL:
 					response = writer.associateGroupEmail(uniqueID, savedID);
 					break;

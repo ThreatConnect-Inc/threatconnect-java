@@ -10,6 +10,7 @@ import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.parser.model.Address;
 import com.threatconnect.sdk.parser.model.Adversary;
+import com.threatconnect.sdk.parser.model.Document;
 import com.threatconnect.sdk.parser.model.Email;
 import com.threatconnect.sdk.parser.model.EmailAddress;
 import com.threatconnect.sdk.parser.model.File;
@@ -23,6 +24,7 @@ import com.threatconnect.sdk.parser.model.Threat;
 import com.threatconnect.sdk.parser.model.Url;
 import com.threatconnect.sdk.parser.service.writer.AddressWriter;
 import com.threatconnect.sdk.parser.service.writer.AdversaryWriter;
+import com.threatconnect.sdk.parser.service.writer.DocumentWriter;
 import com.threatconnect.sdk.parser.service.writer.EmailAddressWriter;
 import com.threatconnect.sdk.parser.service.writer.EmailWriter;
 import com.threatconnect.sdk.parser.service.writer.FileWriter;
@@ -148,6 +150,9 @@ public class SaveApiService implements SaveService
 		{
 			case ADVERSARY:
 				writer = new AdversaryWriter(connection, (Adversary) group);
+				break;
+			case DOCUMENT:
+				writer = new DocumentWriter(connection, (Document) group);
 				break;
 			case EMAIL:
 				writer = new EmailWriter(connection, (Email) group);

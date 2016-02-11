@@ -149,6 +149,9 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 				case ADVERSARY:
 					response = writer.associateGroupAdversary(getSavedGroupID(), savedID);
 					break;
+				case DOCUMENT:
+					response = writer.associateGroupDocument(getSavedGroupID(), savedID);
+					break;
 				case EMAIL:
 					response = writer.associateGroupEmail(getSavedGroupID(), savedID);
 					break;
