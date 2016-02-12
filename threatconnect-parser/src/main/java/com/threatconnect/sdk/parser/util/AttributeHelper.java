@@ -1,5 +1,8 @@
 package com.threatconnect.sdk.parser.util;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import com.threatconnect.sdk.parser.model.Attribute;
@@ -13,7 +16,12 @@ import com.threatconnect.sdk.parser.model.Item;
 public class AttributeHelper
 {
 	public static final String ATTRIBUTE_AAC = "Additional Analysis and Context";
+	public static final String ATTRIBUTE_DESCRIPTION = "Description";
 	public static final String ATTRIBUTE_SOURCE = "Source";
+	public static final String ATTRIBUTE_SOURCE_DATE_TIME = "Source Date Time";
+	public static final String ATTRIBUTE_TTP = "Tactics, Techniques, and Procedures";
+	
+	public static final String SOURCE_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 	
 	/**
 	 * Adds the source attribute to all of the items in the list
@@ -45,6 +53,29 @@ public class AttributeHelper
 	}
 	
 	/**
+	 * Adds a description attribute with the given value to the item
+	 * 
+	 * @param item
+	 * @param value
+	 */
+	public static void addDescriptionAttribute(final Item item, final String value)
+	{
+		addDescriptionAttribute(item, value, null);
+	}
+	
+	/**
+	 * Adds a description attribute with the given value to the item
+	 * 
+	 * @param item
+	 * @param value
+	 * @param displayed
+	 */
+	public static void addDescriptionAttribute(final Item item, final String value, final Boolean displayed)
+	{
+		addAttribute(item, ATTRIBUTE_DESCRIPTION, value, displayed);
+	}
+	
+	/**
 	 * Adds a source attribute with the given value to the item
 	 * 
 	 * @param item
@@ -68,6 +99,18 @@ public class AttributeHelper
 	}
 	
 	/**
+	 * Adds a source date time attribute with the given value to the item
+	 * 
+	 * @param item
+	 * @param value
+	 */
+	public static void addSourceDateTimeAttribute(final Item item, final Date date)
+	{
+		DateFormat dateFormat = new SimpleDateFormat(SOURCE_DATE_TIME_FORMAT);
+		addSourceAttribute(item, dateFormat.format(date));
+	}
+	
+	/**
 	 * Adds an Additional Analysis and Context attribute to the item
 	 * 
 	 * @param item
@@ -76,6 +119,17 @@ public class AttributeHelper
 	public static void addAdditionalAnalysisAndContext(final Item item, final String value)
 	{
 		addAttribute(item, ATTRIBUTE_AAC, value);
+	}
+	
+	/**
+	 * Adds a Tactics, Techniques, and Procedures attribute to the item
+	 * 
+	 * @param item
+	 * @param value
+	 */
+	public static void addTacticsTechniquesProcedures(final Item item, final String value)
+	{
+		addAttribute(item, ATTRIBUTE_TTP, value);
 	}
 	
 	/**
