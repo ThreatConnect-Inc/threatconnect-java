@@ -1,5 +1,7 @@
 package com.threatconnect.sdk.parser.model;
 
+import java.io.File;
+
 public class Document extends Group
 {
 	private String fileName;
@@ -7,6 +9,7 @@ public class Document extends Group
 	private String status;
 	private Boolean malware;
 	private String password;
+	private File file;
 	
 	public Document()
 	{
@@ -61,5 +64,15 @@ public class Document extends Group
 	public void setPassword(String password)
 	{
 		this.password = password;
+	}
+	
+	public File getFile()
+	{
+		return file;
+	}
+	
+	public void setFile(File file)
+	{
+		this.file = file;
 	}
 }

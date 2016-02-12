@@ -1,16 +1,15 @@
 package com.threatconnect.sdk.client.writer;
 
-import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.AbstractRequestExecutor;
-import com.threatconnect.sdk.exception.FailedResponseException;
-import com.threatconnect.sdk.server.entity.Document;
-import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
-import com.threatconnect.sdk.server.response.entity.DocumentResponse;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.threatconnect.sdk.conn.Connection;
+import com.threatconnect.sdk.exception.FailedResponseException;
+import com.threatconnect.sdk.server.entity.Document;
+import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
+import com.threatconnect.sdk.server.response.entity.DocumentResponse;
 
 /**
  * Created by cblades on 4/20/2015.

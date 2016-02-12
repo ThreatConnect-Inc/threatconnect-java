@@ -26,7 +26,7 @@ import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 public abstract class GroupWriter<E extends Group, T extends com.threatconnect.sdk.server.entity.Group>
 	extends Writer
 {
-	private final E groupSource;
+	protected final E groupSource;
 	private final Class<T> tcModelClass;
 	private final Type tcGroupType;
 	
@@ -264,7 +264,7 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 	 * 
 	 * @return
 	 */
-	private Integer getSavedGroupID()
+	protected Integer getSavedGroupID()
 	{
 		com.threatconnect.sdk.server.entity.Group savedGroup = getSavedGroup();
 		
