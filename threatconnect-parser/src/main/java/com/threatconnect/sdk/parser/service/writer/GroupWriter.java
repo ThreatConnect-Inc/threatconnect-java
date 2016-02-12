@@ -87,7 +87,7 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 						// check to see if this was not successful
 						if (!attrResponse.isSuccess())
 						{
-							logger.warn("Failed to save attribute \"{}\" for group id: {}", attribute.getKey(),
+							logger.warn("Failed to save attribute \"{}\" for group id: {}", attribute.getType(),
 								getSavedGroupID());
 							logger.warn(attrResponse.getMessage());
 						}

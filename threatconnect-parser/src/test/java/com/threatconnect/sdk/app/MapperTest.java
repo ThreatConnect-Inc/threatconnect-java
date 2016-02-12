@@ -50,14 +50,14 @@ public class MapperTest
 	public void mapNullTest()
 	{
 		Attribute source = new Attribute();
-		source.setKey("abcd123");
+		source.setType("abcd123");
 		source.setValue(null);
 		
 		com.threatconnect.sdk.server.entity.Attribute target =
 			beanPropertyGenerator.get(com.threatconnect.sdk.server.entity.Attribute.class);
 		mapper.map(source, target);
 		
-		Assert.assertEquals("abcd123", source.getKey());
+		Assert.assertEquals("abcd123", source.getType());
 		Assert.assertNull(source.getValue());
 		
 		Assert.assertEquals("abcd123", target.getType());

@@ -8,13 +8,4 @@
 		<map-empty-string>false</map-empty-string>
 	</configuration>
 
-	<mapping map-null="false">
-		<class-a>com.threatconnect.sdk.parser.model.Attribute</class-a>
-		<class-b>com.threatconnect.sdk.server.entity.Attribute</class-b>
-		<field>
-			<a>key</a>
-			<b>type</b>
-		</field>
-	</mapping>
-
 </mappings> 

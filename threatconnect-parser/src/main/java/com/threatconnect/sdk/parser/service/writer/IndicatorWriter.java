@@ -99,7 +99,7 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 						// check to see if this was not successful
 						if (!attrResponse.isSuccess())
 						{
-							logger.warn("Failed to save attribute \"{}\" for: {}", attribute.getKey(), buildID());
+							logger.warn("Failed to save attribute \"{}\" for: {}", attribute.getType(), buildID());
 							logger.warn(attrResponse.getMessage());
 						}
 					}

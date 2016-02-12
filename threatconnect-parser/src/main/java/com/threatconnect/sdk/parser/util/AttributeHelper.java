@@ -57,10 +57,11 @@ public class AttributeHelper
 	 * 
 	 * @param item
 	 * @param value
+	 * @return the attribute that was created
 	 */
-	public static void addDescriptionAttribute(final Item item, final String value)
+	public static Attribute addDescriptionAttribute(final Item item, final String value)
 	{
-		addDescriptionAttribute(item, value, null);
+		return addDescriptionAttribute(item, value, null);
 	}
 	
 	/**
@@ -69,10 +70,11 @@ public class AttributeHelper
 	 * @param item
 	 * @param value
 	 * @param displayed
+	 * @return the attribute that was created
 	 */
-	public static void addDescriptionAttribute(final Item item, final String value, final Boolean displayed)
+	public static Attribute addDescriptionAttribute(final Item item, final String value, final Boolean displayed)
 	{
-		addAttribute(item, ATTRIBUTE_DESCRIPTION, value, displayed);
+		return addAttribute(item, ATTRIBUTE_DESCRIPTION, value, displayed);
 	}
 	
 	/**
@@ -80,10 +82,11 @@ public class AttributeHelper
 	 * 
 	 * @param item
 	 * @param value
+	 * @return the attribute that was created
 	 */
-	public static void addSourceAttribute(final Item item, final String value)
+	public static Attribute addSourceAttribute(final Item item, final String value)
 	{
-		addSourceAttribute(item, value, null);
+		return addSourceAttribute(item, value, null);
 	}
 	
 	/**
@@ -92,10 +95,11 @@ public class AttributeHelper
 	 * @param item
 	 * @param value
 	 * @param displayed
+	 * @return the attribute that was created
 	 */
-	public static void addSourceAttribute(final Item item, final String value, final Boolean displayed)
+	public static Attribute addSourceAttribute(final Item item, final String value, final Boolean displayed)
 	{
-		addAttribute(item, ATTRIBUTE_SOURCE, value, displayed);
+		return addAttribute(item, ATTRIBUTE_SOURCE, value, displayed);
 	}
 	
 	/**
@@ -103,11 +107,12 @@ public class AttributeHelper
 	 * 
 	 * @param item
 	 * @param value
+	 * @return the attribute that was created
 	 */
-	public static void addSourceDateTimeAttribute(final Item item, final Date date)
+	public static Attribute addSourceDateTimeAttribute(final Item item, final Date date)
 	{
 		DateFormat dateFormat = new SimpleDateFormat(SOURCE_DATE_TIME_FORMAT);
-		addSourceAttribute(item, dateFormat.format(date));
+		return addSourceAttribute(item, dateFormat.format(date));
 	}
 	
 	/**
@@ -115,10 +120,11 @@ public class AttributeHelper
 	 * 
 	 * @param item
 	 * @param value
+	 * @return the attribute that was created
 	 */
-	public static void addAdditionalAnalysisAndContext(final Item item, final String value)
+	public static Attribute addAdditionalAnalysisAndContext(final Item item, final String value)
 	{
-		addAttribute(item, ATTRIBUTE_AAC, value);
+		return addAttribute(item, ATTRIBUTE_AAC, value);
 	}
 	
 	/**
@@ -126,41 +132,47 @@ public class AttributeHelper
 	 * 
 	 * @param item
 	 * @param value
+	 * @return the attribute that was created
 	 */
-	public static void addTacticsTechniquesProcedures(final Item item, final String value)
+	public static Attribute addTacticsTechniquesProcedures(final Item item, final String value)
 	{
-		addAttribute(item, ATTRIBUTE_TTP, value);
+		return addAttribute(item, ATTRIBUTE_TTP, value);
 	}
 	
 	/**
 	 * Adds an attribute to the item
 	 * 
 	 * @param item
-	 * @param key
+	 * @param type
 	 * @param value
+	 * @return the attribute that was created
 	 */
-	public static void addAttribute(final Item item, final String key, final String value)
+	public static Attribute addAttribute(final Item item, final String type, final String value)
 	{
-		addAttribute(item, key, value, null);
+		return addAttribute(item, type, value, null);
 	}
 	
 	/**
 	 * Adds an attribute to the item
 	 * 
 	 * @param item
-	 * @param key
+	 * @param type
 	 * @param value
 	 * @param displayed
+	 * @return the attribute that was created
 	 */
-	public static void addAttribute(final Item item, final String key, final String value, final Boolean displayed)
+	public static Attribute addAttribute(final Item item, final String type, final String value,
+		final Boolean displayed)
 	{
 		// create a new attribute
 		Attribute attribute = new Attribute();
-		attribute.setKey(key);
+		attribute.setType(type);
 		attribute.setValue(value);
 		attribute.setDisplayed(displayed);
 		
 		// add the attribute to the item
 		item.getAttributes().add(attribute);
+		
+		return attribute;
 	}
 }

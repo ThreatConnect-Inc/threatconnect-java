@@ -27,7 +27,7 @@ public class MapperTestHelper
 	
 	public static void verifyAttribute(Attribute source, com.threatconnect.sdk.server.entity.Attribute target)
 	{
-		Assert.assertEquals(source.getKey(), target.getType());
+		Assert.assertEquals(source.getType(), target.getType());
 		Assert.assertEquals(source.getValue(), target.getValue());
 	}
 }
