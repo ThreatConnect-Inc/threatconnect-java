@@ -86,6 +86,10 @@ public class OwnerMetric
     private int totalObservationHost;
     @XmlElement(name = "TotalObservationUrl", required = false)
     private int totalObservationUrl;
+    @XmlElement(name="TotalFalsePositiveDaily", required = false)
+    private int totalFalsePositiveDaily;
+    @XmlElement(name="TotalFalsePositive", required = false)
+    private int totalFalsePositive;
 
     public OwnerMetric()
     {
@@ -409,5 +413,25 @@ public class OwnerMetric
     public void setTotalObservationUrl(int totalObservationUrl)
     {
         this.totalObservationUrl = totalObservationUrl;
+    }
+
+    public int getTotalFalsePositiveDaily()
+    {
+        return totalFalsePositiveDaily;
+    }
+
+    public void setTotalFalsePositiveDaily(int totalFalsePositiveDaily)
+    {
+        this.totalFalsePositiveDaily = totalFalsePositiveDaily;
+    }
+
+    public int getTotalFalsePositive()
+    {
+        return totalFalsePositive;
+    }
+
+    public void setTotalFalsePositive(int totalFalsePositive)
+    {
+        this.totalFalsePositive = totalFalsePositive;
     }
 }

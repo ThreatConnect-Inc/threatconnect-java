@@ -1,5 +1,6 @@
 package com.threatconnect.sdk.client.writer;
 
+import com.threatconnect.sdk.client.AbstractClientAdapter;
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.response.WriteListResponse;
 import com.threatconnect.sdk.client.writer.associate.AbstractAttributeAssociateWriterAdapter;
@@ -25,6 +26,7 @@ import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * AbstractIndicatorWriterAdapter is the primary writer adapter for all Indicator level objects.
@@ -1045,4 +1047,29 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     public ApiEntitySingleResponse dissociateVictim(String uniqueId, Integer victimId, String ownerName) throws IOException, FailedResponseException {
         return victimAssocWriter.dissociateVictim(uniqueId, victimId, ownerName);
     }
+
+    public ApiEntitySingleResponse createObservation(String uniqueId) throws IOException, FailedResponseException
+    {
+        return createObservation(uniqueId, null);
+    }
+
+    public ApiEntitySingleResponse createObservation(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+        Map<String, Object> map = AbstractClientAdapter.createParamMap("id", uniqueId);
+        ApiEntitySingleResponse data = createItem( getUrlBasePrefix() + ".byId.observations", ApiEntitySingleResponse.class, ownerName, map, null);
+
+        return data;
+    }
+
+    public ApiEntitySingleResponse updateFalsePositive(String uniqueId) throws IOException, FailedResponseException
+    {
+        return updateFalsePositive(uniqueId, null);
+    }
+
+    public ApiEntitySingleResponse updateFalsePositive(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+        Map<String, Object> map = AbstractClientAdapter.createParamMap("id", uniqueId);
+        ApiEntitySingleResponse data = createItem( getUrlBasePrefix() + ".byId.falsePositive", ApiEntitySingleResponse.class, ownerName, map, null);
+
+        return data;
+    }
+
 }

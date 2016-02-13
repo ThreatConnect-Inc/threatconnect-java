@@ -39,7 +39,7 @@ public class ExchangeWriterAdapter extends AbstractWriterAdapter
 
         try (InputStream in = uploadFile("v2.spaces.file", SpaceStateResponse.class, ownerName, paramMap))
         {
-            Files.copy(in, outputPath, StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(in, inputPath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e)
         {
             e.printStackTrace();

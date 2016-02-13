@@ -9,6 +9,9 @@ import com.threatconnect.sdk.client.AbstractClientAdapter;
 import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
+import com.threatconnect.sdk.server.entity.FalsePositive;
+import com.threatconnect.sdk.server.entity.Observation;
+import com.threatconnect.sdk.server.entity.ObservationCount;
 import com.threatconnect.sdk.server.response.entity.ApiEntityListResponse;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.util.ApiFilterType;
@@ -72,6 +75,5 @@ public abstract class AbstractBaseReaderAdapter<T,P> extends AbstractReaderAdapt
 
         return (T) item.getData().getData();
     }
-
 
 }

@@ -1,5 +1,6 @@
 package com.threatconnect.sdk.client.reader;
 
+import com.threatconnect.sdk.client.AbstractClientAdapter;
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.reader.associate.*;
 import com.threatconnect.sdk.client.response.IterableResponse;
@@ -10,6 +11,8 @@ import com.threatconnect.sdk.server.response.entity.ApiEntityListResponse;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.server.response.entity.BulkStatusResponse;
 import com.threatconnect.sdk.server.response.entity.IndicatorListResponse;
+import com.threatconnect.sdk.server.response.entity.ObservationListResponse;
+import com.threatconnect.sdk.server.response.entity.data.ObservationListResponseData;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 /**
  * AbstractIndicatorReaderAdapter is the primary client adapter for all Adversary group level objects.
@@ -666,6 +670,46 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     @Override
     public Victim getAssociatedVictim(String uniqueId, Integer victimId, String ownerName) throws IOException, FailedResponseException {
         return victimAssocReader.getAssociatedVictim(uniqueId, victimId, ownerName);
+    }
+
+    public IterableResponse<Observation> getObservations(String uniqueId) throws IOException
+    {
+        return getObservations(uniqueId, null);
+    }
+
+    public IterableResponse<Observation> getObservations(String uniqueId, String ownerName) throws IOException
+    {
+        Map<String, Object> map = AbstractClientAdapter.createParamMap("id", uniqueId);
+        return getItems(getUrlBasePrefix() + ".byId.observations", ObservationListResponse.class, Observation.class, ownerName, map);
+
+    }
+
+    public ObservationCount getObservationCount(String uniqueId) throws IOException
+    {
+        return getObservationCount(uniqueId, null);
+    }
+
+    public ObservationCount getObservationCount(String uniqueId, String ownerName) throws IOException
+    {
+        Map<String, Object> map = AbstractClientAdapter.createParamMap("id", uniqueId);
+        ApiEntitySingleResponse item = getItem(getUrlBasePrefix() + ".byId.observationCount", singleType, ownerName, map);
+
+        return (ObservationCount) item.getData().getData();
+
+    }
+
+    public FalsePositive getFalsePositive(String uniqueId) throws IOException
+    {
+        return getFalsePositive(uniqueId, null);
+    }
+
+    public FalsePositive getFalsePositive(String uniqueId, String ownerName) throws IOException
+    {
+        Map<String, Object> map = AbstractClientAdapter.createParamMap("id", uniqueId);
+        ApiEntitySingleResponse item = getItem(getUrlBasePrefix() + ".byId.falsePositive", singleType, ownerName, map);
+
+        return (FalsePositive) item.getData().getData();
+
     }
 
 }

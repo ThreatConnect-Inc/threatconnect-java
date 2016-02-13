@@ -14,8 +14,11 @@ import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Attribute;
 import com.threatconnect.sdk.server.entity.Address;
+import com.threatconnect.sdk.server.entity.FalsePositive;
 import com.threatconnect.sdk.server.entity.Host;
 import com.threatconnect.sdk.client.fluent.HostBuilder;
+import com.threatconnect.sdk.server.entity.Observation;
+import com.threatconnect.sdk.server.entity.ObservationCount;
 import com.threatconnect.sdk.server.entity.SecurityLabel;
 import com.threatconnect.sdk.client.fluent.SecurityLabelBuilder;
 import com.threatconnect.sdk.server.entity.Tag;
@@ -39,6 +42,7 @@ public class AddressExample {
             System.getProperties().setProperty("threatconnect.api.config", "/config.properties");
             conn = new Connection();
 
+            /*
             doGet(conn);
 
             doCreate(conn);
@@ -58,6 +62,9 @@ public class AddressExample {
             doAssociateVictim(conn);
 
             doDissociateTag(conn);
+            */
+
+            doObservationCountAndFalsePositive(conn);
 
         } catch (IOException ex ) {
             System.err.println("Error: " + ex);
@@ -67,6 +74,7 @@ public class AddressExample {
             }
         }
     }
+
 
     private static void doGet(Connection conn) throws IOException {
 
@@ -499,4 +507,46 @@ public class AddressExample {
         
     }
 
+    private static void doObservationCountAndFalsePositive(Connection conn)
+    {
+        AbstractIndicatorReaderAdapter<Address> iReader = ReaderAdapterFactory.createAddressIndicatorReader(conn);
+        AbstractIndicatorWriterAdapter<Address> iWriter = WriterAdapterFactory.createAddressIndicatorWriter(conn);
+
+        Address address = createTestAddress();
+
+        try {
+            // -----------------------------------------------------------------------------------------------------------
+            // Create Address
+            // -----------------------------------------------------------------------------------------------------------
+            ApiEntitySingleResponse<Address, ?> createResponseAddress = iWriter.create(address);
+            if ( createResponseAddress.isSuccess() )
+            {
+                System.out.println("Created Address: " + createResponseAddress.getItem());
+
+                if ( iWriter.updateFalsePositive(address.getIp()).isSuccess() )
+                {
+                    System.err.println("Created False Positive");
+                }
+
+                FalsePositive falsePositive = iReader.getFalsePositive(address.getIp());
+                System.err.println("Read False Positive: " + falsePositive.toString() );
+
+                if ( iWriter.createObservation( address.getIp() ).isSuccess() )
+                {
+                    System.err.println("Created Observation");
+                }
+
+                Observation observation = iReader.getObservation(address.getIp());
+                System.err.println("Read Observation: " + observation.toString());
+
+                ObservationCount observationCount = iReader.getObservationCount(address.getIp());
+                System.err.println("Read ObservationCount: " + observationCount.toString() );
+
+            }
+
+
+    } catch (IOException | FailedResponseException ex) {
+            System.err.println("Error: " + ex.toString());
+        }
+    }
 }

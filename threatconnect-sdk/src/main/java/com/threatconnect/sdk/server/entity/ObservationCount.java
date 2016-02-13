@@ -26,6 +26,11 @@ public class ObservationCount
     @JsonSerialize(using = DateTimeSerializer.class, include = JsonSerialize.Inclusion.NON_NULL)
     @XmlElement(name = "lastObserved", required = false)
     private Date lastObserved;
+    @XmlElement(name = "YourCount", required = true)
+    private Integer yourCount;
+    @JsonSerialize(using = DateTimeSerializer.class, include = JsonSerialize.Inclusion.NON_NULL)
+    @XmlElement(name = "YourLastObserved", required = false)
+    private Date yourLastObserved;
 
     public ObservationCount()
     {
@@ -49,5 +54,25 @@ public class ObservationCount
     public void setLastObserved(Date lastObserved)
     {
         this.lastObserved = lastObserved;
+    }
+
+    public Integer getYourCount()
+    {
+        return yourCount;
+    }
+
+    public void setYourCount(Integer yourCount)
+    {
+        this.yourCount = yourCount;
+    }
+
+    public Date getYourLastObserved()
+    {
+        return yourLastObserved;
+    }
+
+    public void setYourLastObserved(Date yourLastObserved)
+    {
+        this.yourLastObserved = yourLastObserved;
     }
 }
