@@ -536,8 +536,10 @@ public class AddressExample {
                     System.err.println("Created Observation");
                 }
 
-                Observation observation = iReader.getObservation(address.getIp());
-                System.err.println("Read Observation: " + observation.toString());
+                for (Observation observation : iReader.getObservations(address.getIp()) )
+                {
+                    System.err.println("Read Observation: " + observation.toString());
+                }
 
                 ObservationCount observationCount = iReader.getObservationCount(address.getIp());
                 System.err.println("Read ObservationCount: " + observationCount.toString() );
