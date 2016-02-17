@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>com.threatconnect.sdk</groupId>
 		<artifactId>threatconnect-sdk-parent</artifactId>
-		<version>3.0</version>
+		<version>3.1</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>

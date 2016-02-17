@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.threatconnect.sdk</groupId>
 	<artifactId>threatconnect-sdk-parent</artifactId>
-	<version>3.0</version>
+	<version>3.1</version>
 	<packaging>pom</packaging>
 	<name>ThreatConnect SDK Parent</name>
 
@@ -22,7 +22,7 @@
 		<main.basedir>${project.basedir}</main.basedir>
 
 		<!-- ThreatConnect SDK Version -->
-		<version.this>3.0</version.this>
+		<version.this>3.1</version.this>
 
 		<!-- Dependency Versions -->
 		<version.commons-io>2.4</version.commons-io>
