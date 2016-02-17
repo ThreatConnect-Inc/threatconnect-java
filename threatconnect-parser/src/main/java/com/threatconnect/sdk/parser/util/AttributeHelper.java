@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.threatconnect.sdk.parser.model.Attribute;
+import com.threatconnect.sdk.parser.model.Group;
 import com.threatconnect.sdk.parser.model.Item;
 
 /**
@@ -34,7 +35,8 @@ public class AttributeHelper
 	 * whether or not this should be added to all associated items as
 	 * well
 	 */
-	public static void addSourceAttributeToAll(final List<Item> items, final String source, final boolean recursive)
+	public static void addSourceAttributeToAll(final List<? extends Item> items, final String source,
+		final boolean recursive)
 	{
 		// for each of the items in the list
 		for (Item item : items)
@@ -44,10 +46,14 @@ public class AttributeHelper
 			
 			// check to see if this is recursive and that the item has
 			// associated items
-			if (recursive && !item.getAssociatedItems().isEmpty())
+			if (recursive && item instanceof Group)
 			{
-				// add the source to all child items as well
-				addSourceAttributeToAll(item.getAssociatedItems(), source, recursive);
+				Group group = (Group) item;
+				if (!group.getAssociatedIndicators().isEmpty())
+				{
+					// add the source to all child items as well
+					addSourceAttributeToAll(group.getAssociatedIndicators(), source, recursive);
+				}
 			}
 		}
 	}

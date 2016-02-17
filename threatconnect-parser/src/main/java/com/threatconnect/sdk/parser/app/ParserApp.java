@@ -13,6 +13,7 @@ import com.threatconnect.sdk.app.LoggerUtil;
 import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.parser.Parser;
 import com.threatconnect.sdk.parser.ParserException;
+import com.threatconnect.sdk.parser.model.Group;
 import com.threatconnect.sdk.parser.model.Item;
 import com.threatconnect.sdk.parser.model.ItemType;
 import com.threatconnect.sdk.parser.service.save.SaveApiService;
@@ -249,7 +250,7 @@ public abstract class ParserApp extends App
 	 * whether or not the associated items should be counted as well
 	 * @return
 	 */
-	private int count(final List<Item> items, final ItemType itemType, final boolean recursive)
+	private int count(final List<? extends Item> items, final ItemType itemType, final boolean recursive)
 	{
 		int count = 0;
 		
@@ -266,8 +267,12 @@ public abstract class ParserApp extends App
 			// check to see if this is recursive
 			if (recursive)
 			{
-				// count all of the associated items as well
-				count += count(item.getAssociatedItems(), itemType, recursive);
+				if (item instanceof Group)
+				{
+					// count all of the associated items as well
+					Group group = (Group) item;
+					count += count(group.getAssociatedIndicators(), itemType, recursive);
+				}
 			}
 		}
 		

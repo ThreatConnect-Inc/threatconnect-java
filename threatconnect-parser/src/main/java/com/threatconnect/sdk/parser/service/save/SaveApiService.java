@@ -35,7 +35,6 @@ import com.threatconnect.sdk.parser.service.writer.IndicatorWriter;
 import com.threatconnect.sdk.parser.service.writer.SignatureWriter;
 import com.threatconnect.sdk.parser.service.writer.ThreatWriter;
 import com.threatconnect.sdk.parser.service.writer.UrlWriter;
-import com.threatconnect.sdk.parser.service.writer.Writer;
 
 /**
  * Responsible for saving the model to the server using the threatconnect sdk
@@ -77,7 +76,7 @@ public class SaveApiService implements SaveService
 	 * @param connection
 	 * @throws IOException
 	 */
-	private SaveResults saveItems(final List<Item> items, final Connection connection) throws IOException
+	private SaveResults saveItems(final List<? extends Item> items, final Connection connection) throws IOException
 	{
 		// create a new save result to return
 		SaveResults saveResults = new SaveResults();
@@ -105,32 +104,17 @@ public class SaveApiService implements SaveService
 		final SaveResults saveResults)
 			throws IOException
 	{
-		try
+		// switch based on the item type
+		switch (item.getItemType())
 		{
-			// switch based on the item type
-			switch (item.getItemType())
-			{
-				case GROUP:
-					saveGroup((Group) item, ownerName, connection, saveResults);
-					break;
-				case INDICATOR:
-					saveIndicator((Indicator) item, ownerName, connection, saveResults);
-					break;
-				default:
-					break;
-			}
-		}
-		catch (SaveItemFailedException e)
-		{
-			logger.warn(e.getMessage(), e);
-			
-			// add this item to the list of failed saves
-			saveResults.getFailedItems().add(item);
-			
-			// this item failed to save so attempt to save the associated items individually if they
-			// exist without the associations
-			SaveResults childItemsSaveResults = saveItems(item.getAssociatedItems(), connection);
-			saveResults.getFailedItems().addAll(childItemsSaveResults.getFailedItems());
+			case GROUP:
+				saveGroup((Group) item, ownerName, connection, saveResults);
+				break;
+			case INDICATOR:
+				saveIndicator((Indicator) item, ownerName, connection, saveResults);
+				break;
+			default:
+				break;
 		}
 	}
 	
@@ -210,83 +194,83 @@ public class SaveApiService implements SaveService
 	}
 	
 	private com.threatconnect.sdk.server.entity.Group saveGroup(final Group group, final String ownerName,
-		final Connection connection, final SaveResults saveResults) throws IOException, SaveItemFailedException
+		final Connection connection, final SaveResults saveResults) throws IOException
 	{
-		GroupWriter<?, ?> writer = getGroupWriter(group, connection);
-		
-		// save the group
-		com.threatconnect.sdk.server.entity.Group savedGroup = writer.saveGroup(ownerName);
-		
-		// save the associated items
-		saveAssociatedItems(group, ownerName, connection, writer, saveResults);
-		
-		// return the saved group
-		return savedGroup;
+		try
+		{
+			GroupWriter<?, ?> writer = getGroupWriter(group, connection);
+			
+			// save the group
+			com.threatconnect.sdk.server.entity.Group savedGroup = writer.saveGroup(ownerName);
+			
+			// save the associated items
+			saveAssociatedIndicators(group, ownerName, connection, writer, saveResults);
+			
+			// return the saved group
+			return savedGroup;
+		}
+		catch (SaveItemFailedException e)
+		{
+			logger.warn(e.getMessage(), e);
+			
+			// add this item to the list of failed saves
+			saveResults.getFailedItems().add(group);
+			
+			// this item failed to save so attempt to save the associated items
+			// individually if they
+			// exist without the associations
+			SaveResults childItemsSaveResults = saveItems(group.getAssociatedIndicators(), connection);
+			saveResults.getFailedItems().addAll(childItemsSaveResults.getFailedItems());
+			
+			return null;
+		}
 	}
 	
 	private com.threatconnect.sdk.server.entity.Indicator saveIndicator(final Indicator indicator,
 		final String ownerName, final Connection connection, final SaveResults saveResults)
-			throws IOException, SaveItemFailedException
+			throws IOException
 	{
-		IndicatorWriter<?, ?> writer = getIndicatorWriter(indicator, connection);
-		
-		// save the indicator
-		com.threatconnect.sdk.server.entity.Indicator savedIndicator = writer.saveIndicator(ownerName);
-		
-		// save the associated items
-		saveAssociatedItems(indicator, ownerName, connection, writer, saveResults);
-		
-		// return the saved indicator
-		return savedIndicator;
+		try
+		{
+			IndicatorWriter<?, ?> writer = getIndicatorWriter(indicator, connection);
+			
+			// save the indicator
+			com.threatconnect.sdk.server.entity.Indicator savedIndicator = writer.saveIndicator(ownerName);
+			
+			// return the saved indicator
+			return savedIndicator;
+		}
+		catch (SaveItemFailedException e)
+		{
+			logger.warn(e.getMessage(), e);
+			
+			// add this item to the list of failed saves
+			saveResults.getFailedItems().add(indicator);
+			
+			return null;
+		}
 	}
 	
 	/**
-	 * Saves the associated items for a given item
+	 * Saves the associated indicators for a given group
 	 * 
-	 * @param item
+	 * @param group
 	 * @param ownerName
 	 * @param connection
 	 * @param writer
 	 * @throws IOException
 	 * @throws SaveItemFailedException
 	 */
-	private void saveAssociatedItems(final Item item, final String ownerName, final Connection connection,
-		Writer writer, final SaveResults saveResults) throws IOException
+	private void saveAssociatedIndicators(final Group group, final String ownerName, final Connection connection,
+		GroupWriter<?, ?> writer, final SaveResults saveResults) throws IOException
 	{
 		// for each of the associated items of this group
-		for (Item associatedItem : item.getAssociatedItems())
+		for (Indicator associatedIndicator : group.getAssociatedIndicators())
 		{
 			try
 			{
-				// switch based on the item type
-				switch (associatedItem.getItemType())
-				{
-					case GROUP:
-						Group associatedGroup = (Group) associatedItem;
-						com.threatconnect.sdk.server.entity.Group savedAssociatedGroup =
-							saveGroup(associatedGroup, ownerName, connection, saveResults);
-						writer.associateGroup(associatedGroup.getGroupType(), savedAssociatedGroup.getId());
-						break;
-					case INDICATOR:
-						Indicator associatedIndicator = (Indicator) associatedItem;
-						saveIndicator(associatedIndicator, ownerName, connection, saveResults);
-						writer.associateIndicator(associatedIndicator);
-						break;
-					default:
-						break;
-				}
-			}
-			catch (SaveItemFailedException e)
-			{
-				logger.warn(e.getMessage(), e);
-				
-				// add to the list of failed items
-				saveResults.getFailedItems().add(associatedItem);
-				
-				// this item failed to save so attempt to save the associated items individually if
-				// they exist without the associations
-				SaveResults childItemsSaveResults = saveItems(associatedItem.getAssociatedItems(), connection);
-				saveResults.getFailedItems().addAll(childItemsSaveResults.getFailedItems());
+				saveIndicator(associatedIndicator, ownerName, connection, saveResults);
+				writer.associateIndicator(associatedIndicator);
 			}
 			catch (AssociateFailedException e)
 			{
