@@ -39,15 +39,15 @@ public abstract class ParserApp extends App
 		int totalGroupsSaved = 0;
 		
 		// create the parser
-		Parser[] parsers = createParsers(appConfig);
+		List<Parser<? extends Item>> parsers = createParsers(appConfig);
 		
 		try
 		{
 			// make sure there are parsers
-			if (null != parsers && parsers.length > 0)
+			if (null != parsers && !parsers.isEmpty())
 			{
 				// for each of the parsers
-				for (Parser parser : parsers)
+				for (Parser<? extends Item> parser : parsers)
 				{
 					// make sure that this parser is not null
 					if (null != parser)
@@ -98,7 +98,7 @@ public abstract class ParserApp extends App
 					// no parsers have failed
 					return ExitStatus.Failure;
 				}
-				else if (parserSaveResults.size() == parsers.length)
+				else if (parserSaveResults.size() == parsers.size())
 				{
 					// add parsers have failed
 					return ExitStatus.Success;
@@ -216,7 +216,7 @@ public abstract class ParserApp extends App
 	 * @param appConfig
 	 * @return
 	 */
-	protected abstract Parser[] createParsers(final AppConfig appConfig);
+	protected abstract List<Parser<? extends Item>> createParsers(final AppConfig appConfig);
 	
 	/**
 	 * Retrieve the start date for this parser to use when parsing data. Data older than this date
@@ -233,7 +233,7 @@ public abstract class ParserApp extends App
 	 * 
 	 * @param items
 	 */
-	protected void onParsingFinished(final List<? extends Item> items, final Parser parser)
+	protected void onParsingFinished(final List<? extends Item> items, final Parser<? extends Item> parser)
 	{
 	
 	}
