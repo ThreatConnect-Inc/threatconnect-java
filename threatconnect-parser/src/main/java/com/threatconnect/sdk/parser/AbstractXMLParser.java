@@ -16,9 +16,10 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.threatconnect.sdk.parser.model.Item;
 import com.threatconnect.sdk.parser.result.PageResult;
 
-public abstract class AbstractXMLParser extends AbstractPagedParser
+public abstract class AbstractXMLParser<I extends Item> extends AbstractPagedParser<I>
 {
 	public AbstractXMLParser(final String url)
 	{
@@ -26,7 +27,7 @@ public abstract class AbstractXMLParser extends AbstractPagedParser
 	}
 	
 	@Override
-	protected PageResult parsePage(String pageUrl, Date startDate) throws ParserException
+	protected PageResult<I> parsePage(String pageUrl, Date startDate) throws ParserException
 	{
 		try
 		{
@@ -69,6 +70,6 @@ public abstract class AbstractXMLParser extends AbstractPagedParser
 	 * @return
 	 * @throws ParserException
 	 */
-	protected abstract PageResult processXmlDocument(Document doc, String pageUrl, Date startDate)
+	protected abstract PageResult<I> processXmlDocument(Document doc, String pageUrl, Date startDate)
 		throws ParserException, XPathExpressionException;
 }

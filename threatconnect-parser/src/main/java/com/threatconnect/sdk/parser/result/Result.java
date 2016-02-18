@@ -1,38 +1,41 @@
 package com.threatconnect.sdk.parser.result;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import com.threatconnect.sdk.parser.model.Item;
 
-public class Result
+public class Result<I extends Item>
 {
-	private final List<Item> items;
+	private final List<I> items;
 	
-	public Result(final Item... items)
+	@SafeVarargs
+	public Result(final I... items)
 	{
 		// holds the temp list of items
-		List<Item> itemList = new ArrayList<Item>();
+		this.items = new ArrayList<I>();
 		
 		// make sure the items array is not null
 		if (null != items)
 		{
 			// for each of the items
-			for (Item item : items)
+			for (I item : items)
 			{
 				// make sure this item is not null
 				if (null != item)
 				{
-					itemList.add(item);
+					this.items.add(item);
 				}
 			}
 		}
-		
-		this.items = Collections.unmodifiableList(itemList);
 	}
 	
-	public List<Item> getItems()
+	public Result(List<I> items)
+	{
+		this.items = items;
+	}
+	
+	public List<I> getItems()
 	{
 		return items;
 	}

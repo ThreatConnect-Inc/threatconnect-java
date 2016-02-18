@@ -13,5 +13,5 @@ public interface SaveService
 	 * @param items
 	 * @throws IOException
 	 */
-	public SaveResults saveItems(List<Item> items) throws IOException;
+	public SaveResults saveItems(List<? extends Item> items) throws IOException;
 }

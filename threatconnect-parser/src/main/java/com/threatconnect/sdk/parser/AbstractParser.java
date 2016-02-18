@@ -5,6 +5,7 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.threatconnect.sdk.parser.model.Item;
 import com.threatconnect.sdk.parser.util.regex.HostNameExtractor;
 import com.threatconnect.sdk.parser.util.regex.MatchNotFoundException;
 
@@ -13,7 +14,7 @@ import com.threatconnect.sdk.parser.util.regex.MatchNotFoundException;
  * 
  * @author Greg Marut
  */
-public abstract class AbstractParser implements Parser
+public abstract class AbstractParser<I extends Item> implements Parser<I>
 {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 	

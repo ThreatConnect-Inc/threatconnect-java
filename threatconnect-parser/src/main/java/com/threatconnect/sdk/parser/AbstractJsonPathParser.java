@@ -11,7 +11,7 @@ import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import com.threatconnect.sdk.parser.model.Item;
 
-public abstract class AbstractJsonPathParser extends AbstractParser
+public abstract class AbstractJsonPathParser<I extends Item> extends AbstractParser<I>
 {
 	public AbstractJsonPathParser(final String url)
 	{
@@ -19,7 +19,7 @@ public abstract class AbstractJsonPathParser extends AbstractParser
 	}
 	
 	@Override
-	public List<Item> parseData(Date startDate) throws ParserException
+	public List<I> parseData(Date startDate) throws ParserException
 	{
 		try
 		{
@@ -58,6 +58,6 @@ public abstract class AbstractJsonPathParser extends AbstractParser
 	 * @return
 	 * @throws ParserException
 	 */
-	protected abstract List<Item> processJson(DocumentContext context, Date startDate)
+	protected abstract List<I> processJson(DocumentContext context, Date startDate)
 		throws ParserException;
 }

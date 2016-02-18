@@ -15,7 +15,7 @@ import com.threatconnect.sdk.parser.util.UrlUtil;
  * 
  * @author Greg Marut
  */
-public abstract class AbstractPagedParser extends AbstractParser
+public abstract class AbstractPagedParser<I extends Item> extends AbstractParser<I>
 {
 	public AbstractPagedParser(final String url)
 	{
@@ -23,10 +23,10 @@ public abstract class AbstractPagedParser extends AbstractParser
 	}
 	
 	@Override
-	public List<Item> parseData(Date startDate) throws ParserException
+	public List<I> parseData(Date startDate) throws ParserException
 	{
 		// holds the list of items to return
-		List<Item> items = new ArrayList<Item>();
+		List<I> items = new ArrayList<I>();
 		
 		// holds the set of all of the urls that have been parsed so that we can ensure that an
 		// infinite loop does not occur
@@ -45,7 +45,7 @@ public abstract class AbstractPagedParser extends AbstractParser
 			
 			// parse the page
 			logger.info("Parsing: {}", currentUrl);
-			PageResult pageResult = parsePage(currentUrl, startDate);
+			PageResult<I> pageResult = parsePage(currentUrl, startDate);
 			parsedURLs.add(currentUrl);
 			
 			// make sure the page is not null
@@ -66,6 +66,6 @@ public abstract class AbstractPagedParser extends AbstractParser
 		return items;
 	}
 	
-	protected abstract PageResult parsePage(final String pageUrl, final Date startDate)
+	protected abstract PageResult<I> parsePage(final String pageUrl, final Date startDate)
 		throws ParserException;
 }

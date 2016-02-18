@@ -15,7 +15,7 @@ import com.threatconnect.sdk.parser.result.PageResult;
 import com.threatconnect.sdk.parser.result.Result;
 import com.threatconnect.sdk.parser.util.XPathUtil;
 
-public abstract class AbstractXMLNodeParser extends AbstractXMLParser
+public abstract class AbstractXMLNodeParser<I extends Item> extends AbstractXMLParser<I>
 {
 	private final String nodeXPath;
 	
@@ -26,11 +26,11 @@ public abstract class AbstractXMLNodeParser extends AbstractXMLParser
 	}
 	
 	@Override
-	protected PageResult processXmlDocument(Document doc, String pageUrl, Date startDate)
+	protected PageResult<I> processXmlDocument(Document doc, String pageUrl, Date startDate)
 		throws ParserException, XPathExpressionException
 	{
 		// holds the list of items to return
-		List<Item> items = new ArrayList<Item>();
+		List<I> items = new ArrayList<I>();
 		
 		// retrieve the list of nodes
 		NodeList nodes = XPathUtil.getNodes(nodeXPath, doc);
@@ -41,7 +41,7 @@ public abstract class AbstractXMLNodeParser extends AbstractXMLParser
 			try
 			{
 				Node node = nodes.item(i);
-				Result result = processNode(node, startDate);
+				Result<I> result = processNode(node, startDate);
 				
 				// make sure the result is not null
 				if (null != result)
@@ -56,8 +56,9 @@ public abstract class AbstractXMLNodeParser extends AbstractXMLParser
 			}
 		}
 		
-		return new PageResult(items);
+		return new PageResult<I>(items);
 	}
 	
-	protected abstract Result processNode(Node node, Date startDate) throws ParserException, XPathExpressionException;
+	protected abstract Result<I> processNode(Node node, Date startDate)
+		throws ParserException, XPathExpressionException;
 }

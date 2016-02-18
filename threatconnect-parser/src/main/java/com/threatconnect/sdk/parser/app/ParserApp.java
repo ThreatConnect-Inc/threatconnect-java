@@ -55,7 +55,7 @@ public abstract class ParserApp extends App
 						try
 						{
 							// parse the data
-							List<Item> items = parser.parseData(getParserStartDate(appConfig));
+							List<? extends Item> items = parser.parseData(getParserStartDate(appConfig));
 							getLogger().info("Successfully parsed {} records", items.size());
 							
 							// allow child classes to do something with the parsed data
@@ -233,7 +233,7 @@ public abstract class ParserApp extends App
 	 * 
 	 * @param items
 	 */
-	protected void onParsingFinished(final List<Item> items, final Parser parser)
+	protected void onParsingFinished(final List<? extends Item> items, final Parser parser)
 	{
 	
 	}

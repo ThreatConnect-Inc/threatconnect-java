@@ -61,7 +61,7 @@ public class SaveApiService implements SaveService
 	 * @throws IOException
 	 */
 	@Override
-	public SaveResults saveItems(final List<Item> items) throws IOException
+	public SaveResults saveItems(final List<? extends Item> items) throws IOException
 	{
 		// create a new connection object from the configuration
 		Connection connection = new Connection(configuration);

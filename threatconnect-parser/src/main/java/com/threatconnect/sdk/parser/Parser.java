@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.threatconnect.sdk.parser.model.Item;
 
-public interface Parser
+public interface Parser<I extends Item>
 {
 	/**
 	 * Parses the data from the source and returns a list of items
@@ -16,7 +16,7 @@ public interface Parser
 	 * @return
 	 * @throws ParserException
 	 */
-	public List<Item> parseData(Date startDate) throws ParserException;
+	public List<I> parseData(Date startDate) throws ParserException;
 	
 	/**
 	 * Returns a unique user-friendly name to identify this parser.
