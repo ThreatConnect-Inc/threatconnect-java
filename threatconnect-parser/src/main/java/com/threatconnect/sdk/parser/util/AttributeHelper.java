@@ -118,7 +118,7 @@ public class AttributeHelper
 	public static Attribute addSourceDateTimeAttribute(final Item item, final Date date)
 	{
 		DateFormat dateFormat = new SimpleDateFormat(SOURCE_DATE_TIME_FORMAT);
-		return addSourceAttribute(item, dateFormat.format(date));
+		return addAttribute(item, ATTRIBUTE_SOURCE_DATE_TIME, dateFormat.format(date));
 	}
 	
 	/**
