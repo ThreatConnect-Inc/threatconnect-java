@@ -13,7 +13,6 @@ import com.threatconnect.sdk.app.LoggerUtil;
 import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.parser.Parser;
 import com.threatconnect.sdk.parser.ParserException;
-import com.threatconnect.sdk.parser.model.Group;
 import com.threatconnect.sdk.parser.model.Item;
 import com.threatconnect.sdk.parser.model.ItemType;
 import com.threatconnect.sdk.parser.service.save.SaveApiService;
@@ -267,12 +266,8 @@ public abstract class ParserApp extends App
 			// check to see if this is recursive
 			if (recursive)
 			{
-				if (item instanceof Group)
-				{
-					// count all of the associated items as well
-					Group group = (Group) item;
-					count += count(group.getAssociatedIndicators(), itemType, recursive);
-				}
+				// count all of the associated items as well
+				count += count(item.getAssociatedItems(), itemType, recursive);
 			}
 		}
 		

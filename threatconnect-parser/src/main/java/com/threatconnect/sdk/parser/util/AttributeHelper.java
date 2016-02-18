@@ -49,10 +49,10 @@ public class AttributeHelper
 			if (recursive && item instanceof Group)
 			{
 				Group group = (Group) item;
-				if (!group.getAssociatedIndicators().isEmpty())
+				if (!group.getAssociatedItems().isEmpty())
 				{
 					// add the source to all child items as well
-					addSourceAttributeToAll(group.getAssociatedIndicators(), source, recursive);
+					addSourceAttributeToAll(group.getAssociatedItems(), source, recursive);
 				}
 			}
 		}

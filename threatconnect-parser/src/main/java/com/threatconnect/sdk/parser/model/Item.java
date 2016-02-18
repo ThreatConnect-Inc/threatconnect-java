@@ -30,4 +30,6 @@ public abstract class Item
 	{
 		return tags;
 	}
+	
+	public abstract List<? extends Item> getAssociatedItems();
 }

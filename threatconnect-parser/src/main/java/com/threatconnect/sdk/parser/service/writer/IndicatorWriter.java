@@ -1,8 +1,6 @@
 package com.threatconnect.sdk.parser.service.writer;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 import com.google.gson.Gson;
 import com.threatconnect.sdk.client.reader.AbstractIndicatorReaderAdapter;
@@ -11,14 +9,9 @@ import com.threatconnect.sdk.client.writer.AbstractIndicatorWriterAdapter;
 import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
-import com.threatconnect.sdk.parser.model.Address;
 import com.threatconnect.sdk.parser.model.Attribute;
-import com.threatconnect.sdk.parser.model.EmailAddress;
-import com.threatconnect.sdk.parser.model.File;
 import com.threatconnect.sdk.parser.model.GroupType;
-import com.threatconnect.sdk.parser.model.Host;
 import com.threatconnect.sdk.parser.model.Indicator;
-import com.threatconnect.sdk.parser.model.Url;
 import com.threatconnect.sdk.parser.service.save.AssociateFailedException;
 import com.threatconnect.sdk.parser.service.save.SaveItemFailedException;
 import com.threatconnect.sdk.server.entity.Indicator.Type;
@@ -133,6 +126,57 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 		catch (FailedResponseException e)
 		{
 			throw new SaveItemFailedException(e);
+		}
+	}
+	
+	public void associateGroup(final GroupType groupType, final Integer savedID)
+		throws AssociateFailedException, IOException
+	{
+		try
+		{
+			// create a new indicator writer to do the association
+			AbstractIndicatorWriterAdapter<T> writer = createWriterAdapter();
+			ApiEntitySingleResponse<?, ?> response = null;
+			
+			// holds the uniqueid of this indicator
+			final String uniqueID = buildID();
+			
+			// switch based on the group type
+			switch (groupType)
+			{
+				case ADVERSARY:
+					response = writer.associateGroupAdversary(uniqueID, savedID);
+					break;
+				case DOCUMENT:
+					response = writer.associateGroupDocument(uniqueID, savedID);
+					break;
+				case EMAIL:
+					response = writer.associateGroupEmail(uniqueID, savedID);
+					break;
+				case INCIDENT:
+					response = writer.associateGroupIncident(uniqueID, savedID);
+					break;
+				case SIGNATURE:
+					response = writer.associateGroupSignature(uniqueID, savedID);
+					break;
+				case THREAT:
+					response = writer.associateGroupThreat(uniqueID, savedID);
+					break;
+				default:
+					response = null;
+					break;
+			}
+			
+			// check to see if this was not successful
+			if (null != response && !response.isSuccess())
+			{
+				logger.warn("Failed to associate group id \"{}\" with indicator: {}", savedID, uniqueID);
+				logger.warn(response.getMessage());
+			}
+		}
+		catch (FailedResponseException e)
+		{
+			throw new AssociateFailedException(e);
 		}
 	}
 	
