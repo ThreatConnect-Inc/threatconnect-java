@@ -1,10 +1,16 @@
 package com.threatconnect.sdk.parser.service.writer;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.threatconnect.sdk.client.reader.FileIndicatorReaderAdapter;
+import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
+import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.client.writer.FileIndicatorWriterAdapter;
 import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
 import com.threatconnect.sdk.conn.Connection;
+import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.parser.model.File;
 import com.threatconnect.sdk.parser.model.FileOccurrence;
 import com.threatconnect.sdk.parser.service.save.SaveItemFailedException;
@@ -27,15 +33,55 @@ public class FileWriter extends IndicatorWriter<File, com.threatconnect.sdk.serv
 		// create a writer adapter
 		FileIndicatorWriterAdapter writer = createWriterAdapter();
 		
-		// for each of the file occurrences for this file
-		for (FileOccurrence fileOccurrence : indicatorSource.getFileOccurrences())
+		// check to see if there are file occurrences
+		if (!indicatorSource.getFileOccurrences().isEmpty())
 		{
-			// map the file occurence object
-			com.threatconnect.sdk.server.entity.FileOccurrence fo =
-				mapper.map(fileOccurrence, com.threatconnect.sdk.server.entity.FileOccurrence.class);
+			// holds the map for file name to file occurrence object
+			Map<String, com.threatconnect.sdk.server.entity.FileOccurrence> existingFileOccurrences =
+				retrieveExistingFileOccurrences(buildID(), ownerName);
 				
-			// write the file occurrence for this file
-			writer.createFileOccurrence(buildID(), fo);
+			// for each of the file occurrences for this file
+			for (FileOccurrence fileOccurrence : indicatorSource.getFileOccurrences())
+			{
+				// check to see if this file occurrence already exists
+				if (existingFileOccurrences.containsKey(fileOccurrence.getFileName()))
+				{
+					// make sure the new date is not null
+					if (null != fileOccurrence.getDate())
+					{
+						// retrieve the existing file occurrence to see if it needs to be updated
+						com.threatconnect.sdk.server.entity.FileOccurrence existingFileOccurrence =
+							existingFileOccurrences.get(fileOccurrence.getFileName());
+							
+						// check to see if the new date is before the existing date
+						if (fileOccurrence.getDate().before(existingFileOccurrence.getDate()))
+						{
+							try
+							{
+								// the existing file needs to be updated with the new date
+								existingFileOccurrence.setDate(fileOccurrence.getDate());
+								writer.updateFileOccurrence(buildID(), existingFileOccurrence, ownerName);
+							}
+							catch (FailedResponseException | IOException e)
+							{
+								// something went wrong updating the file occurrence so just log it
+								// for the user to review and move on
+								logger.warn(e.getMessage(), e);
+							}
+						}
+					}
+				}
+				// create a new file occurrence for this file hash
+				else
+				{
+					// map the file occurrence object
+					com.threatconnect.sdk.server.entity.FileOccurrence fo =
+						mapper.map(fileOccurrence, com.threatconnect.sdk.server.entity.FileOccurrence.class);
+						
+					// write the file occurrence for this file
+					writer.createFileOccurrence(buildID(), fo);
+				}
+			}
 		}
 		
 		return file;
@@ -45,6 +91,12 @@ public class FileWriter extends IndicatorWriter<File, com.threatconnect.sdk.serv
 	protected FileIndicatorWriterAdapter createWriterAdapter()
 	{
 		return WriterAdapterFactory.createFileIndicatorWriter(connection);
+	}
+	
+	@Override
+	protected FileIndicatorReaderAdapter createReaderAdapter()
+	{
+		return ReaderAdapterFactory.createFileIndicatorReader(connection);
 	}
 	
 	@Override
@@ -70,5 +122,47 @@ public class FileWriter extends IndicatorWriter<File, com.threatconnect.sdk.serv
 			// no suitable id for this file
 			return null;
 		}
+	}
+	
+	/**
+	 * Retrieves the existing file occurrences if any exist and enters them into a hash map using
+	 * the file name as the key
+	 * 
+	 * @param hash
+	 * @param ownerName
+	 * @return
+	 * @throws FailedResponseException
+	 * @throws IOException
+	 */
+	private Map<String, com.threatconnect.sdk.server.entity.FileOccurrence> retrieveExistingFileOccurrences(
+		final String hash, final String ownerName)
+	{
+		// holds the map for file name to file occurrence object
+		Map<String, com.threatconnect.sdk.server.entity.FileOccurrence> existingFileOccurrences =
+			new HashMap<String, com.threatconnect.sdk.server.entity.FileOccurrence>();
+			
+		try
+		{
+			// create a new reader adapter
+			FileIndicatorReaderAdapter reader = createReaderAdapter();
+			
+			// check to see if there are any existing file occurrences for this file
+			IterableResponse<com.threatconnect.sdk.server.entity.FileOccurrence> fileOccurrenceResponse =
+				reader.getFileOccurrences(hash, ownerName);
+				
+			// for each of the file occurrences
+			for (com.threatconnect.sdk.server.entity.FileOccurrence fileOccurrence : fileOccurrenceResponse)
+			{
+				// add this file occurrence to the map
+				existingFileOccurrences.put(fileOccurrence.getFileName(), fileOccurrence);
+			}
+		}
+		
+		catch (FailedResponseException | IOException e)
+		{
+			logger.warn(e.getMessage(), e);
+		}
+		
+		return existingFileOccurrences;
 	}
 }
