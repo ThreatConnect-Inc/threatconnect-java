@@ -32,16 +32,19 @@ public class RegexUtil
 	 * Matches text that is an MD5 hash
 	 */
 	public static final String REGEX_MD5 = "^[a-fA-F0-9]{32}$";
+	public static final String REGEX_MD5_EXTRACT = "([a-fA-F0-9]{32})";
 	
 	/**
 	 * Matches text that is a SHA1 hash
 	 */
 	public static final String REGEX_SHA1 = "^[a-fA-F0-9]{40}$";
+	public static final String REGEX_SHA1_EXTRACT = "([a-fA-F0-9]{40})";
 	
 	/**
 	 * Matches text that is a SHA256 hash
 	 */
 	public static final String REGEX_SHA256 = "^[a-fA-F0-9]{64}$";
+	public static final String REGEX_SHA256_EXTRACT = "([a-fA-F0-9]{64})";
 	
 	private RegexUtil()
 	{
