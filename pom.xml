@@ -120,7 +120,7 @@
 						<goals>
 							<goal>site</goal>
 						</goals>
-						<!--<phase>deploy</phase>-->
+						<phase>deploy</phase>
 					</execution>
 				</executions>
 			</plugin>
