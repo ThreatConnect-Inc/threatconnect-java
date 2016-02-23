@@ -12,8 +12,7 @@ import java.util.List;
 /**
  *
  * @author dtineo
- * @param <ApiSingleEntityResponse>
- * @param <T>
+ * @param <ApiSingleEntityResponse>  Parameter
  */
 public class WriteListResponse<ApiSingleEntityResponse> {
     private List<ApiEntitySingleResponse> successList = new ArrayList<>();

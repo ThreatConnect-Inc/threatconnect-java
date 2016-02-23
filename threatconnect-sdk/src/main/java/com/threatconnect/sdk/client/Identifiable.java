@@ -8,7 +8,7 @@ package com.threatconnect.sdk.client;
 /**
  *
  * @author dtineo
- * @param <T>
+ * @param <T> Parameter
  */
 public interface Identifiable<T,P> {
     public P getId(T item);

@@ -20,7 +20,7 @@ import java.io.IOException;
  * 
  *
  * @author dtineo
- * @param <T>
+ * @param <T> Parameter
  */
 public abstract class AbstractGroupReaderAdapter<T extends Group>
     extends AbstractBaseReaderAdapter<T,Integer>
@@ -39,8 +39,8 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     /**
      * Package level constructor. Use the {@link ReaderAdapterFactory} to access this object.
      * @param conn      Primary connection object to the ThreatConnect API
-     * @param singleType
-     * @param listType
+     * @param singleType Class of single type
+     * @param listType Class of list type
      * 
      * @see ReaderAdapterFactory
      */

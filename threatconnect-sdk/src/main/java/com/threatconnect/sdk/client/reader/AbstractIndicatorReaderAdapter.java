@@ -30,7 +30,7 @@ import java.util.logging.Level;
  * 
  *
  * @author dtineo
- * @param <T>
+ * @param <T> Parameter
  */
 public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     extends AbstractBaseReaderAdapter<T,String>
@@ -55,8 +55,9 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
      *
      * @param conn Primary connection object to the ThreatConnect API
      * ThreatConnect API
-     * @param singleType
-     * @param listType
+     * @param singleType Class for single type
+     * @param listType Class for list type
+     * @param singleItemType Class for single item type
      *
      * @see ReaderAdapterFactory
      */

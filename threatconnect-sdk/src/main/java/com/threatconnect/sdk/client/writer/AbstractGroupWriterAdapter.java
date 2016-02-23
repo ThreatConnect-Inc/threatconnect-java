@@ -29,7 +29,7 @@ import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
  * 
  *
  * @author dtineo
- * @param <T>
+ * @param <T> Parameter
  */
 public abstract class AbstractGroupWriterAdapter<T extends Group>
     extends AbstractBaseWriterAdapter<T,Integer> 
@@ -50,7 +50,7 @@ public abstract class AbstractGroupWriterAdapter<T extends Group>
     /**
      * Package level constructor. Use the {@link WriterAdapterFactory} to access this object.
      * @param conn      Primary connection object to the ThreatConnect API
-     * @param singleType
+     * @param singleType Single type
      * 
      * @see WriterAdapterFactory
      */

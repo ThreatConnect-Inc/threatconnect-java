@@ -15,8 +15,8 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 /**
  *
  * @author James
- * @param <T>
- * @param <S>
+ * @param <T> Parameter
+ * @param <S> Parameter
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlSeeAlso({AddressListResponse.class, AdversaryListResponse.class, AttributeListResponse.class, DnsResolutionListResponse.class, EmailAddressListResponse.class, EmailListResponse.class, FileListResponse.class, 
