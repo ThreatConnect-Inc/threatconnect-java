@@ -1,6 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<name>${project.groupId}:${project.artifactId}</name>
+	<description>The ThreatConnect Java SDK.  Used to communicate with teh ThreatConnect Threat Intelligence Platform</description>
+	<url>https://github.com/ThreatConnect-Inc/threatconnect-java</url>
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Danny Tineo</name>
+            <email>dtineo@threatconnect.com</email>
+            <organization>ThreatConnect</organization>
+            <organizationUrl>https://www.threatconnect.com</organizationUrl>
+        </developer>
+        <developer>
+            <name>Mitchell Turner</name>
+            <email>mturner@threatconnect.com</email>
+            <organization>ThreatConnect</organization>
+            <organizationUrl>https://www.threatconnect.com</organizationUrl>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:git@github.com:ThreatConnect-Inc/threatconnect-java.git</connection>
+        <developerConnection>scm:git:git@github.com:ThreatConnect-Inc/threatconnect-java.git</developerConnection>
+        <url>git@github.com:ThreatConnect-Inc/threatconnect-java.git</url>
+    </scm>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 	<parent>
 		<groupId>com.threatconnect.sdk</groupId>
 		<artifactId>threatconnect-sdk-parent</artifactId>
@@ -9,7 +47,6 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>threatconnect-sdk</artifactId>
-	<name>Core Java ThreatConnect SDK</name>
 	<packaging>jar</packaging>
 
 	<properties>
@@ -74,6 +111,17 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>2.10.1</version>
+				<configuration>
+					<show>public</show>
+				</configuration>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 
 			<!-- don't include local config.properties in build -->
@@ -153,6 +201,35 @@
 					</execution>
 				</executions>
 			</plugin>
+
+            <!--GPG Signing-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!--Maven release - We don't use yet - http://central.sonatype.org/pages/apache-maven.html#performing-a-release-deployment-with-the-maven-release-plugin -->
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-release-plugin</artifactId>-->
+                <!--<version>2.5</version>-->
+                <!--<configuration>-->
+                    <!--<autoVersionSubmodules>true</autoVersionSubmodules>-->
+                    <!--<useReleaseProfile>false</useReleaseProfile>-->
+                    <!--<releaseProfiles>release</releaseProfiles>-->
+                    <!--<goals>deploy</goals>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
 		</plugins>
 	</build>
 </project>
