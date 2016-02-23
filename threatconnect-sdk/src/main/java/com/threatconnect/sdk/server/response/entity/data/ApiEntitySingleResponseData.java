@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 /**
  *
  * @author James
- * @param <T>
+ * @param <T> Parameter
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlSeeAlso({AddressResponseData.class, AdversaryResponseData.class, AttributeResponseData.class, EmailAddressResponseData.class, EmailResponseData.class, FileResponseData.class, HostResponseData.class, 

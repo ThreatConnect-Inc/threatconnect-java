@@ -119,7 +119,7 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
      *
      * @param path url to issue request to
      * @return raw input stream from response
-     * @throws IOException
+     * @throws IOException On error
      */
     @Override
     public InputStream executeDownloadByteStream(String path) throws IOException {

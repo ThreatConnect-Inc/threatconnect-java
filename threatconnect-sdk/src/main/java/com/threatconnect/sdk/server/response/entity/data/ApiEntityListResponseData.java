@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 /**
  *
  * @author James
- * @param <T>
+ * @param <T> Parameter
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)

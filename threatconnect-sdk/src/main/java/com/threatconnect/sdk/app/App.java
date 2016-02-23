@@ -26,22 +26,22 @@ public abstract class App
 	 * 
 	 * @param appConfig
 	 * the configuration for this app
-	 * @return
-	 * @throws Exception
+	 * @return abstract
+	 * @throws Exception on error
 	 */
 	public abstract ExitStatus execute(AppConfig appConfig) throws Exception;
 	
 	/**
 	 * Retrieves the name of the log file for this app to log to
 	 * 
-	 * @return
+	 * @return the name of the log file for this app to log to
 	 */
 	public abstract String getLogFilename();
 	
 	/**
 	 * Writes a message out to the application's message log file
 	 * 
-	 * @param message
+	 * @param message Message to append to to log
 	 */
 	public void writeMessageTc(String message)
 	{
@@ -70,7 +70,7 @@ public abstract class App
 	/**
 	 * Writes the results out to the application's results log file
 	 * 
-	 * @param results
+	 * @param results Results to write to log file
 	 */
 	public void writeResultsTc(Map<String, String> results)
 	{
@@ -120,7 +120,7 @@ public abstract class App
 	/**
 	 * Returns the log file for this app
 	 * 
-	 * @return
+	 * @return the log file for this app
 	 */
 	public File getAppLogFile()
 	{
@@ -130,7 +130,7 @@ public abstract class App
 	/**
 	 * Returns the message.tc log file
 	 * 
-	 * @return
+	 * @return the message.tc log file
 	 */
 	public File getMessageLogFile()
 	{
@@ -140,7 +140,7 @@ public abstract class App
 	/**
 	 * Returns the results.tc log file
 	 * 
-	 * @return
+	 * @return the results.tc log file
 	 */
 	public File getResultsLogFile()
 	{

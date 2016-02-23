@@ -80,7 +80,7 @@ public class Document extends Group
 
     /**
      * Ignore serialization of status because status isn't settable by API call.
-     * @return
+     * @return String reponse
      */
     @JsonIgnore
     public String getStatus()

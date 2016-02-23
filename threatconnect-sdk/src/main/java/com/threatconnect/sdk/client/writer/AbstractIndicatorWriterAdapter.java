@@ -36,7 +36,7 @@ import java.util.Map;
  * 
  *
  * @author dtineo
- * @param <T>
+ * @param <T> Parameter
  */
 public abstract class AbstractIndicatorWriterAdapter<T extends Indicator> 
     extends AbstractBaseWriterAdapter<T,String> 
@@ -57,7 +57,7 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     /**
      * Package level constructor. Use the {@link WriterAdapterFactory} to access this object.
      * @param conn      Primary connection object to the ThreatConnect API
-     * @param singleType
+     * @param singleType Single type
      * 
      * @see WriterAdapterFactory
      */

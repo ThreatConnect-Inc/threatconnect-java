@@ -17,7 +17,7 @@ public class LoggerUtil
 	 * the log file to write the output
 	 * @param appConfig
 	 * the app configuration
-	 * @throws IOException
+	 * @throws IOException On error
 	 */
 	public static void reconfigureGlobalLogger(final File logFile, final AppConfig appConfig) throws IOException
 	{
@@ -36,7 +36,7 @@ public class LoggerUtil
 	 * the log file to write the output
 	 * @param appConfig
 	 * the app configuration
-	 * @throws IOException
+	 * @throws IOException On error
 	 */
 	public static void reconfigureLogger(final Logger logger, final File logFile, final AppConfig appConfig)
 		throws IOException
@@ -55,8 +55,8 @@ public class LoggerUtil
 	/**
 	 * Writes a message to the standard out
 	 * 
-	 * @param msg
-	 * @param fmtArgs
+	 * @param msg Message to write to log
+	 * @param fmtArgs Formatter string
 	 */
 	public static void logOut(final String msg, final Object... fmtArgs)
 	{
@@ -66,8 +66,8 @@ public class LoggerUtil
 	/**
 	 * Writes a message to the standard error
 	 * 
-	 * @param msg
-	 * @param fmtArgs
+	 * @param msg Message to write to logs
+	 * @param fmtArgs Formatter string
 	 */
 	public static void logErr(final String msg, final Object... fmtArgs)
 	{
@@ -76,9 +76,10 @@ public class LoggerUtil
 	
 	/**
 	 * Writes a message to the standard error
-	 * 
-	 * @param msg
-	 * @param fmtArgs
+	 *
+	 * @param msg Message to write to logs
+	 * @param fmtArgs Formatter string
+	 * @param e Exception
 	 */
 	public static void logErr(final Exception e, final String msg, final Object... fmtArgs)
 	{

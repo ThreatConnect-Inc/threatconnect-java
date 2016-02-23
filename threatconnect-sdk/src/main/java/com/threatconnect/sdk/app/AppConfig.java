@@ -137,8 +137,8 @@ public final class AppConfig
 	/**
 	 * Returns a system property as a string
 	 * 
-	 * @param key
-	 * @return
+	 * @param key Name of system property
+	 * @return a system property as a string
 	 */
 	public String getString(final String key)
 	{
@@ -148,9 +148,9 @@ public final class AppConfig
 	/**
 	 * Returns a value as a list by splitting the string using the delimiter
 	 * 
-	 * @param key
-	 * @param delimiter
-	 * @return
+	 * @param key System property name
+	 * @param delimiter The delimiter to use
+	 * @return A list of strings
 	 */
 	public List<String> getStringList(final String key, final String delimiter)
 	{
@@ -172,8 +172,8 @@ public final class AppConfig
 	 * Returns a system property as an integer. Returns null if the key does not exist or if the
 	 * value is not an integer
 	 * 
-	 * @param key
-	 * @return
+	 * @param key System property name
+	 * @return An integer value of System property key
 	 */
 	public Integer getInteger(final String key)
 	{
@@ -191,9 +191,9 @@ public final class AppConfig
 	 * Returns a system property as an integer. Returns the defaultValue if the key does not exist
 	 * or if the value is not an integer
 	 * 
-	 * @param key
-	 * @param defaultValue
-	 * @return
+	 * @param key System property name
+	 * @param defaultValue Value to return if key doesn't exist
+	 * @return An integer value of System property key
 	 */
 	public int getInteger(final String key, final int defaultValue)
 	{
@@ -205,8 +205,8 @@ public final class AppConfig
 	 * Returns a system property as an integer. Returns null if the key does not exist or if the
 	 * value is not an double
 	 * 
-	 * @param key
-	 * @return
+	 * @param key System property name
+	 * @return An integer value of System property key
 	 */
 	public Double getDouble(final String key)
 	{
@@ -224,9 +224,9 @@ public final class AppConfig
 	 * Returns a system property as an double. Returns the defaultValue if the key does not exist
 	 * or if the value is not a double
 	 * 
-	 * @param key
-	 * @param defaultValue
-	 * @return
+	 * @param key System property name
+	 * @param defaultValue Value to return if key doesn't exist
+	 * @return A double value of System property key
 	 */
 	public double getDouble(final String key, final double defaultValue)
 	{
@@ -237,7 +237,7 @@ public final class AppConfig
 	/**
 	 * Retrieves the instance of this singleton
 	 * 
-	 * @return
+	 * @return Instance of singleton
 	 */
 	public static synchronized AppConfig getInstance()
 	{
