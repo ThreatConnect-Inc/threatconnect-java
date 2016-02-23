@@ -7,37 +7,16 @@ This SDK provides a high-level abstraction layer of the ThreatConnect&trade; RES
 
 ## Maven 
 Add the following entries to your pom file (git clone not required):
-<br/>
-```xml
 
-   <properties>
-        <threatconnect-sdk.version>3.0</threatconnect-sdk.version>
-    </properties>
-
-
-<!-- repository entry -->
-  <repositories>
-      <repository>
-          <id>threatconnect-java-mvn-repo</id>
-         <url>https://raw.github.com/ThreatConnect-Inc/threatconnect-java/mvn-repo-${threatconnect-sdk.version}/</url>
-           <snapshots>
-              <enabled>true</enabled>
-              <updatePolicy>always</updatePolicy>
-          </snapshots>
-      </repository>
-  </repositories>
-
-
-<!-- sdk dependency -->
-    <dependencies>
-        <dependency>
-            <groupId>com.threatconnect.sdk</groupId>
-            <artifactId>threatconnect-sdk</artifactId>
-            <version>${threatconnect-sdk.version}</version>
-         </dependency>
-    </dependencies>
-
+### Maven
 ```
+<dependency>
+  <groupId>com.threatconnect.sdk</groupId>
+  <artifactId>threatconnect-sdk</artifactId>
+  <version>2.5</version>
+</dependency>
+```
+
 
 
 ## Java SDK Architecture Overview
