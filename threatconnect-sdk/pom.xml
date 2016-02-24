@@ -14,38 +14,6 @@
 	<artifactId>threatconnect-sdk</artifactId>
 	<packaging>jar</packaging>
 
-	<licenses>
-		<license>
-			<name>The Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-		</license>
-	</licenses>
-	<developers>
-		<developer>
-			<name>Danny Tineo</name>
-			<email>dtineo@threatconnect.com</email>
-			<organization>ThreatConnect</organization>
-			<organizationUrl>https://www.threatconnect.com</organizationUrl>
-		</developer>
-		<developer>
-			<name>Mitchell Turner</name>
-			<email>mturner@threatconnect.com</email>
-			<organization>ThreatConnect</organization>
-			<organizationUrl>https://www.threatconnect.com</organizationUrl>
-		</developer>
-		<developer>
-			<name>Greg Marut</name>
-			<email>gmarut@threatconnect.com</email>
-			<organization>ThreatConnect</organization>
-			<organizationUrl>https://www.threatconnect.com</organizationUrl>
-		</developer>
-	</developers>
-	<scm>
-		<connection>scm:git:git@github.com:ThreatConnect-Inc/threatconnect-java.git</connection>
-		<developerConnection>scm:git:git@github.com:ThreatConnect-Inc/threatconnect-java.git</developerConnection>
-		<url>git@github.com:ThreatConnect-Inc/threatconnect-java.git</url>
-	</scm>
-
 	<properties>
 		<main.basedir>${project.parent.basedir}</main.basedir>
 	</properties>
