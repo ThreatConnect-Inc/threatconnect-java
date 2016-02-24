@@ -103,24 +103,6 @@
 				</configuration>
 			</plugin>
 
-			<!-- javadoc -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.1</version>
-				<configuration>
-					<show>public</show>
-				</configuration>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
 			<!-- don't include local config.properties in build -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -197,32 +179,6 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
-
-			<!--GPG Signing -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.5</version>
-				<executions>
-					<execution>
-						<id>sign-artifacts</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.sonatype.plugins</groupId>
-				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.3</version>
-				<extensions>true</extensions>
-				<configuration>
-					<serverId>ossrh</serverId>
-					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
