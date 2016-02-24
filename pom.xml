@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.threatconnect.sdk</groupId>
 	<artifactId>threatconnect-sdk-parent</artifactId>
-	<version>2.5</version>
+	<version>2.5.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>ThreatConnect SDK Parent</name>
 
@@ -54,7 +54,7 @@
 		<main.basedir>${project.basedir}</main.basedir>
 
 		<!-- ThreatConnect SDK Version -->
-		<version.this>2.5</version.this>
+		<version.this>2.5.1-SNAPSHOT</version.this>
 
 		<!-- Dependency Versions -->
 		<version.commons-io>2.4</version.commons-io>
@@ -111,7 +111,6 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
-						<version>1.5</version>
 						<executions>
 							<execution>
 								<id>sign-artifacts</id>
@@ -165,4 +164,15 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
 </project>
