@@ -65,7 +65,7 @@ public class IndicatorUtil
 	 * @return
 	 * @throws MatchNotFoundException
 	 */
-	public static Indicator exractHostOrAddress(final String url) throws MatchNotFoundException
+	public static Indicator extractHostOrAddress(final String url) throws MatchNotFoundException
 	{
 		// retrieve the hostname of the url
 		String ipAddressOrHostName = new HostNameExtractor(url.trim()).getHostName();
