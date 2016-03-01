@@ -22,7 +22,7 @@ public class AttributeHelper
 	public static final String ATTRIBUTE_SOURCE_DATE_TIME = "Source Date Time";
 	public static final String ATTRIBUTE_TTP = "Tactics, Techniques, and Procedures";
 	
-	public static final String SOURCE_DATE_TIME_FORMAT = "yyyy/MM/dd HH:mm:ss";
+	public static final String SOURCE_DATE_TIME_FORMAT = "MM-dd-yyyy HH:mm zzz";
 	
 	/**
 	 * Adds the source attribute to all of the items in the list
