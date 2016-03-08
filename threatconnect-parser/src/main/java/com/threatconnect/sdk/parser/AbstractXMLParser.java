@@ -3,7 +3,9 @@ package com.threatconnect.sdk.parser;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Date;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -29,25 +31,29 @@ public abstract class AbstractXMLParser<I extends Item> extends AbstractPagedPar
 	@Override
 	protected PageResult<I> parsePage(String pageUrl, Date startDate) throws ParserException
 	{
+		URLConnection connection = null;
+		
 		try
 		{
 			// load the url and read the xml as a string
 			URL url = new URL(pageUrl);
-			String xml = preProcessXML(IOUtils.toString(url.openStream()));
+			connection = url.openConnection();
+			String xml = preProcessXML(IOUtils.toString(connection.getInputStream()));
 			
-			DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-			domFactory.setNamespaceAware(true);
-			DocumentBuilder builder = domFactory.newDocumentBuilder();
-			Reader reader = new StringReader(xml);
-			InputSource inputSource = new InputSource(reader);
-			Document doc = builder.parse(inputSource);
+			Document doc = createDocument(xml);
 			
 			// process the rss feed
 			return processXmlDocument(doc, pageUrl, startDate);
 		}
-		catch (IOException | ParserConfigurationException | SAXException | XPathExpressionException e)
+		catch (MalformedURLException | ParserConfigurationException | SAXException | XPathExpressionException e)
 		{
 			throw new ParserException(e);
+		}
+		catch (IOException e)
+		{
+			// notify that there was a connection error
+			onConnectionError(connection, e);
+			return null;
 		}
 	}
 	
@@ -60,6 +66,21 @@ public abstract class AbstractXMLParser<I extends Item> extends AbstractPagedPar
 	protected String preProcessXML(final String xml)
 	{
 		return xml;
+	}
+	
+	protected void onConnectionError(final URLConnection connection, final IOException cause) throws ParserException
+	{
+		throw new ParserException(cause);
+	}
+	
+	protected Document createDocument(final String xml) throws ParserConfigurationException, SAXException, IOException
+	{
+		DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+		domFactory.setNamespaceAware(true);
+		DocumentBuilder builder = domFactory.newDocumentBuilder();
+		Reader reader = new StringReader(xml);
+		InputSource inputSource = new InputSource(reader);
+		return builder.parse(inputSource);
 	}
 	
 	/**
