@@ -11,9 +11,9 @@ Add the following entries to your pom file (git clone not required):
 ### Maven
 ```
 <dependency>
-  <groupId>com.threatconnect.sdk-core</groupId>
+  <groupId>com.threatconnect.sdk.core</groupId>
   <artifactId>threatconnect-sdk</artifactId>
-  <version>2.5</version>
+  <version>2.5.0</version>
 </dependency>
 ```
 

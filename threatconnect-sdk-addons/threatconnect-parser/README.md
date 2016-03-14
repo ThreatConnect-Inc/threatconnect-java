@@ -15,7 +15,7 @@ Add the following entries to your pom file (git clone not required):
 <!-- sdk dependency -->
     <dependencies>
         <dependency>
-            <groupId>com.threatconnect.sdk-addons</groupId>
+            <groupId>com.threatconnect.sdk.addons</groupId>
             <artifactId>threatconnect-parser</artifactId>
             <version>${threatconnect-sdk.version}</version>
          </dependency>

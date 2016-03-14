@@ -6,7 +6,7 @@
 	<url>https://github.com/ThreatConnect-Inc/threatconnect-java</url>
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.threatconnect.sdk-core</groupId>
+	<groupId>com.threatconnect.sdk.core</groupId>
 	<artifactId>threatconnect-sdk</artifactId>
 	<version>2.5.0-SNAPSHOT</version>
 	<packaging>jar</packaging>

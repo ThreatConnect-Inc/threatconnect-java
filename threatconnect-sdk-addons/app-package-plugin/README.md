@@ -33,7 +33,7 @@ Add the following entries to your pom file (git clone not required):
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>com.threatconnect.sdk-addons</groupId>
+				<groupId>com.threatconnect.sdk.addons</groupId>
 				<artifactId>app-package-plugin</artifactId>
 				<version>${threatconnect-sdk.version}</version>
 				<executions>
