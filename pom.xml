@@ -9,5 +9,7 @@
     <url>http://maven.apache.org</url>
     <modules>
         <module>threatconnect-sdk-core</module>
+        <module>threatconnect-sdk-addons/app-package-plugin</module>
+        <module>threatconnect-sdk-addons/threatconnect-parser</module>
     </modules>
 </project>
