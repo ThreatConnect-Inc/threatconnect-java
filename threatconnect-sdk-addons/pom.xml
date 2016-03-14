@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.threatconnect.sdk.addons</groupId>
 	<artifactId>threatconnect-sdk-addons</artifactId>
-	<version>2.5.0-SNAPSHOT</version>
+	<version>2.5.0</version>
 	<packaging>pom</packaging>
 	<name>ThreatConnect SDK Addon Parent</name>
 
@@ -53,7 +53,7 @@
 		<main.basedir>${project.basedir}</main.basedir>
 
 		<!-- ThreatConnect SDK Version -->
-		<version.this>2.5.0-SNAPSHOT</version.this>
+		<version.this>2.5.0</version.this>
 
 		<!-- Dependency Versions -->
 		<version.commons-io>2.4</version.commons-io>

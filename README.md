@@ -7,7 +7,7 @@ This SDK provides a high-level abstraction layer of the ThreatConnect&trade; RES
 ### Maven
 ```
 <dependency>
-  <groupId>com.threatconnect.sdk-core</groupId>
+  <groupId>com.threatconnect.sdk.core</groupId>
   <artifactId>threatconnect-sdk</artifactId>
   <version>2.5.0</version>
 </dependency>
