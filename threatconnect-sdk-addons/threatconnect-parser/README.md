@@ -9,27 +9,13 @@ Add the following entries to your pom file (git clone not required):
 ```xml
 
    <properties>
-        <threatconnect-sdk.version>3.0</threatconnect-sdk.version>
+        <threatconnect-sdk.version>2.5.0</threatconnect-sdk.version>
     </properties>
-
-
-<!-- repository entry -->
-  <repositories>
-      <repository>
-          <id>threatconnect-java-mvn-repo</id>
-         <url>https://raw.github.com/ThreatConnect-Inc/threatconnect-java/mvn-repo-${threatconnect-sdk.version}/</url>
-           <snapshots>
-              <enabled>true</enabled>
-              <updatePolicy>always</updatePolicy>
-          </snapshots>
-      </repository>
-  </repositories>
-
 
 <!-- sdk dependency -->
     <dependencies>
         <dependency>
-            <groupId>com.threatconnect.sdk</groupId>
+            <groupId>com.threatconnect.sdk-addons</groupId>
             <artifactId>threatconnect-parser</artifactId>
             <version>${threatconnect-sdk.version}</version>
          </dependency>
