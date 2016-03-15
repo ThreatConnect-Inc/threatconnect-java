@@ -18,7 +18,7 @@ public class SaveResults
 	/**
 	 * Returns the list of items that failed to save
 	 * 
-	 * @return
+	 * @return the list of failed items
 	 */
 	public List<Item> getFailedItems()
 	{
@@ -33,11 +33,9 @@ public class SaveResults
 	/**
 	 * Counts all of the items of a specific type.
 	 * 
-	 * @param items
-	 * the list of all items
 	 * @param itemType
 	 * the type of item to count
-	 * @return
+	 * @return the number of failed items
 	 */
 	public int countFailedItems(final ItemType itemType)
 	{

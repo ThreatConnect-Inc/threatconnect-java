@@ -15,7 +15,7 @@ public class MapperUtil
 	/**
 	 * Creates and configures a bean mapper
 	 * 
-	 * @return
+	 * @return the configured mapper object
 	 */
 	public static Mapper createMapper()
 	{

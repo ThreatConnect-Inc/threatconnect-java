@@ -21,7 +21,10 @@ public class IndicatorUtil
 	 * Creates a URL indicator and ensures that the url is wellformed
 	 * 
 	 * @param url
-	 * @return
+	 * the url to use
+	 * @return a Url indicator object
+	 * @throws InvalidURLException
+	 * if the url is not valid
 	 */
 	public static Url createUrl(final String url) throws InvalidURLException
 	{
@@ -62,8 +65,10 @@ public class IndicatorUtil
 	 * indicator with the appropriate field populated
 	 * 
 	 * @param url
-	 * @return
+	 * the url string to use
+	 * @return the indicator that was created
 	 * @throws MatchNotFoundException
+	 * if the url could not be identified as an indicator
 	 */
 	public static Indicator extractHostOrAddress(final String url) throws MatchNotFoundException
 	{
@@ -76,7 +81,8 @@ public class IndicatorUtil
 	 * Given a hostname or an ip address, an appropriate indicator is created
 	 * 
 	 * @param ipAddressOrHostName
-	 * @return
+	 * the text to use
+	 * @return the indicator that was created
 	 */
 	public static Indicator createHostOrAddress(final String ipAddressOrHostName)
 	{
@@ -98,10 +104,14 @@ public class IndicatorUtil
 	}
 	
 	/**
-	 * Cleans an IP address.<br />
+	 * Cleans an IP address
+	 * <p>
 	 * 1. Strips all leading 0s that are not necessary
+	 * </p>
 	 * 
-	 * @return
+	 * @param ip
+	 * the ip address to clean up
+	 * @return the clean ip address
 	 */
 	public static String cleanIP(final String ip)
 	{

@@ -44,9 +44,12 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 	 * Saves the group with the associated owner
 	 * 
 	 * @param ownerName
-	 * @return
+	 * the owner name of the group
+	 * @return the saved group
 	 * @throws SaveItemFailedException
+	 * if there was an issue saving this item
 	 * @throws IOException
+	 * if there was an exception communicating with the server
 	 */
 	public T saveGroup(final String ownerName)
 		throws SaveItemFailedException, IOException
@@ -128,9 +131,11 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 	 * Associates an indicator with the saved group object of this writer class
 	 * 
 	 * @param indicator
-	 * @param writer
+	 * the indicator to associate to this group
 	 * @throws AssociateFailedException
+	 * if there as an issue associating the indicator to this group
 	 * @throws IOException
+	 * if there was an exception communicating with the server
 	 */
 	public void associateIndicator(final Indicator indicator)
 		throws AssociateFailedException, IOException
@@ -203,7 +208,7 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 	/**
 	 * Retrieves the id of the saved group
 	 * 
-	 * @return
+	 * @return the id of the saved group
 	 */
 	protected Integer getSavedGroupID()
 	{
@@ -221,7 +226,7 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 	/**
 	 * A convenience method for creating a writer adapter for this class
 	 * 
-	 * @return
+	 * @return the group writer adapter
 	 */
 	protected AbstractGroupWriterAdapter<T> createWriterAdapter()
 	{

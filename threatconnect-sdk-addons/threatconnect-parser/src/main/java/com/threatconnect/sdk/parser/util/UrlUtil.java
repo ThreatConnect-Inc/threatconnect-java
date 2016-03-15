@@ -11,8 +11,10 @@ public class UrlUtil
 	 * Converts a URL to an absolute url if needed
 	 * 
 	 * @param url
+	 * the url to use
 	 * @param domain
-	 * @return
+	 * the domain to add if the url is relative
+	 * @return the absolute url
 	 */
 	public static String toAbsoluteURL(final String url, final String domain)
 	{
@@ -50,7 +52,8 @@ public class UrlUtil
 	 * Tests to see if a URL is absolute or relative
 	 * 
 	 * @param urlString
-	 * @return
+	 * the url to check
+	 * @return whether or not this url is absolute
 	 */
 	public static boolean isAbsoluteURL(final String urlString)
 	{

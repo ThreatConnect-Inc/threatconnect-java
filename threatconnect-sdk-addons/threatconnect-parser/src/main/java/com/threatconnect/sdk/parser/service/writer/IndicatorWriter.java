@@ -42,6 +42,7 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 	 * @return
 	 * @throws SaveItemFailedException
 	 * @throws IOException
+	 * if there was an exception communicating with the server
 	 */
 	public T saveIndicator(final String ownerName)
 		throws SaveItemFailedException, IOException
@@ -186,9 +187,12 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 	 * Looks up an indicator by the id
 	 * 
 	 * @param lookupID
-	 * @return
+	 * the id of the indicator to look up
+	 * @return the existing indicator
 	 * @throws FailedResponseException
+	 * if the server returned an invalid resonse
 	 * @throws IOException
+	 * if there was an exception communicating with the server
 	 */
 	private T lookupIndicator(final String lookupID)
 	{
@@ -220,7 +224,7 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 	/**
 	 * Creates a reader adapter for this class
 	 * 
-	 * @return
+	 * @return the reader adapter for this indicator
 	 */
 	protected AbstractIndicatorReaderAdapter<T> createReaderAdapter()
 	{
@@ -230,7 +234,7 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 	/**
 	 * A convenience method for creating a writer adapter for this class
 	 * 
-	 * @return
+	 * @return the writer adapter for this indicator
 	 */
 	protected AbstractIndicatorWriterAdapter<T> createWriterAdapter()
 	{

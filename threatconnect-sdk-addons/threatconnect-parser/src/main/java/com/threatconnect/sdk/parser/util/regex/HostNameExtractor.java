@@ -12,7 +12,7 @@ public class HostNameExtractor extends RegexExtractor
 	/**
 	 * Returns the entire domain portion of the URL with the scheme
 	 * 
-	 * @return
+	 * @return the domain
 	 */
 	public String getDomain()
 	{
@@ -22,7 +22,7 @@ public class HostNameExtractor extends RegexExtractor
 	/**
 	 * Returns only the scheme for this url
 	 * 
-	 * @return
+	 * @return the scheme
 	 */
 	public String getScheme()
 	{
@@ -32,7 +32,7 @@ public class HostNameExtractor extends RegexExtractor
 	/**
 	 * Returns the host name portion of the url without the scheme
 	 * 
-	 * @return
+	 * @return returns the host name
 	 */
 	public String getHostName()
 	{
