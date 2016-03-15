@@ -29,8 +29,8 @@ public class AttributeHelper
 	 * 
 	 * @param items
 	 * the list of items to add the source attribute to
-	 * @param feedType
-	 * the source feed type
+	 * @param source
+	 * the source to use
 	 * @param recursive
 	 * whether or not this should be added to all associated items as
 	 * well
@@ -61,8 +61,8 @@ public class AttributeHelper
 	/**
 	 * Adds a description attribute with the given value to the item
 	 * 
-	 * @param item
-	 * @param value
+	 * @param item the item to add this attribute to
+	 * @param value the value of the attribute
 	 * @return the attribute that was created
 	 */
 	public static Attribute addDescriptionAttribute(final Item item, final String value)
@@ -73,9 +73,9 @@ public class AttributeHelper
 	/**
 	 * Adds a description attribute with the given value to the item
 	 * 
-	 * @param item
-	 * @param value
-	 * @param displayed
+	 * @param item the item to add this attribute to
+	 * @param value the value of the attribute
+	 * @param displayed determines where this attribute is displayed
 	 * @return the attribute that was created
 	 */
 	public static Attribute addDescriptionAttribute(final Item item, final String value, final Boolean displayed)
@@ -86,8 +86,8 @@ public class AttributeHelper
 	/**
 	 * Adds a source attribute with the given value to the item
 	 * 
-	 * @param item
-	 * @param value
+	 * @param item the item to add this attribute to
+	 * @param value the value of the attribute
 	 * @return the attribute that was created
 	 */
 	public static Attribute addSourceAttribute(final Item item, final String value)
@@ -98,9 +98,9 @@ public class AttributeHelper
 	/**
 	 * Adds a source attribute with the given value to the item
 	 * 
-	 * @param item
-	 * @param value
-	 * @param displayed
+	 * @param item the item to add this attribute to
+	 * @param value the value of the attribute
+	 * @param displayed determines where this attribute is displayed
 	 * @return the attribute that was created
 	 */
 	public static Attribute addSourceAttribute(final Item item, final String value, final Boolean displayed)
@@ -111,8 +111,8 @@ public class AttributeHelper
 	/**
 	 * Adds a source date time attribute with the given value to the item
 	 * 
-	 * @param item
-	 * @param value
+	 * @param item the item to add this attribute to
+	 * @param date the date object to use
 	 * @return the attribute that was created
 	 */
 	public static Attribute addSourceDateTimeAttribute(final Item item, final Date date)
@@ -124,8 +124,8 @@ public class AttributeHelper
 	/**
 	 * Adds an Additional Analysis and Context attribute to the item
 	 * 
-	 * @param item
-	 * @param value
+	 * @param item the item to add this attribute to
+	 * @param value the value of the attribute
 	 * @return the attribute that was created
 	 */
 	public static Attribute addAdditionalAnalysisAndContext(final Item item, final String value)
@@ -136,8 +136,8 @@ public class AttributeHelper
 	/**
 	 * Adds a Tactics, Techniques, and Procedures attribute to the item
 	 * 
-	 * @param item
-	 * @param value
+	 * @param item the item to add this attribute to
+	 * @param value the value of the attribute
 	 * @return the attribute that was created
 	 */
 	public static Attribute addTacticsTechniquesProcedures(final Item item, final String value)
@@ -148,9 +148,9 @@ public class AttributeHelper
 	/**
 	 * Adds an attribute to the item
 	 * 
-	 * @param item
-	 * @param type
-	 * @param value
+	 * @param item the item to add this attribute to
+	 * @param type the type of attribute to add
+	 * @param value the value of the attribute
 	 * @return the attribute that was created
 	 */
 	public static Attribute addAttribute(final Item item, final String type, final String value)
@@ -161,10 +161,10 @@ public class AttributeHelper
 	/**
 	 * Adds an attribute to the item
 	 * 
-	 * @param item
-	 * @param type
-	 * @param value
-	 * @param displayed
+	 * @param item the item to add this attribute to
+	 * @param type the type of attribute to add
+	 * @param value the value of the attribute
+	 * @param displayed determines where this attribute is displayed
 	 * @return the attribute that was created
 	 */
 	public static Attribute addAttribute(final Item item, final String type, final String value,

@@ -4,10 +4,11 @@ public class RegexUtil
 {
 	/**
 	 * Matches the host portion of a url.
-	 * <br/>
+	 * <p>
 	 * Group 1: The domain with the scheme
 	 * Group 2: The scheme
 	 * group 3: The host name
+	 * </p>
 	 */
 	public static final String REGEX_HOST = "^((https?\\:\\/\\/)?(?:[^@\\/\\n]+@)?([^:\\/\\n]+))";
 	
