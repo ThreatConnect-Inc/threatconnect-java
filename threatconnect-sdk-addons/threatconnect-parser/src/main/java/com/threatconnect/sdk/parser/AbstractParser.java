@@ -1,10 +1,15 @@
 package com.threatconnect.sdk.parser;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.threatconnect.sdk.app.AppUtil;
 import com.threatconnect.sdk.parser.model.Item;
 import com.threatconnect.sdk.parser.util.regex.HostNameExtractor;
 import com.threatconnect.sdk.parser.util.regex.MatchNotFoundException;
@@ -27,6 +32,20 @@ public abstract class AbstractParser<I extends Item> implements Parser<I>
 		
 		// ensure that the domain is valid
 		getDomain();
+	}
+	
+	/**
+	 * Connects to the specified url and returns an input stream
+	 * 
+	 * @return the inputstream containing the response of the url
+	 * @throws IOException
+	 * if there was an error connecting to the url
+	 */
+	protected InputStream connect() throws IOException
+	{
+		// create a new http connection
+		HttpClient httpClient = AppUtil.createClient(false);
+		return httpClient.execute(new HttpGet(getUrl())).getEntity().getContent();
 	}
 	
 	/**

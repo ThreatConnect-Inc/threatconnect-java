@@ -1,7 +1,6 @@
 package com.threatconnect.sdk.parser;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
@@ -23,9 +22,8 @@ public abstract class AbstractJsonPathParser<I extends Item> extends AbstractPar
 	{
 		try
 		{
-			// load the url and read the json as a string
-			URL url = new URL(getUrl());
-			String json = preProcessJson(IOUtils.toString(url.openStream()));
+			// connect to the source and read the json as a string
+			String json = preProcessJson(IOUtils.toString(connect()));
 			
 			// parse the json into an element
 			DocumentContext context = JsonPath.parse(json);
