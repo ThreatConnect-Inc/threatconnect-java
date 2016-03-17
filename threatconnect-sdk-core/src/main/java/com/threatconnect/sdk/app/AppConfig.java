@@ -41,7 +41,6 @@ public final class AppConfig
 	{
 		// holds the map of configuration settings
 		configuration = new HashMap<String, String>();
-		loadConfigurationSettings(configuration);
 	}
 	
 	public String getTcMainAppClass()
@@ -144,7 +143,18 @@ public final class AppConfig
 	 */
 	public String getString(final String key)
 	{
-		return configuration.get(key);
+		// check to see if this key exists
+		if (configuration.containsKey(key))
+		{
+			return configuration.get(key);
+		}
+		else
+		{
+			// load this setting and put it in the map
+			String value = loadSetting(key);
+			configuration.put(key, value);
+			return value;
+		}
 	}
 	
 	/**
@@ -242,32 +252,6 @@ public final class AppConfig
 	{
 		Double value = getDouble(key);
 		return value == null ? defaultValue : value;
-	}
-	
-	/**
-	 * Loads all of the configuration settings and puts them into the map
-	 * 
-	 * @param configuration
-	 * the map to update with all of the configuration settings
-	 */
-	protected void loadConfigurationSettings(final Map<String, String> configuration)
-	{
-		configuration.put(TC_MAIN_APP_CLASS, loadSetting(TC_MAIN_APP_CLASS));
-		configuration.put(TC_LOG_PATH, loadSetting(TC_LOG_PATH));
-		configuration.put(TC_TEMP_PATH, loadSetting(TC_TEMP_PATH));
-		configuration.put(TC_OUT_PATH, loadSetting(TC_OUT_PATH));
-		configuration.put(TC_API_PATH, loadSetting(TC_API_PATH));
-		configuration.put(TC_SPACE_ELEMENT_ID, loadSetting(TC_SPACE_ELEMENT_ID));
-		configuration.put(TC_API_ACCESS_ID, loadSetting(TC_API_ACCESS_ID));
-		configuration.put(TC_API_SECRET, loadSetting(TC_API_SECRET));
-		configuration.put(TC_API_TOKEN_KEY, loadSetting(TC_API_TOKEN_KEY));
-		configuration.put(TC_API_DEFAULT_ORG, loadSetting(TC_API_DEFAULT_ORG));
-		configuration.put(TC_PROXY_HOST, loadSetting(TC_PROXY_HOST));
-		configuration.put(TC_PROXY_PORT, loadSetting(TC_PROXY_PORT));
-		configuration.put(TC_PROXY_USERNAME, loadSetting(TC_PROXY_USERNAME));
-		configuration.put(TC_PROXY_PASSWORD, loadSetting(TC_PROXY_PASSWORD));
-		configuration.put(TC_API_MAX_RESULT, loadSetting(TC_API_MAX_RESULT));
-		configuration.put(TC_LOG_LEVEL, loadSetting(TC_LOG_LEVEL));
 	}
 	
 	/**
