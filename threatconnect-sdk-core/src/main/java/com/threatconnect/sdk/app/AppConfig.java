@@ -2,7 +2,9 @@ package com.threatconnect.sdk.app;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Level;
@@ -24,7 +26,6 @@ public final class AppConfig
 	public static final String TC_PROXY_USERNAME = "tc_proxy_username";
 	public static final String TC_PROXY_PASSWORD = "tc_proxy_password";
 	public static final String TC_API_MAX_RESULT = "api_max_results";
-	public static final String TC_OWNER = "owner";
 	public static final String TC_LOG_LEVEL = "tc_log_level";
 	
 	public static final int DEFAULT_MAX_RESULTS = 350;
@@ -33,9 +34,14 @@ public final class AppConfig
 	// holds the instance of this singleton
 	private static AppConfig instance;
 	
+	// holds the map of all of the configuration settings
+	private final Map<String, String> configuration;
+	
 	private AppConfig()
 	{
-	
+		// holds the map of configuration settings
+		configuration = new HashMap<String, String>();
+		loadConfigurationSettings(configuration);
 	}
 	
 	public String getTcMainAppClass()
@@ -118,11 +124,6 @@ public final class AppConfig
 		return getInteger(TC_API_MAX_RESULT, defaultMax);
 	}
 	
-	public String getOwner()
-	{
-		return getString(TC_OWNER);
-	}
-	
 	public Level getTcLogLevel()
 	{
 		return getTcLogLevel(DEFAULT_LOG_LEVEL);
@@ -137,19 +138,22 @@ public final class AppConfig
 	/**
 	 * Returns a system property as a string
 	 * 
-	 * @param key Name of system property
+	 * @param key
+	 * Name of system property
 	 * @return a system property as a string
 	 */
 	public String getString(final String key)
 	{
-		return System.getProperty(key);
+		return configuration.get(key);
 	}
 	
 	/**
 	 * Returns a value as a list by splitting the string using the delimiter
 	 * 
-	 * @param key System property name
-	 * @param delimiter The delimiter to use
+	 * @param key
+	 * System property name
+	 * @param delimiter
+	 * The delimiter to use
 	 * @return A list of strings
 	 */
 	public List<String> getStringList(final String key, final String delimiter)
@@ -172,7 +176,8 @@ public final class AppConfig
 	 * Returns a system property as an integer. Returns null if the key does not exist or if the
 	 * value is not an integer
 	 * 
-	 * @param key System property name
+	 * @param key
+	 * System property name
 	 * @return An integer value of System property key
 	 */
 	public Integer getInteger(final String key)
@@ -191,8 +196,10 @@ public final class AppConfig
 	 * Returns a system property as an integer. Returns the defaultValue if the key does not exist
 	 * or if the value is not an integer
 	 * 
-	 * @param key System property name
-	 * @param defaultValue Value to return if key doesn't exist
+	 * @param key
+	 * System property name
+	 * @param defaultValue
+	 * Value to return if key doesn't exist
 	 * @return An integer value of System property key
 	 */
 	public int getInteger(final String key, final int defaultValue)
@@ -205,7 +212,8 @@ public final class AppConfig
 	 * Returns a system property as an integer. Returns null if the key does not exist or if the
 	 * value is not an double
 	 * 
-	 * @param key System property name
+	 * @param key
+	 * System property name
 	 * @return An integer value of System property key
 	 */
 	public Double getDouble(final String key)
@@ -224,14 +232,54 @@ public final class AppConfig
 	 * Returns a system property as an double. Returns the defaultValue if the key does not exist
 	 * or if the value is not a double
 	 * 
-	 * @param key System property name
-	 * @param defaultValue Value to return if key doesn't exist
+	 * @param key
+	 * System property name
+	 * @param defaultValue
+	 * Value to return if key doesn't exist
 	 * @return A double value of System property key
 	 */
 	public double getDouble(final String key, final double defaultValue)
 	{
 		Double value = getDouble(key);
 		return value == null ? defaultValue : value;
+	}
+	
+	/**
+	 * Loads all of the configuration settings and puts them into the map
+	 * 
+	 * @param configuration
+	 * the map to update with all of the configuration settings
+	 */
+	protected void loadConfigurationSettings(final Map<String, String> configuration)
+	{
+		configuration.put(TC_MAIN_APP_CLASS, loadSetting(TC_MAIN_APP_CLASS));
+		configuration.put(TC_LOG_PATH, loadSetting(TC_LOG_PATH));
+		configuration.put(TC_TEMP_PATH, loadSetting(TC_TEMP_PATH));
+		configuration.put(TC_OUT_PATH, loadSetting(TC_OUT_PATH));
+		configuration.put(TC_API_PATH, loadSetting(TC_API_PATH));
+		configuration.put(TC_SPACE_ELEMENT_ID, loadSetting(TC_SPACE_ELEMENT_ID));
+		configuration.put(TC_API_ACCESS_ID, loadSetting(TC_API_ACCESS_ID));
+		configuration.put(TC_API_SECRET, loadSetting(TC_API_SECRET));
+		configuration.put(TC_API_TOKEN_KEY, loadSetting(TC_API_TOKEN_KEY));
+		configuration.put(TC_API_DEFAULT_ORG, loadSetting(TC_API_DEFAULT_ORG));
+		configuration.put(TC_PROXY_HOST, loadSetting(TC_PROXY_HOST));
+		configuration.put(TC_PROXY_PORT, loadSetting(TC_PROXY_PORT));
+		configuration.put(TC_PROXY_USERNAME, loadSetting(TC_PROXY_USERNAME));
+		configuration.put(TC_PROXY_PASSWORD, loadSetting(TC_PROXY_PASSWORD));
+		configuration.put(TC_API_MAX_RESULT, loadSetting(TC_API_MAX_RESULT));
+		configuration.put(TC_LOG_LEVEL, loadSetting(TC_LOG_LEVEL));
+	}
+	
+	/**
+	 * Loads one individual setting given the key
+	 * 
+	 * @param key
+	 * the setting to load
+	 * @return
+	 */
+	protected String loadSetting(final String key)
+	{
+		return System.getProperty(key);
 	}
 	
 	/**
