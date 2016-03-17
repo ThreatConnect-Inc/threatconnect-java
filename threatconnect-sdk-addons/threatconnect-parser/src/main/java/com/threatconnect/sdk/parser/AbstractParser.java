@@ -44,7 +44,7 @@ public abstract class AbstractParser<I extends Item> implements Parser<I>
 	protected InputStream connect() throws IOException
 	{
 		// create a new http connection
-		HttpClient httpClient = AppUtil.createClient(false);
+		HttpClient httpClient = AppUtil.createClient(false, false);
 		return httpClient.execute(new HttpGet(getUrl())).getEntity().getContent();
 	}
 	

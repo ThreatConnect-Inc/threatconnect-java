@@ -12,14 +12,13 @@ public class AppUtil
 	 * @param useProxyIfAvailable
 	 * if the proxy settings are available, this connection will be initiated using the configured
 	 * proxy
+	 * @param trustSelfSignedCertificates
+	 * whether or not self signed certificates should be trusted
 	 * @return a CloseableHttpClient
 	 */
-	public static CloseableHttpClient createClient(final boolean useProxyIfAvailable)
+	public static CloseableHttpClient createClient(final boolean useProxyIfAvailable,
+		final boolean trustSelfSignedCertificates)
 	{
-		// :TODO: should trustSelfSignedCertificates be false by default? if so, how do we enable it
-		// when needed?
-		boolean trustSelfSignedCertificates = true;
-		
 		if (useProxyIfAvailable)
 		{
 			String proxyHost = AppConfig.getInstance().getTcProxyHost();

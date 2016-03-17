@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import org.apache.http.impl.client.CloseableHttpClient;
 
 import com.threatconnect.sdk.app.AppConfig;
+import com.threatconnect.sdk.app.AppUtil;
 import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.config.URLConfiguration;
 
@@ -93,23 +94,12 @@ public class Connection implements Closeable
 		this.config = config;
 	}
 	
-	private CloseableHttpClient createApiClient()
-	{
-		String proxyHost = AppConfig.getInstance().getTcProxyHost();
-		Integer proxyPort = AppConfig.getInstance().getTcProxyPort();
-		String proxyUserName = AppConfig.getInstance().getTcProxyUsername();
-		String proxyPassword = AppConfig.getInstance().getTcProxyPassword();
-		
-		// :TODO: should trustSelfSignedCertificates be false by default? if so, how do we enable it
-		// when needed?
-		return ConnectionUtil.createClient(proxyHost, proxyPort, proxyUserName, proxyPassword, true);
-	}
-	
 	CloseableHttpClient getApiClient()
 	{
 		if (apiClient == null)
 		{
-			apiClient = createApiClient();
+			//:TODO: should we add an SDK param to trust self signed certs?
+			apiClient = AppUtil.createClient(false, true);
 		}
 		return apiClient;
 	}
