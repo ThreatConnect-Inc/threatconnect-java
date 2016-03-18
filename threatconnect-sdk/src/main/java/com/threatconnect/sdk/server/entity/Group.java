@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @XmlAccessorType(XmlAccessType.FIELD)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@XmlSeeAlso({Adversary.class, Email.class, Incident.class, Signature.class, Threat.class})
+@XmlSeeAlso({Adversary.class, Email.class, Incident.class, Signature.class, Threat.class, Task.class})
 public class Group implements AttributeHolder
 {
 
@@ -47,6 +47,7 @@ public class Group implements AttributeHolder
         , Email
         , Incident
         , Signature
+        , Task
         , Threat
     }
     

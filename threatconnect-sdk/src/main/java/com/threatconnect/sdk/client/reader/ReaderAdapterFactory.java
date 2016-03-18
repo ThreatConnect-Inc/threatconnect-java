@@ -6,42 +6,21 @@
 package com.threatconnect.sdk.client.reader;
 
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.server.entity.Address;
-import com.threatconnect.sdk.server.entity.Adversary;
-import com.threatconnect.sdk.server.entity.Email;
-import com.threatconnect.sdk.server.entity.EmailAddress;
-import com.threatconnect.sdk.server.entity.File;
-import com.threatconnect.sdk.server.entity.Group;
-import com.threatconnect.sdk.server.entity.Host;
-import com.threatconnect.sdk.server.entity.Incident;
-import com.threatconnect.sdk.server.entity.Indicator;
-import com.threatconnect.sdk.server.entity.Signature;
-import com.threatconnect.sdk.server.entity.Threat;
-import com.threatconnect.sdk.server.entity.Url;
-import com.threatconnect.sdk.server.response.entity.AddressListResponse;
-import com.threatconnect.sdk.server.response.entity.AddressResponse;
-import com.threatconnect.sdk.server.response.entity.AdversaryListResponse;
-import com.threatconnect.sdk.server.response.entity.AdversaryResponse;
-import com.threatconnect.sdk.server.response.entity.EmailAddressListResponse;
-import com.threatconnect.sdk.server.response.entity.EmailAddressResponse;
-import com.threatconnect.sdk.server.response.entity.EmailListResponse;
-import com.threatconnect.sdk.server.response.entity.EmailResponse;
-import com.threatconnect.sdk.server.response.entity.HostListResponse;
-import com.threatconnect.sdk.server.response.entity.HostResponse;
-import com.threatconnect.sdk.server.response.entity.IncidentListResponse;
-import com.threatconnect.sdk.server.response.entity.IncidentResponse;
-import com.threatconnect.sdk.server.response.entity.SignatureListResponse;
-import com.threatconnect.sdk.server.response.entity.SignatureResponse;
-import com.threatconnect.sdk.server.response.entity.ThreatListResponse;
-import com.threatconnect.sdk.server.response.entity.ThreatResponse;
-import com.threatconnect.sdk.server.response.entity.UrlListResponse;
-import com.threatconnect.sdk.server.response.entity.UrlResponse;
+import com.threatconnect.sdk.server.entity.*;
+import com.threatconnect.sdk.server.response.entity.*;
 
 /**
  *
  * @author dtineo
  */
 public class ReaderAdapterFactory {
+
+    public static AbstractGroupReaderAdapter<Task> createTaskGroupReader(Connection conn) {
+        return new AbstractGroupReaderAdapter<Task>(conn, TaskResponse.class, Task.class, TaskListResponse.class) {
+            @Override
+            public String getUrlType() { return "tasks"; }
+        };
+    }
 
     public static AbstractGroupReaderAdapter<Adversary> createAdversaryGroupReader(Connection conn) {
         return new AbstractGroupReaderAdapter<Adversary>(conn, AdversaryResponse.class, Adversary.class, AdversaryListResponse.class) {
@@ -162,6 +141,8 @@ public class ReaderAdapterFactory {
                 return createSignatureGroupReader(conn);
             case Threat:
                 return createThreatGroupReader(conn);
+            case Task:
+                return createTaskGroupReader(conn);
             default:
                 return null;
         }

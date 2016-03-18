@@ -5,27 +5,10 @@
  */
 package com.threatconnect.sdk.client.writer;
 
+import com.threatconnect.sdk.client.reader.AbstractGroupReaderAdapter;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.server.entity.Address;
-import com.threatconnect.sdk.server.entity.Adversary;
-import com.threatconnect.sdk.server.entity.Email;
-import com.threatconnect.sdk.server.entity.EmailAddress;
-import com.threatconnect.sdk.server.entity.Group;
-import com.threatconnect.sdk.server.entity.Host;
-import com.threatconnect.sdk.server.entity.Incident;
-import com.threatconnect.sdk.server.entity.Indicator;
-import com.threatconnect.sdk.server.entity.Signature;
-import com.threatconnect.sdk.server.entity.Threat;
-import com.threatconnect.sdk.server.entity.Url;
-import com.threatconnect.sdk.server.response.entity.AddressResponse;
-import com.threatconnect.sdk.server.response.entity.AdversaryResponse;
-import com.threatconnect.sdk.server.response.entity.EmailAddressResponse;
-import com.threatconnect.sdk.server.response.entity.EmailResponse;
-import com.threatconnect.sdk.server.response.entity.HostResponse;
-import com.threatconnect.sdk.server.response.entity.IncidentResponse;
-import com.threatconnect.sdk.server.response.entity.SignatureResponse;
-import com.threatconnect.sdk.server.response.entity.ThreatResponse;
-import com.threatconnect.sdk.server.response.entity.UrlResponse;
+import com.threatconnect.sdk.server.entity.*;
+import com.threatconnect.sdk.server.response.entity.*;
 
 /**
  *
@@ -74,6 +57,15 @@ public class WriterAdapterFactory {
             @Override
             public String getUrlType() {
                 return "threats";
+            }
+        };
+    }
+
+    public static AbstractGroupWriterAdapter<Task> createTaskGroupWriter(Connection conn) {
+        return new AbstractGroupWriterAdapter<Task>(conn, TaskResponse.class) {
+            @Override
+            public String getUrlType() {
+                return "tasks";
             }
         };
     }
@@ -194,6 +186,8 @@ public class WriterAdapterFactory {
                 return createSignatureGroupWriter(conn);
             case Threat:
                 return createThreatGroupWriter(conn);
+            case Task:
+                return createTaskGroupWriter(conn);
             default:
                 return null;
         }
@@ -217,4 +211,6 @@ public class WriterAdapterFactory {
     public static ExchangeWriterAdapter createExchangeWriter(Connection conn) {
         return new ExchangeWriterAdapter(conn);
     }
+
+
 }
