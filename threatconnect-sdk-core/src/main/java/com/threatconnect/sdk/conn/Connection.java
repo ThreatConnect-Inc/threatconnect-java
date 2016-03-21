@@ -98,8 +98,8 @@ public class Connection implements Closeable
 	{
 		if (apiClient == null)
 		{
-			//:TODO: should we add an SDK param to trust self signed certs?
-			apiClient = AppUtil.createClient(false, true);
+			// :TODO: should we add an SDK param to trust self signed certs?
+			apiClient = AppUtil.createClient(AppConfig.getInstance().isTcApplyProxy(), true);
 		}
 		return apiClient;
 	}
