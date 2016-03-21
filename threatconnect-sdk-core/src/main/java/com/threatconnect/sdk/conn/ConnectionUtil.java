@@ -253,7 +253,7 @@ public class ConnectionUtil
 	}
 	
 	/**
-	 * Creates a new CloseableHttpClient
+	 * Creates a builder for an HttpClient
 	 * 
 	 * @param proxyHost
 	 * the host of the proxy server (optional)
@@ -267,7 +267,7 @@ public class ConnectionUtil
 	 * whether or not self signed certificates should be trusted
 	 * @return the new http client
 	 */
-	public static CloseableHttpClient createClient(final String proxyHost, Integer proxyPort, String proxyUserName,
+	public static HttpClientBuilder createClientBuilder(final String proxyHost, Integer proxyPort, String proxyUserName,
 		String proxyPassword, boolean trustSelfSignedCertificates)
 	{
 		// create a new http client builder
@@ -286,6 +286,28 @@ public class ConnectionUtil
 			addProxy(builder, proxyHost, proxyPort, proxyUserName, proxyPassword);
 		}
 		
-		return builder.build();
+		return builder;
+	}
+	
+	/**
+	 * Creates a new CloseableHttpClient
+	 * 
+	 * @param proxyHost
+	 * the host of the proxy server (optional)
+	 * @param proxyPort
+	 * the port of the proxy server (optional)
+	 * @param proxyUserName
+	 * the username to authenticate with the proxy server (optional)
+	 * @param proxyPassword
+	 * the password to authenticate with the proxy server (optional)
+	 * @param trustSelfSignedCertificates
+	 * whether or not self signed certificates should be trusted
+	 * @return the new http client
+	 */
+	public static CloseableHttpClient createClient(final String proxyHost, Integer proxyPort, String proxyUserName,
+		String proxyPassword, boolean trustSelfSignedCertificates)
+	{
+		return createClientBuilder(proxyHost, proxyPort, proxyUserName, proxyPassword, trustSelfSignedCertificates)
+			.build();
 	}
 }
