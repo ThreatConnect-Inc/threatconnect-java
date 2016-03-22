@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Level;
+import org.apache.logging.log4j.Level;
+
+
 
 public final class AppConfig
 {
