@@ -28,6 +28,7 @@ public final class AppConfig
 	public static final String TC_PROXY_USERNAME = "tc_proxy_username";
 	public static final String TC_PROXY_PASSWORD = "tc_proxy_password";
 	public static final String TC_API_MAX_RESULT = "api_max_results";
+	public static final String TC_APPLY_PROXY = "apply_proxy_tc";
 	public static final String TC_LOG_LEVEL = "tc_log_level";
 	
 	public static final int DEFAULT_MAX_RESULTS = 350;
@@ -123,6 +124,11 @@ public final class AppConfig
 	public int getApiMaxResults(int defaultMax)
 	{
 		return getInteger(TC_API_MAX_RESULT, defaultMax);
+	}
+	
+	public boolean isTcApplyProxy()
+	{
+		return getBoolean(TC_APPLY_PROXY);
 	}
 	
 	public Level getTcLogLevel()
@@ -221,6 +227,19 @@ public final class AppConfig
 	}
 	
 	/**
+	 * Returns a system property as a boolean. Returns false if the key does not exist or if the
+	 * value is not a boolean
+	 * 
+	 * @param key
+	 * System property name
+	 * @return A boolean value of System property key
+	 */
+	public boolean getBoolean(final String key)
+	{
+		return Boolean.parseBoolean(getString(key));
+	}
+	
+	/**
 	 * Returns a system property as an integer. Returns null if the key does not exist or if the
 	 * value is not an double
 	 * 
@@ -254,6 +273,28 @@ public final class AppConfig
 	{
 		Double value = getDouble(key);
 		return value == null ? defaultValue : value;
+	}
+	
+	/**
+	 * Sets a string value in the configuration map. The object's toString() method is used to
+	 * calculate the string
+	 * 
+	 * @param key
+	 * the key of the configuration
+	 * @param value
+	 * this value will be set in the configuration and it may be null
+	 */
+	public void set(final String key, final Object value)
+	{
+		// make sure the value is not null
+		if (null != value)
+		{
+			configuration.put(key, value.toString());
+		}
+		else
+		{
+			configuration.put(key, null);
+		}
 	}
 	
 	/**
