@@ -2,11 +2,13 @@ package com.threatconnect.sdk.app;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Logger;
+import org.apache.logging.log4j.core.appender.FileAppender;
+import org.apache.logging.log4j.core.layout.PatternLayout;
+
 
 public class LoggerUtil
 {
@@ -22,7 +24,7 @@ public class LoggerUtil
 	public static void reconfigureGlobalLogger(final File logFile, final AppConfig appConfig) throws IOException
 	{
 		// retrieve the root logger
-		Logger logger = Logger.getRootLogger();
+		Logger logger = (Logger) LogManager.getRootLogger();
 		
 		reconfigureLogger(logger, logFile, appConfig);
 	}
@@ -43,13 +45,16 @@ public class LoggerUtil
 	{
 		// set the log level for this logger
 		logger.setLevel(appConfig.getTcLogLevel());
-		logger.removeAllAppenders();
+		//TODO replace the following with log4j2
+		//logger.removeAllAppenders();
 		
 		// Define log pattern layout
-		PatternLayout layout = new PatternLayout("%-5p %d{HH:mm:ss} %c - %m%n");
+		PatternLayout layout= PatternLayout.createLayout("%-5p %d{HH:mm:ss} %c - %m%n", null, null, null, Charset.defaultCharset(),false,false,null,null);
+        
+		//PatternLayout layout = new PatternLayout("%-5p %d{HH:mm:ss} %c - %m%n");
 		
-		// Add the appender to root logger
-		logger.addAppender(new FileAppender(layout, logFile.getAbsolutePath()));
+		// Add the appender to root logger 
+		logger.addAppender(FileAppender.createAppender(logFile.getAbsolutePath(), "true", "false", "fileAppender", "true", "true", "true", "8192", layout, null, "false", null, null));
 	}
 	
 	/**
