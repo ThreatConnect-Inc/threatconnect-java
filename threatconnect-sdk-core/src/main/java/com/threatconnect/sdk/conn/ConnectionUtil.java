@@ -17,7 +17,8 @@ import java.util.logging.Logger;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import javax.net.ssl.SSLContext;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSession;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpHost;
@@ -26,14 +27,13 @@ import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.AbstractHttpMessage;
-// import org.jboss.resteasy.client.ClientRequest;
+import org.apache.http.ssl.SSLContextBuilder;
 
 import com.threatconnect.sdk.config.Configuration;
 
@@ -173,23 +173,27 @@ public class ConnectionUtil
 	/**
 	 * Adds the ability to trust self signed certificates for this HttpClientBuilder
 	 * 
-	 * @param builder
+	 * @param httpClientBuilder
 	 * the HttpClientBuilder to apply these settings to
 	 */
-	@SuppressWarnings("deprecation")
-	public static void trustSelfSignedCerts(final HttpClientBuilder builder)
+	public static void trustSelfSignedCerts(final HttpClientBuilder httpClientBuilder)
 	{
 		try
 		{
-			SSLContext sslcontext = SSLContexts.custom().loadTrustMaterial(null, new TrustSelfSignedStrategy()).build();
-			
-			SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslcontext, new String[]
-			{
-				"TLSv1"
-			},
-				null, SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+			SSLContextBuilder builder = new SSLContextBuilder();
+			builder.loadTrustMaterial(null, new TrustSelfSignedStrategy());
+			SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+				builder.build(), new HostnameVerifier()
+				{
+					@Override
+					public boolean verify(String hostname, SSLSession session)
+					{
+						// allow all
+						return true;
+					}
+				});
 				
-			builder.setSSLSocketFactory(sslsf);
+			httpClientBuilder.setSSLSocketFactory(sslsf);
 		}
 		catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException ex)
 		{
