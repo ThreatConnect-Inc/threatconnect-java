@@ -61,15 +61,6 @@ public class WriterAdapterFactory {
         };
     }
 
-    public static AbstractGroupWriterAdapter<Task> createTaskGroupWriter(Connection conn) {
-        return new AbstractGroupWriterAdapter<Task>(conn, TaskResponse.class) {
-            @Override
-            public String getUrlType() {
-                return "tasks";
-            }
-        };
-    }
-
     public static AbstractIndicatorWriterAdapter<Address> createAddressIndicatorWriter(Connection conn) {
         return new AbstractIndicatorWriterAdapter<Address>(conn, AddressResponse.class) {
             @Override
@@ -210,6 +201,10 @@ public class WriterAdapterFactory {
 
     public static ExchangeWriterAdapter createExchangeWriter(Connection conn) {
         return new ExchangeWriterAdapter(conn);
+    }
+
+    public static TaskWriterAdapter createTaskGroupWriter(Connection conn) {
+        return new TaskWriterAdapter(conn);
     }
 
 

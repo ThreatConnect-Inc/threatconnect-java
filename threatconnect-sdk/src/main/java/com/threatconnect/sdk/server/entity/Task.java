@@ -20,11 +20,11 @@ public class Task extends Group {
     @XmlElement(name = "Status", required = false)
     private String status;
     @XmlElement(name = "Escalated", required = false)
-    private String escalated;
+    private boolean escalated;
     @XmlElement(name = "Reminded", required = false)
-    private String reminded;
+    private boolean reminded;
     @XmlElement(name = "Overdue", required = false)
-    private String overdue;
+    private boolean overdue;
     @JsonSerialize(using = DateTimeSerializer.class, include = JsonSerialize.Inclusion.NON_NULL)
     @XmlElement(name = "DueDate", required = false)
     private Date dueDate;
@@ -44,6 +44,48 @@ public class Task extends Group {
         super();
     }
 
+    public Task(Integer id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink,
+                String status, boolean escalated, boolean reminded, boolean overdue, Date dueDate, Date reminderDate, Date escalationDate,
+                List<User> assignee, List<User> escalatee) {
+        super(id, name, type, owner, ownerName, dateAdded, webLink);
+        this.status = status;
+        this.escalated = escalated;
+        this.reminded = reminded;
+        this.overdue = overdue;
+        this.dueDate = dueDate;
+        this.reminderDate = reminderDate;
+        this.escalationDate = escalationDate;
+        this.assignee = assignee;
+        this.escalatee = escalatee;
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder()
+                .append("Task{")
+                .append(super.toString())
+                .append("', ")
+                .append("status='" + status)
+                .append("', ")
+                .append("escalated='" + escalated)
+                .append("', ")
+                .append("reminded='" + reminded)
+                .append("', ")
+                .append("overdue='" + overdue)
+                .append("', ")
+                .append("dueDate=" + dueDate)
+                .append("', ")
+                .append("reminderDate=" + reminderDate)
+                .append("', ")
+                .append("escalationDate=" + escalationDate)
+                .append("', ")
+                .append("assignee='" + assignee)
+                .append("', ")
+                .append("escalatee='" + escalatee)
+                .append("'}")
+                .toString();
+    }
+
     public String getStatus()
     {
         return status;
@@ -54,32 +96,29 @@ public class Task extends Group {
         this.status = status;
     }
 
-    public String getEscalated()
-    {
-        return escalated;
-    }
+    public boolean getEscalated(){ return escalated; }
 
-    public void setEscalated(String escalated)
+    public void setEscalated(boolean escalated)
     {
         this.escalated = escalated;
     }
 
-    public String getReminded()
+    public boolean getReminded()
     {
         return reminded;
     }
 
-    public void setReminded(String reminded)
+    public void setReminded(boolean reminded)
     {
         this.reminded = reminded;
     }
 
-    public String getOverdue()
+    public boolean getOverdue()
     {
         return overdue;
     }
 
-    public void setOverdue(String overdue)
+    public void setOverdue(boolean overdue)
     {
         this.overdue = overdue;
     }

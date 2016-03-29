@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
  * Created by moweis-ad on 3/15/16.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "Task")
+@XmlRootElement(name = "tasksResponse")
 @XmlSeeAlso(Task.class)
 public class TaskListResponse extends ApiEntityListResponse<Task, TaskListResponseData> {
     public void setData(TaskListResponseData data) { super.setData(data); }

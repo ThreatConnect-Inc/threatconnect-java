@@ -15,13 +15,6 @@ import com.threatconnect.sdk.server.response.entity.*;
  */
 public class ReaderAdapterFactory {
 
-    public static AbstractGroupReaderAdapter<Task> createTaskGroupReader(Connection conn) {
-        return new AbstractGroupReaderAdapter<Task>(conn, TaskResponse.class, Task.class, TaskListResponse.class) {
-            @Override
-            public String getUrlType() { return "tasks"; }
-        };
-    }
-
     public static AbstractGroupReaderAdapter<Adversary> createAdversaryGroupReader(Connection conn) {
         return new AbstractGroupReaderAdapter<Adversary>(conn, AdversaryResponse.class, Adversary.class, AdversaryListResponse.class) {
             @Override
@@ -198,5 +191,9 @@ public class ReaderAdapterFactory {
 
     public static ExchangeReaderAdapter createExchangeReader(Connection conn) {
         return new ExchangeReaderAdapter(conn);
+    }
+
+    public static TaskReaderAdapter createTaskGroupReader(Connection conn) {
+        return new TaskReaderAdapter(conn);
     }
 }
