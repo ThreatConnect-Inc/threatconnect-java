@@ -1,0 +1,176 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<name>ThreatConnect SDK Addon Parent</name>
+	<description>The ThreatConnect Java SDK.  Used to communicate with the ThreatConnect API</description>
+	<url>https://github.com/ThreatConnect-Inc/threatconnect-java</url>
+	
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.threatconnect.sdk.addons</groupId>
+	<artifactId>threatconnect-sdk-addons</artifactId>
+	<version>2.5.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>threatconnect-parser</module>
+		<module>app-package-plugin</module>
+	</modules>
+
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<name>Danny Tineo</name>
+			<email>dtineo@threatconnect.com</email>
+			<organization>ThreatConnect</organization>
+			<organizationUrl>https://www.threatconnect.com</organizationUrl>
+		</developer>
+		<developer>
+			<name>Mitchell Turner</name>
+			<email>mturner@threatconnect.com</email>
+			<organization>ThreatConnect</organization>
+			<organizationUrl>https://www.threatconnect.com</organizationUrl>
+		</developer>
+		<developer>
+			<name>Greg Marut</name>
+			<email>gmarut@threatconnect.com</email>
+			<organization>ThreatConnect</organization>
+			<organizationUrl>https://www.threatconnect.com</organizationUrl>
+		</developer>
+	</developers>
+	<scm>
+		<url>https://github.com/ThreatConnect-Inc/threatconnect-java</url>
+		<connection>scm:git:git@github.com:ThreatConnect-Inc/threatconnect-java.git</connection>
+		<developerConnection>scm:git:git@github.com:ThreatConnect-Inc/threatconnect-java.git</developerConnection>
+	</scm>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+		<github.global.server>github</github.global.server>
+
+		<main.basedir>${project.basedir}</main.basedir>
+
+		<!-- ThreatConnect SDK Version -->
+		<version.this>2.5.1-SNAPSHOT</version.this>
+
+		<!-- Dependency Versions -->
+		<version.commons-io>2.4</version.commons-io>
+		<version.commons-validator>1.5.0</version.commons-validator>
+		<version.dozer>5.5.1</version.dozer>
+		<version.gson>2.3</version.gson>
+		<version.jsonpath>2.1.0</version.jsonpath>
+
+		<!-- Logging Versions -->
+		<version.slf4j>1.7.12</version.slf4j>
+
+		<!-- Test Dependency Versions -->
+		<version.junit>4.12</version.junit>
+		<version.test-beangen>2.5-RELEASE</version.test-beangen>
+	</properties>
+
+	<dependencies>
+		<!-- Logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${version.slf4j}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${version.slf4j}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${version.slf4j}</version>
+		</dependency>
+
+		<!-- Test -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${version.junit}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>sign</id>
+			<build>
+				<plugins>
+					<!--GPG Signing -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<build>
+		<plugins>
+			<!-- javadoc -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.10.1</version>
+				<configuration>
+					<show>public</show>
+					<failOnError>true</failOnError>
+				</configuration>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- sources -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
+</project>
