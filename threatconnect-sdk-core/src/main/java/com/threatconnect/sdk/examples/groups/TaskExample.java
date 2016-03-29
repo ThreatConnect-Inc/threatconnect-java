@@ -34,23 +34,15 @@ public class TaskExample {
             System.getProperties().setProperty("threatconnect.api.config", "/config.properties");
             conn = new Connection();
 
+            testCreateTask(conn);
 
-            doCreate(conn);
+            testGetTask(conn);
 
-            doGet(conn);
+            testDeleteTask(conn);
 
-            doDelete(conn);
+            testTaskAssignee(conn);
 
-            doCreateAndGetAssignee(conn);
-
-            doCreateAndGetEscalatee(conn);
-
-            //doCreateAssignee(conn);
-
-            //doGetAssignee(conn);
-
-            //doGetAssignees(conn);
-
+            testTaskEscalatee(conn);
 
         } catch (IOException ioe) {
             System.err.println("Error: " + ioe);
@@ -61,7 +53,7 @@ public class TaskExample {
         }
     }
 
-    private static void doCreate(Connection conn) {
+    private static void testCreateTask(Connection conn) {
         TaskWriterAdapter writer = WriterAdapterFactory.createTaskGroupWriter(conn);
         Task task = createTestTask();
         try {
@@ -81,7 +73,7 @@ public class TaskExample {
         }
     }
 
-    private static void doGet(Connection conn) throws IOException {
+    private static void testGetTask(Connection conn) throws IOException {
         TaskReaderAdapter reader = ReaderAdapterFactory.createTaskGroupReader(conn);
         IterableResponse<Task> data;
         try {
@@ -99,7 +91,7 @@ public class TaskExample {
 
 
 
-    private static void doDelete(Connection conn) {
+    private static void testDeleteTask(Connection conn) {
         TaskWriterAdapter writer = WriterAdapterFactory.createTaskGroupWriter(conn);
         Task task = createTestTask();
 
@@ -128,7 +120,7 @@ public class TaskExample {
 
     }
 
-    private static void doCreateAndGetAssignee(Connection conn) {
+    private static void testTaskAssignee(Connection conn) {
         TaskWriterAdapter writer = WriterAdapterFactory.createTaskGroupWriter(conn);
         TaskReaderAdapter reader = ReaderAdapterFactory.createTaskGroupReader(conn);
 
@@ -183,7 +175,7 @@ public class TaskExample {
         }
     }
 
-    private static void doCreateAndGetEscalatee(Connection conn) {
+    private static void testTaskEscalatee(Connection conn) {
         TaskWriterAdapter writer = WriterAdapterFactory.createTaskGroupWriter(conn);
         TaskReaderAdapter reader = ReaderAdapterFactory.createTaskGroupReader(conn);
 
