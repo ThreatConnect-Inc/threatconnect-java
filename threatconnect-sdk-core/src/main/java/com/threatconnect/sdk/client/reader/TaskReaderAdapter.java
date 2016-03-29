@@ -4,9 +4,10 @@ import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.server.entity.Task;
 import com.threatconnect.sdk.server.entity.User;
-import com.threatconnect.sdk.server.response.entity.*;
-import com.threatconnect.sdk.server.response.entity.data.TaskResponseData;
-import com.threatconnect.sdk.server.response.entity.data.UserResponseData;
+import com.threatconnect.sdk.server.response.entity.TaskListResponse;
+import com.threatconnect.sdk.server.response.entity.TaskResponse;
+import com.threatconnect.sdk.server.response.entity.UserListResponse;
+import com.threatconnect.sdk.server.response.entity.UserResponse;
 
 import java.io.IOException;
 import java.util.HashMap;

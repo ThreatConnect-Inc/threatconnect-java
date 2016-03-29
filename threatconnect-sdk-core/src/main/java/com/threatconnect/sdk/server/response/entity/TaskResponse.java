@@ -1,6 +1,5 @@
 package com.threatconnect.sdk.server.response.entity;
 
-import com.threatconnect.sdk.server.entity.Document;
 import com.threatconnect.sdk.server.entity.Task;
 import com.threatconnect.sdk.server.response.entity.data.TaskResponseData;
 

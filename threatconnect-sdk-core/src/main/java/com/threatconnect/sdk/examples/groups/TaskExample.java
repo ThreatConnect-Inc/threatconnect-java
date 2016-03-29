@@ -14,13 +14,11 @@ import com.threatconnect.sdk.server.entity.Group;
 import com.threatconnect.sdk.server.entity.Task;
 import com.threatconnect.sdk.server.entity.User;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
-import com.threatconnect.sdk.server.response.entity.TaskResponse;
 import com.threatconnect.sdk.server.response.entity.UserResponse;
 import com.threatconnect.sdk.server.response.entity.data.TaskResponseData;
 import com.threatconnect.sdk.server.response.entity.data.UserResponseData;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.util.Date;
 
 /**
@@ -33,14 +31,9 @@ public class TaskExample {
         Connection conn = null;
 
         try {
-            //System.getProperties().setProperty("threatconnect.api.config", "/config.properties");
-            //conn = new Connection();
+            System.getProperties().setProperty("threatconnect.api.config", "/config.properties");
+            conn = new Connection();
 
-            Configuration config = new Configuration("https://localhost:8443/api",
-                    "70621724379179329486",
-                    "dttcE9gsrmU@e6d^SHJra8ufVcLD^bJC^@@J9eESztqX8Q8ioCd2lPYAkI2lNxwH",
-                    "System");
-            conn = new Connection(config);
 
             doCreate(conn);
 

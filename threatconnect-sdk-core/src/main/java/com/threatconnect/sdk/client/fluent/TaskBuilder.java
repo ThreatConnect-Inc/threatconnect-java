@@ -1,12 +1,9 @@
 package com.threatconnect.sdk.client.fluent;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.threatconnect.sdk.server.entity.Owner;
 import com.threatconnect.sdk.server.entity.Task;
 import com.threatconnect.sdk.server.entity.User;
-import com.threatconnect.sdk.server.entity.format.DateTimeSerializer;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -126,8 +123,4 @@ public class TaskBuilder {
                 assignee, escalatee);
     }
 
-    /*public Task createTask() {
-        return new Task(status, escalated, overdue, dueDate, reminderDate, escalationDate,
-                assignee, escalatee);
-    }*/
 }
