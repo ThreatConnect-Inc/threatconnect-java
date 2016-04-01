@@ -1,5 +1,6 @@
 package com.threatconnect.sdk.examples.groups;
 
+import com.google.common.collect.Lists;
 import com.threatconnect.sdk.client.fluent.TaskBuilder;
 import com.threatconnect.sdk.client.fluent.UserBuilder;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
@@ -38,6 +39,10 @@ public class TaskExample {
 
             testGetTask(conn);
 
+            testUpdateTask(conn);
+
+            testUpdateTaskWithAssignee(conn);
+
             testDeleteTask(conn);
 
             testTaskAssignee(conn);
@@ -63,13 +68,13 @@ public class TaskExample {
             ApiEntitySingleResponse<Task, ?> response = writer.create(task);
 
             if (response.isSuccess()) {
-                System.out.println("Created Task: " + response.getItem());
+                System.out.println("Created Task: " + response.getItem() + "\n");
             } else {
-                System.err.println("Could not create Task: " + response.getMessage());
+                System.err.println("Could not create Task: " + response.getMessage() + "\n");
             }
 
         } catch (IOException | FailedResponseException ex) {
-            System.err.println("Error: " + ex.toString());
+            System.err.println("Error: " + ex.toString() + "\n");
         }
     }
 
@@ -84,12 +89,129 @@ public class TaskExample {
             for (Group g : data) {
                 System.out.println("Task found: " + g);
             }
+            System.out.println();
         } catch (FailedResponseException ex) {
-            System.err.println("Error: " + ex);
+            System.err.println("Error: " + ex + "\n");
         }
     }
 
+    private static void testUpdateTask(Connection conn) throws IOException {
+        TaskWriterAdapter writer = WriterAdapterFactory.createTaskGroupWriter(conn);
+        TaskReaderAdapter reader = ReaderAdapterFactory.createTaskGroupReader(conn);
 
+        Task task = createTestTask();
+        try {
+            // Create task
+            ApiEntitySingleResponse<Task, ?> createResponse = writer.create(task);
+            if (!createResponse.isSuccess()) {
+                System.err.println("Create task failed: " + createResponse.getMessage());
+                return;
+            }
+            Task updatableTask = createResponse.getItem();
+            System.out.println("Created task: " + updatableTask + "\nwith Id: " + updatableTask.getId());
+            Integer id = updatableTask.getId();
+
+            // Update task
+            updatableTask.setName("Power lifting");
+            ApiEntitySingleResponse<Task, ?> updateResponse = writer.update(updatableTask);
+            if (!updateResponse.isSuccess()) {
+                System.err.println("Update task failed: " + updateResponse.getMessage());
+                return;
+            }
+            Task updatedTask = updateResponse.getItem();
+            System.out.println("Updated task: " + updatedTask);
+
+            // Retrieve task again and check changes are there
+            ApiEntitySingleResponse<Task, ?> getResponse = reader.getTask(id);
+            if (!getResponse.isSuccess()) {
+                System.err.println("Failed to retrieve updated task: " + getResponse.getMessage());
+                return;
+            }
+
+            // Now check if the update succeeded
+            Task retrievedTask = getResponse.getItem();
+            if (!String.valueOf(retrievedTask.getName()).equals(updatedTask.getName())) {
+                // If the name is the same, the update failed
+                System.err.println("Failed to update task; changes were not saved");
+                return;
+            } else {
+                System.out.println("Updated task successfully: " + retrievedTask);
+            }
+
+            // Now let's delete it (not a big deal if it fails)
+            ApiEntitySingleResponse<Task, ?> deleteResponse = writer.delete(id);
+            System.out.println("Deleted updated task " + (deleteResponse.isSuccess()
+                    ? "successfully\n"
+                    : "unsuccessfully: " + deleteResponse.getMessage() + "\n"));
+        } catch (IOException | FailedResponseException e) {
+            System.err.println("Error: " + e.toString() + "\n");
+        }
+    }
+
+    // The User should not be updated along with the Task
+    private static void testUpdateTaskWithAssignee(Connection conn) {
+        TaskWriterAdapter writer = WriterAdapterFactory.createTaskGroupWriter(conn);
+        TaskReaderAdapter reader = ReaderAdapterFactory.createTaskGroupReader(conn);
+
+        Task task = createTestTask();
+        User assignee = createTestUser();
+        try {
+            // Create task
+            ApiEntitySingleResponse<Task, ?> createResponse = writer.create(task);
+            if (!createResponse.isSuccess()) {
+                System.err.println("Create task failed: " + createResponse.getMessage());
+                return;
+            }
+            Task updatableTask = createResponse.getItem();
+            System.out.println("Created task: " + updatableTask + "\nwith Id: " + updatableTask.getId());
+            Integer id = updatableTask.getId();
+
+            // Add assignee
+            UserResponse userResp = writer.createAssignee(id, assignee);
+            if (userResp.isSuccess()) {
+                System.out.println("Created Assignee: " + assignee);
+            } else {
+                System.err.println("Create failed: " + userResp.getMessage());
+            }
+
+            // Update task
+            updatableTask.setName("Power lifting");
+            assignee.setRole("Administrator");
+            updatableTask.setAssignee(Lists.newArrayList(assignee));
+            ApiEntitySingleResponse<Task, ?> updateResponse = writer.update(updatableTask);
+            if (!updateResponse.isSuccess()) {
+                System.err.println("Update task failed: " + updateResponse.getMessage());
+                return;
+            }
+            Task updatedTask = updateResponse.getItem();
+            System.out.println("Updated task: " + updatedTask);
+
+            // Retrieve task again and check changes are there
+            ApiEntitySingleResponse<Task, ?> getResponse = reader.getTask(id);
+            if (!getResponse.isSuccess()) {
+                System.err.println("Failed to retrieve updated task: " + getResponse.getMessage());
+                return;
+            }
+
+            // Now check if the update succeeded
+            Task retrievedTask = getResponse.getItem();
+            if (!String.valueOf(retrievedTask.getName()).equals(updatedTask.getName())) {
+                // If the name is the same, the update failed
+                System.err.println("Failed to update task; changes were not saved");
+                return;
+            } else {
+                System.out.println("Updated task successfully: " + retrievedTask);
+            }
+
+            // Now let's delete it (not a big deal if it fails)
+            ApiEntitySingleResponse<Task, ?> deleteResponse = writer.delete(id);
+            System.out.println("Deleted updated task " + (deleteResponse.isSuccess()
+                    ? "successfully\n"
+                    : "unsuccessfully: " + deleteResponse.getMessage() + "\n"));
+        } catch (IOException | FailedResponseException e) {
+            System.err.println("Error: " + e.toString() + "\n");
+        }
+    }
 
     private static void testDeleteTask(Connection conn) {
         TaskWriterAdapter writer = WriterAdapterFactory.createTaskGroupWriter(conn);
@@ -107,15 +229,15 @@ public class TaskExample {
                 // -----------------------------------------------------------------------------------------------------------
                 ApiEntitySingleResponse<Task, ?> deleteResponse = writer.delete(createResponse.getItem().getId());
                 if (deleteResponse.isSuccess()) {
-                    System.out.println("Deleted: " + createResponse.getItem());
+                    System.out.println("Deleted: " + createResponse.getItem() + "\n");
                 } else {
-                    System.err.println("Delete Failed. Cause: " + deleteResponse.getMessage());
+                    System.err.println("Delete Failed. Cause: " + deleteResponse.getMessage() + "\n");
                 }
             } else {
-                System.err.println("Create Failed. Cause: " + createResponse.getMessage());
+                System.err.println("Create Failed. Cause: " + createResponse.getMessage() + "\n");
             }
         } catch (IOException | FailedResponseException ex) {
-            System.err.println("Error: " + ex.toString());
+            System.err.println("Error: " + ex.toString() + "\n");
         }
 
     }
@@ -165,13 +287,13 @@ public class TaskExample {
             // And delete it...
             UserResponse deleteResponse = writer.deleteAssignee(id, getResponse.getItem().getUserName());
             if (deleteResponse.isSuccess()) {
-                System.out.println("--- Assignee Deleted ---\nUser id: " + id);
+                System.out.println("--- Assignee Deleted ---\nUser id: " + id + "\n");
             } else {
-                System.err.println("User not deleted: " + deleteResponse.getMessage());
+                System.err.println("User not deleted: " + deleteResponse.getMessage() + "\n");
             }
 
         } catch (IOException | FailedResponseException ex) {
-            System.err.println("Error: " + ex.toString());
+            System.err.println("Error: " + ex.toString() + "\n");
         }
     }
 
@@ -220,13 +342,13 @@ public class TaskExample {
             // And delete it...
             UserResponse deleteResponse = writer.deleteEscalatee(id, getResponse.getItem().getUserName());
             if (deleteResponse.isSuccess()) {
-                System.out.println("--- Escalatee Deleted ---\nUser id: " + id);
+                System.out.println("--- Escalatee Deleted ---\nUser id: " + id + "\n");
             } else {
-                System.err.println("User not deleted: " + deleteResponse.getMessage());
+                System.err.println("User not deleted: " + deleteResponse.getMessage() + "\n");
             }
 
         } catch (IOException | FailedResponseException ex) {
-            System.err.println("Error: " + ex.toString());
+            System.err.println("Error: " + ex.toString() + "\n");
         }
     }
 
@@ -238,6 +360,7 @@ public class TaskExample {
         return new TaskBuilder()
                 .withName("Rock Lifting")
                 .withStatus("In Progress")
+                .withOwnerName("System")
                 .withDueDate(later)
                 .withEscalationDate(later)
                 .withReminderDate(later)
