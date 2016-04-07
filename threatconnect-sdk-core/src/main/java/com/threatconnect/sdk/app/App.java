@@ -151,7 +151,7 @@ public abstract class App
 		}
 		catch (IOException e)
 		{
-			LoggerUtil.logErr(e, "Failed to write results.tc file");
+			LoggerUtil.logErr(e, "Failed to read results.tc file");
 			return null;
 		}
 	}

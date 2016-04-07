@@ -88,6 +88,7 @@ public abstract class ParserApp extends App
 						catch (Exception e)
 						{
 							getLogger().error(e.getMessage(), e);
+							LoggerUtil.logErr(e, e.getMessage());
 						}
 					}
 				}
