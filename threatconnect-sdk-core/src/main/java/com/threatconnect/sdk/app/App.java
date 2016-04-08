@@ -108,54 +108,6 @@ public abstract class App
 		}
 	}
 	
-	/**
-	 * Writes a results out to the application's results log file
-	 * 
-	 * @param results
-	 * Results to append to to log
-	 */
-	public void writeResultsTc(String results)
-	{
-		PrintWriter writer = null;
-		
-		try
-		{
-			// write the message out to the results.tc file
-			writer = new PrintWriter(getResultsLogFile(), "UTF-8");
-			writer.println(results);
-		}
-		catch (FileNotFoundException | UnsupportedEncodingException e)
-		{
-			LoggerUtil.logErr(e, "Failed to write results.tc file");
-		}
-		finally
-		{
-			// make sure the writer is not null
-			if (null != writer)
-			{
-				writer.close();
-			}
-		}
-	}
-	
-	/**
-	 * Reads the results of the results.tc file
-	 * 
-	 * @return
-	 */
-	public String readResultsTc()
-	{
-		try
-		{
-			return IOUtils.toString(new FileInputStream(getResultsLogFile()));
-		}
-		catch (IOException e)
-		{
-			LoggerUtil.logErr(e, "Failed to read results.tc file");
-			return null;
-		}
-	}
-	
 	public Logger getLogger()
 	{
 		return logger;
