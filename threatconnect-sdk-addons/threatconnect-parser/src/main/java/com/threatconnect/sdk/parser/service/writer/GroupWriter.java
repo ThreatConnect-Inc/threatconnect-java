@@ -22,6 +22,7 @@ import com.threatconnect.sdk.parser.model.Host;
 import com.threatconnect.sdk.parser.model.Indicator;
 import com.threatconnect.sdk.parser.model.Url;
 import com.threatconnect.sdk.parser.service.save.AssociateFailedException;
+import com.threatconnect.sdk.parser.service.save.DeleteItemFailedException;
 import com.threatconnect.sdk.parser.service.save.SaveItemFailedException;
 import com.threatconnect.sdk.server.entity.Group.Type;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
@@ -266,6 +267,43 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 		catch (FailedResponseException e)
 		{
 			throw new AssociateFailedException(e);
+		}
+	}
+	
+	/**
+	 * Deletes the group from the server if it exists
+	 * 
+	 * @param ownerName
+	 * the owner name of the group
+	 * @throws DeleteItemFailedException
+	 * if there was any reason the group could not be deleted
+	 */
+	public void deleteGroup(final String ownerName) throws DeleteItemFailedException
+	{
+		try
+		{
+			// create the writer
+			AbstractGroupWriterAdapter<T> writer = createWriterAdapter();
+			
+			// look up the group from the server
+			T readGroup = lookupGroup(groupSource.getName(), ownerName);
+			
+			// make sure the group is not null
+			if (null != readGroup)
+			{
+				// lookup the indicator from the server
+				ApiEntitySingleResponse<?, ?> response = writer.delete(readGroup.getId(), ownerName);
+				
+				// check to see if this was not successful
+				if (!response.isSuccess())
+				{
+					throw new DeleteItemFailedException(response.getMessage());
+				}
+			}
+		}
+		catch (IOException e)
+		{
+			throw new DeleteItemFailedException(e);
 		}
 	}
 	
