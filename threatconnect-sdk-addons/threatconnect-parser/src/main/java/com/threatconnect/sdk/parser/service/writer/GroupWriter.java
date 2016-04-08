@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.threatconnect.sdk.client.reader.AbstractGroupReaderAdapter;
+import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
+import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.client.writer.AbstractGroupWriterAdapter;
 import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
 import com.threatconnect.sdk.conn.Connection;
@@ -22,6 +25,7 @@ import com.threatconnect.sdk.parser.service.save.AssociateFailedException;
 import com.threatconnect.sdk.parser.service.save.SaveItemFailedException;
 import com.threatconnect.sdk.server.entity.Group.Type;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
+import com.threatconnect.sdk.util.ApiFilterType;
 
 public abstract class GroupWriter<E extends Group, T extends com.threatconnect.sdk.server.entity.Group>
 	extends Writer
@@ -62,6 +66,17 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 			
 			// map the object
 			T group = mapper.map(groupSource, tcModelClass);
+			
+			// attempt to lookup the indicator by the id
+			T readGroup = lookupGroup(groupSource.getName(), ownerName);
+			
+			// check to see if the indicator was found on the server
+			if (null != readGroup)
+			{
+				// use this group as the saved group
+				savedGroup = readGroup;
+				return savedGroup;
+			}
 			
 			if (logger.isDebugEnabled())
 			{
@@ -255,6 +270,50 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 	}
 	
 	/**
+	 * Looks up a group by the group name
+	 * 
+	 * @param groupName
+	 * the name of the group to look up
+	 * @return the existing indicator
+	 * @throws FailedResponseException
+	 * if the server returned an invalid response
+	 * @throws IOException
+	 * if there was an exception communicating with the server
+	 */
+	protected T lookupGroup(final String groupName, final String ownerName)
+	{
+		AbstractGroupReaderAdapter<T> reader = createReaderAdapter();
+		
+		// make sure the group name is not null
+		if (null != groupName)
+		{
+			try
+			{
+				// lookup the group by the group name
+				IterableResponse<T> readGroups =
+					reader.getForFilters(ownerName, false, ApiFilterType.filterName().equal(groupName));
+					
+				// check to see if the read groups is not null
+				if (null != readGroups)
+				{
+					// for each of the indicators
+					for (T group : readGroups)
+					{
+						// return the first group
+						return group;
+					}
+				}
+			}
+			catch (FailedResponseException | IOException e)
+			{
+				return null;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
 	 * Retrieves the id of the saved group
 	 * 
 	 * @return the id of the saved group
@@ -270,6 +329,16 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 		}
 		
 		throw new IllegalStateException("group is not saved");
+	}
+	
+	/**
+	 * Creates a reader adapter for this class
+	 * 
+	 * @return the reader adapter for this indicator
+	 */
+	protected AbstractGroupReaderAdapter<T> createReaderAdapter()
+	{
+		return ReaderAdapterFactory.createGroupReader(tcGroupType, connection);
 	}
 	
 	/**

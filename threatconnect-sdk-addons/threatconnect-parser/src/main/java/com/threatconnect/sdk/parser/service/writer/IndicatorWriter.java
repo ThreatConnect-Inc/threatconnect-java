@@ -184,17 +184,17 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 	protected abstract String buildID();
 	
 	/**
-	 * Looks up an indicator by the id
+	 * Looks up an indicator
 	 * 
 	 * @param lookupID
 	 * the id of the indicator to look up
 	 * @return the existing indicator
 	 * @throws FailedResponseException
-	 * if the server returned an invalid resonse
+	 * if the server returned an invalid response
 	 * @throws IOException
 	 * if there was an exception communicating with the server
 	 */
-	private T lookupIndicator(final String lookupID)
+	protected T lookupIndicator(final String lookupID)
 	{
 		AbstractIndicatorReaderAdapter<T> reader = createReaderAdapter();
 		
