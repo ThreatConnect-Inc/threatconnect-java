@@ -1,9 +1,7 @@
 package com.threatconnect.sdk.app;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
@@ -100,11 +98,7 @@ public abstract class App
 		}
 		finally
 		{
-			// make sure the writer is not null
-			if (null != writer)
-			{
-				writer.close();
-			}
+			IOUtils.closeQuietly(writer);
 		}
 	}
 	
