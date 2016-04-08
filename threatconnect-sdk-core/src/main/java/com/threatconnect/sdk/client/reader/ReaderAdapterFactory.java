@@ -10,7 +10,6 @@ import com.threatconnect.sdk.server.entity.Address;
 import com.threatconnect.sdk.server.entity.Adversary;
 import com.threatconnect.sdk.server.entity.Email;
 import com.threatconnect.sdk.server.entity.EmailAddress;
-import com.threatconnect.sdk.server.entity.File;
 import com.threatconnect.sdk.server.entity.Group;
 import com.threatconnect.sdk.server.entity.Host;
 import com.threatconnect.sdk.server.entity.Incident;
@@ -154,6 +153,8 @@ public class ReaderAdapterFactory {
         switch (type) {
             case Adversary:
                 return createAdversaryGroupReader(conn);
+            case Document:
+            	return createDocumentReader(conn);
             case Email:
                 return createEmailGroupReader(conn);
             case Incident:
