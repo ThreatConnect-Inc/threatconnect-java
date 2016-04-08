@@ -14,6 +14,7 @@ import com.threatconnect.sdk.parser.model.Attribute;
 import com.threatconnect.sdk.parser.model.EmailAddress;
 import com.threatconnect.sdk.parser.model.File;
 import com.threatconnect.sdk.parser.model.Group;
+import com.threatconnect.sdk.parser.model.GroupType;
 import com.threatconnect.sdk.parser.model.Host;
 import com.threatconnect.sdk.parser.model.Indicator;
 import com.threatconnect.sdk.parser.model.Url;
@@ -196,6 +197,54 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 			if (null != response && !response.isSuccess())
 			{
 				logger.warn("Failed to associate indicator \"{}\" with group id: {}", indicatorID, getSavedGroupID());
+				logger.warn(response.getMessage());
+			}
+		}
+		catch (FailedResponseException e)
+		{
+			throw new AssociateFailedException(e);
+		}
+	}
+	
+	public void associateGroup(final GroupType groupType, final Integer savedID)
+		throws AssociateFailedException, IOException
+	{
+		try
+		{
+			// create a new indicator writer to do the association
+			AbstractGroupWriterAdapter<T> writer = createWriterAdapter();
+			ApiEntitySingleResponse<?, ?> response = null;
+			
+			// switch based on the group type
+			switch (groupType)
+			{
+				case ADVERSARY:
+					response = writer.associateGroupAdversary(getSavedGroupID(), savedID);
+					break;
+				case DOCUMENT:
+					response = writer.associateGroupDocument(getSavedGroupID(), savedID);
+					break;
+				case EMAIL:
+					response = writer.associateGroupEmail(getSavedGroupID(), savedID);
+					break;
+				case INCIDENT:
+					response = writer.associateGroupIncident(getSavedGroupID(), savedID);
+					break;
+				case SIGNATURE:
+					response = writer.associateGroupSignature(getSavedGroupID(), savedID);
+					break;
+				case THREAT:
+					response = writer.associateGroupThreat(getSavedGroupID(), savedID);
+					break;
+				default:
+					response = null;
+					break;
+			}
+			
+			// check to see if this was not successful
+			if (null != response && !response.isSuccess())
+			{
+				logger.warn("Failed to associate group id \"{}\" with group: {}", savedID, getSavedGroupID());
 				logger.warn(response.getMessage());
 			}
 		}

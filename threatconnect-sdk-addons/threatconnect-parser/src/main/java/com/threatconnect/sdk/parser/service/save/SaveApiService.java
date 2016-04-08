@@ -217,7 +217,7 @@ public class SaveApiService implements SaveService
 		com.threatconnect.sdk.server.entity.Group savedGroup = writer.saveGroup(ownerName);
 		
 		// save the associated indicators for this group
-		saveAssociatedIndicators(group, ownerName, connection, writer, saveResults);
+		saveAssociatedItems(group, ownerName, connection, writer, saveResults);
 		
 		// return the saved group
 		return savedGroup;
@@ -281,36 +281,51 @@ public class SaveApiService implements SaveService
 	}
 	
 	/**
-	 * Saves the associated indicators for a given group
+	 * Saves the associated items for a given group
 	 * 
-	 * @param item
+	 * @param group
 	 * @param ownerName
 	 * @param connection
 	 * @param writer
+	 * @param saveResults
 	 * @throws IOException
-	 * @throws SaveItemFailedException
 	 */
-	private void saveAssociatedIndicators(final Group group, final String ownerName, final Connection connection,
+	private void saveAssociatedItems(final Group group, final String ownerName, final Connection connection,
 		GroupWriter<?, ?> writer, final SaveResults saveResults) throws IOException
 	{
 		// for each of the associated items of this group
-		for (Indicator associatedIndicator : group.getAssociatedItems())
+		for (Item associatedItem : group.getAssociatedItems())
 		{
 			try
 			{
-				saveIndicator(associatedIndicator, ownerName, connection, saveResults);
-				writer.associateIndicator(associatedIndicator);
+				// switch based on the item type
+				switch (associatedItem.getItemType())
+				{
+					case GROUP:
+						Group associatedGroup = (Group) associatedItem;
+						com.threatconnect.sdk.server.entity.Group savedAssociatedGroup =
+							saveGroup(associatedGroup, ownerName, connection, saveResults);
+						writer.associateGroup(associatedGroup.getGroupType(), savedAssociatedGroup.getId());
+						break;
+					case INDICATOR:
+						Indicator associatedIndicator = (Indicator) associatedItem;
+						saveIndicator(associatedIndicator, ownerName, connection, saveResults);
+						writer.associateIndicator(associatedIndicator);
+						break;
+					default:
+						break;
+				}
 			}
 			catch (SaveItemFailedException e)
 			{
 				logger.warn(e.getMessage(), e);
 				
 				// add to the list of failed items
-				saveResults.getFailedItems().add(associatedIndicator);
+				saveResults.getFailedItems().add(associatedItem);
 				
 				// this item failed to save so attempt to save the associated items individually if
 				// they exist without the associations
-				SaveResults childItemsSaveResults = saveItems(associatedIndicator.getAssociatedItems(), connection);
+				SaveResults childItemsSaveResults = saveItems(associatedItem.getAssociatedItems(), connection);
 				saveResults.getFailedItems().addAll(childItemsSaveResults.getFailedItems());
 			}
 			catch (AssociateFailedException e)
