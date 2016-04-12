@@ -20,41 +20,48 @@ public class TaskReaderAdapter extends AbstractGroupReaderAdapter<Task> {
 
     public TaskReaderAdapter(Connection conn) { super(conn, TaskResponse.class, Task.class, TaskListResponse.class); }
 
-    public TaskResponse getTask(final Integer id) throws IOException {
+    public TaskResponse getTask(final Integer uniqueId) throws IOException {
         Map<String, Object> paramMap = new HashMap<String, Object>() {
-            {   put("id", id);  }
+            {   put("id", uniqueId);  }
         };
         return getItem(getUrlBasePrefix() + ".byId", TaskResponse.class, null, paramMap);
     }
 
-    public IterableResponse<User> getAssignees(final Integer id) throws IOException{
+    public TaskResponse getTask(final Integer uniqueId, final String ownerName) throws IOException {
         Map<String, Object> paramMap = new HashMap<String, Object>() {
-            {   put("id", id);  }
+            {   put("id", uniqueId);  }
+        };
+        return getItem(getUrlBasePrefix() + ".byId", TaskResponse.class, null, paramMap);
+    }
+
+    public IterableResponse<User> getAssignees(final Integer uniqueId) throws IOException{
+        Map<String, Object> paramMap = new HashMap<String, Object>() {
+            {   put("id", uniqueId);  }
         };
         return getItems(getUrlBasePrefix() + ".assignees", UserListResponse.class, User.class, null, paramMap);
     }
 
-    public IterableResponse<User> getEscalatees(final Integer id) throws IOException {
+    public IterableResponse<User> getEscalatees(final Integer uniqueId) throws IOException {
         Map<String, Object> paramMap = new HashMap<String, Object>() {
-            {   put("id", id);  }
+            {   put("id", uniqueId);  }
         };
         return getItems(getUrlBasePrefix() + ".escalatees", UserListResponse.class, User.class, null, paramMap);
     }
 
-    public UserResponse getAssignee(final Integer id, final String userName) throws IOException {
+    public UserResponse getAssignee(final Integer uniqueId, final String userName) throws IOException {
         Map<String, Object> paramMap = new HashMap<String, Object>() {
             {
-                put("id", id);
+                put("id", uniqueId);
                 put("userName", userName);
             }
         };
         return getItem(getUrlBasePrefix() + ".assignees.byUserName", UserResponse.class, null, paramMap);
     }
 
-    public UserResponse getEscalatee(final Integer id, final String userName) throws IOException {
+    public UserResponse getEscalatee(final Integer uniqueId, final String userName) throws IOException {
         Map<String, Object> paramMap = new HashMap<String, Object>() {
             {
-                put("id", id);
+                put("id", uniqueId);
                 put("userName", userName);
             }
         };
@@ -66,4 +73,5 @@ public class TaskReaderAdapter extends AbstractGroupReaderAdapter<Task> {
 
     @Override
     public String getUrlType() { return "tasks";}
+
 }
