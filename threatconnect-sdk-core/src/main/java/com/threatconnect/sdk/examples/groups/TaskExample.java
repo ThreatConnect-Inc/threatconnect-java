@@ -121,14 +121,13 @@ public class TaskExample {
             System.out.println("Updated task: " + updatedTask);
 
             // Retrieve task again and check changes are there
-            ApiEntitySingleResponse<Task, ?> getResponse = reader.getTask(id);
-            if (!getResponse.isSuccess()) {
-                System.err.println("Failed to retrieve updated task: " + getResponse.getMessage());
+            Task retrievedTask = reader.getById(id);
+            if (retrievedTask == null) {
+                System.err.println("Failed to retrieve updated task: " + id);
                 return;
             }
 
             // Now check if the update succeeded
-            Task retrievedTask = getResponse.getItem();
             if (!String.valueOf(retrievedTask.getName()).equals(updatedTask.getName())) {
                 // If the name is the same, the update failed
                 System.err.println("Failed to update task; changes were not saved");
@@ -186,14 +185,13 @@ public class TaskExample {
             System.out.println("Updated task: " + updatedTask);
 
             // Retrieve task again and check changes are there
-            ApiEntitySingleResponse<Task, ?> getResponse = reader.getTask(id);
-            if (!getResponse.isSuccess()) {
-                System.err.println("Failed to retrieve updated task: " + getResponse.getMessage());
+            Task retrievedTask = reader.getById(id);
+            if (retrievedTask == null) {
+                System.err.println("Failed to retrieve updated task: " + id);
                 return;
             }
 
             // Now check if the update succeeded
-            Task retrievedTask = getResponse.getItem();
             if (!String.valueOf(retrievedTask.getName()).equals(updatedTask.getName())) {
                 // If the name is the same, the update failed
                 System.err.println("Failed to update task; changes were not saved");
