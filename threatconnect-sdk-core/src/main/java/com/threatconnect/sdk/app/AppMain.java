@@ -72,13 +72,13 @@ public final class AppMain
 		catch (AppInstantiationException e)
 		{
 			logger.error(e.getMessage(), e);
-			LoggerUtil.logErr(e.getMessage());
+			LoggerUtil.logErr(e, e.getMessage());
 			exitStatus = ExitStatus.Failure;
 		}
 		catch (Exception e)
 		{
 			logger.error(e.getMessage(), e);
-			LoggerUtil.logErr(e.getMessage());
+			LoggerUtil.logErr(e, e.getMessage());
 			exitStatus = ExitStatus.Failure;
 		}
 		finally

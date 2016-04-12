@@ -13,6 +13,7 @@ import com.threatconnect.sdk.parser.model.Attribute;
 import com.threatconnect.sdk.parser.model.GroupType;
 import com.threatconnect.sdk.parser.model.Indicator;
 import com.threatconnect.sdk.parser.service.save.AssociateFailedException;
+import com.threatconnect.sdk.parser.service.save.DeleteItemFailedException;
 import com.threatconnect.sdk.parser.service.save.SaveItemFailedException;
 import com.threatconnect.sdk.server.entity.Indicator.Type;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
@@ -56,7 +57,7 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 			T indicator = mapper.map(indicatorSource, tcModelClass);
 			
 			// attempt to lookup the indicator by the id
-			T readIndicator = lookupIndicator(buildID());
+			T readIndicator = lookupIndicator(buildID(), ownerName);
 			
 			// check to see if the indicator was found on the server
 			if (null != readIndicator)
@@ -181,20 +182,52 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 		}
 	}
 	
+	/**
+	 * Deletes the indicator from the server
+	 * 
+	 * @param ownerName
+	 * the owner name of the indicator
+	 * @throws DeleteItemFailedException
+	 * if there was any reason the indicator could not be deleted
+	 */
+	public void deleteIndicator(final String ownerName) throws DeleteItemFailedException
+	{
+		try
+		{
+			// create the writer
+			AbstractIndicatorWriterAdapter<T> writer = createWriterAdapter();
+			
+			// lookup the indicator from the server
+			ApiEntitySingleResponse<?, ?> response = writer.delete(buildID(), ownerName);
+			
+			// check to see if this was not successful
+			if (!response.isSuccess())
+			{
+				throw new DeleteItemFailedException(response.getMessage());
+			}
+		}
+		catch (IOException e)
+		{
+			throw new DeleteItemFailedException(e);
+		}
+	}
+	
 	protected abstract String buildID();
 	
 	/**
-	 * Looks up an indicator by the id
+	 * Looks up an indicator
 	 * 
 	 * @param lookupID
 	 * the id of the indicator to look up
+	 * @param ownerName
+	 * the name of the owner to use when looking up the indicator
 	 * @return the existing indicator
 	 * @throws FailedResponseException
-	 * if the server returned an invalid resonse
+	 * if the server returned an invalid response
 	 * @throws IOException
 	 * if there was an exception communicating with the server
 	 */
-	private T lookupIndicator(final String lookupID)
+	protected T lookupIndicator(final String lookupID, final String ownerName)
 	{
 		AbstractIndicatorReaderAdapter<T> reader = createReaderAdapter();
 		
@@ -204,7 +237,7 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 			try
 			{
 				// lookup the indicator by the id
-				T readIndicator = reader.getById(lookupID);
+				T readIndicator = reader.getById(lookupID, ownerName);
 				
 				// check to see if the read indicator is not null
 				if (null != readIndicator)

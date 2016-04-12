@@ -9,8 +9,6 @@ import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.Level;
 
-
-
 public final class AppConfig
 {
 	public static final String TC_MAIN_APP_CLASS = "tc_main_app_class";
@@ -223,6 +221,42 @@ public final class AppConfig
 	public int getInteger(final String key, final int defaultValue)
 	{
 		Integer value = getInteger(key);
+		return value == null ? defaultValue : value;
+	}
+	
+	/**
+	 * Returns a system property as a long. Returns null if the key does not exist or if the
+	 * value is not a long
+	 * 
+	 * @param key
+	 * System property name
+	 * @return A long value of System property key
+	 */
+	public Long getLong(final String key)
+	{
+		try
+		{
+			return Long.parseLong(getString(key));
+		}
+		catch (NullPointerException | NumberFormatException e)
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * Returns a system property as a long. Returns the defaultValue if the key does not exist
+	 * or if the value is not a long
+	 * 
+	 * @param key
+	 * System property name
+	 * @param defaultValue
+	 * Value to return if key doesn't exist
+	 * @return A long value of System property key
+	 */
+	public long getLong(final String key, final long defaultValue)
+	{
+		Long value = getLong(key);
 		return value == null ? defaultValue : value;
 	}
 	

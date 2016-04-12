@@ -8,7 +8,6 @@ import com.threatconnect.sdk.client.reader.TaskReaderAdapter;
 import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.client.writer.TaskWriterAdapter;
 import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
-import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Group;
@@ -59,7 +58,7 @@ public class TaskExample {
     }
 
     private static void testCreateTask(Connection conn) {
-        TaskWriterAdapter writer = WriterAdapterFactory.createTaskGroupWriter(conn);
+        TaskWriterAdapter writer = WriterAdapterFactory.createTaskWriter(conn);
         Task task = createTestTask();
         try {
             // -----------------------------------------------------------------------------------------------------------
@@ -79,7 +78,7 @@ public class TaskExample {
     }
 
     private static void testGetTask(Connection conn) throws IOException {
-        TaskReaderAdapter reader = ReaderAdapterFactory.createTaskGroupReader(conn);
+        TaskReaderAdapter reader = ReaderAdapterFactory.createTaskReader(conn);
         IterableResponse<Task> data;
         try {
             // -----------------------------------------------------------------------------------------------------------
@@ -96,8 +95,8 @@ public class TaskExample {
     }
 
     private static void testUpdateTask(Connection conn) throws IOException {
-        TaskWriterAdapter writer = WriterAdapterFactory.createTaskGroupWriter(conn);
-        TaskReaderAdapter reader = ReaderAdapterFactory.createTaskGroupReader(conn);
+        TaskWriterAdapter writer = WriterAdapterFactory.createTaskWriter(conn);
+        TaskReaderAdapter reader = ReaderAdapterFactory.createTaskReader(conn);
 
         Task task = createTestTask();
         try {
@@ -150,8 +149,8 @@ public class TaskExample {
 
     // The User should not be updated along with the Task
     private static void testUpdateTaskWithAssignee(Connection conn) {
-        TaskWriterAdapter writer = WriterAdapterFactory.createTaskGroupWriter(conn);
-        TaskReaderAdapter reader = ReaderAdapterFactory.createTaskGroupReader(conn);
+        TaskWriterAdapter writer = WriterAdapterFactory.createTaskWriter(conn);
+        TaskReaderAdapter reader = ReaderAdapterFactory.createTaskReader(conn);
 
         Task task = createTestTask();
         User assignee = createTestUser();
@@ -214,7 +213,7 @@ public class TaskExample {
     }
 
     private static void testDeleteTask(Connection conn) {
-        TaskWriterAdapter writer = WriterAdapterFactory.createTaskGroupWriter(conn);
+        TaskWriterAdapter writer = WriterAdapterFactory.createTaskWriter(conn);
         Task task = createTestTask();
 
         try {
@@ -243,8 +242,8 @@ public class TaskExample {
     }
 
     private static void testTaskAssignee(Connection conn) {
-        TaskWriterAdapter writer = WriterAdapterFactory.createTaskGroupWriter(conn);
-        TaskReaderAdapter reader = ReaderAdapterFactory.createTaskGroupReader(conn);
+        TaskWriterAdapter writer = WriterAdapterFactory.createTaskWriter(conn);
+        TaskReaderAdapter reader = ReaderAdapterFactory.createTaskReader(conn);
 
         Task task = createTestTask();
         User assignee = createTestUser();
@@ -298,8 +297,8 @@ public class TaskExample {
     }
 
     private static void testTaskEscalatee(Connection conn) {
-        TaskWriterAdapter writer = WriterAdapterFactory.createTaskGroupWriter(conn);
-        TaskReaderAdapter reader = ReaderAdapterFactory.createTaskGroupReader(conn);
+        TaskWriterAdapter writer = WriterAdapterFactory.createTaskWriter(conn);
+        TaskReaderAdapter reader = ReaderAdapterFactory.createTaskReader(conn);
 
         Task task = createTestTask();
         User escalatee = createAdminUser();

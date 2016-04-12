@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.threatconnect.sdk.client.reader.AbstractGroupReaderAdapter;
+import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
+import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.client.writer.AbstractGroupWriterAdapter;
 import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
 import com.threatconnect.sdk.conn.Connection;
@@ -14,13 +17,16 @@ import com.threatconnect.sdk.parser.model.Attribute;
 import com.threatconnect.sdk.parser.model.EmailAddress;
 import com.threatconnect.sdk.parser.model.File;
 import com.threatconnect.sdk.parser.model.Group;
+import com.threatconnect.sdk.parser.model.GroupType;
 import com.threatconnect.sdk.parser.model.Host;
 import com.threatconnect.sdk.parser.model.Indicator;
 import com.threatconnect.sdk.parser.model.Url;
 import com.threatconnect.sdk.parser.service.save.AssociateFailedException;
+import com.threatconnect.sdk.parser.service.save.DeleteItemFailedException;
 import com.threatconnect.sdk.parser.service.save.SaveItemFailedException;
 import com.threatconnect.sdk.server.entity.Group.Type;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
+import com.threatconnect.sdk.util.ApiFilterType;
 
 public abstract class GroupWriter<E extends Group, T extends com.threatconnect.sdk.server.entity.Group>
 	extends Writer
@@ -61,6 +67,17 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 			
 			// map the object
 			T group = mapper.map(groupSource, tcModelClass);
+			
+			// attempt to lookup the indicator by the id
+			T readGroup = lookupGroup(groupSource.getName(), ownerName);
+			
+			// check to see if the indicator was found on the server
+			if (null != readGroup)
+			{
+				// use this group as the saved group
+				savedGroup = readGroup;
+				return savedGroup;
+			}
 			
 			if (logger.isDebugEnabled())
 			{
@@ -205,6 +222,135 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 		}
 	}
 	
+	public void associateGroup(final GroupType groupType, final Integer savedID)
+		throws AssociateFailedException, IOException
+	{
+		try
+		{
+			// create a new indicator writer to do the association
+			AbstractGroupWriterAdapter<T> writer = createWriterAdapter();
+			ApiEntitySingleResponse<?, ?> response = null;
+			
+			// switch based on the group type
+			switch (groupType)
+			{
+				case ADVERSARY:
+					response = writer.associateGroupAdversary(getSavedGroupID(), savedID);
+					break;
+				case DOCUMENT:
+					response = writer.associateGroupDocument(getSavedGroupID(), savedID);
+					break;
+				case EMAIL:
+					response = writer.associateGroupEmail(getSavedGroupID(), savedID);
+					break;
+				case INCIDENT:
+					response = writer.associateGroupIncident(getSavedGroupID(), savedID);
+					break;
+				case SIGNATURE:
+					response = writer.associateGroupSignature(getSavedGroupID(), savedID);
+					break;
+				case THREAT:
+					response = writer.associateGroupThreat(getSavedGroupID(), savedID);
+					break;
+				default:
+					response = null;
+					break;
+			}
+			
+			// check to see if this was not successful
+			if (null != response && !response.isSuccess())
+			{
+				logger.warn("Failed to associate group id \"{}\" with group: {}", savedID, getSavedGroupID());
+				logger.warn(response.getMessage());
+			}
+		}
+		catch (FailedResponseException e)
+		{
+			throw new AssociateFailedException(e);
+		}
+	}
+	
+	/**
+	 * Deletes the group from the server if it exists
+	 * 
+	 * @param ownerName
+	 * the owner name of the group
+	 * @throws DeleteItemFailedException
+	 * if there was any reason the group could not be deleted
+	 */
+	public void deleteGroup(final String ownerName) throws DeleteItemFailedException
+	{
+		try
+		{
+			// create the writer
+			AbstractGroupWriterAdapter<T> writer = createWriterAdapter();
+			
+			// look up the group from the server
+			T readGroup = lookupGroup(groupSource.getName(), ownerName);
+			
+			// make sure the group is not null
+			if (null != readGroup)
+			{
+				// lookup the indicator from the server
+				ApiEntitySingleResponse<?, ?> response = writer.delete(readGroup.getId(), ownerName);
+				
+				// check to see if this was not successful
+				if (!response.isSuccess())
+				{
+					throw new DeleteItemFailedException(response.getMessage());
+				}
+			}
+		}
+		catch (IOException e)
+		{
+			throw new DeleteItemFailedException(e);
+		}
+	}
+	
+	/**
+	 * Looks up a group by the group name
+	 * 
+	 * @param groupName
+	 * the name of the group to look up
+	 * @return the existing indicator
+	 * @throws FailedResponseException
+	 * if the server returned an invalid response
+	 * @throws IOException
+	 * if there was an exception communicating with the server
+	 */
+	protected T lookupGroup(final String groupName, final String ownerName)
+	{
+		AbstractGroupReaderAdapter<T> reader = createReaderAdapter();
+		
+		// make sure the group name is not null
+		if (null != groupName)
+		{
+			try
+			{
+				// lookup the group by the group name
+				IterableResponse<T> readGroups =
+					reader.getForFilters(ownerName, false, ApiFilterType.filterName().equal(groupName));
+					
+				// check to see if the read groups is not null
+				if (null != readGroups)
+				{
+					// for each of the indicators
+					for (T group : readGroups)
+					{
+						// return the first group
+						return group;
+					}
+				}
+			}
+			catch (FailedResponseException | IOException e)
+			{
+				return null;
+			}
+		}
+		
+		return null;
+	}
+	
 	/**
 	 * Retrieves the id of the saved group
 	 * 
@@ -221,6 +367,16 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 		}
 		
 		throw new IllegalStateException("group is not saved");
+	}
+	
+	/**
+	 * Creates a reader adapter for this class
+	 * 
+	 * @return the reader adapter for this indicator
+	 */
+	protected AbstractGroupReaderAdapter<T> createReaderAdapter()
+	{
+		return ReaderAdapterFactory.createGroupReader(tcGroupType, connection);
 	}
 	
 	/**

@@ -6,14 +6,14 @@ import java.util.List;
 public abstract class Group extends Item
 {
 	private final GroupType groupType;
-	private final List<Indicator> associatedItems;
+	private final List<Item> associatedItems;
 	private String name;
 	
 	public Group(final GroupType groupType)
 	{
 		super(ItemType.GROUP);
 		this.groupType = groupType;
-		this.associatedItems = new ArrayList<Indicator>();
+		this.associatedItems = new ArrayList<Item>();
 	}
 	
 	public final GroupType getGroupType()
@@ -32,7 +32,7 @@ public abstract class Group extends Item
 	}
 	
 	@Override
-	public List<Indicator> getAssociatedItems()
+	public List<Item> getAssociatedItems()
 	{
 		return associatedItems;
 	}

@@ -5,7 +5,6 @@
  */
 package com.threatconnect.sdk.client.writer;
 
-import com.threatconnect.sdk.client.reader.AbstractGroupReaderAdapter;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.server.entity.*;
 import com.threatconnect.sdk.server.response.entity.*;
@@ -178,7 +177,7 @@ public class WriterAdapterFactory {
             case Threat:
                 return createThreatGroupWriter(conn);
             case Task:
-                return createTaskGroupWriter(conn);
+                return createTaskWriter(conn);
             default:
                 return null;
         }
@@ -203,7 +202,7 @@ public class WriterAdapterFactory {
         return new ExchangeWriterAdapter(conn);
     }
 
-    public static TaskWriterAdapter createTaskGroupWriter(Connection conn) {
+    public static TaskWriterAdapter createTaskWriter(Connection conn) {
         return new TaskWriterAdapter(conn);
     }
 
