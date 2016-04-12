@@ -20,20 +20,6 @@ public class TaskReaderAdapter extends AbstractGroupReaderAdapter<Task> {
 
     public TaskReaderAdapter(Connection conn) { super(conn, TaskResponse.class, Task.class, TaskListResponse.class); }
 
-    /*public TaskResponse getTask(final Integer uniqueId) throws IOException {
-        Map<String, Object> paramMap = new HashMap<String, Object>() {
-            {   put("id", uniqueId);  }
-        };
-        return getItem(getUrlBasePrefix() + ".byId", TaskResponse.class, null, paramMap);
-    }
-
-    public TaskResponse getTask(final Integer uniqueId, final String ownerName) throws IOException {
-        Map<String, Object> paramMap = new HashMap<String, Object>() {
-            {   put("id", uniqueId);  }
-        };
-        return getItem(getUrlBasePrefix() + ".byId", TaskResponse.class, null, paramMap);
-    }*/
-
     public IterableResponse<User> getAssignees(final Integer uniqueId) throws IOException{
         Map<String, Object> paramMap = new HashMap<String, Object>() {
             {   put("id", uniqueId);  }
