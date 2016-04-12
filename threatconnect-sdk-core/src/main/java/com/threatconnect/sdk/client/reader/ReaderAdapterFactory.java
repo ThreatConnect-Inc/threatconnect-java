@@ -153,8 +153,6 @@ public class ReaderAdapterFactory {
         switch (type) {
             case Adversary:
                 return createAdversaryGroupReader(conn);
-            case Document:
-            	return createDocumentReader(conn);
             case Email:
                 return createEmailGroupReader(conn);
             case Incident:
@@ -163,6 +161,8 @@ public class ReaderAdapterFactory {
                 return createSignatureGroupReader(conn);
             case Threat:
                 return createThreatGroupReader(conn);
+            case Task:
+                return createTaskReader(conn);
             default:
                 return null;
         }
@@ -218,5 +218,9 @@ public class ReaderAdapterFactory {
 
     public static ExchangeReaderAdapter createExchangeReader(Connection conn) {
         return new ExchangeReaderAdapter(conn);
+    }
+
+    public static TaskReaderAdapter createTaskReader(Connection conn) {
+        return new TaskReaderAdapter(conn);
     }
 }
