@@ -3,6 +3,7 @@ package com.threatconnect.sdk.log;
 import java.io.File;
 import java.io.IOException;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +24,9 @@ public class LoggingTest
 		AppConfig appConfig = AppConfig.getInstance();
 		
 		LoggerUtil.reconfigureGlobalLogger(logFile, appConfig);
-		
 		Logger logger = LoggerFactory.getLogger(getClass());
-		
 		logger.info("Log Test");
+		
+		Assert.assertTrue(logFile.length() > 0);
 	}
 }

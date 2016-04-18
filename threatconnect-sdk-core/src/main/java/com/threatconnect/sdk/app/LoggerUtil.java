@@ -44,7 +44,7 @@ public class LoggerUtil
 		throws IOException
 	{
 		// retrieve the logger context
-		LoggerContext loggerContext = (LoggerContext) LogManager.getContext();
+		LoggerContext loggerContext = (LoggerContext) LogManager.getContext(false);
 		Configuration configuration = loggerContext.getConfiguration();
 		
 		// retrieve the root logger config
@@ -58,8 +58,11 @@ public class LoggerUtil
 		FileAppender fileAppender =
 			FileAppender.createAppender(logFile.getAbsolutePath(), "true", "false", "fileAppender",
 				"true", "true", "true", "8192", layout, null, "false", null, null);
-				
+		fileAppender.start();
+		
+		// add the file appender
 		loggerConfig.addAppender(fileAppender, appConfig.getTcLogLevel(), null);
+		loggerContext.updateLoggers();
 	}
 	
 	/**
