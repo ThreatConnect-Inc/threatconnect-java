@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by dtineo on 5/28/15.
@@ -14,7 +16,7 @@ import java.util.logging.Logger;
 public abstract class AbstractRequestExecutor
 {
 
-    protected final Logger logger = Logger.getLogger(getClass().getSimpleName());
+    protected final Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
     protected final Connection conn;
     protected List<ApiCallListener> apiCallListeners = new ArrayList<>();
 

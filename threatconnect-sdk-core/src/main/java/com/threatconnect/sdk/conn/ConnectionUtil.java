@@ -12,8 +12,6 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -34,6 +32,8 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.AbstractHttpMessage;
 import org.apache.http.ssl.SSLContextBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.threatconnect.sdk.config.Configuration;
 
@@ -42,7 +42,7 @@ import com.threatconnect.sdk.config.Configuration;
  */
 public class ConnectionUtil
 {
-	private static final Logger logger = Logger.getLogger(ConnectionUtil.class.getSimpleName());
+	private static final Logger logger = LoggerFactory.getLogger(ConnectionUtil.class.getSimpleName());
 	
 	public static Properties loadProperties(String fileName) throws IOException
 	{
@@ -78,7 +78,7 @@ public class ConnectionUtil
 		}
 		catch (NoSuchAlgorithmException | InvalidKeyException | IllegalStateException ex)
 		{
-			logger.log(Level.SEVERE, "Error creating HMAC SHA256 signature", ex);
+			logger.error("Error creating HMAC SHA256 signature", ex);
 			return null;
 		}
 	}
@@ -150,7 +150,7 @@ public class ConnectionUtil
 		// check to see if the the host or port are null
 		if (proxyHost == null || proxyPort == null)
 		{
-			logger.log(Level.WARNING, "proxyHost and proxyPort are required to connect to a proxy");
+			logger.warn("proxyHost and proxyPort are required to connect to a proxy");
 		}
 		else
 		{
@@ -197,7 +197,7 @@ public class ConnectionUtil
 		}
 		catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException ex)
 		{
-			logger.log(Level.SEVERE, "Error adding SSLSocketFactory to HttpClientBuilder", ex);
+			logger.error("Error adding SSLSocketFactory to HttpClientBuilder", ex);
 		}
 	}
 	

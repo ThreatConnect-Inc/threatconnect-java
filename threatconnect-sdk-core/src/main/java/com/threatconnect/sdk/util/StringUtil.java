@@ -10,8 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -20,12 +18,15 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  *
  * @author dtineo
  */
 public class StringUtil {
-    private final static Logger logger = Logger.getLogger(StringUtil.class.getSimpleName());
+    private final static Logger logger = LoggerFactory.getLogger(StringUtil.class.getSimpleName());
     private static ObjectMapper mapper = new ObjectMapper();
 
     public static String formatResults(String data) throws IOException {
@@ -55,7 +56,7 @@ public class StringUtil {
         try {
             transformer = TransformerFactory.newInstance().newTransformer();
         } catch (TransformerConfigurationException ex) {
-            logger.log(Level.SEVERE, "Error creating Transformer.", ex);
+            logger.error("Error creating Transformer.", ex);
             return xmlData;
         }
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -66,7 +67,7 @@ public class StringUtil {
         try {
             transformer.transform(source, result);
         } catch (TransformerException ex) {
-            logger.log(Level.SEVERE, "Error transforing xml: " + xmlData, ex);
+            logger.error("Error transforing xml: " + xmlData, ex);
             return xmlData;
         }
         String formatted = result.getWriter().toString();

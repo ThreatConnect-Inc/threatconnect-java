@@ -8,10 +8,10 @@ package com.threatconnect.sdk.conn;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.threatconnect.sdk.app.AppConfig;
 import com.threatconnect.sdk.app.AppUtil;
@@ -24,7 +24,7 @@ import com.threatconnect.sdk.config.URLConfiguration;
 public class Connection implements Closeable
 {
 	
-	private final Logger logger = Logger.getLogger(getClass().getSimpleName());
+	private final Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
 	
 	private CloseableHttpClient apiClient;
 	protected Configuration config;
@@ -122,7 +122,7 @@ public class Connection implements Closeable
 			}
 			catch (IOException ex)
 			{
-				logger.log(Level.SEVERE, "Error disconnecting from httpClient", ex);
+				logger.error("Error disconnecting from httpClient", ex);
 			}
 			finally
 			{

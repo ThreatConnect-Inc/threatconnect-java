@@ -5,6 +5,15 @@
  */
 package com.threatconnect.sdk.client.reader;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLEncoder;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.threatconnect.sdk.client.AbstractClientAdapter;
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.response.IterableResponse;
@@ -14,14 +23,6 @@ import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.util.ApiFilterParser;
 import com.threatconnect.sdk.util.ApiFilterType;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URLEncoder;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -42,7 +43,7 @@ import java.util.logging.Logger;
  */
 public abstract class AbstractReaderAdapter extends AbstractClientAdapter
 {
-    private final Logger logger = Logger.getLogger(getClass().getSimpleName());
+    private final Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
 
 
     public AbstractReaderAdapter(Connection conn) {
@@ -56,9 +57,9 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
             url = url.replace("{type}", ((UrlTypeable) this).getUrlType());
         }
 
-        logger.log(Level.FINEST, "calling url=" + url);
+        logger.trace("calling url={}", url);
         String content = executor.execute(AbstractRequestExecutor.HttpMethod.GET, url);
-        logger.log(Level.FINEST, "returning content=" + content);
+        logger.trace("returning content={}", content);
 
         return content;
     }
@@ -79,9 +80,9 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
             }
         }
 
-        logger.log(Level.INFO, "Calling url=" + url);
+        logger.trace("Calling url={}", url);
         InputStream content = executor.executeDownloadByteStream(url);
-        logger.log(Level.FINEST, "returning content=" + content);
+        logger.trace("returning content={}", content);
 
         return content;
     }
@@ -114,9 +115,9 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
         }
 
 
-        logger.log(Level.FINEST, "Calling url=" + url);
+        logger.trace("Calling url={}", url);
         String content = executor.execute(AbstractRequestExecutor.HttpMethod.GET, url);
-        logger.log(Level.FINEST, "returning content=" + content);
+        logger.trace("returning content={}", content);
 
         T result = mapper.readValue(content, type);
         if (!result.isSuccess()) {
@@ -146,9 +147,9 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
             url = url.replace("{type}", ((UrlTypeable) this).getUrlType());
         }
 
-        logger.log(Level.FINEST, "Calling url=" + url);
+        logger.trace("Calling url={}", url);
         if (paramMap != null) {
-            logger.log(Level.FINEST, "paramMap=" + paramMap);
+            logger.trace("paramMap={}", paramMap);
             for(Entry<String,Object> entry : paramMap.entrySet()) {
                 String value = URLEncoder.encode( entry.getValue().toString(), "UTF-8").replace("+", "%20");
                 url = url.replace(String.format("{%s}", entry.getKey()), value);

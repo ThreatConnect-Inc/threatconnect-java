@@ -59,7 +59,7 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 
     private void applyEntityAsJSON(HttpRequestBase httpBase, Object obj) throws JsonProcessingException {
         String jsonData = StringUtil.toJSON(obj);
-        logger.log(Level.FINEST, "entity : " + jsonData);
+        logger.trace("entity : " + jsonData);
        ((HttpEntityEnclosingRequestBase)httpBase).setEntity(new StringEntity(jsonData, ContentType.APPLICATION_JSON));
     }
 
@@ -69,34 +69,34 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
         path +=  ( path.contains("?") ? "&" : "?" );
         path += "createActivityLog=" + this.conn.getConfig().isActivityLogEnabled();
 
-        logger.log(Level.FINEST, "Path: " + path);
+        logger.trace("Path: " + path);
         String fullPath = this.conn.getConfig().getTcApiUrl() + path.replace("/api/","/");
 
-        logger.log(Level.FINEST, "Full: " + type + ": " + fullPath);
+        logger.trace("Full: " + type + ": " + fullPath);
         HttpRequestBase httpBase = getBase(fullPath, type);
         if ( obj != null )  applyEntityAsJSON( httpBase, obj );
 
-        logger.log(Level.FINEST, "RawPath: " + httpBase.getURI().getPath());
-        logger.log(Level.FINEST, "Query: " + httpBase.getURI().getRawQuery());
-        logger.log(Level.FINEST, "Path: " + path);
+        logger.trace("RawPath: " + httpBase.getURI().getPath());
+        logger.trace("Query: " + httpBase.getURI().getRawQuery());
+        logger.trace("Path: " + path);
 
         String headerPath = httpBase.getURI().getRawPath() + "?" + httpBase.getURI().getRawQuery();
-        logger.log(Level.FINEST, "HeaderPath: " + headerPath);
+        logger.trace("HeaderPath: " + headerPath);
         ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, type.toString(), headerPath);
-        logger.log(Level.FINEST, "Request: " + httpBase.getRequestLine());
+        logger.trace("Request: " + httpBase.getRequestLine());
         long startMs = System.currentTimeMillis();
         CloseableHttpResponse response = this.conn.getApiClient().execute(httpBase);
         notifyListeners( type, fullPath, (System.currentTimeMillis()-startMs));
         String result = null;
 
         try {
-            logger.log(Level.FINEST, response.getStatusLine().toString() );
+            logger.trace(response.getStatusLine().toString() );
             HttpEntity entity = response.getEntity();
-            logger.log(Level.FINEST, "Response Headers: " + Arrays.toString(response.getAllHeaders()));
-            logger.log(Level.FINEST, "Content Encoding: " + entity.getContentEncoding());
+            logger.trace("Response Headers: " + Arrays.toString(response.getAllHeaders()));
+            logger.trace("Content Encoding: " + entity.getContentEncoding());
             if (entity != null) {
                 result = EntityUtils.toString(entity, StandardCharsets.UTF_8);
-                logger.log(Level.FINEST, "Result:" + result);
+                logger.trace("Result:" + result);
                 EntityUtils.consume(entity);
             }
         } finally {
@@ -131,22 +131,22 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 
         String fullPath = this.conn.getConfig().getTcApiUrl() + path.replace("/api/","/");
 
-        logger.log(Level.FINEST, "Calling GET: " + fullPath);
+        logger.trace("Calling GET: " + fullPath);
         HttpRequestBase httpBase = getBase(fullPath, HttpMethod.GET);
 
         String headerPath = httpBase.getURI().getRawPath() + "?" + httpBase.getURI().getRawQuery();
         ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), headerPath, conn.getConfig().getContentType()
             , ContentType.APPLICATION_OCTET_STREAM.toString());
-        logger.log(Level.FINEST, "Request: " + httpBase.getRequestLine());
-        logger.log(Level.FINEST, "Headers: " + Arrays.toString(httpBase.getAllHeaders()));
+        logger.trace("Request: " + httpBase.getRequestLine());
+        logger.trace("Headers: " + Arrays.toString(httpBase.getAllHeaders()));
         CloseableHttpResponse response = this.conn.getApiClient().execute(httpBase);
 
 
-        logger.log(Level.FINEST, response.getStatusLine().toString());
+        logger.trace(response.getStatusLine().toString());
         HttpEntity entity = response.getEntity();
         if (entity != null) {
             stream = entity.getContent();
-            logger.log(Level.FINEST, String.format("Result stream size: %d, encoding: %s",
+            logger.trace(String.format("Result stream size: %d, encoding: %s",
                                                 entity.getContentLength(), entity.getContentEncoding()));
         }
         return stream;
@@ -162,24 +162,24 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 
         String fullPath = this.conn.getConfig().getTcApiUrl() + path.replace("/api/","/");
 
-        logger.log(Level.FINEST, "Calling POST: " + fullPath);
+        logger.trace("Calling POST: " + fullPath);
         HttpPost httpBase = new HttpPost(fullPath);
         httpBase.setEntity(new FileEntity(file));
         String headerPath = httpBase.getURI().getRawPath() + "?" + httpBase.getURI().getRawQuery();
         ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), headerPath, ContentType.APPLICATION_OCTET_STREAM.toString());
 
-        logger.log(Level.FINEST, "Request: " + httpBase.getRequestLine());
+        logger.trace("Request: " + httpBase.getRequestLine());
 
         CloseableHttpResponse response = this.conn.getApiClient().execute(httpBase);
         String result = null;
 
 
-        logger.log(Level.FINEST, response.getStatusLine().toString());
+        logger.trace(response.getStatusLine().toString());
         HttpEntity entity = response.getEntity();
         if (entity != null) {
             try {
                 result = EntityUtils.toString(entity, "iso-8859-1");
-                logger.log(Level.FINEST, "Result:" + result);
+                logger.trace("Result:" + result);
                 EntityUtils.consume(entity);
             } finally {
                 response.close();
