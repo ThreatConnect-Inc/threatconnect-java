@@ -22,8 +22,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -44,7 +45,7 @@ import java.util.logging.Logger;
  */
 public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
 
-    private final Logger logger = Logger.getLogger(getClass().getSimpleName());
+    private final Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
 
     public AbstractWriterAdapter(Connection conn) {
         super(conn);
@@ -255,9 +256,9 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
 
     protected <T extends ApiEntitySingleResponse> T uploadFile(String propName, Class<T> type, String ownerName, File file, Map<String, Object> paramMap) throws FailedResponseException, UnsupportedEncodingException
     {
-        logger.log(Level.FINEST, "Getting URL: " + propName);
+        logger.trace("Getting URL: {}", propName);
         String url = getUrl(propName, ownerName);
-        logger.log(Level.FINEST, "\tURL: " + url);
+        logger.trace("\tURL: {}", url);
 
         T result;
         try
@@ -268,9 +269,9 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
                     url = url.replace(String.format("{%s}", entry.getKey()), value );
                 }
             }
-            logger.log(Level.FINEST, "Calling url=" + url);
+            logger.trace("Calling url={}", url);
             String content = executor.executeUploadByteStream(url, file);
-            logger.log(Level.FINEST, "returning content=" + content);
+            logger.trace("returning content={}", content);
             result = mapper.readValue(content, type);
         } catch (IOException e)
         {
@@ -283,7 +284,7 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
     private <T extends ApiEntitySingleResponse> T modifyItem(String propName, Class<T> type, String ownerName, Map<String, Object> paramMap, Object saveObject, HttpMethod requestType)
         throws IOException, FailedResponseException {
 
-        logger.log(Level.FINEST, "Getting URL: " + propName);
+    	logger.trace("Getting URL: {}", propName);
         String url = getUrl(propName, ownerName);
 
         if (this instanceof UrlTypeable) {
@@ -299,12 +300,12 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
 
         T result;
         try {
-            logger.log(Level.FINEST, "Calling url=" + url);
+        	logger.trace("Calling url={}", url);
             String content = executor.execute(url, requestType, saveObject);
-            logger.log(Level.FINEST, "returning content=" + content);
+            logger.trace("returning content={}", content);
             result = mapper.readValue(content, type);
         } catch ( EOFException ex ) {
-            logger.log(Level.SEVERE, requestType + " Error ", ex);
+        	logger.error(requestType + " Error ", ex);
             throw new FailedResponseException( ex.toString() ); // rethrow using local exception
         }
 
