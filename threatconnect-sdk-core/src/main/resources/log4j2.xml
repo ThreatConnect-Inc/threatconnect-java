@@ -7,6 +7,7 @@
 	</Appenders>
 	<Loggers>
 		<Logger name="org.dozer" level="error" />
+		<Logger name="org.apache.http" level="info" />
 		<Root level="info">
 			<AppenderRef ref="STDOUT" />
 		</Root>
