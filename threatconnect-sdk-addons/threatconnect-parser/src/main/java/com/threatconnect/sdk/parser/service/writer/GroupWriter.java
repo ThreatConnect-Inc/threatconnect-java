@@ -119,14 +119,22 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 					// for each of the tags
 					for (String tag : groupSource.getTags())
 					{
-						// save the tag for this group
-						ApiEntitySingleResponse<?, ?> tagResponse = writer.associateTag(getSavedGroupID(), tag);
-						
-						// check to see if this was not successful
-						if (!tagResponse.isSuccess())
+						// make sure this tag is not empty
+						if (null != tag && !tag.isEmpty())
 						{
-							logger.warn("Failed to save tag \"{}\" for group id: {}", tag, getSavedGroupID());
-							logger.warn(tagResponse.getMessage());
+							// save the tag for this group
+							ApiEntitySingleResponse<?, ?> tagResponse = writer.associateTag(getSavedGroupID(), tag);
+							
+							// check to see if this was not successful
+							if (!tagResponse.isSuccess())
+							{
+								logger.warn("Failed to save tag \"{}\" for group id: {}", tag, getSavedGroupID());
+								logger.warn(tagResponse.getMessage());
+							}
+						}
+						else
+						{
+							logger.warn("Skipping blank tag for: {}", getSavedGroupID());
 						}
 					}
 				}

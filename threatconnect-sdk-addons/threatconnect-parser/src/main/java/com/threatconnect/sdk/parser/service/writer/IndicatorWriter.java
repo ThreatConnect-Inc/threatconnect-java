@@ -106,14 +106,22 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 					// for each of the tags
 					for (String tag : indicatorSource.getTags())
 					{
-						// save the tag for this indicator
-						ApiEntitySingleResponse<?, ?> tagResponse = writer.associateTag(buildID(), tag);
-						
-						// check to see if this was not successful
-						if (!tagResponse.isSuccess())
+						// make sure this tag is not empty
+						if (null != tag && !tag.isEmpty())
 						{
-							logger.warn("Failed to save tag \"{}\" for: {}", tag, buildID());
-							logger.warn(tagResponse.getMessage());
+							// save the tag for this indicator
+							ApiEntitySingleResponse<?, ?> tagResponse = writer.associateTag(buildID(), tag);
+							
+							// check to see if this was not successful
+							if (!tagResponse.isSuccess())
+							{
+								logger.warn("Failed to save tag \"{}\" for: {}", tag, buildID());
+								logger.warn(tagResponse.getMessage());
+							}
+						}
+						else
+						{
+							logger.warn("Skipping blank tag for: {}", buildID());
 						}
 					}
 				}
