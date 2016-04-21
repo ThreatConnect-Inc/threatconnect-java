@@ -85,7 +85,8 @@ public abstract class ApiFilterType <T> {
         if (value instanceof Date)
         {
             TimeZone tz = TimeZone.getDefault();
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
+            //DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
+            DateFormat df = new SimpleDateFormat("yyyyMMdd");
             df.setTimeZone(tz);
             return df.format((Date)value);
         } else
