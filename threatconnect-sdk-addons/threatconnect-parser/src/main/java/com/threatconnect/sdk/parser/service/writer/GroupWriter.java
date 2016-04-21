@@ -352,6 +352,8 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 			}
 			catch (FailedResponseException | IOException e)
 			{
+				logger.trace("Failed to lookup group name \"{}\"", groupName);
+				logger.trace(e.getMessage(), e);
 				return null;
 			}
 		}

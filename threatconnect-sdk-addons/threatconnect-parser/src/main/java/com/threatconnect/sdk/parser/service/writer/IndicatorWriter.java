@@ -255,6 +255,8 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 			}
 			catch (FailedResponseException | IOException e)
 			{
+				logger.trace("Failed to lookup indicator \"{}\"", lookupID);
+				logger.trace(e.getMessage(), e);
 				return null;
 			}
 		}
