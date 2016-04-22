@@ -95,7 +95,7 @@ public abstract class AbstractIndicatorAssociateReaderAdapter<P> extends Abstrac
             throws IOException, FailedResponseException {
 
         Map<String,Object> map = createParamMap("id", uniqueId);
-        return getItems(getUrlBasePrefix() + ".byId.indicators.emailAddresses", EmailAddressListResponse.class, Email.class, ownerName, map);
+        return getItems(getUrlBasePrefix() + ".byId.indicators.emailAddresses", EmailAddressListResponse.class, EmailAddress.class, ownerName, map);
     }
 
     @Override
