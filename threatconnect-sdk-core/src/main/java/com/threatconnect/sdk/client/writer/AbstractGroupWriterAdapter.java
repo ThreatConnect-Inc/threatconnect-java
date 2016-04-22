@@ -370,7 +370,7 @@ public abstract class AbstractGroupWriterAdapter<T extends Group>
 
     @Override
     public ApiEntitySingleResponse associateIndicatorEmailAddress(Integer uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
-        return indAssocWriter.associateIndicatorAddress(uniqueId, emailAddress, ownerName);
+        return indAssocWriter.associateIndicatorEmailAddress(uniqueId, emailAddress, ownerName);
     }
 
     @Override
@@ -390,7 +390,7 @@ public abstract class AbstractGroupWriterAdapter<T extends Group>
 
     @Override
     public ApiEntitySingleResponse associateIndicatorFile(Integer uniqueId, String fileHash, String ownerName) throws IOException, FailedResponseException {
-        return indAssocWriter.associateIndicatorAddress(uniqueId, fileHash, ownerName);
+        return indAssocWriter.associateIndicatorFile(uniqueId, fileHash, ownerName);
     }
 
     @Override
