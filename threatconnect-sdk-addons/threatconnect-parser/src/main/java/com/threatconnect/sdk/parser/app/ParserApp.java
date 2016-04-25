@@ -1,7 +1,5 @@
 package com.threatconnect.sdk.parser.app;
 
-import java.text.ParseException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +53,7 @@ public abstract class ParserApp extends App
 						try
 						{
 							// parse the data
-							List<? extends Item> items = parser.parseData(getParserStartDate(appConfig));
+							List<? extends Item> items = parser.parseData();
 							getLogger().info("Successfully parsed {} records", items.size());
 							
 							// allow child classes to do something with the parsed data
@@ -115,71 +113,80 @@ public abstract class ParserApp extends App
 		}
 		finally
 		{
-			// for each entry
-			for (Map.Entry<String, Count> entry : parserCountMap.entrySet())
-			{
-				// retrieve the save results for this parser
-				SaveResults saveResults = parserSaveResults.get(entry.getKey());
-				
-				// build and log a message for what this parser found
-				StringBuilder foundMessage = new StringBuilder();
-				foundMessage.append(entry.getKey());
-				foundMessage.append(" / ");
-				foundMessage.append("Indicators Found: ");
-				foundMessage.append(entry.getValue().getIndicators());
-				foundMessage.append(" / ");
-				foundMessage.append("Groups Found: ");
-				foundMessage.append(entry.getValue().getGroups());
-				getLogger().info(foundMessage.toString());
-				
-				// make sure that the save results is not null
-				if (null != saveResults)
-				{
-					// build and log a message for what this parser saved
-					StringBuilder savedMessage = new StringBuilder();
-					savedMessage.append(entry.getKey());
-					savedMessage.append(" / ");
-					savedMessage.append("Indicators Saved: ");
-					savedMessage
-						.append(entry.getValue().getIndicators() - saveResults.countFailedItems(ItemType.INDICATOR));
-					savedMessage.append(" / ");
-					savedMessage.append("Groups Found: ");
-					savedMessage.append(entry.getValue().getGroups() - saveResults.countFailedItems(ItemType.GROUP));
-					getLogger().info(savedMessage.toString());
-				}
-				else
-				{
-					// nothing was saved for this parser
-					StringBuilder savedMessage = new StringBuilder();
-					savedMessage.append(entry.getKey());
-					savedMessage.append("No indicators or groups saved!");
-					getLogger().warn(savedMessage.toString());
-				}
-			}
-			
-			// build the message for total indicators/groups found
-			StringBuilder foundMessage = new StringBuilder();
-			foundMessage.append("Total Indicators Found: ");
-			foundMessage.append(totalIndicatorsFound);
-			foundMessage.append(" / ");
-			foundMessage.append("Total Groups Found: ");
-			foundMessage.append(totalGroupsFound);
-			
-			// build the message for total indicators/groups saved
-			StringBuilder savedMessage = new StringBuilder();
-			savedMessage.append("Total Indicators Saved: ");
-			savedMessage.append(totalIndicatorsSaved);
-			savedMessage.append(" / ");
-			savedMessage.append("Total Groups Saved: ");
-			savedMessage.append(totalGroupsSaved);
-			
-			// log the messages for the app
-			getLogger().info(foundMessage.toString());
-			getLogger().info(savedMessage.toString());
-			
-			// write the final message out to the file
-			writeMessageTc(foundMessage.toString() + " | " + savedMessage.toString());
+			writeParserResults(parserCountMap, parserSaveResults, totalIndicatorsFound, totalGroupsFound,
+				totalIndicatorsSaved, totalGroupsSaved);
 		}
+	}
+	
+	protected void writeParserResults(final Map<String, Count> parserCountMap,
+		final Map<String, SaveResults> parserSaveResults,
+		final int totalIndicatorsFound, final int totalGroupsFound, final int totalIndicatorsSaved,
+		final int totalGroupsSaved)
+	{
+		// for each entry
+		for (Map.Entry<String, Count> entry : parserCountMap.entrySet())
+		{
+			// retrieve the save results for this parser
+			SaveResults saveResults = parserSaveResults.get(entry.getKey());
+			
+			// build and log a message for what this parser found
+			StringBuilder foundMessage = new StringBuilder();
+			foundMessage.append(entry.getKey());
+			foundMessage.append(" / ");
+			foundMessage.append("Indicators Found: ");
+			foundMessage.append(entry.getValue().getIndicators());
+			foundMessage.append(" / ");
+			foundMessage.append("Groups Found: ");
+			foundMessage.append(entry.getValue().getGroups());
+			getLogger().info(foundMessage.toString());
+			
+			// make sure that the save results is not null
+			if (null != saveResults)
+			{
+				// build and log a message for what this parser saved
+				StringBuilder savedMessage = new StringBuilder();
+				savedMessage.append(entry.getKey());
+				savedMessage.append(" / ");
+				savedMessage.append("Indicators Saved: ");
+				savedMessage
+					.append(entry.getValue().getIndicators() - saveResults.countFailedItems(ItemType.INDICATOR));
+				savedMessage.append(" / ");
+				savedMessage.append("Groups Found: ");
+				savedMessage.append(entry.getValue().getGroups() - saveResults.countFailedItems(ItemType.GROUP));
+				getLogger().info(savedMessage.toString());
+			}
+			else
+			{
+				// nothing was saved for this parser
+				StringBuilder savedMessage = new StringBuilder();
+				savedMessage.append(entry.getKey());
+				savedMessage.append("No indicators or groups saved!");
+				getLogger().warn(savedMessage.toString());
+			}
+		}
+		
+		// build the message for total indicators/groups found
+		StringBuilder foundMessage = new StringBuilder();
+		foundMessage.append("Total Indicators Found: ");
+		foundMessage.append(totalIndicatorsFound);
+		foundMessage.append(" / ");
+		foundMessage.append("Total Groups Found: ");
+		foundMessage.append(totalGroupsFound);
+		
+		// build the message for total indicators/groups saved
+		StringBuilder savedMessage = new StringBuilder();
+		savedMessage.append("Total Indicators Saved: ");
+		savedMessage.append(totalIndicatorsSaved);
+		savedMessage.append(" / ");
+		savedMessage.append("Total Groups Saved: ");
+		savedMessage.append(totalGroupsSaved);
+		
+		// log the messages for the app
+		getLogger().info(foundMessage.toString());
+		getLogger().info(savedMessage.toString());
+		
+		// write the final message out to the file
+		writeMessageTc(foundMessage.toString() + " | " + savedMessage.toString());
 	}
 	
 	/**
@@ -213,16 +220,6 @@ public abstract class ParserApp extends App
 	 * @return
 	 */
 	protected abstract List<Parser<? extends Item>> createParsers(final AppConfig appConfig);
-	
-	/**
-	 * Retrieve the start date for this parser to use when parsing data. Data older than this date
-	 * should not be parsed
-	 * 
-	 * @param appConfig
-	 * @return
-	 * @throws ParseException
-	 */
-	protected abstract Date getParserStartDate(final AppConfig appConfig) throws ParseException;
 	
 	/**
 	 * Called once parsing has completed

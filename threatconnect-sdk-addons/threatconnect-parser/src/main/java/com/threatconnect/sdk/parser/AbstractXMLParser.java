@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.URLConnection;
-import java.util.Date;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -20,30 +18,31 @@ import org.xml.sax.SAXException;
 
 import com.threatconnect.sdk.parser.model.Item;
 import com.threatconnect.sdk.parser.result.PageResult;
+import com.threatconnect.sdk.parser.source.DataSource;
 
 public abstract class AbstractXMLParser<I extends Item> extends AbstractPagedParser<I>
 {
-	public AbstractXMLParser(final String url)
+	public AbstractXMLParser(final DataSource dataSource)
 	{
-		super(url);
+		super(dataSource);
 	}
 	
 	@Override
-	protected PageResult<I> parsePage(String pageUrl, Date startDate) throws ParserException
+	protected PageResult<I> parsePage(DataSource dataSource) throws ParserException
 	{
 		URLConnection connection = null;
 		
 		try
 		{
-			// load the url and read the xml as a string
-			URL url = new URL(pageUrl);
-			connection = url.openConnection();
-			String xml = preProcessXML(IOUtils.toString(connection.getInputStream()));
+			// read the xml as a string and allow any xml preproccessing if needed
+			String rawXML = IOUtils.toString(getDataSource().read());
+			String xml = preProcessXML(rawXML);
 			
+			// create a document from the processed xml
 			Document doc = createDocument(xml);
 			
-			// process the rss feed
-			return processXmlDocument(doc, pageUrl, startDate);
+			// process the xml document
+			return processXmlDocument(doc);
 		}
 		catch (MalformedURLException | ParserConfigurationException | SAXException | XPathExpressionException e)
 		{
@@ -91,6 +90,6 @@ public abstract class AbstractXMLParser<I extends Item> extends AbstractPagedPar
 	 * @return
 	 * @throws ParserException
 	 */
-	protected abstract PageResult<I> processXmlDocument(Document doc, String pageUrl, Date startDate)
+	protected abstract PageResult<I> processXmlDocument(Document doc)
 		throws ParserException, XPathExpressionException;
 }

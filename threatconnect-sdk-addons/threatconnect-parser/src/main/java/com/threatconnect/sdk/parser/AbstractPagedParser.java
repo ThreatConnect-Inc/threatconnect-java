@@ -1,52 +1,50 @@
 package com.threatconnect.sdk.parser;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import com.threatconnect.sdk.parser.model.Item;
 import com.threatconnect.sdk.parser.result.PageResult;
-import com.threatconnect.sdk.parser.util.UrlUtil;
+import com.threatconnect.sdk.parser.source.DataSource;
 
 /**
  * Represents a parser that can contain multiple pages of data to parse
  * 
  * @author Greg Marut
  */
-public abstract class AbstractPagedParser<I extends Item> extends AbstractParser<I>
+public abstract class AbstractPagedParser<I extends Item> extends Parser<I>
 {
-	public AbstractPagedParser(final String url)
+	public AbstractPagedParser(final DataSource dataSource)
 	{
-		super(url);
+		super(dataSource);
 	}
 	
 	@Override
-	public List<I> parseData(Date startDate) throws ParserException
+	public List<I> parseData() throws ParserException
 	{
 		// holds the list of items to return
 		List<I> items = new ArrayList<I>();
 		
-		// holds the set of all of the urls that have been parsed so that we can ensure that an
-		// infinite loop does not occur
-		Set<String> parsedURLs = new HashSet<String>();
+		// holds the set of all of the datasources that have been parsed so that we can ensure that
+		// an infinite loop does not occur
+		Set<DataSource> parsedDataSources = new HashSet<DataSource>();
 		
-		// holds the next url to parse
-		String nextUrl = getUrl();
+		// holds the next data source to parse
+		DataSource nextDataSource = getDataSource();
 		
-		// while the next url is not null and if the set does not contain this url and while the url
-		// is valid
-		while (null != nextUrl && !parsedURLs.contains(nextUrl) && UrlUtil.isValid(nextUrl))
+		// while the next datasource is not null and if the set does not contain this datasource
+		while (null != nextDataSource && !parsedDataSources.contains(nextDataSource))
 		{
-			// hold onto the current url and set the next url to null
-			String currentUrl = nextUrl;
-			nextUrl = null;
+			// hold onto the current datasource and set the next datasource to null
+			DataSource currentDataSource = nextDataSource;
+			nextDataSource = null;
 			
 			// parse the page
-			logger.info("Parsing: {}", currentUrl);
-			PageResult<I> pageResult = parsePage(currentUrl, startDate);
-			parsedURLs.add(currentUrl);
+			getLogger().info("Parsing: {}", currentDataSource.toString());
+			PageResult<I> pageResult = parsePage(currentDataSource);
+			parsedDataSources.add(currentDataSource);
 			
 			// make sure the page is not null
 			if (null != pageResult)
@@ -54,11 +52,10 @@ public abstract class AbstractPagedParser<I extends Item> extends AbstractParser
 				// add all the items to the list
 				items.addAll(pageResult.getItems());
 				
-				// make sure the next url is not null
-				if (null != pageResult.getNextPageUrl())
+				// make sure the next data source is not null
+				if (null != pageResult.getNextDataSource())
 				{
-					// ensure that this url is an absolute url
-					nextUrl = UrlUtil.toAbsoluteURL(pageResult.getNextPageUrl(), getDomain());
+					nextDataSource = pageResult.getNextDataSource();
 				}
 			}
 		}
@@ -66,6 +63,5 @@ public abstract class AbstractPagedParser<I extends Item> extends AbstractParser
 		return items;
 	}
 	
-	protected abstract PageResult<I> parsePage(final String pageUrl, final Date startDate)
-		throws ParserException;
+	protected abstract PageResult<I> parsePage(final DataSource dataSource) throws ParserException;
 }

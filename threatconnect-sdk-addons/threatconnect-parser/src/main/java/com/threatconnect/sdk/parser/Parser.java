@@ -1,27 +1,55 @@
 package com.threatconnect.sdk.parser;
 
-import java.util.Date;
 import java.util.List;
 
-import com.threatconnect.sdk.parser.model.Item;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public interface Parser<I extends Item>
+import com.threatconnect.sdk.parser.model.Item;
+import com.threatconnect.sdk.parser.source.DataSource;
+
+public abstract class Parser<I extends Item>
 {
-	/**
-	 * Parses the data from the source and returns a list of items
-	 * 
-	 * @param startDate
-	 * If startDate is null, there is no date restriction, otherwise, only include records from the
-	 * start date on.
-	 * @return
-	 * @throws ParserException
-	 */
-	public List<I> parseData(Date startDate) throws ParserException;
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
+	
+	private final DataSource dataSource;
+	
+	public Parser(final DataSource dataSource)
+	{
+		// make sure the data source is not null
+		if (null == dataSource)
+		{
+			throw new IllegalArgumentException("dataSource cannot be null");
+		}
+		
+		this.dataSource = dataSource;
+	}
+	
+	public DataSource getDataSource()
+	{
+		return dataSource;
+	}
+	
+	protected Logger getLogger()
+	{
+		return logger;
+	}
 	
 	/**
 	 * Returns a unique user-friendly name to identify this parser.
 	 * 
-	 * @return
+	 * @return the unique name to identify this parser
 	 */
-	public String getUniqueName();
+	public String getUniqueName()
+	{
+		return getClass().getSimpleName();
+	}
+	
+	/**
+	 * Parses the data from the source and returns a list of items
+	 * 
+	 * @return the list of items that were parsed
+	 * @throws ParserException
+	 */
+	public abstract List<I> parseData() throws ParserException;
 }
