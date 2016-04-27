@@ -75,11 +75,16 @@ public abstract class AbstractXMLParser<I extends Item> extends Parser<I>
 		throw new ParserException(cause);
 	}
 	
-	protected Document createDocument(final String xml) throws ParserConfigurationException, SAXException, IOException
+	protected DocumentBuilder createDocumentBuilder() throws ParserConfigurationException
 	{
 		DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
 		domFactory.setNamespaceAware(true);
-		DocumentBuilder builder = domFactory.newDocumentBuilder();
+		return domFactory.newDocumentBuilder();
+	}
+	
+	protected Document createDocument(final String xml) throws ParserConfigurationException, SAXException, IOException
+	{
+		DocumentBuilder builder = createDocumentBuilder();
 		Reader reader = new StringReader(xml);
 		InputSource inputSource = new InputSource(reader);
 		return builder.parse(inputSource);

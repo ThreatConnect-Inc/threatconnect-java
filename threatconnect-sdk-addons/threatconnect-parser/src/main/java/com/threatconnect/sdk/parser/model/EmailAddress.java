@@ -25,4 +25,10 @@ public class EmailAddress extends Indicator
 			this.address = null;
 		}
 	}
+	
+	@Override
+	public String toString()
+	{
+		return getAddress();
+	}
 }

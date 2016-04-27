@@ -36,4 +36,10 @@ public abstract class Group extends Item
 	{
 		return associatedItems;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return getName();
+	}
 }
