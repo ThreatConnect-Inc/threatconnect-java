@@ -13,6 +13,11 @@ public class RegexUtil
 	public static final String REGEX_HOST = "^((https?\\:\\/\\/)?(?:[^@\\/\\n]+@)?([^:\\/\\n]+))";
 	
 	/**
+	 * Matches text that is an email address
+	 */
+	public static final String REGEX_EMAIL = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+	
+	/**
 	 * Matches text that is in the format of an IP address. This does not validate that each octet
 	 * is valid, just simply that it follows an IPv4 format
 	 */

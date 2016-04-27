@@ -5,7 +5,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URLConnection;
-import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -18,20 +17,20 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.threatconnect.sdk.parser.model.Item;
-import com.threatconnect.sdk.parser.result.Result;
+import com.threatconnect.sdk.parser.result.PageResult;
 import com.threatconnect.sdk.parser.source.DataSource;
 
-public abstract class AbstractXMLParser<I extends Item> extends Parser<I>
+public abstract class AbstractPagedXMLParser<I extends Item> extends AbstractPagedParser<I>
 {
 	private Document document;
 	
-	public AbstractXMLParser(final DataSource dataSource)
+	public AbstractPagedXMLParser(final DataSource dataSource)
 	{
 		super(dataSource);
 	}
 	
 	@Override
-	public List<I> parseData() throws ParserException
+	protected PageResult<I> parsePage(DataSource dataSource) throws ParserException
 	{
 		URLConnection connection = null;
 		
@@ -45,7 +44,7 @@ public abstract class AbstractXMLParser<I extends Item> extends Parser<I>
 			document = createDocument(xml);
 			
 			// process the xml document
-			return processXmlDocument(document).getItems();
+			return processXmlDocument(document);
 		}
 		catch (MalformedURLException | ParserConfigurationException | SAXException | XPathExpressionException e)
 		{
@@ -98,6 +97,6 @@ public abstract class AbstractXMLParser<I extends Item> extends Parser<I>
 	 * @return
 	 * @throws ParserException
 	 */
-	protected abstract Result<I> processXmlDocument(Document document)
+	protected abstract PageResult<I> processXmlDocument(Document document)
 		throws ParserException, XPathExpressionException;
 }

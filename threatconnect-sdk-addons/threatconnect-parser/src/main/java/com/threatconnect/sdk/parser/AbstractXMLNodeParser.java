@@ -15,7 +15,7 @@ import com.threatconnect.sdk.parser.result.Result;
 import com.threatconnect.sdk.parser.source.DataSource;
 import com.threatconnect.sdk.parser.util.XPathUtil;
 
-public abstract class AbstractXMLNodeParser<I extends Item> extends AbstractXMLParser<I>
+public abstract class AbstractXMLNodeParser<I extends Item> extends AbstractPagedXMLParser<I>
 {
 	private final String nodeXPath;
 	
