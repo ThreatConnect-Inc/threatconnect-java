@@ -41,14 +41,14 @@ import com.threatconnect.sdk.parser.service.writer.UrlWriter;
  * 
  * @author Greg Marut
  */
-public class SaveApiService implements SaveService
+public class ApiSaveService implements SaveService
 {
-	private static final Logger logger = LoggerFactory.getLogger(SaveApiService.class);
+	private static final Logger logger = LoggerFactory.getLogger(ApiSaveService.class);
 	
 	private final Configuration configuration;
 	private final String ownerName;
 	
-	public SaveApiService(final Configuration configuration, final String ownerName)
+	public ApiSaveService(final Configuration configuration, final String ownerName)
 	{
 		this.configuration = configuration;
 		this.ownerName = ownerName;

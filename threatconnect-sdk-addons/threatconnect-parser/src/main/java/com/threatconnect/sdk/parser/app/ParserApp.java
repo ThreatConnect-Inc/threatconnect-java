@@ -13,7 +13,7 @@ import com.threatconnect.sdk.parser.Parser;
 import com.threatconnect.sdk.parser.ParserException;
 import com.threatconnect.sdk.parser.model.Item;
 import com.threatconnect.sdk.parser.model.ItemType;
-import com.threatconnect.sdk.parser.service.save.SaveApiService;
+import com.threatconnect.sdk.parser.service.save.ApiSaveService;
 import com.threatconnect.sdk.parser.service.save.SaveResults;
 import com.threatconnect.sdk.parser.service.save.SaveService;
 
@@ -210,7 +210,7 @@ public abstract class ParserApp extends App
 	 */
 	protected SaveService getSaveService(final AppConfig appConfig)
 	{
-		return new SaveApiService(getConfiguration(appConfig), null);
+		return new ApiSaveService(getConfiguration(appConfig), null);
 	}
 	
 	/**
