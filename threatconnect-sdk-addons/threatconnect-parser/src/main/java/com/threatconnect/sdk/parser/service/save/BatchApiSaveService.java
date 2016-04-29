@@ -1,7 +1,11 @@
 package com.threatconnect.sdk.parser.service.save;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,11 +23,13 @@ import com.threatconnect.sdk.parser.model.Host;
 import com.threatconnect.sdk.parser.model.Incident;
 import com.threatconnect.sdk.parser.model.Indicator;
 import com.threatconnect.sdk.parser.model.Item;
+import com.threatconnect.sdk.parser.model.ItemType;
 import com.threatconnect.sdk.parser.model.Signature;
 import com.threatconnect.sdk.parser.model.Threat;
 import com.threatconnect.sdk.parser.model.Url;
 import com.threatconnect.sdk.parser.service.writer.AddressWriter;
 import com.threatconnect.sdk.parser.service.writer.AdversaryWriter;
+import com.threatconnect.sdk.parser.service.writer.BatchIndicatorWriter;
 import com.threatconnect.sdk.parser.service.writer.DocumentWriter;
 import com.threatconnect.sdk.parser.service.writer.EmailAddressWriter;
 import com.threatconnect.sdk.parser.service.writer.EmailWriter;
@@ -36,19 +42,14 @@ import com.threatconnect.sdk.parser.service.writer.SignatureWriter;
 import com.threatconnect.sdk.parser.service.writer.ThreatWriter;
 import com.threatconnect.sdk.parser.service.writer.UrlWriter;
 
-/**
- * Responsible for saving the model to the server using the threatconnect sdk
- * 
- * @author Greg Marut
- */
-public class ApiSaveService implements SaveService
+public class BatchApiSaveService implements SaveService
 {
-	private static final Logger logger = LoggerFactory.getLogger(ApiSaveService.class);
+	private static final Logger logger = LoggerFactory.getLogger(BatchApiSaveService.class);
 	
 	private final Configuration configuration;
 	private final String ownerName;
 	
-	public ApiSaveService(final Configuration configuration, final String ownerName)
+	public BatchApiSaveService(final Configuration configuration, final String ownerName)
 	{
 		this.configuration = configuration;
 		this.ownerName = ownerName;
@@ -66,28 +67,79 @@ public class ApiSaveService implements SaveService
 		// create a new connection object from the configuration
 		Connection connection = new Connection(configuration);
 		
-		return saveItems(items, connection);
+		// break the list of items into sets of groups and indicators
+		Set<Group> groups = new HashSet<Group>();
+		Set<Indicator> indicators = new HashSet<Indicator>();
+		seperateGroupsAndIndicators(items, groups, indicators);
+		
+		// save all of the indicators
+		saveIndicators(indicators, connection);
+		
+		// save all of the groups
+		return saveGroups(groups, connection);
 	}
 	
-	/**
-	 * Saves all of the items to the server using the APIs
-	 * 
-	 * @param items
-	 * @param connection
-	 * @throws IOException
-	 */
-	protected SaveResults saveItems(final List<? extends Item> items, final Connection connection) throws IOException
+	protected SaveResults saveGroups(final Collection<Group> groups, final Connection connection) throws IOException
 	{
 		// create a new save result to return
 		SaveResults saveResults = new SaveResults();
 		
 		// for each of the items
-		for (Item item : items)
+		for (Group group : groups)
 		{
-			saveItem(item, ownerName, connection, saveResults);
+			saveItem(group, ownerName, connection, saveResults);
 		}
 		
 		return saveResults;
+	}
+	
+	protected void saveIndicators(final Collection<Indicator> indicators, final Connection connection)
+		throws IOException
+	{
+		// create a new batch indicator writer
+		BatchIndicatorWriter batchIndicatorWriter = new BatchIndicatorWriter(connection, indicators);
+		
+		// save the indicators
+		batchIndicatorWriter.saveIndicators(ownerName);
+	}
+	
+	/**
+	 * Given a list of items, this recursively follows the associated items looking for groups and
+	 * indicators and assigns them to their respective sets
+	 * 
+	 * @param items
+	 * @param groups
+	 * @param indicators
+	 */
+	private void seperateGroupsAndIndicators(final List<? extends Item> items,
+		final Set<Group> groups, final Set<Indicator> indicators)
+	{
+		// for every item in this list
+		for (Item item : items)
+		{
+			if (ItemType.GROUP.equals(item.getItemType()))
+			{
+				final Group group = (Group) item;
+				
+				// add this group
+				if (groups.add(group))
+				{
+					// continue following the associated items
+					seperateGroupsAndIndicators(item.getAssociatedItems(), groups, indicators);
+				}
+			}
+			else if (ItemType.INDICATOR.equals(item.getItemType()))
+			{
+				final Indicator indicator = (Indicator) item;
+				
+				// add this indicator
+				if (indicators.add(indicator))
+				{
+					// continue following the associated items
+					seperateGroupsAndIndicators(item.getAssociatedItems(), groups, indicators);
+				}
+			}
+		}
 	}
 	
 	/**
@@ -112,9 +164,8 @@ public class ApiSaveService implements SaveService
 				case GROUP:
 					saveGroup((Group) item, ownerName, connection, saveResults);
 					break;
+				// the indicators have already been saved in bulk so they can be ignored now
 				case INDICATOR:
-					saveIndicator((Indicator) item, ownerName, connection, saveResults);
-					break;
 				default:
 					break;
 			}
@@ -128,7 +179,7 @@ public class ApiSaveService implements SaveService
 			
 			// this item failed to save so attempt to save the associated items individually if they
 			// exist without the associations
-			SaveResults childItemsSaveResults = saveItems(item.getAssociatedItems(), connection);
+			SaveResults childItemsSaveResults = saveGroups(filterGroups(item.getAssociatedItems()), connection);
 			saveResults.getFailedItems().addAll(childItemsSaveResults.getFailedItems());
 		}
 	}
@@ -223,22 +274,6 @@ public class ApiSaveService implements SaveService
 		return savedGroup;
 	}
 	
-	protected com.threatconnect.sdk.server.entity.Indicator saveIndicator(final Indicator indicator,
-		final String ownerName, final Connection connection, final SaveResults saveResults)
-			throws IOException, SaveItemFailedException
-	{
-		IndicatorWriter<?, ?> writer = getIndicatorWriter(indicator, connection);
-		
-		// save the indicator
-		com.threatconnect.sdk.server.entity.Indicator savedIndicator = writer.saveIndicator(ownerName);
-		
-		// save the associated groups for this indicator
-		saveAssociatedGroups(indicator, ownerName, connection, writer, saveResults);
-		
-		// return the saved indicator
-		return savedIndicator;
-	}
-	
 	/**
 	 * Saves the associated groups for a given indicator
 	 * 
@@ -270,7 +305,8 @@ public class ApiSaveService implements SaveService
 				
 				// this item failed to save so attempt to save the associated items individually if
 				// they exist without the associations
-				SaveResults childItemsSaveResults = saveItems(associatedGroup.getAssociatedItems(), connection);
+				SaveResults childItemsSaveResults =
+					saveGroups(filterGroups(associatedGroup.getAssociatedItems()), connection);
 				saveResults.getFailedItems().addAll(childItemsSaveResults.getFailedItems());
 			}
 			catch (AssociateFailedException e)
@@ -309,7 +345,6 @@ public class ApiSaveService implements SaveService
 						break;
 					case INDICATOR:
 						Indicator associatedIndicator = (Indicator) associatedItem;
-						saveIndicator(associatedIndicator, ownerName, connection, saveResults);
 						writer.associateIndicator(associatedIndicator);
 						break;
 					default:
@@ -325,7 +360,8 @@ public class ApiSaveService implements SaveService
 				
 				// this item failed to save so attempt to save the associated items individually if
 				// they exist without the associations
-				SaveResults childItemsSaveResults = saveItems(associatedItem.getAssociatedItems(), connection);
+				SaveResults childItemsSaveResults =
+					saveGroups(filterGroups(associatedItem.getAssociatedItems()), connection);
 				saveResults.getFailedItems().addAll(childItemsSaveResults.getFailedItems());
 			}
 			catch (AssociateFailedException e)
@@ -333,5 +369,28 @@ public class ApiSaveService implements SaveService
 				logger.warn(e.getMessage(), e);
 			}
 		}
+	}
+	
+	/**
+	 * Given a list of items, this returns only a list of groups and ignores the indicators
+	 * 
+	 * @param items
+	 * @return
+	 */
+	private List<Group> filterGroups(final List<? extends Item> items)
+	{
+		// holds the list of groups
+		List<Group> groups = new ArrayList<Group>();
+		
+		// for each of the items
+		for (Item item : items)
+		{
+			if (ItemType.GROUP.equals(item.getItemType()))
+			{
+				groups.add((Group) item);
+			}
+		}
+		
+		return groups;
 	}
 }
