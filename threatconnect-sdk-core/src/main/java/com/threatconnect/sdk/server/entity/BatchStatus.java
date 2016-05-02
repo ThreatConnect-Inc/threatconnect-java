@@ -21,6 +21,15 @@ public class BatchStatus
 	@XmlElement(name = "id", required = false)
 	private Integer id;
 	
+	@XmlElement(name = "errorCount", required = false)
+	private Integer errorCount;
+	
+	@XmlElement(name = "successCount", required = false)
+	private Integer successCount;
+	
+	@XmlElement(name = "unprocessCount", required = false)
+	private Integer unprocessCount;
+	
 	public enum Status
 	{
 		Created,
@@ -33,10 +42,13 @@ public class BatchStatus
 	{
 	}
 	
-	public BatchStatus(Status status, Integer id)
+	public BatchStatus(Status status, Integer id, Integer errorCount, Integer successCount, Integer unprocessCount)
 	{
 		this.status = status;
 		this.id = id;
+		this.errorCount = errorCount;
+		this.successCount = successCount;
+		this.unprocessCount = unprocessCount;
 	}
 	
 	public Status getStatus()
@@ -57,5 +69,35 @@ public class BatchStatus
 	public void setId(Integer id)
 	{
 		this.id = id;
+	}
+	
+	public Integer getErrorCount()
+	{
+		return errorCount;
+	}
+	
+	public void setErrorCount(Integer errorCount)
+	{
+		this.errorCount = errorCount;
+	}
+	
+	public Integer getSuccessCount()
+	{
+		return successCount;
+	}
+	
+	public void setSuccessCount(Integer successCount)
+	{
+		this.successCount = successCount;
+	}
+	
+	public Integer getUnprocessCount()
+	{
+		return unprocessCount;
+	}
+	
+	public void setUnprocessCount(Integer unprocessCount)
+	{
+		this.unprocessCount = unprocessCount;
 	}
 }

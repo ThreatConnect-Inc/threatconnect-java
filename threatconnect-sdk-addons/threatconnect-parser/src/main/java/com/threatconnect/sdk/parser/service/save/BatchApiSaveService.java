@@ -60,6 +60,9 @@ public class BatchApiSaveService implements SaveService
 	 * 
 	 * @param items
 	 * @throws IOException
+	 * Signals that an I/O exception of some sort has occurred. This
+	 * class is the general class of exceptions produced by failed or
+	 * interrupted I/O operations.
 	 */
 	@Override
 	public SaveResults saveItems(final List<? extends Item> items) throws IOException
@@ -96,11 +99,18 @@ public class BatchApiSaveService implements SaveService
 	protected void saveIndicators(final Collection<Indicator> indicators, final Connection connection)
 		throws IOException
 	{
-		// create a new batch indicator writer
-		BatchIndicatorWriter batchIndicatorWriter = new BatchIndicatorWriter(connection, indicators);
-		
-		// save the indicators
-		batchIndicatorWriter.saveIndicators(ownerName);
+		try
+		{
+			// create a new batch indicator writer
+			BatchIndicatorWriter batchIndicatorWriter = new BatchIndicatorWriter(connection, indicators);
+			
+			// save the indicators
+			batchIndicatorWriter.saveIndicators(ownerName);
+		}
+		catch (SaveItemFailedException e)
+		{
+			logger.warn(e.getMessage(), e);
+		}
 	}
 	
 	/**
@@ -150,6 +160,9 @@ public class BatchApiSaveService implements SaveService
 	 * @param connection
 	 * @param saveResults
 	 * @throws IOException
+	 * Signals that an I/O exception of some sort has occurred. This
+	 * class is the general class of exceptions produced by failed or
+	 * interrupted I/O operations.
 	 * @throws SaveItemFailedException
 	 */
 	protected void saveItem(final Item item, final String ownerName, final Connection connection,
@@ -175,12 +188,12 @@ public class BatchApiSaveService implements SaveService
 			logger.warn(e.getMessage(), e);
 			
 			// add this item to the list of failed saves
-			saveResults.getFailedItems().add(item);
+			saveResults.addFailedItems(item);
 			
 			// this item failed to save so attempt to save the associated items individually if they
 			// exist without the associations
 			SaveResults childItemsSaveResults = saveGroups(filterGroups(item.getAssociatedItems()), connection);
-			saveResults.getFailedItems().addAll(childItemsSaveResults.getFailedItems());
+			saveResults.addFailedItems(childItemsSaveResults.getFailedItems());
 		}
 	}
 	
@@ -282,6 +295,9 @@ public class BatchApiSaveService implements SaveService
 	 * @param connection
 	 * @param writer
 	 * @throws IOException
+	 * Signals that an I/O exception of some sort has occurred. This
+	 * class is the general class of exceptions produced by failed or
+	 * interrupted I/O operations.
 	 * @throws SaveItemFailedException
 	 */
 	protected void saveAssociatedGroups(final Indicator indicator, final String ownerName, final Connection connection,
@@ -301,13 +317,13 @@ public class BatchApiSaveService implements SaveService
 				logger.warn(e.getMessage(), e);
 				
 				// add to the list of failed items
-				saveResults.getFailedItems().add(associatedGroup);
+				saveResults.addFailedItems(associatedGroup);
 				
 				// this item failed to save so attempt to save the associated items individually if
 				// they exist without the associations
 				SaveResults childItemsSaveResults =
 					saveGroups(filterGroups(associatedGroup.getAssociatedItems()), connection);
-				saveResults.getFailedItems().addAll(childItemsSaveResults.getFailedItems());
+				saveResults.addFailedItems(childItemsSaveResults.getFailedItems());
 			}
 			catch (AssociateFailedException e)
 			{
@@ -325,6 +341,9 @@ public class BatchApiSaveService implements SaveService
 	 * @param writer
 	 * @param saveResults
 	 * @throws IOException
+	 * Signals that an I/O exception of some sort has occurred. This
+	 * class is the general class of exceptions produced by failed or
+	 * interrupted I/O operations.
 	 */
 	protected void saveAssociatedItems(final Group group, final String ownerName, final Connection connection,
 		GroupWriter<?, ?> writer, final SaveResults saveResults) throws IOException
@@ -356,13 +375,13 @@ public class BatchApiSaveService implements SaveService
 				logger.warn(e.getMessage(), e);
 				
 				// add to the list of failed items
-				saveResults.getFailedItems().add(associatedItem);
+				saveResults.addFailedItems(associatedItem);
 				
 				// this item failed to save so attempt to save the associated items individually if
 				// they exist without the associations
 				SaveResults childItemsSaveResults =
 					saveGroups(filterGroups(associatedItem.getAssociatedItems()), connection);
-				saveResults.getFailedItems().addAll(childItemsSaveResults.getFailedItems());
+				saveResults.addFailedItems(childItemsSaveResults.getFailedItems());
 			}
 			catch (AssociateFailedException e)
 			{

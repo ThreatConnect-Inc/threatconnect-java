@@ -50,6 +50,7 @@ public abstract class Parser<I extends Item>
 	 * 
 	 * @return the list of items that were parsed
 	 * @throws ParserException
+	 * indicates that a parser was unable to complete parsing the source data
 	 */
 	public abstract List<I> parseData() throws ParserException;
 }

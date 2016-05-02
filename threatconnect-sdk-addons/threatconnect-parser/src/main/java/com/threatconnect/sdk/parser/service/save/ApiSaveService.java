@@ -59,6 +59,9 @@ public class ApiSaveService implements SaveService
 	 * 
 	 * @param items
 	 * @throws IOException
+	 * Signals that an I/O exception of some sort has occurred. This
+	 * class is the general class of exceptions produced by failed or
+	 * interrupted I/O operations.
 	 */
 	@Override
 	public SaveResults saveItems(final List<? extends Item> items) throws IOException
@@ -75,6 +78,9 @@ public class ApiSaveService implements SaveService
 	 * @param items
 	 * @param connection
 	 * @throws IOException
+	 * Signals that an I/O exception of some sort has occurred. This
+	 * class is the general class of exceptions produced by failed or
+	 * interrupted I/O operations.
 	 */
 	protected SaveResults saveItems(final List<? extends Item> items, final Connection connection) throws IOException
 	{
@@ -124,12 +130,12 @@ public class ApiSaveService implements SaveService
 			logger.warn(e.getMessage(), e);
 			
 			// add this item to the list of failed saves
-			saveResults.getFailedItems().add(item);
+			saveResults.addFailedItems(item);
 			
 			// this item failed to save so attempt to save the associated items individually if they
 			// exist without the associations
 			SaveResults childItemsSaveResults = saveItems(item.getAssociatedItems(), connection);
-			saveResults.getFailedItems().addAll(childItemsSaveResults.getFailedItems());
+			saveResults.addFailedItems(childItemsSaveResults.getFailedItems());
 		}
 	}
 	
@@ -247,6 +253,9 @@ public class ApiSaveService implements SaveService
 	 * @param connection
 	 * @param writer
 	 * @throws IOException
+	 * Signals that an I/O exception of some sort has occurred. This
+	 * class is the general class of exceptions produced by failed or
+	 * interrupted I/O operations.
 	 * @throws SaveItemFailedException
 	 */
 	protected void saveAssociatedGroups(final Indicator indicator, final String ownerName, final Connection connection,
@@ -266,12 +275,12 @@ public class ApiSaveService implements SaveService
 				logger.warn(e.getMessage(), e);
 				
 				// add to the list of failed items
-				saveResults.getFailedItems().add(associatedGroup);
+				saveResults.addFailedItems(associatedGroup);
 				
 				// this item failed to save so attempt to save the associated items individually if
 				// they exist without the associations
 				SaveResults childItemsSaveResults = saveItems(associatedGroup.getAssociatedItems(), connection);
-				saveResults.getFailedItems().addAll(childItemsSaveResults.getFailedItems());
+				saveResults.addFailedItems(childItemsSaveResults.getFailedItems());
 			}
 			catch (AssociateFailedException e)
 			{
@@ -289,6 +298,9 @@ public class ApiSaveService implements SaveService
 	 * @param writer
 	 * @param saveResults
 	 * @throws IOException
+	 * Signals that an I/O exception of some sort has occurred. This
+	 * class is the general class of exceptions produced by failed or
+	 * interrupted I/O operations.
 	 */
 	protected void saveAssociatedItems(final Group group, final String ownerName, final Connection connection,
 		GroupWriter<?, ?> writer, final SaveResults saveResults) throws IOException
@@ -321,12 +333,12 @@ public class ApiSaveService implements SaveService
 				logger.warn(e.getMessage(), e);
 				
 				// add to the list of failed items
-				saveResults.getFailedItems().add(associatedItem);
+				saveResults.addFailedItems(associatedItem);
 				
 				// this item failed to save so attempt to save the associated items individually if
 				// they exist without the associations
 				SaveResults childItemsSaveResults = saveItems(associatedItem.getAssociatedItems(), connection);
-				saveResults.getFailedItems().addAll(childItemsSaveResults.getFailedItems());
+				saveResults.addFailedItems(childItemsSaveResults.getFailedItems());
 			}
 			catch (AssociateFailedException e)
 			{

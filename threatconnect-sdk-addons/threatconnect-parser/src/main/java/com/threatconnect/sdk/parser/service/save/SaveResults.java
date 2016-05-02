@@ -1,33 +1,74 @@
 package com.threatconnect.sdk.parser.service.save;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.threatconnect.sdk.parser.model.Item;
 import com.threatconnect.sdk.parser.model.ItemType;
 
 public class SaveResults
 {
-	private final List<Item> failedItems;
+	// holds the map that counts the failed items by type
+	private final Map<ItemType, Integer> failedItems;
 	
 	public SaveResults()
 	{
-		failedItems = new ArrayList<Item>();
+		failedItems = new HashMap<ItemType, Integer>();
 	}
 	
-	/**
-	 * Returns the list of items that failed to save
-	 * 
-	 * @return the list of failed items
-	 */
-	public List<Item> getFailedItems()
+	public Map<ItemType, Integer> getFailedItems()
 	{
 		return failedItems;
 	}
 	
+	public void addFailedItems(final Map<ItemType, Integer> failedItems)
+	{
+		synchronized (failedItems)
+		{
+			// for each of the failed items
+			for (Entry<ItemType, Integer> failedItem : failedItems.entrySet())
+			{
+				// update the total number of failed items for this type
+				Integer count = failedItems.get(failedItem.getKey());
+				this.failedItems.put(failedItem.getKey(),
+					(null != count ? count + failedItem.getValue() : failedItem.getValue()));
+			}
+		}
+	}
+	
+	public void addFailedItems(final Item... items)
+	{
+		// for each of the items in the list
+		for (Item item : items)
+		{
+			addFailedItems(item.getItemType(), 1);
+		}
+	}
+	
+	public void addFailedItems(final ItemType itemType, final int total)
+	{
+		synchronized (failedItems)
+		{
+			// update the total number of failed items for this type
+			Integer count = failedItems.get(itemType);
+			failedItems.put(itemType, (null != count ? count + total : total));
+		}
+	}
+	
 	public boolean isSuccessfully()
 	{
-		return failedItems.isEmpty();
+		for (ItemType itemType : ItemType.values())
+		{
+			if (countFailedItems(itemType) > 0)
+			{
+				// this item had a count greater than 0 so therefore, it is not successful
+				return false;
+			}
+		}
+		
+		// no items had a count greater than 0
+		return true;
 	}
 	
 	/**
@@ -39,19 +80,15 @@ public class SaveResults
 	 */
 	public int countFailedItems(final ItemType itemType)
 	{
-		int count = 0;
+		Integer count = failedItems.get(itemType);
 		
-		// for each of the items
-		for (Item item : failedItems)
+		if (null != count)
 		{
-			// check to see if this item is of the correct type
-			if (item.getItemType().equals(itemType))
-			{
-				// increment the count
-				count++;
-			}
+			return count;
 		}
-		
-		return count;
+		else
+		{
+			return 0;
+		}
 	}
 }
