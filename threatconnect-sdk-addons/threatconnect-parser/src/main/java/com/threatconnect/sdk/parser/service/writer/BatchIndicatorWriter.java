@@ -37,13 +37,26 @@ public class BatchIndicatorWriter extends Writer
 		AbstractBatchWriterAdapter<com.threatconnect.sdk.server.entity.Indicator> batchWriterAdapter =
 			createWriterAdapter();
 			
-		ApiEntitySingleResponse response =
-			batchWriterAdapter.create(new BatchConfig(false, AttributeWriteType.Replace, Action.Create), ownerName);
+		ApiEntitySingleResponse<Integer, ?> batchConfigResponse =
+			batchWriterAdapter.create(new BatchConfig(false, AttributeWriteType.Replace, Action.Create, ownerName));
 			
-		// check to see if the reponse was successful
-		if (response.isSuccess())
+		// check to see if the response was successful
+		if (batchConfigResponse.isSuccess())
 		{
-		
+			// retrieve the batch id and upload the file
+			int batchID = batchConfigResponse.getItem();
+			ApiEntitySingleResponse<?, ?> batchUploadResponse =
+				batchWriterAdapter.uploadFile(batchID, jsonToInputStream(json));
+				
+			// check to see if the response was successful
+			if (batchUploadResponse.isSuccess())
+			{
+			
+			}
+			else
+			{
+			
+			}
 		}
 		else
 		{

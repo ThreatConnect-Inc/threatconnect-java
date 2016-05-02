@@ -1,6 +1,7 @@
 package com.threatconnect.sdk.client.writer;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +38,6 @@ public class DocumentWriterAdapter extends AbstractGroupWriterAdapter<Document>
     {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("id", uniqueId);
-        return uploadFile("v2.documents.upload", DocumentResponse.class, ownerName, file, paramMap);
+        return uploadFile("v2.documents.upload", DocumentResponse.class, ownerName, new FileInputStream(file), paramMap);
     }
 }

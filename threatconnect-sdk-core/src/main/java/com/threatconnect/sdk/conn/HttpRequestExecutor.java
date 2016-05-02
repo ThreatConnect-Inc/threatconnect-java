@@ -5,8 +5,11 @@
  */
 package com.threatconnect.sdk.conn;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.threatconnect.sdk.util.StringUtil;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
@@ -16,17 +19,12 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.ContentType;
-import org.apache.http.entity.FileEntity;
+import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.logging.Level;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.threatconnect.sdk.util.StringUtil;
 
 /**
  *
@@ -154,7 +152,7 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 
 
     @Override
-    public String executeUploadByteStream(String path, File file) throws IOException
+    public String executeUploadByteStream(String path, InputStream inputStream) throws IOException
     {
         if (this.conn.getConfig() == null) {
             throw new IllegalStateException("Can't execute HTTP request when configuration is undefined.");
@@ -164,7 +162,7 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 
         logger.trace("Calling POST: " + fullPath);
         HttpPost httpBase = new HttpPost(fullPath);
-        httpBase.setEntity(new FileEntity(file));
+        httpBase.setEntity(new InputStreamEntity(inputStream));
         String headerPath = httpBase.getURI().getRawPath() + "?" + httpBase.getURI().getRawQuery();
         ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), headerPath, ContentType.APPLICATION_OCTET_STREAM.toString());
 
