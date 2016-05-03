@@ -1,16 +1,118 @@
 package com.threatconnect.sdk.parser.service.bulk;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
+import org.apache.commons.lang3.NotImplementedException;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.threatconnect.sdk.parser.model.Address;
 import com.threatconnect.sdk.parser.model.Attribute;
+import com.threatconnect.sdk.parser.model.EmailAddress;
+import com.threatconnect.sdk.parser.model.Host;
 import com.threatconnect.sdk.parser.model.Indicator;
 import com.threatconnect.sdk.parser.model.IndicatorType;
+import com.threatconnect.sdk.parser.model.Url;
 
 public class BulkIndicatorConverter
 {
-	public JsonObject convertToJson(final Collection<Indicator> indicators)
+	public List<Indicator> convertToIndicators(final JsonObject jsonObject)
+	{
+		// holds the list of indicators to return
+		List<Indicator> indicators = new ArrayList<Indicator>();
+		
+		JsonArray indicatorsJsonArray = jsonObject.get("indicator").getAsJsonArray();
+		
+		// for each object in the json array
+		for (JsonElement indicatorElement : indicatorsJsonArray)
+		{
+			// create the indicator
+			JsonObject indicatorObject = indicatorElement.getAsJsonObject();
+			Indicator indicator = convertToIndicator(indicatorObject);
+			
+			// copy the rating and confidence
+			indicator.setRating(indicatorObject.get("rating").getAsDouble());
+			indicator.setConfidence(indicatorObject.get("confidence").getAsDouble());
+			
+			// check to see if there are tags
+			JsonElement tagElement = indicatorObject.get("tag");
+			if (null != tagElement)
+			{
+				// for each of the tags
+				JsonArray tags = tagElement.getAsJsonArray();
+				for (JsonElement tag : tags)
+				{
+					indicator.getTags().add(tag.getAsJsonObject().get("name").getAsString());
+				}
+			}
+			
+			// check to see if there are attributes
+			JsonElement attributeElement = indicatorObject.get("attribute");
+			if (null != attributeElement)
+			{
+				// for each of the attributes
+				JsonArray attributes = attributeElement.getAsJsonArray();
+				for (JsonElement attribute : attributes)
+				{
+					indicator.getAttributes().add(convertToAttribute(attribute.getAsJsonObject()));
+				}
+			}
+			
+			indicators.add(indicator);
+		}
+		
+		return indicators;
+	}
+	
+	public Indicator convertToIndicator(final JsonObject indicatorObject)
+	{
+		final String indicatorType = indicatorObject.get("type").getAsString();
+		
+		if (null == indicatorType)
+		{
+			throw new IllegalArgumentException("indicatorType cannot be null");
+		}
+		
+		final String summary = indicatorObject.get("summary").getAsString();
+		switch (indicatorType)
+		{
+			case "Address":
+				Address address = new Address();
+				address.setIp(summary);
+				return address;
+			case "EmailAddress":
+				EmailAddress emailAddress = new EmailAddress();
+				emailAddress.setAddress(summary);
+				return emailAddress;
+			case "File":
+				// :FIXME: finish this
+				throw new NotImplementedException("Need to know what file summary looks like");
+			case "Host":
+				Host host = new Host();
+				host.setHostName(summary);
+				return host;
+			case "Url":
+				Url url = new Url();
+				url.setText(summary);
+				return url;
+			default:
+				throw new IllegalArgumentException(indicatorType + "is not a valid indicatorType");
+		}
+	}
+	
+	public Attribute convertToAttribute(final JsonObject jsonObject)
+	{
+		Attribute attribute = new Attribute();
+		attribute.setType(jsonObject.get("type").getAsString());
+		attribute.setValue(jsonObject.get("value").getAsString());
+		
+		return attribute;
+	}
+	
+	public JsonObject convertToJson(final Collection<? extends Indicator> indicators)
 	{
 		// create the root indicator json object
 		JsonObject indicatorJsonObject = new JsonObject();

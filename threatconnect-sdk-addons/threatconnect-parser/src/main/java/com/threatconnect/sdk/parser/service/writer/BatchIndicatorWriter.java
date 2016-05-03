@@ -43,6 +43,17 @@ public class BatchIndicatorWriter extends Writer
 	
 	public SaveResults saveIndicators(final String ownerName) throws SaveItemFailedException, IOException
 	{
+		return writeIndicators(ownerName, Action.Create);
+	}
+	
+	public SaveResults deleteIndicators(final String ownerName) throws SaveItemFailedException, IOException
+	{
+		return writeIndicators(ownerName, Action.Delete);
+	}
+	
+	private SaveResults writeIndicators(final String ownerName, final Action action)
+		throws SaveItemFailedException, IOException
+	{
 		try
 		{
 			// create a new bulk indicator converter
@@ -56,7 +67,7 @@ public class BatchIndicatorWriter extends Writer
 				createReaderAdapter();
 				
 			ApiEntitySingleResponse<Integer, ?> batchConfigResponse =
-				batchWriterAdapter.create(new BatchConfig(false, AttributeWriteType.Replace, Action.Create, ownerName));
+				batchWriterAdapter.create(new BatchConfig(false, AttributeWriteType.Replace, action, ownerName));
 				
 			// check to see if the response was successful
 			if (batchConfigResponse.isSuccess())

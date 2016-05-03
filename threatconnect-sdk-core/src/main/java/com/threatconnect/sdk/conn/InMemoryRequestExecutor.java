@@ -27,6 +27,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.http.entity.ContentType;
+
 /**
  *
  * @author dtineo
@@ -51,7 +53,7 @@ public class InMemoryRequestExecutor extends AbstractRequestExecutor
     }
 
     @Override
-    public InputStream executeDownloadByteStream(String path) throws IOException
+    public InputStream executeDownloadByteStream(String path, ContentType contentType) throws IOException
     {
         return null;
     }

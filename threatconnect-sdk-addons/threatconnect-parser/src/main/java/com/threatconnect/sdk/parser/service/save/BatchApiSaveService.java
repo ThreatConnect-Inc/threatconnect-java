@@ -46,8 +46,8 @@ public class BatchApiSaveService implements SaveService
 {
 	private static final Logger logger = LoggerFactory.getLogger(BatchApiSaveService.class);
 	
-	private final Configuration configuration;
-	private final String ownerName;
+	protected final Configuration configuration;
+	protected final String ownerName;
 	
 	public BatchApiSaveService(final Configuration configuration, final String ownerName)
 	{
@@ -110,6 +110,26 @@ public class BatchApiSaveService implements SaveService
 			
 			// save the indicators
 			return batchIndicatorWriter.saveIndicators(ownerName);
+		}
+		catch (SaveItemFailedException e)
+		{
+			logger.warn(e.getMessage(), e);
+			SaveResults saveResults = new SaveResults();
+			saveResults.addFailedItems(ItemType.INDICATOR, indicators.size());
+			return saveResults;
+		}
+	}
+	
+	protected SaveResults deleteIndicators(final Collection<Indicator> indicators, final Connection connection)
+		throws IOException
+	{
+		try
+		{
+			// create a new batch indicator writer
+			BatchIndicatorWriter batchIndicatorWriter = new BatchIndicatorWriter(connection, indicators);
+			
+			// delete the indicators
+			return batchIndicatorWriter.deleteIndicators(ownerName);
 		}
 		catch (SaveItemFailedException e)
 		{
