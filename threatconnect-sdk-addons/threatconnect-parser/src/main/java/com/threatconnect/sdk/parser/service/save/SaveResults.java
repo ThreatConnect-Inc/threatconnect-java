@@ -22,6 +22,11 @@ public class SaveResults
 		return failedItems;
 	}
 	
+	public void addFailedItems(final SaveResults saveResults)
+	{
+		addFailedItems(saveResults.getFailedItems());
+	}
+	
 	public void addFailedItems(final Map<ItemType, Integer> failedItems)
 	{
 		synchronized (failedItems)

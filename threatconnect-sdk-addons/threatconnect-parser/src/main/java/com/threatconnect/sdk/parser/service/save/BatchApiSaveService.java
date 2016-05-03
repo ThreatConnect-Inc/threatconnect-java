@@ -70,16 +70,20 @@ public class BatchApiSaveService implements SaveService
 		// create a new connection object from the configuration
 		Connection connection = new Connection(configuration);
 		
+		SaveResults saveResults = new SaveResults();
+		
 		// break the list of items into sets of groups and indicators
 		Set<Group> groups = new HashSet<Group>();
 		Set<Indicator> indicators = new HashSet<Indicator>();
 		seperateGroupsAndIndicators(items, groups, indicators);
 		
 		// save all of the indicators
-		saveIndicators(indicators, connection);
+		saveResults.addFailedItems(saveIndicators(indicators, connection));
 		
 		// save all of the groups
-		return saveGroups(groups, connection);
+		saveResults.addFailedItems(saveGroups(groups, connection));
+		
+		return saveResults;
 	}
 	
 	protected SaveResults saveGroups(final Collection<Group> groups, final Connection connection) throws IOException
@@ -96,7 +100,7 @@ public class BatchApiSaveService implements SaveService
 		return saveResults;
 	}
 	
-	protected void saveIndicators(final Collection<Indicator> indicators, final Connection connection)
+	protected SaveResults saveIndicators(final Collection<Indicator> indicators, final Connection connection)
 		throws IOException
 	{
 		try
@@ -105,11 +109,14 @@ public class BatchApiSaveService implements SaveService
 			BatchIndicatorWriter batchIndicatorWriter = new BatchIndicatorWriter(connection, indicators);
 			
 			// save the indicators
-			batchIndicatorWriter.saveIndicators(ownerName);
+			return batchIndicatorWriter.saveIndicators(ownerName);
 		}
 		catch (SaveItemFailedException e)
 		{
 			logger.warn(e.getMessage(), e);
+			SaveResults saveResults = new SaveResults();
+			saveResults.addFailedItems(ItemType.INDICATOR, indicators.size());
+			return saveResults;
 		}
 	}
 	
