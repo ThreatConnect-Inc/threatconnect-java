@@ -68,6 +68,9 @@ public class AppPackageMojo extends AbstractMojo
 			// copy the attributes json file if it exists
 			copyFileToDirectoryIfExists(getAttributesCsvFile(), explodedDir);
 			
+			// copy all of the files in the include folder
+			copyFileToDirectoryIfExists(getIncludeFolder(), explodedDir);
+			
 			// copy the log4j files
 			FileUtils.copyStreamToFile(new RawInputStreamFacade(log4jssl), new File(log4jDir + "/log4j-ssl.xml"));
 			FileUtils.copyStreamToFile(new RawInputStreamFacade(log4jnossl), new File(log4jDir + "/log4j-nossl.xml"));
@@ -94,6 +97,11 @@ public class AppPackageMojo extends AbstractMojo
 	protected File getAttributesCsvFile()
 	{
 		return new File(baseDirectory + "/attributes.csv");
+	}
+	
+	protected File getIncludeFolder()
+	{
+		return new File(baseDirectory + "/include");
 	}
 	
 	/**
@@ -146,12 +154,47 @@ public class AppPackageMojo extends AbstractMojo
 	 * @param destinationDirectory
 	 * @throws IOException
 	 */
-	protected void copyFileToDirectoryIfExists(final File source, final File destinationDirectory) throws IOException
+	protected void copyFileToDirectoryIfExists(final File source, final File destinationDirectory)
+		throws IOException
 	{
 		// check to see if the source file exists
 		if (source.exists())
 		{
-			FileUtils.copyFileToDirectory(source, destinationDirectory);
+			// check to see if this is a directory
+			if (source.isDirectory())
+			{
+				// for each of the files
+				for (File file : source.listFiles())
+				{
+					// check to see if this file is a directory
+					if (file.isDirectory())
+					{
+						// create the new destination folder
+						final File destination =
+							new File(destinationDirectory.getAbsoluteFile() + File.separator + file.getName());
+							
+						// recursively copy this file
+						copyFileToDirectoryIfExists(file, destination);
+					}
+					else
+					{
+						// recursively copy this file
+						copyFileToDirectoryIfExists(file, destinationDirectory);
+					}
+				}
+			}
+			else
+			{
+				// check to see if the destination directory does not exist
+				if (!destinationDirectory.exists())
+				{
+					// make all the directories as needed
+					destinationDirectory.mkdirs();
+				}
+				
+				// copy this file to the destination directory
+				FileUtils.copyFileToDirectory(source, destinationDirectory);
+			}
 		}
 	}
 	
