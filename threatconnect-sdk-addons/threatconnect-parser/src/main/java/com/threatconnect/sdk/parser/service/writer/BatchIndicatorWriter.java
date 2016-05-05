@@ -1,6 +1,7 @@
 package com.threatconnect.sdk.parser.service.writer;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
@@ -9,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.threatconnect.sdk.client.reader.BatchReaderAdapter;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
@@ -43,22 +45,34 @@ public class BatchIndicatorWriter extends Writer
 	
 	public SaveResults saveIndicators(final String ownerName) throws SaveItemFailedException, IOException
 	{
-		return writeIndicators(ownerName, Action.Create);
+		return writeIndicators(ownerName, AttributeWriteType.Replace, Action.Create);
+	}
+	
+	public SaveResults saveIndicators(final String ownerName, final AttributeWriteType attributeWriteType)
+		throws SaveItemFailedException, IOException
+	{
+		return writeIndicators(ownerName, attributeWriteType, Action.Create);
 	}
 	
 	public SaveResults deleteIndicators(final String ownerName) throws SaveItemFailedException, IOException
 	{
-		return writeIndicators(ownerName, Action.Delete);
+		return writeIndicators(ownerName, AttributeWriteType.Replace, Action.Delete);
 	}
 	
-	private SaveResults writeIndicators(final String ownerName, final Action action)
-		throws SaveItemFailedException, IOException
+	private SaveResults writeIndicators(final String ownerName, final AttributeWriteType attributeWriteType,
+		final Action action) throws SaveItemFailedException, IOException
 	{
 		try
 		{
 			// create a new bulk indicator converter
 			BulkIndicatorConverter converter = new BulkIndicatorConverter();
 			JsonElement json = converter.convertToJson(source);
+			
+			if (logger.isTraceEnabled())
+			{
+				logger.trace("Uploading Json Document:");
+				logger.trace(new GsonBuilder().setPrettyPrinting().create().toJson(json));
+			}
 			
 			// create the reader/writer adapter
 			AbstractBatchWriterAdapter<com.threatconnect.sdk.server.entity.Indicator> batchWriterAdapter =
@@ -67,7 +81,7 @@ public class BatchIndicatorWriter extends Writer
 				createReaderAdapter();
 				
 			ApiEntitySingleResponse<Integer, ?> batchConfigResponse =
-				batchWriterAdapter.create(new BatchConfig(false, AttributeWriteType.Replace, action, ownerName));
+				batchWriterAdapter.create(new BatchConfig(false, attributeWriteType, action, ownerName));
 				
 			// check to see if the response was successful
 			if (batchConfigResponse.isSuccess())
@@ -114,6 +128,14 @@ public class BatchIndicatorWriter extends Writer
 					// make sure the response is not null
 					if (null != batchStatusResponse)
 					{
+						// check to see if there are errors
+						if (batchStatusResponse.getItem().getErrorCount() > 0)
+						{
+							ByteArrayOutputStream baos = new ByteArrayOutputStream();
+							batchReaderAdapter.downloadErrors(batchID, ownerName, baos);
+							logger.warn(new String(baos.toByteArray()));
+						}
+						
 						// create a new save result
 						SaveResults saveResults = new SaveResults();
 						saveResults.addFailedItems(ItemType.INDICATOR, batchStatusResponse.getItem().getErrorCount());

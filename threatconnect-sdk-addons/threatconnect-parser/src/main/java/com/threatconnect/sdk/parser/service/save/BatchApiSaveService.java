@@ -41,6 +41,7 @@ import com.threatconnect.sdk.parser.service.writer.IndicatorWriter;
 import com.threatconnect.sdk.parser.service.writer.SignatureWriter;
 import com.threatconnect.sdk.parser.service.writer.ThreatWriter;
 import com.threatconnect.sdk.parser.service.writer.UrlWriter;
+import com.threatconnect.sdk.server.entity.BatchConfig.AttributeWriteType;
 
 public class BatchApiSaveService implements SaveService
 {
@@ -103,13 +104,19 @@ public class BatchApiSaveService implements SaveService
 	protected SaveResults saveIndicators(final Collection<Indicator> indicators, final Connection connection)
 		throws IOException
 	{
+		return saveIndicators(indicators, connection, AttributeWriteType.Replace);
+	}
+	
+	protected SaveResults saveIndicators(final Collection<Indicator> indicators, final Connection connection,
+		final AttributeWriteType attributeWriteType) throws IOException
+	{
 		try
 		{
 			// create a new batch indicator writer
 			BatchIndicatorWriter batchIndicatorWriter = new BatchIndicatorWriter(connection, indicators);
 			
 			// save the indicators
-			return batchIndicatorWriter.saveIndicators(ownerName);
+			return batchIndicatorWriter.saveIndicators(ownerName, attributeWriteType);
 		}
 		catch (SaveItemFailedException e)
 		{

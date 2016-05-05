@@ -29,13 +29,13 @@ public class SaveResults
 	
 	public void addFailedItems(final Map<ItemType, Integer> failedItems)
 	{
-		synchronized (failedItems)
+		synchronized (this.failedItems)
 		{
 			// for each of the failed items
 			for (Entry<ItemType, Integer> failedItem : failedItems.entrySet())
 			{
 				// update the total number of failed items for this type
-				Integer count = failedItems.get(failedItem.getKey());
+				Integer count = this.failedItems.get(failedItem.getKey());
 				this.failedItems.put(failedItem.getKey(),
 					(null != count ? count + failedItem.getValue() : failedItem.getValue()));
 			}
