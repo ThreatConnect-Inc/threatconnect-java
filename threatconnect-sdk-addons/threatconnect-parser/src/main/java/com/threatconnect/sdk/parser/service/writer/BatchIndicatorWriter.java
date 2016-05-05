@@ -65,6 +65,7 @@ public class BatchIndicatorWriter extends Writer
 		try
 		{
 			// create a new bulk indicator converter
+			logger.trace("Marshalling indicator list to JSON");
 			BulkIndicatorConverter converter = new BulkIndicatorConverter();
 			JsonElement json = converter.convertToJson(source);
 			
