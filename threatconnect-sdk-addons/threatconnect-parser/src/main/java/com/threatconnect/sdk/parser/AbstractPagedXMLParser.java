@@ -37,13 +37,17 @@ public abstract class AbstractPagedXMLParser<I extends Item> extends AbstractPag
 		try
 		{
 			// read the xml as a string and allow any xml preproccessing if needed
+			logger.trace("Loading XML DataSource as a string");
 			String rawXML = IOUtils.toString(getDataSource().read());
+			logger.trace("Preprocessing raw XML String");
 			String xml = preProcessXML(rawXML);
 			
 			// create a document from the processed xml
+			logger.trace("Converting the XML String to an XML Document object");
 			document = createDocument(xml);
 			
 			// process the xml document
+			logger.trace("Processing XML Document");
 			return processXmlDocument(document);
 		}
 		catch (MalformedURLException | ParserConfigurationException | SAXException | XPathExpressionException e)
