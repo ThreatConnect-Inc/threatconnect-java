@@ -15,6 +15,7 @@ public final class AppConfig
 	public static final String TC_LOG_PATH = "tc_log_path";
 	public static final String TC_TEMP_PATH = "tc_temp_path";
 	public static final String TC_OUT_PATH = "tc_out_path";
+	public static final String TC_IN_PATH = "tc_in_path";
 	public static final String TC_API_PATH = "tc_api_path";
 	public static final String TC_SPACE_ELEMENT_ID = "tc_space_element_id";
 	public static final String TC_API_ACCESS_ID = "api_access_id";
@@ -62,6 +63,11 @@ public final class AppConfig
 	public String getTcOutPath()
 	{
 		return getString(TC_OUT_PATH);
+	}
+	
+	public String getTcInPath()
+	{
+		return getString(TC_IN_PATH);
 	}
 	
 	public String getTcApiPath()
