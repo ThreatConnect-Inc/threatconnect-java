@@ -32,7 +32,7 @@ public abstract class AbstractXMLNodeParser<I extends Item> extends AbstractPage
 		List<I> items = new ArrayList<I>();
 		
 		// retrieve the list of nodes
-		NodeList nodes = XPathUtil.getNodes(nodeXPath, doc);
+		NodeList nodes = new XPathUtil().getNodes(nodeXPath, doc);
 		final int nodeLength = nodes.getLength();
 		logger.trace("Found {} XML nodes to process", nodeLength);
 		
