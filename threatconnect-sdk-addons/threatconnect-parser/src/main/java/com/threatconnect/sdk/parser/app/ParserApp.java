@@ -198,8 +198,13 @@ public abstract class ParserApp extends App
 	protected Configuration getConfiguration(final AppConfig appConfig)
 	{
 		// create the configuration for the threatconnect server
-		return new Configuration(appConfig.getTcApiPath(), appConfig.getTcApiAccessID(),
+		Configuration configuration = new Configuration(appConfig.getTcApiPath(), appConfig.getTcApiAccessID(),
 			appConfig.getTcApiUserSecretKey(), appConfig.getApiDefaultOrg());
+		
+		// add the tc token if it exists
+		configuration.setTcToken(appConfig.getTcToken());
+		
+		return configuration;
 	}
 	
 	/**
