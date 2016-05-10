@@ -2,7 +2,6 @@ package com.threatconnect.plugin.pkg;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -12,7 +11,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.io.RawInputStreamFacade;
 
 @Mojo(name = "app-package", defaultPhase = LifecyclePhase.PACKAGE, threadSafe = true, requiresDependencyResolution = ResolutionScope.RUNTIME)
 public class AppPackageMojo extends AbstractMojo
@@ -53,9 +51,6 @@ public class AppPackageMojo extends AbstractMojo
 		
 		try
 		{
-			InputStream log4jssl = getClass().getResourceAsStream("/log4j-ssl.xml");
-			InputStream log4jnossl = getClass().getResourceAsStream("/log4j-nossl.xml");
-			
 			// copy the files into the directory
 			FileUtils.copyFileToDirectory(getSourceJarFile(), explodedDir);
 			
@@ -70,10 +65,6 @@ public class AppPackageMojo extends AbstractMojo
 			
 			// copy all of the files in the include folder
 			copyFileToDirectoryIfExists(getIncludeFolder(), explodedDir);
-			
-			// copy the log4j files
-			FileUtils.copyStreamToFile(new RawInputStreamFacade(log4jssl), new File(log4jDir + "/log4j-ssl.xml"));
-			FileUtils.copyStreamToFile(new RawInputStreamFacade(log4jnossl), new File(log4jDir + "/log4j-nossl.xml"));
 			
 			// zip up the app
 			ZipUtil.zipFolder(explodedDir);
