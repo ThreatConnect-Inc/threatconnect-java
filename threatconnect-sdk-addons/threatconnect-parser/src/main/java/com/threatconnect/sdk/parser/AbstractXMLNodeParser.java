@@ -43,7 +43,13 @@ public abstract class AbstractXMLNodeParser<I extends Item> extends AbstractPage
 			
 			try
 			{
+				//retrieve the next node
 				Node node = nodes.item(i);
+				
+				//detach this node from the parent
+				node.getParentNode().removeChild(node);
+				
+				//process this node
 				Result<I> result = processNode(node);
 				
 				// make sure the result is not null
