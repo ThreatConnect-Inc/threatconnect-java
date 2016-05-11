@@ -41,17 +41,9 @@ public class IndicatorUtil
 				fullUrl = url;
 			}
 			
-			// check to see if the url is valid
-			if (UrlUtil.isValid(fullUrl))
-			{
-				Url result = new Url();
-				result.setText(fullUrl);
-				return result;
-			}
-			else
-			{
-				throw new InvalidURLException(fullUrl + " is not a valid URL");
-			}
+			Url result = new Url();
+			result.setText(fullUrl);
+			return result;
 		}
 		else
 		{

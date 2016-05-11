@@ -3,8 +3,6 @@ package com.threatconnect.sdk.parser.util;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.commons.validator.routines.UrlValidator;
-
 public class UrlUtil
 {
 	/**
@@ -72,10 +70,5 @@ public class UrlUtil
 			return false;
 		}
 		return result;
-	}
-	
-	public static boolean isValid(final String urlString)
-	{
-		return new UrlValidator().isValid(urlString);
 	}
 }
