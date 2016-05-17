@@ -33,6 +33,9 @@ import com.threatconnect.sdk.server.response.entity.data.BatchStatusResponseData
 
 public class BatchIndicatorWriter extends Writer
 {
+	private static final long POLL_INITIAL_DELAY = 1000L;
+	private static final long POLL_MAX_DELAY = 30000L;
+	
 	private static final Logger logger = LoggerFactory.getLogger(BatchIndicatorWriter.class);
 	
 	private final Collection<Indicator> source;
@@ -96,7 +99,7 @@ public class BatchIndicatorWriter extends Writer
 				if (batchUploadResponse.isSuccess())
 				{
 					boolean processing = true;
-					long delay = 1000L;
+					long delay = POLL_INITIAL_DELAY;
 					
 					// holds the response object
 					ApiEntitySingleResponse<BatchStatus, BatchStatusResponseData> batchStatusResponse = null;
@@ -122,8 +125,18 @@ public class BatchIndicatorWriter extends Writer
 						// completed
 						processing = (status != Status.Completed);
 						
-						// increment the delay
-						delay += delay;
+						// make sure the delay is less than the maximum
+						if (delay < POLL_MAX_DELAY)
+						{
+							// increment the delay
+							delay *= 2;
+						}
+						
+						// make sure that the delay does not exceed the maximum
+						if (delay > POLL_MAX_DELAY)
+						{
+							delay = POLL_MAX_DELAY;
+						}
 					}
 					
 					// make sure the response is not null
