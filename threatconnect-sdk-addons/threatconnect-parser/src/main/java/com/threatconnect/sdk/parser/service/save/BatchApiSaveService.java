@@ -41,6 +41,7 @@ import com.threatconnect.sdk.parser.service.writer.IndicatorWriter;
 import com.threatconnect.sdk.parser.service.writer.SignatureWriter;
 import com.threatconnect.sdk.parser.service.writer.ThreatWriter;
 import com.threatconnect.sdk.parser.service.writer.UrlWriter;
+import com.threatconnect.sdk.parser.util.ItemUtil;
 import com.threatconnect.sdk.server.entity.BatchConfig.AttributeWriteType;
 
 public class BatchApiSaveService implements SaveService
@@ -76,7 +77,7 @@ public class BatchApiSaveService implements SaveService
 		// break the list of items into sets of groups and indicators
 		Set<Group> groups = new HashSet<Group>();
 		Set<Indicator> indicators = new HashSet<Indicator>();
-		seperateGroupsAndIndicators(items, groups, indicators);
+		ItemUtil.seperateGroupsAndIndicators(items, groups, indicators);
 		
 		// save all of the indicators
 		saveResults.addFailedItems(saveIndicators(indicators, connection));
@@ -144,45 +145,6 @@ public class BatchApiSaveService implements SaveService
 			SaveResults saveResults = new SaveResults();
 			saveResults.addFailedItems(ItemType.INDICATOR, indicators.size());
 			return saveResults;
-		}
-	}
-	
-	/**
-	 * Given a list of items, this recursively follows the associated items looking for groups and
-	 * indicators and assigns them to their respective sets
-	 * 
-	 * @param items
-	 * @param groups
-	 * @param indicators
-	 */
-	private void seperateGroupsAndIndicators(final List<? extends Item> items,
-		final Set<Group> groups, final Set<Indicator> indicators)
-	{
-		// for every item in this list
-		for (Item item : items)
-		{
-			if (ItemType.GROUP.equals(item.getItemType()))
-			{
-				final Group group = (Group) item;
-				
-				// add this group
-				if (groups.add(group))
-				{
-					// continue following the associated items
-					seperateGroupsAndIndicators(item.getAssociatedItems(), groups, indicators);
-				}
-			}
-			else if (ItemType.INDICATOR.equals(item.getItemType()))
-			{
-				final Indicator indicator = (Indicator) item;
-				
-				// add this indicator
-				if (indicators.add(indicator))
-				{
-					// continue following the associated items
-					seperateGroupsAndIndicators(item.getAssociatedItems(), groups, indicators);
-				}
-			}
 		}
 	}
 	
