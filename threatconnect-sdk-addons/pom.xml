@@ -56,7 +56,7 @@
 		<main.basedir>${project.basedir}</main.basedir>
 
 		<!-- ThreatConnect SDK Version -->
-		<version.this>2.6.0</version.this>
+		<version.this>2.6.1</version.this>
 
 		<!-- Dependency Versions -->
 		<version.commons-io>2.4</version.commons-io>
