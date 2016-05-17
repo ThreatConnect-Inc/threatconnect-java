@@ -33,9 +33,16 @@ public class BulkIndicatorConverter
 			JsonObject indicatorObject = indicatorElement.getAsJsonObject();
 			Indicator indicator = convertToIndicator(indicatorObject);
 			
-			// copy the rating and confidence
-			indicator.setRating(indicatorObject.get("rating").getAsDouble());
-			indicator.setConfidence(indicatorObject.get("confidence").getAsDouble());
+			try
+			{
+				// copy the rating and confidence
+				indicator.setRating(indicatorObject.get("rating").getAsDouble());
+				indicator.setConfidence(indicatorObject.get("confidence").getAsDouble());
+			}
+			catch (NullPointerException e)
+			{
+				// its ok to ignore this if the rating and confidence do not exist.
+			}
 			
 			// check to see if there are tags
 			JsonElement tagElement = indicatorObject.get("tag");
