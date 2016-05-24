@@ -215,7 +215,7 @@ public abstract class ParserApp extends App
 	 */
 	protected SaveService getSaveService(final AppConfig appConfig)
 	{
-		return new ApiSaveService(getConfiguration(appConfig), null);
+		return new ApiSaveService(getConfiguration(appConfig), appConfig.getApiDefaultOrg());
 	}
 	
 	/**

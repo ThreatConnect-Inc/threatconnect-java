@@ -30,6 +30,7 @@ import com.threatconnect.sdk.server.entity.BatchStatus;
 import com.threatconnect.sdk.server.entity.BatchStatus.Status;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.server.response.entity.data.BatchStatusResponseData;
+import com.threatconnect.sdk.util.UploadMethodType;
 
 public class BatchIndicatorWriter extends Writer
 {
@@ -93,7 +94,7 @@ public class BatchIndicatorWriter extends Writer
 				// retrieve the batch id and upload the file
 				int batchID = batchConfigResponse.getItem();
 				ApiEntitySingleResponse<?, ?> batchUploadResponse =
-					batchWriterAdapter.uploadFile(batchID, jsonToInputStream(json));
+					batchWriterAdapter.uploadFile(batchID, jsonToInputStream(json), UploadMethodType.POST);
 					
 				// check to see if the response was successful
 				if (batchUploadResponse.isSuccess())

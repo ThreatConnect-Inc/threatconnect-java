@@ -14,7 +14,7 @@ import com.threatconnect.sdk.parser.source.DataSource;
  * 
  * @author Greg Marut
  */
-public abstract class AbstractPagedParser<I extends Item> extends Parser<I>
+public abstract class AbstractPagedParser<I extends Item> extends AbstractParser<I>
 {
 	public AbstractPagedParser(final DataSource dataSource)
 	{

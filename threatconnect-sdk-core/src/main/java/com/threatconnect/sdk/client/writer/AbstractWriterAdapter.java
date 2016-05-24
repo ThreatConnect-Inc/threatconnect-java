@@ -26,6 +26,7 @@ import com.threatconnect.sdk.conn.AbstractRequestExecutor.HttpMethod;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
+import com.threatconnect.sdk.util.UploadMethodType;
 
 /**
  *
@@ -250,12 +251,12 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
         return modifyItem(propName, type, ownerName, paramMap, saveObject, HttpMethod.POST);
     }
 
-    protected <T extends ApiEntitySingleResponse> T uploadFile(String propName, Class<T> type, InputStream inputStream, Map<String, Object> paramMap) throws FailedResponseException, UnsupportedEncodingException
+    protected <T extends ApiEntitySingleResponse> T uploadFile(String propName, Class<T> type, InputStream inputStream, Map<String, Object> paramMap, UploadMethodType uploadMethodType) throws FailedResponseException, UnsupportedEncodingException
     {
-        return uploadFile(propName, type, null, inputStream, paramMap);
+        return uploadFile(propName, type, null, inputStream, paramMap, uploadMethodType);
     }
 
-    protected <T extends ApiEntitySingleResponse> T uploadFile(String propName, Class<T> type, String ownerName, InputStream inputStream, Map<String, Object> paramMap) throws FailedResponseException, UnsupportedEncodingException
+    protected <T extends ApiEntitySingleResponse> T uploadFile(String propName, Class<T> type, String ownerName, InputStream inputStream, Map<String, Object> paramMap, UploadMethodType uploadMethodType) throws FailedResponseException, UnsupportedEncodingException
     {
         logger.trace("Getting URL: {}", propName);
         String url = getUrl(propName, ownerName);
@@ -271,7 +272,7 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
                 }
             }
             logger.trace("Calling url={}", url);
-            String content = executor.executeUploadByteStream(url, inputStream);
+            String content = executor.executeUploadByteStream(url, inputStream, uploadMethodType);
             logger.trace("returning content={}", content);
             result = mapper.readValue(content, type);
         } catch (IOException e)

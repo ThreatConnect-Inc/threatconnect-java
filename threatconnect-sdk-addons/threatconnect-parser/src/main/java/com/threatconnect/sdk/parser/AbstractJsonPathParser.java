@@ -10,7 +10,7 @@ import com.jayway.jsonpath.JsonPath;
 import com.threatconnect.sdk.parser.model.Item;
 import com.threatconnect.sdk.parser.source.DataSource;
 
-public abstract class AbstractJsonPathParser<I extends Item> extends Parser<I>
+public abstract class AbstractJsonPathParser<I extends Item> extends AbstractParser<I>
 {
 	public AbstractJsonPathParser(final DataSource dataSource)
 	{

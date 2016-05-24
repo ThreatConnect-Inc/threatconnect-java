@@ -21,7 +21,7 @@ import com.threatconnect.sdk.parser.model.Item;
 import com.threatconnect.sdk.parser.result.Result;
 import com.threatconnect.sdk.parser.source.DataSource;
 
-public abstract class AbstractXMLParser<I extends Item> extends Parser<I>
+public abstract class AbstractXMLParser<I extends Item> extends AbstractParser<I>
 {
 	private Document document;
 	

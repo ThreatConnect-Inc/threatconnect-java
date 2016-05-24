@@ -27,6 +27,7 @@ import org.apache.http.util.EntityUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.threatconnect.sdk.conn.exception.HttpResourceNotFoundException;
 import com.threatconnect.sdk.util.StringUtil;
+import com.threatconnect.sdk.util.UploadMethodType;
 
 /**
  * @author dtineo
@@ -173,7 +174,8 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 	}
 	
 	@Override
-	public String executeUploadByteStream(String path, InputStream inputStream) throws IOException
+	public String executeUploadByteStream(String path, InputStream inputStream, UploadMethodType uploadMethodType)
+		throws IOException
 	{
 		if (this.conn.getConfig() == null)
 		{
@@ -182,8 +184,19 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 		
 		String fullPath = this.conn.getConfig().getTcApiUrl() + path.replace("/api/", "/");
 		
-		logger.trace("Calling POST: " + fullPath);
-		HttpPost httpBase = new HttpPost(fullPath);
+		final HttpEntityEnclosingRequestBase httpBase;
+		
+		if (uploadMethodType.equals(UploadMethodType.POST))
+		{
+			logger.trace("Calling POST: " + fullPath);
+			httpBase = new HttpPost(fullPath);
+		}
+		else
+		{
+			logger.trace("Calling PUT: " + fullPath);
+			httpBase = new HttpPut(fullPath);
+		}
+		
 		httpBase.setEntity(new InputStreamEntity(inputStream));
 		String headerPath = httpBase.getURI().getRawPath() + "?" + httpBase.getURI().getRawQuery();
 		ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), headerPath,

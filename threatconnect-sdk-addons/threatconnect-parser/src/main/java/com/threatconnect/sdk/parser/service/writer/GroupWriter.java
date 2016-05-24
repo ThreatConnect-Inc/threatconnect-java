@@ -345,8 +345,9 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 					// for each of the indicators
 					for (T group : readGroups)
 					{
-						// return the first group
-						return group;
+						// need to perform another lookup on the server to get all of the
+						// information for this group and not just the summary
+						return reader.getById(group.getId());
 					}
 				}
 			}
