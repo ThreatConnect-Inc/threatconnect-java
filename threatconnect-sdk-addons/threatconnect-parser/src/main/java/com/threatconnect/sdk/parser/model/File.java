@@ -1,7 +1,6 @@
 package com.threatconnect.sdk.parser.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class File extends Indicator
@@ -67,9 +66,6 @@ public class File extends Indicator
 	@Override
 	public String toString()
 	{
-		return Arrays.toString(new String[]
-		{
-			getMd5(), getSha1(), getSha256()
-		});
+		return getMd5() + ":" + getSha1() + ":" + getSha256();
 	}
 }
