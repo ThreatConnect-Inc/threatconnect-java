@@ -5,7 +5,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URLConnection;
-import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -18,34 +17,38 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.threatconnect.sdk.parser.model.Item;
-import com.threatconnect.sdk.parser.result.Result;
+import com.threatconnect.sdk.parser.result.PageResult;
 import com.threatconnect.sdk.parser.source.DataSource;
 
-public abstract class AbstractXMLParser<I extends Item> extends AbstractParser<I>
+public abstract class AbstractPagedXMLParser<I extends Item> extends AbstractPagedParser<I>
 {
 	private Document document;
 	
-	public AbstractXMLParser(final DataSource dataSource)
+	public AbstractPagedXMLParser(final DataSource dataSource)
 	{
 		super(dataSource);
 	}
 	
 	@Override
-	public List<I> parseData() throws ParserException
+	protected PageResult<I> parsePage(DataSource dataSource) throws ParserException
 	{
 		URLConnection connection = null;
 		
 		try
 		{
 			// read the xml as a string and allow any xml preproccessing if needed
+			logger.trace("Loading XML DataSource as a string");
 			String rawXML = IOUtils.toString(getDataSource().read());
+			logger.trace("Preprocessing raw XML String");
 			String xml = preProcessXML(rawXML);
 			
 			// create a document from the processed xml
+			logger.trace("Converting the XML String to an XML Document object");
 			document = createDocument(xml);
 			
 			// process the xml document
-			return processXmlDocument(document).getItems();
+			logger.trace("Processing XML Document");
+			return processXmlDocument(document);
 		}
 		catch (MalformedURLException | ParserConfigurationException | SAXException | XPathExpressionException e)
 		{
@@ -75,16 +78,11 @@ public abstract class AbstractXMLParser<I extends Item> extends AbstractParser<I
 		throw new ParserException(cause);
 	}
 	
-	protected DocumentBuilder createDocumentBuilder() throws ParserConfigurationException
+	protected Document createDocument(final String xml) throws ParserConfigurationException, SAXException, IOException
 	{
 		DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
 		domFactory.setNamespaceAware(true);
-		return domFactory.newDocumentBuilder();
-	}
-	
-	protected Document createDocument(final String xml) throws ParserConfigurationException, SAXException, IOException
-	{
-		DocumentBuilder builder = createDocumentBuilder();
+		DocumentBuilder builder = domFactory.newDocumentBuilder();
 		Reader reader = new StringReader(xml);
 		InputSource inputSource = new InputSource(reader);
 		return builder.parse(inputSource);
@@ -103,6 +101,6 @@ public abstract class AbstractXMLParser<I extends Item> extends AbstractParser<I
 	 * @return
 	 * @throws ParserException
 	 */
-	protected abstract Result<I> processXmlDocument(Document document)
+	protected abstract PageResult<I> processXmlDocument(Document document)
 		throws ParserException, XPathExpressionException;
 }

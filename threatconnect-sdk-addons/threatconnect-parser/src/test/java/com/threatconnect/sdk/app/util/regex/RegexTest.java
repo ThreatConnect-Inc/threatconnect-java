@@ -1,7 +1,5 @@
 package com.threatconnect.sdk.app.util.regex;
 
-import java.util.regex.Pattern;
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -12,10 +10,10 @@ public class RegexTest
 	@Test
 	public void testIPAddress()
 	{
-		Assert.assertTrue(Pattern.matches(RegexUtil.REGEX_IP_FORMAT, "68.168.209.242"));
-		Assert.assertTrue(Pattern.matches(RegexUtil.REGEX_IP_FORMAT, "10.0.0.1"));
-		Assert.assertTrue(Pattern.matches(RegexUtil.REGEX_IP_FORMAT, "28.148.247.32"));
-		Assert.assertTrue(Pattern.matches(RegexUtil.REGEX_IP_FORMAT, "1.1.1.1"));
-		Assert.assertTrue(Pattern.matches(RegexUtil.REGEX_IP_FORMAT, "128.128.128.128"));
+		Assert.assertTrue(RegexUtil.REGEX_IP_FORMAT.matcher("68.168.209.242").matches());
+		Assert.assertTrue(RegexUtil.REGEX_IP_FORMAT.matcher("10.0.0.1").matches());
+		Assert.assertTrue(RegexUtil.REGEX_IP_FORMAT.matcher("28.148.247.32").matches());
+		Assert.assertTrue(RegexUtil.REGEX_IP_FORMAT.matcher("1.1.1.1").matches());
+		Assert.assertTrue(RegexUtil.REGEX_IP_FORMAT.matcher("128.128.128.128").matches());
 	}
 }

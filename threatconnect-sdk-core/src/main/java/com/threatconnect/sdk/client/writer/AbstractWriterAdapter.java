@@ -5,17 +5,10 @@
  */
 package com.threatconnect.sdk.client.writer;
 
-import com.threatconnect.sdk.client.AbstractClientAdapter;
-import com.threatconnect.sdk.client.UrlTypeable;
-import com.threatconnect.sdk.client.response.WriteListResponse;
-import com.threatconnect.sdk.conn.AbstractRequestExecutor.HttpMethod;
-import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.exception.FailedResponseException;
-import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
-
 import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -25,6 +18,15 @@ import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.threatconnect.sdk.client.AbstractClientAdapter;
+import com.threatconnect.sdk.client.UrlTypeable;
+import com.threatconnect.sdk.client.response.WriteListResponse;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor.HttpMethod;
+import com.threatconnect.sdk.conn.Connection;
+import com.threatconnect.sdk.exception.FailedResponseException;
+import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
+import com.threatconnect.sdk.util.UploadMethodType;
 
 /**
  *
@@ -249,12 +251,12 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
         return modifyItem(propName, type, ownerName, paramMap, saveObject, HttpMethod.POST);
     }
 
-    protected <T extends ApiEntitySingleResponse> T uploadFile(String propName, Class<T> type, File file, Map<String, Object> paramMap) throws FailedResponseException, UnsupportedEncodingException
+    protected <T extends ApiEntitySingleResponse> T uploadFile(String propName, Class<T> type, InputStream inputStream, Map<String, Object> paramMap, UploadMethodType uploadMethodType) throws FailedResponseException, UnsupportedEncodingException
     {
-        return uploadFile(propName, type, null, file, paramMap);
+        return uploadFile(propName, type, null, inputStream, paramMap, uploadMethodType);
     }
 
-    protected <T extends ApiEntitySingleResponse> T uploadFile(String propName, Class<T> type, String ownerName, File file, Map<String, Object> paramMap) throws FailedResponseException, UnsupportedEncodingException
+    protected <T extends ApiEntitySingleResponse> T uploadFile(String propName, Class<T> type, String ownerName, InputStream inputStream, Map<String, Object> paramMap, UploadMethodType uploadMethodType) throws FailedResponseException, UnsupportedEncodingException
     {
         logger.trace("Getting URL: {}", propName);
         String url = getUrl(propName, ownerName);
@@ -270,7 +272,7 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
                 }
             }
             logger.trace("Calling url={}", url);
-            String content = executor.executeUploadByteStream(url, file);
+            String content = executor.executeUploadByteStream(url, inputStream, uploadMethodType);
             logger.trace("returning content={}", content);
             result = mapper.readValue(content, type);
         } catch (IOException e)

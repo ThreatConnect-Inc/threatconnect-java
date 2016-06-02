@@ -18,4 +18,10 @@ public class Url extends Indicator
 	{
 		this.text = text;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return getText();
+	}
 }

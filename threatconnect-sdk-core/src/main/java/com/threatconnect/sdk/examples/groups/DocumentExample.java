@@ -20,6 +20,7 @@ import com.threatconnect.sdk.client.fluent.ThreatBuilder;
 import com.threatconnect.sdk.server.entity.Victim;
 import com.threatconnect.sdk.client.fluent.VictimBuilder;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
+import com.threatconnect.sdk.util.UploadMethodType;
 import com.threatconnect.sdk.client.writer.AbstractGroupWriterAdapter;
 import com.threatconnect.sdk.client.writer.AbstractIndicatorWriterAdapter;
 import com.threatconnect.sdk.client.writer.DocumentWriterAdapter;
@@ -112,7 +113,7 @@ public class DocumentExample
                 ClassLoader classLoader = DocumentExample.class.getClassLoader();
                 File file = new File(classLoader.getResource("testUpload.txt").getFile());
 
-                writer.uploadFile(response.getItem().getId(), file);
+                writer.uploadFile(response.getItem().getId(), file, UploadMethodType.POST);
             }
         } catch (FailedResponseException | IOException e)
         {

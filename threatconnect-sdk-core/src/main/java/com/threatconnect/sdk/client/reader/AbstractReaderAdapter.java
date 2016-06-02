@@ -11,6 +11,7 @@ import java.net.URLEncoder;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.http.entity.ContentType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,10 +67,15 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
 
     protected InputStream getFile(String propName, String ownerName, Map<String,Object> paramMap) throws IOException
     {
-        return getFile(propName, ownerName, paramMap, false);
+        return getFile(propName, ownerName, paramMap, false, ContentType.APPLICATION_OCTET_STREAM);
+    }
+    
+    protected InputStream getFile(String propName, String ownerName, Map<String,Object> paramMap, ContentType contentType) throws IOException
+    {
+        return getFile(propName, ownerName, paramMap, false, contentType);
     }
 
-    protected InputStream getFile(String propName, String ownerName, Map<String,Object> paramMap, boolean bypassOwnerCheck) throws IOException
+    protected InputStream getFile(String propName, String ownerName, Map<String,Object> paramMap, boolean bypassOwnerCheck, ContentType contentType) throws IOException
     {
         String url = getUrl(propName, ownerName, bypassOwnerCheck);
 
@@ -81,7 +87,7 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
         }
 
         logger.trace("Calling url={}", url);
-        InputStream content = executor.executeDownloadByteStream(url);
+        InputStream content = executor.executeDownloadByteStream(url, contentType);
         logger.trace("returning content={}", content);
 
         return content;

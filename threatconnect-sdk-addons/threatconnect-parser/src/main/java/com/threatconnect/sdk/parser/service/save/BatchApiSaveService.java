@@ -1,7 +1,11 @@
 package com.threatconnect.sdk.parser.service.save;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,11 +23,13 @@ import com.threatconnect.sdk.parser.model.Host;
 import com.threatconnect.sdk.parser.model.Incident;
 import com.threatconnect.sdk.parser.model.Indicator;
 import com.threatconnect.sdk.parser.model.Item;
+import com.threatconnect.sdk.parser.model.ItemType;
 import com.threatconnect.sdk.parser.model.Signature;
 import com.threatconnect.sdk.parser.model.Threat;
 import com.threatconnect.sdk.parser.model.Url;
 import com.threatconnect.sdk.parser.service.writer.AddressWriter;
 import com.threatconnect.sdk.parser.service.writer.AdversaryWriter;
+import com.threatconnect.sdk.parser.service.writer.BatchIndicatorWriter;
 import com.threatconnect.sdk.parser.service.writer.DocumentWriter;
 import com.threatconnect.sdk.parser.service.writer.EmailAddressWriter;
 import com.threatconnect.sdk.parser.service.writer.EmailWriter;
@@ -35,20 +41,17 @@ import com.threatconnect.sdk.parser.service.writer.IndicatorWriter;
 import com.threatconnect.sdk.parser.service.writer.SignatureWriter;
 import com.threatconnect.sdk.parser.service.writer.ThreatWriter;
 import com.threatconnect.sdk.parser.service.writer.UrlWriter;
+import com.threatconnect.sdk.parser.util.ItemUtil;
+import com.threatconnect.sdk.server.entity.BatchConfig.AttributeWriteType;
 
-/**
- * Responsible for saving the model to the server using the threatconnect sdk
- * 
- * @author Greg Marut
- */
-public class SaveApiService implements SaveService
+public class BatchApiSaveService implements SaveService
 {
-	private static final Logger logger = LoggerFactory.getLogger(SaveApiService.class);
+	private static final Logger logger = LoggerFactory.getLogger(BatchApiSaveService.class);
 	
-	private final Configuration configuration;
-	private final String ownerName;
+	protected final Configuration configuration;
+	protected final String ownerName;
 	
-	public SaveApiService(final Configuration configuration, final String ownerName)
+	public BatchApiSaveService(final Configuration configuration, final String ownerName)
 	{
 		this.configuration = configuration;
 		this.ownerName = ownerName;
@@ -59,6 +62,9 @@ public class SaveApiService implements SaveService
 	 * 
 	 * @param items
 	 * @throws IOException
+	 * Signals that an I/O exception of some sort has occurred. This
+	 * class is the general class of exceptions produced by failed or
+	 * interrupted I/O operations.
 	 */
 	@Override
 	public SaveResults saveItems(final List<? extends Item> items) throws IOException
@@ -66,28 +72,80 @@ public class SaveApiService implements SaveService
 		// create a new connection object from the configuration
 		Connection connection = new Connection(configuration);
 		
-		return saveItems(items, connection);
+		SaveResults saveResults = new SaveResults();
+		
+		// break the list of items into sets of groups and indicators
+		Set<Group> groups = new HashSet<Group>();
+		Set<Indicator> indicators = new HashSet<Indicator>();
+		ItemUtil.seperateGroupsAndIndicators(items, groups, indicators);
+		
+		// save all of the indicators
+		saveResults.addFailedItems(saveIndicators(indicators, connection));
+		
+		// save all of the groups
+		saveResults.addFailedItems(saveGroups(groups, connection));
+		
+		return saveResults;
 	}
 	
-	/**
-	 * Saves all of the items to the server using the APIs
-	 * 
-	 * @param items
-	 * @param connection
-	 * @throws IOException
-	 */
-	private SaveResults saveItems(final List<? extends Item> items, final Connection connection) throws IOException
+	protected SaveResults saveGroups(final Collection<Group> groups, final Connection connection) throws IOException
 	{
 		// create a new save result to return
 		SaveResults saveResults = new SaveResults();
 		
 		// for each of the items
-		for (Item item : items)
+		for (Group group : groups)
 		{
-			saveItem(item, ownerName, connection, saveResults);
+			saveItem(group, ownerName, connection, saveResults);
 		}
 		
 		return saveResults;
+	}
+	
+	protected SaveResults saveIndicators(final Collection<Indicator> indicators, final Connection connection)
+		throws IOException
+	{
+		return saveIndicators(indicators, connection, AttributeWriteType.Replace);
+	}
+	
+	protected SaveResults saveIndicators(final Collection<Indicator> indicators, final Connection connection,
+		final AttributeWriteType attributeWriteType) throws IOException
+	{
+		try
+		{
+			// create a new batch indicator writer
+			BatchIndicatorWriter batchIndicatorWriter = new BatchIndicatorWriter(connection, indicators);
+			
+			// save the indicators
+			return batchIndicatorWriter.saveIndicators(ownerName, attributeWriteType);
+		}
+		catch (SaveItemFailedException e)
+		{
+			logger.warn(e.getMessage(), e);
+			SaveResults saveResults = new SaveResults();
+			saveResults.addFailedItems(ItemType.INDICATOR, indicators.size());
+			return saveResults;
+		}
+	}
+	
+	protected SaveResults deleteIndicators(final Collection<Indicator> indicators, final Connection connection)
+		throws IOException
+	{
+		try
+		{
+			// create a new batch indicator writer
+			BatchIndicatorWriter batchIndicatorWriter = new BatchIndicatorWriter(connection, indicators);
+			
+			// delete the indicators
+			return batchIndicatorWriter.deleteIndicators(ownerName);
+		}
+		catch (SaveItemFailedException e)
+		{
+			logger.warn(e.getMessage(), e);
+			SaveResults saveResults = new SaveResults();
+			saveResults.addFailedItems(ItemType.INDICATOR, indicators.size());
+			return saveResults;
+		}
 	}
 	
 	/**
@@ -98,9 +156,12 @@ public class SaveApiService implements SaveService
 	 * @param connection
 	 * @param saveResults
 	 * @throws IOException
+	 * Signals that an I/O exception of some sort has occurred. This
+	 * class is the general class of exceptions produced by failed or
+	 * interrupted I/O operations.
 	 * @throws SaveItemFailedException
 	 */
-	private void saveItem(final Item item, final String ownerName, final Connection connection,
+	protected void saveItem(final Item item, final String ownerName, final Connection connection,
 		final SaveResults saveResults)
 			throws IOException
 	{
@@ -112,9 +173,8 @@ public class SaveApiService implements SaveService
 				case GROUP:
 					saveGroup((Group) item, ownerName, connection, saveResults);
 					break;
+				// the indicators have already been saved in bulk so they can be ignored now
 				case INDICATOR:
-					saveIndicator((Indicator) item, ownerName, connection, saveResults);
-					break;
 				default:
 					break;
 			}
@@ -124,12 +184,12 @@ public class SaveApiService implements SaveService
 			logger.warn(e.getMessage(), e);
 			
 			// add this item to the list of failed saves
-			saveResults.getFailedItems().add(item);
+			saveResults.addFailedItems(item);
 			
 			// this item failed to save so attempt to save the associated items individually if they
 			// exist without the associations
-			SaveResults childItemsSaveResults = saveItems(item.getAssociatedItems(), connection);
-			saveResults.getFailedItems().addAll(childItemsSaveResults.getFailedItems());
+			SaveResults childItemsSaveResults = saveGroups(filterGroups(item.getAssociatedItems()), connection);
+			saveResults.addFailedItems(childItemsSaveResults.getFailedItems());
 		}
 	}
 	
@@ -140,7 +200,7 @@ public class SaveApiService implements SaveService
 	 * @param connection
 	 * @return
 	 */
-	private GroupWriter<?, ?> getGroupWriter(final Group group, final Connection connection)
+	protected GroupWriter<?, ?> getGroupWriter(final Group group, final Connection connection)
 	{
 		GroupWriter<?, ?> writer = null;
 		
@@ -179,7 +239,7 @@ public class SaveApiService implements SaveService
 	 * @param connection
 	 * @return
 	 */
-	private IndicatorWriter<?, ?> getIndicatorWriter(final Indicator indicator, final Connection connection)
+	protected IndicatorWriter<?, ?> getIndicatorWriter(final Indicator indicator, final Connection connection)
 	{
 		IndicatorWriter<?, ?> writer = null;
 		
@@ -208,7 +268,7 @@ public class SaveApiService implements SaveService
 		return writer;
 	}
 	
-	private com.threatconnect.sdk.server.entity.Group saveGroup(final Group group, final String ownerName,
+	protected com.threatconnect.sdk.server.entity.Group saveGroup(final Group group, final String ownerName,
 		final Connection connection, final SaveResults saveResults) throws IOException, SaveItemFailedException
 	{
 		GroupWriter<?, ?> writer = getGroupWriter(group, connection);
@@ -223,22 +283,6 @@ public class SaveApiService implements SaveService
 		return savedGroup;
 	}
 	
-	private com.threatconnect.sdk.server.entity.Indicator saveIndicator(final Indicator indicator,
-		final String ownerName, final Connection connection, final SaveResults saveResults)
-			throws IOException, SaveItemFailedException
-	{
-		IndicatorWriter<?, ?> writer = getIndicatorWriter(indicator, connection);
-		
-		// save the indicator
-		com.threatconnect.sdk.server.entity.Indicator savedIndicator = writer.saveIndicator(ownerName);
-		
-		// save the associated groups for this indicator
-		saveAssociatedGroups(indicator, ownerName, connection, writer, saveResults);
-		
-		// return the saved indicator
-		return savedIndicator;
-	}
-	
 	/**
 	 * Saves the associated groups for a given indicator
 	 * 
@@ -247,9 +291,12 @@ public class SaveApiService implements SaveService
 	 * @param connection
 	 * @param writer
 	 * @throws IOException
+	 * Signals that an I/O exception of some sort has occurred. This
+	 * class is the general class of exceptions produced by failed or
+	 * interrupted I/O operations.
 	 * @throws SaveItemFailedException
 	 */
-	private void saveAssociatedGroups(final Indicator indicator, final String ownerName, final Connection connection,
+	protected void saveAssociatedGroups(final Indicator indicator, final String ownerName, final Connection connection,
 		IndicatorWriter<?, ?> writer, final SaveResults saveResults) throws IOException
 	{
 		// for each of the associated items of this group
@@ -266,12 +313,13 @@ public class SaveApiService implements SaveService
 				logger.warn(e.getMessage(), e);
 				
 				// add to the list of failed items
-				saveResults.getFailedItems().add(associatedGroup);
+				saveResults.addFailedItems(associatedGroup);
 				
 				// this item failed to save so attempt to save the associated items individually if
 				// they exist without the associations
-				SaveResults childItemsSaveResults = saveItems(associatedGroup.getAssociatedItems(), connection);
-				saveResults.getFailedItems().addAll(childItemsSaveResults.getFailedItems());
+				SaveResults childItemsSaveResults =
+					saveGroups(filterGroups(associatedGroup.getAssociatedItems()), connection);
+				saveResults.addFailedItems(childItemsSaveResults.getFailedItems());
 			}
 			catch (AssociateFailedException e)
 			{
@@ -289,8 +337,11 @@ public class SaveApiService implements SaveService
 	 * @param writer
 	 * @param saveResults
 	 * @throws IOException
+	 * Signals that an I/O exception of some sort has occurred. This
+	 * class is the general class of exceptions produced by failed or
+	 * interrupted I/O operations.
 	 */
-	private void saveAssociatedItems(final Group group, final String ownerName, final Connection connection,
+	protected void saveAssociatedItems(final Group group, final String ownerName, final Connection connection,
 		GroupWriter<?, ?> writer, final SaveResults saveResults) throws IOException
 	{
 		// for each of the associated items of this group
@@ -309,7 +360,6 @@ public class SaveApiService implements SaveService
 						break;
 					case INDICATOR:
 						Indicator associatedIndicator = (Indicator) associatedItem;
-						saveIndicator(associatedIndicator, ownerName, connection, saveResults);
 						writer.associateIndicator(associatedIndicator);
 						break;
 					default:
@@ -321,17 +371,41 @@ public class SaveApiService implements SaveService
 				logger.warn(e.getMessage(), e);
 				
 				// add to the list of failed items
-				saveResults.getFailedItems().add(associatedItem);
+				saveResults.addFailedItems(associatedItem);
 				
 				// this item failed to save so attempt to save the associated items individually if
 				// they exist without the associations
-				SaveResults childItemsSaveResults = saveItems(associatedItem.getAssociatedItems(), connection);
-				saveResults.getFailedItems().addAll(childItemsSaveResults.getFailedItems());
+				SaveResults childItemsSaveResults =
+					saveGroups(filterGroups(associatedItem.getAssociatedItems()), connection);
+				saveResults.addFailedItems(childItemsSaveResults.getFailedItems());
 			}
 			catch (AssociateFailedException e)
 			{
 				logger.warn(e.getMessage(), e);
 			}
 		}
+	}
+	
+	/**
+	 * Given a list of items, this returns only a list of groups and ignores the indicators
+	 * 
+	 * @param items
+	 * @return
+	 */
+	private List<Group> filterGroups(final List<? extends Item> items)
+	{
+		// holds the list of groups
+		List<Group> groups = new ArrayList<Group>();
+		
+		// for each of the items
+		for (Item item : items)
+		{
+			if (ItemType.GROUP.equals(item.getItemType()))
+			{
+				groups.add((Group) item);
+			}
+		}
+		
+		return groups;
 	}
 }

@@ -2,7 +2,10 @@ package com.threatconnect.plugin.pkg;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -12,11 +15,12 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.io.RawInputStreamFacade;
 
 @Mojo(name = "app-package", defaultPhase = LifecyclePhase.PACKAGE, threadSafe = true, requiresDependencyResolution = ResolutionScope.RUNTIME)
 public class AppPackageMojo extends AbstractMojo
 {
+	public static final Pattern PATTERN_INSTALL_JSON = Pattern.compile("^(?:(.*)\\.)?install\\.json$");
+	
 	/**
 	 * The base directory for the application
 	 */
@@ -46,39 +50,80 @@ public class AppPackageMojo extends AbstractMojo
 	{
 		getLog().info("Building ThreatConnect App file");
 		
-		File explodedDir = getExplodedDir();
-		File log4jDir = new File(explodedDir.getAbsolutePath() + "/src/main/resources");
-		explodedDir.mkdirs();
-		log4jDir.mkdirs();
+		// retrieve the list of profiles
+		List<Profile> profiles = getProfiles();
 		
 		try
 		{
-			InputStream log4jssl = getClass().getResourceAsStream("/log4j-ssl.xml");
-			InputStream log4jnossl = getClass().getResourceAsStream("/log4j-nossl.xml");
-			
-			// copy the files into the directory
-			FileUtils.copyFileToDirectory(getSourceJarFile(), explodedDir);
-			
-			// copy the install conf file if it exists
-			copyFileToDirectoryIfExists(getInstallConfFile(), explodedDir);
-			
-			// copy the install json file if it exists
-			copyFileToDirectoryIfExists(getInstallJsonFile(), explodedDir);
-			
-			// copy the attributes json file if it exists
-			copyFileToDirectoryIfExists(getAttributesCsvFile(), explodedDir);
-			
-			// copy the log4j files
-			FileUtils.copyStreamToFile(new RawInputStreamFacade(log4jssl), new File(log4jDir + "/log4j-ssl.xml"));
-			FileUtils.copyStreamToFile(new RawInputStreamFacade(log4jnossl), new File(log4jDir + "/log4j-nossl.xml"));
-			
-			// zip up the app
-			ZipUtil.zipFolder(explodedDir);
+			// check to see if there are any profiles
+			if (!profiles.isEmpty())
+			{
+				// for each of the profiles
+				for (Profile profile : profiles)
+				{
+					// package an app profile
+					packageProfile(profile);
+				}
+			}
+			else
+			{
+				// package a legacy app (no install.json file)
+				packageLegacy();
+			}
 		}
 		catch (IOException e)
 		{
 			throw new MojoFailureException(e.getMessage(), e);
 		}
+	}
+	
+	protected void packageProfile(final Profile profile) throws IOException
+	{
+		// determine what this app name will be
+		final String appName = (null == profile.getProfileName() || profile.getProfileName().isEmpty()) ? getAppName()
+			: profile.getProfileName();
+			
+		getLog().info("Packaging Profile " + appName);
+		
+		File explodedDir = getExplodedDir(appName);
+		explodedDir.mkdirs();
+		
+		// copy the files into the directory
+		FileUtils.copyFileToDirectory(getSourceJarFile(), explodedDir);
+		
+		// copy this file to the destination directory
+		File installJsonDestination = new File(explodedDir.getAbsolutePath() + File.separator + "install.json");
+		FileUtils.copyFile(profile.getInstallFile(), installJsonDestination);
+		
+		// copy the attributes json file if it exists
+		copyFileToDirectoryIfExists(getAttributesCsvFile(), explodedDir);
+		
+		// copy all of the files in the include folder
+		copyFileToDirectoryIfExists(getIncludeFolder(), explodedDir);
+		
+		// zip up the app
+		ZipUtil.zipFolder(explodedDir);
+	}
+	
+	protected void packageLegacy() throws IOException
+	{
+		File explodedDir = getExplodedDir(getAppName());
+		explodedDir.mkdirs();
+		
+		// copy the files into the directory
+		FileUtils.copyFileToDirectory(getSourceJarFile(), explodedDir);
+		
+		// copy the install conf file if it exists
+		copyFileToDirectoryIfExists(getInstallConfFile(), explodedDir);
+		
+		// copy the attributes json file if it exists
+		copyFileToDirectoryIfExists(getAttributesCsvFile(), explodedDir);
+		
+		// copy all of the files in the include folder
+		copyFileToDirectoryIfExists(getIncludeFolder(), explodedDir);
+		
+		// zip up the app
+		ZipUtil.zipFolder(explodedDir);
 	}
 	
 	protected File getSourceJarFile()
@@ -96,17 +141,51 @@ public class AppPackageMojo extends AbstractMojo
 		return new File(baseDirectory + "/attributes.csv");
 	}
 	
-	/**
-	 * @return the install.json {@link File}
-	 */
-	protected File getInstallJsonFile()
+	protected File getIncludeFolder()
 	{
-		return new File(baseDirectory + "/install.json");
+		return new File(baseDirectory + "/include");
 	}
 	
-	protected File getExplodedDir()
+	/**
+	 * Returns the list of profiles for this app packager
+	 * 
+	 * @return
+	 */
+	protected List<Profile> getProfiles()
 	{
-		return new File(getOutputDirectory() + "/" + getAppName());
+		// holds the list of install
+		List<Profile> profiles = new ArrayList<Profile>();
+		
+		// retrieve the base directory file
+		File root = new File(baseDirectory);
+		
+		// for each file in the root
+		for (File file : root.listFiles())
+		{
+			// make sure this is a file (not a directory)
+			if (file.isFile())
+			{
+				// retrieve the matcher for this filename
+				Matcher matcher = PATTERN_INSTALL_JSON.matcher(file.getName());
+				
+				// make sure this is an install file
+				if (matcher.matches())
+				{
+					// retrieve the profile name for this install file
+					final String profileName = matcher.group(1);
+					
+					// create a new profile
+					profiles.add(new Profile(profileName, file));
+				}
+			}
+		}
+		
+		return profiles;
+	}
+	
+	protected File getExplodedDir(final String appName)
+	{
+		return new File(getOutputDirectory() + "/" + appName);
 	}
 	
 	protected String getFinalNameAndClassifier(String finalName, String classifier)
@@ -146,12 +225,47 @@ public class AppPackageMojo extends AbstractMojo
 	 * @param destinationDirectory
 	 * @throws IOException
 	 */
-	protected void copyFileToDirectoryIfExists(final File source, final File destinationDirectory) throws IOException
+	protected void copyFileToDirectoryIfExists(final File source, final File destinationDirectory)
+		throws IOException
 	{
 		// check to see if the source file exists
 		if (source.exists())
 		{
-			FileUtils.copyFileToDirectory(source, destinationDirectory);
+			// check to see if this is a directory
+			if (source.isDirectory())
+			{
+				// for each of the files
+				for (File file : source.listFiles())
+				{
+					// check to see if this file is a directory
+					if (file.isDirectory())
+					{
+						// create the new destination folder
+						final File destination =
+							new File(destinationDirectory.getAbsoluteFile() + File.separator + file.getName());
+							
+						// recursively copy this file
+						copyFileToDirectoryIfExists(file, destination);
+					}
+					else
+					{
+						// recursively copy this file
+						copyFileToDirectoryIfExists(file, destinationDirectory);
+					}
+				}
+			}
+			else
+			{
+				// check to see if the destination directory does not exist
+				if (!destinationDirectory.exists())
+				{
+					// make all the directories as needed
+					destinationDirectory.mkdirs();
+				}
+				
+				// copy this file to the destination directory
+				FileUtils.copyFileToDirectory(source, destinationDirectory);
+			}
 		}
 	}
 	

@@ -96,6 +96,7 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 						{
 							logger.warn("Failed to save attribute \"{}\" for: {}", attribute.getType(), buildID());
 							logger.warn(attrResponse.getMessage());
+							logger.warn(attribute.getValue());
 						}
 					}
 				}
