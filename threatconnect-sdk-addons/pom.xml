@@ -64,6 +64,7 @@
 		<version.dozer>5.5.1</version.dozer>
 		<version.gson>2.3</version.gson>
 		<version.jsonpath>2.1.0</version.jsonpath>
+		<version.opencsv>3.8</version.opencsv>
 
 		<!-- Test Dependency Versions -->
 		<version.junit>4.12</version.junit>
@@ -71,6 +72,11 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>${version.opencsv}</version>
+		</dependency>
 
 		<!-- Test -->
 		<dependency>
