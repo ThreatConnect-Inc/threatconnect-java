@@ -45,6 +45,7 @@ public class AppPackageMojo extends AbstractMojo
 	public void execute() throws MojoExecutionException, MojoFailureException
 	{
 		getLog().info("Building ThreatConnect App file");
+		getLog().info("MT Version Check");
 		
 		File explodedDir = getExplodedDir();
 		File log4jDir = new File(explodedDir.getAbsolutePath() + "/src/main/resources");
