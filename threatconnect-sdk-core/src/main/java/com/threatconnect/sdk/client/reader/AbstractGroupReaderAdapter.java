@@ -223,6 +223,26 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     }
 
     @Override
+    public IterableResponse<Document> getAssociatedGroupDocuments(Integer uniqueId) throws IOException, FailedResponseException {
+        return groupAssocReader.getAssociatedGroupDocuments(uniqueId);
+    }
+
+    @Override
+    public IterableResponse<Document> getAssociatedGroupDocuments(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocReader.getAssociatedGroupDocuments(uniqueId, ownerName);
+    }
+
+    @Override
+    public Document getAssociatedGroupDocument(Integer uniqueId, Integer incidentId) throws IOException, FailedResponseException {
+        return groupAssocReader.getAssociatedGroupDocument(uniqueId, incidentId);
+    }
+
+    @Override
+    public Document getAssociatedGroupDocument(Integer uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocReader.getAssociatedGroupDocument(uniqueId, incidentId, ownerName);
+    }
+
+    @Override
     public Incident getAssociatedGroupIncident(Integer uniqueId, Integer incidentId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupIncident(uniqueId, incidentId);
     }

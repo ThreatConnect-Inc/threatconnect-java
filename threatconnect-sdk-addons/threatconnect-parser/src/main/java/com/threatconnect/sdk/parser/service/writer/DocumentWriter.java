@@ -1,7 +1,5 @@
 package com.threatconnect.sdk.parser.service.writer;
 
-import java.io.IOException;
-
 import com.threatconnect.sdk.client.writer.DocumentWriterAdapter;
 import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
 import com.threatconnect.sdk.conn.Connection;
@@ -10,6 +8,8 @@ import com.threatconnect.sdk.parser.service.save.SaveItemFailedException;
 import com.threatconnect.sdk.server.entity.Group.Type;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.util.UploadMethodType;
+
+import java.io.IOException;
 
 public class DocumentWriter extends GroupWriter<Document, com.threatconnect.sdk.server.entity.Document>
 {

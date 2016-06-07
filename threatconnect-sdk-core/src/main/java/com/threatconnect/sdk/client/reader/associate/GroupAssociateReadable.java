@@ -7,12 +7,7 @@ package com.threatconnect.sdk.client.reader.associate;
 
 import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.exception.FailedResponseException;
-import com.threatconnect.sdk.server.entity.Adversary;
-import com.threatconnect.sdk.server.entity.Email;
-import com.threatconnect.sdk.server.entity.Group;
-import com.threatconnect.sdk.server.entity.Incident;
-import com.threatconnect.sdk.server.entity.Signature;
-import com.threatconnect.sdk.server.entity.Threat;
+import com.threatconnect.sdk.server.entity.*;
 
 import java.io.IOException;
 
@@ -55,6 +50,16 @@ public interface GroupAssociateReadable<P> {
      public Incident getAssociatedGroupIncident(P uniqueId, Integer incidentId) throws IOException, FailedResponseException;
 
     public Incident getAssociatedGroupIncident(P uniqueId, Integer incidentId, String ownerName)
+            throws IOException, FailedResponseException;
+
+    public IterableResponse<Document> getAssociatedGroupDocuments(P uniqueId) throws IOException, FailedResponseException;
+
+    public IterableResponse<Document> getAssociatedGroupDocuments(P uniqueId, String ownerName)
+            throws IOException, FailedResponseException;
+
+    public Document getAssociatedGroupDocument(P uniqueId, Integer incidentId) throws IOException, FailedResponseException;
+
+    public Document getAssociatedGroupDocument(P uniqueId, Integer incidentId, String ownerName)
             throws IOException, FailedResponseException;
 
     public IterableResponse<Signature> getAssociatedGroupSignatures(P uniqueId) throws IOException, FailedResponseException;

@@ -1,28 +1,5 @@
 package com.threatconnect.sdk.app;
 
-import static com.threatconnect.sdk.util.IndicatorUtil.getUniqueId;
-import static com.threatconnect.sdk.util.IndicatorUtil.setUniqueId;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.http.HttpEntityEnclosingRequest;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.HttpClientBuilder;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.threatconnect.sdk.client.fluent.AdversaryBuilder;
 import com.threatconnect.sdk.client.fluent.AttributeBuilder;
@@ -40,15 +17,28 @@ import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
 import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
-import com.threatconnect.sdk.server.entity.Adversary;
-import com.threatconnect.sdk.server.entity.Attribute;
-import com.threatconnect.sdk.server.entity.Group;
-import com.threatconnect.sdk.server.entity.Indicator;
-import com.threatconnect.sdk.server.entity.Tag;
-import com.threatconnect.sdk.server.entity.Threat;
+import com.threatconnect.sdk.server.entity.*;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.util.IndicatorUtil;
 import com.threatconnect.sdk.util.StringUtil;
+import org.apache.http.HttpEntityEnclosingRequest;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+
+import java.io.IOException;
+import java.util.*;
+
+import static com.threatconnect.sdk.util.IndicatorUtil.getUniqueId;
+import static com.threatconnect.sdk.util.IndicatorUtil.setUniqueId;
 
 /**
  * Created by dtineo on 5/15/15.
@@ -71,7 +61,8 @@ public abstract class EnhancedApp extends App
 	private Map<String, Adversary> adversaryMap;
 	private TagWriterAdapter tagWriter;
 	private Map<String, Tag> tagMap;
-	
+	private TagReaderAdapter tagReader;
+
 	protected Integer getRateLimit()
 	{
 		return Integer.MAX_VALUE;
@@ -219,7 +210,17 @@ public abstract class EnhancedApp extends App
 		
 		return writer;
 	}
-	
+
+	public TagReaderAdapter getTagReader()
+	{
+		if (this.tagReader == null)
+		{
+			this.tagReader = ReaderAdapterFactory.createTagReader(conn);
+		}
+
+		return this.tagReader;
+	}
+
 	public int getMaxRetries()
 	{
 		return maxRetries;
@@ -732,7 +733,7 @@ public abstract class EnhancedApp extends App
 		return createTag(tag);
 	}
 	
-	protected TagWriterAdapter getTagWriter()
+	public TagWriterAdapter getTagWriter()
 	{
 		if (tagWriter == null)
 		{
@@ -775,7 +776,7 @@ public abstract class EnhancedApp extends App
 	private void loadTagMap()
 	{
 		tagMap = new HashMap<>();
-		TagReaderAdapter tagReader = ReaderAdapterFactory.createTagReader(getConn());
+		TagReaderAdapter tagReader = getTagReader();
 		try
 		{
 			for (Tag t : tagReader.getAll(getOwner()))

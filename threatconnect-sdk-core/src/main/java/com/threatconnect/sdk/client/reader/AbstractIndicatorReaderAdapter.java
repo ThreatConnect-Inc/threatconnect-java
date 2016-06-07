@@ -32,37 +32,21 @@ import com.threatconnect.sdk.client.reader.associate.VictimAssociateReadable;
 import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
-import com.threatconnect.sdk.server.entity.Address;
-import com.threatconnect.sdk.server.entity.Adversary;
-import com.threatconnect.sdk.server.entity.Attribute;
-import com.threatconnect.sdk.server.entity.Email;
-import com.threatconnect.sdk.server.entity.EmailAddress;
-import com.threatconnect.sdk.server.entity.FalsePositive;
-import com.threatconnect.sdk.server.entity.File;
-import com.threatconnect.sdk.server.entity.Group;
-import com.threatconnect.sdk.server.entity.Host;
-import com.threatconnect.sdk.server.entity.Incident;
-import com.threatconnect.sdk.server.entity.Indicator;
-import com.threatconnect.sdk.server.entity.Observation;
-import com.threatconnect.sdk.server.entity.ObservationCount;
-import com.threatconnect.sdk.server.entity.Owner;
-import com.threatconnect.sdk.server.entity.SecurityLabel;
-import com.threatconnect.sdk.server.entity.Signature;
-import com.threatconnect.sdk.server.entity.Tag;
-import com.threatconnect.sdk.server.entity.Threat;
-import com.threatconnect.sdk.server.entity.Url;
-import com.threatconnect.sdk.server.entity.Victim;
-import com.threatconnect.sdk.server.entity.VictimAsset;
-import com.threatconnect.sdk.server.entity.VictimEmailAddress;
-import com.threatconnect.sdk.server.entity.VictimNetworkAccount;
-import com.threatconnect.sdk.server.entity.VictimPhone;
-import com.threatconnect.sdk.server.entity.VictimSocialNetwork;
-import com.threatconnect.sdk.server.entity.VictimWebSite;
+import com.threatconnect.sdk.server.entity.*;
 import com.threatconnect.sdk.server.response.entity.ApiEntityListResponse;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.server.response.entity.BulkStatusResponse;
 import com.threatconnect.sdk.server.response.entity.IndicatorListResponse;
 import com.threatconnect.sdk.server.response.entity.ObservationListResponse;
+import com.threatconnect.sdk.server.response.entity.data.ObservationListResponseData;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
 
 /**
  * AbstractIndicatorReaderAdapter is the primary client adapter for all Adversary group level objects.
@@ -247,7 +231,7 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     {
         downloadBulkIndicatorJson(ownerName, new FileOutputStream(outputPath.toFile()));
     }
-    
+
     public void downloadBulkIndicatorJson(String ownerName, OutputStream output) throws IOException
     {
         Map<String, Object> param = new HashMap<>();
@@ -264,7 +248,7 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     {
     	downloadBulkIndicatorCsv(ownerName, new FileOutputStream(outputPath.toFile()));
     }
-    
+
     public void downloadBulkIndicatorCsv(String ownerName, OutputStream output) throws IOException
     {
         Map<String, Object> param = new HashMap<>();
@@ -276,7 +260,7 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
             IOUtils.copy(in, output);
         }
     }
-    
+
     private InputStream downloadBulkHelper(String ownerName, Map<String, Object> param) throws IOException
     {
         return getFile("v2.bulk.download", ownerName, param, ContentType.APPLICATION_JSON);
@@ -359,6 +343,28 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     public Incident getAssociatedGroupIncident(String uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupIncident(uniqueId, incidentId, ownerName);
     }
+
+
+    @Override
+    public IterableResponse<Document> getAssociatedGroupDocuments(String uniqueId) throws IOException, FailedResponseException {
+        return groupAssocReader.getAssociatedGroupDocuments(uniqueId);
+    }
+
+    @Override
+    public IterableResponse<Document> getAssociatedGroupDocuments(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocReader.getAssociatedGroupDocuments(uniqueId, ownerName);
+    }
+
+    @Override
+    public Document getAssociatedGroupDocument(String uniqueId, Integer incidentId) throws IOException, FailedResponseException {
+        return groupAssocReader.getAssociatedGroupDocument(uniqueId, incidentId);
+    }
+
+    @Override
+    public Document getAssociatedGroupDocument(String uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocReader.getAssociatedGroupDocument(uniqueId, incidentId, ownerName);
+    }
+
 
     @Override
     public IterableResponse<Signature> getAssociatedGroupSignatures(String uniqueId) throws IOException, FailedResponseException {
