@@ -103,6 +103,8 @@ public class AttributeDefinitionUtil
 								// add an entry for this attribute and type combination
 								final String key = getKey(attributeDefinition.getName(), groupType);
 								attributeDefinitions.put(key, attributeDefinition);
+								logger.debug("Loaded attribute definition for {} - {}", attributeDefinition.getName(),
+									groupType);
 							}
 							
 							// for each of the indicator types
@@ -111,6 +113,8 @@ public class AttributeDefinitionUtil
 								// add an entry for this attribute and type combination
 								final String key = getKey(attributeDefinition.getName(), indicatorType);
 								attributeDefinitions.put(key, attributeDefinition);
+								logger.debug("Loaded attribute definition for {} - {}", attributeDefinition.getName(),
+									indicatorType);
 							}
 						}
 						catch (NumberFormatException e)
