@@ -249,7 +249,7 @@ public class BatchApiSaveService implements SaveService
 			case ADDRESS:
 				writer = new AddressWriter(connection, (Address) indicator);
 				break;
-			case EMAIL_ADDRESS:
+			case EMAILADDRESS:
 				writer = new EmailAddressWriter(connection, (EmailAddress) indicator);
 				break;
 			case FILE:

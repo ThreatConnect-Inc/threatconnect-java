@@ -1,5 +1,8 @@
 package com.threatconnect.sdk.parser.util.attribute;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -13,23 +16,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.opencsv.CSVReader;
+import com.threatconnect.sdk.parser.model.Group;
 import com.threatconnect.sdk.parser.model.GroupType;
+import com.threatconnect.sdk.parser.model.Indicator;
 import com.threatconnect.sdk.parser.model.IndicatorType;
+import com.threatconnect.sdk.parser.model.Item;
 
-public class AttributeDefinitionFileReader
+public class AttributeDefinitionUtil
 {
 	public static final String ATTRIBUTES_FILE = "attributes.csv";
 	public static final String TYPE_DELIMITER = "|";
 	public static final int COLUMNS = 5;
 	
-	private static final Logger logger = LoggerFactory.getLogger(AttributeDefinitionFileReader.class);
+	private static final Logger logger = LoggerFactory.getLogger(AttributeDefinitionUtil.class);
 	
-	private static AttributeDefinitionFileReader instance;
+	private static AttributeDefinitionUtil instance;
 	
 	// holds the map of attributes
 	private final Map<String, AttributeDefinition> attributeDefinitions;
 	
-	private AttributeDefinitionFileReader()
+	private AttributeDefinitionUtil()
 	{
 		this.attributeDefinitions = new HashMap<String, AttributeDefinition>();
 		loadAttributesCSV();
@@ -139,7 +145,14 @@ public class AttributeDefinitionFileReader
 	
 	private InputStream findAttributesFile()
 	{
-		return getClass().getResourceAsStream(ATTRIBUTES_FILE);
+		try
+		{
+			return new FileInputStream(new File(ATTRIBUTES_FILE));
+		}
+		catch (FileNotFoundException e)
+		{
+			return null;
+		}
 	}
 	
 	private void setTypes(final AttributeDefinition attributeDefinition, final String types)
@@ -150,8 +163,30 @@ public class AttributeDefinitionFileReader
 		// for each of the types
 		for (String type : typesArray)
 		{
-			IndicatorType indicatorType = IndicatorType.valueOf(type.toUpperCase());
-			GroupType groupType = GroupType.valueOf(type.toUpperCase());
+			IndicatorType indicatorType;
+			GroupType groupType;
+			
+			try
+			{
+				// attempt to load this indicator type
+				indicatorType = IndicatorType.valueOf(type.toUpperCase());
+			}
+			catch (IllegalArgumentException e)
+			{
+				// its ok if it does not exist
+				indicatorType = null;
+			}
+			
+			try
+			{
+				// attempt to load this group type
+				groupType = GroupType.valueOf(type.toUpperCase());
+			}
+			catch (IllegalArgumentException e)
+			{
+				// its ok if it does not exist
+				groupType = null;
+			}
 			
 			// check to see if the indicator type is not null
 			if (null != indicatorType)
@@ -171,6 +206,27 @@ public class AttributeDefinitionFileReader
 		}
 	}
 	
+	public boolean containsAttribute(final String attributeName, final Item item)
+	{
+		// check to see if this item is a group
+		if (item instanceof Group)
+		{
+			Group group = (Group) item;
+			return containsAttribute(attributeName, group.getGroupType());
+		}
+		// check to see if this item is an indicator
+		else if (item instanceof Indicator)
+		{
+			Indicator indicator = (Indicator) item;
+			return containsAttribute(attributeName, indicator.getIndicatorType());
+		}
+		// this should technically never happen unless a new item type is created
+		else
+		{
+			return false;
+		}
+	}
+	
 	public boolean containsAttribute(final String attributeName, final IndicatorType indicatorType)
 	{
 		return (null != getAttribute(attributeName, indicatorType));
@@ -179,6 +235,27 @@ public class AttributeDefinitionFileReader
 	public boolean containsAttribute(final String attributeName, final GroupType groupType)
 	{
 		return (null != getAttribute(attributeName, groupType));
+	}
+	
+	public AttributeDefinition getAttribute(final String attributeName, final Item item)
+	{
+		// check to see if this item is a group
+		if (item instanceof Group)
+		{
+			Group group = (Group) item;
+			return getAttribute(attributeName, group.getGroupType());
+		}
+		// check to see if this item is an indicator
+		else if (item instanceof Indicator)
+		{
+			Indicator indicator = (Indicator) item;
+			return getAttribute(attributeName, indicator.getIndicatorType());
+		}
+		// this should technically never happen unless a new item type is created
+		else
+		{
+			return null;
+		}
 	}
 	
 	public AttributeDefinition getAttribute(final String attributeName, final IndicatorType indicatorType)
@@ -201,12 +278,12 @@ public class AttributeDefinitionFileReader
 		return attributeName + "|G|" + groupType.toString();
 	}
 	
-	public synchronized AttributeDefinitionFileReader getInstance()
+	public static synchronized AttributeDefinitionUtil getInstance()
 	{
 		// check to see if this instance is null
 		if (null == instance)
 		{
-			instance = new AttributeDefinitionFileReader();
+			instance = new AttributeDefinitionUtil();
 		}
 		
 		return instance;

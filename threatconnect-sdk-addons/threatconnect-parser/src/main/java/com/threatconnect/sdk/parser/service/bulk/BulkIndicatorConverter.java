@@ -209,7 +209,7 @@ public class BulkIndicatorConverter
 		{
 			case ADDRESS:
 				return "Address";
-			case EMAIL_ADDRESS:
+			case EMAILADDRESS:
 				return "EmailAddress";
 			case FILE:
 				return "File";

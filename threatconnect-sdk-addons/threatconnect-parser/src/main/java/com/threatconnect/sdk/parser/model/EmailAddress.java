@@ -6,7 +6,7 @@ public class EmailAddress extends Indicator
 	
 	public EmailAddress()
 	{
-		super(IndicatorType.EMAIL_ADDRESS);
+		super(IndicatorType.EMAILADDRESS);
 	}
 	
 	public String getAddress()
