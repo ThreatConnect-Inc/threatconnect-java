@@ -47,4 +47,10 @@ public class Host extends Indicator
 	{
 		this.whoisActive = whoisActive;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return getHostName();
+	}
 }

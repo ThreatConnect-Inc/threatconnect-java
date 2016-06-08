@@ -10,23 +10,8 @@ import com.threatconnect.sdk.client.reader.AbstractBaseReaderAdapter;
 import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
-import com.threatconnect.sdk.server.entity.Adversary;
-import com.threatconnect.sdk.server.entity.Email;
-import com.threatconnect.sdk.server.entity.Group;
-import com.threatconnect.sdk.server.entity.Incident;
-import com.threatconnect.sdk.server.entity.Signature;
-import com.threatconnect.sdk.server.entity.Threat;
-import com.threatconnect.sdk.server.response.entity.AdversaryListResponse;
-import com.threatconnect.sdk.server.response.entity.AdversaryResponse;
-import com.threatconnect.sdk.server.response.entity.EmailListResponse;
-import com.threatconnect.sdk.server.response.entity.EmailResponse;
-import com.threatconnect.sdk.server.response.entity.GroupListResponse;
-import com.threatconnect.sdk.server.response.entity.IncidentListResponse;
-import com.threatconnect.sdk.server.response.entity.IncidentResponse;
-import com.threatconnect.sdk.server.response.entity.SignatureListResponse;
-import com.threatconnect.sdk.server.response.entity.SignatureResponse;
-import com.threatconnect.sdk.server.response.entity.ThreatListResponse;
-import com.threatconnect.sdk.server.response.entity.ThreatResponse;
+import com.threatconnect.sdk.server.entity.*;
+import com.threatconnect.sdk.server.response.entity.*;
 
 import java.io.IOException;
 import java.util.Map;
@@ -111,6 +96,33 @@ public abstract class AbstractGroupAssociateReaderAdapter<P> extends AbstractBas
         return (Incident)data.getData().getData();
     }
 
+    @Override
+    public Document getAssociatedGroupDocument(P uniqueId, Integer incidentId) throws IOException, FailedResponseException {
+        return getAssociatedGroupDocument(uniqueId, incidentId, null);
+    }
+
+    @Override
+    public Document getAssociatedGroupDocument(P uniqueId, Integer documentId, String ownerName)
+            throws IOException, FailedResponseException {
+
+        Map<String,Object> map = createParamMap("id", uniqueId, "groupId", documentId);
+        DocumentResponse data = getItem(getUrlBasePrefix() + ".byId.groups.documents.byGroupId", DocumentResponse.class, ownerName, map);
+
+        return (Document)data.getData().getData();
+    }
+
+    @Override
+    public IterableResponse<Document> getAssociatedGroupDocuments(P uniqueId) throws IOException, FailedResponseException {
+        return getAssociatedGroupDocuments(uniqueId, null);
+    }
+
+    @Override
+    public IterableResponse<Document> getAssociatedGroupDocuments(P uniqueId, String ownerName)
+            throws IOException, FailedResponseException {
+
+        Map<String,Object> map = createParamMap("id", uniqueId);
+        return getItems(getUrlBasePrefix() + ".byId.groups.documents", DocumentListResponse.class, Document.class, ownerName, map);
+    }
     @Override
     public IterableResponse<Signature> getAssociatedGroupSignatures(P uniqueId) throws IOException, FailedResponseException {
         return getAssociatedGroupSignatures(uniqueId, null);

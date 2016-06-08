@@ -103,9 +103,9 @@ public class ConnectionUtil
 	static void applyHeaders(Configuration config, AbstractHttpMessage message, String httpMethod, String urlPath,
 		String contentType, String acceptType)
 	{
-		if (config.getTcApiToken() != null)
+		if (config.getTcToken() != null)
 		{
-			message.addHeader("authorization", "TC-Token " + config.getTcApiToken());
+			message.addHeader("authorization", "TC-Token " + config.getTcToken());
 		}
 		else
 		{

@@ -5,12 +5,6 @@
  */
 package com.threatconnect.sdk.client.reader;
 
-import java.io.IOException;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.threatconnect.sdk.client.AbstractClientAdapter;
 import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.conn.Connection;
@@ -18,6 +12,11 @@ import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.response.entity.ApiEntityListResponse;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.util.ApiFilterType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.Map;
 
 /**
  *
@@ -73,5 +72,4 @@ public abstract class AbstractBaseReaderAdapter<T,P> extends AbstractReaderAdapt
 
         return (T) item.getData().getData();
     }
-
 }

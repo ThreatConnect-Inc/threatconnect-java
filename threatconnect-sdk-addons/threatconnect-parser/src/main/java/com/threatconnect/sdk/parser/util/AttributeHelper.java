@@ -5,9 +5,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.threatconnect.sdk.parser.model.Attribute;
 import com.threatconnect.sdk.parser.model.Group;
 import com.threatconnect.sdk.parser.model.Item;
+import com.threatconnect.sdk.parser.util.attribute.AttributeDefinition;
+import com.threatconnect.sdk.parser.util.attribute.AttributeDefinitionUtil;
 
 /**
  * A utility class that adds some of the commonly used attributes to an item
@@ -23,6 +28,8 @@ public class AttributeHelper
 	public static final String ATTRIBUTE_TTP = "Tactics, Techniques, and Procedures";
 	
 	public static final String SOURCE_DATE_TIME_FORMAT = "MM-dd-yyyy HH:mm zzz";
+	
+	private static final Logger logger = LoggerFactory.getLogger(AttributeHelper.class);
 	
 	/**
 	 * Adds the source attribute to all of the items in the list
@@ -61,8 +68,10 @@ public class AttributeHelper
 	/**
 	 * Adds a description attribute with the given value to the item
 	 * 
-	 * @param item the item to add this attribute to
-	 * @param value the value of the attribute
+	 * @param item
+	 * the item to add this attribute to
+	 * @param value
+	 * the value of the attribute
 	 * @return the attribute that was created
 	 */
 	public static Attribute addDescriptionAttribute(final Item item, final String value)
@@ -73,9 +82,12 @@ public class AttributeHelper
 	/**
 	 * Adds a description attribute with the given value to the item
 	 * 
-	 * @param item the item to add this attribute to
-	 * @param value the value of the attribute
-	 * @param displayed determines where this attribute is displayed
+	 * @param item
+	 * the item to add this attribute to
+	 * @param value
+	 * the value of the attribute
+	 * @param displayed
+	 * determines where this attribute is displayed
 	 * @return the attribute that was created
 	 */
 	public static Attribute addDescriptionAttribute(final Item item, final String value, final Boolean displayed)
@@ -86,8 +98,10 @@ public class AttributeHelper
 	/**
 	 * Adds a source attribute with the given value to the item
 	 * 
-	 * @param item the item to add this attribute to
-	 * @param value the value of the attribute
+	 * @param item
+	 * the item to add this attribute to
+	 * @param value
+	 * the value of the attribute
 	 * @return the attribute that was created
 	 */
 	public static Attribute addSourceAttribute(final Item item, final String value)
@@ -98,9 +112,12 @@ public class AttributeHelper
 	/**
 	 * Adds a source attribute with the given value to the item
 	 * 
-	 * @param item the item to add this attribute to
-	 * @param value the value of the attribute
-	 * @param displayed determines where this attribute is displayed
+	 * @param item
+	 * the item to add this attribute to
+	 * @param value
+	 * the value of the attribute
+	 * @param displayed
+	 * determines where this attribute is displayed
 	 * @return the attribute that was created
 	 */
 	public static Attribute addSourceAttribute(final Item item, final String value, final Boolean displayed)
@@ -111,8 +128,10 @@ public class AttributeHelper
 	/**
 	 * Adds a source date time attribute with the given value to the item
 	 * 
-	 * @param item the item to add this attribute to
-	 * @param date the date object to use
+	 * @param item
+	 * the item to add this attribute to
+	 * @param date
+	 * the date object to use
 	 * @return the attribute that was created
 	 */
 	public static Attribute addSourceDateTimeAttribute(final Item item, final Date date)
@@ -124,8 +143,10 @@ public class AttributeHelper
 	/**
 	 * Adds an Additional Analysis and Context attribute to the item
 	 * 
-	 * @param item the item to add this attribute to
-	 * @param value the value of the attribute
+	 * @param item
+	 * the item to add this attribute to
+	 * @param value
+	 * the value of the attribute
 	 * @return the attribute that was created
 	 */
 	public static Attribute addAdditionalAnalysisAndContext(final Item item, final String value)
@@ -136,8 +157,10 @@ public class AttributeHelper
 	/**
 	 * Adds a Tactics, Techniques, and Procedures attribute to the item
 	 * 
-	 * @param item the item to add this attribute to
-	 * @param value the value of the attribute
+	 * @param item
+	 * the item to add this attribute to
+	 * @param value
+	 * the value of the attribute
 	 * @return the attribute that was created
 	 */
 	public static Attribute addTacticsTechniquesProcedures(final Item item, final String value)
@@ -148,9 +171,12 @@ public class AttributeHelper
 	/**
 	 * Adds an attribute to the item
 	 * 
-	 * @param item the item to add this attribute to
-	 * @param type the type of attribute to add
-	 * @param value the value of the attribute
+	 * @param item
+	 * the item to add this attribute to
+	 * @param type
+	 * the type of attribute to add
+	 * @param value
+	 * the value of the attribute
 	 * @return the attribute that was created
 	 */
 	public static Attribute addAttribute(final Item item, final String type, final String value)
@@ -161,19 +187,50 @@ public class AttributeHelper
 	/**
 	 * Adds an attribute to the item
 	 * 
-	 * @param item the item to add this attribute to
-	 * @param type the type of attribute to add
-	 * @param value the value of the attribute
-	 * @param displayed determines where this attribute is displayed
+	 * @param item
+	 * the item to add this attribute to
+	 * @param type
+	 * the type of attribute to add
+	 * @param value
+	 * the value of the attribute
+	 * @param displayed
+	 * determines where this attribute is displayed
 	 * @return the attribute that was created
 	 */
 	public static Attribute addAttribute(final Item item, final String type, final String value,
 		final Boolean displayed)
 	{
+		final String truncatedValue;
+		
+		// make sure that the value is not null and check to see if there is an attribute definition
+		// for this
+		if (null != value && AttributeDefinitionUtil.getInstance().containsAttribute(type, item))
+		{
+			// retrieve the attribute definition
+			AttributeDefinition attributeDefinition = AttributeDefinitionUtil.getInstance().getAttribute(type, item);
+			
+			// check to see if the value has exceeded the max length
+			if (value.length() > attributeDefinition.getMaxSize())
+			{
+				// truncate this value and notify this action in the logs
+				truncatedValue = value.substring(0, attributeDefinition.getMaxSize());
+				logger.info("Attribute {} has been truncated to {} characters as definied in {}", type,
+					attributeDefinition.getMaxSize(), AttributeDefinitionUtil.ATTRIBUTES_FILE);
+			}
+			else
+			{
+				truncatedValue = value;
+			}
+		}
+		else
+		{
+			truncatedValue = value;
+		}
+		
 		// create a new attribute
 		Attribute attribute = new Attribute();
 		attribute.setType(type);
-		attribute.setValue(value);
+		attribute.setValue(truncatedValue);
 		attribute.setDisplayed(displayed);
 		
 		// add the attribute to the item

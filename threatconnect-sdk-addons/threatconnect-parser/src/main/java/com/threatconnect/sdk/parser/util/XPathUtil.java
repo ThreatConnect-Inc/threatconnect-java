@@ -1,5 +1,8 @@
 package com.threatconnect.sdk.parser.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.xml.namespace.QName;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -14,9 +17,11 @@ public class XPathUtil
 {
 	public static final String RSS_ITEM_XPATH = "//rss/channel/item";
 	
-	private XPathUtil()
-	{
+	private final Map<String, XPathExpression> expressions;
 	
+	public XPathUtil()
+	{
+		this.expressions = new HashMap<String, XPathExpression>();
 	}
 	
 	/**
@@ -30,7 +35,7 @@ public class XPathUtil
 	 * @throws XPathExpressionException
 	 * represents an error in an XPath expression
 	 */
-	public static Node getNode(final String xPath, final Object item)
+	public Node getNode(final String xPath, final Object item)
 		throws XPathExpressionException
 	{
 		return (Node) evaluateXPath(xPath, item, XPathConstants.NODE);
@@ -47,7 +52,7 @@ public class XPathUtil
 	 * @throws XPathExpressionException
 	 * represents an error in an XPath expression
 	 */
-	public static NodeList getNodes(final String xPath, final Object item)
+	public NodeList getNodes(final String xPath, final Object item)
 		throws XPathExpressionException
 	{
 		return (NodeList) evaluateXPath(xPath, item, XPathConstants.NODESET);
@@ -64,7 +69,7 @@ public class XPathUtil
 	 * @throws XPathExpressionException
 	 * represents an error in an XPath expression
 	 */
-	public static String getString(final String xPath, final Object item)
+	public String getString(final String xPath, final Object item)
 		throws XPathExpressionException
 	{
 		return (String) evaluateXPath(xPath, item, XPathConstants.STRING);
@@ -83,11 +88,25 @@ public class XPathUtil
 	 * @throws XPathExpressionException
 	 * represents an error in an XPath expression
 	 */
-	public static Object evaluateXPath(final String xPath, final Object item, final QName returnType)
+	public Object evaluateXPath(final String xPath, final Object item, final QName returnType)
 		throws XPathExpressionException
 	{
-		XPath xpath = XPathFactory.newInstance().newXPath();
-		XPathExpression expr = xpath.compile(xPath);
-		return expr.evaluate(item, returnType);
+		return getXPathExpression(xPath).evaluate(item, returnType);
+	}
+	
+	private XPathExpression getXPathExpression(final String xPath) throws XPathExpressionException
+	{
+		// check to see if this xpath does not exist in the map
+		if (!expressions.containsKey(xPath))
+		{
+			// create the xpath expression
+			XPath xpath = XPathFactory.newInstance().newXPath();
+			XPathExpression expr = xpath.compile(xPath);
+			
+			// add this xpath expression to the list
+			expressions.put(xPath, expr);
+		}
+		
+		return expressions.get(xPath);
 	}
 }

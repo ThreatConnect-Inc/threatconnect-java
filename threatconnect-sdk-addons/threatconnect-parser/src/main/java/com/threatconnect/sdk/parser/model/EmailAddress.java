@@ -6,7 +6,7 @@ public class EmailAddress extends Indicator
 	
 	public EmailAddress()
 	{
-		super(IndicatorType.EMAIL_ADDRESS);
+		super(IndicatorType.EMAILADDRESS);
 	}
 	
 	public String getAddress()
@@ -24,5 +24,11 @@ public class EmailAddress extends Indicator
 		{
 			this.address = null;
 		}
+	}
+	
+	@Override
+	public String toString()
+	{
+		return getAddress();
 	}
 }

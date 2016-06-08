@@ -1,8 +1,34 @@
 package com.threatconnect.sdk.client.reader;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.http.entity.ContentType;
+
 import com.threatconnect.sdk.client.AbstractClientAdapter;
 import com.threatconnect.sdk.client.UrlTypeable;
-import com.threatconnect.sdk.client.reader.associate.*;
+import com.threatconnect.sdk.client.reader.associate.AbstractAttributeAssociateReaderAdapter;
+import com.threatconnect.sdk.client.reader.associate.AbstractGroupAssociateReaderAdapter;
+import com.threatconnect.sdk.client.reader.associate.AbstractIndicatorAssociateReaderAdapter;
+import com.threatconnect.sdk.client.reader.associate.AbstractOwnerAssociateReaderAdapter;
+import com.threatconnect.sdk.client.reader.associate.AbstractSecurityLabelAssociateReaderAdapter;
+import com.threatconnect.sdk.client.reader.associate.AbstractTagAssociateReaderAdapter;
+import com.threatconnect.sdk.client.reader.associate.AbstractVictimAssetAssociateReaderAdapter;
+import com.threatconnect.sdk.client.reader.associate.AbstractVictimAssociateReaderAdapter;
+import com.threatconnect.sdk.client.reader.associate.AttributeAssociateReadable;
+import com.threatconnect.sdk.client.reader.associate.GroupAssociateReadable;
+import com.threatconnect.sdk.client.reader.associate.IndicatorAssociateReadable;
+import com.threatconnect.sdk.client.reader.associate.OwnerAssociateReadable;
+import com.threatconnect.sdk.client.reader.associate.SecurityLabelAssociateReadable;
+import com.threatconnect.sdk.client.reader.associate.TagAssociateReadable;
+import com.threatconnect.sdk.client.reader.associate.VictimAssetAssociateReadable;
+import com.threatconnect.sdk.client.reader.associate.VictimAssociateReadable;
 import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
@@ -203,17 +229,27 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
 
     public void downloadBulkIndicatorJson(String ownerName, Path outputPath) throws IOException
     {
+        downloadBulkIndicatorJson(ownerName, new FileOutputStream(outputPath.toFile()));
+    }
+
+    public void downloadBulkIndicatorJson(String ownerName, OutputStream output) throws IOException
+    {
         Map<String, Object> param = new HashMap<>();
         param.put("format", "json");
 
         InputStream in = downloadBulkHelper(ownerName, param);
 
         if (null != in) {
-            Files.copy(in, outputPath);
+            IOUtils.copy(in, output);
         }
     }
 
     public void downloadBulkIndicatorCsv(String ownerName, Path outputPath) throws IOException
+    {
+    	downloadBulkIndicatorCsv(ownerName, new FileOutputStream(outputPath.toFile()));
+    }
+
+    public void downloadBulkIndicatorCsv(String ownerName, OutputStream output) throws IOException
     {
         Map<String, Object> param = new HashMap<>();
         param.put("format", "csv");
@@ -221,13 +257,13 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
         InputStream in = downloadBulkHelper(ownerName, param);
 
         if (null != in) {
-            Files.copy(in, outputPath);
+            IOUtils.copy(in, output);
         }
     }
 
     private InputStream downloadBulkHelper(String ownerName, Map<String, Object> param) throws IOException
     {
-        return getFile("v2.bulk.download", ownerName, param);
+        return getFile("v2.bulk.download", ownerName, param, ContentType.APPLICATION_JSON);
     }
 
     public String getIndicatorsAsText() throws IOException {
@@ -307,6 +343,28 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     public Incident getAssociatedGroupIncident(String uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupIncident(uniqueId, incidentId, ownerName);
     }
+
+
+    @Override
+    public IterableResponse<Document> getAssociatedGroupDocuments(String uniqueId) throws IOException, FailedResponseException {
+        return groupAssocReader.getAssociatedGroupDocuments(uniqueId);
+    }
+
+    @Override
+    public IterableResponse<Document> getAssociatedGroupDocuments(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocReader.getAssociatedGroupDocuments(uniqueId, ownerName);
+    }
+
+    @Override
+    public Document getAssociatedGroupDocument(String uniqueId, Integer incidentId) throws IOException, FailedResponseException {
+        return groupAssocReader.getAssociatedGroupDocument(uniqueId, incidentId);
+    }
+
+    @Override
+    public Document getAssociatedGroupDocument(String uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocReader.getAssociatedGroupDocument(uniqueId, incidentId, ownerName);
+    }
+
 
     @Override
     public IterableResponse<Signature> getAssociatedGroupSignatures(String uniqueId) throws IOException, FailedResponseException {

@@ -19,7 +19,7 @@ public class Configuration {
     private String tcApiAccessID;
     private String tcApiUserSecretKey;
 
-    private String tcApiToken;
+    private String tcToken;
     private Integer resultLimit;
     private String defaultOwner;
 
@@ -42,9 +42,9 @@ public class Configuration {
         this.resultLimit = resultLimit;
     }
 
-    public Configuration(String tcApiUrl, String tcApiToken, String defaultOwner, Integer resultLimit) {
+    public Configuration(String tcApiUrl, String tcToken, String defaultOwner, Integer resultLimit) {
         this.tcApiUrl = tcApiUrl;
-        this.tcApiToken = tcApiToken;
+        this.tcToken = tcToken;
         this.defaultOwner = defaultOwner;
         this.resultLimit = resultLimit;
     }
@@ -160,15 +160,15 @@ public class Configuration {
         return proxyPort;
     }
 
-    public String getTcApiToken()
-    {
-        return tcApiToken;
-    }
-
-    public void setTcApiToken(String tcApiToken)
-    {
-        this.tcApiToken = tcApiToken;
-    }
+    public String getTcToken()
+	{
+		return tcToken;
+	}
+    
+    public void setTcToken(String tcToken)
+	{
+		this.tcToken = tcToken;
+	}
 
     public boolean isActivityLogEnabled()
     {

@@ -1,7 +1,6 @@
 package com.threatconnect.sdk.parser.util;
 
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.threatconnect.sdk.parser.model.Address;
 import com.threatconnect.sdk.parser.model.Host;
@@ -42,17 +41,9 @@ public class IndicatorUtil
 				fullUrl = url;
 			}
 			
-			// check to see if the url is valid
-			if (UrlUtil.isValid(fullUrl))
-			{
-				Url result = new Url();
-				result.setText(fullUrl);
-				return result;
-			}
-			else
-			{
-				throw new InvalidURLException(fullUrl + " is not a valid URL");
-			}
+			Url result = new Url();
+			result.setText(fullUrl);
+			return result;
 		}
 		else
 		{
@@ -87,7 +78,7 @@ public class IndicatorUtil
 	public static Indicator createHostOrAddress(final String ipAddressOrHostName)
 	{
 		// check to see if this is an IP address
-		if (Pattern.matches(RegexUtil.REGEX_IP_FORMAT, ipAddressOrHostName))
+		if (RegexUtil.REGEX_IP_FORMAT.matcher(ipAddressOrHostName).matches())
 		{
 			// create an address indicator
 			Address address = new Address();
@@ -116,14 +107,14 @@ public class IndicatorUtil
 	public static String cleanIP(final String ip)
 	{
 		// create a matcher for this ip
-		Matcher matcher = Pattern.compile(RegexUtil.REGEX_LEADING_ZEROS).matcher(ip);
+		Matcher matcher = RegexUtil.REGEX_LEADING_ZEROS.matcher(ip);
 		
 		// check to see if there are any matches
 		if (matcher.find())
 		{
 			// remove all of the leading zeros and recursively call this again to ensure that the ip
 			// is now clean
-			return cleanIP(ip.replaceAll(RegexUtil.REGEX_LEADING_ZEROS, ""));
+			return cleanIP(ip.replaceAll(RegexUtil.REGEX_LEADING_ZEROS.pattern(), ""));
 		}
 		else
 		{
