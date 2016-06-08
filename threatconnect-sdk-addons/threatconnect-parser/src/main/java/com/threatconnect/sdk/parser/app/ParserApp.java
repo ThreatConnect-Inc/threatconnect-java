@@ -59,6 +59,15 @@ public abstract class ParserApp extends App
 							// allow child classes to do something with the parsed data
 							onParsingFinished(items, parser);
 							
+							// add up all of the indicators and groups
+							Count count =
+								new Count(count(items, ItemType.INDICATOR, true), count(items, ItemType.GROUP, true));
+							parserCountMap.put(parser.getUniqueName(), count);
+							
+							// add up the total groups and indicators that were found
+							totalIndicatorsFound += count.getIndicators();
+							totalGroupsFound += count.getGroups();
+							
 							// create a save service that to write the data
 							SaveService saveService = getSaveService(appConfig);
 							
@@ -66,15 +75,7 @@ public abstract class ParserApp extends App
 							SaveResults saveResults = saveService.saveItems(items);
 							parserSaveResults.put(parser.getUniqueName(), saveResults);
 							
-							// add up all of the indicators and groups
-							Count count =
-								new Count(count(items, ItemType.INDICATOR, true), count(items, ItemType.GROUP, true));
-							parserCountMap.put(parser.getUniqueName(), count);
-							
-							// add up the totals
-							totalIndicatorsFound += count.getIndicators();
-							totalGroupsFound += count.getGroups();
-							
+							// add up the total groups and indicators that were saved
 							totalIndicatorsSaved +=
 								count.getIndicators() - saveResults.countFailedItems(ItemType.INDICATOR);
 							totalGroupsSaved += count.getGroups() - saveResults.countFailedItems(ItemType.GROUP);
@@ -200,7 +201,7 @@ public abstract class ParserApp extends App
 		// create the configuration for the threatconnect server
 		Configuration configuration = new Configuration(appConfig.getTcApiPath(), appConfig.getTcApiAccessID(),
 			appConfig.getTcApiUserSecretKey(), appConfig.getApiDefaultOrg());
-		
+			
 		// add the tc token if it exists
 		configuration.setTcToken(appConfig.getTcToken());
 		
