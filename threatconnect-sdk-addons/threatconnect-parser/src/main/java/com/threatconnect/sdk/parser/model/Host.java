@@ -49,7 +49,7 @@ public class Host extends Indicator
 	}
 	
 	@Override
-	public String toString()
+	public String getIdentifier()
 	{
 		return getHostName();
 	}

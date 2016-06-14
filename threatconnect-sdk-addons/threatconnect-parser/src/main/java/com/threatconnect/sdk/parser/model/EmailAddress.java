@@ -27,7 +27,7 @@ public class EmailAddress extends Indicator
 	}
 	
 	@Override
-	public String toString()
+	public String getIdentifier()
 	{
 		return getAddress();
 	}

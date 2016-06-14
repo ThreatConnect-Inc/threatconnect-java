@@ -20,7 +20,7 @@ public class Url extends Indicator
 	}
 	
 	@Override
-	public String toString()
+	public String getIdentifier()
 	{
 		return getText();
 	}

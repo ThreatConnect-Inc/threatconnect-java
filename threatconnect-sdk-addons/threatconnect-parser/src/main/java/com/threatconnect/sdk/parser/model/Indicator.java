@@ -126,4 +126,58 @@ public abstract class Indicator extends Item
 	{
 		return associatedItems;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return getIdentifier();
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		final String id = getIdentifier();
+		
+		// make sure the id is not null
+		if (null != id)
+		{
+			return id.hashCode();
+		}
+		else
+		{
+			return super.hashCode();
+		}
+	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		final String id = getIdentifier();
+		
+		// make sure the id is not null
+		if (null != id)
+		{
+			// make sure the other object is an indicator
+			if (obj instanceof Indicator)
+			{
+				final Indicator other = (Indicator) obj;
+				return id.equals(other.getIdentifier());
+			}
+			else
+			{
+				return super.equals(obj);
+			}
+		}
+		else
+		{
+			return super.equals(obj);
+		}
+	}
+	
+	/**
+	 * Returns the unique identifier for this indicator
+	 * 
+	 * @return
+	 */
+	public abstract String getIdentifier();
 }
