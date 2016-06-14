@@ -2,6 +2,8 @@ package com.threatconnect.sdk.app;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
@@ -102,6 +104,28 @@ public abstract class App
 		}
 	}
 	
+	/**
+	 * Writes data out to an output file for this app
+	 * 
+	 * @param fileName
+	 * the filename to write to
+	 * @param data
+	 * the data to write
+	 * @throws IOException
+	 * if there was an error writing the file
+	 */
+	public void writeOutFile(final String fileName, final byte[] data) throws IOException
+	{
+		// retrieve the file to write to
+		File file = getOutFile(fileName);
+		
+		// write the data to this file
+		try (FileOutputStream out = new FileOutputStream(file))
+		{
+			out.write(data);
+		}
+	}
+	
 	public Logger getLogger()
 	{
 		return logger;
@@ -134,7 +158,7 @@ public abstract class App
 	 */
 	public File getMessageLogFile()
 	{
-		return new File(getAppConfig().getTcOutPath() + File.separator + "message.tc");
+		return getOutFile("message.tc");
 	}
 	
 	/**
@@ -144,6 +168,11 @@ public abstract class App
 	 */
 	public File getResultsLogFile()
 	{
-		return new File(getAppConfig().getTcOutPath() + File.separator + "results.tc");
+		return getOutFile("results.tc");
+	}
+	
+	public File getOutFile(final String fileName)
+	{
+		return new File(getAppConfig().getTcOutPath() + File.separator + fileName);
 	}
 }
