@@ -93,7 +93,7 @@ public class AttributeDefinitionUtil
 						
 						try
 						{
-							attributeDefinition.setMaxSize(Integer.parseInt(nextLine[3]));
+							attributeDefinition.setMaxSize(Integer.parseInt(nextLine[3].trim()));
 							
 							setTypes(attributeDefinition, nextLine[4]);
 							
@@ -173,7 +173,7 @@ public class AttributeDefinitionUtil
 			try
 			{
 				// attempt to load this indicator type
-				indicatorType = IndicatorType.valueOf(type.toUpperCase());
+				indicatorType = IndicatorType.valueOf(type.trim().toUpperCase());
 			}
 			catch (IllegalArgumentException e)
 			{
@@ -184,7 +184,7 @@ public class AttributeDefinitionUtil
 			try
 			{
 				// attempt to load this group type
-				groupType = GroupType.valueOf(type.toUpperCase());
+				groupType = GroupType.valueOf(type.trim().toUpperCase());
 			}
 			catch (IllegalArgumentException e)
 			{
@@ -205,7 +205,7 @@ public class AttributeDefinitionUtil
 			// this is not a valid type
 			else
 			{
-				throw new InvalidAttributeDefinitionTypesException(type + " is not a valid group or indicator type");
+				throw new InvalidAttributeDefinitionTypesException(type.trim() + " is not a valid group or indicator type");
 			}
 		}
 	}
