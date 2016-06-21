@@ -14,6 +14,11 @@ public class FileDataSource implements DataSource
 		this.file = file;
 	}
 	
+	public File getFile()
+	{
+		return file;
+	}
+	
 	@Override
 	public InputStream read() throws IOException
 	{

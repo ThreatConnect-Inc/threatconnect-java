@@ -15,6 +15,11 @@ public class UrlDataSource implements DataSource
 		this.url = new URL(url);
 	}
 	
+	public URL getUrl()
+	{
+		return url;
+	}
+	
 	@Override
 	public InputStream read() throws IOException
 	{
