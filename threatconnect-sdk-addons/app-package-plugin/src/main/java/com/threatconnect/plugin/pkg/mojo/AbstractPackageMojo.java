@@ -1,4 +1,4 @@
-package com.threatconnect.plugin.pkg;
+package com.threatconnect.plugin.pkg.mojo;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +12,11 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.plexus.util.FileUtils;
+
+import com.threatconnect.plugin.pkg.Profile;
+import com.threatconnect.plugin.pkg.ZipUtil;
+import com.threatconnect.plugin.pkg.config.InstallJson;
+import com.threatconnect.plugin.pkg.config.InvalidInstallJsonFileException;
 
 public abstract class AbstractPackageMojo extends AbstractMojo
 {
@@ -45,11 +50,11 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	{
 		getLog().info("Building ThreatConnect App file");
 		
-		// retrieve the list of profiles
-		List<Profile> profiles = getProfiles();
-		
 		try
 		{
+			// retrieve the list of profiles
+			List<Profile> profiles = getProfiles();
+			
 			// check to see if there are any profiles
 			if (!profiles.isEmpty())
 			{
@@ -66,7 +71,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 				packageLegacy();
 			}
 		}
-		catch (IOException e)
+		catch (InvalidInstallJsonFileException | IOException e)
 		{
 			throw new MojoFailureException(e.getMessage(), e);
 		}
@@ -75,23 +80,11 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	protected void packageProfile(final Profile profile) throws IOException
 	{
 		// determine what this app name will be
-		final String appName = (null == profile.getProfileName() || profile.getProfileName().isEmpty()) ? getAppName()
-			: profile.getProfileName();
-		final String finalAppName;
+		final String appName = determineAppName(profile);
 		
-		// check to see if the app name needs the version
-		if (appName.endsWith(getVersion()))
-		{
-			finalAppName = appName;
-		}
-		else
-		{
-			finalAppName = appName + "-" + getVersion();
-		}
+		getLog().info("Packaging Profile " + appName);
 		
-		getLog().info("Packaging Profile " + finalAppName);
-		
-		File explodedDir = getExplodedDir(finalAppName);
+		File explodedDir = getExplodedDir(appName);
 		explodedDir.mkdirs();
 		
 		// copy the install.json file
@@ -107,7 +100,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	
 	protected void packageLegacy() throws IOException
 	{
-		File explodedDir = getExplodedDir(getAppName());
+		File explodedDir = getExplodedDir(determineAppName(null));
 		explodedDir.mkdirs();
 		
 		// copy the install conf file if it exists
@@ -120,14 +113,58 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 		ZipUtil.zipFolder(explodedDir);
 	}
 	
-	protected abstract void writeAppContentsToDirectory(final File targetDirectory) throws IOException;
+	protected String determineAppName(final Profile profile)
+	{
+		String appName;
+		
+		// first check to see if the profile is not null
+		if (null != profile)
+		{
+			// retrieve the application name and program version from the install.json file
+			final String applicationName = profile.getInstallJson().getApplicatioName();
+			final String programVersion = profile.getInstallJson().getProgramVersion();
+			
+			// make sure that both the application name and program version are valid
+			if (null != applicationName && !applicationName.trim().isEmpty() && null != programVersion
+				&& !programVersion.trim().isEmpty())
+			{
+				appName = applicationName + "-" + programVersion;
+			}
+			else
+			{
+				// check to see if a valid profile name exists
+				if (null != profile.getProfileName() && !profile.getProfileName().trim().isEmpty())
+				{
+					appName = profile.getProfileName();
+					
+					// check to see if the app name needs the version
+					if (!appName.endsWith(getVersion()))
+					{
+						appName = appName + "-" + getVersion();
+					}
+				}
+				// there is a profile, but it does not contain a valid name
+				else
+				{
+					appName = getAppName();
+				}
+			}
+		}
+		// there is not profile object
+		else
+		{
+			appName = getAppName();
+		}
+		
+		return appName;
+	}
 	
 	/**
 	 * Returns the list of profiles for this app packager
 	 * 
 	 * @return
 	 */
-	protected List<Profile> getProfiles()
+	protected List<Profile> getProfiles() throws InvalidInstallJsonFileException
 	{
 		// holds the list of install
 		List<Profile> profiles = new ArrayList<Profile>();
@@ -150,8 +187,12 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 					// retrieve the profile name for this install file
 					final String profileName = matcher.group(1);
 					
+					// create the install json object
+					InstallJson installJson = new InstallJson(file);
+					
 					// create a new profile
-					profiles.add(new Profile(profileName, file));
+					Profile profile = new Profile(profileName, file, installJson);
+					profiles.add(profile);
 				}
 			}
 		}
@@ -239,4 +280,12 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	{
 		return version;
 	}
+	
+	/**
+	 * Called when the app packager is ready to begin writing the files needed for building an app
+	 * 
+	 * @param targetDirectory
+	 * @throws IOException
+	 */
+	protected abstract void writeAppContentsToDirectory(final File targetDirectory) throws IOException;
 }

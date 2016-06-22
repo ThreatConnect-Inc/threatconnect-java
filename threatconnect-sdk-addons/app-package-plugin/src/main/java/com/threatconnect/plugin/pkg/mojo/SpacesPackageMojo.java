@@ -1,4 +1,4 @@
-package com.threatconnect.plugin.pkg;
+package com.threatconnect.plugin.pkg.mojo;
 
 import java.io.File;
 import java.io.IOException;
