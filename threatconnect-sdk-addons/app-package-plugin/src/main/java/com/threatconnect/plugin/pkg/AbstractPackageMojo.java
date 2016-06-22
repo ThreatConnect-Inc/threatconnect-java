@@ -35,6 +35,12 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	@Parameter(defaultValue = "${project.build.finalName}", required = true)
 	private String appName;
 	
+	/**
+	 * The version of the app
+	 */
+	@Parameter(defaultValue = "${project.version}", required = true)
+	private String version;
+	
 	public void execute() throws MojoExecutionException, MojoFailureException
 	{
 		getLog().info("Building ThreatConnect App file");
@@ -71,10 +77,11 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 		// determine what this app name will be
 		final String appName = (null == profile.getProfileName() || profile.getProfileName().isEmpty()) ? getAppName()
 			: profile.getProfileName();
-			
-		getLog().info("Packaging Profile " + appName);
+		final String appNameAndVersion = appName + "-" + getVersion();
 		
-		File explodedDir = getExplodedDir(appName);
+		getLog().info("Packaging Profile " + appNameAndVersion);
+		
+		File explodedDir = getExplodedDir(appNameAndVersion);
 		explodedDir.mkdirs();
 		
 		// copy the install.json file
@@ -216,5 +223,10 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	public String getBaseDirectory()
 	{
 		return baseDirectory;
+	}
+	
+	public String getVersion()
+	{
+		return version;
 	}
 }
