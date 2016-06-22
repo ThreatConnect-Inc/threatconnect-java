@@ -77,11 +77,21 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 		// determine what this app name will be
 		final String appName = (null == profile.getProfileName() || profile.getProfileName().isEmpty()) ? getAppName()
 			: profile.getProfileName();
-		final String appNameAndVersion = appName + "-" + getVersion();
+		final String finalAppName;
 		
-		getLog().info("Packaging Profile " + appNameAndVersion);
+		// check to see if the app name needs the version
+		if (appName.endsWith(getVersion()))
+		{
+			finalAppName = appName;
+		}
+		else
+		{
+			finalAppName = appName + "-" + getVersion();
+		}
 		
-		File explodedDir = getExplodedDir(appNameAndVersion);
+		getLog().info("Packaging Profile " + finalAppName);
+		
+		File explodedDir = getExplodedDir(finalAppName);
 		explodedDir.mkdirs();
 		
 		// copy the install.json file
