@@ -77,6 +77,14 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 		}
 	}
 	
+	/**
+	 * Packages a profile. A profile is determined by an install.json file. If multiple install.json
+	 * files are found, they are each built using their profile name. Otherwise, if only an
+	 * install.json file is found, the default settings are used.
+	 * 
+	 * @param profile
+	 * @throws IOException
+	 */
 	protected void packageProfile(final Profile profile) throws IOException
 	{
 		// determine what this app name will be
@@ -98,6 +106,11 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 		ZipUtil.zipFolder(explodedDir);
 	}
 	
+	/**
+	 * Packages a legacy app which consists of an install.conf file.
+	 * 
+	 * @throws IOException
+	 */
 	protected void packageLegacy() throws IOException
 	{
 		File explodedDir = getExplodedDir(determineAppName(null));
@@ -113,6 +126,14 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 		ZipUtil.zipFolder(explodedDir);
 	}
 	
+	/**
+	 * Given a profile, the name of the app is determined here. First, if the install.json file has
+	 * an applicationName and programVersion attribute set, those are used. If not, the prefix of
+	 * the install.json file is used if it exists, otherwise the default app name is used.
+	 * 
+	 * @param profile
+	 * @return
+	 */
 	protected String determineAppName(final Profile profile)
 	{
 		String appName;

@@ -29,7 +29,6 @@ public class ZipUtil
 	
 	private static void addFileToZip(String path, String srcFile, ZipOutputStream zip) throws IOException
 	{
-		
 		File folder = new File(srcFile);
 		if (folder.isDirectory())
 		{
