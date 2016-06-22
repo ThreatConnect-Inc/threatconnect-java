@@ -39,11 +39,14 @@ public class ZipUtil
 		{
 			byte[] buf = new byte[1024];
 			int len;
-			FileInputStream in = new FileInputStream(srcFile);
-			zip.putNextEntry(new ZipEntry(path + "/" + folder.getName()));
-			while ((len = in.read(buf)) > 0)
+			
+			try (FileInputStream in = new FileInputStream(srcFile))
 			{
-				zip.write(buf, 0, len);
+				zip.putNextEntry(new ZipEntry(path + "/" + folder.getName()));
+				while ((len = in.read(buf)) > 0)
+				{
+					zip.write(buf, 0, len);
+				}
 			}
 		}
 	}
