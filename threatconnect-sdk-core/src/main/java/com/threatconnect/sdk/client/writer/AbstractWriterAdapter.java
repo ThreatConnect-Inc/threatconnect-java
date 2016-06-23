@@ -19,6 +19,7 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.threatconnect.sdk.client.AbstractClientAdapter;
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.response.WriteListResponse;
@@ -301,15 +302,18 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
         }
 
         T result;
-        try {
-        	logger.trace("Calling url={}", url);
-            String content = executor.execute(url, requestType, saveObject);
-            logger.trace("returning content={}", content);
-            result = mapper.readValue(content, type);
-        } catch ( EOFException ex ) {
-        	logger.error(requestType + " Error ", ex);
-            throw new FailedResponseException( ex.toString() ); // rethrow using local exception
-        }
+		try
+		{
+			logger.trace("Calling url={}", url);
+			String content = executor.execute(url, requestType, saveObject);
+			logger.trace("returning content={}", content);
+			result = mapper.readValue(content, type);
+		}
+		catch (JsonMappingException | EOFException ex)
+		{
+			logger.error(requestType + " Error ", ex);
+			throw new FailedResponseException(ex);
+		}
 
         return result;
     }

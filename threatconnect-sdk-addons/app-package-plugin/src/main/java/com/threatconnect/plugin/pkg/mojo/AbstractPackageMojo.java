@@ -1,4 +1,4 @@
-package com.threatconnect.plugin.pkg;
+package com.threatconnect.plugin.pkg.mojo;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,14 +10,15 @@ import java.util.regex.Pattern;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.LifecyclePhase;
-import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.codehaus.plexus.util.FileUtils;
 
-@Mojo(name = "app-package", defaultPhase = LifecyclePhase.PACKAGE, threadSafe = true, requiresDependencyResolution = ResolutionScope.RUNTIME)
-public class AppPackageMojo extends AbstractMojo
+import com.threatconnect.plugin.pkg.Profile;
+import com.threatconnect.plugin.pkg.ZipUtil;
+import com.threatconnect.plugin.pkg.config.InstallJson;
+import com.threatconnect.plugin.pkg.config.InvalidInstallJsonFileException;
+
+public abstract class AbstractPackageMojo extends AbstractMojo
 {
 	public static final Pattern PATTERN_INSTALL_JSON = Pattern.compile("^(?:(.*)\\.)?install\\.json$");
 	
@@ -40,21 +41,20 @@ public class AppPackageMojo extends AbstractMojo
 	private String appName;
 	
 	/**
-	 * Classifier to add to the generated App. If given, the artifact will be an attachment instead.
-	 * The classifier will not be applied to the JAR file of the project - only to the WAR file.
+	 * The version of the app
 	 */
-	@Parameter
-	private String classifier;
+	@Parameter(defaultValue = "${project.version}", required = true)
+	private String version;
 	
 	public void execute() throws MojoExecutionException, MojoFailureException
 	{
 		getLog().info("Building ThreatConnect App file");
 		
-		// retrieve the list of profiles
-		List<Profile> profiles = getProfiles();
-		
 		try
 		{
+			// retrieve the list of profiles
+			List<Profile> profiles = getProfiles();
+			
 			// check to see if there are any profiles
 			if (!profiles.isEmpty())
 			{
@@ -71,79 +71,113 @@ public class AppPackageMojo extends AbstractMojo
 				packageLegacy();
 			}
 		}
-		catch (IOException e)
+		catch (InvalidInstallJsonFileException | IOException e)
 		{
 			throw new MojoFailureException(e.getMessage(), e);
 		}
 	}
 	
+	/**
+	 * Packages a profile. A profile is determined by an install.json file. If multiple install.json
+	 * files are found, they are each built using their profile name. Otherwise, if only an
+	 * install.json file is found, the default settings are used.
+	 * 
+	 * @param profile
+	 * @throws IOException
+	 */
 	protected void packageProfile(final Profile profile) throws IOException
 	{
 		// determine what this app name will be
-		final String appName = (null == profile.getProfileName() || profile.getProfileName().isEmpty()) ? getAppName()
-			: profile.getProfileName();
-			
+		final String appName = determineAppName(profile);
+		
 		getLog().info("Packaging Profile " + appName);
 		
 		File explodedDir = getExplodedDir(appName);
 		explodedDir.mkdirs();
 		
-		// copy the files into the directory
-		FileUtils.copyFileToDirectory(getSourceJarFile(), explodedDir);
-		
-		// copy this file to the destination directory
+		// copy the install.json file
 		File installJsonDestination = new File(explodedDir.getAbsolutePath() + File.separator + "install.json");
 		FileUtils.copyFile(profile.getInstallFile(), installJsonDestination);
 		
-		// copy the attributes json file if it exists
-		copyFileToDirectoryIfExists(getAttributesCsvFile(), explodedDir);
-		
-		// copy all of the files in the include folder
-		copyFileToDirectoryIfExists(getIncludeFolder(), explodedDir);
+		// write the rest of the app contents out to the target folder
+		writeAppContentsToDirectory(explodedDir);
 		
 		// zip up the app
 		ZipUtil.zipFolder(explodedDir);
 	}
 	
+	/**
+	 * Packages a legacy app which consists of an install.conf file.
+	 * 
+	 * @throws IOException
+	 */
 	protected void packageLegacy() throws IOException
 	{
-		File explodedDir = getExplodedDir(getAppName());
+		File explodedDir = getExplodedDir(determineAppName(null));
 		explodedDir.mkdirs();
-		
-		// copy the files into the directory
-		FileUtils.copyFileToDirectory(getSourceJarFile(), explodedDir);
 		
 		// copy the install conf file if it exists
 		copyFileToDirectoryIfExists(getInstallConfFile(), explodedDir);
 		
-		// copy the attributes json file if it exists
-		copyFileToDirectoryIfExists(getAttributesCsvFile(), explodedDir);
-		
-		// copy all of the files in the include folder
-		copyFileToDirectoryIfExists(getIncludeFolder(), explodedDir);
+		// write the rest of the app contents out to the target folder
+		writeAppContentsToDirectory(explodedDir);
 		
 		// zip up the app
 		ZipUtil.zipFolder(explodedDir);
 	}
 	
-	protected File getSourceJarFile()
+	/**
+	 * Given a profile, the name of the app is determined here. First, if the install.json file has
+	 * an applicationName and programVersion attribute set, those are used. If not, the prefix of
+	 * the install.json file is used if it exists, otherwise the default app name is used.
+	 * 
+	 * @param profile
+	 * @return
+	 */
+	protected String determineAppName(final Profile profile)
 	{
-		return getTargetFile(new File(getOutputDirectory()), getAppName(), getClassifier(), "jar");
-	}
-	
-	protected File getInstallConfFile()
-	{
-		return new File(baseDirectory + "/install.conf");
-	}
-	
-	protected File getAttributesCsvFile()
-	{
-		return new File(baseDirectory + "/attributes.csv");
-	}
-	
-	protected File getIncludeFolder()
-	{
-		return new File(baseDirectory + "/include");
+		String appName;
+		
+		// first check to see if the profile is not null
+		if (null != profile)
+		{
+			// retrieve the application name and program version from the install.json file
+			final String applicationName = profile.getInstallJson().getApplicatioName();
+			final String programVersion = profile.getInstallJson().getProgramVersion();
+			
+			// make sure that both the application name and program version are valid
+			if (null != applicationName && !applicationName.trim().isEmpty() && null != programVersion
+				&& !programVersion.trim().isEmpty())
+			{
+				appName = applicationName + "-" + programVersion;
+			}
+			else
+			{
+				// check to see if a valid profile name exists
+				if (null != profile.getProfileName() && !profile.getProfileName().trim().isEmpty())
+				{
+					appName = profile.getProfileName();
+					
+					// check to see if the app name needs the version
+					if (!appName.endsWith(getVersion()))
+					{
+						appName = appName + "-" + getVersion();
+					}
+				}
+				// there is a profile, but it does not contain a valid name
+				else
+				{
+					appName = getAppName();
+				}
+			}
+		}
+		// there is not profile object
+		else
+		{
+			appName = getAppName();
+		}
+		
+		return appName;
 	}
 	
 	/**
@@ -151,7 +185,7 @@ public class AppPackageMojo extends AbstractMojo
 	 * 
 	 * @return
 	 */
-	protected List<Profile> getProfiles()
+	protected List<Profile> getProfiles() throws InvalidInstallJsonFileException
 	{
 		// holds the list of install
 		List<Profile> profiles = new ArrayList<Profile>();
@@ -174,8 +208,12 @@ public class AppPackageMojo extends AbstractMojo
 					// retrieve the profile name for this install file
 					final String profileName = matcher.group(1);
 					
+					// create the install json object
+					InstallJson installJson = new InstallJson(file);
+					
 					// create a new profile
-					profiles.add(new Profile(profileName, file));
+					Profile profile = new Profile(profileName, file, installJson);
+					profiles.add(profile);
 				}
 			}
 		}
@@ -183,39 +221,14 @@ public class AppPackageMojo extends AbstractMojo
 		return profiles;
 	}
 	
+	protected File getInstallConfFile()
+	{
+		return new File(baseDirectory + "/install.conf");
+	}
+	
 	protected File getExplodedDir(final String appName)
 	{
 		return new File(getOutputDirectory() + "/" + appName);
-	}
-	
-	protected String getFinalNameAndClassifier(String finalName, String classifier)
-	{
-		if (classifier == null)
-		{
-			classifier = "";
-		}
-		else if (classifier.trim().length() > 0 && !classifier.startsWith("-"))
-		{
-			classifier = "-" + classifier;
-		}
-		
-		return finalName + classifier;
-	}
-	
-	/**
-	 * @param basedir
-	 * The basedir
-	 * @param finalName
-	 * The finalName
-	 * @param classifier
-	 * The classifier.
-	 * @param type
-	 * The type.
-	 * @return {@link File}
-	 */
-	protected File getTargetFile(File basedir, String finalName, String classifier, String type)
-	{
-		return new File(basedir, getFinalNameAndClassifier(finalName, classifier) + "." + type);
 	}
 	
 	/**
@@ -279,8 +292,21 @@ public class AppPackageMojo extends AbstractMojo
 		return appName;
 	}
 	
-	public String getClassifier()
+	public String getBaseDirectory()
 	{
-		return classifier;
+		return baseDirectory;
 	}
+	
+	public String getVersion()
+	{
+		return version;
+	}
+	
+	/**
+	 * Called when the app packager is ready to begin writing the files needed for building an app
+	 * 
+	 * @param targetDirectory
+	 * @throws IOException
+	 */
+	protected abstract void writeAppContentsToDirectory(final File targetDirectory) throws IOException;
 }

@@ -180,7 +180,7 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 					indicatorID = ((Address) indicator).getIp();
 					response = writer.associateIndicatorAddress(getSavedGroupID(), indicatorID);
 					break;
-				case EMAIL_ADDRESS:
+				case EMAILADDRESS:
 					indicatorID = ((EmailAddress) indicator).getAddress();
 					response = writer.associateIndicatorEmailAddress(getSavedGroupID(), indicatorID);
 					break;

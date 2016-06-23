@@ -16,6 +16,7 @@ import com.threatconnect.sdk.parser.model.Host;
 import com.threatconnect.sdk.parser.model.Indicator;
 import com.threatconnect.sdk.parser.model.IndicatorType;
 import com.threatconnect.sdk.parser.model.Url;
+import com.threatconnect.sdk.parser.util.TagUtil;
 
 public class BulkIndicatorConverter
 {
@@ -52,7 +53,7 @@ public class BulkIndicatorConverter
 				JsonArray tags = tagElement.getAsJsonArray();
 				for (JsonElement tag : tags)
 				{
-					indicator.getTags().add(tag.getAsJsonObject().get("name").getAsString());
+					TagUtil.addTag(tag.getAsJsonObject().get("name").getAsString(), indicator);
 				}
 			}
 			
@@ -208,7 +209,7 @@ public class BulkIndicatorConverter
 		{
 			case ADDRESS:
 				return "Address";
-			case EMAIL_ADDRESS:
+			case EMAILADDRESS:
 				return "EmailAddress";
 			case FILE:
 				return "File";

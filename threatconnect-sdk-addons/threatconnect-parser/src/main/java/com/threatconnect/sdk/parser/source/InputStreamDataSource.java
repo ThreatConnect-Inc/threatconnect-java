@@ -12,6 +12,11 @@ public class InputStreamDataSource implements DataSource
 		this.inputStream = inputStream;
 	}
 	
+	public InputStream getInputStream()
+	{
+		return inputStream;
+	}
+	
 	@Override
 	public InputStream read() throws IOException
 	{
