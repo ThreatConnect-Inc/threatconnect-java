@@ -5,14 +5,14 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 
-import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.JsonPath;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.threatconnect.sdk.parser.model.Item;
 import com.threatconnect.sdk.parser.source.DataSource;
 
-public abstract class AbstractJsonPathParser<I extends Item> extends AbstractParser<I>
+public abstract class AbstractGsonParser<I extends Item> extends AbstractParser<I>
 {
-	public AbstractJsonPathParser(final DataSource dataSource)
+	public AbstractGsonParser(final DataSource dataSource)
 	{
 		super(dataSource);
 	}
@@ -27,10 +27,11 @@ public abstract class AbstractJsonPathParser<I extends Item> extends AbstractPar
 			String json = preProcessJson(rawJson);
 			
 			// parse the json into an element
-			DocumentContext context = JsonPath.parse(json);
+			JsonParser parser = new JsonParser();
+			JsonElement element = parser.parse(json);
 			
 			// process the json and retrieve the result
-			return processJson(context);
+			return processJson(element);
 		}
 		catch (IOException e)
 		{
@@ -52,9 +53,9 @@ public abstract class AbstractJsonPathParser<I extends Item> extends AbstractPar
 	/**
 	 * Process the json context
 	 * 
-	 * @param context
+	 * @param element
 	 * @return
 	 * @throws ParserException
 	 */
-	protected abstract List<I> processJson(DocumentContext context) throws ParserException;
+	protected abstract List<I> processJson(JsonElement element) throws ParserException;
 }
