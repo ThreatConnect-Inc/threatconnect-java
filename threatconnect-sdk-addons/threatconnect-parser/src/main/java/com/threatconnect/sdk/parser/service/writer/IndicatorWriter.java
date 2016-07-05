@@ -87,10 +87,13 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 					// for each of the attributes of this group
 					for (Attribute attribute : indicatorSource.getAttributes())
 					{
-						// save the attributes for this indicator
-						ApiEntitySingleResponse<?, ?> attrResponse = writer.addAttribute(buildID(),
-							mapper.map(attribute, com.threatconnect.sdk.server.entity.Attribute.class));
+						// map the attribute to a server entity
+						com.threatconnect.sdk.server.entity.Attribute attr =
+							mapper.map(attribute, com.threatconnect.sdk.server.entity.Attribute.class);
 							
+						// save the attributes for this indicator
+						ApiEntitySingleResponse<?, ?> attrResponse = writer.addAttribute(buildID(), attr);
+						
 						// check to see if this was not successful
 						if (!attrResponse.isSuccess())
 						{

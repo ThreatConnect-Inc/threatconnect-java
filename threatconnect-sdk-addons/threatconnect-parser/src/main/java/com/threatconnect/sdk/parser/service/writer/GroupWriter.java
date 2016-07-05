@@ -99,10 +99,13 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 					// for each of the attributes of this group
 					for (Attribute attribute : groupSource.getAttributes())
 					{
-						// save the attributes for this group
-						ApiEntitySingleResponse<?, ?> attrResponse = writer.addAttribute(getSavedGroupID(),
-							mapper.map(attribute, com.threatconnect.sdk.server.entity.Attribute.class));
+						// map the attribute to a server entity
+						com.threatconnect.sdk.server.entity.Attribute attr =
+							mapper.map(attribute, com.threatconnect.sdk.server.entity.Attribute.class);
 							
+						// save the attributes for this group
+						ApiEntitySingleResponse<?, ?> attrResponse = writer.addAttribute(getSavedGroupID(), attr);
+						
 						// check to see if this was not successful
 						if (!attrResponse.isSuccess())
 						{
