@@ -92,7 +92,7 @@ public final class AppMain
 			}
 			
 			// flush the logs to the server
-			ServerLogger.getInstance().flushToServer(false);
+			ServerLogger.getInstance().flushToServer();
 			
 			// exit the app with this exit status
 			System.exit(exitStatus.getExitCode());

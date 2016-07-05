@@ -12,6 +12,17 @@ import com.threatconnect.sdk.client.writer.LogWriterAdapter;
 import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.conn.Connection;
 
+/**
+ * This singleton maintains the logic needed for recording and reporting log entries to the server.
+ * 2 queues which are used to accomplish this task. The first queue is used to store log entries
+ * until a threshold is reached. Once this occurs, a task is created which will be responsible for
+ * making a batch API call to the server with all of the log entries. The second queue is used to
+ * track the actual executing api calls. In the event that multiple batch requests are created
+ * before the previous can finish executing, this queue helps maintain the order of all log entries
+ * as well as track actively executing api calls.
+ * 
+ * @author Greg Marut
+ */
 public class ServerLogger
 {
 	// holds the default threshold for when the log entries will be flushed to the server as a batch
@@ -22,10 +33,11 @@ public class ServerLogger
 	private static final Object lock = new Object();
 	
 	// holds the executor service for flushing the logs to the server
-	private final ExecutorService executorService;
+	private final ExecutorService taskExecutorService;
 	
 	// holds the queue of server log entries that are pending submit
 	private final AbstractQueue<LogEntry> logEntryQueue;
+	private final AbstractQueue<LogWriterTask> logWriterTasks;
 	
 	// holds the configuration object for connecting to the api
 	private Configuration configuration;
@@ -37,7 +49,8 @@ public class ServerLogger
 	private ServerLogger()
 	{
 		logEntryQueue = new ConcurrentLinkedQueue<LogEntry>();
-		executorService = Executors.newSingleThreadExecutor();
+		logWriterTasks = new ConcurrentLinkedQueue<LogWriterTask>();
+		taskExecutorService = Executors.newSingleThreadExecutor();
 		setBatchLogEntryThreshold(DEFAULT_BATCH_THRESHOLD);
 		setConfiguration(createConfiguration());
 	}
@@ -61,66 +74,77 @@ public class ServerLogger
 		this.batchLogEntryThreshold = batchLogEntryThreshold;
 	}
 	
-	public void flushToServerIfNeeded()
+	/**
+	 * First checks to see if the log entry queue has reached the required threshold, if so, it is
+	 * flushed to the server
+	 */
+	private void flushToServerIfNeeded()
 	{
 		// check to see if the size of the queue exceeds the threshold
 		if (logEntryQueue.size() >= getBatchLogEntryThreshold())
 		{
-			flushToServer(true);
+			// run this inside of a new thread
+			taskExecutorService.execute(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					flushToServer();
+				}
+			});
 		}
 	}
 	
-	public void flushToServer(final boolean async)
+	/**
+	 * Writes all remaining log entries to the server. This method blocks until all entries have
+	 * been uploaded to the server
+	 */
+	public void flushToServer()
 	{
-		final LogEntry[] logEntryArray;
+		// prepare any remaining log entries from the queue
+		prepareLogWriterTask();
 		
-		try
+		// acquire a thread lock on the queue
+		synchronized (logWriterTasks)
 		{
-			final LogWriterAdapter logWriterAdapter = new LogWriterAdapter(createConnection());
-			
-			// acquire a thread lock on the queue
-			synchronized (logEntryQueue)
+			// while there are more tasks to write
+			while (!logWriterTasks.isEmpty())
 			{
-				// convert the queue to an array
-				logEntryArray = logEntryQueue.toArray(new LogEntry[logEntryQueue.size()]);
-				
-				// clear the queue
-				logEntryQueue.clear();
-				
-				// create the runnable task that will send the batch of log entries to the server
-				Runnable task = new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						try
-						{
-							// send the log entry array to the server
-							logWriterAdapter.writeLogEntires(logEntryArray);
-						}
-						catch (IOException e)
-						{
-							LoggerUtil.logErr(e, e.getMessage());
-						}
-					}
-				};
-				
-				// check to see if this should be executed asynchronously
-				if (async)
-				{
-					// execute synchronously
-					executorService.execute(task);
-				}
-				else
-				{
-					// execute synchronously
-					task.run();
-				}
+				// execute the next pending task
+				logWriterTasks.poll().run();
 			}
 		}
-		catch (IOException e)
+	}
+	
+	/**
+	 * Converts the queue of log entries into a task that is ready to be sent to the server
+	 */
+	private void prepareLogWriterTask()
+	{
+		// acquire a thread lock on the queue
+		synchronized (logEntryQueue)
 		{
-			LoggerUtil.logErr(e, e.getMessage());
+			// convert the queue to an array
+			final LogEntry[] logEntryArray = logEntryQueue.toArray(new LogEntry[logEntryQueue.size()]);
+			
+			// clear the queue
+			logEntryQueue.clear();
+			
+			// make sure there are log entries
+			if (logEntryArray.length > 0)
+			{
+				try
+				{
+					// create the runnable task that will send the batch of log entries to the
+					// server
+					LogWriterTask task = new LogWriterTask(new LogWriterAdapter(createConnection()), logEntryArray);
+					logWriterTasks.add(task);
+				}
+				catch (IOException e)
+				{
+					LoggerUtil.logErr(e, e.getMessage());
+				}
+			}
 		}
 	}
 	

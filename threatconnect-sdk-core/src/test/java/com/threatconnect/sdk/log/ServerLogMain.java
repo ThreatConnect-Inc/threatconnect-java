@@ -34,6 +34,6 @@ public class ServerLogMain
 		
 		Assert.assertTrue(logFile.length() > 0);
 		
-		ServerLogger.getInstance().flushToServer(false);
+		ServerLogger.getInstance().flushToServer();
 	}
 }
