@@ -206,5 +206,7 @@ public class WriterAdapterFactory {
         return new TaskWriterAdapter(conn);
     }
 
-
+    public static LogWriterAdapter createLogWriter(Connection conn) {
+        return new LogWriterAdapter(conn);
+    }
 }

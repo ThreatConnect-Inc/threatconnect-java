@@ -31,7 +31,7 @@ public abstract class ApiEntitySingleResponse<T, S extends ApiEntitySingleRespon
     private String message;
     @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
     @XmlElement(name = "Data", required = false)
-    private ApiEntitySingleResponseData data;
+    private ApiEntitySingleResponseData<T> data;
     
     protected ApiEntitySingleResponse()
     {
@@ -60,7 +60,7 @@ public abstract class ApiEntitySingleResponse<T, S extends ApiEntitySingleRespon
         this.message = message;
     }
 
-    public ApiEntitySingleResponseData getData()
+    public ApiEntitySingleResponseData<T> getData()
     {
         return data;
     }
@@ -70,7 +70,7 @@ public abstract class ApiEntitySingleResponse<T, S extends ApiEntitySingleRespon
         return data == null ? null : (T)data.getData();
     }
 
-    public void setData(ApiEntitySingleResponseData data) {
+    public void setData(ApiEntitySingleResponseData<T> data) {
         this.data = data;
     }
     
