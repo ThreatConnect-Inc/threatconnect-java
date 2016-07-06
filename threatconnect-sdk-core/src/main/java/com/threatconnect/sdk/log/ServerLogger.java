@@ -61,11 +61,15 @@ public class ServerLogger
 	
 	public void addLogEntry(final LogEntry logEntry)
 	{
-		// adds a log entry to the queue
-		logEntryQueue.add(logEntry);
-		
-		// check to see if the log entries need to be flushed
-		flushToServerIfNeeded();
+		// ensure that server logging is enabled
+		if (isEnabled())
+		{
+			// adds a log entry to the queue
+			logEntryQueue.add(logEntry);
+			
+			// check to see if the log entries need to be flushed
+			flushToServerIfNeeded();
+		}
 	}
 	
 	public int getBatchLogEntryThreshold()
