@@ -39,6 +39,9 @@ public class ServerLogger
 	private final AbstractQueue<LogEntry> logEntryQueue;
 	private final AbstractQueue<LogWriterTask> logWriterTasks;
 	
+	// determines whether or not server logging is enabled
+	private volatile boolean enabled;
+	
 	// holds the configuration object for connecting to the api
 	private Configuration configuration;
 	
@@ -53,6 +56,7 @@ public class ServerLogger
 		taskExecutorService = Executors.newSingleThreadExecutor();
 		setBatchLogEntryThreshold(DEFAULT_BATCH_THRESHOLD);
 		setConfiguration(createConfiguration());
+		setEnabled(true);
 	}
 	
 	public void addLogEntry(final LogEntry logEntry)
@@ -75,43 +79,51 @@ public class ServerLogger
 	}
 	
 	/**
-	 * First checks to see if the log entry queue has reached the required threshold, if so, it is
-	 * flushed to the server
-	 */
-	private void flushToServerIfNeeded()
-	{
-		// check to see if the size of the queue exceeds the threshold
-		if (logEntryQueue.size() >= getBatchLogEntryThreshold())
-		{
-			// run this inside of a new thread
-			taskExecutorService.execute(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					flushToServer();
-				}
-			});
-		}
-	}
-	
-	/**
 	 * Writes all remaining log entries to the server. This method blocks until all entries have
 	 * been uploaded to the server
 	 */
 	public void flushToServer()
 	{
-		// prepare any remaining log entries from the queue
-		prepareLogWriterTask();
-		
-		// acquire a thread lock on the queue
-		synchronized (logWriterTasks)
+		// ensure that server logging is enabled
+		if (isEnabled())
 		{
-			// while there are more tasks to write
-			while (!logWriterTasks.isEmpty())
+			// prepare any remaining log entries from the queue
+			prepareLogWriterTask();
+			
+			// acquire a thread lock on the queue
+			synchronized (logWriterTasks)
 			{
-				// execute the next pending task
-				logWriterTasks.poll().run();
+				// while there are more tasks to write
+				while (!logWriterTasks.isEmpty())
+				{
+					// execute the next pending task
+					logWriterTasks.poll().run();
+				}
+			}
+		}
+	}
+	
+	/**
+	 * First checks to see if the log entry queue has reached the required threshold, if so, it is
+	 * flushed to the server
+	 */
+	private void flushToServerIfNeeded()
+	{
+		// ensure that server logging is enabled
+		if (isEnabled())
+		{
+			// check to see if the size of the queue exceeds the threshold
+			if (logEntryQueue.size() >= getBatchLogEntryThreshold())
+			{
+				// run this inside of a new thread
+				taskExecutorService.execute(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						flushToServer();
+					}
+				});
 			}
 		}
 	}
@@ -121,28 +133,32 @@ public class ServerLogger
 	 */
 	private void prepareLogWriterTask()
 	{
-		// acquire a thread lock on the queue
-		synchronized (logEntryQueue)
+		// ensure that server logging is enabled
+		if (isEnabled())
 		{
-			// convert the queue to an array
-			final LogEntry[] logEntryArray = logEntryQueue.toArray(new LogEntry[logEntryQueue.size()]);
-			
-			// make sure there are log entries
-			if (logEntryArray.length > 0)
+			// acquire a thread lock on the queue
+			synchronized (logEntryQueue)
 			{
-				// clear the queue
-				logEntryQueue.clear();
+				// convert the queue to an array
+				final LogEntry[] logEntryArray = logEntryQueue.toArray(new LogEntry[logEntryQueue.size()]);
 				
-				try
+				// make sure there are log entries
+				if (logEntryArray.length > 0)
 				{
-					// create the runnable task that will send the batch of log entries to the
-					// server
-					LogWriterTask task = new LogWriterTask(new LogWriterAdapter(createConnection()), logEntryArray);
-					logWriterTasks.add(task);
-				}
-				catch (IOException e)
-				{
-					LoggerUtil.logErr(e, e.getMessage());
+					// clear the queue
+					logEntryQueue.clear();
+					
+					try
+					{
+						// create the runnable task that will send the batch of log entries to the
+						// server
+						LogWriterTask task = new LogWriterTask(new LogWriterAdapter(createConnection()), logEntryArray);
+						logWriterTasks.add(task);
+					}
+					catch (IOException e)
+					{
+						LoggerUtil.logErr(e, e.getMessage());
+					}
 				}
 			}
 		}
@@ -180,6 +196,16 @@ public class ServerLogger
 		configuration.setTcToken(appConfig.getTcToken());
 		
 		return configuration;
+	}
+	
+	public boolean isEnabled()
+	{
+		return enabled;
+	}
+	
+	public void setEnabled(boolean enabled)
+	{
+		this.enabled = enabled;
 	}
 	
 	public static ServerLogger getInstance()
