@@ -127,12 +127,12 @@ public class ServerLogger
 			// convert the queue to an array
 			final LogEntry[] logEntryArray = logEntryQueue.toArray(new LogEntry[logEntryQueue.size()]);
 			
-			// clear the queue
-			logEntryQueue.clear();
-			
 			// make sure there are log entries
 			if (logEntryArray.length > 0)
 			{
+				// clear the queue
+				logEntryQueue.clear();
+				
 				try
 				{
 					// create the runnable task that will send the batch of log entries to the
