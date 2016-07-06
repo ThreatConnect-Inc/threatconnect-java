@@ -20,6 +20,7 @@ public class Configuration {
     private String tcApiUserSecretKey;
 
     private String tcToken;
+    private String tcTokenExpires;
     private Integer resultLimit;
     private String defaultOwner;
 
@@ -161,14 +162,24 @@ public class Configuration {
     }
 
     public String getTcToken()
-	{
-		return tcToken;
-	}
+    {
+        return tcToken;
+    }
     
     public void setTcToken(String tcToken)
-	{
-		this.tcToken = tcToken;
-	}
+    {
+	this.tcToken = tcToken;
+    }
+
+    public String getTcTokenExpires()
+    {
+        return this.tcTokenExpires;
+    }
+
+    public void setTcTokenExpires(String tcTokenExpires)
+    {
+        this.tcTokenExpires = tcTokenExpires;
+    }
 
     public boolean isActivityLogEnabled()
     {

@@ -28,13 +28,25 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.threatconnect.sdk.conn.exception.HttpResourceNotFoundException;
 import com.threatconnect.sdk.util.StringUtil;
 import com.threatconnect.sdk.util.UploadMethodType;
+import com.google.gson.JsonObject; 
+import com.google.gson.JsonParser;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URLEncoder;
+import org.apache.http.impl.client.CloseableHttpClient;
 
 /**
  * @author dtineo
  */
-public class HttpRequestExecutor extends AbstractRequestExecutor
+public class HttpRequestExecutor extends AbstractRequestExecutor        
 {
-	
+	private static final String APP_AUTH_URL_SERVLET_PART = "/appAuth/?expiredToken=";
+        private static final String ERROR_MSG = "errorMsg";
+        private static final String NEW_TOKEN = "newToken";
+        private static final String NEW_TOKEN_EXPIRES = "newTokenExpires";
+        private static final String STATUS = "status";
+        private static final String FAILURE = "Failure";
+        
 	public HttpRequestExecutor(Connection conn)
 	{
 		super(conn);
@@ -64,55 +76,136 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 		logger.trace("entity : " + jsonData);
 		((HttpEntityEnclosingRequestBase) httpBase).setEntity(new StringEntity(jsonData, ContentType.APPLICATION_JSON));
 	}
-	
-	@Override
-	public String execute(String path, HttpMethod type, Object obj) throws IOException
+        
+    private String makeApiCall(HttpMethod type, String fullPath, HttpRequestBase httpBase) throws IOException
+    {
+        logger.trace("Before call to api server");
+        long startMs = System.currentTimeMillis();
+        CloseableHttpResponse response = this.conn.getApiClient().execute(httpBase);
+
+        //update listeners based on api call whether it worked or not
+        notifyListeners(type, fullPath, (System.currentTimeMillis() - startMs));
+
+        String result = null;
+        try
+        {
+            logger.trace(response.getStatusLine().toString());
+            HttpEntity entity = response.getEntity();
+            if (entity != null)
+            {
+                logger.trace("Response Headers: " + Arrays.toString(response.getAllHeaders()));
+                logger.trace("Content Encoding: " + entity.getContentEncoding());
+                result = EntityUtils.toString(entity, StandardCharsets.UTF_8);
+                logger.trace("Result:" + result);
+                EntityUtils.consume(entity);
+            }
+        } finally
+        {
+            response.close();
+        }
+
+        return result;
+    }
+
+    private String getNewToken(HttpRequestBase httpBase) throws UnsupportedEncodingException, IOException
+    {
+        if (this.conn.getConfig().getTcToken() != null)
 	{
-		
-		path += (path.contains("?") ? "&" : "?");
-		path += "createActivityLog=" + this.conn.getConfig().isActivityLogEnabled();
-		
-		logger.trace("Path: " + path);
-		String fullPath = this.conn.getConfig().getTcApiUrl() + path.replace("/api/", "/");
-		
-		logger.trace("Full: " + type + ": " + fullPath);
-		HttpRequestBase httpBase = getBase(fullPath, type);
-		if (obj != null)
-			applyEntityAsJSON(httpBase, obj);
-			
-		logger.trace("RawPath: " + httpBase.getURI().getPath());
-		logger.trace("Query: " + httpBase.getURI().getRawQuery());
-		logger.trace("Path: " + path);
-		
-		String headerPath = httpBase.getURI().getRawPath() + "?" + httpBase.getURI().getRawQuery();
-		logger.trace("HeaderPath: " + headerPath);
-		ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, type.toString(), headerPath);
-		logger.trace("Request: " + httpBase.getRequestLine());
-		long startMs = System.currentTimeMillis();
-		CloseableHttpResponse response = this.conn.getApiClient().execute(httpBase);
-		notifyListeners(type, fullPath, (System.currentTimeMillis() - startMs));
-		String result = null;
-		
-		try
-		{
-			logger.trace(response.getStatusLine().toString());
-			HttpEntity entity = response.getEntity();
-			logger.trace("Response Headers: " + Arrays.toString(response.getAllHeaders()));
-			logger.trace("Content Encoding: " + entity.getContentEncoding());
-			if (entity != null)
-			{
-				result = EntityUtils.toString(entity, StandardCharsets.UTF_8);
-				logger.trace("Result:" + result);
-				EntityUtils.consume(entity);
-			}
-		}
-		finally
-		{
-			response.close();
-		}
-		
-		return result;
+            //get the expire time
+            long expireTime = Long.valueOf(this.conn.getConfig().getTcTokenExpires());
+
+            //compare to now + 15
+            long timeNow = System.currentTimeMillis() / 1000L;
+            if (expireTime < (timeNow+15l))
+            {
+                //its expired...lets get a new one
+                try
+                {
+                    //in this case, we want to get a new token if the token being used has not been reused before.
+                    String retryToken = this.conn.getConfig().getTcToken();
+                    logger.trace("Secure Token to be looked at: " + retryToken);
+                    String retryUrl = httpBase.getURI().getScheme()
+                            + "://"
+                            + httpBase.getURI().getHost()
+                            + ":"
+                            + httpBase.getURI().getPort()
+                            + APP_AUTH_URL_SERVLET_PART
+                            + URLEncoder.encode(retryToken, "UTF-8");
+
+                    //Default TC SSL cert is not trusted so need to add the TC cert to local jvm cacerts if
+                    //running app locally
+                    CloseableHttpClient httpClient = this.conn.getApiClient();
+                    HttpGet httpGet = new HttpGet(retryUrl);
+                    CloseableHttpResponse retryTokenCloseableResponse = httpClient.execute(httpGet);
+                    HttpEntity entity = retryTokenCloseableResponse.getEntity();
+                    String retryTokenResponse = EntityUtils.toString(entity, StandardCharsets.UTF_8);
+
+                    //parse line to see what happened
+                    JsonParser jsonParser = new JsonParser();
+                    JsonObject retryResponse = jsonParser.parse(retryTokenResponse).getAsJsonObject();
+                    String retryStatus = retryResponse.get("apiToken").getAsJsonObject().get(STATUS).getAsString();
+                    if (retryStatus.equals(FAILURE))
+                    {
+                        //need to translate the retry token error into the format
+                        //expected in 'result' object
+                        String errMsg = retryResponse.get(ERROR_MSG).getAsString();
+                        logger.trace("errmsg from servlet: " + errMsg);
+                        return "{\"status\":\"Failure\",\"message\":\""+errMsg+"\"}";
+                    }
+
+                    //no error, got a new token..need to set it so the caller will use it
+                    String newToken = retryResponse.get(NEW_TOKEN).getAsString();
+                    String newTokenExpires = retryResponse.get(NEW_TOKEN_EXPIRES).getAsString();
+                    logger.trace("New token returned from servlet: " + newToken);                    
+
+                    //set the new token just created
+                    this.conn.getConfig().setTcToken(newToken);
+                    this.conn.getConfig().setTcTokenExpires(newTokenExpires);
+                } catch (MalformedURLException ex)
+                {
+                    return "{\"status\":\"Failure\",\"message\":\""+ex.getMessage()+"\"}";
+                }
+            }
 	}
+        return null;
+    }
+
+    @Override
+    public String execute(String path, HttpMethod type, Object obj) throws IOException
+    {
+        path += (path.contains("?") ? "&" : "?");
+        path += "createActivityLog=" + this.conn.getConfig().isActivityLogEnabled();
+
+        logger.trace("Path: " + path);
+        String fullPath = this.conn.getConfig().getTcApiUrl() + path.replace("/api/", "/");
+
+        logger.trace("Full: " + type + ": " + fullPath);
+        HttpRequestBase httpBase = getBase(fullPath, type);
+        if (obj != null)
+        {
+            applyEntityAsJSON(httpBase, obj);
+        }
+
+        logger.trace("RawPath: " + httpBase.getURI().getPath());
+        logger.trace("Query: " + httpBase.getURI().getRawQuery());
+        logger.trace("Path: " + path);
+
+        String headerPath = httpBase.getURI().getRawPath() + "?" + httpBase.getURI().getRawQuery();
+        logger.trace("HeaderPath: " + headerPath);
+
+        //Check for token to expire and get a new one if it is
+        String error = getNewToken(httpBase);
+        if (error != null)
+        {
+            return error;
+        }
+
+        //this call adds in the auth token from the connection config if one exists
+        ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, type.toString(), headerPath);
+
+        logger.trace("Request: " + httpBase.getRequestLine());
+        return makeApiCall(type, fullPath, httpBase);
+    }
 	
 	private void notifyListeners(HttpMethod type, String fullPath, long ms)
 	{
