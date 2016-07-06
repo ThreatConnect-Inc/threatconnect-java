@@ -35,5 +35,10 @@ public class ServerLogMain
 		Assert.assertTrue(logFile.length() > 0);
 		
 		ServerLogger.getInstance().flushToServer();
+		
+		logger.debug("Log Test 4");
+		logger.debug("Log Test 5");
+		
+		ServerLogger.getInstance().flushToServer();
 	}
 }

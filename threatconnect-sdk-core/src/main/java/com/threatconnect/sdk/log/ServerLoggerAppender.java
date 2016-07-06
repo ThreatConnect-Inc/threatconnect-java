@@ -5,7 +5,6 @@ import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.config.plugins.PluginAttribute;
-import org.apache.logging.log4j.core.config.plugins.PluginElement;
 import org.apache.logging.log4j.core.config.plugins.PluginFactory;
 
 @Plugin(name = "ServerLoggerAppender", category = "Core", elementType = "appender", printObject = true)
@@ -35,8 +34,7 @@ public class ServerLoggerAppender extends AbstractAppender
 	
 	@PluginFactory
 	public static ServerLoggerAppender createAppender(
-		@PluginAttribute("name") String name,
-		@PluginElement("Filter") final Filter filter)
+		@PluginAttribute("name") String name)
 	{
 		if (name == null)
 		{
@@ -44,6 +42,6 @@ public class ServerLoggerAppender extends AbstractAppender
 			return null;
 		}
 		
-		return new ServerLoggerAppender(name, filter, new DefaultLogEntryTransformer());
+		return new ServerLoggerAppender(name, ThreadLogFilter.getInstance(), new DefaultLogEntryTransformer());
 	}
 }

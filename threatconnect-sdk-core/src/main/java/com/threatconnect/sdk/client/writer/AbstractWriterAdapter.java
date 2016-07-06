@@ -48,7 +48,7 @@ import com.threatconnect.sdk.util.UploadMethodType;
  */
 public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
+    protected final Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
 
     public AbstractWriterAdapter(Connection conn) {
         super(conn);
@@ -284,9 +284,8 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
         return result;
     }
 
-    private <T extends ApiEntitySingleResponse> T modifyItem(String propName, Class<T> type, String ownerName, Map<String, Object> paramMap, Object saveObject, HttpMethod requestType)
+    protected <T extends ApiEntitySingleResponse> T modifyItem(String propName, Class<T> type, String ownerName, Map<String, Object> paramMap, Object saveObject, HttpMethod requestType)
         throws IOException, FailedResponseException {
-
     	logger.trace("Getting URL: {}", propName);
         String url = getUrl(propName, ownerName);
 

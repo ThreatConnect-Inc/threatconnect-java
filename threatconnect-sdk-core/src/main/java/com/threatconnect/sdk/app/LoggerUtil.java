@@ -89,8 +89,7 @@ public class LoggerUtil
 		loggerConfig.setLevel(appConfig.getTcLogLevel());
 		
 		// create the appenders
-		ServerLoggerAppender serverLoggerAppender =
-			ServerLoggerAppender.createAppender("serverLoggerAppender", null);
+		ServerLoggerAppender serverLoggerAppender = ServerLoggerAppender.createAppender("serverLoggerAppender");
 		serverLoggerAppender.start();
 		
 		// add the appenders
