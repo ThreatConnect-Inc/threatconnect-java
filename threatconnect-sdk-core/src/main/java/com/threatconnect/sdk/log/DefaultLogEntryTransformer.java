@@ -14,6 +14,7 @@ public class DefaultLogEntryTransformer implements LogEntryTransformer
 		LogEntry logEntry = new LogEntry();
 		logEntry.setLevel(event.getLevel().toString());
 		logEntry.setMessage(createMessage(event));
+		logEntry.setTimestamp(event.getTimeMillis());
 		
 		return logEntry;
 	}

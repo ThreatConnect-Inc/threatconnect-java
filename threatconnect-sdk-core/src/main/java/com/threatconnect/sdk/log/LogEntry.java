@@ -4,6 +4,7 @@ public class LogEntry
 {
 	private String level;
 	private String message;
+	private long timestamp;
 	
 	public String getLevel()
 	{
@@ -23,5 +24,15 @@ public class LogEntry
 	public void setMessage(String message)
 	{
 		this.message = message;
+	}
+	
+	public long getTimestamp()
+	{
+		return timestamp;
+	}
+	
+	public void setTimestamp(long timestamp)
+	{
+		this.timestamp = timestamp;
 	}
 }

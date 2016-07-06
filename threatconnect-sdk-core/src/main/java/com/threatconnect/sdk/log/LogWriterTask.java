@@ -1,7 +1,5 @@
 package com.threatconnect.sdk.log;
 
-import java.io.IOException;
-
 import com.threatconnect.sdk.app.LoggerUtil;
 import com.threatconnect.sdk.client.writer.LogWriterAdapter;
 
@@ -36,7 +34,7 @@ public class LogWriterTask implements Runnable
 				// send the log entry array to the server
 				logWriterAdapter.writeLogEntires(logEntryArray);
 			}
-			catch (IOException e)
+			catch (Exception e)
 			{
 				LoggerUtil.logErr(e, e.getMessage());
 			}
