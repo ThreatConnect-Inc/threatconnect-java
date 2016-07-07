@@ -31,16 +31,26 @@ public class Configuration {
 
     private final String contentType = ContentType.APPLICATION_JSON.getMimeType();
 
+    public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner, String tcToken, String tcTokenExpires){
+        this(tcApiUrl, tcApiAccessID, tcApiUserSecretKey, defaultOwner, 500, tcToken, tcTokenExpires);
+    };
+
     public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner) {
-        this(tcApiUrl, tcApiAccessID, tcApiUserSecretKey, defaultOwner, 500);
+        this(tcApiUrl, tcApiAccessID, tcApiUserSecretKey, defaultOwner, 500, null, null);
     }
 
-    public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner, Integer resultLimit) {
+        public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner, Integer resultLimit) {
+        this(tcApiUrl, tcApiAccessID, tcApiUserSecretKey, defaultOwner, resultLimit, null, null);
+    }
+
+    public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner, Integer resultLimit, String tcToken, String tcTokenExpires) {
         this.tcApiUrl = tcApiUrl;
         this.tcApiAccessID = tcApiAccessID;
         this.tcApiUserSecretKey = tcApiUserSecretKey;
         this.defaultOwner = defaultOwner;
         this.resultLimit = resultLimit;
+        this.tcToken = tcToken;
+        this.tcTokenExpires = tcTokenExpires;
     }
 
     public Configuration(String tcApiUrl, String tcToken, String defaultOwner, Integer resultLimit) {

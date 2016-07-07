@@ -30,6 +30,7 @@ import com.threatconnect.sdk.util.StringUtil;
 import com.threatconnect.sdk.util.UploadMethodType;
 import com.google.gson.JsonObject; 
 import com.google.gson.JsonParser;
+import com.threatconnect.sdk.app.AppConfig;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
@@ -41,11 +42,10 @@ import org.apache.http.impl.client.CloseableHttpClient;
 public class HttpRequestExecutor extends AbstractRequestExecutor        
 {
 	private static final String APP_AUTH_URL_SERVLET_PART = "/appAuth/?expiredToken=";
-        private static final String ERROR_MSG = "errorMsg";
-        private static final String NEW_TOKEN = "newToken";
-        private static final String NEW_TOKEN_EXPIRES = "newTokenExpires";
-        private static final String STATUS = "status";
-        private static final String FAILURE = "Failure";
+        private static final String MSG = "message";
+        private static final String NEW_TOKEN = "apiToken";
+        private static final String NEW_TOKEN_EXPIRES = "apiTokenExpires";
+        private static final String SUCCESS_IND = "success";
         
 	public HttpRequestExecutor(Connection conn)
 	{
@@ -143,12 +143,12 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
                     //parse line to see what happened
                     JsonParser jsonParser = new JsonParser();
                     JsonObject retryResponse = jsonParser.parse(retryTokenResponse).getAsJsonObject();
-                    String retryStatus = retryResponse.get("apiToken").getAsJsonObject().get(STATUS).getAsString();
-                    if (retryStatus.equals(FAILURE))
+                    boolean retrySuccess = retryResponse.get(SUCCESS_IND).getAsBoolean();
+                    if (!retrySuccess)
                     {
                         //need to translate the retry token error into the format
                         //expected in 'result' object
-                        String errMsg = retryResponse.get(ERROR_MSG).getAsString();
+                        String errMsg = retryResponse.get(MSG).getAsString();
                         logger.trace("errmsg from servlet: " + errMsg);
                         return "{\"status\":\"Failure\",\"message\":\""+errMsg+"\"}";
                     }
@@ -156,11 +156,16 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
                     //no error, got a new token..need to set it so the caller will use it
                     String newToken = retryResponse.get(NEW_TOKEN).getAsString();
                     String newTokenExpires = retryResponse.get(NEW_TOKEN_EXPIRES).getAsString();
-                    logger.trace("New token returned from servlet: " + newToken);                    
+                    logger.trace("New token returned from servlet: " + newToken);
 
-                    //set the new token just created
+                    //update the config object being used for this api call
                     this.conn.getConfig().setTcToken(newToken);
                     this.conn.getConfig().setTcTokenExpires(newTokenExpires);
+
+                    //Then update the AppConfig singleton object too for future calls/future configs
+                    AppConfig.getInstance().set(AppConfig.TC_TOKEN, newToken);
+                    AppConfig.getInstance().set(AppConfig.TC_TOKEN_EXPIRES, newTokenExpires);
+
                 } catch (MalformedURLException ex)
                 {
                     return "{\"status\":\"Failure\",\"message\":\""+ex.getMessage()+"\"}";
