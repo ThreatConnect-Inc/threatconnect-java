@@ -57,7 +57,7 @@
 		<version.apache-http>4.4.1</version.apache-http>
 		<version.jackson>2.5.3</version.jackson>
 		<version.reflections>0.9.10</version.reflections>
-		<log4j.version>2.5</log4j.version>
+		<log4j.version>2.6.1</log4j.version>
 
 		<!-- Logging Versions -->
 		<version.slf4j>1.7.12</version.slf4j>

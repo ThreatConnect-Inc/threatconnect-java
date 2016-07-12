@@ -20,7 +20,9 @@ public class ServerLogMain
 		logFile.delete();
 		
 		AppConfig appConfig = AppConfig.getInstance();
-		
+		appConfig.set(AppConfig.TC_TOKEN,
+			"1:301:a2f6c6e7-2952-4c07-8249-4c75c477cb40:1468248049:Ok35Q:2vmDWmqJoSQKAFdwfzeLViYJBByD/0qBArJaspvLPgM=");
+			
 		LoggerUtil.reconfigureGlobalLogger(logFile, appConfig);
 		Logger logger = LoggerFactory.getLogger(ServerLogMain.class);
 		

@@ -16,8 +16,6 @@ import org.apache.logging.log4j.message.Message;
  */
 public class ThreadLogFilter extends AbstractFilter
 {
-	private static final long serialVersionUID = 4506134970995961314L;
-	
 	// holds the instance of this singleton
 	private static ThreadLogFilter instance;
 	private static final Object lock = new Object();
