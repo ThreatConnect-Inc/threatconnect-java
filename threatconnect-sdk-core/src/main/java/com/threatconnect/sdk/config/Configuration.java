@@ -5,9 +5,9 @@
  */
 package com.threatconnect.sdk.config;
 
-import java.util.Properties;
-
 import org.apache.http.entity.ContentType;
+
+import java.util.Properties;
 
 /**
  *
@@ -61,6 +61,7 @@ public class Configuration {
         String tcApiAccessID = props.getProperty("connection.tcApiAccessID");
         String tcApiUserSecretKey = props.getProperty("connection.tcApiUserSecretKey");
         String tcDefaultOwner = props.getProperty("connection.tcDefaultOwner");
+        String tcToken = props.getProperty("connection.tcToken");
         Integer tcResultLimit = Integer.valueOf(props.getProperty("connection.tcResultLimit"));
         Configuration conf = new Configuration(tcApiUrl, tcApiAccessID, tcApiUserSecretKey, tcDefaultOwner, tcResultLimit);
 

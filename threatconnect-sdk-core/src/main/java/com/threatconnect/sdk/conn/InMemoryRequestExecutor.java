@@ -5,12 +5,12 @@
  */
 package com.threatconnect.sdk.conn;
 
-import java.io.IOException;
-import java.io.InputStream;
-
+import com.threatconnect.sdk.util.UploadMethodType;
 import org.apache.http.entity.ContentType;
 
-import com.threatconnect.sdk.util.UploadMethodType;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
 
 /**
  *
@@ -25,6 +25,12 @@ public class InMemoryRequestExecutor extends AbstractRequestExecutor
 
     @Override
     public String execute(String path, HttpMethod type, Object obj) throws IOException
+    {
+        return null;
+    }
+
+    @Override
+    public String execute(String path, HttpMethod type, Map<String, String> headers, Object ojb) throws IOException
     {
         return null;
     }

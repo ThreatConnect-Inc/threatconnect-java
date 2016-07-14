@@ -5,29 +5,24 @@
  */
 package com.threatconnect.sdk.conn;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.threatconnect.sdk.conn.exception.HttpResourceNotFoundException;
+import com.threatconnect.sdk.util.StringUtil;
+import com.threatconnect.sdk.util.UploadMethodType;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.methods.*;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.threatconnect.sdk.conn.exception.HttpResourceNotFoundException;
-import com.threatconnect.sdk.util.StringUtil;
-import com.threatconnect.sdk.util.UploadMethodType;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * @author dtineo
@@ -60,13 +55,18 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 	
 	private void applyEntityAsJSON(HttpRequestBase httpBase, Object obj) throws JsonProcessingException
 	{
-		String jsonData = StringUtil.toJSON(obj);
+		String jsonData = obj instanceof String ? (String)obj : StringUtil.toJSON(obj);
 		logger.trace("entity : " + jsonData);
 		((HttpEntityEnclosingRequestBase) httpBase).setEntity(new StringEntity(jsonData, ContentType.APPLICATION_JSON));
 	}
-	
+
 	@Override
 	public String execute(String path, HttpMethod type, Object obj) throws IOException
+	{
+		return execute(path, type, null /*headers*/, obj);
+	}
+
+	public String execute(String path, HttpMethod type, Map<String, String> headers, Object obj) throws IOException
 	{
 		
 		path += (path.contains("?") ? "&" : "?");
@@ -87,6 +87,14 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 		String headerPath = httpBase.getURI().getRawPath() + "?" + httpBase.getURI().getRawQuery();
 		logger.trace("HeaderPath: " + headerPath);
 		ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, type.toString(), headerPath);
+		if (headers != null)
+		{
+			for (Entry<String, String> header : headers.entrySet())
+			{
+				logger.trace(String.format("Applying header: %s: %s", header.getKey(), header.getValue()));
+				httpBase.addHeader(header.getKey(), header.getValue());
+			}
+		}
 		logger.trace("Request: " + httpBase.getRequestLine());
 		long startMs = System.currentTimeMillis();
 		CloseableHttpResponse response = this.conn.getApiClient().execute(httpBase);
