@@ -210,4 +210,8 @@ public class WriterAdapterFactory {
     {
         return new DataStoreWriterAdapater(conn);
     }
+    
+    public static LogWriterAdapter createLogWriter(Connection conn) {
+        return new LogWriterAdapter(conn);
+    }
 }

@@ -11,8 +11,12 @@ import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 
+import com.threatconnect.sdk.log.ServerLoggerAppender;
+
 public class LoggerUtil
 {
+	public static final String DEFAULT_LOGGER_PATTERN = "%-5p %d{HH:mm:ss} %c - %m%n";
+	
 	/**
 	 * Reconfigures the global logger setting up the log file and the log level
 	 * 
@@ -43,6 +47,13 @@ public class LoggerUtil
 	public static void reconfigureLogger(final String loggerPath, final File logFile, final AppConfig appConfig)
 		throws IOException
 	{
+		addFileAppender(loggerPath, logFile, appConfig);
+		addServerAppender(loggerPath, appConfig);
+	}
+	
+	public static void addFileAppender(final String loggerPath, final File logFile, final AppConfig appConfig)
+		throws IOException
+	{
 		// retrieve the logger context
 		LoggerContext loggerContext = (LoggerContext) LogManager.getContext(false);
 		Configuration configuration = loggerContext.getConfiguration();
@@ -52,16 +63,37 @@ public class LoggerUtil
 		loggerConfig.setLevel(appConfig.getTcLogLevel());
 		
 		// Define log pattern layout
-		PatternLayout layout = PatternLayout.createLayout("%-5p %d{HH:mm:ss} %c - %m%n", null, null, null,
+		PatternLayout layout = PatternLayout.createLayout(DEFAULT_LOGGER_PATTERN, null, null, null,
 			Charset.defaultCharset(), false, false, null, null);
 			
+		// create the appenders
 		FileAppender fileAppender =
 			FileAppender.createAppender(logFile.getAbsolutePath(), "true", "false", "fileAppender",
 				"true", "true", "true", "8192", layout, null, "false", null, null);
 		fileAppender.start();
 		
-		// add the file appender
+		// add the appenders
 		loggerConfig.addAppender(fileAppender, appConfig.getTcLogLevel(), null);
+		loggerContext.updateLoggers();
+	}
+	
+	public static void addServerAppender(final String loggerPath, final AppConfig appConfig)
+		throws IOException
+	{
+		// retrieve the logger context
+		LoggerContext loggerContext = (LoggerContext) LogManager.getContext(false);
+		Configuration configuration = loggerContext.getConfiguration();
+		
+		// retrieve the root logger config
+		LoggerConfig loggerConfig = configuration.getLoggerConfig(loggerPath);
+		loggerConfig.setLevel(appConfig.getTcLogLevel());
+		
+		// create the appenders
+		ServerLoggerAppender serverLoggerAppender = ServerLoggerAppender.createAppender("serverLoggerAppender");
+		serverLoggerAppender.start();
+		
+		// add the appenders
+		loggerConfig.addAppender(serverLoggerAppender, appConfig.getTcLogLevel(), null);
 		loggerContext.updateLoggers();
 	}
 	

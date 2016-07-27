@@ -13,7 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Represents the core of an app
+ * Represents the core of an app. All child classes of this class must contain a no argument
+ * constructor.
  * 
  * @author Greg Marut
  */

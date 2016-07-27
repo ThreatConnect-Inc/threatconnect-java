@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.threatconnect.sdk.app.exception.AppInstantiationException;
+import com.threatconnect.sdk.log.ServerLogger;
 
 public final class AppMain
 {
@@ -89,6 +90,9 @@ public final class AppMain
 				LoggerUtil.logErr("Exit status is null.");
 				exitStatus = ExitStatus.Failure;
 			}
+			
+			// flush the logs to the server
+			ServerLogger.getInstance().flushToServer();
 			
 			// exit the app with this exit status
 			System.exit(exitStatus.getExitCode());
