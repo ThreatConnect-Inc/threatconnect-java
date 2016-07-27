@@ -36,13 +36,22 @@ public class BulkIndicatorConverter
 			
 			try
 			{
-				// copy the rating and confidence
+				// copy the rating
 				indicator.setRating(indicatorObject.get("rating").getAsDouble());
+			}
+			catch (NullPointerException e)
+			{
+				// its ok to ignore this if the rating do not exist.
+			}
+			
+			try
+			{
+				// copy the confidence
 				indicator.setConfidence(indicatorObject.get("confidence").getAsDouble());
 			}
 			catch (NullPointerException e)
 			{
-				// its ok to ignore this if the rating and confidence do not exist.
+				// its ok to ignore this if the confidence do not exist.
 			}
 			
 			// check to see if there are tags
