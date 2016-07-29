@@ -1,6 +1,6 @@
 package com.threatconnect.sdk.parser.util;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Set;
 
 import com.threatconnect.sdk.parser.model.Group;
@@ -26,7 +26,7 @@ public class ItemUtil
 	 * @param indicators
 	 * the set that will be used to store the indicators
 	 */
-	public static void seperateGroupsAndIndicators(final List<? extends Item> items,
+	public static void seperateGroupsAndIndicators(final Collection<? extends Item> items,
 		final Set<Group> groups, final Set<Indicator> indicators)
 	{
 		// for every item in this list

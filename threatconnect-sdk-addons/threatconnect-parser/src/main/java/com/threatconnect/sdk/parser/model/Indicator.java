@@ -1,13 +1,13 @@
 package com.threatconnect.sdk.parser.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public abstract class Indicator extends Item
 {
 	private final IndicatorType indicatorType;
-	private final List<Group> associatedItems;
+	private final Set<Group> associatedItems;
 	
 	private Double rating;
 	private Double confidence;
@@ -23,7 +23,7 @@ public abstract class Indicator extends Item
 	{
 		super(ItemType.INDICATOR);
 		this.indicatorType = indicatorType;
-		this.associatedItems = new ArrayList<Group>();
+		this.associatedItems = new LinkedHashSet<Group>();
 	}
 	
 	public final IndicatorType getIndicatorType()
@@ -122,7 +122,7 @@ public abstract class Indicator extends Item
 	}
 	
 	@Override
-	public List<Group> getAssociatedItems()
+	public Set<Group> getAssociatedItems()
 	{
 		return associatedItems;
 	}

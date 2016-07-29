@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,7 @@ import com.threatconnect.sdk.client.writer.AbstractBatchWriterAdapter;
 import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
+import com.threatconnect.sdk.parser.model.Group;
 import com.threatconnect.sdk.parser.model.Indicator;
 import com.threatconnect.sdk.parser.model.ItemType;
 import com.threatconnect.sdk.parser.service.bulk.BulkIndicatorConverter;
@@ -45,6 +47,7 @@ public class BatchIndicatorWriter extends Writer
 	private static final Logger logger = LoggerFactory.getLogger(BatchIndicatorWriter.class);
 	
 	private final Collection<Indicator> source;
+	private final Map<Group, Integer> savedGroupMap;
 	
 	// determines the max number of indicators per batch file. If there are more indicators than
 	// this limit, multiple batch files are created
@@ -52,8 +55,15 @@ public class BatchIndicatorWriter extends Writer
 	
 	public BatchIndicatorWriter(final Connection connection, final Collection<Indicator> source)
 	{
+		this(connection, source, null);
+	}
+	
+	public BatchIndicatorWriter(final Connection connection, final Collection<Indicator> source,
+		final Map<Group, Integer> savedGroupMap)
+	{
 		super(connection);
 		this.source = source;
+		this.savedGroupMap = savedGroupMap;
 		this.indicatorLimitPerBatch = DEFAULT_BATCH_LIMIT;
 	}
 	

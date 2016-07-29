@@ -1,5 +1,6 @@
 package com.threatconnect.sdk.parser.app;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -248,7 +249,7 @@ public abstract class ParserApp extends App
 	 * whether or not the associated items should be counted as well
 	 * @return
 	 */
-	private int count(final List<? extends Item> items, final ItemType itemType, final boolean recursive)
+	private int count(final Collection<? extends Item> items, final ItemType itemType, final boolean recursive)
 	{
 		int count = 0;
 		
