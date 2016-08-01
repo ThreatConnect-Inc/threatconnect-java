@@ -2,7 +2,6 @@ package com.threatconnect.sdk.parser.service.save;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +64,7 @@ public class ApiSaveService implements SaveService
 	 * interrupted I/O operations.
 	 */
 	@Override
-	public SaveResults saveItems(final List<? extends Item> items) throws IOException
+	public SaveResults saveItems(final Collection<? extends Item> items) throws IOException
 	{
 		// create a new connection object from the configuration
 		Connection connection = new Connection(configuration);
@@ -83,7 +82,8 @@ public class ApiSaveService implements SaveService
 	 * class is the general class of exceptions produced by failed or
 	 * interrupted I/O operations.
 	 */
-	protected SaveResults saveItems(final Collection<? extends Item> items, final Connection connection) throws IOException
+	protected SaveResults saveItems(final Collection<? extends Item> items, final Connection connection)
+		throws IOException
 	{
 		// create a new save result to return
 		SaveResults saveResults = new SaveResults();

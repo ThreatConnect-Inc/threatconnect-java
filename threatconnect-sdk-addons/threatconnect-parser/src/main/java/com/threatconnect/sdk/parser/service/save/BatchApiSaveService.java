@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -57,11 +56,26 @@ public class BatchApiSaveService implements SaveService
 	 * interrupted I/O operations.
 	 */
 	@Override
-	public SaveResults saveItems(final List<? extends Item> items) throws IOException
+	public SaveResults saveItems(final Collection<? extends Item> items) throws IOException
 	{
 		// create a new connection object from the configuration
 		Connection connection = new Connection(configuration);
 		
+		return saveItems(items, connection);
+	}
+	
+	/**
+	 * Saves all of the items to the server using the APIs
+	 * 
+	 * @param items
+	 * @param connection
+	 * @throws IOException
+	 * Signals that an I/O exception of some sort has occurred. This
+	 * class is the general class of exceptions produced by failed or
+	 * interrupted I/O operations.
+	 */
+	public SaveResults saveItems(final Collection<? extends Item> items, final Connection connection) throws IOException
+	{
 		SaveResults saveResults = new SaveResults();
 		
 		// break the list of items into sets of groups and indicators
@@ -90,7 +104,7 @@ public class BatchApiSaveService implements SaveService
 		// create a new save result to return
 		SaveResults saveResults = new SaveResults();
 		
-		// for each of the items
+		// for each of the groups
 		for (Group group : groups)
 		{
 			try
@@ -107,6 +121,58 @@ public class BatchApiSaveService implements SaveService
 		}
 		
 		return saveResults;
+	}
+	
+	/**
+	 * Saves the associated items for a given group
+	 * 
+	 * @param group
+	 * @param ownerName
+	 * @param connection
+	 * @param writer
+	 * @param saveResults
+	 * @throws IOException
+	 * Signals that an I/O exception of some sort has occurred. This
+	 * class is the general class of exceptions produced by failed or
+	 * interrupted I/O operations.
+	 */
+	protected void saveAssociatedItems(final Group group, final String ownerName,
+		final Map<Group, Integer> savedGroupMap, final Connection connection,
+		GroupWriter<?, ?> writer, final SaveResults saveResults) throws IOException
+	{
+		// for each of the associated items of this group
+		for (Item associatedItem : group.getAssociatedItems())
+		{
+			try
+			{
+				// switch based on the item type
+				switch (associatedItem.getItemType())
+				{
+					case GROUP:
+						Group associatedGroup = (Group) associatedItem;
+						Integer savedAssociatedGroupId =
+							saveGroup(associatedGroup, ownerName, savedGroupMap, connection, saveResults);
+						writer.associateGroup(associatedGroup.getGroupType(), savedAssociatedGroupId);
+						break;
+					case INDICATOR:
+						// Ignore the indicators for now, this is done later in batch save
+						break;
+					default:
+						break;
+				}
+			}
+			catch (SaveItemFailedException e)
+			{
+				logger.warn(e.getMessage(), e);
+				
+				// add to the list of failed items
+				saveResults.addFailedItems(associatedItem);
+			}
+			catch (AssociateFailedException e)
+			{
+				logger.warn(e.getMessage(), e);
+			}
+		}
 	}
 	
 	protected SaveResults saveIndicators(final Collection<Indicator> indicators,
@@ -196,17 +262,27 @@ public class BatchApiSaveService implements SaveService
 		return writer;
 	}
 	
-	protected void saveGroup(final Group group, final String ownerName,
+	protected Integer saveGroup(final Group group, final String ownerName,
 		final Map<Group, Integer> savedGroupMap, final Connection connection, final SaveResults saveResults)
 			throws IOException, SaveItemFailedException
 	{
 		GroupWriter<?, ?> writer = getGroupWriter(group, connection);
 		
-		// save the group
-		com.threatconnect.sdk.server.entity.Group savedGroup = writer.saveGroup(ownerName);
-		
-		// store the id in the map
-		savedGroupMap.put(group, savedGroup.getId());
+		// check to see if this group has not already been saved
+		if (!savedGroupMap.containsKey(group))
+		{
+			// save the group
+			com.threatconnect.sdk.server.entity.Group savedGroup = writer.saveGroup(ownerName);
+			
+			// store the id in the map
+			savedGroupMap.put(group, savedGroup.getId());
+			
+			return savedGroup.getId();
+		}
+		else
+		{
+			return savedGroupMap.get(group);
+		}
 	}
 	
 	/**
