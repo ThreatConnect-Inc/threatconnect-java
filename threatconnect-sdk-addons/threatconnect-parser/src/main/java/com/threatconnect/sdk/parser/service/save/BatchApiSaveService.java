@@ -73,8 +73,13 @@ public class BatchApiSaveService implements SaveService
 		Map<Group, Integer> savedGroupMap = new HashMap<Group, Integer>();
 		saveResults.addFailedItems(saveGroups(groups, savedGroupMap, connection));
 		
+		// now that the groups have been saved, we need to create a map to allow quick lookups of
+		// all associated group ids for a given indicator
+		Map<Indicator, Set<Integer>> associatedIndicatorGroupsIDs =
+			buildAssociatedIndicatorGroupIDs(groups, indicators, savedGroupMap);
+			
 		// save all of the indicators
-		saveResults.addFailedItems(saveIndicators(indicators, savedGroupMap, connection));
+		saveResults.addFailedItems(saveIndicators(indicators, associatedIndicatorGroupsIDs, connection));
 		
 		return saveResults;
 	}
@@ -104,22 +109,22 @@ public class BatchApiSaveService implements SaveService
 		return saveResults;
 	}
 	
-	protected SaveResults saveIndicators(final Collection<Indicator> indicators, Map<Group, Integer> savedGroupMap,
-		final Connection connection)
-			throws IOException
+	protected SaveResults saveIndicators(final Collection<Indicator> indicators,
+		final Map<Indicator, Set<Integer>> associatedIndicatorGroupsIDs, final Connection connection) throws IOException
 	{
-		return saveIndicators(indicators, savedGroupMap, connection, AttributeWriteType.Replace);
+		return saveIndicators(indicators, associatedIndicatorGroupsIDs, connection, AttributeWriteType.Replace);
 	}
 	
 	protected SaveResults saveIndicators(final Collection<Indicator> indicators,
-		final Map<Group, Integer> savedGroupMap, final Connection connection,
+		final Map<Indicator, Set<Integer>> associatedIndicatorGroupsIDs, final Connection connection,
 		final AttributeWriteType attributeWriteType) throws IOException
 	{
 		try
 		{
 			// create a new batch indicator writer
-			BatchIndicatorWriter batchIndicatorWriter = new BatchIndicatorWriter(connection, indicators, savedGroupMap);
-			
+			BatchIndicatorWriter batchIndicatorWriter =
+				new BatchIndicatorWriter(connection, indicators, associatedIndicatorGroupsIDs);
+				
 			// save the indicators
 			return batchIndicatorWriter.saveIndicators(ownerName, attributeWriteType);
 		}
@@ -202,5 +207,86 @@ public class BatchApiSaveService implements SaveService
 		
 		// store the id in the map
 		savedGroupMap.put(group, savedGroup.getId());
+	}
+	
+	/**
+	 * Looks at all of the possible associations for each group/indicator and builds a map that can
+	 * lookup all of the associated group ids for any given indicator object
+	 * 
+	 * @param groups
+	 * @param indicators
+	 * @param savedGroupMap
+	 * @return
+	 */
+	private Map<Indicator, Set<Integer>> buildAssociatedIndicatorGroupIDs(Set<Group> groups,
+		Set<Indicator> indicators, Map<Group, Integer> savedGroupMap)
+	{
+		// holds the hashmap to resolve the set of associated group ids for a given indicator
+		Map<Indicator, Set<Integer>> associatedIndicatorGroupsIDs = new HashMap<Indicator, Set<Integer>>();
+		
+		// for each of the groups
+		for (Group group : groups)
+		{
+			// look up the group id for this group
+			Integer groupID = savedGroupMap.get(group);
+			
+			// make sure this group id is not null
+			if (null != groupID)
+			{
+				// for each of the associated items of this group
+				for (Item item : group.getAssociatedItems())
+				{
+					// check to see if this item is an indicator
+					if (item.getItemType().equals(ItemType.INDICATOR))
+					{
+						// add this group id to the set of associated items for this indicator
+						Indicator indicator = (Indicator) item;
+						getOrCreateGroupIDSet(indicator, associatedIndicatorGroupsIDs).add(groupID);
+					}
+				}
+			}
+			else
+			{
+				// :TODO: the group id doesn't exist so it failed to save
+			}
+		}
+		
+		// for each of the indicators
+		for (Indicator indicator : indicators)
+		{
+			// for each of the associated groups of this indicator
+			for (Group group : indicator.getAssociatedItems())
+			{
+				// look up the group id for this group
+				Integer groupID = savedGroupMap.get(group);
+				
+				// make sure this group id is not null
+				if (null != groupID)
+				{
+					// add this group id to the set of associated items for this indicator
+					getOrCreateGroupIDSet(indicator, associatedIndicatorGroupsIDs).add(groupID);
+				}
+				else
+				{
+					// :TODO: the group id doesn't exist so it failed to save
+				}
+			}
+		}
+		
+		return associatedIndicatorGroupsIDs;
+	}
+	
+	private Set<Integer> getOrCreateGroupIDSet(final Indicator indicator,
+		Map<Indicator, Set<Integer>> associatedIndicatorGroupsIDs)
+	{
+		// check to see if the map contains this set of ids
+		Set<Integer> ids = associatedIndicatorGroupsIDs.get(indicator);
+		if (null == ids)
+		{
+			ids = new HashSet<Integer>();
+			associatedIndicatorGroupsIDs.put(indicator, ids);
+		}
+		
+		return ids;
 	}
 }

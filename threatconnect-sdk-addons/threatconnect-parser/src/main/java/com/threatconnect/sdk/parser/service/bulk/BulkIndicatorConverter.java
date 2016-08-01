@@ -3,12 +3,15 @@ package com.threatconnect.sdk.parser.service.bulk;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.NotImplementedException;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.threatconnect.sdk.parser.model.Address;
 import com.threatconnect.sdk.parser.model.Attribute;
 import com.threatconnect.sdk.parser.model.EmailAddress;
@@ -129,7 +132,8 @@ public class BulkIndicatorConverter
 		return attribute;
 	}
 	
-	public JsonObject convertToJson(final Collection<? extends Indicator> indicators)
+	public JsonObject convertToJson(final Collection<? extends Indicator> indicators,
+		final Map<Indicator, Set<Integer>> associatedIndicatorGroupsIDs)
 	{
 		// create the root indicator json object
 		JsonObject indicatorJsonObject = new JsonObject();
@@ -141,14 +145,16 @@ public class BulkIndicatorConverter
 		// for each indicator in the collection
 		for (Indicator indicator : indicators)
 		{
+			Set<Integer> ids = associatedIndicatorGroupsIDs.get(indicator);
+			
 			// convert this indicator and add it to the array
-			indicatorsJsonArray.add(convertToJson(indicator));
+			indicatorsJsonArray.add(convertToJson(indicator, ids));
 		}
 		
 		return indicatorJsonObject;
 	}
 	
-	public JsonObject convertToJson(final Indicator indicator)
+	public JsonObject convertToJson(final Indicator indicator, final Set<Integer> associatedGroupIDs)
 	{
 		// holds the json object that will represent this indicator
 		JsonObject indicatorJsonObject = new JsonObject();
@@ -159,6 +165,21 @@ public class BulkIndicatorConverter
 		indicatorJsonObject.addProperty("summary", indicator.toString());
 		
 		indicatorJsonObject.addProperty("type", indicatorTypeToString(indicator.getIndicatorType()));
+		
+		// check to see if the associatedGroupIDs is not null or empty
+		if (null != associatedGroupIDs && !associatedGroupIDs.isEmpty())
+		{
+			// create a new json array of the ids
+			JsonArray associatedGroups = new JsonArray();
+			
+			// for each of the ids
+			for (Integer id : associatedGroupIDs)
+			{
+				associatedGroups.add(new JsonPrimitive(id));
+			}
+			
+			indicatorJsonObject.add("associatedGroup", associatedGroups);
+		}
 		
 		// check to see if this indicator has attributes
 		if (!indicator.getAttributes().isEmpty())
