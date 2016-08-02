@@ -1,6 +1,10 @@
 package com.threatconnect.sdk.app.bulk;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -26,15 +30,24 @@ public class BulkIndicatorConverterTest
 	@Test
 	public void serializeBoth()
 	{
+		Map<Indicator, Set<Integer>> associatedIndicatorGroupsIDs = new HashMap<Indicator, Set<Integer>>();
+		
 		List<Host> hosts = beanPropertyGenerator.getList(Host.class, 3);
 		for (Indicator indicator : hosts)
 		{
 			indicator.getTags().add("Dell SecureWorks");
 			indicator.getAttributes().add(beanPropertyGenerator.get(Attribute.class));
+			
+			Set<Integer> ids = new HashSet<Integer>();
+			ids.add(10);
+			ids.add(11);
+			ids.add(12);
+			
+			associatedIndicatorGroupsIDs.put(indicator, ids);
 		}
 		
 		BulkIndicatorConverter converter = new BulkIndicatorConverter();
-		JsonObject jsonObject = converter.convertToJson(hosts);
+		JsonObject jsonObject = converter.convertToJson(hosts, associatedIndicatorGroupsIDs);
 		System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject));
 		
 		List<Indicator> indicators = converter.convertToIndicators(jsonObject);

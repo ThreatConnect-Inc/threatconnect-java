@@ -2,8 +2,8 @@ package com.threatconnect.sdk.parser.util;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +42,7 @@ public class AttributeHelper
 	 * whether or not this should be added to all associated items as
 	 * well
 	 */
-	public static void addSourceAttributeToAll(final List<? extends Item> items, final String source,
+	public static void addSourceAttributeToAll(final Collection<? extends Item> items, final String source,
 		final boolean recursive)
 	{
 		// for each of the items in the list
