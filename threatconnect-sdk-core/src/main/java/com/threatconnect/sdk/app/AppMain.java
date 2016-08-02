@@ -24,6 +24,9 @@ public final class AppMain
 			// create the app config object
 			AppConfig appConfig = AppConfig.getInstance();
 			
+			// set whether or not api logging is enabled
+			ServerLogger.getInstance().setEnabled(appConfig.isTcLogToApi());
+			
 			// check to see if there is an app class specified
 			if (null != appConfig.getTcMainAppClass() && !appConfig.getTcMainAppClass().isEmpty())
 			{

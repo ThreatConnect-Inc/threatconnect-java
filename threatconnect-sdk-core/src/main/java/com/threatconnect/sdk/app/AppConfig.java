@@ -30,6 +30,7 @@ public final class AppConfig
 	public static final String TC_API_MAX_RESULT = "api_max_results";
 	public static final String TC_APPLY_PROXY = "apply_proxy_tc";
 	public static final String TC_LOG_LEVEL = "tc_log_level";
+	public static final String TC_LOG_TO_API = "tc_log_to_api";
 	
 	public static final int DEFAULT_MAX_RESULTS = 350;
 	public static final String DEFAULT_LOG_LEVEL = "INFO";
@@ -150,6 +151,11 @@ public final class AppConfig
 	{
 		String level = getString(TC_LOG_LEVEL);
 		return null == level ? Level.toLevel(defaultLevel) : Level.toLevel(level.toUpperCase());
+	}
+	
+	public boolean isTcLogToApi()
+	{
+		return getBoolean(TC_LOG_TO_API);
 	}
 	
 	/**
