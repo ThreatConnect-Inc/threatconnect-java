@@ -19,6 +19,7 @@ import org.xml.sax.SAXException;
 import com.threatconnect.sdk.parser.model.Item;
 import com.threatconnect.sdk.parser.result.PageResult;
 import com.threatconnect.sdk.parser.source.DataSource;
+import java.io.InputStream;
 
 public abstract class AbstractPagedXMLParser<I extends Item> extends AbstractPagedParser<I>
 {
@@ -38,7 +39,9 @@ public abstract class AbstractPagedXMLParser<I extends Item> extends AbstractPag
 		{
 			// read the xml as a string and allow any xml preproccessing if needed
 			logger.trace("Loading XML DataSource as a string");
-			String rawXML = IOUtils.toString(getDataSource().read());
+                        InputStream is = getDataSource().read();
+			String rawXML = IOUtils.toString(is,"UTF-8");
+                        is.close();
 			logger.trace("Preprocessing raw XML String");
 			String xml = preProcessXML(rawXML);
 			
