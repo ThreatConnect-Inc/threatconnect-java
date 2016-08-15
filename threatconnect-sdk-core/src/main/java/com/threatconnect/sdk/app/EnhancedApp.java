@@ -5,15 +5,9 @@ import com.threatconnect.sdk.client.fluent.AdversaryBuilder;
 import com.threatconnect.sdk.client.fluent.AttributeBuilder;
 import com.threatconnect.sdk.client.fluent.TagBuilder;
 import com.threatconnect.sdk.client.fluent.ThreatBuilder;
-import com.threatconnect.sdk.client.reader.AbstractGroupReaderAdapter;
-import com.threatconnect.sdk.client.reader.AbstractIndicatorReaderAdapter;
-import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
-import com.threatconnect.sdk.client.reader.TagReaderAdapter;
+import com.threatconnect.sdk.client.reader.*;
 import com.threatconnect.sdk.client.response.IterableResponse;
-import com.threatconnect.sdk.client.writer.AbstractGroupWriterAdapter;
-import com.threatconnect.sdk.client.writer.AbstractIndicatorWriterAdapter;
-import com.threatconnect.sdk.client.writer.TagWriterAdapter;
-import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
+import com.threatconnect.sdk.client.writer.*;
 import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
@@ -32,11 +26,11 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.IOException;
 import java.util.*;
 
+import static com.threatconnect.sdk.app.AppUtil.createClientBuilder;
 import static com.threatconnect.sdk.util.IndicatorUtil.getUniqueId;
 import static com.threatconnect.sdk.util.IndicatorUtil.setUniqueId;
 
@@ -62,6 +56,8 @@ public abstract class EnhancedApp extends App
 	private TagWriterAdapter tagWriter;
 	private Map<String, Tag> tagMap;
 	private TagReaderAdapter tagReader;
+	private DataStoreReaderAdapter dataStoreReader;
+    private DataStoreWriterAdapter dataStoreWriter;
 
 	protected Integer getRateLimit()
 	{
@@ -221,6 +217,26 @@ public abstract class EnhancedApp extends App
 		return this.tagReader;
 	}
 
+	public DataStoreReaderAdapter getDataStoreReader()
+	{
+		if (this.dataStoreReader == null)
+		{
+			this.dataStoreReader = ReaderAdapterFactory.createDataStoreReaderAdapter(conn);
+		}
+
+		return this.dataStoreReader;
+	}
+
+    public DataStoreWriterAdapter getDataStoreWriter()
+    {
+        if (this.dataStoreWriter == null)
+        {
+            this.dataStoreWriter = WriterAdapterFactory.createDataStoreWriterAdapter(conn);
+        }
+
+        return this.dataStoreWriter;
+    }
+    
 	public int getMaxRetries()
 	{
 		return maxRetries;
@@ -321,8 +337,9 @@ public abstract class EnhancedApp extends App
 		MetricUtil.tick("getResponse");
 		debug("getResponse.URL=%s, retryNum=%d", url, retryNum);
 		// debug("getResponse.headers=%s", headerMap);
-		
-		HttpClient client = HttpClientBuilder.create().build();
+		HttpClient client =
+				createClientBuilder(AppConfig.getInstance().isExternalApplyProxy(), true).build();
+
 		addHeaders(request, headerMap);
 		HttpResponse response;
 		

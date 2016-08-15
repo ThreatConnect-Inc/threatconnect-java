@@ -5,18 +5,17 @@
  */
 package com.threatconnect.sdk.conn;
 
-import java.io.Closeable;
-import java.io.IOException;
-import java.util.Properties;
-
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.threatconnect.sdk.app.AppConfig;
 import com.threatconnect.sdk.app.AppUtil;
 import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.config.URLConfiguration;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.Closeable;
+import java.io.IOException;
+import java.util.Properties;
 
 /**
  * @author dtineo
@@ -27,11 +26,12 @@ public class Connection implements Closeable
 	private final Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
 	
 	private CloseableHttpClient apiClient;
+	private CloseableHttpClient externalClient;
 	protected Configuration config;
 	private AbstractRequestExecutor executor;
 	
 	private final URLConfiguration urlConfig;
-	
+
 	public Connection() throws IOException
 	{
 		String fileName = System.getProperties().getProperty("threatconnect.api.config");
@@ -103,7 +103,18 @@ public class Connection implements Closeable
 		}
 		return apiClient;
 	}
-	
+
+	CloseableHttpClient getExternalClient()
+	{
+		if (externalClient == null)
+		{
+			// :TODO: should we add an SDK param to trust self signed certs?
+			externalClient = AppUtil.createClient(AppConfig.getInstance().isExternalApplyProxy(), true);
+		}
+		return externalClient;
+	}
+
+
 	/**
 	 * @return the urlConfig
 	 */

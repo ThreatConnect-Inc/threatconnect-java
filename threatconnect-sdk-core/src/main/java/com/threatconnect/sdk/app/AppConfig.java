@@ -1,13 +1,9 @@
 package com.threatconnect.sdk.app;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-
 import org.apache.logging.log4j.Level;
+
+import java.util.*;
+import java.util.regex.Pattern;
 
 public final class AppConfig
 {
@@ -35,7 +31,8 @@ public final class AppConfig
 	
 	public static final int DEFAULT_MAX_RESULTS = 350;
 	public static final String DEFAULT_LOG_LEVEL = "INFO";
-	
+	public static final String EXTERNAL_APPLY_PROXY = "apply_proxy_external";
+
 	// holds the instance of this singleton
 	private static AppConfig instance;
 	
@@ -147,7 +144,12 @@ public final class AppConfig
 	{
 		return getBoolean(TC_APPLY_PROXY);
 	}
-	
+
+	public boolean isExternalApplyProxy()
+	{
+		return getBoolean(EXTERNAL_APPLY_PROXY);
+	}
+
 	public Level getTcLogLevel()
 	{
 		return getTcLogLevel(DEFAULT_LOG_LEVEL);
@@ -163,7 +165,9 @@ public final class AppConfig
 	{
 		return getBoolean(TC_LOG_TO_API);
 	}
-	
+
+
+
 	/**
 	 * Returns a system property as a string
 	 * 
