@@ -248,6 +248,13 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
 
         return modifyItem(propName, type, ownerName, paramMap, saveObject, HttpMethod.POST);
     }
+    
+    protected <T extends ApiEntitySingleResponse> T createItemWithGet(String propName, Class<T> type, String ownerName, Map<String, Object> paramMap, Object saveObject)
+            throws IOException, FailedResponseException {
+
+            return modifyItem(propName, type, ownerName, paramMap, saveObject, HttpMethod.GET);
+        }
+
 
     protected <T extends ApiEntitySingleResponse> T uploadFile(String propName, Class<T> type, File file, Map<String, Object> paramMap) throws FailedResponseException, UnsupportedEncodingException
     {
@@ -300,9 +307,9 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
 
         T result;
         try {
-        	logger.trace("Calling url={}", url);
+        	System.out.println("Calling url={}"+ url);
             String content = executor.execute(url, requestType, saveObject);
-            logger.trace("returning content={}", content);
+            System.out.println("returning content={}"+ content);
             result = mapper.readValue(content, type);
         } catch ( EOFException ex ) {
         	logger.error(requestType + " Error ", ex);
