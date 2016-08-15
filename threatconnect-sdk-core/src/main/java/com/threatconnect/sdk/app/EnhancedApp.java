@@ -664,7 +664,7 @@ public abstract class EnhancedApp extends App
 		
 	}
 	
-	public void addTags(AbstractIndicatorWriterAdapter<Indicator> writer, Indicator indicator, List<String> tagLabels)
+	public void addTags(AbstractIndicatorWriterAdapter<? extends Indicator> writer, Indicator indicator, List<String> tagLabels)
 	{
 		
 		if (tagMap == null)
