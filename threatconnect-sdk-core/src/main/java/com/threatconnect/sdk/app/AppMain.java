@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.threatconnect.sdk.app.exception.AppInstantiationException;
+import com.threatconnect.sdk.app.exception.TCMessageException;
 import com.threatconnect.sdk.log.ServerLogger;
 
 public final class AppMain
@@ -123,8 +124,16 @@ public final class AppMain
 			// reconfigure the log file for this app
 			LoggerUtil.reconfigureGlobalLogger(app.getAppLogFile(), appConfig);
 			
-			// execute this app
-			return app.execute(appConfig);
+			try
+			{
+				// execute this app
+				return app.execute(appConfig);
+			}
+			catch (TCMessageException e)
+			{
+				app.writeMessageTc(e.getMessage());
+				return ExitStatus.Failure;
+			}
 		}
 		catch (IllegalAccessException | InstantiationException e)
 		{
