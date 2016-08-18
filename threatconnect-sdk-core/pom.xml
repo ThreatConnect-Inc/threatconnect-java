@@ -55,9 +55,11 @@
 		<version.commons-codec>1.9</version.commons-codec>
 		<version.commons-io>2.4</version.commons-io>
 		<version.apache-http>4.4.1</version.apache-http>
-		<version.jackson>2.5.3</version.jackson>
+		<version.jackson>2.7.5</version.jackson>
 		<version.reflections>0.9.10</version.reflections>
 		<log4j.version>2.6.1</log4j.version>
+		<es.version>2.3.4</es.version>
+		<version.gson>2.3</version.gson>
 
 		<!-- Logging Versions -->
 		<version.slf4j>1.7.12</version.slf4j>
@@ -96,7 +98,11 @@
 			<artifactId>jackson-core</artifactId>
 			<version>${version.jackson}</version>
 		</dependency>
-
+        <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-xml-provider</artifactId>
+            <version>${version.jackson}</version>
+        </dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
@@ -125,7 +131,11 @@
 			<artifactId>log4j-core</artifactId>
 			<version>${log4j.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>${version.gson}</version>
+		</dependency>
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>

@@ -20,6 +20,7 @@ public class Configuration {
     private String tcApiUserSecretKey;
 
     private String tcToken;
+    private String tcTokenExpires;
     private Integer resultLimit;
     private String defaultOwner;
 
@@ -30,16 +31,26 @@ public class Configuration {
 
     private final String contentType = ContentType.APPLICATION_JSON.getMimeType();
 
+    public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner, String tcToken, String tcTokenExpires){
+        this(tcApiUrl, tcApiAccessID, tcApiUserSecretKey, defaultOwner, 500, tcToken, tcTokenExpires);
+    };
+
     public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner) {
-        this(tcApiUrl, tcApiAccessID, tcApiUserSecretKey, defaultOwner, 500);
+        this(tcApiUrl, tcApiAccessID, tcApiUserSecretKey, defaultOwner, 500, null, null);
     }
 
-    public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner, Integer resultLimit) {
+        public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner, Integer resultLimit) {
+        this(tcApiUrl, tcApiAccessID, tcApiUserSecretKey, defaultOwner, resultLimit, null, null);
+    }
+
+    public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner, Integer resultLimit, String tcToken, String tcTokenExpires) {
         this.tcApiUrl = tcApiUrl;
         this.tcApiAccessID = tcApiAccessID;
         this.tcApiUserSecretKey = tcApiUserSecretKey;
         this.defaultOwner = defaultOwner;
         this.resultLimit = resultLimit;
+        this.tcToken = tcToken;
+        this.tcTokenExpires = tcTokenExpires;
     }
 
     public Configuration(String tcApiUrl, String tcToken, String defaultOwner, Integer resultLimit) {
@@ -162,14 +173,24 @@ public class Configuration {
     }
 
     public String getTcToken()
-	{
-		return tcToken;
-	}
+    {
+        return tcToken;
+    }
     
     public void setTcToken(String tcToken)
-	{
-		this.tcToken = tcToken;
-	}
+    {
+	this.tcToken = tcToken;
+    }
+
+    public String getTcTokenExpires()
+    {
+        return this.tcTokenExpires;
+    }
+
+    public void setTcTokenExpires(String tcTokenExpires)
+    {
+        this.tcTokenExpires = tcTokenExpires;
+    }
 
     public boolean isActivityLogEnabled()
     {

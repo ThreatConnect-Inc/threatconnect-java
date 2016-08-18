@@ -1,13 +1,9 @@
 package com.threatconnect.sdk.app;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-
 import org.apache.logging.log4j.Level;
+
+import java.util.*;
+import java.util.regex.Pattern;
 
 public final class AppConfig
 {
@@ -22,6 +18,7 @@ public final class AppConfig
 	public static final String TC_API_SECRET = "api_secret_key";
 	public static final String TC_API_TOKEN_KEY = "tc_api_token_key";
 	public static final String TC_TOKEN = "tc_token";
+        public static final String TC_TOKEN_EXPIRES = "tc_token_expires";
 	public static final String TC_API_DEFAULT_ORG = "api_default_org";
 	public static final String TC_PROXY_HOST = "tc_proxy_host";
 	public static final String TC_PROXY_PORT = "tc_proxy_port";
@@ -34,7 +31,8 @@ public final class AppConfig
 	
 	public static final int DEFAULT_MAX_RESULTS = 350;
 	public static final String DEFAULT_LOG_LEVEL = "INFO";
-	
+	public static final String EXTERNAL_APPLY_PROXY = "apply_proxy_external";
+
 	// holds the instance of this singleton
 	private static AppConfig instance;
 	
@@ -101,6 +99,11 @@ public final class AppConfig
 	{
 		return getString(TC_TOKEN);
 	}
+
+	public String getTcTokenExpires()
+	{
+		return getString(TC_TOKEN_EXPIRES);
+	}
 	
 	public String getApiDefaultOrg()
 	{
@@ -141,7 +144,12 @@ public final class AppConfig
 	{
 		return getBoolean(TC_APPLY_PROXY);
 	}
-	
+
+	public boolean isExternalApplyProxy()
+	{
+		return getBoolean(EXTERNAL_APPLY_PROXY);
+	}
+
 	public Level getTcLogLevel()
 	{
 		return getTcLogLevel(DEFAULT_LOG_LEVEL);
@@ -157,7 +165,9 @@ public final class AppConfig
 	{
 		return getBoolean(TC_LOG_TO_API);
 	}
-	
+
+
+
 	/**
 	 * Returns a system property as a string
 	 * 
