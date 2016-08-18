@@ -26,26 +26,20 @@ public class DataStoreReaderAdapter extends AbstractReaderAdapter
 
     public String getOrganization(String type, String search, String owner)
     {
-        return get("Organization", type, search, owner);
+        return get("Organization", type, search, owner, null /* body */);
     }
 
     public String getSystem(String type, String search)
     {
-        return get("System", type, search);
+        return get("System", type, search, null /* owner */, null /* body */);
     }
 
     public String getLocal(String type, String search)
     {
-        return get("Local", type, search);
+        return get("Local", type, search, null /* owner */, null /* body */);
     }
 
-
-    protected String get(String domain, String type, String search)
-    {
-        return get(domain, type, search, null /* owner */);
-    }
-
-    protected String get(String domain, String type, String search, String owner)
+    protected String get(String domain, String type, String search, String owner, String body)
     {
         Map<String, String> params = new HashMap<>();
         params.put("domain", domain);
@@ -54,7 +48,7 @@ public class DataStoreReaderAdapter extends AbstractReaderAdapter
 
         try
         {
-            return getAsText(GET, params, owner);
+            return getAsText(GET, params, owner, body);
         } catch (IOException ioe)
         {
             logger.error("Error while retrieving dataStore query");
@@ -63,7 +57,7 @@ public class DataStoreReaderAdapter extends AbstractReaderAdapter
         return null;
     }
 
-    protected String getAsText(HttpMethod esMethod, Map<String, String> params, String owner) throws IOException
+    protected String getAsText(HttpMethod esMethod, Map<String, String> params, String owner, String body) throws IOException
     {
         String url = getConn().getUrlConfig().getUrl(getUrlBasePrefix());
 
@@ -80,7 +74,7 @@ public class DataStoreReaderAdapter extends AbstractReaderAdapter
         headers.put("DB-Method", esMethod.name());
 
         logger.trace("calling url={}", url);
-        String content = executor.execute(url, POST, headers, null /* body */);
+        String content = executor.execute(url, POST, headers, body);
 
         logger.trace("returning content={}", content);
 

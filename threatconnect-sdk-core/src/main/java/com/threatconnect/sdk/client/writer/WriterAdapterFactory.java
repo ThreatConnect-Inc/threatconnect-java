@@ -206,9 +206,9 @@ public class WriterAdapterFactory {
         return new TaskWriterAdapter(conn);
     }
 
-    public static DataStoreWriterAdapater createDataStoreWriterAdapter(Connection conn)
+    public static DataStoreWriterAdapter createDataStoreWriterAdapter(Connection conn)
     {
-        return new DataStoreWriterAdapater(conn);
+        return new DataStoreWriterAdapter(conn);
     }
     
     public static LogWriterAdapter createLogWriter(Connection conn) {

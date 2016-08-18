@@ -14,11 +14,11 @@ import static com.threatconnect.sdk.conn.AbstractRequestExecutor.HttpMethod.*;
 /**
  * Created by cblades on 7/14/2016.
  */
-public class DataStoreWriterAdapater extends AbstractWriterAdapter
+public class DataStoreWriterAdapter extends AbstractWriterAdapter
 {
     private final Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
 
-    public DataStoreWriterAdapater(Connection conn)
+    public DataStoreWriterAdapter(Connection conn)
     {
         super(conn);
     }
