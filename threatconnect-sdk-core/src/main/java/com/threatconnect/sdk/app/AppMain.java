@@ -132,6 +132,8 @@ public final class AppMain
 			catch (TCMessageException e)
 			{
 				app.writeMessageTc(e.getMessage());
+				logger.error(e.getMessage(), e);
+				LoggerUtil.logErr(e, e.getMessage());
 				return ExitStatus.Failure;
 			}
 		}
