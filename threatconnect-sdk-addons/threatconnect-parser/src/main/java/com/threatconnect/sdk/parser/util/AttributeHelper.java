@@ -185,6 +185,46 @@ public class AttributeHelper
 	}
 	
 	/**
+	 * Adds an attribute to the item provided that the value is not null or empty
+	 * 
+	 * @param item
+	 * the item to add this attribute to
+	 * @param type
+	 * the type of attribute to add
+	 * @param value
+	 * the value of the attribute
+	 * @return the attribute that was created or null if the value was null or empty
+	 */
+	public static Attribute addAttributeIfExists(final Item item, final String type, final String value)
+	{
+		return addAttributeIfExists(item, type, value, null);
+	}
+	
+	/**
+	 * Adds an attribute to the item provided that the value is not null or empty
+	 * 
+	 * @param item
+	 * the item to add this attribute to
+	 * @param type
+	 * the type of attribute to add
+	 * @param value
+	 * the value of the attribute
+	 * @return the attribute that was created or null if the value was null or empty
+	 */
+	public static Attribute addAttributeIfExists(final Item item, final String type, final String value,
+		final Boolean displayed)
+	{
+		if (null != value && !value.trim().isEmpty())
+		{
+			return addAttribute(item, type, value, displayed);
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * Adds an attribute to the item
 	 * 
 	 * @param item
