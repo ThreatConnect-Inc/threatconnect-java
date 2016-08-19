@@ -4,9 +4,13 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 
 import com.threatconnect.sdk.conn.ConnectionUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AppUtil
 {
+	private static final Logger logger = LoggerFactory.getLogger(ConnectionUtil.class.getSimpleName());
+
 	/**
 	 * Creates a HttpClientBuilder object with the proxy settings if they are configured
 	 * 
@@ -26,13 +30,16 @@ public class AppUtil
 			Integer proxyPort = AppConfig.getInstance().getTcProxyPort();
 			String proxyUserName = AppConfig.getInstance().getTcProxyUsername();
 			String proxyPassword = AppConfig.getInstance().getTcProxyPassword();
-			
+
+			logger.debug(String.format("creating http client with proxy setings http://%s:%s %s:%s",
+					proxyHost, proxyPort, proxyUserName, proxyPassword));
+
 			return ConnectionUtil.createClientBuilder(proxyHost, proxyPort, proxyUserName, proxyPassword,
 				trustSelfSignedCertificates);
 		}
 		else
 		{
-			
+			logger.debug("Creating http client without proxy settings");
 			return ConnectionUtil.createClientBuilder(null, null, null, null, trustSelfSignedCertificates);
 		}
 	}

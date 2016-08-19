@@ -32,6 +32,7 @@ public final class AppConfig
 	public static final int DEFAULT_MAX_RESULTS = 350;
 	public static final String DEFAULT_LOG_LEVEL = "INFO";
 	public static final String EXTERNAL_APPLY_PROXY = "apply_proxy_external";
+	public static final String VERIFY_SSL_EXTERNAL = "verify_ssl_external";
 
 	// holds the instance of this singleton
 	private static AppConfig instance;
@@ -148,6 +149,11 @@ public final class AppConfig
 	public boolean isExternalApplyProxy()
 	{
 		return getBoolean(EXTERNAL_APPLY_PROXY);
+	}
+
+	public boolean isVerifySSL()
+	{
+		return getBoolean(VERIFY_SSL_EXTERNAL, true);
 	}
 
 	public Level getTcLogLevel()
@@ -299,6 +305,17 @@ public final class AppConfig
 	public boolean getBoolean(final String key)
 	{
 		return Boolean.parseBoolean(getString(key));
+	}
+
+	public boolean getBoolean(final String key, final boolean dfault)
+	{
+		String value = getString(key);
+		if (value == null || value.trim().isEmpty())
+		{
+			return dfault;
+		}
+
+		return Boolean.parseBoolean(value);
 	}
 	
 	/**

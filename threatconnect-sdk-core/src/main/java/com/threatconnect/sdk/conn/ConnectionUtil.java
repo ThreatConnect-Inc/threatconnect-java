@@ -5,19 +5,7 @@
  */
 package com.threatconnect.sdk.conn;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.InvalidKeyException;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Properties;
-
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLSession;
-
+import com.threatconnect.sdk.config.Configuration;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -35,7 +23,17 @@ import org.apache.http.ssl.SSLContextBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.threatconnect.sdk.config.Configuration;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSession;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Properties;
 
 /**
  * @author dtineo
@@ -178,6 +176,7 @@ public class ConnectionUtil
 	 */
 	public static void trustSelfSignedCerts(final HttpClientBuilder httpClientBuilder)
 	{
+		logger.debug("Trusting self-signed certs.");
 		try
 		{
 			SSLContextBuilder builder = new SSLContextBuilder();

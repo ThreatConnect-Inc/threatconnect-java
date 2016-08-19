@@ -338,7 +338,8 @@ public abstract class EnhancedApp extends App
 		debug("getResponse.URL=%s, retryNum=%d", url, retryNum);
 		// debug("getResponse.headers=%s", headerMap);
 		HttpClient client =
-				createClientBuilder(AppConfig.getInstance().isExternalApplyProxy(), true).build();
+				createClientBuilder(AppConfig.getInstance().isExternalApplyProxy(),
+									AppConfig.getInstance().isVerifySSL()).build();
 
 		addHeaders(request, headerMap);
 		HttpResponse response;
