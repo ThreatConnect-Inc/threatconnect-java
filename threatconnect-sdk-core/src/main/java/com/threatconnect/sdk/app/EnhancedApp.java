@@ -58,6 +58,7 @@ public abstract class EnhancedApp extends App
 	private TagReaderAdapter tagReader;
 	private DataStoreReaderAdapter dataStoreReader;
     private DataStoreWriterAdapter dataStoreWriter;
+	private HttpClient externalClient;
 
 	protected Integer getRateLimit()
 	{
@@ -337,9 +338,7 @@ public abstract class EnhancedApp extends App
 		MetricUtil.tick("getResponse");
 		debug("getResponse.URL=%s, retryNum=%d", url, retryNum);
 		// debug("getResponse.headers=%s", headerMap);
-		HttpClient client =
-				createClientBuilder(AppConfig.getInstance().isExternalApplyProxy(),
-									AppConfig.getInstance().isVerifySSL()).build();
+		HttpClient client = getExternalClient();
 
 		addHeaders(request, headerMap);
 		HttpResponse response;
@@ -378,7 +377,17 @@ public abstract class EnhancedApp extends App
 			"URL failed to return data: response_code=" + response.getStatusLine().getStatusCode()
 				+ "reason=" + response.getStatusLine().getReasonPhrase());
 	}
-	
+
+	protected HttpClient getExternalClient()
+	{
+		if (externalClient == null)
+		{
+			externalClient = createClientBuilder(AppConfig.getInstance().isExternalApplyProxy(),
+											     AppConfig.getInstance().isVerifySSL()).build();
+		}
+		return externalClient;
+	}
+
 	private void checkRateLimit()
 	{
 		
