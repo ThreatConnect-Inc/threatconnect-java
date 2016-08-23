@@ -614,7 +614,7 @@ public abstract class EnhancedApp extends App
 		return ind;
 	}
 	
-	public void addTags(AbstractGroupWriterAdapter<Group> writer, Integer groupId, List<String> tagLabels)
+	public void addTags(AbstractGroupWriterAdapter<? extends Group> writer, Integer groupId, List<String> tagLabels)
 	{
 		List<Tag> tags = new ArrayList<>();
 		for (String label : tagLabels)
@@ -627,7 +627,7 @@ public abstract class EnhancedApp extends App
 		addFullTags(writer, groupId, tags);
 	}
 	
-	public void addFullTags(AbstractGroupWriterAdapter<Group> writer, Integer groupId, List<Tag> tags)
+	public void addFullTags(AbstractGroupWriterAdapter<? extends Group> writer, Integer groupId, List<Tag> tags)
 	{
 		
 		if (tagMap == null)
