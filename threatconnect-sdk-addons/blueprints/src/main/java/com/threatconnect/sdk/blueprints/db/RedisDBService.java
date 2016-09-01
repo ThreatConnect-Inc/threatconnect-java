@@ -25,12 +25,11 @@ public class RedisDBService implements DBService
 	}
 
 	@Override
-	public boolean saveValue(String key, byte[] value)
+	public void saveValue(String key, byte[] value)
 	{
 		logger.debug("savingValue: session={}, key={}, value={}\n", contextKey, key, new String(value));
 
 		redis.hset(contextKey.getBytes(), key.getBytes(), value);
-		return true;
 	}
 
 	@Override

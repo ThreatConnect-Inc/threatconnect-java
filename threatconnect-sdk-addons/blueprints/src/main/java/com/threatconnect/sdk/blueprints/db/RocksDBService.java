@@ -4,7 +4,6 @@ import com.threatconnect.sdk.blueprints.app.BlueprintsAppConfig;
 import org.rocksdb.Options;
 import org.rocksdb.RocksDB;
 import org.rocksdb.RocksDBException;
-import org.rocksdb.TtlDB;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,61 +16,61 @@ public class RocksDBService implements DBService
 	// the variables to the execution cache
 	private static final Integer TRIGGER_TTL_SECONDS = 60 * 60;
 
+	//holds the path to the database
+	private String databasePath;
+
 	public RocksDBService()
 	{
+		this.databasePath = BlueprintsAppConfig.getBlueprintsAppConfig().getDBPath();
+
 		// a static method that loads the RocksDB C++ library.
 		RocksDB.loadLibrary();
 	}
 
 	@Override
-	public boolean saveValue(String key, byte[] value)
+	public void saveValue(String key, byte[] value) throws DBWriteException
 	{
-		String path = BlueprintsAppConfig.getBlueprintsAppConfig().getDBPath();
 		logger.debug("savingValue: key={}, value={}\n", key, new String(value));
 
+		RocksDB db = null;
 		Options options = createOptions();
-		RocksDB db = getDb(path, options, /*allowWrites=*/true);
 
 		try
 		{
+			//open the database with write access
+			db = openDatabase(options, true);
 			db.put(key.getBytes(), value);
 		}
 		catch (RocksDBException e)
 		{
-			logger.error(e.getMessage(), e);
-			return false;
+			throw new DBWriteException(e);
 		}
 		finally
 		{
 			close(db, options);
 		}
-
-		return true;
 	}
 
 	@Override
-	public byte[] getValue(String key) throws DBException
+	public byte[] getValue(String key) throws DBReadException
 	{
-		String path = BlueprintsAppConfig.getBlueprintsAppConfig().getDBPath();
-
+		RocksDB db = null;
 		Options options = createOptions();
-		RocksDB db = getDb(path, options, /*allowWrites=*/false);
-		byte[] out = new byte[0];
+
 		try
 		{
-			out = db.get(key.getBytes());
+			//open the database in read only
+			db = openDatabase(options, false);
+			return db.get(key.getBytes());
 		}
 		catch (RocksDBException e)
 		{
-			logger.error(e.getMessage(), e);
-			return null;
+			throw new DBReadException(e);
 		}
 		finally
 		{
 			close(db, options);
 		}
-
-		return out;
 	}
 
 	// the Options class contains a set of configurable DB options
@@ -93,34 +92,24 @@ public class RocksDBService implements DBService
 		}
 	}
 
-	private RocksDB getTtlDb(String dbPath, Options options, boolean allowWrites)
+	/**
+	 * Opens the RocksDB database
+	 *
+	 * @param options
+	 * @param allowWrites whether or not to opean the database with write access
+	 * @return
+	 * @throws RocksDBException
+	 */
+	private RocksDB openDatabase(Options options, boolean allowWrites) throws RocksDBException
 	{
 		try
 		{
-			return TtlDB.open(options, dbPath, TRIGGER_TTL_SECONDS, !allowWrites);
-
+			return allowWrites ? RocksDB.open(options, databasePath) : RocksDB.openReadOnly(options, databasePath);
 		}
 		catch (RocksDBException e)
 		{
-			logger.error("Failed to create ttl db: " + dbPath);
-			logger.error(e.getMessage(), e);
+			logger.error("Failed to create db: " + databasePath);
+			throw e;
 		}
-
-		return null;
-	}
-
-	private RocksDB getDb(String dbPath, Options options, boolean allowWrites)
-	{
-		try
-		{
-			return allowWrites ? RocksDB.open(options, dbPath) : RocksDB.openReadOnly(options, dbPath);
-		}
-		catch (RocksDBException e)
-		{
-			logger.error("Failed to create db: " + dbPath);
-			logger.error(e.getMessage(), e);
-		}
-
-		return null;
 	}
 }

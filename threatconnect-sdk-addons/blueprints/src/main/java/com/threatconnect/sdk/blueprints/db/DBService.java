@@ -5,7 +5,7 @@ package com.threatconnect.sdk.blueprints.db;
  */
 public interface DBService
 {
-	boolean saveValue(String key, byte[] value) throws DBException;
+	void saveValue(String key, byte[] value) throws DBWriteException;
 
-	byte[] getValue(String key) throws DBException;
+	byte[] getValue(String key) throws DBReadException;
 }
