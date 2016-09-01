@@ -13,6 +13,7 @@
 	<modules>
 		<module>threatconnect-parser</module>
 		<module>app-package-plugin</module>
+		<module>blueprints</module>
 	</modules>
 
 	<licenses>
