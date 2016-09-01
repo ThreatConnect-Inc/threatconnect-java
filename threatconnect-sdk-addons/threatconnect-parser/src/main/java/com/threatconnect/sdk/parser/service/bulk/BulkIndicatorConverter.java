@@ -1,26 +1,14 @@
 package com.threatconnect.sdk.parser.service.bulk;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import com.threatconnect.sdk.app.exception.TCMessageException;
-import org.apache.commons.lang3.NotImplementedException;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import com.threatconnect.sdk.parser.model.Address;
-import com.threatconnect.sdk.parser.model.Attribute;
-import com.threatconnect.sdk.parser.model.EmailAddress;
-import com.threatconnect.sdk.parser.model.Host;
-import com.threatconnect.sdk.parser.model.Indicator;
-import com.threatconnect.sdk.parser.model.IndicatorType;
-import com.threatconnect.sdk.parser.model.Url;
+import com.threatconnect.sdk.parser.model.*;
 import com.threatconnect.sdk.parser.util.TagUtil;
+import org.apache.commons.lang3.NotImplementedException;
+
+import java.util.*;
 
 public class BulkIndicatorConverter
 {
@@ -89,13 +77,9 @@ public class BulkIndicatorConverter
 
 				indicators.add(indicator);
 			}
+		}
 
-			return indicators;
-		}
-		else
-		{
-			throw new TCMessageException("Unable to read bulk indicators for this source.");
-		}
+		return indicators;
 	}
 
 	public Indicator convertToIndicator(final JsonObject indicatorObject)
