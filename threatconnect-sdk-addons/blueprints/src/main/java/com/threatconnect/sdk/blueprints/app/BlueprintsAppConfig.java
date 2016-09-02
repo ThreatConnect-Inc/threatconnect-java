@@ -52,7 +52,7 @@ public class BlueprintsAppConfig
 		return AppConfig.getInstance();
 	}
 
-	public static BlueprintsAppConfig getBlueprintsAppConfig()
+	public static BlueprintsAppConfig getInstance()
 	{
 		//check to see if the blueprints app config is null
 		if (null == instance)

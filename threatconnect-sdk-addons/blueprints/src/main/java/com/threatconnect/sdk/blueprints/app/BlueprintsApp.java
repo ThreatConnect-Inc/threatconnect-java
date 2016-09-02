@@ -20,7 +20,8 @@ public abstract class BlueprintsApp extends App
 
 	public BlueprintsApp()
 	{
-		final BlueprintsAppConfig blueprintsAppConfig = BlueprintsAppConfig.getBlueprintsAppConfig();
+		//retrieve the reference to the blueprints config
+		final BlueprintsAppConfig blueprintsAppConfig = BlueprintsAppConfig.getInstance();
 
 		//check to see if the database is a redis database
 		if (DB_TYPE_DISTRIBUTED.equals(blueprintsAppConfig.getDBType()))
@@ -42,11 +43,20 @@ public abstract class BlueprintsApp extends App
 	@Override
 	public ExitStatus execute(AppConfig appConfig) throws Exception
 	{
-		return null;
+		return execute(BlueprintsAppConfig.getInstance());
 	}
 
 	protected DBService getDbService()
 	{
 		return dbService;
 	}
+
+	/**
+	 * Executes the blueprint app
+	 *
+	 * @param blueprintsAppConfig
+	 * @return
+	 * @throws Exception
+	 */
+	protected abstract ExitStatus execute(BlueprintsAppConfig blueprintsAppConfig) throws Exception;
 }

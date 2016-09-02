@@ -17,8 +17,8 @@ public class RedisDBService implements DBService
 	public RedisDBService(final String contextKey)
 	{
 		//building the redis connection object
-		String host = BlueprintsAppConfig.getBlueprintsAppConfig().getDBPath();
-		int port = BlueprintsAppConfig.getBlueprintsAppConfig().getDBPort(DEFAULT_REDIS_PORT);
+		String host = BlueprintsAppConfig.getInstance().getDBPath();
+		int port = BlueprintsAppConfig.getInstance().getDBPort(DEFAULT_REDIS_PORT);
 		this.redis = new Jedis(host, port);
 
 		this.contextKey = contextKey;

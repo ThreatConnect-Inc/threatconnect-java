@@ -21,7 +21,7 @@ public class RocksDBService implements DBService
 
 	public RocksDBService()
 	{
-		this.databasePath = BlueprintsAppConfig.getBlueprintsAppConfig().getDBPath();
+		this.databasePath = BlueprintsAppConfig.getInstance().getDBPath();
 
 		// a static method that loads the RocksDB C++ library.
 		RocksDB.loadLibrary();
