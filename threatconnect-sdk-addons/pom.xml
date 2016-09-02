@@ -121,7 +121,7 @@
 				<version>2.10.1</version>
 				<configuration>
 					<show>public</show>
-					<failOnError>true</failOnError>
+					<failOnError>false</failOnError>
 				</configuration>
 				<executions>
 					<execution>

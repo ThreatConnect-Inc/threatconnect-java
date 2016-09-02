@@ -3,41 +3,26 @@ package com.threatconnect.sdk.blueprints.app;
 import com.threatconnect.sdk.app.App;
 import com.threatconnect.sdk.app.AppConfig;
 import com.threatconnect.sdk.app.ExitStatus;
+import com.threatconnect.sdk.blueprints.content.ContentService;
 import com.threatconnect.sdk.blueprints.db.DBService;
-import com.threatconnect.sdk.blueprints.db.RedisDBService;
-import com.threatconnect.sdk.blueprints.db.RocksDBService;
+import com.threatconnect.sdk.blueprints.db.DBServiceFactory;
 
 /**
  * @author Greg Marut
  */
 public abstract class BlueprintsApp extends App
 {
-	public static final String DB_TYPE_DISTRIBUTED = "Redis";
-	public static final String DB_TYPE_EMBEDDED = "RocksDB";
-
-	//holds the database service object
-	private final DBService dbService;
+	//holds the content service object for reading and writing content
+	private final ContentService contentService;
 
 	public BlueprintsApp()
 	{
-		//retrieve the reference to the blueprints config
-		final BlueprintsAppConfig blueprintsAppConfig = BlueprintsAppConfig.getInstance();
+		this(DBServiceFactory.buildFromAppConfig());
+	}
 
-		//check to see if the database is a redis database
-		if (DB_TYPE_DISTRIBUTED.equals(blueprintsAppConfig.getDBType()))
-		{
-			this.dbService = new RedisDBService(blueprintsAppConfig.getDBContext());
-		}
-		else if (DB_TYPE_EMBEDDED.equals(blueprintsAppConfig.getDBType()))
-		{
-			this.dbService = new RocksDBService();
-		}
-		else
-		{
-			//invalid database configuration
-			throw new RuntimeException("Invalid database type. " + BlueprintsAppConfig.PARAM_DB_TYPE
-				+ " parameter must be set to a valid value.");
-		}
+	public BlueprintsApp(final DBService dbService)
+	{
+		this.contentService = new ContentService(dbService);
 	}
 
 	@Override
@@ -46,9 +31,9 @@ public abstract class BlueprintsApp extends App
 		return execute(BlueprintsAppConfig.getInstance());
 	}
 
-	protected DBService getDbService()
+	protected ContentService getContentService()
 	{
-		return dbService;
+		return contentService;
 	}
 
 	/**
