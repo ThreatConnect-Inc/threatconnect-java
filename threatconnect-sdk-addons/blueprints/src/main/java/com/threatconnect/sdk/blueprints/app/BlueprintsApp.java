@@ -31,7 +31,7 @@ public abstract class BlueprintsApp extends App
 		return execute(BlueprintsAppConfig.getInstance());
 	}
 
-	protected ContentService getContentService()
+	public ContentService getContentService()
 	{
 		return contentService;
 	}
