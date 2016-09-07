@@ -54,20 +54,18 @@ public class ContentAccumulator<T>
 		{
 			throw new IllegalArgumentException("key cannot be null");
 		}
-		else
-		{
-			try
-			{
-				//retrieve the content converter for this type and make sure that the converter is not null
-				ContentConverter<T> converter = ConverterFactory.getConverter(key, standardTypes);
 
-				//convert the value to a byte array and write the raw byte value to the database
-				dbService.saveValue(key, converter.toByteArray(content));
-			}
-			catch (DBWriteException | UnknownConverterException | ConversionException e)
-			{
-				throw new ContentException(e);
-			}
+		try
+		{
+			//retrieve the content converter for this type and make sure that the converter is not null
+			ContentConverter<T> converter = ConverterFactory.getConverter(key, standardTypes);
+
+			//convert the value to a byte array and write the raw byte value to the database
+			dbService.saveValue(key, converter.toByteArray(content));
+		}
+		catch (DBWriteException | UnknownConverterException | ConversionException e)
+		{
+			throw new ContentException(e);
 		}
 	}
 
@@ -111,26 +109,24 @@ public class ContentAccumulator<T>
 		{
 			throw new IllegalArgumentException("key cannot be null");
 		}
-		else
+
+		try
 		{
-			try
-			{
-				//retrieve the content converter for this type and make sure that the converter is not null
-				ContentConverter<T> converter = ConverterFactory.getConverter(key, standardTypes);
+			//retrieve the content converter for this type and make sure that the converter is not null
+			ContentConverter<T> converter = ConverterFactory.getConverter(key, standardTypes);
 
-				//read the value from the database service as a raw byte array and check to see if the content is not null
-				byte[] content = dbService.getValue(key);
-				if (content == null)
-				{
-					return null;
-				}
-
-				return converter.fromByteArray(content);
-			}
-			catch (DBReadException | ConversionException | UnknownConverterException e)
+			//read the value from the database service as a raw byte array and check to see if the content is not null
+			byte[] content = dbService.getValue(key);
+			if (content == null)
 			{
-				throw new ContentException(e);
+				return null;
 			}
+
+			return converter.fromByteArray(content);
+		}
+		catch (DBReadException | ConversionException | UnknownConverterException e)
+		{
+			throw new ContentException(e);
 		}
 	}
 }
