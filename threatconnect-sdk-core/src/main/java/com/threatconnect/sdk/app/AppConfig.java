@@ -1,6 +1,8 @@
 package com.threatconnect.sdk.app;
 
 import org.apache.logging.log4j.Level;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -18,7 +20,7 @@ public final class AppConfig
 	public static final String TC_API_SECRET = "api_secret_key";
 	public static final String TC_API_TOKEN_KEY = "tc_api_token_key";
 	public static final String TC_TOKEN = "tc_token";
-        public static final String TC_TOKEN_EXPIRES = "tc_token_expires";
+	public static final String TC_TOKEN_EXPIRES = "tc_token_expires";
 	public static final String TC_API_DEFAULT_ORG = "api_default_org";
 	public static final String TC_PROXY_HOST = "tc_proxy_host";
 	public static final String TC_PROXY_PORT = "tc_proxy_port";
@@ -33,6 +35,8 @@ public final class AppConfig
 	public static final String DEFAULT_LOG_LEVEL = "INFO";
 	public static final String EXTERNAL_APPLY_PROXY = "apply_proxy_external";
 	public static final String VERIFY_SSL_EXTERNAL = "verify_ssl_external";
+
+	private static final Logger logger = LoggerFactory.getLogger(AppConfig.class);
 
 	// holds the instance of this singleton
 	private static AppConfig instance;
@@ -171,8 +175,6 @@ public final class AppConfig
 	{
 		return getBoolean(TC_LOG_TO_API);
 	}
-
-
 
 	/**
 	 * Returns a system property as a string
@@ -385,7 +387,10 @@ public final class AppConfig
 	 */
 	protected String loadSetting(final String key)
 	{
-		return System.getProperty(key);
+		String value = System.getProperty(key);
+		logger.trace("Reading param {}={}", key, value);
+
+		return value;
 	}
 	
 	/**
