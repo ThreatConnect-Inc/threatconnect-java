@@ -82,7 +82,7 @@ public abstract class App
 	public void writeResultsTc(Map<String, String> results)
 	{
 		PrintWriter writer = null;
-		
+                
 		try
 		{
 			// create the writer object
@@ -97,7 +97,7 @@ public abstract class App
 		}
 		catch (FileNotFoundException | UnsupportedEncodingException e)
 		{
-			LoggerUtil.logErr(e, "Failed to write message.tc file");
+			LoggerUtil.logErr(e, "Failed to write results.tc file");
 		}
 		finally
 		{
