@@ -3,8 +3,6 @@ package com.threatconnect.sdk.blueprints.content.accumulator;
 import com.threatconnect.sdk.blueprints.content.StandardType;
 import com.threatconnect.sdk.blueprints.content.converter.ContentConverter;
 import com.threatconnect.sdk.blueprints.content.converter.ConversionException;
-import com.threatconnect.sdk.blueprints.content.converter.ConverterFactory;
-import com.threatconnect.sdk.blueprints.content.converter.UnknownConverterException;
 import com.threatconnect.sdk.blueprints.db.DBReadException;
 import com.threatconnect.sdk.blueprints.db.DBService;
 import com.threatconnect.sdk.blueprints.db.DBWriteException;
@@ -18,10 +16,12 @@ public class ContentAccumulator<T>
 {
 	private static final Logger logger = LoggerFactory.getLogger(ContentAccumulator.class.getName());
 
-	private final StandardType[] standardTypes;
+	private final StandardType standardType;
 	private final DBService dbService;
+	private final ContentConverter<T> contentConverter;
 
-	public ContentAccumulator(final DBService dbService, final StandardType... standardTypes)
+	public ContentAccumulator(final DBService dbService, final StandardType standardType, final ContentConverter<T>
+		contentConverter)
 	{
 		//make sure the db service is not null
 		if (null == dbService)
@@ -29,14 +29,21 @@ public class ContentAccumulator<T>
 			throw new IllegalArgumentException("dbService cannot be null");
 		}
 
-		//make sure the array of standard types is not null
-		if (null == standardTypes || standardTypes.length == 0)
+		//make sure the standard type is not null
+		if (null == standardType)
 		{
-			throw new IllegalArgumentException("standardTypes cannot be null or empty");
+			throw new IllegalArgumentException("standardType cannot be null or empty");
+		}
+
+		//make sure the content contentConverter is not null
+		if (null == contentConverter)
+		{
+			throw new IllegalArgumentException("contentConverter cannot be null or empty");
 		}
 
 		this.dbService = dbService;
-		this.standardTypes = standardTypes;
+		this.standardType = standardType;
+		this.contentConverter = contentConverter;
 	}
 
 	/**
@@ -57,13 +64,10 @@ public class ContentAccumulator<T>
 
 		try
 		{
-			//retrieve the content converter for this type and make sure that the converter is not null
-			ContentConverter<T> converter = ConverterFactory.getConverter(key, standardTypes);
-
 			//convert the value to a byte array and write the raw byte value to the database
-			dbService.saveValue(key, converter.toByteArray(content));
+			dbService.saveValue(key, contentConverter.toByteArray(content));
 		}
-		catch (DBWriteException | UnknownConverterException | ConversionException e)
+		catch (DBWriteException | ConversionException e)
 		{
 			throw new ContentException(e);
 		}
@@ -112,9 +116,6 @@ public class ContentAccumulator<T>
 
 		try
 		{
-			//retrieve the content converter for this type and make sure that the converter is not null
-			ContentConverter<T> converter = ConverterFactory.getConverter(key, standardTypes);
-
 			//read the value from the database service as a raw byte array and check to see if the content is not null
 			byte[] content = dbService.getValue(key);
 			if (content == null)
@@ -122,9 +123,9 @@ public class ContentAccumulator<T>
 				return null;
 			}
 
-			return converter.fromByteArray(content);
+			return contentConverter.fromByteArray(content);
 		}
-		catch (DBReadException | ConversionException | UnknownConverterException e)
+		catch (DBReadException | ConversionException e)
 		{
 			throw new ContentException(e);
 		}

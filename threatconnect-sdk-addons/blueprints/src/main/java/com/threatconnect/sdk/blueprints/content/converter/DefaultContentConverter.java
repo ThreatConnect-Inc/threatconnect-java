@@ -3,13 +3,11 @@ package com.threatconnect.sdk.blueprints.content.converter;
 import org.codehaus.jackson.map.type.TypeFactory;
 import org.codehaus.jackson.type.JavaType;
 
-import java.util.List;
-
-public class ListContentConverter<T> extends ContentConverter<List<T>>
+public class DefaultContentConverter<T> extends ContentConverter<T>
 {
 	private final Class<T> genericClass;
 
-	public ListContentConverter(final Class<T> genericClass)
+	public DefaultContentConverter(final Class<T> genericClass)
 	{
 		this.genericClass = genericClass;
 	}
@@ -17,6 +15,6 @@ public class ListContentConverter<T> extends ContentConverter<List<T>>
 	@Override
 	protected JavaType constructType(TypeFactory typeFactory)
 	{
-		return typeFactory.constructCollectionType(List.class, genericClass);
+		return typeFactory.constructType(this.genericClass);
 	}
 }

@@ -3,22 +3,11 @@ package com.threatconnect.sdk.blueprints.content.converter;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.type.TypeFactory;
 import org.codehaus.jackson.type.JavaType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-public class ContentConverter<T>
+public abstract class ContentConverter<T>
 {
-	private static final Logger logger = LoggerFactory.getLogger(ContentConverter.class);
-
-	private final Class<T> genericClass;
-
-	public ContentConverter(final Class<T> genericClass)
-	{
-		this.genericClass = genericClass;
-	}
-
 	/**
 	 * Converts the data to a byte array
 	 *
@@ -30,7 +19,7 @@ public class ContentConverter<T>
 	{
 		ObjectMapper mapper = new ObjectMapper();
 		TypeFactory typeFactory = mapper.getTypeFactory();
-		JavaType type = constructType(typeFactory, genericClass);
+		JavaType type = constructType(typeFactory);
 
 		try
 		{
@@ -56,7 +45,7 @@ public class ContentConverter<T>
 		{
 			ObjectMapper mapper = new ObjectMapper();
 			TypeFactory typeFactory = mapper.getTypeFactory();
-			JavaType type = constructType(typeFactory, genericClass);
+			JavaType type = constructType(typeFactory);
 
 			return new ObjectMapper().readValue(raw, type);
 		}
@@ -66,8 +55,5 @@ public class ContentConverter<T>
 		}
 	}
 
-	protected JavaType constructType(final TypeFactory typeFactory, final Class<T> genericClass)
-	{
-		return typeFactory.constructType(genericClass);
-	}
+	protected abstract JavaType constructType(final TypeFactory typeFactory);
 }

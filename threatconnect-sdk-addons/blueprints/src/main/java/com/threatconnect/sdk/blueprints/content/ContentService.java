@@ -2,7 +2,10 @@ package com.threatconnect.sdk.blueprints.content;
 
 import com.threatconnect.sdk.blueprints.content.accumulator.ContentAccumulator;
 import com.threatconnect.sdk.blueprints.content.accumulator.ContentException;
+import com.threatconnect.sdk.blueprints.content.converter.StringConverter;
+import com.threatconnect.sdk.blueprints.content.converter.StringListConverter;
 import com.threatconnect.sdk.blueprints.db.DBService;
+import com.threatconnect.sdk.blueprints.util.BlueprintVariableUtil;
 
 import java.util.List;
 
@@ -21,13 +24,24 @@ public class ContentService
 	{
 		this.dbService = dbService;
 
-		this.stringAccumulator = new ContentAccumulator<String>(dbService, StandardType.String);
-		this.stringListAccumulator = new ContentAccumulator<List<String>>(dbService, StandardType.StringArray);
+		this.stringAccumulator = new ContentAccumulator<String>(dbService, StandardType.String, new StringConverter());
+		this.stringListAccumulator = new ContentAccumulator<List<String>>(dbService, StandardType.StringArray, new
+			StringListConverter());
 	}
 
-	public String readStringContent(final String key) throws ContentException
+	public String readStringContent(final String content) throws ContentException
 	{
-		return stringAccumulator.readContent(key);
+		//check to see if this string input is a variable
+		if(BlueprintVariableUtil.isVariable(content))
+		{
+			//read the content from the database
+			return stringAccumulator.readContent(content);
+		}
+		else
+		{
+			//this is a literal value
+			return content;
+		}
 	}
 
 	public void writeStringContent(final String key, final String value) throws ContentException
