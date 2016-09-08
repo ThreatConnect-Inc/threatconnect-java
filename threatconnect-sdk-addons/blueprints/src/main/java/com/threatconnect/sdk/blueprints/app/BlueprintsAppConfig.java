@@ -47,6 +47,11 @@ public class BlueprintsAppConfig
 		return getAppConfig().getInteger(PARAM_DB_PORT, defaultValue);
 	}
 
+	public String getOutputVars()
+	{
+		return getAppConfig().getString(PARAM_OUT_VARS);
+	}
+
 	public AppConfig getAppConfig()
 	{
 		return AppConfig.getInstance();
