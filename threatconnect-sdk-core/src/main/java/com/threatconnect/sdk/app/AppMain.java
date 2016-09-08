@@ -1,15 +1,14 @@
 package com.threatconnect.sdk.app;
 
-import java.lang.reflect.Modifier;
-import java.util.Set;
-
+import com.threatconnect.sdk.app.exception.AppInstantiationException;
+import com.threatconnect.sdk.app.exception.TCMessageException;
+import com.threatconnect.sdk.log.ServerLogger;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.threatconnect.sdk.app.exception.AppInstantiationException;
-import com.threatconnect.sdk.app.exception.TCMessageException;
-import com.threatconnect.sdk.log.ServerLogger;
+import java.lang.reflect.Modifier;
+import java.util.Set;
 
 public final class AppMain
 {
@@ -74,12 +73,6 @@ public final class AppMain
 				}
 			}
 		}
-		catch (AppInstantiationException e)
-		{
-			logger.error(e.getMessage(), e);
-			LoggerUtil.logErr(e, e.getMessage());
-			exitStatus = ExitStatus.Failure;
-		}
 		catch (Exception e)
 		{
 			logger.error(e.getMessage(), e);
@@ -97,10 +90,10 @@ public final class AppMain
 			
 			// flush the logs to the server
 			ServerLogger.getInstance().flushToServer();
-			
-			// exit the app with this exit status
-			System.exit(exitStatus.getExitCode());
 		}
+
+		// exit the app with this exit status
+		System.exit(exitStatus.getExitCode());
 	}
 	
 	/**
