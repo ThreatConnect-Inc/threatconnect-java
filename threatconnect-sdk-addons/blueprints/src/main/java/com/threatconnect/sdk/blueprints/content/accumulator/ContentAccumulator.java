@@ -83,7 +83,7 @@ public class ContentAccumulator<T>
 	public List<T> readContentAsList(String... keys) throws ContentException
 	{
 		//holds the list of results to return
-		List<T> result = new ArrayList<>();
+		List<T> result = new ArrayList<T>();
 
 		//for each of the keys
 		for (String key : keys)

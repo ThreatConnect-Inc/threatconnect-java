@@ -11,11 +11,6 @@ public class RocksDBService implements DBService
 {
 	private static final Logger logger = LoggerFactory.getLogger(RocksDBService.class);
 
-	// number of seconds before keys are deleted
-	// we use the trigger cache purely as an ephemeral k/v while the blueprint execution pulls
-	// the variables to the execution cache
-	private static final Integer TRIGGER_TTL_SECONDS = 60 * 60;
-
 	//holds the path to the database
 	private String databasePath;
 
