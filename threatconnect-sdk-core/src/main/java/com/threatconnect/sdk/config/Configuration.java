@@ -10,195 +10,209 @@ import org.apache.http.entity.ContentType;
 import java.util.Properties;
 
 /**
- *
  * @author dtineo
  */
-public class Configuration {
+public class Configuration
+{
+	private String tcApiUrl;
+	private String tcApiAccessID;
+	private String tcApiUserSecretKey;
 
-    private String tcApiUrl;
-    private String tcApiAccessID;
-    private String tcApiUserSecretKey;
+	private String tcToken;
+	private String tcTokenExpires;
+	private Integer resultLimit;
+	private String defaultOwner;
 
-    private String tcToken;
-    private String tcTokenExpires;
-    private Integer resultLimit;
-    private String defaultOwner;
+	private String proxyHost;
+	private Integer proxyPort;
 
-    private String proxyHost;
-    private Integer proxyPort;
+	private boolean activityLogEnabled;
 
-    private boolean activityLogEnabled;
+	private final String contentType = ContentType.APPLICATION_JSON.getMimeType();
 
-    private final String contentType = ContentType.APPLICATION_JSON.getMimeType();
+	public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner,
+		String tcToken, String tcTokenExpires)
+	{
+		this(tcApiUrl, tcApiAccessID, tcApiUserSecretKey, defaultOwner, 500, tcToken, tcTokenExpires);
+	}
 
-    public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner, String tcToken, String tcTokenExpires){
-        this(tcApiUrl, tcApiAccessID, tcApiUserSecretKey, defaultOwner, 500, tcToken, tcTokenExpires);
-    };
+	public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner)
+	{
+		this(tcApiUrl, tcApiAccessID, tcApiUserSecretKey, defaultOwner, 500, null, null);
+	}
 
-    public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner) {
-        this(tcApiUrl, tcApiAccessID, tcApiUserSecretKey, defaultOwner, 500, null, null);
-    }
+	public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner,
+		Integer resultLimit)
+	{
+		this(tcApiUrl, tcApiAccessID, tcApiUserSecretKey, defaultOwner, resultLimit, null, null);
+	}
 
-        public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner, Integer resultLimit) {
-        this(tcApiUrl, tcApiAccessID, tcApiUserSecretKey, defaultOwner, resultLimit, null, null);
-    }
+	public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner,
+		Integer resultLimit, String tcToken, String tcTokenExpires)
+	{
+		this.tcApiUrl = tcApiUrl;
+		this.tcApiAccessID = tcApiAccessID;
+		this.tcApiUserSecretKey = tcApiUserSecretKey;
+		this.defaultOwner = defaultOwner;
+		this.resultLimit = resultLimit;
+		this.tcToken = tcToken;
+		this.tcTokenExpires = tcTokenExpires;
+	}
 
-    public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner, Integer resultLimit, String tcToken, String tcTokenExpires) {
-        this.tcApiUrl = tcApiUrl;
-        this.tcApiAccessID = tcApiAccessID;
-        this.tcApiUserSecretKey = tcApiUserSecretKey;
-        this.defaultOwner = defaultOwner;
-        this.resultLimit = resultLimit;
-        this.tcToken = tcToken;
-        this.tcTokenExpires = tcTokenExpires;
-    }
+	public Configuration(String tcApiUrl, String tcToken, String defaultOwner, Integer resultLimit)
+	{
+		this.tcApiUrl = tcApiUrl;
+		this.tcToken = tcToken;
+		this.defaultOwner = defaultOwner;
+		this.resultLimit = resultLimit;
+	}
 
-    public Configuration(String tcApiUrl, String tcToken, String defaultOwner, Integer resultLimit) {
-        this.tcApiUrl = tcApiUrl;
-        this.tcToken = tcToken;
-        this.defaultOwner = defaultOwner;
-        this.resultLimit = resultLimit;
-    }
+	public void setProxy(String host, Integer port)
+	{
+		this.proxyHost = host;
+		this.proxyPort = port;
+	}
 
-    public void setProxy(String host, Integer port)
-    {
-        this.proxyHost = host;
-        this.proxyPort = port;
-    }
+	public static Configuration build(Properties props)
+	{
 
-    public static Configuration build(Properties props) {
+		String tcApiUrl = props.getProperty("connection.tcApiUrl");
+		String tcApiAccessID = props.getProperty("connection.tcApiAccessID");
+		String tcApiUserSecretKey = props.getProperty("connection.tcApiUserSecretKey");
+		String tcDefaultOwner = props.getProperty("connection.tcDefaultOwner");
+		String tcToken = props.getProperty("connection.tcToken");
+		Integer tcResultLimit = Integer.valueOf(props.getProperty("connection.tcResultLimit"));
+		Configuration conf =
+			new Configuration(tcApiUrl, tcApiAccessID, tcApiUserSecretKey, tcDefaultOwner, tcResultLimit);
 
-        String tcApiUrl = props.getProperty("connection.tcApiUrl");
-        String tcApiAccessID = props.getProperty("connection.tcApiAccessID");
-        String tcApiUserSecretKey = props.getProperty("connection.tcApiUserSecretKey");
-        String tcDefaultOwner = props.getProperty("connection.tcDefaultOwner");
-        String tcToken = props.getProperty("connection.tcToken");
-        Integer tcResultLimit = Integer.valueOf(props.getProperty("connection.tcResultLimit"));
-        Configuration conf = new Configuration(tcApiUrl, tcApiAccessID, tcApiUserSecretKey, tcDefaultOwner, tcResultLimit);
+		if (props.getProperty("connection.tcProxyHost") != null)
+		{
+			String tcProxyHost = props.getProperty("connection.tcProxyHost");
+			Integer tcProxyPort = Integer.valueOf(props.getProperty("connection.tcProxyPort"));
+			conf.setProxy(tcProxyHost, tcProxyPort);
+		}
 
-        if ( props.getProperty("connection.tcProxyHost") != null  )
-        {
-            String tcProxyHost = props.getProperty("connection.tcProxyHost");
-            Integer tcProxyPort = Integer.valueOf(props.getProperty("connection.tcProxyPort"));
-            conf.setProxy(tcProxyHost, tcProxyPort);
-        }
+		return conf;
+	}
 
-        return conf;
-    }
+	public boolean hasProxySettings()
+	{
+		return this.proxyHost != null && this.proxyPort != null;
+	}
 
-    public boolean hasProxySettings()
-    {
-        return this.proxyHost != null && this.proxyPort != null;
-    }
+	/**
+	 * @return the tcApiUrl
+	 */
+	public String getTcApiUrl()
+	{
+		return tcApiUrl;
+	}
 
+	/**
+	 * @param tcApiUrl the tcApiUrl to set
+	 */
+	public void setTcApiUrl(String tcApiUrl)
+	{
+		this.tcApiUrl = tcApiUrl;
+	}
 
-    /**
-     * @return the tcApiUrl
-     */
-    public String getTcApiUrl() {
-        return tcApiUrl;
-    }
+	/**
+	 * @return the tcApiAccessID
+	 */
+	public String getTcApiAccessID()
+	{
+		return tcApiAccessID;
+	}
 
-    /**
-     * @param tcApiUrl the tcApiUrl to set
-     */
-    public void setTcApiUrl(String tcApiUrl) {
-        this.tcApiUrl = tcApiUrl;
-    }
+	/**
+	 * @param tcAccessID the tcApiAccessID to set
+	 */
+	public void setTcApiAccessID(String tcAccessID)
+	{
+		this.tcApiAccessID = tcAccessID;
+	}
 
-    /**
-     * @return the tcApiAccessID
-     */
-    public String getTcApiAccessID() {
-        return tcApiAccessID;
-    }
+	/**
+	 * @return the tcApiUserSecretKey
+	 */
+	public String getTcApiUserSecretKey()
+	{
+		return tcApiUserSecretKey;
+	}
 
-    /**
-     * @param tcAccessID the tcApiAccessID to set
-     */
-    public void setTcApiAccessID(String tcAccessID) {
-        this.tcApiAccessID = tcAccessID;
-    }
+	/**
+	 * @param tcApiUserSecretKey the tcApiUserSecretKey to set
+	 */
+	public void setTcApiUserSecretKey(String tcApiUserSecretKey)
+	{
+		this.tcApiUserSecretKey = tcApiUserSecretKey;
+	}
 
-    /**
-     * @return the tcApiUserSecretKey
-     */
-    public String getTcApiUserSecretKey() {
-        return tcApiUserSecretKey;
-    }
+	/**
+	 * @return the contentType
+	 */
+	public String getContentType()
+	{
+		return contentType;
+	}
 
-    /**
-     * @param tcApiUserSecretKey the tcApiUserSecretKey to set
-     */
-    public void setTcApiUserSecretKey(String tcApiUserSecretKey) {
-        this.tcApiUserSecretKey = tcApiUserSecretKey;
-    }
+	public Integer getResultLimit()
+	{
+		return resultLimit;
+	}
 
-    /**
-     * @return the contentType
-     */
-    public String getContentType()
-    {
-        return contentType;
-    }
+	public void setResultLimit(Integer resultLimit)
+	{
+		this.resultLimit = resultLimit;
+	}
 
-    public Integer getResultLimit()
-    {
-        return resultLimit;
-    }
+	public String getDefaultOwner()
+	{
+		return defaultOwner;
+	}
 
-    public void setResultLimit(Integer resultLimit)
-    {
-        this.resultLimit = resultLimit;
-    }
+	public void setDefaultOwner(String defaultOwner)
+	{
+		this.defaultOwner = defaultOwner;
+	}
 
-    public String getDefaultOwner()
-    {
-        return defaultOwner;
-    }
+	public String getProxyHost()
+	{
+		return proxyHost;
+	}
 
-    public void setDefaultOwner(String defaultOwner)
-    {
-        this.defaultOwner = defaultOwner;
-    }
+	public Integer getProxyPort()
+	{
+		return proxyPort;
+	}
 
-    public String getProxyHost()
-    {
-        return proxyHost;
-    }
+	public String getTcToken()
+	{
+		return tcToken;
+	}
 
-    public Integer getProxyPort()
-    {
-        return proxyPort;
-    }
+	public void setTcToken(String tcToken)
+	{
+		this.tcToken = tcToken;
+	}
 
-    public String getTcToken()
-    {
-        return tcToken;
-    }
-    
-    public void setTcToken(String tcToken)
-    {
-	this.tcToken = tcToken;
-    }
+	public String getTcTokenExpires()
+	{
+		return this.tcTokenExpires;
+	}
 
-    public String getTcTokenExpires()
-    {
-        return this.tcTokenExpires;
-    }
+	public void setTcTokenExpires(String tcTokenExpires)
+	{
+		this.tcTokenExpires = tcTokenExpires;
+	}
 
-    public void setTcTokenExpires(String tcTokenExpires)
-    {
-        this.tcTokenExpires = tcTokenExpires;
-    }
+	public boolean isActivityLogEnabled()
+	{
+		return activityLogEnabled;
+	}
 
-    public boolean isActivityLogEnabled()
-    {
-        return activityLogEnabled;
-    }
-
-    public void setActivityLogEnabled(boolean activityLogEnabled)
-    {
-        this.activityLogEnabled = activityLogEnabled;
-    }
+	public void setActivityLogEnabled(boolean activityLogEnabled)
+	{
+		this.activityLogEnabled = activityLogEnabled;
+	}
 }
