@@ -81,12 +81,12 @@ public class DataStoreWriterAdapter extends AbstractWriterAdapter
 
     protected String update(String domain, String type, String search, String owner, String body)
     {
-        return query(POST, domain, type, search, owner, body);
+        return query(PUT, domain, type, search, owner, body);
     }
 
     protected String create(String domain, String type, String search, String owner, String body)
     {
-        return query(PUT, domain, type, search, owner, body);
+        return query(POST, domain, type, search, owner, body);
     }
 
     protected String query(HttpMethod dbMethod, String domain, String type, String search, String owner, String body)
