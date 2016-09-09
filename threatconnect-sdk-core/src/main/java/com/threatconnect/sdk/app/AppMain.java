@@ -8,69 +8,51 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
-public final class AppMain
+public class AppMain
 {
 	private static final Logger logger = LoggerFactory.getLogger(AppMain.class);
-	
-	public static void main(String[] args)
+
+	protected void execute()
 	{
 		// holds the most recent exit status from the app
 		ExitStatus exitStatus = null;
-		
+
 		try
 		{
 			// create the app config object
 			AppConfig appConfig = AppConfig.getInstance();
-			
+
 			// set whether or not api logging is enabled
 			ServerLogger.getInstance().setEnabled(appConfig.isTcLogToApi());
-			
-			// check to see if there is an app class specified
-			if (null != appConfig.getTcMainAppClass() && !appConfig.getTcMainAppClass().isEmpty())
+
+			//get the list of classes to execute
+			List<Class<? extends App>> appClasses = getAppClassesToExecute(appConfig);
+
+			//make sure the list of app classes is not null
+			if (null != appClasses)
 			{
-				// load the class by name
-				Class<?> clazz = Class.forName(appConfig.getTcMainAppClass());
-				
-				try
+				//for each of the app classes
+				for (Class<? extends App> appClass : appClasses)
 				{
-					// cast the app class
-					@SuppressWarnings("unchecked")
-					Class<? extends App> appClass = (Class<? extends App>) clazz;
-					
 					// execute this app
 					exitStatus = configureAndExecuteApp(appClass, appConfig);
-				}
-				catch (ClassCastException e)
-				{
-					String message = "The main class " + clazz.getName() + " does not extend " + App.class + ".";
-					throw new ClassCastException(message);
-				}
-			}
-			// scan for all app classes and execute them while the status is successful
-			else
-			{
-				// find the set of all classes that extend the App class
-				Set<Class<? extends App>> subTypes = scanForAppClasses();
-				
-				// for each of the classes
-				for (Class<? extends App> appClass : subTypes)
-				{
-					// make sure that this is not an abstract class
-					if (!Modifier.isAbstract(appClass.getModifiers()))
+
+					// check to see if this app was not successful
+					if (exitStatus != ExitStatus.Success)
 					{
-						// execute this app
-						exitStatus = configureAndExecuteApp(appClass, appConfig);
-						
-						// check to see if this app was not successful
-						if (exitStatus != ExitStatus.Success)
-						{
-							// stop executing the apps
-							return;
-						}
+						// stop executing the apps
+						// exit the app with this exit status
+						System.exit(exitStatus.getExitCode());
 					}
 				}
+			}
+			else
+			{
+				logger.error("No Apps were found to execute.");
 			}
 		}
 		catch (Exception e)
@@ -87,7 +69,7 @@ public final class AppMain
 				LoggerUtil.logErr("Exit status is null.");
 				exitStatus = ExitStatus.Failure;
 			}
-			
+
 			// flush the logs to the server
 			ServerLogger.getInstance().flushToServer();
 		}
@@ -95,10 +77,67 @@ public final class AppMain
 		// exit the app with this exit status
 		System.exit(exitStatus.getExitCode());
 	}
-	
+
+	/**
+	 * returns the list of app classes that will be instantiated and executed
+	 *
+	 * @param appConfig
+	 * @return
+	 * @throws ClassNotFoundException
+	 */
+	protected List<Class<? extends App>> getAppClassesToExecute(final AppConfig appConfig) throws ClassNotFoundException
+	{
+		//holds the list of classes to execute
+		final List<Class<? extends App>> appClasses = new ArrayList<Class<? extends App>>();
+
+		// check to see if there is an app class specified
+		if (null != appConfig.getTcMainAppClass() && !appConfig.getTcMainAppClass().isEmpty())
+		{
+			// load the class by name
+			Class<?> clazz = Class.forName(appConfig.getTcMainAppClass());
+
+			try
+			{
+				// cast the app class
+				@SuppressWarnings("unchecked")
+				Class<? extends App> appClass = (Class<? extends App>) clazz;
+
+				// add this class to be executed
+				appClasses.add(appClass);
+			}
+			catch (ClassCastException e)
+			{
+				String message = "The main class " + clazz.getName() + " does not extend " + App.class + ".";
+				throw new ClassCastException(message);
+			}
+		}
+		// scan for all app classes and execute them while the status is successful
+		else
+		{
+			// find the set of all classes that extend the App class
+			Set<Class<? extends App>> subTypes = scanForAppClasses();
+
+			// for each of the classes
+			for (Class<? extends App> appClass : subTypes)
+			{
+				// make sure that this is not an abstract class
+				if (!Modifier.isAbstract(appClass.getModifiers()))
+				{
+					appClasses.add(appClass);
+				}
+				else
+				{
+					logger.error("{} is abstract and cannot be executed", appClass.getName());
+				}
+			}
+		}
+
+		return appClasses;
+	}
+
 	/**
 	 * Instantiates and executes the app given
-	 * 
+	 *
 	 * @param appClass
 	 * @return
 	 * @throws Exception
@@ -110,13 +149,13 @@ public final class AppMain
 		{
 			// instantiate a new app class
 			App app = appClass.newInstance();
-			
+
 			// add the app config for this app
 			app.setAppConfig(appConfig);
-			
+
 			// reconfigure the log file for this app
 			LoggerUtil.reconfigureGlobalLogger(app.getAppLogFile(), appConfig);
-			
+
 			try
 			{
 				// execute this app
@@ -135,18 +174,23 @@ public final class AppMain
 			throw new AppInstantiationException(e, appClass);
 		}
 	}
-	
+
 	private static Set<Class<? extends App>> scanForAppClasses()
 	{
 		return scanForAppClasses(null);
 	}
-	
+
 	private static Set<Class<? extends App>> scanForAppClasses(final String basePackage)
 	{
 		// find the set of all classes that extend the App class
 		Reflections reflections = new Reflections(basePackage);
 		Set<Class<? extends App>> subTypes = reflections.getSubTypesOf(App.class);
-		
+
 		return subTypes;
+	}
+
+	public static void main(String[] args)
+	{
+		new AppMain().execute();
 	}
 }
