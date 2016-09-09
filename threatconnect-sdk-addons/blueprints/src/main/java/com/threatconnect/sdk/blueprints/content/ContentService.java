@@ -3,7 +3,10 @@ package com.threatconnect.sdk.blueprints.content;
 import com.threatconnect.sdk.blueprints.content.accumulator.ContentAccumulator;
 import com.threatconnect.sdk.blueprints.content.accumulator.ContentException;
 import com.threatconnect.sdk.blueprints.content.accumulator.StringAccumulator;
-import com.threatconnect.sdk.blueprints.content.converter.*;
+import com.threatconnect.sdk.blueprints.content.converter.ByteArrayConverter;
+import com.threatconnect.sdk.blueprints.content.converter.StringListConverter;
+import com.threatconnect.sdk.blueprints.content.converter.TCEntityConverter;
+import com.threatconnect.sdk.blueprints.content.converter.TCEntityListConverter;
 import com.threatconnect.sdk.blueprints.content.entity.TCEntity;
 import com.threatconnect.sdk.blueprints.db.DBService;
 import com.threatconnect.sdk.blueprints.util.BlueprintVariableUtil;
@@ -117,6 +120,12 @@ public class ContentService
 
 	private void verifyKeyIsVariable(final String key)
 	{
+		//make sure the key is not null
+		if (null == key)
+		{
+			throw new IllegalArgumentException("key cannot be null");
+		}
+
 		//check to see if this string input is a variable
 		if (!BlueprintVariableUtil.isVariable(key))
 		{

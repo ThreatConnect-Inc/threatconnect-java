@@ -4,6 +4,7 @@ import com.threatconnect.sdk.app.App;
 import com.threatconnect.sdk.app.AppConfig;
 import com.threatconnect.sdk.app.ExitStatus;
 import com.threatconnect.sdk.blueprints.content.ContentService;
+import com.threatconnect.sdk.blueprints.content.accumulator.ContentException;
 import com.threatconnect.sdk.blueprints.db.DBService;
 import com.threatconnect.sdk.blueprints.db.DBServiceFactory;
 
@@ -52,7 +53,7 @@ public abstract class BlueprintsApp extends App
 	 *
 	 * @return the list of output params that this app is expected to write
 	 */
-	protected List<String> getOutputParams()
+	protected final List<String> getOutputParams()
 	{
 		//check to see if the list of output params is null
 		if (null == outputParams)
@@ -90,9 +91,56 @@ public abstract class BlueprintsApp extends App
 	 * @param outputParam the output param to check
 	 * @return whether or not this app is expected to write this output parameter
 	 */
-	protected boolean isOutputParamExpected(final String outputParam)
+	protected final boolean isOutputParamExpected(final String outputParam)
 	{
 		return getOutputParams().contains(outputParam);
+	}
+
+	/**
+	 * Serves as a shorthand method for reading a string value from the database where the param is a database key
+	 *
+	 * @param param the app parameter which represents a blueprints variable
+	 * @return
+	 */
+	public final String readStringContent(final String param) throws ContentException
+	{
+		return getContentService().readString(getAppConfig().getString(param));
+	}
+
+	/**
+	 * Serves as a shorthand method for writing a string value to the database where the param is a database key
+	 *
+	 * @param param the app parameter which represents a blueprints variable
+	 * @param value the value to write to the variable
+	 * @throws ContentException
+	 */
+	public final void writeStringContent(final String param, final String value) throws ContentException
+	{
+		getContentService().writeString(getAppConfig().getString(param), value);
+	}
+
+	/**
+	 * Serves as a shorthand method for reading a string list value from the database where the param is a database key
+	 *
+	 * @param param the app parameter which represents a blueprints variable
+	 * @return
+	 */
+	public final List<String> readStringListContent(final String param) throws ContentException
+	{
+		return getContentService().readStringList(getAppConfig().getString(param));
+	}
+
+	/**
+	 * Serves as a shorthand method for writing a list of string values to the database where the param is a database
+	 * key
+	 *
+	 * @param param  the app parameter which represents a blueprints variable
+	 * @param values the list of values to write to the variable
+	 * @throws ContentException
+	 */
+	public final void writeStringListContent(final String param, final List<String> values) throws ContentException
+	{
+		getContentService().writeStringList(getAppConfig().getString(param), values);
 	}
 
 	/**
