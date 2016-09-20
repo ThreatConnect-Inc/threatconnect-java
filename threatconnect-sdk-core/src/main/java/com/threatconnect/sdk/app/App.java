@@ -1,5 +1,9 @@
 package com.threatconnect.sdk.app;
 
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -8,23 +12,19 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Represents the core of an app. All child classes of this class must contain a no argument
  * constructor.
- * 
+ *
  * @author Greg Marut
  */
 public abstract class App
 {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
-
+	
 	// holds the reference to the app config object
 	private AppConfig appConfig;
-
+	
 	/**
 	 * Executes the app
 	 *
@@ -33,14 +33,14 @@ public abstract class App
 	 * @throws Exception on error
 	 */
 	public abstract ExitStatus execute(AppConfig appConfig) throws Exception;
-
+	
 	/**
 	 * Retrieves the name of the log file for this app to log to
 	 *
 	 * @return the name of the log file for this app to log to
 	 */
 	public abstract String getLogFilename();
-
+	
 	/**
 	 * Writes a message out to the application's message log file
 	 *
@@ -49,7 +49,7 @@ public abstract class App
 	public void writeMessageTc(String message)
 	{
 		PrintWriter writer = null;
-
+		
 		try
 		{
 			// write the message out to the message.tc file
@@ -69,7 +69,7 @@ public abstract class App
 			}
 		}
 	}
-
+	
 	/**
 	 * Writes the results out to the application's results log file
 	 *
@@ -144,7 +144,7 @@ public abstract class App
 	
 	/**
 	 * Returns the log file for this app
-	 * 
+	 *
 	 * @return the log file for this app
 	 */
 	public File getAppLogFile()
@@ -154,7 +154,7 @@ public abstract class App
 	
 	/**
 	 * Returns the message.tc log file
-	 * 
+	 *
 	 * @return the message.tc log file
 	 */
 	public File getMessageLogFile()
@@ -164,7 +164,7 @@ public abstract class App
 	
 	/**
 	 * Returns the results.tc log file
-	 * 
+	 *
 	 * @return the results.tc log file
 	 */
 	public File getResultsLogFile()
