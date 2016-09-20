@@ -15,6 +15,7 @@ import com.threatconnect.sdk.server.entity.*;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.util.IndicatorUtil;
 import com.threatconnect.sdk.util.StringUtil;
+import org.apache.http.Header;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
@@ -59,7 +60,8 @@ public abstract class EnhancedApp extends App
 	private DataStoreReaderAdapter dataStoreReader;
 	private DataStoreWriterAdapter dataStoreWriter;
 	private HttpClient externalClient;
-
+        private List<String> cookies = new ArrayList();
+        
 	protected Integer getRateLimit()
 	{
 		return Integer.MAX_VALUE;
@@ -108,20 +110,17 @@ public abstract class EnhancedApp extends App
 
 	protected void debug(String msg, Object... fmtArgs)
 	{
-		// logger.log(Level.FINEST, String.format(msg, fmtArgs) );
-		System.err.printf(msg + "\n", fmtArgs);
+		getLogger().debug(String.format(msg, fmtArgs));
 	}
 
 	protected void warn(String msg, Object... fmtArgs)
 	{
-		// logger.log(Level.WARNING, String.format(msg, fmtArgs) );
-		System.err.printf(msg + "\n", fmtArgs);
+		getLogger().warn(String.format(msg, fmtArgs) );
 	}
 
 	protected void info(String msg, Object... fmtArgs)
 	{
-		// logger.log(Level.INFO, String.format(msg, fmtArgs) );
-		System.out.printf(msg + "\n", fmtArgs);
+		getLogger().info(String.format(msg, fmtArgs) );		
 	}
 
 	protected void error(Exception e, String msg, Object... fmtArgs)
@@ -291,14 +290,21 @@ public abstract class EnhancedApp extends App
 
 	protected void addHeaders(HttpRequest request, Map<String, String> headerMap)
 	{
-		if (request instanceof HttpEntityEnclosingRequest)
-		{
-			request.addHeader("Accept", ContentType.APPLICATION_JSON.toString());
-		}
-		for (Map.Entry<String, String> entry : headerMap.entrySet())
-		{
-			request.setHeader(entry.getKey(), entry.getValue());
-		}
+            if (request instanceof HttpEntityEnclosingRequest)
+            {
+                    request.addHeader("Accept", ContentType.APPLICATION_JSON.toString());
+            }
+            for (Map.Entry<String, String> entry : headerMap.entrySet())
+            {
+                    request.setHeader(entry.getKey(), entry.getValue());
+            }
+                
+            //now add in any cookies saved from the last request
+            for (int i = 0; i < cookies.size(); i++)
+            {
+                String cookie = cookies.get(i);
+                request.setHeader("cookie", cookie);
+            }                
 	}
 
 	protected HttpResponse getHttpResponse(String url, Map<String, String> headerMap, int maxRetries, int retryNum)
@@ -360,6 +366,16 @@ public abstract class EnhancedApp extends App
 		if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
 		{
 			MetricUtil.tockUpdate("getResponse");
+                        
+                        //save any cookies that are set.  
+                        Header[] headers = response.getAllHeaders();
+                        for (Header header : headers) {
+                            if (header.getName().equals("Set-Cookie"))
+                            {
+                                cookies.add(header.getValue());
+                                debug("Cookie to be saved: Key : " + header.getName() + " ,Value : " + header.getValue());                        
+                            }
+                        }                                        
 			return response;
 		}
 		else if (response.getStatusLine().getStatusCode() == HttpStatus.SC_SERVICE_UNAVAILABLE)
@@ -600,7 +616,7 @@ public abstract class EnhancedApp extends App
 		{
 
 			String uniqueId = getUniqueId(indicator);
-			if (uniqueId != null)
+                        if (uniqueId != null)
 			{
 				return (Attribute) writer.addAttribute(uniqueId, attribute, getOwner()).getItem();
 			}

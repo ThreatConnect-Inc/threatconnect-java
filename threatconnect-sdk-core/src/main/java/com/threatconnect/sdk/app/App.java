@@ -1,16 +1,21 @@
 package com.threatconnect.sdk.app;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.Map;
+
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
-import java.util.Map;
-
 /**
  * Represents the core of an app. All child classes of this class must contain a no argument
  * constructor.
- *
+ * 
  * @author Greg Marut
  */
 public abstract class App
@@ -73,12 +78,12 @@ public abstract class App
 	public void writeResultsTc(Map<String, String> results)
 	{
 		PrintWriter writer = null;
-
+		
 		try
 		{
 			// create the writer object
 			writer = new PrintWriter(getResultsLogFile(), "UTF-8");
-
+			
 			// for each of the results
 			for (Map.Entry<String, String> entry : results.entrySet())
 			{
@@ -88,14 +93,14 @@ public abstract class App
 		}
 		catch (FileNotFoundException | UnsupportedEncodingException e)
 		{
-			LoggerUtil.logErr(e, "Failed to write message.tc file");
+			LoggerUtil.logErr(e, "Failed to write results.tc file");
 		}
 		finally
 		{
 			IOUtils.closeQuietly(writer);
 		}
 	}
-
+	
 	/**
 	 * Writes data out to an output file for this app
 	 *
@@ -107,19 +112,19 @@ public abstract class App
 	{
 		// retrieve the file to write to
 		File file = getOutFile(fileName);
-
+		
 		// write the data to this file
 		try (FileOutputStream out = new FileOutputStream(file))
 		{
 			out.write(data);
 		}
 	}
-
+	
 	public Logger getLogger()
 	{
 		return logger;
 	}
-
+	
 	public AppConfig getAppConfig()
 	{
 		if (null != appConfig)
@@ -131,42 +136,42 @@ public abstract class App
 			return AppConfig.getInstance();
 		}
 	}
-
+	
 	public void setAppConfig(AppConfig appConfig)
 	{
 		this.appConfig = appConfig;
 	}
-
+	
 	/**
 	 * Returns the log file for this app
-	 *
+	 * 
 	 * @return the log file for this app
 	 */
 	public File getAppLogFile()
 	{
 		return new File(getAppConfig().getTcLogPath() + File.separator + getLogFilename());
 	}
-
+	
 	/**
 	 * Returns the message.tc log file
-	 *
+	 * 
 	 * @return the message.tc log file
 	 */
 	public File getMessageLogFile()
 	{
 		return getOutFile("message.tc");
 	}
-
+	
 	/**
 	 * Returns the results.tc log file
-	 *
+	 * 
 	 * @return the results.tc log file
 	 */
 	public File getResultsLogFile()
 	{
 		return getOutFile("results.tc");
 	}
-
+	
 	public File getOutFile(final String fileName)
 	{
 		return new File(getAppConfig().getTcOutPath() + File.separator + fileName);
