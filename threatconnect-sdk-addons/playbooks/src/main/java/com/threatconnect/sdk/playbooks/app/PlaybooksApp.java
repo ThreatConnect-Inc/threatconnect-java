@@ -19,34 +19,34 @@ import java.util.regex.Pattern;
 public abstract class PlaybooksApp extends App
 {
 	private static final String OUTPUT_PARAMS_DELIM = ",";
-
+	
 	//holds the content service object for reading and writing content
 	private final ContentService contentService;
-
+	
 	//holds the list of output parameters for this app
 	private List<String> outputParams;
-
+	
 	public PlaybooksApp()
 	{
 		this(DBServiceFactory.buildFromAppConfig());
 	}
-
+	
 	public PlaybooksApp(final DBService dbService)
 	{
 		this.contentService = new ContentService(dbService);
 	}
-
+	
 	@Override
 	public ExitStatus execute(AppConfig appConfig) throws Exception
 	{
 		return execute(PlaybooksAppConfig.getInstance());
 	}
-
+	
 	public ContentService getContentService()
 	{
 		return contentService;
 	}
-
+	
 	/**
 	 * Returns the list of output parameters that this app is expected to write. This will be a subset of any number
 	 * of of the output parameters that are originally defined by the app's install file.
@@ -66,7 +66,7 @@ public abstract class PlaybooksApp extends App
 				{
 					//read the output params that were passed to this app
 					String outputVars = PlaybooksAppConfig.getInstance().getOutputVars();
-
+					
 					//make sure the output params is not null
 					if (null != outputVars && !outputVars.isEmpty())
 					{
@@ -81,10 +81,10 @@ public abstract class PlaybooksApp extends App
 				}
 			}
 		}
-
+		
 		return outputParams;
 	}
-
+	
 	/**
 	 * Checks to see if a specific output param is expected to be written by this app
 	 *
@@ -95,7 +95,7 @@ public abstract class PlaybooksApp extends App
 	{
 		return getOutputParams().contains(outputParam);
 	}
-
+	
 	/**
 	 * Serves as a shorthand method for reading a string value from the database where the param is a database key
 	 *
@@ -106,7 +106,7 @@ public abstract class PlaybooksApp extends App
 	{
 		return getContentService().readString(getAppConfig().getString(param));
 	}
-
+	
 	/**
 	 * Serves as a shorthand method for writing a string value to the database where the param is a database key
 	 *
@@ -118,7 +118,7 @@ public abstract class PlaybooksApp extends App
 	{
 		getContentService().writeString(getAppConfig().getString(param), value);
 	}
-
+	
 	/**
 	 * Serves as a shorthand method for reading a string list value from the database where the param is a database key
 	 *
@@ -129,7 +129,7 @@ public abstract class PlaybooksApp extends App
 	{
 		return getContentService().readStringList(getAppConfig().getString(param));
 	}
-
+	
 	/**
 	 * Serves as a shorthand method for writing a list of string values to the database where the param is a database
 	 * key
@@ -142,7 +142,30 @@ public abstract class PlaybooksApp extends App
 	{
 		getContentService().writeStringList(getAppConfig().getString(param), values);
 	}
-
+	
+	/**
+	 * Serves as a shorthand method for reading a binary value from the database where the param is a database key
+	 *
+	 * @param param the app parameter which represents a playbooks variable
+	 * @return
+	 */
+	public final byte[] readBinaryContent(final String param) throws ContentException
+	{
+		return getContentService().readBinary(getAppConfig().getString(param));
+	}
+	
+	/**
+	 * Serves as a shorthand method for writing a binary value to the database where the param is a database key
+	 *
+	 * @param param the app parameter which represents a playbooks variable
+	 * @param value the value to write to the variable
+	 * @throws ContentException
+	 */
+	public final void writeBinaryContent(final String param, final byte[] value) throws ContentException
+	{
+		getContentService().writeBinary(getAppConfig().getString(param), value);
+	}
+	
 	/**
 	 * Executes the playbook app
 	 *

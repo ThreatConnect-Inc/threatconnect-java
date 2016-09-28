@@ -5,6 +5,7 @@ import com.threatconnect.sdk.playbooks.content.accumulator.ContentException;
 import com.threatconnect.sdk.playbooks.content.accumulator.StringAccumulator;
 import com.threatconnect.sdk.playbooks.content.accumulator.StringKeyValueAccumulator;
 import com.threatconnect.sdk.playbooks.content.converter.ByteArrayConverter;
+import com.threatconnect.sdk.playbooks.content.converter.ByteMatrixConverter;
 import com.threatconnect.sdk.playbooks.content.converter.StringListConverter;
 import com.threatconnect.sdk.playbooks.content.converter.TCEntityConverter;
 import com.threatconnect.sdk.playbooks.content.converter.TCEntityListConverter;
@@ -30,6 +31,7 @@ public class ContentService
 	private final ContentAccumulator<TCEntity> tcEntityAccumulator;
 	private final ContentAccumulator<List<TCEntity>> tcEntityListAccumulator;
 	private final ContentAccumulator<byte[]> binaryAccumulator;
+	private final ContentAccumulator<byte[][]> binaryArrayAccumulator;
 	private final ContentAccumulator<StringKeyValue> stringKeyValueContentAccumulator;
 	
 	public ContentService(final DBService dbService)
@@ -45,6 +47,8 @@ public class ContentService
 			new TCEntityListConverter());
 		this.binaryAccumulator = new ContentAccumulator<byte[]>(dbService, StandardType.Binary, new
 			ByteArrayConverter());
+		this.binaryArrayAccumulator = new ContentAccumulator<byte[][]>(dbService, StandardType.BinaryArray, new
+			ByteMatrixConverter());
 		this.stringKeyValueContentAccumulator = new StringKeyValueAccumulator(dbService);
 	}
 	
@@ -115,6 +119,18 @@ public class ContentService
 	{
 		verifyKeyIsVariable(key);
 		binaryAccumulator.writeContent(key, value);
+	}
+	
+	public byte[][] readBinaryArray(final String key) throws ContentException
+	{
+		verifyKeyIsVariable(key);
+		return binaryArrayAccumulator.readContent(key);
+	}
+	
+	public void writeBinaryArray(final String key, final byte[][] value) throws ContentException
+	{
+		verifyKeyIsVariable(key);
+		binaryArrayAccumulator.writeContent(key, value);
 	}
 	
 	public StringKeyValue readKeyValue(final String key) throws ContentException
