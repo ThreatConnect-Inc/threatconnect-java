@@ -45,6 +45,7 @@ public class CustomIndicatorExample {
             Configuration config = new Configuration("https://127.0.0.1:8443/api", "53597229568569709386", "DL6okSIkRFovChG0js9gAC^l6l36G^q6ulZ7wmIlPRlT9FP%IISbrU1uBnJg%uFu",  "System");
             conn = new Connection(config);
            
+           
             doGet(conn); //success
 
             doCreate(conn);//success
@@ -62,26 +63,8 @@ public class CustomIndicatorExample {
             doDissociateTag(conn);//success
 
  			doCustomAssociateIndicator(conn);//success
-          
-/*
-            doGet(conn); //success
 
-            doCreate(conn);//success
-
-            doUpdate(conn);//success
-
-            doDelete(conn);//success
-
-            doAddAttribute(conn);//success
-
-            doAssociateGroup(conn);//success
-
-            doAssociateTag(conn);//success
-
-            doDissociateTag(conn);//success
-
- 			doCustomAssociateIndicator(conn);//success
- 			
+ /*			
 			//old code: doesn't work
             doAssociateIndicator(conn);///POST : api/v2/indicators/registrationkey/7ywx9-w3c2v-d46gw-p722p-9cp4daa/indicators/hosts/www.bad-hostname.com?owner=System: Resource not found, check the requested path. Please review your request and try again. If the problem persists, contact technical support.
 
