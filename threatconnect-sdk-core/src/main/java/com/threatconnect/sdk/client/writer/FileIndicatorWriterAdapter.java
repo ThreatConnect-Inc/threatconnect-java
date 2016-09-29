@@ -112,4 +112,11 @@ public class FileIndicatorWriterAdapter extends AbstractIndicatorWriterAdapter<F
 
         return item;
     }
+
+	@Override
+	public ApiEntitySingleResponse associateCustomIndicatorToIndicator(String uniqueId, String targetId,
+			String assciateType, String targetType) throws IOException, FailedResponseException {
+		// TODO Auto-generated method stub
+		throw new RuntimeException("not implemented yet");
+	}
 }

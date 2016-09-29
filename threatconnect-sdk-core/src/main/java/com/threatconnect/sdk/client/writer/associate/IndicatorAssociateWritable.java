@@ -55,6 +55,9 @@ public interface IndicatorAssociateWritable<P> {
     public WriteListResponse<String> associateIndicatorHosts(P uniqueId, List<String> hostNames, String ownerName)   
             throws IOException;
 
+    public ApiEntitySingleResponse associateCustomIndicatorToIndicator(P uniqueId, String targetId, String assciateType, String targetType) throws IOException, FailedResponseException;
+
+   
     public ApiEntitySingleResponse associateIndicatorHost(P uniqueId, String hostName) throws IOException, FailedResponseException;
 
     public ApiEntitySingleResponse associateIndicatorHost(P uniqueId, String hostName, String ownerName)   

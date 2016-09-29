@@ -139,6 +139,7 @@ public class IterableResponse<V> implements Iterator<V>, Iterable<V>
         {
             String content = executor.execute(AbstractRequestExecutor.HttpMethod.GET, url);
             logger.log(Level.FINEST, "returning content=" + content);
+            System.out.println("returning content=" + content);
             ApiEntityListResponse result = (ApiEntityListResponse) mapper.readValue(content, this.responseType);
             if (!result.isSuccess()) {
                 throw new FailedResponseException(result.getMessage());

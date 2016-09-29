@@ -11,6 +11,7 @@ import com.threatconnect.sdk.client.response.WriteListResponse;
 import com.threatconnect.sdk.conn.AbstractRequestExecutor.HttpMethod;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
+import com.threatconnect.sdk.server.entity.CustomIndicator;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 
 import java.io.EOFException;
@@ -243,15 +244,14 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
         return createItem(propName, type, null, null, saveObject);
     }
 
+   
     protected <T extends ApiEntitySingleResponse> T createItem(String propName, Class<T> type, String ownerName, Map<String, Object> paramMap, Object saveObject)
         throws IOException, FailedResponseException {
-
         return modifyItem(propName, type, ownerName, paramMap, saveObject, HttpMethod.POST);
     }
     
     protected <T extends ApiEntitySingleResponse> T createItemWithGet(String propName, Class<T> type, String ownerName, Map<String, Object> paramMap, Object saveObject)
             throws IOException, FailedResponseException {
-
             return modifyItem(propName, type, ownerName, paramMap, saveObject, HttpMethod.GET);
         }
 
@@ -294,9 +294,16 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
     	logger.trace("Getting URL: {}", propName);
         String url = getUrl(propName, ownerName);
 
-        if (this instanceof UrlTypeable) {
+        //overwrite if customIndicator
+        if(saveObject instanceof CustomIndicator) {
+        	CustomIndicator cIn = (CustomIndicator)saveObject;
+        	if(cIn.getIndicatorType() != null)
+        	url = url.replace("{type}", cIn.getIndicatorType());
+        }
+        else if (this instanceof UrlTypeable) {
             url = url.replace("{type}", ((UrlTypeable) this).getUrlType());
         }
+        
 
         if (paramMap != null) {
             for (Entry<String, Object> entry : paramMap.entrySet()) {

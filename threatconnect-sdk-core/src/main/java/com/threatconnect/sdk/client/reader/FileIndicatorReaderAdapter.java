@@ -11,6 +11,7 @@ import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.File;
 import com.threatconnect.sdk.server.entity.FileOccurrence;
+import com.threatconnect.sdk.server.entity.Indicator;
 import com.threatconnect.sdk.server.response.entity.FileListResponse;
 import com.threatconnect.sdk.server.response.entity.FileOccurrenceListResponse;
 import com.threatconnect.sdk.server.response.entity.FileOccurrenceResponse;
@@ -56,5 +57,7 @@ public class FileIndicatorReaderAdapter extends AbstractIndicatorReaderAdapter<F
 
         return getItems(getUrlBasePrefix() + ".byId.fileOccurrences", FileOccurrenceListResponse.class, FileOccurrence.class, ownerName, map);
     }
+
+	
 
 }

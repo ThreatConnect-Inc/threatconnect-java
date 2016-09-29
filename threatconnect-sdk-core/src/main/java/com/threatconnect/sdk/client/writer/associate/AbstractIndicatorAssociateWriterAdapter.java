@@ -14,6 +14,7 @@ import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.response.entity.AddressListResponse;
 import com.threatconnect.sdk.server.response.entity.AddressResponse;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
+import com.threatconnect.sdk.server.response.entity.CustomIndicatorResponse;
 import com.threatconnect.sdk.server.response.entity.EmailAddressListResponse;
 import com.threatconnect.sdk.server.response.entity.EmailAddressResponse;
 import com.threatconnect.sdk.server.response.entity.FileListResponse;
@@ -43,7 +44,21 @@ public abstract class AbstractIndicatorAssociateWriterAdapter<T,P> extends Abstr
     public WriteListResponse<String> associateIndicatorAddresses(P uniqueId, List<String> ipAddresses) throws IOException {
         return associateIndicatorAddresses(uniqueId, ipAddresses, null);
     }
-
+	
+    @Override
+	public ApiEntitySingleResponse associateCustomIndicatorToIndicator(P uniqueId, String targetId,
+			String assciateType, String targetType) throws IOException, FailedResponseException {
+		// TODO add implementation here
+    	//v2.indicators.type.byId.indicators.customIndicator.association.byIndicatorId
+    	///api/v2/indicators/{type}/{uniqueId}/associations/{associationType}/indicators/{targetType}/{targetId}
+        Map<String, Object> map = AbstractClientAdapter.createParamMap("uniqueId", uniqueId, "targetId", targetId,"associationType",assciateType,"targetType",targetType);
+        String url = getUrlBasePrefix() + ".byId.indicators.customIndicator.association.byIndicatorId";
+        //System.out.println("create custom association url name="+url);
+        CustomIndicatorResponse data = createItem(url, CustomIndicatorResponse.class, null, map, null);
+        //AddressResponse data = createItem(url, AddressResponse.class, null, map, null);
+          return data;
+	}
+	
     @Override
     public WriteListResponse<String> associateIndicatorAddresses(P uniqueId, List<String> ipAddresses, String ownerName) throws IOException {
 

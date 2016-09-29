@@ -11,6 +11,7 @@ import com.threatconnect.sdk.client.writer.FileIndicatorWriterAdapter;
 import com.threatconnect.sdk.client.writer.TagWriterAdapter;
 import com.threatconnect.sdk.client.writer.VictimWriterAdapter;
 import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
+import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Attribute;
@@ -45,9 +46,18 @@ public class FileExample
         try
         {
 
-            System.getProperties().setProperty("threatconnect.api.config", "/config.properties");
-            conn = new Connection();
-
+        	  Configuration config = new Configuration("https://127.0.0.1:8443/api", "37821189919142416750", "J+xdst/-~$iC2vL{I]#tf<NxzYCZUL?Fn833QNsJxR)N{6J{Q}u@Q{Sn&RJsJ&W-",  "System");
+              conn = new Connection(config);
+              
+      		System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
+      		System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
+      		System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "DEBUG");
+      		System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.conn", "DEBUG");
+      		System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.client", "DEBUG");
+      		System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.client", "DEBUG");
+      		System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "DEBUG");            
+      		 doAssociateTag(conn);
+      		 /*
             doGet(conn);
 
             doCreate(conn);
@@ -69,6 +79,7 @@ public class FileExample
             doDissociateTag(conn);
 
             doFileOccurrences(conn);
+            */
 
         } catch (IOException ex)
         {

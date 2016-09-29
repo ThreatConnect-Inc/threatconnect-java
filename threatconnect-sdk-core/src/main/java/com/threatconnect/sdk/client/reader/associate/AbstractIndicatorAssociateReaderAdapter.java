@@ -5,12 +5,14 @@
  */
 package com.threatconnect.sdk.client.reader.associate;
 
+import com.threatconnect.sdk.client.AbstractClientAdapter;
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.reader.AbstractBaseReaderAdapter;
 import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Address;
+import com.threatconnect.sdk.server.entity.CustomIndicator;
 import com.threatconnect.sdk.server.entity.Email;
 import com.threatconnect.sdk.server.entity.EmailAddress;
 import com.threatconnect.sdk.server.entity.File;
@@ -19,12 +21,15 @@ import com.threatconnect.sdk.server.entity.Indicator;
 import com.threatconnect.sdk.server.entity.Url;
 import com.threatconnect.sdk.server.response.entity.AddressListResponse;
 import com.threatconnect.sdk.server.response.entity.AddressResponse;
+import com.threatconnect.sdk.server.response.entity.CustomIndicatorListResponse;
+import com.threatconnect.sdk.server.response.entity.CustomIndicatorResponse;
 import com.threatconnect.sdk.server.response.entity.EmailAddressListResponse;
 import com.threatconnect.sdk.server.response.entity.EmailAddressResponse;
 import com.threatconnect.sdk.server.response.entity.EmailListResponse;
 import com.threatconnect.sdk.server.response.entity.EmailResponse;
 import com.threatconnect.sdk.server.response.entity.FileListResponse;
 import com.threatconnect.sdk.server.response.entity.FileResponse;
+import com.threatconnect.sdk.server.response.entity.GenericIndicatorListResponse;
 import com.threatconnect.sdk.server.response.entity.HostListResponse;
 import com.threatconnect.sdk.server.response.entity.HostResponse;
 import com.threatconnect.sdk.server.response.entity.IndicatorListResponse;
@@ -196,5 +201,27 @@ public abstract class AbstractIndicatorAssociateReaderAdapter<P> extends Abstrac
 
         return (Url)data.getData().getData();
     }
+    
+    @Override
+    public IterableResponse<? extends Indicator> getAssociatedIndicatorsForCustomIndicators(P uniqueId, String associationType) throws IOException, FailedResponseException {
+    	Map<String, Object> map = AbstractClientAdapter.createParamMap("uniqueId", uniqueId, "associationType",associationType);
+        String url = getUrlBasePrefix() + ".byId.indicators.customIndicator.association.byType";
+        //System.out.println("getAssociatedIndicatorsForCustomIndicators url name="+url);
+        IterableResponse<Indicator> data = getItems(url, GenericIndicatorListResponse.class, Indicator.class, null, map);
+          return data;
+    	//throw new RuntimeException("not implemented yet");
+    }
+
+    @Override
+    public IterableResponse<? extends Indicator> getAssociatedIndicatorsForCustomIndicators(P uniqueId, String associationType, String targetType)
+            throws IOException, FailedResponseException {
+    	Map<String, Object> map = AbstractClientAdapter.createParamMap("uniqueId", uniqueId, "associationType",associationType,"targetType",targetType);
+        String url = getUrlBasePrefix() + ".byId.indicators.customIndicator.association.byTargetType";
+        //System.out.println("getAssociatedIndicatorsForCustomIndicators url name="+url);
+        IterableResponse<Indicator> data = getItems(url, GenericIndicatorListResponse.class, Indicator.class, null, map);
+          return data;
+    	//throw new RuntimeException("not implemented yet");
+    }
+
 
 }

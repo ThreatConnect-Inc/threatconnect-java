@@ -15,6 +15,7 @@ import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Address;
 import com.threatconnect.sdk.server.entity.Adversary;
+import com.threatconnect.sdk.server.entity.CustomIndicator;
 import com.threatconnect.sdk.server.entity.Email;
 import com.threatconnect.sdk.server.entity.EmailAddress;
 import com.threatconnect.sdk.server.entity.File;
@@ -318,4 +319,16 @@ public class SecurityLabelReaderAdapter
         return indAssocReader.getAssociatedIndicatorUrl(uniqueId, urlText, ownerName);
     }
 
+	@Override
+	public IterableResponse<? extends Indicator> getAssociatedIndicatorsForCustomIndicators(String uniqueId,
+			String associationType) throws IOException, FailedResponseException {
+		return indAssocReader.getAssociatedIndicatorsForCustomIndicators(uniqueId, associationType);
+	}
+
+	@Override
+	public IterableResponse<? extends Indicator> getAssociatedIndicatorsForCustomIndicators(String uniqueId,
+			String associationType, String targetType) throws IOException, FailedResponseException {
+		return indAssocReader.getAssociatedIndicatorsForCustomIndicators(uniqueId, associationType, targetType);
+	}
+	
 }

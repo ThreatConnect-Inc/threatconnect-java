@@ -21,6 +21,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlAccessorType(XmlAccessType.FIELD)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @XmlSeeAlso({AddressListResponseData.class, AdversaryListResponseData.class, AttributeListResponseData.class, DnsResolutionListResponseData.class, EmailAddressListResponseData.class, EmailListResponseData.class, 
+	CustomIndicatorListResponseData.class, CustomIndicatorListResponseData.class,
     FileListResponseData.class, GroupListResponseData.class, HostListResponseData.class, IncidentListResponseData.class, IndicatorListResponseData.class, OwnerListResponseData.class, SignatureListResponseData.class,
     TagListResponseData.class, SecurityLabelListResponseData.class, ThreatListResponseData.class, UrlListResponseData.class, VictimAssetListResponseData.class, VictimEmailAddressListResponseData.class, 
     VictimNetworkAccountListResponseData.class, VictimPhoneListResponseData.class, VictimSocialNetworkListResponseData.class, VictimWebSiteListResponseData.class, VictimListResponseData.class})

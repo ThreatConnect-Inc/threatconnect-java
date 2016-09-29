@@ -8,9 +8,11 @@ import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.*;
 import com.threatconnect.sdk.server.response.entity.ApiEntityListResponse;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
+import com.threatconnect.sdk.server.response.entity.CustomIndicatorResponse;
 import com.threatconnect.sdk.server.response.entity.GroupListResponse;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * EmailReaderAdapter is the primary client adapter for all Email group level objects.
@@ -566,6 +568,17 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     public SecurityLabel getAssociatedSecurityLabel(Integer uniqueId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
         return secLabelAssocReader.getAssociatedSecurityLabel(uniqueId, securityLabel, ownerName);
     }
+	@Override
+	public IterableResponse<? extends Indicator> getAssociatedIndicatorsForCustomIndicators(Integer uniqueId,
+			String associationType) throws IOException, FailedResponseException {
+		throw new RuntimeException("not implemented yet");
+	}
+
+	@Override
+	public IterableResponse<? extends Indicator> getAssociatedIndicatorsForCustomIndicators(Integer uniqueId,
+			String associationType, String targetType) throws IOException, FailedResponseException {
+		throw new RuntimeException("not implemented yet");
+	}
 
 
 }

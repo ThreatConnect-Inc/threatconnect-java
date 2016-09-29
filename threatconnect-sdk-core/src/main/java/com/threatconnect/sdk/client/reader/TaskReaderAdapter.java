@@ -2,6 +2,9 @@ package com.threatconnect.sdk.client.reader;
 
 import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.conn.Connection;
+import com.threatconnect.sdk.exception.FailedResponseException;
+import com.threatconnect.sdk.server.entity.CustomIndicator;
+import com.threatconnect.sdk.server.entity.Indicator;
 import com.threatconnect.sdk.server.entity.Task;
 import com.threatconnect.sdk.server.entity.User;
 import com.threatconnect.sdk.server.response.entity.TaskListResponse;
@@ -59,5 +62,18 @@ public class TaskReaderAdapter extends AbstractGroupReaderAdapter<Task> {
 
     @Override
     public String getUrlType() { return "tasks";}
+
+	@Override
+	public IterableResponse<? extends Indicator> getAssociatedIndicatorsForCustomIndicators(Integer uniqueId,
+			String associationType) throws IOException, FailedResponseException {
+		throw new RuntimeException("not implemented yet");
+	}
+
+	@Override
+	public IterableResponse<? extends Indicator> getAssociatedIndicatorsForCustomIndicators(Integer uniqueId,
+			String associationType, String targetType) throws IOException, FailedResponseException {
+		throw new RuntimeException("not implemented yet");
+	}
+
 
 }

@@ -6,8 +6,6 @@ package com.threatconnect.sdk.server.response.entity;
 
 import com.threatconnect.sdk.server.entity.Email;
 import com.threatconnect.sdk.server.response.entity.data.EmailListResponseData;
-import com.threatconnect.sdk.server.entity.Email;
-import com.threatconnect.sdk.server.response.entity.data.EmailListResponseData;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

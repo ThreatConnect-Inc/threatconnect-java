@@ -13,6 +13,8 @@ import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Attribute;
+import com.threatconnect.sdk.server.entity.CustomIndicator;
+import com.threatconnect.sdk.server.entity.CustomIndicatorIdFinder;
 import com.threatconnect.sdk.server.entity.EmailAddress;
 import com.threatconnect.sdk.client.fluent.EmailAddressBuilder;
 import com.threatconnect.sdk.server.entity.Host;
@@ -29,8 +31,9 @@ import com.threatconnect.sdk.client.fluent.VictimBuilder;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 
 import java.io.IOException;
+import java.util.HashMap;
 
-public class EmailAddressExample {
+public class CustomIndicatorExample {
 
     public static void main(String[] args) {
 
@@ -40,44 +43,51 @@ public class EmailAddressExample {
 
             //System.getProperties().setProperty("threatconnect.api.config", "/config.properties");
             Configuration config = new Configuration("https://127.0.0.1:8443/api", "53597229568569709386", "DL6okSIkRFovChG0js9gAC^l6l36G^q6ulZ7wmIlPRlT9FP%IISbrU1uBnJg%uFu",  "System");
-            config.setResultLimit(1);
             conn = new Connection(config);
-            /*
-    		System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
-    		System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
-    		System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "DEBUG");
-    		System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.conn", "DEBUG");
-    		System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.client", "DEBUG");
-    		System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.client", "DEBUG");
-    		System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "DEBUG");    
-    		*/        
-            doAssociateIndicator(conn);
-            //StackTraceElement[] stacks= Thread.currentThread().getStackTrace();
-            //new Throwable().getStackTrace();
-            //for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
-             //   System.out.println(ste);
-           // }
-            
+           
+            doGet(conn); //success
+
+            doCreate(conn);//success
+
+            doUpdate(conn);//success
+
+            doDelete(conn);//success
+
+            doAddAttribute(conn);//success
+
+            doAssociateGroup(conn);//success
+
+            doAssociateTag(conn);//success
+
+            doDissociateTag(conn);//success
+
+ 			doCustomAssociateIndicator(conn);//success
+          
 /*
-            doGet(conn);
+            doGet(conn); //success
 
-            doCreate(conn);
+            doCreate(conn);//success
 
-            doUpdate(conn);
+            doUpdate(conn);//success
 
-            doDelete(conn);
+            doDelete(conn);//success
 
-            doAddAttribute(conn);
+            doAddAttribute(conn);//success
 
-            doAssociateIndicator(conn);
+            doAssociateGroup(conn);//success
 
-            doAssociateGroup(conn);
+            doAssociateTag(conn);//success
 
-            doAssociateTag(conn);
+            doDissociateTag(conn);//success
 
-            doAssociateVictim(conn);
+ 			doCustomAssociateIndicator(conn);//success
+ 			
+			//old code: doesn't work
+            doAssociateIndicator(conn);///POST : api/v2/indicators/registrationkey/7ywx9-w3c2v-d46gw-p722p-9cp4daa/indicators/hosts/www.bad-hostname.com?owner=System: Resource not found, check the requested path. Please review your request and try again. If the problem persists, contact technical support.
 
-            doDissociateTag(conn);
+			//the function is not implemented according to Morris
+            doAssociateVictim(conn);// GET : /api/v2/indicators/registrationkey/7ywx9-w3c2v-d46gw-p722p-9cp4daa/victims/1?owner=System : Resource not found, check the requested path. Please review your request and try again. If the problem persists, contact technical support
+
 */
         } catch (IOException ex ) {
             //System.err.println("Error: " + ex);
@@ -91,16 +101,16 @@ public class EmailAddressExample {
 
     private static void doGet(Connection conn) throws IOException {
 
-        AbstractIndicatorReaderAdapter<EmailAddress> reader = ReaderAdapterFactory.createEmailAddressIndicatorReader(conn);
-        IterableResponse<EmailAddress> data;
+        AbstractIndicatorReaderAdapter<CustomIndicator> reader = ReaderAdapterFactory.createCustomIndicatorReader(conn,"registrationkey");
+        IterableResponse<CustomIndicator> data;
         try {
             // -----------------------------------------------------------------------------------------------------------
-            // Get EmailAddress
+            // Get CustomIndicator
             // -----------------------------------------------------------------------------------------------------------
         	
             data = reader.getAll();
             for (Indicator g : data) {
-                System.out.println("EmailAddress: " + g);
+                System.out.println("CustomIndicator: " + g.getId());
             }
         } catch (FailedResponseException ex) {
             System.err.println("Error: " + ex);
@@ -108,20 +118,20 @@ public class EmailAddressExample {
     }
 
     private static void doCreate(Connection conn) {
-        AbstractIndicatorWriterAdapter<EmailAddress> writer = WriterAdapterFactory.createEmailAddressIndicatorWriter(conn);
+        AbstractIndicatorWriterAdapter<CustomIndicator> writer = WriterAdapterFactory.createCustomIndicatorWriter(conn,null);
 
-        EmailAddress emailAddress = createTestEmailAddress();
+        CustomIndicator indicator = createTestCustomIndicator();
 
         try {
             // -----------------------------------------------------------------------------------------------------------
-            // Create EmailAddress
+            // Create CustomIndicator
             // -----------------------------------------------------------------------------------------------------------
-            System.out.println("Before: " + emailAddress.toString());
-            ApiEntitySingleResponse<EmailAddress, ?> response = writer.create(emailAddress);
+            System.out.println("Before: " + indicator.toString());
+            ApiEntitySingleResponse<CustomIndicator, ?> response = writer.create(indicator);
 
             if (response.isSuccess()) {
-                EmailAddress savedEmailAddress = response.getItem();
-                System.out.println("Saved: " + savedEmailAddress.toString());
+            	CustomIndicator savedIndicator = response.getItem();
+                System.out.println("Saved: " + savedIndicator.toString()+",id="+savedIndicator.getId());
 
             } else {
                 System.err.println("Error: " + response.getMessage());
@@ -135,22 +145,31 @@ public class EmailAddressExample {
     }
 
     private static void doDelete(Connection conn) {
-        AbstractIndicatorWriterAdapter<EmailAddress> writer = WriterAdapterFactory.createEmailAddressIndicatorWriter(conn);
+    	AbstractIndicatorWriterAdapter<CustomIndicator> writer = WriterAdapterFactory.createCustomIndicatorWriter(conn,"registrationkey");
 
-        EmailAddress emailAddress = createTestEmailAddress();
+    	CustomIndicator indicator = createTestCustomIndicator();
 
         try {
             // -----------------------------------------------------------------------------------------------------------
-            // Update EmailAddress
+            // Update CustomIndicator
             // -----------------------------------------------------------------------------------------------------------
-            ApiEntitySingleResponse<EmailAddress, ?> createResponse = writer.create(emailAddress);
+            ApiEntitySingleResponse<CustomIndicator, ?> createResponse = writer.create(indicator);
             if (createResponse.isSuccess()) {
                 System.out.println("Saved: " + createResponse.getItem());
 
                 // -----------------------------------------------------------------------------------------------------------
-                // Delete EmailAddress
+                // Delete CustomIndicator
                 // -----------------------------------------------------------------------------------------------------------
-                ApiEntitySingleResponse<EmailAddress, ?> deleteResponse = writer.delete(createResponse.getItem().getAddress());
+                createResponse.getItem().setUniqueIdFinder(new CustomIndicatorIdFinder() {
+
+        			@Override
+        			public String getUniqueId(CustomIndicator indicator) {
+        				return indicator.getMap().get("keyentry");
+        			}
+            		
+            	});
+                
+                ApiEntitySingleResponse<CustomIndicator, ?> deleteResponse = writer.delete(createResponse.getItem().getUniqueId());
                 if (deleteResponse.isSuccess()) {
                     System.out.println("Deleted: " + createResponse.getItem());
                 } else {
@@ -167,44 +186,76 @@ public class EmailAddressExample {
     }
 
     private static void doUpdate(Connection conn) {
-        AbstractIndicatorWriterAdapter<EmailAddress> writer = WriterAdapterFactory.createEmailAddressIndicatorWriter(conn);
+    	
+        AbstractIndicatorWriterAdapter<CustomIndicator> writer = WriterAdapterFactory.createCustomIndicatorWriter(conn,null);
 
-        EmailAddress emailAddress = createTestEmailAddress();
+        CustomIndicator indicator = createTestCustomIndicator();
 
         try {
             // -----------------------------------------------------------------------------------------------------------
-            // Create EmailAddress
+            // Create CustomIndicator
             // -----------------------------------------------------------------------------------------------------------
-            ApiEntitySingleResponse<EmailAddress, ?> createResponse = writer.create(emailAddress);
-            if (createResponse.isSuccess()) {
-                System.out.println("Created EmailAddress: " + createResponse.getItem());
+            System.out.println("Before: " + indicator.toString());
+            ApiEntitySingleResponse<CustomIndicator, ?> response = writer.create(indicator);
 
+            if (response.isSuccess()) {
+            	CustomIndicator savedIndicator = response.getItem();
+                System.out.println("Saved: " + savedIndicator.toString()+",id="+savedIndicator.getId());
                 // -----------------------------------------------------------------------------------------------------------
-                // Update EmailAddress
+                // Update CustomIndicator
                 // -----------------------------------------------------------------------------------------------------------
-                EmailAddress updatedEmailAddress = createResponse.getItem();
-                updatedEmailAddress.setDescription("UPDATED: " + createResponse.getItem().getDescription());
-                System.out.println("Saving Updated EmailAddress: " + updatedEmailAddress);
+                
+                savedIndicator.setDescription("UPDATED: " + response.getItem().getDescription());
+                System.out.println("Saving Updated CustomIndicator: " + savedIndicator);
 
-                ApiEntitySingleResponse<EmailAddress, ?> updateResponse = writer.update(updatedEmailAddress);
+                savedIndicator.setUniqueIdFinder(new CustomIndicatorIdFinder() {
+
+        			@Override
+        			public String getUniqueId(CustomIndicator indicator) {
+        				return indicator.getMap().get("keyentry");
+        			}
+            		
+            	});
+                ApiEntitySingleResponse<CustomIndicator, ?> updateResponse = writer.update(savedIndicator);
                 if (updateResponse.isSuccess()) {
-                    System.out.println("Updated EmailAddress: " + updateResponse.getItem());
+                    System.out.println("Updated CustomIndicator: " + updateResponse.getItem());
                 } else {
-                    System.err.println("Failed to Update EmailAddress: " + updateResponse.getMessage());
+                    System.err.println("Failed to Update CustomIndicator: " + updateResponse.getMessage());
                 }
+                
             } else {
-                System.err.println("Failed to Create EmailAddress: " + createResponse.getMessage());
+                System.err.println("Error: " + response.getMessage());
+
             }
 
         } catch (IOException | FailedResponseException ex) {
             System.err.println("Error: " + ex.toString());
         }
 
+        
+      
+    }
+
+    private static CustomIndicator createTestCustomIndicator() {
+    	CustomIndicator indicator = new  CustomIndicator();
+    	indicator.setIndicatorType("registrationkey");
+    	HashMap<String, String> map = new HashMap<String, String>();
+    	map.put("keyentry", "7YWX9-W3C2V-D46GW-P722P-9CP4DAA");
+    	indicator.setMap(map);
+    	indicator.setUniqueIdFinder(new CustomIndicatorIdFinder() {
+
+			@Override
+			public String getUniqueId(CustomIndicator indicator) {
+				return indicator.getMap().get("keyentry");
+			}
+    		
+    	});
+    	return indicator;
     }
 
     private static EmailAddress createTestEmailAddress() {
         EmailAddress emailAddress = new EmailAddressBuilder().createEmailAddress();
-        emailAddress.setAddress("test2@test.com");
+        emailAddress.setAddress("test@test.com");
         emailAddress.setDescription("Test EmailAddress");
         emailAddress.setOwnerName("System");
 
@@ -266,104 +317,210 @@ public class EmailAddressExample {
     }
  
     private static void doAddAttribute(Connection conn) {
-        AbstractIndicatorWriterAdapter<EmailAddress> writer = WriterAdapterFactory.createEmailAddressIndicatorWriter(conn);
+        AbstractIndicatorWriterAdapter<CustomIndicator> writer = WriterAdapterFactory.createCustomIndicatorWriter(conn,"registrationkey");
 
-        EmailAddress emailAddress = createTestEmailAddress();
+        CustomIndicator indicator = createTestCustomIndicator();
+        
         Attribute attribute = createTestAttribute();
-
         try {
             // -----------------------------------------------------------------------------------------------------------
-            // Create EmailAddress
+            // Create CustomIndicator
             // -----------------------------------------------------------------------------------------------------------
-            ApiEntitySingleResponse<EmailAddress, ?> createResponse = writer.create(emailAddress);
-            if (createResponse.isSuccess()) {
-                System.out.println("Created EmailAddress: " + createResponse.getItem());
+            System.out.println("Before: " + indicator.toString());
+            ApiEntitySingleResponse<CustomIndicator, ?> response = writer.create(indicator);
 
-                // -----------------------------------------------------------------------------------------------------------
+            if (response.isSuccess()) {
+            	CustomIndicator savedIndicator = response.getItem();
+                System.out.println("Saved: " + savedIndicator.toString()+",id="+savedIndicator.getId());
+                savedIndicator.setUniqueIdFinder(new CustomIndicatorIdFinder() {
+
+        			@Override
+        			public String getUniqueId(CustomIndicator indicator) {
+        				return indicator.getMap().get("keyentry");
+        			}
+            		
+            	});
+             // -----------------------------------------------------------------------------------------------------------
                 // Add Attribute
                 // -----------------------------------------------------------------------------------------------------------
                 ApiEntitySingleResponse<Attribute, ?> attribResponse
-                    = writer.addAttribute( createResponse.getItem().getAddress(), attribute );
+                    = writer.addAttribute( savedIndicator.getUniqueId(), attribute );
 
                 if ( attribResponse.isSuccess() ) {
                     System.out.println("\tAdded Attribute: " + attribResponse.getItem() );
                 } else {
                     System.err.println("Failed to Add Attribute: " + attribResponse.getMessage());
                 }
+                
 
             } else {
-                System.err.println("Failed to Create EmailAddress: " + createResponse.getMessage());
+                System.err.println("Error: " + response.getMessage());
+
             }
 
         } catch (IOException | FailedResponseException ex) {
             System.err.println("Error: " + ex.toString());
-        }
+        }    
+        
 
     }
 
-    private static void doAssociateIndicator(Connection conn) {
-        AbstractIndicatorWriterAdapter<EmailAddress> gWriter= WriterAdapterFactory.createEmailAddressIndicatorWriter(conn);
+    private static void doCustomAssociateIndicator(Connection conn) {
+    	
+        AbstractIndicatorWriterAdapter<CustomIndicator> writer = WriterAdapterFactory.createCustomIndicatorWriter(conn,"registrationkey");
+
+        CustomIndicator indicator = createTestCustomIndicator();
+        
+        Attribute attribute = createTestAttribute();
+        
         AbstractIndicatorWriterAdapter<Host> hWriter = WriterAdapterFactory.createHostIndicatorWriter(conn);
-
-        EmailAddress emailAddress = createTestEmailAddress();
         Host host = createTestHost();
-
         try {
-
             // -----------------------------------------------------------------------------------------------------------
-            // Create EmailAddress and Host
+            // Create CustomIndicator
             // -----------------------------------------------------------------------------------------------------------
-            ApiEntitySingleResponse<EmailAddress, ?> createResponseEmailAddress = gWriter.create(emailAddress);
+            System.out.println("Before: " + indicator.toString());
             ApiEntitySingleResponse<Host, ?> createResponseHost = hWriter.create(host);
-            if (createResponseEmailAddress.isSuccess() && createResponseHost.isSuccess() ) {
-                System.out.println("Created EmailAddress: " + createResponseEmailAddress.getItem());
-                System.out.println("Created Host: " + createResponseHost.getItem());
+            ApiEntitySingleResponse<CustomIndicator, ?> response = writer.create(indicator);
 
-                // -----------------------------------------------------------------------------------------------------------
+            if (response.isSuccess() && createResponseHost.isSuccess()) {
+            	CustomIndicator savedIndicator = response.getItem();
+                System.out.println("Saved: " + savedIndicator.toString()+",id="+savedIndicator.getId());
+                savedIndicator.setUniqueIdFinder(new CustomIndicatorIdFinder() {
+
+        			@Override
+        			public String getUniqueId(CustomIndicator indicator) {
+        				return indicator.getMap().get("keyentry");
+        			}
+            		
+            	});
+                
+                 System.out.println("unique id ="+savedIndicator.getUniqueId());
+             // -----------------------------------------------------------------------------------------------------------
                 // Associate Host
                 // -----------------------------------------------------------------------------------------------------------
                 ApiEntitySingleResponse assocResponse
-                    = gWriter.associateIndicatorHost(createResponseEmailAddress.getItem().getAddress(), createResponseHost.getItem().getHostName() );
+                    = writer.associateCustomIndicatorToIndicator(savedIndicator.getUniqueId(), createResponseHost.getItem().getHostName(),"rkassociation","hosts" );
+
+                if ( assocResponse.isSuccess() ) {
+                    System.out.println("\tAssociated Host: " + createResponseHost.getItem().getHostName() );
+                } else {
+                    System.err.println("Failed to associate with host: " + assocResponse.getMessage());
+                }
+                
+                AbstractIndicatorReaderAdapter<CustomIndicator> reader = ReaderAdapterFactory.createCustomIndicatorReader(conn,"registrationkey");
+                IterableResponse<? extends Indicator> indicators = reader.getAssociatedIndicatorsForCustomIndicators(savedIndicator.getUniqueId(), "rkassociation");
+                for (Indicator g : indicators) {
+                    System.out.println("indicator: " + g.getId());
+                }
+                indicators = reader.getAssociatedIndicatorsForCustomIndicators(savedIndicator.getUniqueId(), "rkassociation","hosts");
+                for (Indicator g : indicators) {
+                    System.out.println("indicator: " + g.getId());
+                }
+                
+                
+
+            } else {
+                System.err.println("Error: " + response.getMessage());
+
+            }
+
+        } catch (IOException | FailedResponseException ex) {
+            System.err.println("Error: " + ex.toString());
+        }    
+        
+      
+    }
+    
+    private static void doAssociateIndicator(Connection conn) {
+    	
+        AbstractIndicatorWriterAdapter<CustomIndicator> writer = WriterAdapterFactory.createCustomIndicatorWriter(conn,"registrationkey");
+
+        CustomIndicator indicator = createTestCustomIndicator();
+        
+        Attribute attribute = createTestAttribute();
+        
+        AbstractIndicatorWriterAdapter<Host> hWriter = WriterAdapterFactory.createHostIndicatorWriter(conn);
+        Host host = createTestHost();
+        try {
+            // -----------------------------------------------------------------------------------------------------------
+            // Create CustomIndicator
+            // -----------------------------------------------------------------------------------------------------------
+            System.out.println("Before: " + indicator.toString());
+            ApiEntitySingleResponse<Host, ?> createResponseHost = hWriter.create(host);
+            ApiEntitySingleResponse<CustomIndicator, ?> response = writer.create(indicator);
+
+            if (response.isSuccess() && createResponseHost.isSuccess()) {
+            	CustomIndicator savedIndicator = response.getItem();
+                System.out.println("Saved: " + savedIndicator.toString()+",id="+savedIndicator.getId());
+                savedIndicator.setUniqueIdFinder(new CustomIndicatorIdFinder() {
+
+        			@Override
+        			public String getUniqueId(CustomIndicator indicator) {
+        				return indicator.getMap().get("keyentry");
+        			}
+            		
+            	});
+                
+                savedIndicator.setIndicatorType("registrationkey");
+                
+             // -----------------------------------------------------------------------------------------------------------
+                // Associate Host
+                // -----------------------------------------------------------------------------------------------------------
+                ApiEntitySingleResponse assocResponse
+                    = writer.associateIndicatorHost(savedIndicator.getUniqueId(), createResponseHost.getItem().getHostName() );
 
                 if ( assocResponse.isSuccess() ) {
                     System.out.println("\tAssociated Host: " + createResponseHost.getItem().getHostName() );
                 } else {
                     System.err.println("Failed to Add Attribute: " + assocResponse.getMessage());
                 }
+                
 
             } else {
-                if ( !createResponseEmailAddress.isSuccess() ) System.err.println("Failed to Create EmailAddress: " + createResponseEmailAddress.getMessage());
-                if ( !createResponseHost.isSuccess() ) System.err.println("Failed to Create Host: " + createResponseHost.getMessage());
+                System.err.println("Error: " + response.getMessage());
+
             }
 
         } catch (IOException | FailedResponseException ex) {
             System.err.println("Error: " + ex.toString());
-        }
-
+        }    
+        
+      
     }
 
     private static void doAssociateGroup(Connection conn) {
-        AbstractIndicatorWriterAdapter<EmailAddress> gWriter= WriterAdapterFactory.createEmailAddressIndicatorWriter(conn);
         AbstractGroupWriterAdapter<Threat> tWriter = WriterAdapterFactory.createThreatGroupWriter(conn);
+        AbstractIndicatorWriterAdapter<CustomIndicator> writer = WriterAdapterFactory.createCustomIndicatorWriter(conn,"registrationkey");
 
-        EmailAddress emailAddress = createTestEmailAddress();
+        CustomIndicator indicator = createTestCustomIndicator();
+
         Threat threat = createTestThreat();
-
         try {
             // -----------------------------------------------------------------------------------------------------------
-            // Create EmailAddress and Threat
+            // Create CustomIndicator
             // -----------------------------------------------------------------------------------------------------------
-            ApiEntitySingleResponse<EmailAddress, ?> createResponseEmailAddress = gWriter.create(emailAddress);
+        	ApiEntitySingleResponse<CustomIndicator, ?> response = writer.create(indicator);
             ApiEntitySingleResponse<Threat, ?> createResponseThreat = tWriter.create(threat);
-            if (createResponseEmailAddress.isSuccess() && createResponseThreat.isSuccess() ) {
-                System.out.println("Created EmailAddress: " + createResponseEmailAddress.getItem());
+            if (response.isSuccess() && createResponseThreat.isSuccess() ) {
+                System.out.println("Created registration key: " + response.getItem());
                 System.out.println("Created Threat: " + createResponseThreat.getItem());
+                CustomIndicator savedIndicator = response.getItem();
+                savedIndicator.setUniqueIdFinder(new CustomIndicatorIdFinder() {
 
+        			@Override
+        			public String getUniqueId(CustomIndicator indicator) {
+        				return indicator.getMap().get("keyentry");
+        			}
+            		
+            	});
+                
+               
                 // -----------------------------------------------------------------------------------------------------------
                 // Associate Threat
                 // -----------------------------------------------------------------------------------------------------------
                 ApiEntitySingleResponse assocResponse
-                    = gWriter.associateGroupThreat(createResponseEmailAddress.getItem().getAddress(), createResponseThreat.getItem().getId());
+                    = writer.associateGroupThreat(savedIndicator.getUniqueId(), createResponseThreat.getItem().getId());
 
                 if ( assocResponse.isSuccess() ) {
                     System.out.println("\tAssociated Threat: " + createResponseThreat.getItem().getId() );
@@ -372,7 +529,7 @@ public class EmailAddressExample {
                 }
 
             } else {
-                if ( !createResponseEmailAddress.isSuccess() ) System.err.println("Failed to Create EmailAddress: " + createResponseEmailAddress.getMessage());
+                if ( !response.isSuccess() ) System.err.println("Failed to Create registration key: " + response.getMessage());
                 if ( !createResponseThreat.isSuccess() ) System.err.println("Failed to Create Threat: " + createResponseThreat.getMessage());
             }
 
@@ -383,30 +540,39 @@ public class EmailAddressExample {
     }
 
     private static void doAssociateTag(Connection conn) {
-        AbstractIndicatorWriterAdapter<EmailAddress> gWriter= WriterAdapterFactory.createEmailAddressIndicatorWriter(conn);
         TagWriterAdapter tWriter = WriterAdapterFactory.createTagWriter(conn);
 
-        EmailAddress emailAddress = createTestEmailAddress();
         Tag tag = createTestTag();
+
+        AbstractIndicatorWriterAdapter<CustomIndicator> writer = WriterAdapterFactory.createCustomIndicatorWriter(conn,"registrationkey");
+
+        CustomIndicator indicator = createTestCustomIndicator();
 
         try {
             // -----------------------------------------------------------------------------------------------------------
-            // Create EmailAddress and Tag 
+            // Create CustomIndicator and Tag 
             // -----------------------------------------------------------------------------------------------------------
-            ApiEntitySingleResponse<EmailAddress, ?> createResponseEmailAddress = gWriter.create(emailAddress);
+        	ApiEntitySingleResponse<CustomIndicator, ?> response = writer.create(indicator);
             tWriter.delete(tag.getName()); // delete if it exists
             ApiEntitySingleResponse<Tag, ?> createResponseTag = tWriter.create(tag);
 
-            if (createResponseEmailAddress.isSuccess() && createResponseTag.isSuccess() ) {
-                System.out.println("Created EmailAddress: " + createResponseEmailAddress.getItem());
-                System.out.println("Created Tag: " + createResponseTag.getItem());
+            if (response.isSuccess() && createResponseTag.isSuccess() ) {
+                System.out.println("Created registration key: " + response.getItem());
+                System.out.println("Created Threat: " + createResponseTag.getItem());
+                CustomIndicator savedIndicator = response.getItem();
+                savedIndicator.setUniqueIdFinder(new CustomIndicatorIdFinder() {
 
+        			@Override
+        			public String getUniqueId(CustomIndicator indicator) {
+        				return indicator.getMap().get("keyentry");
+        			}
+            		
+            	});
                 // -----------------------------------------------------------------------------------------------------------
                 // Associate Tag
                 // -----------------------------------------------------------------------------------------------------------
                 ApiEntitySingleResponse assocResponse
-                    = gWriter.associateTag(createResponseEmailAddress.getItem().getAddress()
-                                         , createResponseTag.getItem().getName() );
+                    =writer.associateTag(savedIndicator.getUniqueId(), createResponseTag.getItem().getName() );
 
                 if ( assocResponse.isSuccess() ) {
                     System.out.println("\tAssociated Tag: " + createResponseTag.getItem().getName() );
@@ -415,7 +581,7 @@ public class EmailAddressExample {
                 }
 
             } else {
-                if ( !createResponseEmailAddress.isSuccess() ) System.err.println("Failed to Create EmailAddress: " + createResponseEmailAddress.getMessage());
+            	if ( !response.isSuccess() ) System.err.println("Failed to Create registration key: " + response.getMessage());
                 if ( !createResponseTag.isSuccess() ) System.err.println("Failed to Create Tag: " + createResponseTag.getMessage());
             }
 
@@ -425,53 +591,60 @@ public class EmailAddressExample {
     }
 
     private static void doDissociateTag(Connection conn) {
-
-        AbstractIndicatorWriterAdapter<EmailAddress> gWriter= WriterAdapterFactory.createEmailAddressIndicatorWriter(conn);
         TagWriterAdapter tWriter = WriterAdapterFactory.createTagWriter(conn);
 
-        EmailAddress emailAddress = createTestEmailAddress();
         Tag tag = createTestTag();
+
+        AbstractIndicatorWriterAdapter<CustomIndicator> writer = WriterAdapterFactory.createCustomIndicatorWriter(conn,"registrationkey");
+
+        CustomIndicator indicator = createTestCustomIndicator();
 
         try {
             // -----------------------------------------------------------------------------------------------------------
-            // Create EmailAddress and Tag 
+            // Create CustomIndicator and Tag 
             // -----------------------------------------------------------------------------------------------------------
-            ApiEntitySingleResponse<EmailAddress, ?> createResponseEmailAddress = gWriter.create(emailAddress);
+        	ApiEntitySingleResponse<CustomIndicator, ?> response = writer.create(indicator);
             tWriter.delete(tag.getName()); // delete if it exists
             ApiEntitySingleResponse<Tag, ?> createResponseTag = tWriter.create(tag);
 
-            if (createResponseEmailAddress.isSuccess() && createResponseTag.isSuccess() ) {
-                System.out.println("Created EmailAddress: " + createResponseEmailAddress.getItem());
-                System.out.println("Created Tag: " + createResponseTag.getItem());
+            if (response.isSuccess() && createResponseTag.isSuccess() ) {
+                System.out.println("Created registration key: " + response.getItem());
+                System.out.println("Created Threat: " + createResponseTag.getItem());
+                CustomIndicator savedIndicator = response.getItem();
+                savedIndicator.setUniqueIdFinder(new CustomIndicatorIdFinder() {
 
+        			@Override
+        			public String getUniqueId(CustomIndicator indicator) {
+        				return indicator.getMap().get("keyentry");
+        			}
+            		
+            	});
+               
                 // -----------------------------------------------------------------------------------------------------------
                 // Associate Tag
                 // -----------------------------------------------------------------------------------------------------------
                 ApiEntitySingleResponse assocResponse
-                    = gWriter.associateTag(createResponseEmailAddress.getItem().getAddress()
-                                         , createResponseTag.getItem().getName() );
+                    =writer.associateTag(savedIndicator.getUniqueId(), createResponseTag.getItem().getName() );
 
                 if ( assocResponse.isSuccess() ) {
                     System.out.println("\tAssociated Tag: " + createResponseTag.getItem().getName() );
-
-                    // -----------------------------------------------------------------------------------------------------------
+                 // -----------------------------------------------------------------------------------------------------------
                     // Delete Association
                     // -----------------------------------------------------------------------------------------------------------
                     ApiEntitySingleResponse deleteAssocResponse
-                        = gWriter.dissociateTag(createResponseEmailAddress.getItem().getAddress(), createResponseTag.getItem().getName() );
+                        = writer.dissociateTag(savedIndicator.getUniqueId(), createResponseTag.getItem().getName() );
 
                     if ( deleteAssocResponse.isSuccess() ) {
                         System.out.println("\tDeleted Associated Tag: " + createResponseTag.getItem().getName() );
                     } else {
                         System.err.println("Failed to delete Associated Tag: " + deleteAssocResponse.getMessage());
                     }
-
                 } else {
                     System.err.println("Failed to Associate Tag: " + assocResponse.getMessage());
                 }
 
             } else {
-                if ( !createResponseEmailAddress.isSuccess() ) System.err.println("Failed to Create EmailAddress: " + createResponseEmailAddress.getMessage());
+            	if ( !response.isSuccess() ) System.err.println("Failed to Create registration key: " + response.getMessage());
                 if ( !createResponseTag.isSuccess() ) System.err.println("Failed to Create Tag: " + createResponseTag.getMessage());
             }
 
@@ -479,30 +652,41 @@ public class EmailAddressExample {
             System.err.println("Error: " + ex.toString());
         }
         
+   
     }
 
     private static void doAssociateVictim(Connection conn) {
-        AbstractIndicatorWriterAdapter<EmailAddress> gWriter= WriterAdapterFactory.createEmailAddressIndicatorWriter(conn);
         VictimWriterAdapter vWriter = WriterAdapterFactory.createVictimWriter(conn);
-
-        EmailAddress emailAddress = createTestEmailAddress();
         Victim victim = createTestVictim();
+        AbstractIndicatorWriterAdapter<CustomIndicator> writer = WriterAdapterFactory.createCustomIndicatorWriter(conn,"registrationkey");
+
+        CustomIndicator indicator = createTestCustomIndicator();
 
         try {
             // -----------------------------------------------------------------------------------------------------------
             // Create EmailAddress and Victim
             // -----------------------------------------------------------------------------------------------------------
-            ApiEntitySingleResponse<EmailAddress, ?> createResponseEmailAddress = gWriter.create(emailAddress);
+        	ApiEntitySingleResponse<CustomIndicator, ?> response = writer.create(indicator);
             ApiEntitySingleResponse<Victim, ?> createResponseVictim = vWriter.create(victim);
-            if (createResponseEmailAddress.isSuccess() && createResponseVictim.isSuccess() ) {
-                System.out.println("Created EmailAddress: " + createResponseEmailAddress.getItem());
+            if (response.isSuccess() && createResponseVictim.isSuccess() ) {
                 System.out.println("Created Victim: " + createResponseVictim.getItem());
+                System.out.println("Created registration key: " + response.getItem());
+                CustomIndicator savedIndicator = response.getItem();
+                savedIndicator.setUniqueIdFinder(new CustomIndicatorIdFinder() {
 
+        			@Override
+        			public String getUniqueId(CustomIndicator indicator) {
+        				return indicator.getMap().get("keyentry");
+        			}
+            		
+            	});
+                
+                
                 // -----------------------------------------------------------------------------------------------------------
                 // Associate Victim
                 // -----------------------------------------------------------------------------------------------------------
                 ApiEntitySingleResponse assocResponse
-                    = gWriter.associateVictim(createResponseEmailAddress.getItem().getAddress(), createResponseVictim.getItem().getId());
+                    = writer.associateVictim(savedIndicator.getUniqueId(), createResponseVictim.getItem().getId());
 
                 if ( assocResponse.isSuccess() ) {
                     System.out.println("\tAssociated Victim: " + createResponseVictim.getItem().getId() );
@@ -510,18 +694,11 @@ public class EmailAddressExample {
                     System.err.println("Failed to Associate Victim: " + assocResponse.getMessage());
                 }
                 
-                //retrieve email address associated victims
-                /*
-                AbstractIndicatorReaderAdapter<EmailAddress> reader = ReaderAdapterFactory.createEmailAddressIndicatorReader(conn);
-                IterableResponse<Victim> victims = reader.getAssociatedVictims(createResponseEmailAddress.getItem().getAddress());
-                for(Victim v : victims) {
-                	System.out.println(v.getDescription()+","+v.getName());
-                }
-                */
+               
                 
 
             } else {
-                if ( !createResponseEmailAddress.isSuccess() ) System.err.println("Failed to Create EmailAddress: " + createResponseEmailAddress.getMessage());
+            	if ( !response.isSuccess() ) System.err.println("Failed to Create registration key: " + response.getMessage());
                 if ( !createResponseVictim.isSuccess() ) System.err.println("Failed to Create Victim: " + createResponseVictim.getMessage());
             }
 

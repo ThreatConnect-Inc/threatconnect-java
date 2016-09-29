@@ -17,6 +17,7 @@ import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Address;
 import com.threatconnect.sdk.server.entity.Adversary;
+import com.threatconnect.sdk.server.entity.CustomIndicator;
 import com.threatconnect.sdk.server.entity.Email;
 import com.threatconnect.sdk.server.entity.EmailAddress;
 import com.threatconnect.sdk.server.entity.File;
@@ -446,5 +447,20 @@ public class VictimReaderAdapter
     public VictimWebSite getAssociatedVictimAssetWebsite(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetWebsite(uniqueId, assetId, ownerName);
     }
+
+	@Override
+	public IterableResponse<Indicator> getAssociatedIndicatorsForCustomIndicators(Integer uniqueId,
+			String associationType) throws IOException, FailedResponseException {
+		throw new RuntimeException("not implemented yet");
+	}
+
+	@Override
+	public IterableResponse<Indicator> getAssociatedIndicatorsForCustomIndicators(Integer uniqueId,
+			String associationType, String targetType) throws IOException, FailedResponseException {
+		throw new RuntimeException("not implemented yet");
+	}
+
+
+	
 
 }

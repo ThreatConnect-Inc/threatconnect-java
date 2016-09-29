@@ -39,4 +39,11 @@ public class DocumentWriterAdapter extends AbstractGroupWriterAdapter<Document>
         paramMap.put("id", uniqueId);
         return uploadFile("v2.documents.upload", DocumentResponse.class, ownerName, file, paramMap);
     }
+
+    @Override
+	public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Integer uniqueId, String targetId,
+			String assciateType, String targetType) throws IOException, FailedResponseException {
+		throw new RuntimeException("not implemented yet");
+		//return null;
+	}
 }

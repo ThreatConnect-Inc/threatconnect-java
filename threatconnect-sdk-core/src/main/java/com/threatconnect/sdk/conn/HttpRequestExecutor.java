@@ -41,7 +41,7 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
     }
 
     private HttpRequestBase getBase(String fullPath, HttpMethod type) {
-
+    	System.out.println("http method="+type);
         switch(type) {
             case GET:
                 return new HttpGet(fullPath);
@@ -60,6 +60,7 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
     private void applyEntityAsJSON(HttpRequestBase httpBase, Object obj) throws JsonProcessingException {
         String jsonData = StringUtil.toJSON(obj);
         logger.trace("entity : " + jsonData);
+        System.out.println("entity : " + jsonData);;
        ((HttpEntityEnclosingRequestBase)httpBase).setEntity(new StringEntity(jsonData, ContentType.APPLICATION_JSON));
     }
 

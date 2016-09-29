@@ -5,7 +5,10 @@
  */
 package com.threatconnect.sdk.client.writer;
 
+import java.io.IOException;
+
 import com.threatconnect.sdk.conn.Connection;
+import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.*;
 import com.threatconnect.sdk.server.response.entity.*;
 
@@ -21,6 +24,12 @@ public class WriterAdapterFactory {
             public String getUrlType() {
                 return "adversaries";
             }
+
+			@Override
+			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Integer uniqueId, String targetId,
+					String assciateType, String targetType) throws IOException, FailedResponseException {
+				throw new RuntimeException("not implemented yet");
+			}
         };
     }
 
@@ -30,6 +39,13 @@ public class WriterAdapterFactory {
             public String getUrlType() {
                 return "emails";
             }
+
+			@Override
+			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Integer uniqueId, String targetId,
+					String assciateType, String targetType) throws IOException, FailedResponseException {
+				// TODO Auto-generated method stub
+				throw new RuntimeException("not implemented yet");
+			}
         };
     }
 
@@ -39,6 +55,13 @@ public class WriterAdapterFactory {
             public String getUrlType() {
                 return "incidents";
             }
+
+			@Override
+			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Integer uniqueId, String targetId,
+					String assciateType, String targetType) throws IOException, FailedResponseException {
+				// TODO Auto-generated method stub
+				throw new RuntimeException("not implemented yet");
+			}
         };
     }
 
@@ -48,6 +71,13 @@ public class WriterAdapterFactory {
             public String getUrlType() {
                 return "signatures";
             }
+
+			@Override
+			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Integer uniqueId, String targetId,
+					String assciateType, String targetType) throws IOException, FailedResponseException {
+				// TODO Auto-generated method stub
+				throw new RuntimeException("not implemented yet");
+			}
         };
     }
     
@@ -57,6 +87,12 @@ public class WriterAdapterFactory {
             public String getUrlType() {
                 return "threats";
             }
+			@Override
+			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Integer uniqueId, String targetId,
+					String assciateType, String targetType) throws IOException, FailedResponseException {
+				// TODO Auto-generated method stub
+				throw new RuntimeException("not implemented yet");
+			}
         };
     }
 
@@ -71,6 +107,14 @@ public class WriterAdapterFactory {
             public String getId(Address indicator) {
                 return indicator.getIp();
             }
+
+			@Override
+			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(String uniqueId, String targetId,
+					String assciateType, String targetType) throws IOException, FailedResponseException {
+				// TODO Auto-generated method stub
+				throw new RuntimeException("not implemented yet");
+			}
+
         };
     }
 
@@ -85,6 +129,31 @@ public class WriterAdapterFactory {
             public String getId(EmailAddress indicator) {
                 return indicator.getAddress();
             }
+
+			@Override
+			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(String uniqueId, String targetId,
+					String assciateType, String targetType) throws IOException, FailedResponseException {
+				// TODO Auto-generated method stub
+				throw new RuntimeException("not implemented yet");
+			}
+        };
+    }
+    
+    public static AbstractIndicatorWriterAdapter<CustomIndicator> createCustomIndicatorWriter(Connection conn, String customType) {
+         return new AbstractIndicatorWriterAdapter<CustomIndicator>(conn, CustomIndicatorResponse.class) {
+            @Override
+            public String getUrlType() {
+            	if(customType != null)
+            		return customType;
+                return "customIndicator";
+            }
+
+            @Override
+            public String getId(CustomIndicator indicator) {
+                return indicator.getUniqueId();
+            }
+
+			
         };
     }
     
@@ -103,6 +172,12 @@ public class WriterAdapterFactory {
             public String getId(Host indicator) {
                 return indicator.getHostName();
             }
+			@Override
+			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(String uniqueId, String targetId,
+					String assciateType, String targetType) throws IOException, FailedResponseException {
+				// TODO Auto-generated method stub
+				throw new RuntimeException("not implemented yet");
+			}
         };
     }
 
@@ -117,6 +192,13 @@ public class WriterAdapterFactory {
             public String getId(Url indicator) {
                 return indicator.getText();
             }
+
+			@Override
+			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(String uniqueId, String targetId,
+					String assciateType, String targetType) throws IOException, FailedResponseException {
+				// TODO Auto-generated method stub
+				throw new RuntimeException("not implemented yet");
+			}
         };
     }
 
