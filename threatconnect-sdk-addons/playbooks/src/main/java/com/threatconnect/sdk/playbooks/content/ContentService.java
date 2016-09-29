@@ -4,6 +4,7 @@ import com.threatconnect.sdk.playbooks.content.accumulator.ContentAccumulator;
 import com.threatconnect.sdk.playbooks.content.accumulator.ContentException;
 import com.threatconnect.sdk.playbooks.content.accumulator.StringAccumulator;
 import com.threatconnect.sdk.playbooks.content.accumulator.StringKeyValueAccumulator;
+import com.threatconnect.sdk.playbooks.content.accumulator.StringKeyValueArrayAccumulator;
 import com.threatconnect.sdk.playbooks.content.converter.ByteArrayConverter;
 import com.threatconnect.sdk.playbooks.content.converter.ByteMatrixConverter;
 import com.threatconnect.sdk.playbooks.content.converter.StringListConverter;
@@ -33,6 +34,7 @@ public class ContentService
 	private final ContentAccumulator<byte[]> binaryAccumulator;
 	private final ContentAccumulator<byte[][]> binaryArrayAccumulator;
 	private final ContentAccumulator<StringKeyValue> stringKeyValueContentAccumulator;
+	private final ContentAccumulator<List<StringKeyValue>> stringKeyValueArrayContentAccumulator;
 	
 	public ContentService(final DBService dbService)
 	{
@@ -50,6 +52,7 @@ public class ContentService
 		this.binaryArrayAccumulator = new ContentAccumulator<byte[][]>(dbService, StandardType.BinaryArray, new
 			ByteMatrixConverter());
 		this.stringKeyValueContentAccumulator = new StringKeyValueAccumulator(dbService);
+		this.stringKeyValueArrayContentAccumulator = new StringKeyValueArrayAccumulator(dbService);
 	}
 	
 	public String readString(final String content) throws ContentException
@@ -143,6 +146,18 @@ public class ContentService
 	{
 		verifyKeyIsVariable(key);
 		stringKeyValueContentAccumulator.writeContent(key, value);
+	}
+	
+	public List<StringKeyValue> readKeyValueArray(final String key) throws ContentException
+	{
+		verifyKeyIsVariable(key);
+		return stringKeyValueArrayContentAccumulator.readContent(key);
+	}
+	
+	public void writeKeyValueArray(final String key, final List<StringKeyValue> value) throws ContentException
+	{
+		verifyKeyIsVariable(key);
+		stringKeyValueArrayContentAccumulator.writeContent(key, value);
 	}
 	
 	public DBService getDbService()

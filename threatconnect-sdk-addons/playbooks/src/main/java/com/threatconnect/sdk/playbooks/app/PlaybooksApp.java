@@ -215,6 +215,30 @@ public abstract class PlaybooksApp extends App
 	}
 	
 	/**
+	 * Serves as a shorthand method for reading a key/value list from the database where the param is a database key
+	 *
+	 * @param param the app parameter which represents a playbooks variable
+	 * @return
+	 */
+	public final List<StringKeyValue> readKeyValueArrayContent(final String param) throws ContentException
+	{
+		return getContentService().readKeyValueArray(getAppConfig().getString(param));
+	}
+	
+	/**
+	 * Serves as a shorthand method for writing a key/value list to the database where the param is a database key
+	 *
+	 * @param param the app parameter which represents a playbooks variable
+	 * @param value the value to write to the variable
+	 * @throws ContentException
+	 */
+	public final void writeKeyValueArrayContent(final String param, final List<StringKeyValue> value)
+		throws ContentException
+	{
+		getContentService().writeKeyValueArray(getAppConfig().getString(param), value);
+	}
+	
+	/**
 	 * Serves as a shorthand method for reading a TCEntity from the database where the param is a database key
 	 *
 	 * @param param the app parameter which represents a playbooks variable
