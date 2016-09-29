@@ -55,7 +55,7 @@ public class ContentService
 	public String readString(final String content) throws ContentException
 	{
 		//check to see if this string input is a variable
-		if (PlaybooksVariableUtil.isVariable(content))
+		if (null != content && PlaybooksVariableUtil.isVariable(content))
 		{
 			//read the content from the database
 			return stringAccumulator.readContent(content);
@@ -150,13 +150,19 @@ public class ContentService
 		return dbService;
 	}
 	
-	private void verifyKeyIsVariable(final String key)
+	private void verifyKeyIsNotNull(final String key)
 	{
 		//make sure the key is not null
 		if (null == key)
 		{
 			throw new IllegalArgumentException("key cannot be null");
 		}
+	}
+	
+	private void verifyKeyIsVariable(final String key)
+	{
+		//make sure the key is not null
+		verifyKeyIsNotNull(key);
 		
 		//check to see if this string input is a variable
 		if (!PlaybooksVariableUtil.isVariable(key))
