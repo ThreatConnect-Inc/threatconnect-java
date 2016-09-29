@@ -5,6 +5,8 @@ import com.threatconnect.sdk.app.AppConfig;
 import com.threatconnect.sdk.app.ExitStatus;
 import com.threatconnect.sdk.playbooks.content.ContentService;
 import com.threatconnect.sdk.playbooks.content.accumulator.ContentException;
+import com.threatconnect.sdk.playbooks.content.entity.StringKeyValue;
+import com.threatconnect.sdk.playbooks.content.entity.TCEntity;
 import com.threatconnect.sdk.playbooks.db.DBService;
 import com.threatconnect.sdk.playbooks.db.DBServiceFactory;
 
@@ -164,6 +166,98 @@ public abstract class PlaybooksApp extends App
 	public final void writeBinaryContent(final String param, final byte[] value) throws ContentException
 	{
 		getContentService().writeBinary(getAppConfig().getString(param), value);
+	}
+	
+	/**
+	 * Serves as a shorthand method for reading a binary array value from the database where the param is a database key
+	 *
+	 * @param param the app parameter which represents a playbooks variable
+	 * @return
+	 */
+	public final byte[][] readBinaryArrayContent(final String param) throws ContentException
+	{
+		return getContentService().readBinaryArray(getAppConfig().getString(param));
+	}
+	
+	/**
+	 * Serves as a shorthand method for writing a binary array value to the database where the param is a database key
+	 *
+	 * @param param the app parameter which represents a playbooks variable
+	 * @param value the value to write to the variable
+	 * @throws ContentException
+	 */
+	public final void writeBinaryArrayContent(final String param, final byte[][] value) throws ContentException
+	{
+		getContentService().writeBinaryArray(getAppConfig().getString(param), value);
+	}
+	
+	/**
+	 * Serves as a shorthand method for reading a key/value from the database where the param is a database key
+	 *
+	 * @param param the app parameter which represents a playbooks variable
+	 * @return
+	 */
+	public final StringKeyValue readKeyValueContent(final String param) throws ContentException
+	{
+		return getContentService().readKeyValue(getAppConfig().getString(param));
+	}
+	
+	/**
+	 * Serves as a shorthand method for writing a key/value to the database where the param is a database key
+	 *
+	 * @param param the app parameter which represents a playbooks variable
+	 * @param value the value to write to the variable
+	 * @throws ContentException
+	 */
+	public final void writeKeyValueContent(final String param, final StringKeyValue value) throws ContentException
+	{
+		getContentService().writeKeyValue(getAppConfig().getString(param), value);
+	}
+	
+	/**
+	 * Serves as a shorthand method for reading a TCEntity from the database where the param is a database key
+	 *
+	 * @param param the app parameter which represents a playbooks variable
+	 * @return
+	 */
+	public final TCEntity readTCEntityContent(final String param) throws ContentException
+	{
+		return getContentService().readTCEntity(getAppConfig().getString(param));
+	}
+	
+	/**
+	 * Serves as a shorthand method for writing a TCEntity to the database where the param is a database key
+	 *
+	 * @param param the app parameter which represents a playbooks variable
+	 * @param value the value to write to the variable
+	 * @throws ContentException
+	 */
+	public final void writeTCEntityContent(final String param, final TCEntity value) throws ContentException
+	{
+		getContentService().writeTCEntity(getAppConfig().getString(param), value);
+	}
+	
+	/**
+	 * Serves as a shorthand method for reading a TCEntity from the database where the param is a database key
+	 *
+	 * @param param the app parameter which represents a playbooks variable
+	 * @return
+	 */
+	public final List<TCEntity> readTCEntityListContent(final String param) throws ContentException
+	{
+		return getContentService().readTCEntityList(getAppConfig().getString(param));
+	}
+	
+	/**
+	 * Serves as a shorthand method for writing a TCEntity to the database where the param is a database key
+	 *
+	 * @param param the app parameter which represents a playbooks variable
+	 * @param value the value to write to the variable
+	 * @throws ContentException
+	 */
+	public final void writeTCEntityListContent(final String param, final List<TCEntity> value) throws ContentException
+	{
+		getContentService().writeTCEntityList(getAppConfig().getString(param), value);
 	}
 	
 	/**
