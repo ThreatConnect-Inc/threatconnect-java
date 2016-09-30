@@ -14,6 +14,7 @@
 		<module>threatconnect-parser</module>
 		<module>app-package-plugin</module>
 		<module>playbooks</module>
+		<module>playbooks-test</module>
 	</modules>
 
 	<licenses>

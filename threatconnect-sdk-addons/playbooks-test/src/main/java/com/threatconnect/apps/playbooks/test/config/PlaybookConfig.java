@@ -1,0 +1,122 @@
+package com.threatconnect.apps.playbooks.test.config;
+
+import com.threatconnect.plugin.pkg.config.install.InstallJson;
+import com.threatconnect.plugin.pkg.config.install.Param;
+import com.threatconnect.plugin.pkg.config.install.PlaybookOutputVariable;
+import com.threatconnect.sdk.playbooks.app.PlaybooksApp;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @author Greg Marut
+ */
+public class PlaybookConfig
+{
+	private static final Logger logger = LoggerFactory.getLogger(PlaybookConfig.class);
+	
+	private final int appID;
+	private final Class<? extends PlaybooksApp> playbookAppClass;
+	
+	//holds the maps to index the params and variables
+	private final Map<String, Param> playbookParams;
+	private final Map<String, PlaybookOutputVariable> playbookOutputVariables;
+	
+	public PlaybookConfig(final int appID, final Class<? extends PlaybooksApp> playbookAppClass,
+		final InstallJson installJson)
+	{
+		this.appID = appID;
+		this.playbookAppClass = playbookAppClass;
+		this.playbookParams = new HashMap<String, Param>();
+		this.playbookOutputVariables = new HashMap<String, PlaybookOutputVariable>();
+		
+		List<Param> playbookParamList = installJson.getPlaybooksParams();
+		logger.debug("Found {} playbook params for \"{}\"", playbookParamList.size(), playbookAppClass.getName());
+		
+		List<PlaybookOutputVariable> playbookOutputVariableList = installJson.getPlaybooksOutputVariables();
+		logger.debug("Found {} playbook output variables for \"{}\"", playbookOutputVariableList.size(),
+			playbookAppClass.getName());
+		
+		//for each of the playbook params
+		for (Param param : playbookParamList)
+		{
+			//make sure this param does not already exist
+			if (!playbookParams.containsKey(param.getName()))
+			{
+				//add this param to the map
+				playbookParams.put(param.getName(), param);
+			}
+			else
+			{
+				//warn that this param was already added
+				logger.warn("Duplicate playbook param found: {}", param.getName());
+			}
+		}
+		
+		//for each of the output variables
+		for (PlaybookOutputVariable playbookOutputVariable : playbookOutputVariableList)
+		{
+			//make sure this variable does not already exist
+			if (!playbookOutputVariables.containsKey(playbookOutputVariable.getName()))
+			{
+				//add this variable to the map
+				playbookOutputVariables.put(playbookOutputVariable.getName(), playbookOutputVariable);
+			}
+			else
+			{
+				//warn that this variable was already added
+				logger.warn("Duplicate playbook param found: {}", playbookOutputVariable.getName());
+			}
+		}
+	}
+	
+	public int getAppID()
+	{
+		return appID;
+	}
+	
+	public Class<? extends PlaybooksApp> getPlaybookAppClass()
+	{
+		return playbookAppClass;
+	}
+	
+	public String createVariableForInputParam(final String paramName)
+	{
+		//make sure this param name exists
+		if (playbookParams.containsKey(paramName))
+		{
+			Param param = playbookParams.get(paramName);
+			return buildParam(this.appID, param.getName(), param.getType());
+		}
+		else
+		{
+			throw new InvalidParamException(
+				"\"" + paramName + "\" is not a valid input parameter for playbook app \"" + getPlaybookAppClass()
+					.getName() + "\"");
+		}
+	}
+	
+	public String createVariableForOutputVariable(final String paramName)
+	{
+		//make sure this output param name exists
+		if (playbookOutputVariables.containsKey(paramName))
+		{
+			PlaybookOutputVariable playbookOutputVariable = playbookOutputVariables.get(paramName);
+			return buildParam(this.appID, playbookOutputVariable.getName(), playbookOutputVariable.getType());
+		}
+		else
+		{
+			throw new InvalidParamException(
+				"\"" + paramName + "\" is not a valid output variable for playbook app \"" + getPlaybookAppClass()
+					.getName() + "\"");
+		}
+	}
+	
+	private String buildParam(final int appID, final String paramName, final String paramType)
+	{
+		return "#App:" + appID + ":" + paramName + "!" + paramType;
+	}
+}

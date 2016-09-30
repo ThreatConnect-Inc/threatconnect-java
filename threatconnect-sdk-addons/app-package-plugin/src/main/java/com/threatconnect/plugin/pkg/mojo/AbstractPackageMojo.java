@@ -1,22 +1,21 @@
 package com.threatconnect.plugin.pkg.mojo;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import com.threatconnect.plugin.pkg.Profile;
+import com.threatconnect.plugin.pkg.ZipUtil;
+import com.threatconnect.plugin.pkg.config.install.InstallJson;
+import com.threatconnect.plugin.pkg.config.InvalidInstallJsonFileException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.plexus.util.FileUtils;
 
-import com.threatconnect.plugin.pkg.Profile;
-import com.threatconnect.plugin.pkg.ZipUtil;
-import com.threatconnect.plugin.pkg.config.InstallJson;
-import com.threatconnect.plugin.pkg.config.InvalidInstallJsonFileException;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public abstract class AbstractPackageMojo extends AbstractMojo
 {
@@ -142,7 +141,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 		if (null != profile)
 		{
 			// retrieve the application name and program version from the install.json file
-			final String applicationName = profile.getInstallJson().getApplicatioName();
+			final String applicationName = profile.getInstallJson().getApplicationName();
 			final String programVersion = profile.getInstallJson().getProgramVersion();
 			
 			// make sure that both the application name and program version are valid

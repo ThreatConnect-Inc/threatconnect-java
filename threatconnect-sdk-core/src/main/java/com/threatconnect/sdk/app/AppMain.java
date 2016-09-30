@@ -85,7 +85,7 @@ public class AppMain
 	 * @return
 	 * @throws ClassNotFoundException
 	 */
-	protected List<Class<? extends App>> getAppClassesToExecute(final AppConfig appConfig) throws ClassNotFoundException
+	public List<Class<? extends App>> getAppClassesToExecute(final AppConfig appConfig) throws ClassNotFoundException
 	{
 		//holds the list of classes to execute
 		final List<Class<? extends App>> appClasses = new ArrayList<Class<? extends App>>();
