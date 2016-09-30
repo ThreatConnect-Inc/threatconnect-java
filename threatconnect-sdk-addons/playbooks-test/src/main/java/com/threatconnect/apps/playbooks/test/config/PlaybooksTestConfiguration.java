@@ -200,6 +200,11 @@ public class PlaybooksTestConfiguration
 		}
 	}
 	
+	public Map<Class<? extends PlaybooksApp>, PlaybookConfig> getConfigurationMap()
+	{
+		return new HashMap<Class<? extends PlaybooksApp>, PlaybookConfig>(configurationMap);
+	}
+	
 	public static PlaybooksTestConfiguration getInstance()
 	{
 		//check to see if the instance is null
