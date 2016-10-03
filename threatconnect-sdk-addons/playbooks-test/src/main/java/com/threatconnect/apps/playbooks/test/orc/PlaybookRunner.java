@@ -132,11 +132,21 @@ public class PlaybookRunner implements Runnable
 				{
 					target.writeString(variable, source.readString(variable));
 				}
+				else if (null == target.readString(variable))
+				{
+					throw new IllegalStateException(variable
+						+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
+				}
 				break;
 			case StringArray:
 				if (null != source.readStringList(variable))
 				{
 					target.writeStringList(variable, source.readStringList(variable));
+				}
+				else if (null == target.readStringList(variable))
+				{
+					throw new IllegalStateException(variable
+						+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
 				}
 				break;
 			case TCEntity:
@@ -144,11 +154,21 @@ public class PlaybookRunner implements Runnable
 				{
 					target.writeTCEntity(variable, source.readTCEntity(variable));
 				}
+				else if (null == target.readTCEntity(variable))
+				{
+					throw new IllegalStateException(variable
+						+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
+				}
 				break;
 			case TCEntityArray:
 				if (null != source.readTCEntityList(variable))
 				{
 					target.writeTCEntityList(variable, source.readTCEntityList(variable));
+				}
+				else if (null == target.readTCEntityList(variable))
+				{
+					throw new IllegalStateException(variable
+						+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
 				}
 				break;
 			case Binary:
@@ -156,11 +176,21 @@ public class PlaybookRunner implements Runnable
 				{
 					target.writeBinary(variable, source.readBinary(variable));
 				}
+				else if (null == target.readBinary(variable))
+				{
+					throw new IllegalStateException(variable
+						+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
+				}
 				break;
 			case BinaryArray:
 				if (null != source.readBinaryArray(variable))
 				{
 					target.writeBinaryArray(variable, source.readBinaryArray(variable));
+				}
+				else if (null == target.readBinaryArray(variable))
+				{
+					throw new IllegalStateException(variable
+						+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
 				}
 				break;
 			case KeyValue:
@@ -168,11 +198,21 @@ public class PlaybookRunner implements Runnable
 				{
 					target.writeKeyValue(variable, source.readKeyValue(variable));
 				}
+				else if (null == target.readKeyValue(variable))
+				{
+					throw new IllegalStateException(variable
+						+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
+				}
 				break;
 			case KeyValueArray:
 				if (null != source.readKeyValueArray(variable))
 				{
 					target.writeKeyValueArray(variable, source.readKeyValueArray(variable));
+				}
+				else if (null == target.readKeyValueArray(variable))
+				{
+					throw new IllegalStateException(variable
+						+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
 				}
 				break;
 			default:
