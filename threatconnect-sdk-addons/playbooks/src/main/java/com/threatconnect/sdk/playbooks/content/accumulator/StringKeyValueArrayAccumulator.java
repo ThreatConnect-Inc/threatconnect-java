@@ -17,7 +17,7 @@ public class StringKeyValueArrayAccumulator extends ContentAccumulator<List<Stri
 	
 	public StringKeyValueArrayAccumulator(final DBService dbService)
 	{
-		super(dbService, StandardType.KeyValue, new StringKeyValueListConverter());
+		super(dbService, StandardType.KeyValueArray, new StringKeyValueListConverter());
 		this.stringAccumulator = new StringAccumulator(dbService);
 	}
 	

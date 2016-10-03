@@ -43,7 +43,7 @@ public class PlaybooksTestConfiguration
 	private PlaybooksTestConfiguration()
 	{
 		this.configurationMap = new HashMap<Class<? extends PlaybooksApp>, PlaybookConfig>();
-		this.playbookConfigurationCounter = new AtomicInteger(1);
+		this.playbookConfigurationCounter = new AtomicInteger();
 		
 		logger.info("Loading Playbooks Test Configuration");
 		

@@ -26,5 +26,11 @@
 			<artifactId>app-package-plugin</artifactId>
 			<version>${threatconnect-sdk.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${version.junit}</version>
+		</dependency>
 	</dependencies>
 </project>

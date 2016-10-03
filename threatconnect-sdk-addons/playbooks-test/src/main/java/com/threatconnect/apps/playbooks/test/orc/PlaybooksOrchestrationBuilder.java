@@ -7,27 +7,27 @@ import com.threatconnect.sdk.playbooks.app.PlaybooksApp;
 /**
  * @author Greg Marut
  */
-public class PlaybooksOrchestrationBuilder
+public final class PlaybooksOrchestrationBuilder
 {
 	//holds the initial playbook runner to execute
-	private final PlaybookRunner playbookRunner;
+	private final PlaybooksOrchestration playbooksOrchestration;
 	
 	private PlaybooksOrchestrationBuilder(final Class<? extends PlaybooksApp> playbookAppClass)
 	{
-		playbookRunner = createPlaybookRunner(playbookAppClass, this);
+		playbooksOrchestration = createPlaybookOrchestration(playbookAppClass, this);
 	}
 	
-	public PlaybooksOrchestration build()
+	public PlaybookRunner build()
 	{
-		return new PlaybooksOrchestration(this);
+		return new PlaybookRunner(playbooksOrchestration);
 	}
 	
-	PlaybookRunner getPlaybookRunner()
+	public PlaybooksOrchestration getPlaybooksOrchestration()
 	{
-		return playbookRunner;
+		return playbooksOrchestration;
 	}
 	
-	static PlaybookRunner createPlaybookRunner(final Class<? extends PlaybooksApp> playbookAppClass,
+	static PlaybooksOrchestration createPlaybookOrchestration(final Class<? extends PlaybooksApp> playbookAppClass,
 		final PlaybooksOrchestrationBuilder builder)
 	{
 		//look up the configuration for this
@@ -38,7 +38,7 @@ public class PlaybooksOrchestrationBuilder
 		if (null != playbookConfig)
 		{
 			//create the new playbook runner
-			return new PlaybookRunner(playbookConfig, builder);
+			return new PlaybooksOrchestration(playbookConfig, builder);
 		}
 		else
 		{
