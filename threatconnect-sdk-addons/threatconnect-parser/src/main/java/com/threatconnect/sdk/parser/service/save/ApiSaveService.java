@@ -1,11 +1,5 @@
 package com.threatconnect.sdk.parser.service.save;
 
-import java.io.IOException;
-import java.util.Collection;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.parser.model.Address;
@@ -35,10 +29,15 @@ import com.threatconnect.sdk.parser.service.writer.IndicatorWriter;
 import com.threatconnect.sdk.parser.service.writer.SignatureWriter;
 import com.threatconnect.sdk.parser.service.writer.ThreatWriter;
 import com.threatconnect.sdk.parser.service.writer.UrlWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.Collection;
 
 /**
  * Responsible for saving the model to the server using the threatconnect sdk
- * 
+ *
  * @author Greg Marut
  */
 public class ApiSaveService implements SaveService
@@ -56,7 +55,7 @@ public class ApiSaveService implements SaveService
 	
 	/**
 	 * Saves all of the items to the server using the APIs
-	 * 
+	 *
 	 * @param items
 	 * @throws IOException
 	 * Signals that an I/O exception of some sort has occurred. This
@@ -74,7 +73,7 @@ public class ApiSaveService implements SaveService
 	
 	/**
 	 * Saves all of the items to the server using the APIs
-	 * 
+	 *
 	 * @param items
 	 * @param connection
 	 * @throws IOException
@@ -99,7 +98,7 @@ public class ApiSaveService implements SaveService
 	
 	/**
 	 * Saves a single item
-	 * 
+	 *
 	 * @param item
 	 * @param ownerName
 	 * @param connection
@@ -141,7 +140,7 @@ public class ApiSaveService implements SaveService
 	
 	/**
 	 * Retrieves the specific writer implementation for this group
-	 * 
+	 *
 	 * @param group
 	 * @param connection
 	 * @return
@@ -180,7 +179,7 @@ public class ApiSaveService implements SaveService
 	
 	/**
 	 * Retrieves the specific writer implementation for this indicator
-	 * 
+	 *
 	 * @param indicator
 	 * @param connection
 	 * @return
@@ -247,8 +246,8 @@ public class ApiSaveService implements SaveService
 	
 	/**
 	 * Saves the associated groups for a given indicator
-	 * 
-	 * @param item
+	 *
+	 * @param indicator
 	 * @param ownerName
 	 * @param connection
 	 * @param writer
@@ -291,7 +290,7 @@ public class ApiSaveService implements SaveService
 	
 	/**
 	 * Saves the associated items for a given group
-	 * 
+	 *
 	 * @param group
 	 * @param ownerName
 	 * @param connection
