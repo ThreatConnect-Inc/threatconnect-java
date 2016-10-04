@@ -99,21 +99,6 @@ public class PlaybooksOrchestration
 		return builder;
 	}
 	
-	PlaybookConfig getPlaybookConfig()
-	{
-		return playbookConfig;
-	}
-	
-	Map<String, String> getInputParams()
-	{
-		return inputParams;
-	}
-	
-	ContentService getContentService()
-	{
-		return contentService;
-	}
-	
 	public String getVariableForOutputVariable(final String param)
 	{
 		//retrieve this variable
@@ -299,5 +284,20 @@ public class PlaybooksOrchestration
 		{
 			throw new IllegalArgumentException(value + " is not a valid Playbooks variable");
 		}
+	}
+	
+	PlaybookConfig getPlaybookConfig()
+	{
+		return playbookConfig;
+	}
+	
+	Map<String, String> getInputParams()
+	{
+		return inputParams;
+	}
+	
+	ContentService getContentService()
+	{
+		return contentService;
 	}
 }

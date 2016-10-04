@@ -9,4 +9,9 @@ public class PlaybookRunnerException extends RuntimeException
 	{
 		super(cause);
 	}
+	
+	public PlaybookRunnerException(final String message)
+	{
+		super(message);
+	}
 }

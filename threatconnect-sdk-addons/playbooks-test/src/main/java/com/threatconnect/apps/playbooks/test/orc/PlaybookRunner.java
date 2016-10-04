@@ -55,6 +55,9 @@ public class PlaybookRunner implements Runnable
 			logger.info("Running {}", playbookConfig.getPlaybookAppClass());
 			ExitStatus exitStatus = playbooksApp.execute(AppConfig.getInstance());
 			
+			//log the output variables
+			logOutputs(playbooksOrchestration, playbooksApp);
+			
 			//check to see if this was successful
 			if (ExitStatus.Success.equals(exitStatus))
 			{
@@ -68,6 +71,13 @@ public class PlaybookRunner implements Runnable
 				{
 					run(playbooksOrchestration.getRunOnSuccess());
 				}
+				//check to see if there is a run on failure app
+				else if (null != playbooksOrchestration.getRunOnFailure())
+				{
+					throw new PlaybookRunnerException(
+						playbookConfig.getPlaybookAppClass() + " finished with an unexpected status of \"" + exitStatus
+							.toString() + "\"");
+				}
 			}
 			else
 			{
@@ -77,6 +87,13 @@ public class PlaybookRunner implements Runnable
 				if (null != playbooksOrchestration.getRunOnFailure())
 				{
 					run(playbooksOrchestration.getRunOnFailure());
+				}
+				//check to see if there is a run on success app
+				else if (null != playbooksOrchestration.getRunOnSuccess())
+				{
+					throw new PlaybookRunnerException(
+						playbookConfig.getPlaybookAppClass() + " finished with an unexpected status of \"" + exitStatus
+							.toString() + "\"");
 				}
 			}
 		}
@@ -246,6 +263,72 @@ public class PlaybookRunner implements Runnable
 			catch (DBReadException e)
 			{
 				throw new RuntimeException(e);
+			}
+		}
+	}
+	
+	private void logOutputs(final PlaybooksOrchestration playbooksOrchestration, final PlaybooksApp playbooksApp)
+		throws ContentException
+	{
+		//for each of the outputs
+		for (String outputVar : playbooksOrchestration.getOutputParams())
+		{
+			final String variable =
+				playbooksOrchestration.getPlaybookConfig().createVariableForOutputVariable(outputVar);
+			StandardType type = PlaybooksVariableUtil.extractVariableType(variable);
+			
+			ContentService source = playbooksApp.getContentService();
+			
+			switch (type)
+			{
+				case String:
+					if (null != source.readString(variable))
+					{
+						logger.debug("{}: {}", variable, source.readString(variable));
+					}
+					break;
+				case StringArray:
+					if (null != source.readStringList(variable))
+					{
+						logger.debug("{}: {}", variable, source.readStringList(variable));
+					}
+					break;
+				case TCEntity:
+					if (null != source.readTCEntity(variable))
+					{
+						logger.debug("{}: {}", variable, source.readTCEntity(variable));
+					}
+					break;
+				case TCEntityArray:
+					if (null != source.readTCEntityList(variable))
+					{
+						logger.debug("{}: {}", variable, source.readTCEntityList(variable));
+					}
+					break;
+				case Binary:
+					if (null != source.readBinary(variable))
+					{
+						logger.debug("{}: {}", variable, source.readBinary(variable));
+					}
+					break;
+				case BinaryArray:
+					if (null != source.readBinaryArray(variable))
+					{
+						logger.debug("{}: {}", variable, source.readBinaryArray(variable));
+					}
+					break;
+				case KeyValue:
+					if (null != source.readKeyValue(variable))
+					{
+						logger.debug("{}: {}", variable, source.readKeyValue(variable));
+					}
+					break;
+				case KeyValueArray:
+					if (null != source.readKeyValueArray(variable))
+					{
+						logger.debug("{}: {}", variable, source.readKeyValueArray(variable));
+					}
+					break;
 			}
 		}
 	}
