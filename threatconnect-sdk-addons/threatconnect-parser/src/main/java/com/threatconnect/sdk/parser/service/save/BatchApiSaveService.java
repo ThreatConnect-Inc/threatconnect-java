@@ -1,20 +1,11 @@
 package com.threatconnect.sdk.parser.service.save;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.parser.model.Adversary;
 import com.threatconnect.sdk.parser.model.Document;
 import com.threatconnect.sdk.parser.model.Email;
+import com.threatconnect.sdk.parser.model.File;
 import com.threatconnect.sdk.parser.model.Group;
 import com.threatconnect.sdk.parser.model.Incident;
 import com.threatconnect.sdk.parser.model.Indicator;
@@ -32,6 +23,16 @@ import com.threatconnect.sdk.parser.service.writer.SignatureWriter;
 import com.threatconnect.sdk.parser.service.writer.ThreatWriter;
 import com.threatconnect.sdk.parser.util.ItemUtil;
 import com.threatconnect.sdk.server.entity.BatchConfig.AttributeWriteType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class BatchApiSaveService implements SaveService
 {
@@ -48,12 +49,10 @@ public class BatchApiSaveService implements SaveService
 	
 	/**
 	 * Saves all of the items to the server using the APIs
-	 * 
+	 *
 	 * @param items
-	 * @throws IOException
-	 * Signals that an I/O exception of some sort has occurred. This
-	 * class is the general class of exceptions produced by failed or
-	 * interrupted I/O operations.
+	 * @throws IOException Signals that an I/O exception of some sort has occurred. This class is the general class of
+	 *                     exceptions produced by failed or interrupted I/O operations.
 	 */
 	@Override
 	public SaveResults saveItems(final Collection<? extends Item> items) throws IOException
@@ -66,13 +65,11 @@ public class BatchApiSaveService implements SaveService
 	
 	/**
 	 * Saves all of the items to the server using the APIs
-	 * 
+	 *
 	 * @param items
 	 * @param connection
-	 * @throws IOException
-	 * Signals that an I/O exception of some sort has occurred. This
-	 * class is the general class of exceptions produced by failed or
-	 * interrupted I/O operations.
+	 * @throws IOException Signals that an I/O exception of some sort has occurred. This class is the general class of
+	 *                     exceptions produced by failed or interrupted I/O operations.
 	 */
 	public SaveResults saveItems(final Collection<? extends Item> items, final Connection connection) throws IOException
 	{
@@ -91,7 +88,7 @@ public class BatchApiSaveService implements SaveService
 		// all associated group ids for a given indicator
 		Map<Indicator, Set<Integer>> associatedIndicatorGroupsIDs =
 			buildAssociatedIndicatorGroupIDs(groups, indicators, savedGroupMap);
-			
+		
 		// save all of the indicators
 		saveResults.addFailedItems(saveIndicators(indicators, associatedIndicatorGroupsIDs, connection));
 		
@@ -125,16 +122,14 @@ public class BatchApiSaveService implements SaveService
 	
 	/**
 	 * Saves the associated items for a given group
-	 * 
+	 *
 	 * @param group
 	 * @param ownerName
 	 * @param connection
 	 * @param writer
 	 * @param saveResults
-	 * @throws IOException
-	 * Signals that an I/O exception of some sort has occurred. This
-	 * class is the general class of exceptions produced by failed or
-	 * interrupted I/O operations.
+	 * @throws IOException Signals that an I/O exception of some sort has occurred. This class is the general class of
+	 *                     exceptions produced by failed or interrupted I/O operations.
 	 */
 	protected void saveAssociatedItems(final Group group, final String ownerName,
 		final Map<Group, Integer> savedGroupMap, final Connection connection,
@@ -190,9 +185,14 @@ public class BatchApiSaveService implements SaveService
 			// create a new batch indicator writer
 			BatchIndicatorWriter batchIndicatorWriter =
 				new BatchIndicatorWriter(connection, indicators, associatedIndicatorGroupsIDs);
-				
+			
 			// save the indicators
-			return batchIndicatorWriter.saveIndicators(ownerName, attributeWriteType);
+			SaveResults batchSaveResults = batchIndicatorWriter.saveIndicators(ownerName, attributeWriteType);
+			
+			//TODO: the batch api does not handle saving file occurrences so we have to revert to the ApiSaveService to do so
+			saveFileOccurrences(indicators, batchSaveResults);
+			
+			return batchSaveResults;
 		}
 		catch (SaveItemFailedException e)
 		{
@@ -200,6 +200,36 @@ public class BatchApiSaveService implements SaveService
 			SaveResults saveResults = new SaveResults();
 			saveResults.addFailedItems(ItemType.INDICATOR, indicators.size());
 			return saveResults;
+		}
+	}
+	
+	/**
+	 * TODO: the batch api does not handle saving file occurrences so we have to revert to the ApiSaveService to do so
+	 *
+	 * @return
+	 */
+	private void saveFileOccurrences(final Collection<Indicator> indicators, final SaveResults saveResults)
+	{
+		//extract all of the file objects from the set of indicators
+		Set<File> files = ItemUtil.extractIndicatorSet(indicators, File.class);
+		ApiSaveService apiSaveService = new ApiSaveService(configuration, ownerName);
+		
+		//for each of the files
+		for (File file : files)
+		{
+			//check to see if this file has occurrences
+			if (!file.getFileOccurrences().isEmpty())
+			{
+				try
+				{
+					saveResults.addFailedItems(apiSaveService.saveItems(Arrays.asList(file)));
+				}
+				catch (IOException e)
+				{
+					logger.warn(e.getMessage(), e);
+					saveResults.addFailedItems(file);
+				}
+			}
 		}
 	}
 	
@@ -225,7 +255,7 @@ public class BatchApiSaveService implements SaveService
 	
 	/**
 	 * Retrieves the specific writer implementation for this group
-	 * 
+	 *
 	 * @param group
 	 * @param connection
 	 * @return
@@ -264,7 +294,7 @@ public class BatchApiSaveService implements SaveService
 	
 	protected Integer saveGroup(final Group group, final String ownerName,
 		final Map<Group, Integer> savedGroupMap, final Connection connection, final SaveResults saveResults)
-			throws IOException, SaveItemFailedException
+		throws IOException, SaveItemFailedException
 	{
 		GroupWriter<?, ?> writer = getGroupWriter(group, connection);
 		
@@ -288,7 +318,7 @@ public class BatchApiSaveService implements SaveService
 	/**
 	 * Looks at all of the possible associations for each group/indicator and builds a map that can
 	 * lookup all of the associated group ids for any given indicator object
-	 * 
+	 *
 	 * @param groups
 	 * @param indicators
 	 * @param savedGroupMap

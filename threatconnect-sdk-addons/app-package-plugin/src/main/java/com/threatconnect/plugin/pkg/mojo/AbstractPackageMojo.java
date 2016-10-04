@@ -2,8 +2,8 @@ package com.threatconnect.plugin.pkg.mojo;
 
 import com.threatconnect.plugin.pkg.Profile;
 import com.threatconnect.plugin.pkg.ZipUtil;
-import com.threatconnect.plugin.pkg.config.install.InstallJson;
 import com.threatconnect.plugin.pkg.config.InvalidInstallJsonFileException;
+import com.threatconnect.plugin.pkg.config.install.InstallJson;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -80,7 +80,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	 * Packages a profile. A profile is determined by an install.json file. If multiple install.json
 	 * files are found, they are each built using their profile name. Otherwise, if only an
 	 * install.json file is found, the default settings are used.
-	 * 
+	 *
 	 * @param profile
 	 * @throws IOException
 	 */
@@ -107,7 +107,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	
 	/**
 	 * Packages a legacy app which consists of an install.conf file.
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	protected void packageLegacy() throws IOException
@@ -129,7 +129,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	 * Given a profile, the name of the app is determined here. First, if the install.json file has
 	 * an applicationName and programVersion attribute set, those are used. If not, the prefix of
 	 * the install.json file is used if it exists, otherwise the default app name is used.
-	 * 
+	 *
 	 * @param profile
 	 * @return
 	 */
@@ -148,7 +148,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 			if (null != applicationName && !applicationName.trim().isEmpty() && null != programVersion
 				&& !programVersion.trim().isEmpty())
 			{
-				appName = applicationName + "-" + programVersion;
+				appName = applicationName + "_v" + programVersion;
 			}
 			else
 			{
@@ -160,7 +160,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 					// check to see if the app name needs the version
 					if (!appName.endsWith(getVersion()))
 					{
-						appName = appName + "-" + getVersion();
+						appName = appName + "_v" + getVersion();
 					}
 				}
 				// there is a profile, but it does not contain a valid name
@@ -181,7 +181,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	
 	/**
 	 * Returns the list of profiles for this app packager
-	 * 
+	 *
 	 * @return
 	 */
 	protected List<Profile> getProfiles() throws InvalidInstallJsonFileException
@@ -232,7 +232,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	
 	/**
 	 * Copies a file to a destination directory if the source file exists
-	 * 
+	 *
 	 * @param source
 	 * @param destinationDirectory
 	 * @throws IOException
@@ -255,7 +255,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 						// create the new destination folder
 						final File destination =
 							new File(destinationDirectory.getAbsoluteFile() + File.separator + file.getName());
-							
+						
 						// recursively copy this file
 						copyFileToDirectoryIfExists(file, destination);
 					}
@@ -303,7 +303,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	
 	/**
 	 * Called when the app packager is ready to begin writing the files needed for building an app
-	 * 
+	 *
 	 * @param targetDirectory
 	 * @throws IOException
 	 */
