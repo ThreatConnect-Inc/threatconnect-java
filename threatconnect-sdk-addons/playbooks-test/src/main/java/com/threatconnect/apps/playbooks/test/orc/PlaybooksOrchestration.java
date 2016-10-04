@@ -3,14 +3,10 @@ package com.threatconnect.apps.playbooks.test.orc;
 import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
 import com.threatconnect.apps.playbooks.test.db.EmbeddedMapDBService;
 import com.threatconnect.plugin.pkg.config.install.PlaybookOutputVariable;
+import com.threatconnect.sdk.playbooks.app.PlaybooksApp;
 import com.threatconnect.sdk.playbooks.content.ContentService;
-import com.threatconnect.sdk.playbooks.content.StandardType;
-import com.threatconnect.sdk.playbooks.content.accumulator.ContentException;
-import com.threatconnect.sdk.playbooks.content.entity.StringKeyValue;
-import com.threatconnect.sdk.playbooks.content.entity.TCEntity;
-import com.threatconnect.sdk.playbooks.util.PlaybooksVariableUtil;
-import org.junit.Assert;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -22,6 +18,7 @@ import java.util.Set;
  */
 public class PlaybooksOrchestration
 {
+	private final PlaybooksOrchestration parent;
 	private final PlaybookConfig playbookConfig;
 	private final PlaybooksOrchestrationBuilder builder;
 	private POResult onSuccess;
@@ -36,8 +33,15 @@ public class PlaybooksOrchestration
 	
 	PlaybooksOrchestration(final PlaybookConfig playbookConfig, final PlaybooksOrchestrationBuilder builder)
 	{
+		this(playbookConfig, builder, null);
+	}
+	
+	PlaybooksOrchestration(final PlaybookConfig playbookConfig, final PlaybooksOrchestrationBuilder builder,
+		final PlaybooksOrchestration parent)
+	{
 		this.playbookConfig = playbookConfig;
 		this.builder = builder;
+		this.parent = parent;
 		this.outputParams = new HashSet<String>();
 		this.inputParams = new HashMap<String, String>();
 		this.contentService = new ContentService(new EmbeddedMapDBService());
@@ -107,217 +111,59 @@ public class PlaybooksOrchestration
 		return variable;
 	}
 	
-	public PlaybooksOrchestration addStringInput(final String param, final String value) throws ContentException
+	public WithInput withInput()
 	{
-		if (!PlaybooksVariableUtil.isVariable(value))
+		return new WithInput(this);
+	}
+	
+	/**
+	 * Searches the chain of PlaybooksOrchestration objects looking for the last run playbook that matches the
+	 * playbookAppClass
+	 *
+	 * @param playbookAppClass
+	 * @return
+	 */
+	PlaybooksOrchestration findLastRunUpsteamApp(final Class<? extends PlaybooksApp> playbookAppClass)
+	{
+		List<PlaybooksOrchestration> list = findUpstreamApps(playbookAppClass);
+		
+		//check to see if the list is not empty
+		if (!list.isEmpty())
 		{
-			//store this object in the local content service
-			final String variable = playbookConfig.createVariableForInputParam(param, StandardType.String);
-			contentService.writeString(variable, value);
-			inputParams.put(param, variable);
+			//return the last item in the list
+			return list.get(list.size() - 1);
 		}
 		else
 		{
-			addStringVariable(param, value);
+			return null;
 		}
-		
-		return this;
 	}
 	
-	public PlaybooksOrchestration addStringVariable(final String param, final String value) throws ContentException
+	/**
+	 * Searches the chain of PlaybooksOrchestration objects looking for any that match the given playbookAppClass
+	 *
+	 * @param playbookAppClass
+	 * @return
+	 */
+	List<PlaybooksOrchestration> findUpstreamApps(final Class<? extends PlaybooksApp> playbookAppClass)
 	{
-		if (PlaybooksVariableUtil.isVariable(value))
+		List<PlaybooksOrchestration> list = new ArrayList<PlaybooksOrchestration>();
+		
+		//check to see if the parent is not null
+		if (null != parent)
 		{
-			Assert.assertEquals(StandardType.String, PlaybooksVariableUtil.extractVariableType(value));
-			inputParams.put(param, value);
-		}
-		else
-		{
-			throw new IllegalArgumentException(value + " is not a valid Playbooks variable");
+			//recursively call the parent
+			list.addAll(parent.findUpstreamApps(playbookAppClass));
+			
+			//check to see if the parent's app class matches what we are looking for
+			if (parent.getPlaybookConfig().getPlaybookAppClass().equals(playbookAppClass))
+			{
+				//add it to the list
+				list.add(parent);
+			}
 		}
 		
-		return this;
-	}
-	
-	public PlaybooksOrchestration addStringListInput(final String param, final List<String> value)
-		throws ContentException
-	{
-		//store this object in the local content service
-		final String variable = playbookConfig.createVariableForInputParam(param, StandardType.StringArray);
-		contentService.writeStringList(variable, value);
-		inputParams.put(param, variable);
-		
-		return this;
-	}
-	
-	public PlaybooksOrchestration addStringListVariable(final String param, final String value) throws ContentException
-	{
-		if (PlaybooksVariableUtil.isVariable(value))
-		{
-			Assert.assertEquals(StandardType.StringArray, PlaybooksVariableUtil.extractVariableType(value));
-			inputParams.put(param, value);
-		}
-		else
-		{
-			throw new IllegalArgumentException(value + " is not a valid Playbooks variable");
-		}
-		
-		return this;
-	}
-	
-	public PlaybooksOrchestration addBinaryInput(final String param, final byte[] value) throws ContentException
-	{
-		//store this object in the local content service
-		final String variable = playbookConfig.createVariableForInputParam(param, StandardType.Binary);
-		contentService.writeBinary(variable, value);
-		inputParams.put(param, variable);
-		
-		return this;
-	}
-	
-	public PlaybooksOrchestration addBinaryVariable(final String param, final String value) throws ContentException
-	{
-		if (PlaybooksVariableUtil.isVariable(value))
-		{
-			Assert.assertEquals(StandardType.Binary, PlaybooksVariableUtil.extractVariableType(value));
-			inputParams.put(param, value);
-		}
-		else
-		{
-			throw new IllegalArgumentException(value + " is not a valid Playbooks variable");
-		}
-		
-		return this;
-	}
-	
-	public PlaybooksOrchestration addBinaryArrayInput(final String param, final byte[][] value) throws ContentException
-	{
-		//store this object in the local content service
-		final String variable = playbookConfig.createVariableForInputParam(param, StandardType.BinaryArray);
-		contentService.writeBinaryArray(variable, value);
-		inputParams.put(param, variable);
-		
-		return this;
-	}
-	
-	public PlaybooksOrchestration addBinaryArrayVariable(final String param, final String value) throws ContentException
-	{
-		if (PlaybooksVariableUtil.isVariable(value))
-		{
-			Assert.assertEquals(StandardType.BinaryArray, PlaybooksVariableUtil.extractVariableType(value));
-			inputParams.put(param, value);
-		}
-		else
-		{
-			throw new IllegalArgumentException(value + " is not a valid Playbooks variable");
-		}
-		
-		return this;
-	}
-	
-	public PlaybooksOrchestration addKeyValueInput(final String param, final StringKeyValue value)
-		throws ContentException
-	{
-		//store this object in the local content service
-		final String variable = playbookConfig.createVariableForInputParam(param, StandardType.KeyValue);
-		contentService.writeKeyValue(variable, value);
-		inputParams.put(param, variable);
-		
-		return this;
-	}
-	
-	public PlaybooksOrchestration addKeyValueVariable(final String param, final String value) throws ContentException
-	{
-		if (PlaybooksVariableUtil.isVariable(value))
-		{
-			Assert.assertEquals(StandardType.KeyValue, PlaybooksVariableUtil.extractVariableType(value));
-			inputParams.put(param, value);
-		}
-		else
-		{
-			throw new IllegalArgumentException(value + " is not a valid Playbooks variable");
-		}
-		
-		return this;
-	}
-	
-	public PlaybooksOrchestration addKeyValueArrayInput(final String param, final List<StringKeyValue> value)
-		throws ContentException
-	{
-		//store this object in the local content service
-		final String variable = playbookConfig.createVariableForInputParam(param, StandardType.KeyValueArray);
-		contentService.writeKeyValueArray(variable, value);
-		inputParams.put(param, variable);
-		
-		return this;
-	}
-	
-	public PlaybooksOrchestration addKeyValueArrayVariable(final String param, final String value)
-		throws ContentException
-	{
-		if (PlaybooksVariableUtil.isVariable(value))
-		{
-			Assert.assertEquals(StandardType.KeyValueArray, PlaybooksVariableUtil.extractVariableType(value));
-			inputParams.put(param, value);
-		}
-		else
-		{
-			throw new IllegalArgumentException(value + " is not a valid Playbooks variable");
-		}
-		
-		return this;
-	}
-	
-	public PlaybooksOrchestration addTCEntityInput(final String param, final TCEntity value) throws ContentException
-	{
-		//store this object in the local content service
-		final String variable = playbookConfig.createVariableForInputParam(param, StandardType.TCEntity);
-		contentService.writeTCEntity(variable, value);
-		inputParams.put(param, variable);
-		
-		return this;
-	}
-	
-	public PlaybooksOrchestration addTCEntityVariable(final String param, final String value) throws ContentException
-	{
-		if (PlaybooksVariableUtil.isVariable(value))
-		{
-			Assert.assertEquals(StandardType.TCEntity, PlaybooksVariableUtil.extractVariableType(value));
-			inputParams.put(param, value);
-		}
-		else
-		{
-			throw new IllegalArgumentException(value + " is not a valid Playbooks variable");
-		}
-		
-		return this;
-	}
-	
-	public PlaybooksOrchestration addTCEntityListInput(final String param, final List<TCEntity> value)
-		throws ContentException
-	{
-		//store this object in the local content service
-		final String variable = playbookConfig.createVariableForInputParam(param, StandardType.TCEntityArray);
-		contentService.writeTCEntityList(variable, value);
-		inputParams.put(param, variable);
-		
-		return this;
-	}
-	
-	public PlaybooksOrchestration addTCEntityArrayVariable(final String param, final String value)
-		throws ContentException
-	{
-		if (PlaybooksVariableUtil.isVariable(value))
-		{
-			Assert.assertEquals(StandardType.TCEntityArray, PlaybooksVariableUtil.extractVariableType(value));
-			inputParams.put(param, value);
-		}
-		else
-		{
-			throw new IllegalArgumentException(value + " is not a valid Playbooks variable");
-		}
-		
-		return this;
+		return list;
 	}
 	
 	PlaybookConfig getPlaybookConfig()

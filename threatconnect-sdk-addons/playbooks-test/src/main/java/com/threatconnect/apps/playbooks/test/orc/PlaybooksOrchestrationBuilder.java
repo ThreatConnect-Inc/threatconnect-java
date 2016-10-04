@@ -14,7 +14,7 @@ public final class PlaybooksOrchestrationBuilder
 	
 	private PlaybooksOrchestrationBuilder(final Class<? extends PlaybooksApp> playbookAppClass)
 	{
-		playbooksOrchestration = createPlaybookOrchestration(playbookAppClass, this);
+		playbooksOrchestration = createPlaybookOrchestration(playbookAppClass, this, null);
 	}
 	
 	public PlaybookRunner build()
@@ -28,7 +28,7 @@ public final class PlaybooksOrchestrationBuilder
 	}
 	
 	static PlaybooksOrchestration createPlaybookOrchestration(final Class<? extends PlaybooksApp> playbookAppClass,
-		final PlaybooksOrchestrationBuilder builder)
+		final PlaybooksOrchestrationBuilder builder, final PlaybooksOrchestration parent)
 	{
 		//look up the configuration for this
 		PlaybookConfig playbookConfig =
@@ -38,7 +38,7 @@ public final class PlaybooksOrchestrationBuilder
 		if (null != playbookConfig)
 		{
 			//create the new playbook runner
-			return new PlaybooksOrchestration(playbookConfig, builder);
+			return new PlaybooksOrchestration(playbookConfig, builder, parent);
 		}
 		else
 		{
@@ -48,8 +48,13 @@ public final class PlaybooksOrchestrationBuilder
 		}
 	}
 	
-	public static PlaybooksOrchestrationBuilder runApp(final Class<? extends PlaybooksApp> playbookAppClass)
+	public static PlaybooksOrchestrationBuilder create(final Class<? extends PlaybooksApp> playbookAppClass)
 	{
 		return new PlaybooksOrchestrationBuilder(playbookAppClass);
+	}
+	
+	public static PlaybooksOrchestration runApp(final Class<? extends PlaybooksApp> playbookAppClass)
+	{
+		return new PlaybooksOrchestrationBuilder(playbookAppClass).getPlaybooksOrchestration();
 	}
 }
