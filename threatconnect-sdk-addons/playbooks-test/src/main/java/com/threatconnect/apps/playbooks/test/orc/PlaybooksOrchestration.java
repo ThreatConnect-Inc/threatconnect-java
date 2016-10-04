@@ -100,6 +100,17 @@ public class PlaybooksOrchestration
 		return builder;
 	}
 	
+	/**
+	 * A convenience method for building the PlaybookRunner without having to first call
+	 * getPlaybooksOrchestrationBuilder()
+	 *
+	 * @return
+	 */
+	public PlaybookRunner build()
+	{
+		return builder.build();
+	}
+	
 	public String getVariableForOutputVariable(final String param)
 	{
 		//retrieve this variable
