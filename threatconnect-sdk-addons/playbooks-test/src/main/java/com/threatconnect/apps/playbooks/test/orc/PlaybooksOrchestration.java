@@ -46,15 +46,23 @@ public class PlaybooksOrchestration
 		addAllOutputParams();
 	}
 	
-	public POResult onSuccess()
+	public synchronized POResult onSuccess()
 	{
-		this.onSuccess = new POResult(this, builder);
+		if (null == onSuccess)
+		{
+			this.onSuccess = new POResult(this, builder);
+		}
+		
 		return onSuccess;
 	}
 	
-	public POResult getOnFailure(PlaybooksOrchestration playbooksOrchestration)
+	public synchronized POResult onFailure()
 	{
-		this.onFailure = new POResult(this, builder);
+		if (null == onFailure)
+		{
+			this.onFailure = new POResult(this, builder);
+		}
+		
 		return onFailure;
 	}
 	
@@ -99,7 +107,7 @@ public class PlaybooksOrchestration
 		return variable;
 	}
 	
-	public final void addStringInput(final String param, final String value) throws ContentException
+	public PlaybooksOrchestration addStringInput(final String param, final String value) throws ContentException
 	{
 		if (!PlaybooksVariableUtil.isVariable(value))
 		{
@@ -112,9 +120,11 @@ public class PlaybooksOrchestration
 		{
 			addStringVariable(param, value);
 		}
+		
+		return this;
 	}
 	
-	public final void addStringVariable(final String param, final String value) throws ContentException
+	public PlaybooksOrchestration addStringVariable(final String param, final String value) throws ContentException
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
@@ -125,17 +135,22 @@ public class PlaybooksOrchestration
 		{
 			throw new IllegalArgumentException(value + " is not a valid Playbooks variable");
 		}
+		
+		return this;
 	}
 	
-	public final void addStringListInput(final String param, final List<String> value) throws ContentException
+	public PlaybooksOrchestration addStringListInput(final String param, final List<String> value)
+		throws ContentException
 	{
 		//store this object in the local content service
 		final String variable = playbookConfig.createVariableForInputParam(param, StandardType.StringArray);
 		contentService.writeStringList(variable, value);
 		inputParams.put(param, variable);
+		
+		return this;
 	}
 	
-	public final void addStringListVariable(final String param, final String value) throws ContentException
+	public PlaybooksOrchestration addStringListVariable(final String param, final String value) throws ContentException
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
@@ -146,17 +161,21 @@ public class PlaybooksOrchestration
 		{
 			throw new IllegalArgumentException(value + " is not a valid Playbooks variable");
 		}
+		
+		return this;
 	}
 	
-	public final void addBinaryInput(final String param, final byte[] value) throws ContentException
+	public PlaybooksOrchestration addBinaryInput(final String param, final byte[] value) throws ContentException
 	{
 		//store this object in the local content service
 		final String variable = playbookConfig.createVariableForInputParam(param, StandardType.Binary);
 		contentService.writeBinary(variable, value);
 		inputParams.put(param, variable);
+		
+		return this;
 	}
 	
-	public final void addBinaryVariable(final String param, final String value) throws ContentException
+	public PlaybooksOrchestration addBinaryVariable(final String param, final String value) throws ContentException
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
@@ -167,17 +186,21 @@ public class PlaybooksOrchestration
 		{
 			throw new IllegalArgumentException(value + " is not a valid Playbooks variable");
 		}
+		
+		return this;
 	}
 	
-	public final void addBinaryArrayInput(final String param, final byte[][] value) throws ContentException
+	public PlaybooksOrchestration addBinaryArrayInput(final String param, final byte[][] value) throws ContentException
 	{
 		//store this object in the local content service
 		final String variable = playbookConfig.createVariableForInputParam(param, StandardType.BinaryArray);
 		contentService.writeBinaryArray(variable, value);
 		inputParams.put(param, variable);
+		
+		return this;
 	}
 	
-	public final void addBinaryArrayVariable(final String param, final String value) throws ContentException
+	public PlaybooksOrchestration addBinaryArrayVariable(final String param, final String value) throws ContentException
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
@@ -188,17 +211,22 @@ public class PlaybooksOrchestration
 		{
 			throw new IllegalArgumentException(value + " is not a valid Playbooks variable");
 		}
+		
+		return this;
 	}
 	
-	public final void addKeyValueInput(final String param, final StringKeyValue value) throws ContentException
+	public PlaybooksOrchestration addKeyValueInput(final String param, final StringKeyValue value)
+		throws ContentException
 	{
 		//store this object in the local content service
 		final String variable = playbookConfig.createVariableForInputParam(param, StandardType.KeyValue);
 		contentService.writeKeyValue(variable, value);
 		inputParams.put(param, variable);
+		
+		return this;
 	}
 	
-	public final void addKeyValueVariable(final String param, final String value) throws ContentException
+	public PlaybooksOrchestration addKeyValueVariable(final String param, final String value) throws ContentException
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
@@ -209,18 +237,23 @@ public class PlaybooksOrchestration
 		{
 			throw new IllegalArgumentException(value + " is not a valid Playbooks variable");
 		}
+		
+		return this;
 	}
 	
-	public final void addKeyValueArrayInput(final String param, final List<StringKeyValue> value)
+	public PlaybooksOrchestration addKeyValueArrayInput(final String param, final List<StringKeyValue> value)
 		throws ContentException
 	{
 		//store this object in the local content service
 		final String variable = playbookConfig.createVariableForInputParam(param, StandardType.KeyValueArray);
 		contentService.writeKeyValueArray(variable, value);
 		inputParams.put(param, variable);
+		
+		return this;
 	}
 	
-	public final void addKeyValueArrayVariable(final String param, final String value) throws ContentException
+	public PlaybooksOrchestration addKeyValueArrayVariable(final String param, final String value)
+		throws ContentException
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
@@ -231,17 +264,21 @@ public class PlaybooksOrchestration
 		{
 			throw new IllegalArgumentException(value + " is not a valid Playbooks variable");
 		}
+		
+		return this;
 	}
 	
-	public final void addTCEntityInput(final String param, final TCEntity value) throws ContentException
+	public PlaybooksOrchestration addTCEntityInput(final String param, final TCEntity value) throws ContentException
 	{
 		//store this object in the local content service
 		final String variable = playbookConfig.createVariableForInputParam(param, StandardType.TCEntity);
 		contentService.writeTCEntity(variable, value);
 		inputParams.put(param, variable);
+		
+		return this;
 	}
 	
-	public final void addTCEntityVariable(final String param, final String value) throws ContentException
+	public PlaybooksOrchestration addTCEntityVariable(final String param, final String value) throws ContentException
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
@@ -252,17 +289,23 @@ public class PlaybooksOrchestration
 		{
 			throw new IllegalArgumentException(value + " is not a valid Playbooks variable");
 		}
+		
+		return this;
 	}
 	
-	public final void addTCEntityListInput(final String param, final List<TCEntity> value) throws ContentException
+	public PlaybooksOrchestration addTCEntityListInput(final String param, final List<TCEntity> value)
+		throws ContentException
 	{
 		//store this object in the local content service
 		final String variable = playbookConfig.createVariableForInputParam(param, StandardType.TCEntityArray);
 		contentService.writeTCEntityList(variable, value);
 		inputParams.put(param, variable);
+		
+		return this;
 	}
 	
-	public final void addTCEntityArrayVariable(final String param, final String value) throws ContentException
+	public PlaybooksOrchestration addTCEntityArrayVariable(final String param, final String value)
+		throws ContentException
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
@@ -273,6 +316,8 @@ public class PlaybooksOrchestration
 		{
 			throw new IllegalArgumentException(value + " is not a valid Playbooks variable");
 		}
+		
+		return this;
 	}
 	
 	PlaybookConfig getPlaybookConfig()
