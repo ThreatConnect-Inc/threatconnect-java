@@ -61,13 +61,14 @@ public class PlaybookRunner implements Runnable
 			//check to see if this was successful
 			if (ExitStatus.Success.equals(exitStatus))
 			{
-				logger.info("{} finished successfully", playbookConfig.getPlaybookAppClass());
-				
 				//validate that all the output variables were written out
 				validateOutputVariablesWereWritten(playbooksOrchestration, playbooksApp);
 				
+				logger.info("{} finished successfully", playbookConfig.getPlaybookAppClass());
+				
 				//check to see if this runner has an app to run
-				if (null != playbooksOrchestration.getOnSuccess())
+				if (null != playbooksOrchestration.getOnSuccess() && null != playbooksOrchestration.getOnSuccess()
+					.getRunApp())
 				{
 					run(playbooksOrchestration.getOnSuccess().getRunApp());
 				}
@@ -85,7 +86,8 @@ public class PlaybookRunner implements Runnable
 				logger.info("{} finished failed", playbookConfig.getPlaybookAppClass());
 				
 				//check to see if this runner has an app to run
-				if (null != playbooksOrchestration.getOnFailure().getRunApp())
+				if (null != playbooksOrchestration.getOnFailure() && null != playbooksOrchestration.getOnFailure()
+					.getRunApp())
 				{
 					run(playbooksOrchestration.getOnFailure().getRunApp());
 				}
