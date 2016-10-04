@@ -67,12 +67,13 @@ public class PlaybookRunner implements Runnable
 				validateOutputVariablesWereWritten(playbooksOrchestration, playbooksApp);
 				
 				//check to see if this runner has an app to run
-				if (null != playbooksOrchestration.getRunOnSuccess())
+				if (null != playbooksOrchestration.getOnSuccess())
 				{
-					run(playbooksOrchestration.getRunOnSuccess());
+					run(playbooksOrchestration.getOnSuccess().getRunApp());
 				}
 				//check to see if there is a run on failure app
-				else if (null != playbooksOrchestration.getRunOnFailure())
+				else if (null != playbooksOrchestration.getOnFailure() && null != playbooksOrchestration.getOnFailure()
+					.getRunApp())
 				{
 					throw new PlaybookRunnerException(
 						playbookConfig.getPlaybookAppClass() + " finished with an unexpected status of \"" + exitStatus
@@ -84,12 +85,13 @@ public class PlaybookRunner implements Runnable
 				logger.info("{} finished failed", playbookConfig.getPlaybookAppClass());
 				
 				//check to see if this runner has an app to run
-				if (null != playbooksOrchestration.getRunOnFailure())
+				if (null != playbooksOrchestration.getOnFailure().getRunApp())
 				{
-					run(playbooksOrchestration.getRunOnFailure());
+					run(playbooksOrchestration.getOnFailure().getRunApp());
 				}
 				//check to see if there is a run on success app
-				else if (null != playbooksOrchestration.getRunOnSuccess())
+				else if (null != playbooksOrchestration.getOnSuccess() && null != playbooksOrchestration.getOnSuccess()
+					.getRunApp())
 				{
 					throw new PlaybookRunnerException(
 						playbookConfig.getPlaybookAppClass() + " finished with an unexpected status of \"" + exitStatus

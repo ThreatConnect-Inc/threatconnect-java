@@ -3,7 +3,6 @@ package com.threatconnect.apps.playbooks.test.orc;
 import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
 import com.threatconnect.apps.playbooks.test.db.EmbeddedMapDBService;
 import com.threatconnect.plugin.pkg.config.install.PlaybookOutputVariable;
-import com.threatconnect.sdk.playbooks.app.PlaybooksApp;
 import com.threatconnect.sdk.playbooks.content.ContentService;
 import com.threatconnect.sdk.playbooks.content.StandardType;
 import com.threatconnect.sdk.playbooks.content.accumulator.ContentException;
@@ -25,8 +24,8 @@ public class PlaybooksOrchestration
 {
 	private final PlaybookConfig playbookConfig;
 	private final PlaybooksOrchestrationBuilder builder;
-	private PlaybooksOrchestration runOnSuccess;
-	private PlaybooksOrchestration runOnFailure;
+	private POResult onSuccess;
+	private POResult onFailure;
 	
 	//holds the list of output params
 	private final Set<String> outputParams;
@@ -47,26 +46,16 @@ public class PlaybooksOrchestration
 		addAllOutputParams();
 	}
 	
-	public PlaybooksOrchestration runAppOnSuccess(PlaybooksOrchestration playbooksOrchestration)
+	public POResult onSuccess()
 	{
-		this.runOnSuccess = playbooksOrchestration;
-		return runOnSuccess;
+		this.onSuccess = new POResult(this, builder);
+		return onSuccess;
 	}
 	
-	public PlaybooksOrchestration runAppOnSuccess(final Class<? extends PlaybooksApp> playbookAppClass)
+	public POResult getOnFailure(PlaybooksOrchestration playbooksOrchestration)
 	{
-		return runAppOnSuccess(PlaybooksOrchestrationBuilder.createPlaybookOrchestration(playbookAppClass, builder));
-	}
-	
-	public PlaybooksOrchestration runAppOnFailure(PlaybooksOrchestration playbooksOrchestration)
-	{
-		this.runOnFailure = playbooksOrchestration;
-		return runOnFailure;
-	}
-	
-	public PlaybooksOrchestration runAppOnFailure(final Class<? extends PlaybooksApp> playbookAppClass)
-	{
-		return runAppOnFailure(PlaybooksOrchestrationBuilder.createPlaybookOrchestration(playbookAppClass, builder));
+		this.onFailure = new POResult(this, builder);
+		return onFailure;
 	}
 	
 	public void addOutputParam(final String... outputVariables)
@@ -87,16 +76,6 @@ public class PlaybooksOrchestration
 			//add it to the set
 			outputParams.add(outputVariable.getName());
 		}
-	}
-	
-	public PlaybooksOrchestration getRunOnSuccess()
-	{
-		return runOnSuccess;
-	}
-	
-	public PlaybooksOrchestration getRunOnFailure()
-	{
-		return runOnFailure;
 	}
 	
 	public Set<String> getOutputParams()
@@ -309,5 +288,15 @@ public class PlaybooksOrchestration
 	ContentService getContentService()
 	{
 		return contentService;
+	}
+	
+	POResult getOnSuccess()
+	{
+		return onSuccess;
+	}
+	
+	POResult getOnFailure()
+	{
+		return onFailure;
 	}
 }

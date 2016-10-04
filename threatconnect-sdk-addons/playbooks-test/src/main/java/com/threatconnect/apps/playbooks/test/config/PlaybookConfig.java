@@ -47,7 +47,8 @@ public class PlaybookConfig
 		List<Param> playbookParamList = installJson.getPlaybooksParams();
 		logger.debug("Found {} playbook params for \"{}\"", playbookParamList.size(), playbookAppClass.getName());
 		
-		List<PlaybookOutputVariable> playbookOutputVariableList = installJson.getPlaybooksOutputVariables();
+		List<PlaybookOutputVariable> playbookOutputVariableList =
+			installJson.getPlaybook().getPlaybooksOutputVariables();
 		logger.debug("Found {} playbook output variables for \"{}\"", playbookOutputVariableList.size(),
 			playbookAppClass.getName());
 		

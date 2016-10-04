@@ -22,8 +22,8 @@ public class InstallJson
 	private static final String PROGRAM_MAIN = "programMain";
 	private static final String RUNTIME_LEVEL = "runtimeLevel";
 	private static final String PARAMS = "params";
-	private static final String PLAYBOOKS_OUTPUT_VARIABLES = "blueprintOutputVariables";
 	
+	private static final String PLAYBOOK = "blueprint";
 	private static final String PLAYBOOK_RUN_LEVEL = "Blueprint";
 	
 	private final File installJsonFile;
@@ -53,22 +53,22 @@ public class InstallJson
 	
 	public String getApplicationName()
 	{
-		return getAsString(APPLICATION_NAME);
+		return JsonUtil.getAsString(root, APPLICATION_NAME);
 	}
 	
 	public String getProgramVersion()
 	{
-		return getAsString(PROGRAM_VERSION);
+		return JsonUtil.getAsString(root, PROGRAM_VERSION);
 	}
 	
 	public String getProgramMain()
 	{
-		return getAsString(PROGRAM_MAIN);
+		return JsonUtil.getAsString(root, PROGRAM_MAIN);
 	}
 	
 	public String getRuntimeLevel()
 	{
-		return getAsString(RUNTIME_LEVEL);
+		return JsonUtil.getAsString(root, RUNTIME_LEVEL);
 	}
 	
 	public boolean isPlaybookApp()
@@ -76,24 +76,9 @@ public class InstallJson
 		return PLAYBOOK_RUN_LEVEL.equals(getRuntimeLevel());
 	}
 	
-	public List<PlaybookOutputVariable> getPlaybooksOutputVariables()
+	public Playbook getPlaybook()
 	{
-		List<PlaybookOutputVariable> results = new ArrayList<PlaybookOutputVariable>();
-		
-		//retrieve the playbooks output variables and make sure it is not null
-		JsonElement variablesElement = root.get(PLAYBOOKS_OUTPUT_VARIABLES);
-		if (null != variablesElement)
-		{
-			//for each of the variables
-			JsonArray array = variablesElement.getAsJsonArray();
-			for (JsonElement element : array)
-			{
-				//convert this json object to a playbook variable and add it to the results list
-				results.add(new PlaybookOutputVariable(element.getAsJsonObject()));
-			}
-		}
-		
-		return results;
+		return new Playbook(root.get(PLAYBOOK).getAsJsonObject());
 	}
 	
 	public List<Param> getPlaybooksParams()
@@ -120,11 +105,6 @@ public class InstallJson
 		}
 		
 		return results;
-	}
-	
-	private String getAsString(final String... paths)
-	{
-		return JsonUtil.getAsString(root, paths);
 	}
 	
 	public File getInstallJsonFile()
