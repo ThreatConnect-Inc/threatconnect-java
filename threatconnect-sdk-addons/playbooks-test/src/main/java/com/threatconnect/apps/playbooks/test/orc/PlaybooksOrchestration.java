@@ -47,16 +47,26 @@ public class PlaybooksOrchestration
 		addAllOutputParams();
 	}
 	
+	public PlaybooksOrchestration runAppOnSuccess(PlaybooksOrchestration playbooksOrchestration)
+	{
+		this.runOnSuccess = playbooksOrchestration;
+		return runOnSuccess;
+	}
+	
 	public PlaybooksOrchestration runAppOnSuccess(final Class<? extends PlaybooksApp> playbookAppClass)
 	{
-		this.runOnSuccess = PlaybooksOrchestrationBuilder.createPlaybookOrchestration(playbookAppClass, builder);
-		return runOnSuccess;
+		return runAppOnSuccess(PlaybooksOrchestrationBuilder.createPlaybookOrchestration(playbookAppClass, builder));
+	}
+	
+	public PlaybooksOrchestration runAppOnFailure(PlaybooksOrchestration playbooksOrchestration)
+	{
+		this.runOnFailure = playbooksOrchestration;
+		return runOnFailure;
 	}
 	
 	public PlaybooksOrchestration runAppOnFailure(final Class<? extends PlaybooksApp> playbookAppClass)
 	{
-		this.runOnFailure = PlaybooksOrchestrationBuilder.createPlaybookOrchestration(playbookAppClass, builder);
-		return runOnFailure;
+		return runAppOnFailure(PlaybooksOrchestrationBuilder.createPlaybookOrchestration(playbookAppClass, builder));
 	}
 	
 	public void addOutputParam(final String... outputVariables)

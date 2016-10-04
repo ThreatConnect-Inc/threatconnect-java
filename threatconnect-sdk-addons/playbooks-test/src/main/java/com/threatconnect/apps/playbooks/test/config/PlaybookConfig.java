@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Greg Marut
@@ -21,6 +22,9 @@ public class PlaybookConfig
 {
 	private static final Logger logger = LoggerFactory.getLogger(PlaybookConfig.class);
 	
+	//holds the counter for the playbook app id
+	private static final AtomicInteger counter = new AtomicInteger();
+	
 	private final int appID;
 	private final Class<? extends PlaybooksApp> playbookAppClass;
 	
@@ -28,13 +32,17 @@ public class PlaybookConfig
 	private final Map<String, Param> playbookParams;
 	private final Map<String, PlaybookOutputVariable> playbookOutputVariables;
 	
-	public PlaybookConfig(final int appID, final Class<? extends PlaybooksApp> playbookAppClass,
-		final InstallJson installJson)
+	public PlaybookConfig(final Class<? extends PlaybooksApp> playbookAppClass)
 	{
-		this.appID = appID;
+		this.appID = counter.getAndIncrement();
 		this.playbookAppClass = playbookAppClass;
 		this.playbookParams = new HashMap<String, Param>();
 		this.playbookOutputVariables = new HashMap<String, PlaybookOutputVariable>();
+	}
+	
+	public PlaybookConfig(final Class<? extends PlaybooksApp> playbookAppClass, final InstallJson installJson)
+	{
+		this(playbookAppClass);
 		
 		List<Param> playbookParamList = installJson.getPlaybooksParams();
 		logger.debug("Found {} playbook params for \"{}\"", playbookParamList.size(), playbookAppClass.getName());

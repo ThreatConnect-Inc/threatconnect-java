@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,13 +36,9 @@ public class PlaybooksTestConfiguration
 	//holds the playbook configuration map
 	private final Map<Class<? extends PlaybooksApp>, PlaybookConfig> configurationMap;
 	
-	//holds the counter for the playbook app id
-	private final AtomicInteger playbookConfigurationCounter;
-	
 	private PlaybooksTestConfiguration()
 	{
 		this.configurationMap = new HashMap<Class<? extends PlaybooksApp>, PlaybookConfig>();
-		this.playbookConfigurationCounter = new AtomicInteger();
 		
 		logger.info("Loading Playbooks Test Configuration");
 		
@@ -179,9 +174,7 @@ public class PlaybooksTestConfiguration
 			if (!configurationMap.containsKey(playbooksAppClass))
 			{
 				//create a new playbook configuration class
-				PlaybookConfig playbookConfig =
-					new PlaybookConfig(playbookConfigurationCounter.getAndIncrement(), playbooksAppClass,
-						installJson);
+				PlaybookConfig playbookConfig = new PlaybookConfig(playbooksAppClass, installJson);
 				
 				//add this config to the map
 				configurationMap.put(playbooksAppClass, playbookConfig);

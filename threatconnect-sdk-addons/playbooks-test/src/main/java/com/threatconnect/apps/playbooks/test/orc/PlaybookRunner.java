@@ -256,9 +256,7 @@ public class PlaybookRunner implements Runnable
 			}
 			catch (AssertionError e)
 			{
-				logger.error(e.getMessage());
-				throw new RuntimeException("Output Variable \"" + outputVar
-					+ "\" was null. Please ensure that your app has properly set this value when requested.", e);
+				logger.warn("Output Variable \"" + outputVar + "\" was expected but null. Was this intended?");
 			}
 			catch (DBReadException e)
 			{
@@ -270,6 +268,8 @@ public class PlaybookRunner implements Runnable
 	private void logOutputs(final PlaybooksOrchestration playbooksOrchestration, final PlaybooksApp playbooksApp)
 		throws ContentException
 	{
+		ContentService contentService = playbooksApp.getContentService();
+		
 		//for each of the outputs
 		for (String outputVar : playbooksOrchestration.getOutputParams())
 		{
@@ -277,57 +277,31 @@ public class PlaybookRunner implements Runnable
 				playbooksOrchestration.getPlaybookConfig().createVariableForOutputVariable(outputVar);
 			StandardType type = PlaybooksVariableUtil.extractVariableType(variable);
 			
-			ContentService source = playbooksApp.getContentService();
-			
 			switch (type)
 			{
 				case String:
-					if (null != source.readString(variable))
-					{
-						logger.debug("{}: {}", variable, source.readString(variable));
-					}
+					logger.debug("\"{}\" = \"{}\"", variable, contentService.readString(variable));
 					break;
 				case StringArray:
-					if (null != source.readStringList(variable))
-					{
-						logger.debug("{}: {}", variable, source.readStringList(variable));
-					}
+					logger.debug("\"{}\" = \"{}\"", variable, contentService.readStringList(variable));
 					break;
 				case TCEntity:
-					if (null != source.readTCEntity(variable))
-					{
-						logger.debug("{}: {}", variable, source.readTCEntity(variable));
-					}
+					logger.debug("\"{}\" = \"{}\"", variable, contentService.readTCEntity(variable));
 					break;
 				case TCEntityArray:
-					if (null != source.readTCEntityList(variable))
-					{
-						logger.debug("{}: {}", variable, source.readTCEntityList(variable));
-					}
+					logger.debug("\"{}\" = \"{}\"", variable, contentService.readTCEntityList(variable));
 					break;
 				case Binary:
-					if (null != source.readBinary(variable))
-					{
-						logger.debug("{}: {}", variable, source.readBinary(variable));
-					}
+					logger.debug("\"{}\" = \"{}\"", variable, contentService.readBinary(variable));
 					break;
 				case BinaryArray:
-					if (null != source.readBinaryArray(variable))
-					{
-						logger.debug("{}: {}", variable, source.readBinaryArray(variable));
-					}
+					logger.debug("\"{}\" = \"{}\"", variable, contentService.readBinaryArray(variable));
 					break;
 				case KeyValue:
-					if (null != source.readKeyValue(variable))
-					{
-						logger.debug("{}: {}", variable, source.readKeyValue(variable));
-					}
+					logger.debug("\"{}\" = \"{}\"", variable, contentService.readKeyValue(variable));
 					break;
 				case KeyValueArray:
-					if (null != source.readKeyValueArray(variable))
-					{
-						logger.debug("{}: {}", variable, source.readKeyValueArray(variable));
-					}
+					logger.debug("\"{}\" = \"{}\"", variable, contentService.readKeyValueArray(variable));
 					break;
 			}
 		}
