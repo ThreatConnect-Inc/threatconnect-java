@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.threatconnect.plugin.pkg.config.InvalidInstallJsonFileException;
-import com.threatconnect.plugin.pkg.util.JsonUtil;
+import com.threatconnect.sdk.addons.util.JsonUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;

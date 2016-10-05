@@ -1,7 +1,7 @@
 package com.threatconnect.plugin.pkg.config.install;
 
 import com.google.gson.JsonObject;
-import com.threatconnect.plugin.pkg.util.JsonUtil;
+import com.threatconnect.sdk.addons.util.JsonUtil;
 
 /**
  * @author Greg Marut

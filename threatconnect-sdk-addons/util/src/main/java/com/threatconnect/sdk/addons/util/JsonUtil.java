@@ -1,5 +1,6 @@
-package com.threatconnect.plugin.pkg.util;
+package com.threatconnect.sdk.addons.util;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
 /**
@@ -10,6 +11,28 @@ public class JsonUtil
 	private JsonUtil()
 	{
 		
+	}
+	
+	/**
+	 * Given a root node, traverses the json object and safely handles any null objects along the
+	 * way
+	 *
+	 * @param root
+	 * @param paths
+	 * @return
+	 */
+	public static JsonArray getAsJsonArray(final JsonElement root, final String... paths)
+	{
+		// make sure the element is not null
+		JsonElement element = get(root, paths);
+		if (null != element)
+		{
+			return element.getAsJsonArray();
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	/**

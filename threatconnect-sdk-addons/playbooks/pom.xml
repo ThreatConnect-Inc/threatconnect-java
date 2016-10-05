@@ -19,7 +19,7 @@
 		<dependency>
 			<groupId>com.threatconnect.sdk.core</groupId>
 			<artifactId>threatconnect-sdk</artifactId>
-			<version>${version.this}</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>

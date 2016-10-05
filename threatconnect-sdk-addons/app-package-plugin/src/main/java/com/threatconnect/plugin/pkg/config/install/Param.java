@@ -3,7 +3,7 @@ package com.threatconnect.plugin.pkg.config.install;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.threatconnect.plugin.pkg.util.JsonUtil;
+import com.threatconnect.sdk.addons.util.JsonUtil;
 
 import java.util.ArrayList;
 import java.util.List;
