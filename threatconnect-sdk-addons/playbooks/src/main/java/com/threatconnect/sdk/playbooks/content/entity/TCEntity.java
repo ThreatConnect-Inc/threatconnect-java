@@ -18,6 +18,12 @@ public class TCEntity
 		this.value = value == null ? null : value.toString();
 	}
 	
+	public TCEntity(Object type, Object value, String owner)
+	{
+		this(type,value);
+		ownerName = owner;
+	}
+	
 	public Integer getId()
 	{
 		return id;
