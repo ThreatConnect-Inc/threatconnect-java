@@ -1,8 +1,8 @@
 package com.threatconnect.apps.playbooks.test.config;
 
-import com.threatconnect.plugin.pkg.config.install.InstallJson;
-import com.threatconnect.plugin.pkg.config.install.Param;
-import com.threatconnect.plugin.pkg.config.install.PlaybookOutputVariable;
+import com.threatconnect.sdk.addons.util.config.install.InstallJson;
+import com.threatconnect.sdk.addons.util.config.install.Param;
+import com.threatconnect.sdk.addons.util.config.install.PlaybookOutputVariable;
 import com.threatconnect.sdk.playbooks.app.PlaybooksApp;
 import com.threatconnect.sdk.playbooks.content.StandardType;
 import org.slf4j.Logger;

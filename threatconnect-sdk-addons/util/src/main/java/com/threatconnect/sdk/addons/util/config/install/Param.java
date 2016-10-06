@@ -1,4 +1,4 @@
-package com.threatconnect.plugin.pkg.config.install;
+package com.threatconnect.sdk.addons.util.config.install;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

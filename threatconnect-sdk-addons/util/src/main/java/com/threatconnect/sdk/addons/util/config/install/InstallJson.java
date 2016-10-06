@@ -1,4 +1,4 @@
-package com.threatconnect.plugin.pkg.config.install;
+package com.threatconnect.sdk.addons.util.config.install;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -6,7 +6,6 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
-import com.threatconnect.plugin.pkg.config.InvalidInstallJsonFileException;
 import com.threatconnect.sdk.addons.util.JsonUtil;
 
 import java.io.File;

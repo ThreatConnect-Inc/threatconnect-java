@@ -19,7 +19,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.threatconnect.sdk.addons</groupId>
-			<artifactId>app-package-plugin</artifactId>
+			<artifactId>util</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

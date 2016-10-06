@@ -1,8 +1,8 @@
 package com.threatconnect.apps.playbooks.test.config;
 
 import com.threatconnect.apps.playbooks.test.db.EmbeddedMapDBService;
-import com.threatconnect.plugin.pkg.config.InvalidInstallJsonFileException;
-import com.threatconnect.plugin.pkg.config.install.InstallJson;
+import com.threatconnect.sdk.addons.util.config.install.InvalidInstallJsonFileException;
+import com.threatconnect.sdk.addons.util.config.install.InstallJson;
 import com.threatconnect.sdk.app.App;
 import com.threatconnect.sdk.app.AppConfig;
 import com.threatconnect.sdk.app.AppMain;

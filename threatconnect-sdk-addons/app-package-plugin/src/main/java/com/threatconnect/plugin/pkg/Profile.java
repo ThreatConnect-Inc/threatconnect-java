@@ -2,7 +2,7 @@ package com.threatconnect.plugin.pkg;
 
 import java.io.File;
 
-import com.threatconnect.plugin.pkg.config.install.InstallJson;
+import com.threatconnect.sdk.addons.util.config.install.InstallJson;
 
 public class Profile
 {
