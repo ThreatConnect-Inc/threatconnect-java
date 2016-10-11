@@ -1,6 +1,6 @@
 package com.threatconnect.sdk.playbooks.util;
 
-import com.threatconnect.sdk.playbooks.content.StandardType;
+import com.threatconnect.sdk.addons.util.config.install.PlaybookVariableType;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 public class PlaybooksVariableUtil
 {
 	//holds the regex pattern that identifies a variable
-	public static final String VARIABLE_REGEX = "(#(?:[A-Za-z]+):(?:[\\d]+):(?:[A-Za-z0-9_.-]+)!([A-Za-z0-9_-]+))";
+	public static final String VARIABLE_REGEX = "(#(?:[A-Za-z]+):(?:[\\d]+):([A-Za-z0-9_.-]+)!([A-Za-z0-9_-]+))";
 	public static final Pattern VARIABLE_PATTERN = Pattern.compile(VARIABLE_REGEX);
 	
 	public static boolean isVariable(final String input)
@@ -25,56 +25,69 @@ public class PlaybooksVariableUtil
 		return VARIABLE_PATTERN.matcher(input).matches();
 	}
 	
-	public static StandardType extractVariableType(final String variableName)
+	public static String extractVariableName(final String variable)
 	{
 		//make sure this is a variable
-		if (!isVariable(variableName))
+		if (!isVariable(variable))
 		{
-			throw new IllegalArgumentException(variableName + " is not a valid variable");
+			throw new IllegalArgumentException(variable + " is not a valid variable");
 		}
 		
-		Matcher matcher = VARIABLE_PATTERN.matcher(variableName);
+		Matcher matcher = VARIABLE_PATTERN.matcher(variable);
 		matcher.find();
-		return StandardType.valueOf(matcher.group(2));
+		return matcher.group(2);
 	}
 	
-	public static boolean isStringType(final String variableName)
+	public static PlaybookVariableType extractVariableType(final String variable)
 	{
-		return StandardType.String.equals(extractVariableType(variableName));
+		//make sure this is a variable
+		if (!isVariable(variable))
+		{
+			throw new IllegalArgumentException(variable + " is not a valid variable");
+		}
+		
+		Matcher matcher = VARIABLE_PATTERN.matcher(variable);
+		matcher.find();
+		return PlaybookVariableType.valueOf(matcher.group(3));
 	}
 	
-	public static boolean isStringArrayType(final String variableName)
+	public static boolean isStringType(final String variable)
 	{
-		return StandardType.StringArray.equals(extractVariableType(variableName));
+		return PlaybookVariableType.String.equals(extractVariableType(variable));
 	}
 	
-	public static boolean isBinaryType(final String variableName)
+	public static boolean isStringArrayType(final String variable)
 	{
-		return StandardType.Binary.equals(extractVariableType(variableName));
+		return PlaybookVariableType.StringArray.equals(extractVariableType(variable));
 	}
 	
-	public static boolean isBinaryArrayType(final String variableName)
+	public static boolean isBinaryType(final String variable)
 	{
-		return StandardType.BinaryArray.equals(extractVariableType(variableName));
+		return PlaybookVariableType.Binary.equals(extractVariableType(variable));
 	}
 	
-	public static boolean isKeyValueType(final String variableName)
+	public static boolean isBinaryArrayType(final String variable)
 	{
-		return StandardType.KeyValue.equals(extractVariableType(variableName));
+		return PlaybookVariableType.BinaryArray.equals(extractVariableType(variable));
 	}
 	
-	public static boolean isKeyValueArrayType(final String variableName)
+	public static boolean isKeyValueType(final String variable)
 	{
-		return StandardType.KeyValueArray.equals(extractVariableType(variableName));
+		return PlaybookVariableType.KeyValue.equals(extractVariableType(variable));
 	}
 	
-	public static boolean isTCEntityType(final String variableName)
+	public static boolean isKeyValueArrayType(final String variable)
 	{
-		return StandardType.TCEntity.equals(extractVariableType(variableName));
+		return PlaybookVariableType.KeyValueArray.equals(extractVariableType(variable));
 	}
 	
-	public static boolean isTCEntityArrayType(final String variableName)
+	public static boolean isTCEntityType(final String variable)
 	{
-		return StandardType.TCEntityArray.equals(extractVariableType(variableName));
+		return PlaybookVariableType.TCEntity.equals(extractVariableType(variable));
+	}
+	
+	public static boolean isTCEntityArrayType(final String variable)
+	{
+		return PlaybookVariableType.TCEntityArray.equals(extractVariableType(variable));
 	}
 }

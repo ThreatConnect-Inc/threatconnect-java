@@ -3,6 +3,7 @@ package com.threatconnect.apps.playbooks.test.orc;
 import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
 import com.threatconnect.apps.playbooks.test.db.EmbeddedMapDBService;
 import com.threatconnect.sdk.addons.util.config.install.PlaybookOutputVariable;
+import com.threatconnect.sdk.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.sdk.playbooks.app.PlaybooksApp;
 import com.threatconnect.sdk.playbooks.content.ContentService;
 
@@ -24,8 +25,8 @@ public class PlaybooksOrchestration
 	private POResult onSuccess;
 	private POResult onFailure;
 	
-	//holds the list of output params
-	private final Set<String> outputParams;
+	//holds the list of output variables
+	private final Set<String> outputVariables;
 	
 	//holds the set of all input params
 	private final Map<String, String> inputParams;
@@ -42,7 +43,7 @@ public class PlaybooksOrchestration
 		this.playbookConfig = playbookConfig;
 		this.builder = builder;
 		this.parent = parent;
-		this.outputParams = new HashSet<String>();
+		this.outputVariables = new HashSet<String>();
 		this.inputParams = new HashMap<String, String>();
 		this.contentService = new ContentService(new EmbeddedMapDBService());
 		
@@ -70,14 +71,11 @@ public class PlaybooksOrchestration
 		return onFailure;
 	}
 	
-	public void addOutputParam(final String... outputVariables)
+	public void addOutputParam(final String outputVariable, final PlaybookVariableType type)
 	{
-		//for each of the output variables
-		for (String outputVariable : outputVariables)
-		{
-			//validate that this is a real output param and add it to the set
-			outputParams.add(playbookConfig.getOutputVariable(outputVariable).getName());
-		}
+		//retrieve this variable
+		String variable = playbookConfig.createVariableForOutputVariable(outputVariable, type);
+		outputVariables.add(variable);
 	}
 	
 	public void addAllOutputParams()
@@ -85,14 +83,14 @@ public class PlaybooksOrchestration
 		//for each of the output variables
 		for (PlaybookOutputVariable outputVariable : playbookConfig.getAllOutputVariables())
 		{
-			//add it to the set
-			outputParams.add(outputVariable.getName());
+			//add this output param
+			addOutputParam(outputVariable.getName(), outputVariable.getType());
 		}
 	}
 	
-	public Set<String> getOutputParams()
+	public Set<String> getOutputVariables()
 	{
-		return outputParams;
+		return outputVariables;
 	}
 	
 	public PlaybooksOrchestrationBuilder getPlaybooksOrchestrationBuilder()
@@ -111,13 +109,13 @@ public class PlaybooksOrchestration
 		return builder.build();
 	}
 	
-	public String getVariableForOutputVariable(final String param)
+	public String getVariableForOutputVariable(final String param, final PlaybookVariableType type)
 	{
 		//retrieve this variable
-		String variable = playbookConfig.createVariableForOutputVariable(param);
+		String variable = playbookConfig.createVariableForOutputVariable(param, type);
 		
 		//since this param has been requested, make sure it is added to the out params
-		addOutputParam(param);
+		addOutputParam(param, type);
 		
 		return variable;
 	}

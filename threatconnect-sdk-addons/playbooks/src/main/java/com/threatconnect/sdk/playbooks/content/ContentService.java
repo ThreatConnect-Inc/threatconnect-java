@@ -1,5 +1,6 @@
 package com.threatconnect.sdk.playbooks.content;
 
+import com.threatconnect.sdk.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.sdk.playbooks.content.accumulator.ContentAccumulator;
 import com.threatconnect.sdk.playbooks.content.accumulator.ContentException;
 import com.threatconnect.sdk.playbooks.content.accumulator.StringAccumulator;
@@ -41,15 +42,15 @@ public class ContentService
 		this.dbService = dbService;
 		
 		this.stringAccumulator = new StringAccumulator(dbService);
-		this.stringListAccumulator = new ContentAccumulator<List<String>>(dbService, StandardType.StringArray, new
+		this.stringListAccumulator = new ContentAccumulator<List<String>>(dbService, PlaybookVariableType.StringArray, new
 			StringListConverter());
 		this.tcEntityAccumulator =
-			new ContentAccumulator<TCEntity>(dbService, StandardType.TCEntity, new TCEntityConverter());
-		this.tcEntityListAccumulator = new ContentAccumulator<List<TCEntity>>(dbService, StandardType.TCEntityArray,
+			new ContentAccumulator<TCEntity>(dbService, PlaybookVariableType.TCEntity, new TCEntityConverter());
+		this.tcEntityListAccumulator = new ContentAccumulator<List<TCEntity>>(dbService, PlaybookVariableType.TCEntityArray,
 			new TCEntityListConverter());
-		this.binaryAccumulator = new ContentAccumulator<byte[]>(dbService, StandardType.Binary, new
+		this.binaryAccumulator = new ContentAccumulator<byte[]>(dbService, PlaybookVariableType.Binary, new
 			ByteArrayConverter());
-		this.binaryArrayAccumulator = new ContentAccumulator<byte[][]>(dbService, StandardType.BinaryArray, new
+		this.binaryArrayAccumulator = new ContentAccumulator<byte[][]>(dbService, PlaybookVariableType.BinaryArray, new
 			ByteMatrixConverter());
 		this.stringKeyValueContentAccumulator = new StringKeyValueAccumulator(dbService);
 		this.stringKeyValueArrayContentAccumulator = new StringKeyValueArrayAccumulator(dbService);

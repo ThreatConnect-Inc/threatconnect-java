@@ -1,12 +1,12 @@
 package com.threatconnect.apps.playbooks.test.orc;
 
 import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
+import com.threatconnect.sdk.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.sdk.app.AppConfig;
 import com.threatconnect.sdk.app.ExitStatus;
 import com.threatconnect.sdk.playbooks.app.PlaybooksApp;
 import com.threatconnect.sdk.playbooks.app.PlaybooksAppConfig;
 import com.threatconnect.sdk.playbooks.content.ContentService;
-import com.threatconnect.sdk.playbooks.content.StandardType;
 import com.threatconnect.sdk.playbooks.content.accumulator.ContentException;
 import com.threatconnect.sdk.playbooks.db.DBReadException;
 import com.threatconnect.sdk.playbooks.db.DBService;
@@ -111,18 +111,9 @@ public class PlaybookRunner implements Runnable
 		throws ContentException
 	{
 		//add all of the output params
-		final String paramOutVars = StringUtils.join(playbooksOrchestration.getOutputParams(), ",");
+		final String paramOutVars = StringUtils.join(playbooksOrchestration.getOutputVariables(), ",");
 		AppConfig.getInstance().set(PlaybooksAppConfig.PARAM_OUT_VARS, paramOutVars);
 		logger.debug("Setting \"{}\":\"{}\"", PlaybooksAppConfig.PARAM_OUT_VARS, paramOutVars);
-		
-		//for each of the outputs
-		for (String outputVar : playbooksOrchestration.getOutputParams())
-		{
-			final String variable =
-				playbooksOrchestration.getPlaybookConfig().createVariableForOutputVariable(outputVar);
-			AppConfig.getInstance().set(outputVar, variable);
-			logger.debug("Setting Output Variable \"{}\":\"{}\"", outputVar, variable);
-		}
 		
 		//for each of the input params
 		for (Map.Entry<String, String> inputParam : playbooksOrchestration.getInputParams().entrySet())
@@ -140,7 +131,7 @@ public class PlaybookRunner implements Runnable
 		final Map.Entry<String, String> entry) throws ContentException
 	{
 		final String variable = entry.getValue();
-		StandardType type = PlaybooksVariableUtil.extractVariableType(variable);
+		PlaybookVariableType type = PlaybooksVariableUtil.extractVariableType(variable);
 		
 		//retrieve the source and target content services for copying the data
 		ContentService source = playbooksOrchestration.getContentService();
@@ -249,18 +240,17 @@ public class PlaybookRunner implements Runnable
 		DBService dbService = playbooksApp.getContentService().getDbService();
 		
 		//for each of the outputs
-		for (String outputVar : playbooksOrchestration.getOutputParams())
+		for (String variable : playbooksOrchestration.getOutputVariables())
 		{
 			try
 			{
 				//verify that these output are not null
-				final String variable = playbooksApp.getAppConfig().getString(outputVar);
 				final byte[] value = dbService.getValue(variable);
 				Assert.assertNotNull(value);
 			}
 			catch (AssertionError e)
 			{
-				logger.warn("Output Variable \"" + outputVar + "\" was expected but null. Was this intended?");
+				logger.warn("Output Variable \"" + variable + "\" was expected but null. Was this intended?");
 			}
 			catch (DBReadException e)
 			{
@@ -275,37 +265,35 @@ public class PlaybookRunner implements Runnable
 		ContentService contentService = playbooksApp.getContentService();
 		
 		//for each of the outputs
-		for (String outputVar : playbooksOrchestration.getOutputParams())
+		for (String outputVariable : playbooksOrchestration.getOutputVariables())
 		{
-			final String variable =
-				playbooksOrchestration.getPlaybookConfig().createVariableForOutputVariable(outputVar);
-			StandardType type = PlaybooksVariableUtil.extractVariableType(variable);
+			PlaybookVariableType type = PlaybooksVariableUtil.extractVariableType(outputVariable);
 			
 			switch (type)
 			{
 				case String:
-					logger.debug("\"{}\" = \"{}\"", variable, contentService.readString(variable));
+					logger.debug("\"{}\" = \"{}\"", outputVariable, contentService.readString(outputVariable));
 					break;
 				case StringArray:
-					logger.debug("\"{}\" = \"{}\"", variable, contentService.readStringList(variable));
+					logger.debug("\"{}\" = \"{}\"", outputVariable, contentService.readStringList(outputVariable));
 					break;
 				case TCEntity:
-					logger.debug("\"{}\" = \"{}\"", variable, contentService.readTCEntity(variable));
+					logger.debug("\"{}\" = \"{}\"", outputVariable, contentService.readTCEntity(outputVariable));
 					break;
 				case TCEntityArray:
-					logger.debug("\"{}\" = \"{}\"", variable, contentService.readTCEntityList(variable));
+					logger.debug("\"{}\" = \"{}\"", outputVariable, contentService.readTCEntityList(outputVariable));
 					break;
 				case Binary:
-					logger.debug("\"{}\" = \"{}\"", variable, contentService.readBinary(variable));
+					logger.debug("\"{}\" = \"{}\"", outputVariable, contentService.readBinary(outputVariable));
 					break;
 				case BinaryArray:
-					logger.debug("\"{}\" = \"{}\"", variable, contentService.readBinaryArray(variable));
+					logger.debug("\"{}\" = \"{}\"", outputVariable, contentService.readBinaryArray(outputVariable));
 					break;
 				case KeyValue:
-					logger.debug("\"{}\" = \"{}\"", variable, contentService.readKeyValue(variable));
+					logger.debug("\"{}\" = \"{}\"", outputVariable, contentService.readKeyValue(outputVariable));
 					break;
 				case KeyValueArray:
-					logger.debug("\"{}\" = \"{}\"", variable, contentService.readKeyValueArray(variable));
+					logger.debug("\"{}\" = \"{}\"", outputVariable, contentService.readKeyValueArray(outputVariable));
 					break;
 			}
 		}

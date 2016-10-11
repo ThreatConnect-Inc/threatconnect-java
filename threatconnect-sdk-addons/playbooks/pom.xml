@@ -21,6 +21,11 @@
 			<artifactId>threatconnect-sdk</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.threatconnect.sdk.addons</groupId>
+			<artifactId>util</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>

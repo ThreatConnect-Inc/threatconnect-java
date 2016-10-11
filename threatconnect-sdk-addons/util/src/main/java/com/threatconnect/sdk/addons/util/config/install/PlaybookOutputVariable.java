@@ -23,9 +23,9 @@ public class PlaybookOutputVariable
 		return getAsString(NAME);
 	}
 	
-	public String getType()
+	public PlaybookVariableType getType()
 	{
-		return getAsString(TYPE);
+		return PlaybookVariableType.valueOf(getAsString(TYPE));
 	}
 	
 	private String getAsString(final String... paths)

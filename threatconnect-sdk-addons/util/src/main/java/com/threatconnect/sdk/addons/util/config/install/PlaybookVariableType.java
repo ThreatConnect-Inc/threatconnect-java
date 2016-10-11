@@ -1,9 +1,9 @@
-package com.threatconnect.sdk.playbooks.content;
+package com.threatconnect.sdk.addons.util.config.install;
 
 /**
  * @author Greg Marut
  */
-public enum StandardType
+public enum PlaybookVariableType
 {
 	String,
 	StringArray,

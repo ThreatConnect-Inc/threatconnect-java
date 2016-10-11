@@ -3,7 +3,7 @@ package com.threatconnect.apps.playbooks.test.orc;
 import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
 import com.threatconnect.sdk.playbooks.app.PlaybooksApp;
 import com.threatconnect.sdk.playbooks.content.ContentService;
-import com.threatconnect.sdk.playbooks.content.StandardType;
+import com.threatconnect.sdk.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.sdk.playbooks.content.accumulator.ContentException;
 import com.threatconnect.sdk.playbooks.content.entity.StringKeyValue;
 import com.threatconnect.sdk.playbooks.content.entity.TCEntity;
@@ -30,7 +30,7 @@ public class WithInput
 		if (!PlaybooksVariableUtil.isVariable(value))
 		{
 			//store this object in the local content service
-			final String variable = getPlaybookConfig().createVariableForInputParam(param, StandardType.String);
+			final String variable = getPlaybookConfig().createVariableForInputParam(param, PlaybookVariableType.String);
 			getContentService().writeString(variable, value);
 			getInputParams().put(param, variable);
 		}
@@ -46,7 +46,7 @@ public class WithInput
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
-			Assert.assertEquals(StandardType.String, PlaybooksVariableUtil.extractVariableType(value));
+			Assert.assertEquals(PlaybookVariableType.String, PlaybooksVariableUtil.extractVariableType(value));
 			getInputParams().put(param, value);
 		}
 		else
@@ -61,7 +61,7 @@ public class WithInput
 		throws ContentException
 	{
 		//store this object in the local content service
-		final String variable = getPlaybookConfig().createVariableForInputParam(param, StandardType.StringArray);
+		final String variable = getPlaybookConfig().createVariableForInputParam(param, PlaybookVariableType.StringArray);
 		getContentService().writeStringList(variable, value);
 		getInputParams().put(param, variable);
 		
@@ -72,7 +72,7 @@ public class WithInput
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
-			Assert.assertEquals(StandardType.StringArray, PlaybooksVariableUtil.extractVariableType(value));
+			Assert.assertEquals(PlaybookVariableType.StringArray, PlaybooksVariableUtil.extractVariableType(value));
 			getInputParams().put(param, value);
 		}
 		else
@@ -86,7 +86,7 @@ public class WithInput
 	public WithInput asBinary(final String param, final byte[] value) throws ContentException
 	{
 		//store this object in the local content service
-		final String variable = getPlaybookConfig().createVariableForInputParam(param, StandardType.Binary);
+		final String variable = getPlaybookConfig().createVariableForInputParam(param, PlaybookVariableType.Binary);
 		getContentService().writeBinary(variable, value);
 		getInputParams().put(param, variable);
 		
@@ -97,7 +97,7 @@ public class WithInput
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
-			Assert.assertEquals(StandardType.Binary, PlaybooksVariableUtil.extractVariableType(value));
+			Assert.assertEquals(PlaybookVariableType.Binary, PlaybooksVariableUtil.extractVariableType(value));
 			getInputParams().put(param, value);
 		}
 		else
@@ -111,7 +111,7 @@ public class WithInput
 	public WithInput asBinaryArray(final String param, final byte[][] value) throws ContentException
 	{
 		//store this object in the local content service
-		final String variable = getPlaybookConfig().createVariableForInputParam(param, StandardType.BinaryArray);
+		final String variable = getPlaybookConfig().createVariableForInputParam(param, PlaybookVariableType.BinaryArray);
 		getContentService().writeBinaryArray(variable, value);
 		getInputParams().put(param, variable);
 		
@@ -122,7 +122,7 @@ public class WithInput
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
-			Assert.assertEquals(StandardType.BinaryArray, PlaybooksVariableUtil.extractVariableType(value));
+			Assert.assertEquals(PlaybookVariableType.BinaryArray, PlaybooksVariableUtil.extractVariableType(value));
 			getInputParams().put(param, value);
 		}
 		else
@@ -137,7 +137,7 @@ public class WithInput
 		throws ContentException
 	{
 		//store this object in the local content service
-		final String variable = getPlaybookConfig().createVariableForInputParam(param, StandardType.KeyValue);
+		final String variable = getPlaybookConfig().createVariableForInputParam(param, PlaybookVariableType.KeyValue);
 		getContentService().writeKeyValue(variable, value);
 		getInputParams().put(param, variable);
 		
@@ -148,7 +148,7 @@ public class WithInput
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
-			Assert.assertEquals(StandardType.KeyValue, PlaybooksVariableUtil.extractVariableType(value));
+			Assert.assertEquals(PlaybookVariableType.KeyValue, PlaybooksVariableUtil.extractVariableType(value));
 			getInputParams().put(param, value);
 		}
 		else
@@ -163,7 +163,7 @@ public class WithInput
 		throws ContentException
 	{
 		//store this object in the local content service
-		final String variable = getPlaybookConfig().createVariableForInputParam(param, StandardType.KeyValueArray);
+		final String variable = getPlaybookConfig().createVariableForInputParam(param, PlaybookVariableType.KeyValueArray);
 		getContentService().writeKeyValueArray(variable, value);
 		getInputParams().put(param, variable);
 		
@@ -175,7 +175,7 @@ public class WithInput
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
-			Assert.assertEquals(StandardType.KeyValueArray, PlaybooksVariableUtil.extractVariableType(value));
+			Assert.assertEquals(PlaybookVariableType.KeyValueArray, PlaybooksVariableUtil.extractVariableType(value));
 			getInputParams().put(param, value);
 		}
 		else
@@ -189,7 +189,7 @@ public class WithInput
 	public WithInput asTCEntity(final String param, final TCEntity value) throws ContentException
 	{
 		//store this object in the local content service
-		final String variable = getPlaybookConfig().createVariableForInputParam(param, StandardType.TCEntity);
+		final String variable = getPlaybookConfig().createVariableForInputParam(param, PlaybookVariableType.TCEntity);
 		getContentService().writeTCEntity(variable, value);
 		getInputParams().put(param, variable);
 		
@@ -200,7 +200,7 @@ public class WithInput
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
-			Assert.assertEquals(StandardType.TCEntity, PlaybooksVariableUtil.extractVariableType(value));
+			Assert.assertEquals(PlaybookVariableType.TCEntity, PlaybooksVariableUtil.extractVariableType(value));
 			getInputParams().put(param, value);
 		}
 		else
@@ -215,7 +215,7 @@ public class WithInput
 		throws ContentException
 	{
 		//store this object in the local content service
-		final String variable = getPlaybookConfig().createVariableForInputParam(param, StandardType.TCEntityArray);
+		final String variable = getPlaybookConfig().createVariableForInputParam(param, PlaybookVariableType.TCEntityArray);
 		getContentService().writeTCEntityList(variable, value);
 		getInputParams().put(param, variable);
 		
@@ -227,7 +227,7 @@ public class WithInput
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
-			Assert.assertEquals(StandardType.TCEntityArray, PlaybooksVariableUtil.extractVariableType(value));
+			Assert.assertEquals(PlaybookVariableType.TCEntityArray, PlaybooksVariableUtil.extractVariableType(value));
 			getInputParams().put(param, value);
 		}
 		else
@@ -239,7 +239,7 @@ public class WithInput
 	}
 	
 	public WithInput fromLastRunUpstreamApp(final String param, final Class<? extends PlaybooksApp> playbookAppClass,
-		final String output)
+		final String output, final PlaybookVariableType outputType)
 	{
 		//find the last run upstream app with this playbooks class
 		PlaybooksOrchestration upstream = playbooksOrchestration.findLastRunUpsteamApp(playbookAppClass);
@@ -252,7 +252,7 @@ public class WithInput
 		}
 		
 		//retrieve the output from the upstream app
-		final String outputVariable = upstream.getVariableForOutputVariable(output);
+		final String outputVariable = upstream.getVariableForOutputVariable(output, outputType);
 		
 		//add this to the params map
 		getInputParams().put(param, outputVariable);

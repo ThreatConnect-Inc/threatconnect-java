@@ -1,6 +1,6 @@
 package com.threatconnect.sdk.playbooks.content.accumulator;
 
-import com.threatconnect.sdk.playbooks.content.StandardType;
+import com.threatconnect.sdk.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.sdk.playbooks.content.converter.StringConverter;
 import com.threatconnect.sdk.playbooks.db.DBService;
 import com.threatconnect.sdk.playbooks.util.PlaybooksVariableUtil;
@@ -20,7 +20,7 @@ public class StringAccumulator extends ContentAccumulator<String>
 	
 	public StringAccumulator(DBService dbService)
 	{
-		super(dbService, StandardType.String, new StringConverter());
+		super(dbService, PlaybookVariableType.String, new StringConverter());
 	}
 	
 	@Override

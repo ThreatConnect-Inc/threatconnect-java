@@ -1,5 +1,6 @@
 package com.threatconnect.sdk.playbooks.app;
 
+import com.threatconnect.sdk.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.sdk.app.App;
 import com.threatconnect.sdk.app.AppConfig;
 import com.threatconnect.sdk.app.ExitStatus;
@@ -9,6 +10,7 @@ import com.threatconnect.sdk.playbooks.content.entity.StringKeyValue;
 import com.threatconnect.sdk.playbooks.content.entity.TCEntity;
 import com.threatconnect.sdk.playbooks.db.DBService;
 import com.threatconnect.sdk.playbooks.db.DBServiceFactory;
+import com.threatconnect.sdk.playbooks.util.PlaybooksVariableUtil;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -26,8 +28,8 @@ public abstract class PlaybooksApp extends App
 	//holds the content service object for reading and writing content
 	private final ContentService contentService;
 	
-	//holds the list of output parameters for this app
-	private Set<String> outputParams;
+	//holds the list of output variables for this app
+	private Set<String> outputVariables;
 	
 	public PlaybooksApp()
 	{
@@ -56,16 +58,16 @@ public abstract class PlaybooksApp extends App
 	 *
 	 * @return the list of output params that this app is expected to write
 	 */
-	protected final Set<String> getOutputParams()
+	protected final Set<String> getOutputVariables()
 	{
 		//check to see if the list of output params is null
-		if (null == outputParams)
+		if (null == outputVariables)
 		{
 			//acquire a thread lock on this object to prevent this list from being built twice
 			synchronized (this)
 			{
 				//now that a lock is in place, check again for null
-				if (null == outputParams)
+				if (null == outputVariables)
 				{
 					//read the output params that were passed to this app
 					String outputVars = PlaybooksAppConfig.getInstance().getOutputVars();
@@ -75,40 +77,55 @@ public abstract class PlaybooksApp extends App
 					{
 						//split the output params by the delimiter and all all of them to the result
 						String[] outputParamsArray = outputVars.split(Pattern.quote(OUTPUT_PARAMS_DELIM));
-						outputParams = new HashSet<String>(Arrays.asList(outputParamsArray));
+						outputVariables = new HashSet<String>(Arrays.asList(outputParamsArray));
 					}
 					else
 					{
-						outputParams = new HashSet<String>();
+						outputVariables = new HashSet<String>();
 					}
 				}
 			}
 		}
 		
-		return outputParams;
+		return outputVariables;
 	}
 	
 	/**
 	 * Checks to see if a specific output param is expected to be written by this app
 	 *
 	 * @param outputParam the output param to check
+	 * @param type        the output type of the output param
 	 * @return whether or not this app is expected to write this output parameter
 	 */
-	protected final boolean isOutputParamExpected(final String outputParam)
+	protected final boolean isOutputParamExpected(final String outputParam, final PlaybookVariableType type)
 	{
-		//check to see if this output is in the list
-		if (getOutputParams().contains(outputParam))
+		return null != findOutputVariable(outputParam, type);
+	}
+	
+	/**
+	 * Checks the output variables list looking for a specific name/type
+	 *
+	 * @param outputParam the output param to check
+	 * @param type        the output type of the output param
+	 * @return the database variable key
+	 */
+	protected final String findOutputVariable(final String outputParam, final PlaybookVariableType type)
+	{
+		//for each of the output params
+		for (String outputVariable : getOutputVariables())
 		{
-			return true;
-		}
-		else
-		{
-			//lookup the output param and get it's DB key
-			final String key = getAppConfig().getString(outputParam);
+			final String variableName = PlaybooksVariableUtil.extractVariableName(outputVariable);
+			final PlaybookVariableType variableType = PlaybooksVariableUtil.extractVariableType(outputVariable);
 			
-			//check to see if this db key is expected as output
-			return null != key && getOutputParams().contains(key);
+			//check to see if this output param was found in one of the variables
+			if (variableName.equals(outputParam) && variableType.equals(type))
+			{
+				return outputVariable;
+			}
 		}
+		
+		//no output variable was found with this name/type
+		return null;
 	}
 	
 	/**
@@ -131,7 +148,7 @@ public abstract class PlaybooksApp extends App
 	 */
 	public final void writeStringContent(final String param, final String value) throws ContentException
 	{
-		getContentService().writeString(getAppConfig().getString(param), value);
+		getContentService().writeString(findOutputVariable(param, PlaybookVariableType.String), value);
 	}
 	
 	/**
@@ -155,7 +172,7 @@ public abstract class PlaybooksApp extends App
 	 */
 	public final void writeStringListContent(final String param, final List<String> values) throws ContentException
 	{
-		getContentService().writeStringList(getAppConfig().getString(param), values);
+		getContentService().writeStringList(findOutputVariable(param, PlaybookVariableType.StringArray), values);
 	}
 	
 	/**
@@ -178,7 +195,7 @@ public abstract class PlaybooksApp extends App
 	 */
 	public final void writeBinaryContent(final String param, final byte[] value) throws ContentException
 	{
-		getContentService().writeBinary(getAppConfig().getString(param), value);
+		getContentService().writeBinary(findOutputVariable(param, PlaybookVariableType.Binary), value);
 	}
 	
 	/**
@@ -201,7 +218,7 @@ public abstract class PlaybooksApp extends App
 	 */
 	public final void writeBinaryArrayContent(final String param, final byte[][] value) throws ContentException
 	{
-		getContentService().writeBinaryArray(getAppConfig().getString(param), value);
+		getContentService().writeBinaryArray(findOutputVariable(param, PlaybookVariableType.BinaryArray), value);
 	}
 	
 	/**
@@ -224,7 +241,7 @@ public abstract class PlaybooksApp extends App
 	 */
 	public final void writeKeyValueContent(final String param, final StringKeyValue value) throws ContentException
 	{
-		getContentService().writeKeyValue(getAppConfig().getString(param), value);
+		getContentService().writeKeyValue(findOutputVariable(param, PlaybookVariableType.KeyValue), value);
 	}
 	
 	/**
@@ -248,7 +265,7 @@ public abstract class PlaybooksApp extends App
 	public final void writeKeyValueArrayContent(final String param, final List<StringKeyValue> value)
 		throws ContentException
 	{
-		getContentService().writeKeyValueArray(getAppConfig().getString(param), value);
+		getContentService().writeKeyValueArray(findOutputVariable(param, PlaybookVariableType.KeyValueArray), value);
 	}
 	
 	/**
@@ -271,7 +288,7 @@ public abstract class PlaybooksApp extends App
 	 */
 	public final void writeTCEntityContent(final String param, final TCEntity value) throws ContentException
 	{
-		getContentService().writeTCEntity(getAppConfig().getString(param), value);
+		getContentService().writeTCEntity(findOutputVariable(param, PlaybookVariableType.TCEntity), value);
 	}
 	
 	/**
@@ -294,7 +311,7 @@ public abstract class PlaybooksApp extends App
 	 */
 	public final void writeTCEntityListContent(final String param, final List<TCEntity> value) throws ContentException
 	{
-		getContentService().writeTCEntityList(getAppConfig().getString(param), value);
+		getContentService().writeTCEntityList(findOutputVariable(param, PlaybookVariableType.TCEntityArray), value);
 	}
 	
 	/**
