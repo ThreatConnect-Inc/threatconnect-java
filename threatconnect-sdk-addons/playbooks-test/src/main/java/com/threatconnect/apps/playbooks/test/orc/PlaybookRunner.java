@@ -1,6 +1,9 @@
 package com.threatconnect.apps.playbooks.test.orc;
 
 import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
+import com.threatconnect.apps.playbooks.test.orc.test.TestFailureException;
+import com.threatconnect.apps.playbooks.test.orc.test.Testable;
+import com.threatconnect.apps.playbooks.test.util.ContentServiceUtil;
 import com.threatconnect.sdk.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.sdk.app.AppConfig;
 import com.threatconnect.sdk.app.ExitStatus;
@@ -16,6 +19,7 @@ import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,6 +70,14 @@ public class PlaybookRunner implements Runnable
 				
 				logger.info("{} finished successfully", playbookConfig.getPlaybookAppClass());
 				
+				//check to see if there are tests to run
+				if (null != playbooksOrchestration.getOnSuccess() && !playbooksOrchestration.getOnSuccess()
+					.getTests().isEmpty())
+				{
+					logger.info("Running tests for {}", playbookConfig.getPlaybookAppClass());
+					runTests(playbooksOrchestration.getOnSuccess().getTests(), playbooksApp);
+				}
+				
 				//check to see if this runner has an app to run
 				if (null != playbooksOrchestration.getOnSuccess() && null != playbooksOrchestration.getOnSuccess()
 					.getRunApp())
@@ -84,6 +96,14 @@ public class PlaybookRunner implements Runnable
 			else
 			{
 				logger.info("{} finished failed", playbookConfig.getPlaybookAppClass());
+				
+				//check to see if there are tests to run
+				if (null != playbooksOrchestration.getOnFailure() && !playbooksOrchestration.getOnFailure()
+					.getTests().isEmpty())
+				{
+					logger.info("Running tests for {}", playbookConfig.getPlaybookAppClass());
+					runTests(playbooksOrchestration.getOnFailure().getTests(), playbooksApp);
+				}
 				
 				//check to see if this runner has an app to run
 				if (null != playbooksOrchestration.getOnFailure() && null != playbooksOrchestration.getOnFailure()
@@ -114,6 +134,14 @@ public class PlaybookRunner implements Runnable
 		final String paramOutVars = StringUtils.join(playbooksOrchestration.getOutputVariables(), ",");
 		AppConfig.getInstance().set(PlaybooksAppConfig.PARAM_OUT_VARS, paramOutVars);
 		logger.debug("Setting \"{}\":\"{}\"", PlaybooksAppConfig.PARAM_OUT_VARS, paramOutVars);
+		
+		//for each of the app params
+		for (Map.Entry<String, String> appParams : playbooksOrchestration.getAppParams().entrySet())
+		{
+			//set this app param
+			AppConfig.getInstance().set(appParams.getKey(), appParams.getValue());
+			logger.debug("Setting App Param \"{}\":\"{}\"", appParams.getKey(), appParams.getValue());
+		}
 		
 		//for each of the input params
 		for (Map.Entry<String, String> inputParam : playbooksOrchestration.getInputParams().entrySet())
@@ -259,6 +287,23 @@ public class PlaybookRunner implements Runnable
 		}
 	}
 	
+	private void runTests(final List<Testable> tests, final PlaybooksApp playbooksApp)
+	{
+		try
+		{
+			//for each test
+			for (Testable test : tests)
+			{
+				//run the test
+				test.run(playbooksApp);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new TestFailureException(e);
+		}
+	}
+	
 	private void logOutputs(final PlaybooksOrchestration playbooksOrchestration, final PlaybooksApp playbooksApp)
 		throws ContentException
 	{
@@ -267,35 +312,7 @@ public class PlaybookRunner implements Runnable
 		//for each of the outputs
 		for (String outputVariable : playbooksOrchestration.getOutputVariables())
 		{
-			PlaybookVariableType type = PlaybooksVariableUtil.extractVariableType(outputVariable);
-			
-			switch (type)
-			{
-				case String:
-					logger.debug("\"{}\" = \"{}\"", outputVariable, contentService.readString(outputVariable));
-					break;
-				case StringArray:
-					logger.debug("\"{}\" = \"{}\"", outputVariable, contentService.readStringList(outputVariable));
-					break;
-				case TCEntity:
-					logger.debug("\"{}\" = \"{}\"", outputVariable, contentService.readTCEntity(outputVariable));
-					break;
-				case TCEntityArray:
-					logger.debug("\"{}\" = \"{}\"", outputVariable, contentService.readTCEntityList(outputVariable));
-					break;
-				case Binary:
-					logger.debug("\"{}\" = \"{}\"", outputVariable, contentService.readBinary(outputVariable));
-					break;
-				case BinaryArray:
-					logger.debug("\"{}\" = \"{}\"", outputVariable, contentService.readBinaryArray(outputVariable));
-					break;
-				case KeyValue:
-					logger.debug("\"{}\" = \"{}\"", outputVariable, contentService.readKeyValue(outputVariable));
-					break;
-				case KeyValueArray:
-					logger.debug("\"{}\" = \"{}\"", outputVariable, contentService.readKeyValueArray(outputVariable));
-					break;
-			}
+			logger.debug("\"{}\" = \"{}\"", outputVariable, ContentServiceUtil.read(outputVariable, contentService));
 		}
 	}
 }

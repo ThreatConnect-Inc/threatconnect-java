@@ -16,13 +16,11 @@ import java.util.Map;
 /**
  * @author Greg Marut
  */
-public class WithInput
+public class WithInput extends AbstractThen<PlaybooksOrchestration>
 {
-	private final PlaybooksOrchestration playbooksOrchestration;
-	
 	WithInput(final PlaybooksOrchestration playbooksOrchestration)
 	{
-		this.playbooksOrchestration = playbooksOrchestration;
+		super(playbooksOrchestration);
 	}
 	
 	public WithInput asString(final String inputParam, final String value) throws ContentException
@@ -260,7 +258,7 @@ public class WithInput
 		final String outputParam, final PlaybookVariableType outputType)
 	{
 		//find the last run upstream app with this playbooks class
-		PlaybooksOrchestration upstream = playbooksOrchestration.findLastRunUpsteamApp(upstreamPlaybookAppClass);
+		PlaybooksOrchestration upstream = getThen().findLastRunUpsteamApp(upstreamPlaybookAppClass);
 		
 		//make sure the upstream app was found
 		if (null == upstream)
@@ -278,23 +276,18 @@ public class WithInput
 		return this;
 	}
 	
-	public PlaybooksOrchestration then()
-	{
-		return playbooksOrchestration;
-	}
-	
 	private PlaybookConfig getPlaybookConfig()
 	{
-		return playbooksOrchestration.getPlaybookConfig();
+		return getThen().getPlaybookConfig();
 	}
 	
 	private Map<String, String> getInputParams()
 	{
-		return playbooksOrchestration.getInputParams();
+		return getThen().getInputParams();
 	}
 	
 	private ContentService getContentService()
 	{
-		return playbooksOrchestration.getContentService();
+		return getThen().getContentService();
 	}
 }

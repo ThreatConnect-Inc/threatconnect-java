@@ -30,6 +30,8 @@ public class PlaybooksOrchestration
 	
 	//holds the set of all input params
 	private final Map<String, String> inputParams;
+	private final Map<String, String> appParams;
+	
 	private final ContentService contentService;
 	
 	PlaybooksOrchestration(final PlaybookConfig playbookConfig, final PlaybooksOrchestrationBuilder builder)
@@ -45,6 +47,7 @@ public class PlaybooksOrchestration
 		this.parent = parent;
 		this.outputVariables = new HashSet<String>();
 		this.inputParams = new HashMap<String, String>();
+		this.appParams = new HashMap<String, String>();
 		this.contentService = new ContentService(new EmbeddedMapDBService());
 		
 		if (addAllOutputParams)
@@ -132,6 +135,11 @@ public class PlaybooksOrchestration
 		return new WithInput(this);
 	}
 	
+	public WithAppParam withAppParam()
+	{
+		return new WithAppParam(this);
+	}
+	
 	/**
 	 * Searches the chain of PlaybooksOrchestration objects looking for the last run playbook that matches the
 	 * playbookAppClass
@@ -185,6 +193,11 @@ public class PlaybooksOrchestration
 	PlaybookConfig getPlaybookConfig()
 	{
 		return playbookConfig;
+	}
+	
+	Map<String, String> getAppParams()
+	{
+		return appParams;
 	}
 	
 	Map<String, String> getInputParams()
