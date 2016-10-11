@@ -10,9 +10,10 @@ import com.threatconnect.sdk.playbooks.content.entity.TCEntity;
 import com.threatconnect.sdk.playbooks.db.DBService;
 import com.threatconnect.sdk.playbooks.db.DBServiceFactory;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -26,7 +27,7 @@ public abstract class PlaybooksApp extends App
 	private final ContentService contentService;
 	
 	//holds the list of output parameters for this app
-	private List<String> outputParams;
+	private Set<String> outputParams;
 	
 	public PlaybooksApp()
 	{
@@ -55,7 +56,7 @@ public abstract class PlaybooksApp extends App
 	 *
 	 * @return the list of output params that this app is expected to write
 	 */
-	protected final List<String> getOutputParams()
+	protected final Set<String> getOutputParams()
 	{
 		//check to see if the list of output params is null
 		if (null == outputParams)
@@ -74,11 +75,11 @@ public abstract class PlaybooksApp extends App
 					{
 						//split the output params by the delimiter and all all of them to the result
 						String[] outputParamsArray = outputVars.split(Pattern.quote(OUTPUT_PARAMS_DELIM));
-						outputParams = Arrays.asList(outputParamsArray);
+						outputParams = new HashSet<String>(Arrays.asList(outputParamsArray));
 					}
 					else
 					{
-						outputParams = new ArrayList<String>();
+						outputParams = new HashSet<String>();
 					}
 				}
 			}
@@ -95,7 +96,19 @@ public abstract class PlaybooksApp extends App
 	 */
 	protected final boolean isOutputParamExpected(final String outputParam)
 	{
-		return getOutputParams().contains(outputParam);
+		//check to see if this output is in the list
+		if (getOutputParams().contains(outputParam))
+		{
+			return true;
+		}
+		else
+		{
+			//lookup the output param and get it's DB key
+			final String key = getAppConfig().getString(outputParam);
+			
+			//check to see if this db key is expected as output
+			return null != key && getOutputParams().contains(key);
+		}
 	}
 	
 	/**
