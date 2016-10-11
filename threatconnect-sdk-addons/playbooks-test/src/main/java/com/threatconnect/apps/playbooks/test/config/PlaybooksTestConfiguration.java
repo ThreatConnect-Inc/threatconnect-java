@@ -1,8 +1,8 @@
 package com.threatconnect.apps.playbooks.test.config;
 
 import com.threatconnect.apps.playbooks.test.db.EmbeddedMapDBService;
-import com.threatconnect.sdk.addons.util.config.install.InvalidInstallJsonFileException;
 import com.threatconnect.sdk.addons.util.config.install.InstallJson;
+import com.threatconnect.sdk.addons.util.config.install.InvalidInstallJsonFileException;
 import com.threatconnect.sdk.app.App;
 import com.threatconnect.sdk.app.AppConfig;
 import com.threatconnect.sdk.app.AppMain;
@@ -129,17 +129,13 @@ public class PlaybooksTestConfiguration
 				(Class<? extends AppMain>) Class.forName(installJson.getProgramMain());
 			
 			//instantiate this class
-			AppMain appMain = (AppMain) programMainClass.newInstance();
+			AppMain appMain = programMainClass.newInstance();
 			
 			//retrieve the classes that are executed from this main
-			List<Class<? extends App>> classes = appMain.getAppClassesToExecute(AppConfig.getInstance());
+			Class<? extends App> appClass = appMain.getAppClassToExecute(AppConfig.getInstance());
 			
-			//for each of the classes
-			for (Class<? extends App> appClass : classes)
-			{
-				//configure this app
-				configureApp(appClass, installJson);
-			}
+			//configure this app
+			configureApp(appClass, installJson);
 		}
 		catch (ClassNotFoundException e)
 		{
