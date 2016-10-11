@@ -26,8 +26,14 @@ public class POResult
 	
 	public PlaybooksOrchestration runApp(final Class<? extends PlaybooksApp> playbookAppClass)
 	{
+		return runApp(playbookAppClass, true);
+	}
+	
+	public PlaybooksOrchestration runApp(final Class<? extends PlaybooksApp> playbookAppClass,
+		final boolean addAllOutputParams)
+	{
 		return runApp(PlaybooksOrchestrationBuilder
-			.createPlaybookOrchestration(playbookAppClass, builder, playbooksOrchestration));
+			.createPlaybookOrchestration(playbookAppClass, builder, playbooksOrchestration, addAllOutputParams));
 	}
 	
 	PlaybooksOrchestration getRunApp()

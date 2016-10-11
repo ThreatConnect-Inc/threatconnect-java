@@ -34,11 +34,11 @@ public class PlaybooksOrchestration
 	
 	PlaybooksOrchestration(final PlaybookConfig playbookConfig, final PlaybooksOrchestrationBuilder builder)
 	{
-		this(playbookConfig, builder, null);
+		this(playbookConfig, builder, null, true);
 	}
 	
 	PlaybooksOrchestration(final PlaybookConfig playbookConfig, final PlaybooksOrchestrationBuilder builder,
-		final PlaybooksOrchestration parent)
+		final PlaybooksOrchestration parent, final boolean addAllOutputParams)
 	{
 		this.playbookConfig = playbookConfig;
 		this.builder = builder;
@@ -47,8 +47,11 @@ public class PlaybooksOrchestration
 		this.inputParams = new HashMap<String, String>();
 		this.contentService = new ContentService(new EmbeddedMapDBService());
 		
-		//add all output params as the default
-		addAllOutputParams();
+		if (addAllOutputParams)
+		{
+			//add all output params as the default
+			addAllOutputParams();
+		}
 	}
 	
 	public synchronized POResult onSuccess()
@@ -71,14 +74,16 @@ public class PlaybooksOrchestration
 		return onFailure;
 	}
 	
-	public void addOutputParam(final String outputVariable, final PlaybookVariableType type)
+	public PlaybooksOrchestration addOutputParam(final String outputVariable, final PlaybookVariableType type)
 	{
 		//retrieve this variable
 		String variable = playbookConfig.createVariableForOutputVariable(outputVariable, type);
 		outputVariables.add(variable);
+		
+		return this;
 	}
 	
-	public void addAllOutputParams()
+	public PlaybooksOrchestration addAllOutputParams()
 	{
 		//for each of the output variables
 		for (PlaybookOutputVariable outputVariable : playbookConfig.getAllOutputVariables())
@@ -86,6 +91,8 @@ public class PlaybooksOrchestration
 			//add this output param
 			addOutputParam(outputVariable.getName(), outputVariable.getType());
 		}
+		
+		return this;
 	}
 	
 	public Set<String> getOutputVariables()

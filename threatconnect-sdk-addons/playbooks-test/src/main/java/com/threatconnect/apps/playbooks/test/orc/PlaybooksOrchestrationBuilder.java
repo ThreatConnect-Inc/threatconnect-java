@@ -12,9 +12,10 @@ public final class PlaybooksOrchestrationBuilder
 	//holds the initial playbook runner to execute
 	private final PlaybooksOrchestration playbooksOrchestration;
 	
-	private PlaybooksOrchestrationBuilder(final Class<? extends PlaybooksApp> playbookAppClass)
+	private PlaybooksOrchestrationBuilder(final Class<? extends PlaybooksApp> playbookAppClass,
+		final boolean addAllOutputParams)
 	{
-		playbooksOrchestration = createPlaybookOrchestration(playbookAppClass, this, null);
+		playbooksOrchestration = createPlaybookOrchestration(playbookAppClass, this, null, addAllOutputParams);
 	}
 	
 	public PlaybookRunner build()
@@ -28,7 +29,8 @@ public final class PlaybooksOrchestrationBuilder
 	}
 	
 	static PlaybooksOrchestration createPlaybookOrchestration(final Class<? extends PlaybooksApp> playbookAppClass,
-		final PlaybooksOrchestrationBuilder builder, final PlaybooksOrchestration parent)
+		final PlaybooksOrchestrationBuilder builder, final PlaybooksOrchestration parent,
+		final boolean addAllOutputParams)
 	{
 		//look up the configuration for this
 		PlaybookConfig playbookConfig =
@@ -38,7 +40,7 @@ public final class PlaybooksOrchestrationBuilder
 		if (null != playbookConfig)
 		{
 			//create the new playbook runner
-			return new PlaybooksOrchestration(playbookConfig, builder, parent);
+			return new PlaybooksOrchestration(playbookConfig, builder, parent, addAllOutputParams);
 		}
 		else
 		{
@@ -50,11 +52,23 @@ public final class PlaybooksOrchestrationBuilder
 	
 	public static PlaybooksOrchestrationBuilder create(final Class<? extends PlaybooksApp> playbookAppClass)
 	{
-		return new PlaybooksOrchestrationBuilder(playbookAppClass);
+		return create(playbookAppClass, true);
+	}
+	
+	public static PlaybooksOrchestrationBuilder create(final Class<? extends PlaybooksApp> playbookAppClass,
+		final boolean addAllOutputParams)
+	{
+		return new PlaybooksOrchestrationBuilder(playbookAppClass, addAllOutputParams);
 	}
 	
 	public static PlaybooksOrchestration runApp(final Class<? extends PlaybooksApp> playbookAppClass)
 	{
-		return new PlaybooksOrchestrationBuilder(playbookAppClass).getPlaybooksOrchestration();
+		return runApp(playbookAppClass, true);
+	}
+	
+	public static PlaybooksOrchestration runApp(final Class<? extends PlaybooksApp> playbookAppClass,
+		final boolean addAllOutputParams)
+	{
+		return new PlaybooksOrchestrationBuilder(playbookAppClass, addAllOutputParams).getPlaybooksOrchestration();
 	}
 }
