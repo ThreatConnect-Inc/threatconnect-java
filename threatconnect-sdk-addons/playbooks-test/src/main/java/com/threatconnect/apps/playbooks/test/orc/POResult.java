@@ -49,6 +49,17 @@ public class POResult
 		return new AssertOutput(this);
 	}
 	
+	/**
+	 * A convenience method for building the PlaybookRunner without having to first call
+	 * getPlaybooksOrchestrationBuilder()
+	 *
+	 * @return
+	 */
+	public PlaybookRunner build()
+	{
+		return builder.build();
+	}
+	
 	PlaybooksOrchestration getPlaybooksOrchestration()
 	{
 		return playbooksOrchestration;
