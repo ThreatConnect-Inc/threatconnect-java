@@ -9,6 +9,8 @@ import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 /**
  * @author Greg Marut
  */
@@ -54,6 +56,52 @@ public class AssertOutput extends AbstractThen<POResult>
 					expected);
 				final String variable = getPlaybookConfig().createVariableForOutputVariable(outputParam, type);
 				Assert.assertEquals(expected, ContentServiceUtil.read(variable, playbooksApp.getContentService()));
+			}
+		});
+		
+		return this;
+	}
+	
+	public AssertOutput assertStringArrayEquals(final String outputParam, final PlaybookVariableType type,
+		final List<String> expected)
+	{
+		//since this param has been requested, make sure it is added to the out params
+		getThen().getPlaybooksOrchestration().addOutputParam(outputParam, type);
+		
+		add(new Testable()
+		{
+			@Override
+			public void run(final PlaybooksApp playbooksApp) throws Exception
+			{
+				logger.debug("assertStringArrayEquals Output Param \"{}\" of type \"{}\" = \"{}\"", outputParam,
+					type.toString(),
+					expected);
+				final String variable = getPlaybookConfig().createVariableForOutputVariable(outputParam, type);
+				List<String> result = playbooksApp.getContentService().readStringList(variable);
+				Assert.assertArrayEquals(expected.toArray(new String[] {}), result.toArray(new String[] {}));
+			}
+		});
+		
+		return this;
+	}
+	
+	public AssertOutput assertStringArraySize(final String outputParam, final PlaybookVariableType type,
+		final int expected)
+	{
+		//since this param has been requested, make sure it is added to the out params
+		getThen().getPlaybooksOrchestration().addOutputParam(outputParam, type);
+		
+		add(new Testable()
+		{
+			@Override
+			public void run(final PlaybooksApp playbooksApp) throws Exception
+			{
+				logger.debug("assertStringArraySize Output Param \"{}\" of type \"{}\" = \"{}\"", outputParam,
+					type.toString(),
+					expected);
+				final String variable = getPlaybookConfig().createVariableForOutputVariable(outputParam, type);
+				List<String> result = playbooksApp.getContentService().readStringList(variable);
+				Assert.assertEquals(expected, result.size());
 			}
 		});
 		
