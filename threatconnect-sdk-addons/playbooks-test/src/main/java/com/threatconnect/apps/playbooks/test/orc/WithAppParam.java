@@ -21,6 +21,6 @@ public class WithAppParam extends AbstractThen<PlaybooksOrchestration>
 	
 	private Map<String, String> getAppParams()
 	{
-		return getThen().getInputParams();
+		return getThen().getAppParams();
 	}
 }

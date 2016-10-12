@@ -1,0 +1,37 @@
+{
+  "displayName": "App2",
+  "programVersion": "1.0.0",
+  "programLanguage": "JAVA",
+  "programMain": "com.threatconnect.apps.playbooks.test.app2.App2Main",
+  "languageVersion": "7",
+  "listDelimiter": "|",
+  "runtimeLevel": "Blueprint",
+  "blueprint": {
+    "type": "Basic",
+    "outputVariables": [
+      {
+        "type": "String",
+        "name": "test.app2.concat"
+      }
+    ]
+  },
+  "params": [
+    {
+      "name": "join_on",
+      "label": "Join On",
+      "sequence": 1,
+      "required": true,
+      "type": "String"
+    },
+    {
+      "name": "input_array",
+      "label": "Input Array",
+      "sequence": 2,
+      "required": true,
+      "type": "String",
+      "blueprintDataType": [
+        "StringArray"
+      ]
+    }
+  ]
+}

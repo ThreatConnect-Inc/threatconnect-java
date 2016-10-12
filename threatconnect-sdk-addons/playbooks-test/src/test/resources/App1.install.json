@@ -1,0 +1,40 @@
+{
+  "displayName": "App1",
+  "programVersion": "1.0.0",
+  "programLanguage": "JAVA",
+  "programMain": "com.threatconnect.apps.playbooks.test.app1.App1Main",
+  "languageVersion": "7",
+  "listDelimiter": "|",
+  "runtimeLevel": "Blueprint",
+  "blueprint": {
+    "type": "Basic",
+    "outputVariables": [
+      {
+        "type": "String",
+        "name": "test.app1.name"
+      }
+    ]
+  },
+  "params": [
+    {
+      "name": "first_name",
+      "label": "First Name",
+      "sequence": 1,
+      "required": true,
+      "type": "String",
+      "blueprintDataType": [
+        "String"
+      ]
+    },
+    {
+      "name": "last_name",
+      "label": "Last Name",
+      "sequence": 2,
+      "required": true,
+      "type": "String",
+      "blueprintDataType": [
+        "String"
+      ]
+    }
+  ]
+}

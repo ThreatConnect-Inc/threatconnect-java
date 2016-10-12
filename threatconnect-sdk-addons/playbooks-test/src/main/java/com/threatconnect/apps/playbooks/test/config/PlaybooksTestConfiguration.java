@@ -47,30 +47,10 @@ public class PlaybooksTestConfiguration
 		
 		logger.info("Found {} install.json files", files.size());
 		
-		try
+		//for each of the files
+		for (File file : files)
 		{
-			//for each of the files
-			for (File file : files)
-			{
-				//read the json file
-				InstallJson installJson = new InstallJson(file);
-				
-				//check to see if this is a playbooks app
-				if (installJson.isPlaybookApp())
-				{
-					//configure the app for this install.json file
-					configureApp(installJson);
-				}
-				else
-				{
-					logger.info("Skipping \"{}\" -- runtimeLevel indicates this config is not a playbooks app ",
-						file.getAbsolutePath());
-				}
-			}
-		}
-		catch (UnsupposedPlaybookMainClassException | InvalidInstallJsonFileException | InvalidPlaybookAppException e)
-		{
-			throw new PlaybooksConfigurationException(e);
+			loadFileAndConfigure(file);
 		}
 	}
 	
@@ -109,6 +89,33 @@ public class PlaybooksTestConfiguration
 		}
 		
 		return files;
+	}
+	
+	public void loadFileAndConfigure(final File file)
+	{
+		try
+		{
+			logger.info("Loading {}", file.getAbsolutePath());
+			
+			//read the json file
+			InstallJson installJson = new InstallJson(file);
+			
+			//check to see if this is a playbooks app
+			if (installJson.isPlaybookApp())
+			{
+				//configure the app for this install.json file
+				configureApp(installJson);
+			}
+			else
+			{
+				logger.info("Skipping \"{}\" -- runtimeLevel indicates this config is not a playbooks app ",
+					file.getAbsolutePath());
+			}
+		}
+		catch (UnsupposedPlaybookMainClassException | InvalidInstallJsonFileException | InvalidPlaybookAppException e)
+		{
+			throw new PlaybooksConfigurationException(e);
+		}
 	}
 	
 	/**
