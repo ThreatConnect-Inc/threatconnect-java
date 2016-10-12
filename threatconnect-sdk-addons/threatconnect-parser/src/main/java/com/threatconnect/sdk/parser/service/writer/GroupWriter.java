@@ -1,9 +1,5 @@
 package com.threatconnect.sdk.parser.service.writer;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-
 import com.google.gson.Gson;
 import com.threatconnect.sdk.client.reader.AbstractGroupReaderAdapter;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
@@ -27,6 +23,10 @@ import com.threatconnect.sdk.parser.service.save.SaveItemFailedException;
 import com.threatconnect.sdk.server.entity.Group.Type;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.util.ApiFilterType;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public abstract class GroupWriter<E extends Group, T extends com.threatconnect.sdk.server.entity.Group>
 	extends Writer
@@ -147,12 +147,12 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 			}
 			else
 			{
-				throw new SaveItemFailedException(response.getMessage());
+				throw new SaveItemFailedException(groupSource, response.getMessage());
 			}
 		}
 		catch (FailedResponseException e)
 		{
-			throw new SaveItemFailedException(e);
+			throw new SaveItemFailedException(groupSource, e);
 		}
 	}
 	
