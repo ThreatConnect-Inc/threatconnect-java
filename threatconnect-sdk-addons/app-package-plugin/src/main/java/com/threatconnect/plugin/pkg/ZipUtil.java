@@ -9,9 +9,9 @@ import java.util.zip.ZipOutputStream;
 
 public class ZipUtil
 {
-	public static void zipFolder(File srcFolder) throws IOException
+	public static void zipFolder(File srcFolder, final String fileExtension) throws IOException
 	{
-		zipFolder(srcFolder.getAbsolutePath(), srcFolder.getAbsolutePath() + ".zip");
+		zipFolder(srcFolder.getAbsolutePath(), srcFolder.getAbsolutePath() + "." + fileExtension);
 	}
 	
 	public static void zipFolder(String srcFolder, String destZipFile) throws IOException
