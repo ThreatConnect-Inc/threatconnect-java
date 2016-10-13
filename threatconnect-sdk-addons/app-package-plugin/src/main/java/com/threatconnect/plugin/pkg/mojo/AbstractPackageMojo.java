@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 public abstract class AbstractPackageMojo extends AbstractMojo
 {
 	public static final Pattern PATTERN_INSTALL_JSON = Pattern.compile("^(?:(.*)\\.)?install\\.json$");
+	public static final String TC_APP_FILE_EXTENSION = "tcx";
 	
 	/**
 	 * The base directory for the application
@@ -102,7 +103,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 		writeAppContentsToDirectory(explodedDir);
 		
 		// zip up the app
-		ZipUtil.zipFolder(explodedDir);
+		ZipUtil.zipFolder(explodedDir, TC_APP_FILE_EXTENSION);
 	}
 	
 	/**
@@ -122,7 +123,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 		writeAppContentsToDirectory(explodedDir);
 		
 		// zip up the app
-		ZipUtil.zipFolder(explodedDir);
+		ZipUtil.zipFolder(explodedDir, TC_APP_FILE_EXTENSION);
 	}
 	
 	/**
