@@ -23,6 +23,40 @@ public class AssertOutput extends AbstractThen<POResult>
 		super(poResult);
 	}
 	
+	public AssertOutput fail()
+	{
+		add(new Testable()
+		{
+			@Override
+			public void run(final PlaybooksApp playbooksApp) throws Exception
+			{
+				logger.debug("fail()");
+				Assert.fail();
+			}
+		});
+		
+		return this;
+	}
+	
+	public AssertOutput assertNull(final String outputParam, final PlaybookVariableType type)
+	{
+		//since this param has been requested, make sure it is added to the out params
+		getThen().getPlaybooksOrchestration().addOutputParam(outputParam, type);
+		
+		add(new Testable()
+		{
+			@Override
+			public void run(final PlaybooksApp playbooksApp) throws Exception
+			{
+				logger.debug("assertNull Output Param \"{}\" of type \"{}\"", outputParam, type.toString());
+				final String variable = getPlaybookConfig().createVariableForOutputVariable(outputParam, type);
+				Assert.assertNull(ContentServiceUtil.read(variable, playbooksApp.getContentService()));
+			}
+		});
+		
+		return this;
+	}
+	
 	public AssertOutput assertNotNull(final String outputParam, final PlaybookVariableType type)
 	{
 		//since this param has been requested, make sure it is added to the out params
