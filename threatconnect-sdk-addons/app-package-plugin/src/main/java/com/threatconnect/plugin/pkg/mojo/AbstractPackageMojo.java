@@ -21,6 +21,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 {
 	public static final Pattern PATTERN_INSTALL_JSON = Pattern.compile("^(?:(.*)\\.)?install\\.json$");
 	public static final String TC_APP_FILE_EXTENSION = "tcx";
+	public static final String TC_BUNDLED_FILE_EXTENSION = "bundle.zip";
 	
 	/**
 	 * The base directory for the application
@@ -54,6 +55,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 		{
 			// retrieve the list of profiles
 			List<Profile> profiles = getProfiles();
+			List<File> packagedApps = new ArrayList<File>();
 			
 			// check to see if there are any profiles
 			if (!profiles.isEmpty())
@@ -62,7 +64,14 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 				for (Profile profile : profiles)
 				{
 					// package an app profile
-					packageProfile(profile);
+					packagedApps.add(packageProfile(profile));
+				}
+				
+				//check to see if there are multiple profiles
+				if (profiles.size() > 1)
+				{
+					//build a bundled archive of all the apps
+					buildBundledArchive(packagedApps);
 				}
 			}
 			else
@@ -78,14 +87,26 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	}
 	
 	/**
+	 * Given a list of packed app files, this builds a bundled archive containing all of them
+	 *
+	 * @param packagedApps
+	 */
+	protected void buildBundledArchive(final List<File> packagedApps) throws IOException
+	{
+		File bundledFile = new File(getOutputDirectory() + "/" + getAppName() + "." + TC_BUNDLED_FILE_EXTENSION);
+		getLog().info("Packaging Bundle " + bundledFile.getName());
+		ZipUtil.zipFiles(packagedApps, bundledFile.getAbsolutePath());
+	}
+	
+	/**
 	 * Packages a profile. A profile is determined by an install.json file. If multiple install.json
 	 * files are found, they are each built using their profile name. Otherwise, if only an
 	 * install.json file is found, the default settings are used.
-	 * 
+	 *
 	 * @param profile
 	 * @throws IOException
 	 */
-	protected void packageProfile(final Profile profile) throws IOException
+	protected File packageProfile(final Profile profile) throws IOException
 	{
 		// determine what this app name will be
 		final String appName = determineAppName(profile);
@@ -102,13 +123,13 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 		// write the rest of the app contents out to the target folder
 		writeAppContentsToDirectory(explodedDir);
 		
-		// zip up the app
-		ZipUtil.zipFolder(explodedDir, TC_APP_FILE_EXTENSION);
+		// zip up the app and return the file of the packaged app
+		return ZipUtil.zipFolder(explodedDir, TC_APP_FILE_EXTENSION);
 	}
 	
 	/**
 	 * Packages a legacy app which consists of an install.conf file.
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	protected void packageLegacy() throws IOException
@@ -130,7 +151,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	 * Given a profile, the name of the app is determined here. First, if the install.json file has
 	 * an applicationName and programVersion attribute set, those are used. If not, the prefix of
 	 * the install.json file is used if it exists, otherwise the default app name is used.
-	 * 
+	 *
 	 * @param profile
 	 * @return
 	 */
@@ -182,7 +203,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	
 	/**
 	 * Returns the list of profiles for this app packager
-	 * 
+	 *
 	 * @return
 	 */
 	protected List<Profile> getProfiles() throws InvalidInstallJsonFileException
@@ -233,7 +254,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	
 	/**
 	 * Copies a file to a destination directory if the source file exists
-	 * 
+	 *
 	 * @param source
 	 * @param destinationDirectory
 	 * @throws IOException
@@ -256,7 +277,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 						// create the new destination folder
 						final File destination =
 							new File(destinationDirectory.getAbsoluteFile() + File.separator + file.getName());
-							
+						
 						// recursively copy this file
 						copyFileToDirectoryIfExists(file, destination);
 					}
@@ -304,7 +325,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	
 	/**
 	 * Called when the app packager is ready to begin writing the files needed for building an app
-	 * 
+	 *
 	 * @param targetDirectory
 	 * @throws IOException
 	 */
