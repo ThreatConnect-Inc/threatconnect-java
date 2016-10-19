@@ -70,24 +70,27 @@ public class PlaybookRunner implements Runnable
 				
 				logger.info("{} finished successfully", playbookConfig.getPlaybookAppClass());
 				
-				//check to see if there are tests to run
-				if (null != playbooksOrchestration.getOnSuccess() && !playbooksOrchestration.getOnSuccess()
-					.getTests().isEmpty())
+				//check to see if there is an onsuccess defined
+				if (null != playbooksOrchestration.getOnSuccess())
 				{
-					logger.info("Running tests for {}", playbookConfig.getPlaybookAppClass());
-					runTests(playbooksOrchestration.getOnSuccess().getTests(), playbooksApp);
+					//check to see if there are tests to run
+					if (!playbooksOrchestration.getOnSuccess()
+						.getTests().isEmpty())
+					{
+						logger.info("Running tests for {}", playbookConfig.getPlaybookAppClass());
+						runTests(playbooksOrchestration.getOnSuccess().getTests(), playbooksApp);
+					}
+					
+					//check to see if this runner has an app to run
+					if (null != playbooksOrchestration.getOnSuccess().getRunApp())
+					{
+						run(playbooksOrchestration.getOnSuccess().getRunApp());
+					}
 				}
-				
-				//check to see if this runner has an app to run
-				if (null != playbooksOrchestration.getOnSuccess() && null != playbooksOrchestration.getOnSuccess()
-					.getRunApp())
+				//check to see if there is an onfailure definied
+				else if (null != playbooksOrchestration.getOnFailure())
 				{
-					run(playbooksOrchestration.getOnSuccess().getRunApp());
-				}
-				//check to see if there is a run on failure app
-				else if (null != playbooksOrchestration.getOnFailure() && null != playbooksOrchestration.getOnFailure()
-					.getRunApp())
-				{
+					//we were expecting the app to fail but it was successful
 					throw new PlaybookRunnerException(
 						playbookConfig.getPlaybookAppClass() + " finished with an unexpected status of \"" + exitStatus
 							.toString() + "\"");
@@ -95,26 +98,28 @@ public class PlaybookRunner implements Runnable
 			}
 			else
 			{
-				logger.info("{} finished failed", playbookConfig.getPlaybookAppClass());
+				logger.info("{} failed", playbookConfig.getPlaybookAppClass());
 				
-				//check to see if there are tests to run
-				if (null != playbooksOrchestration.getOnFailure() && !playbooksOrchestration.getOnFailure()
-					.getTests().isEmpty())
+				//check to see if there is an onfailure defined
+				if (null != playbooksOrchestration.getOnFailure())
 				{
-					logger.info("Running tests for {}", playbookConfig.getPlaybookAppClass());
-					runTests(playbooksOrchestration.getOnFailure().getTests(), playbooksApp);
+					//check to see if there are tests to run
+					if (!playbooksOrchestration.getOnFailure().getTests().isEmpty())
+					{
+						logger.info("Running tests for {}", playbookConfig.getPlaybookAppClass());
+						runTests(playbooksOrchestration.getOnFailure().getTests(), playbooksApp);
+					}
+					
+					//check to see if this runner has an app to run
+					if (null != playbooksOrchestration.getOnFailure().getRunApp())
+					{
+						run(playbooksOrchestration.getOnFailure().getRunApp());
+					}
 				}
-				
-				//check to see if this runner has an app to run
-				if (null != playbooksOrchestration.getOnFailure() && null != playbooksOrchestration.getOnFailure()
-					.getRunApp())
+				//check to see if there is an onsuccess defined
+				else if (null != playbooksOrchestration.getOnSuccess())
 				{
-					run(playbooksOrchestration.getOnFailure().getRunApp());
-				}
-				//check to see if there is a run on success app
-				else if (null != playbooksOrchestration.getOnSuccess() && null != playbooksOrchestration.getOnSuccess()
-					.getRunApp())
-				{
+					//we were expecting the app to succeed but it was failed
 					throw new PlaybookRunnerException(
 						playbookConfig.getPlaybookAppClass() + " finished with an unexpected status of \"" + exitStatus
 							.toString() + "\"");
