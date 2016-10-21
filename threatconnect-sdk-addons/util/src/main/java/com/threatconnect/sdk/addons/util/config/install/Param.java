@@ -17,7 +17,7 @@ public class Param
 	
 	private static final String NAME = "name";
 	private static final String TYPE = "type";
-	private static final String PLAYBOOK_DATA_TYPE = "blueprintDataType";
+	private static final String PLAYBOOK_DATA_TYPE = "playbookDataType";
 	
 	public Param(final JsonObject root)
 	{

@@ -5,8 +5,8 @@
   "programMain": "com.threatconnect.apps.playbooks.test.app3.App3Main",
   "languageVersion": "7",
   "listDelimiter": "|",
-  "runtimeLevel": "Blueprint",
-  "blueprint": {
+  "runtimeLevel": "Playbook",
+  "playbook": {
     "type": "Basic",
     "outputVariables": [
       {
@@ -29,7 +29,7 @@
       "sequence": 2,
       "required": true,
       "type": "String",
-      "blueprintDataType": [
+      "playbookDataType": [
         "String"
       ]
     }

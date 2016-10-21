@@ -22,8 +22,8 @@ public class InstallJson
 	private static final String RUNTIME_LEVEL = "runtimeLevel";
 	private static final String PARAMS = "params";
 	
-	private static final String PLAYBOOK = "blueprint";
-	private static final String PLAYBOOK_RUN_LEVEL = "Blueprint";
+	private static final String PLAYBOOK = "playbook";
+	private static final String PLAYBOOK_RUN_LEVEL = "Playbook";
 	
 	private final File installJsonFile;
 	private final JsonObject root;

@@ -105,7 +105,7 @@ public class PlaybookConfig
 		
 		Param param = getInputParam(paramName);
 		
-		//for each of the blueprint types
+		//for each of the playbook types
 		for (String dataType : param.getPlaybookDataTypes())
 		{
 			String variable = buildParam(this.appID, param.getName(), PlaybookVariableType.valueOf(dataType));
@@ -119,7 +119,7 @@ public class PlaybookConfig
 	{
 		Param param = getInputParam(paramName);
 		
-		//for each of the blueprint types
+		//for each of the playbook types
 		for (String dataType : param.getPlaybookDataTypes())
 		{
 			//check to see if this datatype matches
