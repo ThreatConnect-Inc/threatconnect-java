@@ -26,7 +26,7 @@ public class ContentService
 	//holds the database service object
 	private final DBService dbService;
 	
-	//holds all of the content accumulators that will be responsbile for reading/writing/converting data to and from
+	//holds all of the content accumulators that will be responsible for reading/writing/converting data to and from
 	//the database
 	private final ContentAccumulator<String> stringAccumulator;
 	private final ContentAccumulator<List<String>> stringListAccumulator;
