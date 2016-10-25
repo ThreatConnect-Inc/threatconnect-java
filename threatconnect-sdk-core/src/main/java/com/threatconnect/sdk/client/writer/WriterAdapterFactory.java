@@ -139,7 +139,7 @@ public class WriterAdapterFactory {
         };
     }
     
-    public static AbstractIndicatorWriterAdapter<CustomIndicator> createCustomIndicatorWriter(Connection conn, String customType) {
+    public static AbstractIndicatorWriterAdapter<CustomIndicator> createCustomIndicatorWriter(Connection conn, final String customType) {
          return new AbstractIndicatorWriterAdapter<CustomIndicator>(conn, CustomIndicatorResponse.class) {
             @Override
             public String getUrlType() {

@@ -139,8 +139,7 @@ public class ReaderAdapterFactory
 		};
 	}
 
-	//TOD double check later on
-	public static AbstractIndicatorReaderAdapter<CustomIndicator> createCustomIndicatorReader(Connection conn, String type)
+	public static AbstractIndicatorReaderAdapter<CustomIndicator> createCustomIndicatorReader(Connection conn, final String type)
 	{
 		return new AbstractIndicatorReaderAdapter<CustomIndicator>(conn, CustomIndicatorResponse.class, CustomIndicator.class,
 				CustomIndicatorListResponse.class)

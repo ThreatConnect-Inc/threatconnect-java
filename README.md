@@ -9,7 +9,7 @@ This SDK provides a high-level abstraction layer of the ThreatConnect&trade; RES
 <dependency>
   <groupId>com.threatconnect.sdk.core</groupId>
   <artifactId>threatconnect-sdk</artifactId>
-  <version>2.6.1</version>
+  <version>2.6.2</version>
 </dependency>
 ```
 
