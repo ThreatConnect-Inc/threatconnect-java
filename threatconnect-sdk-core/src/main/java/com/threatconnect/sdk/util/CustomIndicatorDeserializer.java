@@ -42,7 +42,7 @@ public class CustomIndicatorDeserializer extends JsonDeserializer<CustomIndicato
 	
 	private List<String> getDeclaredFields()
 	{
-		//these are the field for indicator, can use reflection to retrieve instead
+		//these are the fields for indicator, can use reflection to retrieve instead
 		List<String> result = new ArrayList<String>();
 		result.add("id");
 		result.add("owner");
