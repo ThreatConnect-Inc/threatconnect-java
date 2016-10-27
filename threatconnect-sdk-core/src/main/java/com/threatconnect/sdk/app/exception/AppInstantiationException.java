@@ -9,7 +9,7 @@ public class AppInstantiationException extends Exception
 		super(buildErrorMessage(clazz), cause);
 	}
 	
-	private static final String buildErrorMessage(final Class<?> clazz)
+	private static String buildErrorMessage(final Class<?> clazz)
 	{
 		return "Unable to instantiate " + clazz.getName() + ". Does it contain a public no-argument constructor?";
 	}

@@ -1,31 +1,37 @@
 package com.threatconnect.sdk.conn;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.threatconnect.app.apps.AppConfig;
+import com.threatconnect.sdk.app.SdkAppConfig;
 import com.threatconnect.sdk.conn.exception.HttpResourceNotFoundException;
 import com.threatconnect.sdk.util.StringUtil;
 import com.threatconnect.sdk.util.UploadMethodType;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
-import org.apache.http.client.methods.*;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import com.google.gson.JsonObject; 
-import com.google.gson.JsonParser;
-import com.threatconnect.sdk.app.AppConfig;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URLEncoder;
-import org.apache.http.impl.client.CloseableHttpClient;
 
 /**
  * @author dtineo
@@ -154,8 +160,8 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
                         this.conn.getConfig().setTcTokenExpires(newTokenExpires);
 
                         //Then update the AppConfig singleton object too for future calls/future configs
-                        AppConfig.getInstance().set(AppConfig.TC_TOKEN, newToken);
-                        AppConfig.getInstance().set(AppConfig.TC_TOKEN_EXPIRES, newTokenExpires);
+                        SdkAppConfig.getInstance().set(AppConfig.TC_TOKEN, newToken);
+                        SdkAppConfig.getInstance().set(AppConfig.TC_TOKEN_EXPIRES, newTokenExpires);
 
                     } catch (MalformedURLException ex)
                     {

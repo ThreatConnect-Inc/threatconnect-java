@@ -5,8 +5,8 @@
  */
 package com.threatconnect.sdk.conn;
 
-import com.threatconnect.sdk.app.AppConfig;
 import com.threatconnect.sdk.app.AppUtil;
+import com.threatconnect.sdk.app.SdkAppConfig;
 import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.config.URLConfiguration;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -99,7 +99,7 @@ public class Connection implements Closeable
 		if (apiClient == null)
 		{
 			// :TODO: should we add an SDK param to trust self signed certs?
-			apiClient = AppUtil.createClient(AppConfig.getInstance().isTcApplyProxy(), true);
+			apiClient = AppUtil.createClient(SdkAppConfig.getInstance().isTcApplyProxy(), true);
 		}
 		return apiClient;
 	}
@@ -109,7 +109,7 @@ public class Connection implements Closeable
 		if (externalClient == null)
 		{
 			// :TODO: should we add an SDK param to trust self signed certs?
-			externalClient = AppUtil.createClient(AppConfig.getInstance().isExternalApplyProxy(), true);
+			externalClient = AppUtil.createClient(SdkAppConfig.getInstance().isExternalApplyProxy(), true);
 		}
 		return externalClient;
 	}

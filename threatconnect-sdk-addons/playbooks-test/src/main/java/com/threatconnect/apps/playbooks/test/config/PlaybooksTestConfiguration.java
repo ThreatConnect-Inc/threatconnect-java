@@ -1,11 +1,11 @@
 package com.threatconnect.apps.playbooks.test.config;
 
+import com.threatconnect.app.apps.App;
 import com.threatconnect.apps.playbooks.test.db.EmbeddedMapDBService;
 import com.threatconnect.sdk.addons.util.config.install.InstallJson;
 import com.threatconnect.sdk.addons.util.config.install.InvalidInstallJsonFileException;
-import com.threatconnect.sdk.app.App;
-import com.threatconnect.sdk.app.AppConfig;
 import com.threatconnect.sdk.app.AppMain;
+import com.threatconnect.sdk.app.SdkAppConfig;
 import com.threatconnect.sdk.playbooks.app.PlaybooksApp;
 import com.threatconnect.sdk.playbooks.app.PlaybooksAppConfig;
 import com.threatconnect.sdk.playbooks.db.DBServiceFactory;
@@ -60,7 +60,7 @@ public class PlaybooksTestConfiguration
 		
 		//register the inmemory database
 		DBServiceFactory.registerCustomDBService("Memory", new EmbeddedMapDBService());
-		AppConfig.getInstance().set(PlaybooksAppConfig.PARAM_DB_TYPE, "Memory");
+		SdkAppConfig.getInstance().set(PlaybooksAppConfig.PARAM_DB_TYPE, "Memory");
 	}
 	
 	private List<File> findInstallJsonFiles()
@@ -139,7 +139,7 @@ public class PlaybooksTestConfiguration
 			AppMain appMain = programMainClass.newInstance();
 			
 			//retrieve the classes that are executed from this main
-			Class<? extends App> appClass = appMain.getAppClassToExecute(AppConfig.getInstance());
+			Class<? extends App> appClass = appMain.getAppClassToExecute(SdkAppConfig.getInstance());
 			
 			//configure this app
 			configureApp(appClass, installJson);

@@ -8,6 +8,7 @@
 	<name>tc-sdk</name>
 	<url>http://maven.apache.org</url>
 	<modules>
+		<module>threatconnect-app</module>
 		<module>threatconnect-sdk-core</module>
 		<module>threatconnect-sdk-addons</module>
 	</modules>

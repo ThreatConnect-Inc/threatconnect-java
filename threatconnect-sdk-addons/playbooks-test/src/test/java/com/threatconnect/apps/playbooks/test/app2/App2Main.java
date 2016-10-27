@@ -1,7 +1,7 @@
 package com.threatconnect.apps.playbooks.test.app2;
 
-import com.threatconnect.sdk.app.App;
-import com.threatconnect.sdk.app.AppConfig;
+import com.threatconnect.app.apps.App;
+import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.sdk.app.AppMain;
 
 /**

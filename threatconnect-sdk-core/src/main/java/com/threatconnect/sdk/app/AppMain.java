@@ -1,5 +1,8 @@
 package com.threatconnect.sdk.app;
 
+import com.threatconnect.app.apps.App;
+import com.threatconnect.app.apps.AppConfig;
+import com.threatconnect.app.apps.ExitStatus;
 import com.threatconnect.sdk.app.exception.AppInstantiationException;
 import com.threatconnect.sdk.app.exception.MultipleAppClassFoundException;
 import com.threatconnect.sdk.app.exception.NoAppClassFoundException;
@@ -26,7 +29,7 @@ public class AppMain
 		try
 		{
 			// create the app config object
-			AppConfig appConfig = AppConfig.getInstance();
+			AppConfig appConfig = new SdkAppConfig();
 			
 			// set whether or not api logging is enabled
 			ServerLogger.getInstance().setEnabled(appConfig.isTcLogToApi());
@@ -144,8 +147,8 @@ public class AppMain
 			// instantiate a new app class
 			App app = appClass.newInstance();
 			
-			// add the app config for this app
-			app.setAppConfig(appConfig);
+			// initialize this app
+			app.init(appConfig);
 			
 			// reconfigure the log file for this app
 			LoggerUtil.reconfigureGlobalLogger(app.getAppLogFile(), appConfig);

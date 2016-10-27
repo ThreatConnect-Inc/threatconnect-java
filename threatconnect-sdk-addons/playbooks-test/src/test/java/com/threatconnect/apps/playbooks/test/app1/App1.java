@@ -1,7 +1,7 @@
 package com.threatconnect.apps.playbooks.test.app1;
 
 import com.threatconnect.sdk.addons.util.config.install.PlaybookVariableType;
-import com.threatconnect.sdk.app.ExitStatus;
+import com.threatconnect.app.apps.ExitStatus;
 import com.threatconnect.sdk.playbooks.app.PlaybooksApp;
 import com.threatconnect.sdk.playbooks.app.PlaybooksAppConfig;
 

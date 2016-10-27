@@ -1,12 +1,12 @@
 package com.threatconnect.apps.playbooks.test.orc;
 
+import com.threatconnect.app.apps.ExitStatus;
 import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
 import com.threatconnect.apps.playbooks.test.orc.test.TestFailureException;
 import com.threatconnect.apps.playbooks.test.orc.test.Testable;
 import com.threatconnect.apps.playbooks.test.util.ContentServiceUtil;
 import com.threatconnect.sdk.addons.util.config.install.PlaybookVariableType;
-import com.threatconnect.sdk.app.AppConfig;
-import com.threatconnect.sdk.app.ExitStatus;
+import com.threatconnect.sdk.app.SdkAppConfig;
 import com.threatconnect.sdk.playbooks.app.PlaybooksApp;
 import com.threatconnect.sdk.playbooks.app.PlaybooksAppConfig;
 import com.threatconnect.sdk.playbooks.content.ContentService;
@@ -50,14 +50,14 @@ public class PlaybookRunner implements Runnable
 			
 			//instantiate the app
 			PlaybooksApp playbooksApp = playbookConfig.getPlaybookAppClass().newInstance();
-			playbooksApp.setAppConfig(AppConfig.getInstance());
+			playbooksApp.init(SdkAppConfig.getInstance());
 			
 			//configure the parameters before running this app
 			logger.info("Configuring params for {}", playbookConfig.getPlaybookAppClass());
 			configureParams(playbooksOrchestration, playbooksApp);
 			
 			logger.info("Running {}", playbookConfig.getPlaybookAppClass());
-			ExitStatus exitStatus = playbooksApp.execute(AppConfig.getInstance());
+			ExitStatus exitStatus = playbooksApp.execute(SdkAppConfig.getInstance());
 			
 			//log the output variables
 			logOutputs(playbooksOrchestration, playbooksApp);
@@ -137,14 +137,14 @@ public class PlaybookRunner implements Runnable
 	{
 		//add all of the output params
 		final String paramOutVars = StringUtils.join(playbooksOrchestration.getOutputVariables(), ",");
-		AppConfig.getInstance().set(PlaybooksAppConfig.PARAM_OUT_VARS, paramOutVars);
+		SdkAppConfig.getInstance().set(PlaybooksAppConfig.PARAM_OUT_VARS, paramOutVars);
 		logger.debug("Setting \"{}\":\"{}\"", PlaybooksAppConfig.PARAM_OUT_VARS, paramOutVars);
 		
 		//for each of the app params
 		for (Map.Entry<String, String> appParams : playbooksOrchestration.getAppParams().entrySet())
 		{
 			//set this app param
-			AppConfig.getInstance().set(appParams.getKey(), appParams.getValue());
+			SdkAppConfig.getInstance().set(appParams.getKey(), appParams.getValue());
 			logger.debug("Setting App Param \"{}\":\"{}\"", appParams.getKey(), appParams.getValue());
 		}
 		
@@ -152,7 +152,7 @@ public class PlaybookRunner implements Runnable
 		for (Map.Entry<String, String> inputParam : playbooksOrchestration.getInputParams().entrySet())
 		{
 			//set this input
-			AppConfig.getInstance().set(inputParam.getKey(), inputParam.getValue());
+			SdkAppConfig.getInstance().set(inputParam.getKey(), inputParam.getValue());
 			logger.debug("Setting Input Param \"{}\":\"{}\"", inputParam.getKey(), inputParam.getValue());
 			
 			//write the data to the content service

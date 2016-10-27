@@ -1,13 +1,8 @@
 package com.threatconnect.sdk.parser.app;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.threatconnect.sdk.app.App;
-import com.threatconnect.sdk.app.AppConfig;
-import com.threatconnect.sdk.app.ExitStatus;
+import com.threatconnect.app.apps.App;
+import com.threatconnect.app.apps.AppConfig;
+import com.threatconnect.app.apps.ExitStatus;
 import com.threatconnect.sdk.app.LoggerUtil;
 import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.parser.Parser;
@@ -17,6 +12,11 @@ import com.threatconnect.sdk.parser.model.ItemType;
 import com.threatconnect.sdk.parser.service.save.ApiSaveService;
 import com.threatconnect.sdk.parser.service.save.SaveResults;
 import com.threatconnect.sdk.parser.service.save.SaveService;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class ParserApp extends App
 {
