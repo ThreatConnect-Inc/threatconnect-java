@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 public abstract class AbstractPackageMojo extends AbstractMojo
 {
 	public static final Pattern PATTERN_INSTALL_JSON = Pattern.compile("^(?:(.*)\\.)?install\\.json$");
-	public static final String TC_APP_FILE_EXTENSION = "tcx";
+	public static final String TC_APP_FILE_EXTENSION = "zip";
 	public static final String TC_BUNDLED_FILE_EXTENSION = "bundle.zip";
 	
 	/**
