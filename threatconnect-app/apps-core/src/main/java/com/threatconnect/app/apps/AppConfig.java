@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class AppConfig
+public abstract class AppConfig
 {
 	public static final String TC_MAIN_APP_CLASS = "tc_main_app_class";
 	public static final String TC_LOG_PATH = "tc_log_path";
@@ -364,8 +364,5 @@ public class AppConfig
 	 * @param key the setting to load
 	 * @return
 	 */
-	protected String loadSetting(final String key)
-	{
-		return null;
-	}
+	protected abstract String loadSetting(final String key);
 }
