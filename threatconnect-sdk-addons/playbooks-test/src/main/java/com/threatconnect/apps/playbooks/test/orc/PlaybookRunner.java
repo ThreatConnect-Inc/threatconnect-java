@@ -1,5 +1,6 @@
 package com.threatconnect.apps.playbooks.test.orc;
 
+import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.ExitStatus;
 import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
 import com.threatconnect.apps.playbooks.test.orc.test.TestFailureException;
@@ -45,60 +46,100 @@ public class PlaybookRunner implements Runnable
 	{
 		try
 		{
+			//create an instance of the app config
+			AppConfig appConfig = SdkAppConfig.getInstance();
+			
 			//get the playbook config
 			PlaybookConfig playbookConfig = playbooksOrchestration.getPlaybookConfig();
 			
 			//instantiate the app
 			PlaybooksApp playbooksApp = playbookConfig.getPlaybookAppClass().newInstance();
-			playbooksApp.init(SdkAppConfig.getInstance());
+			playbooksApp.init(appConfig);
 			
 			//configure the parameters before running this app
 			logger.info("Configuring params for {}", playbookConfig.getPlaybookAppClass());
-			configureParams(playbooksOrchestration, playbooksApp);
+			configureParams(playbooksOrchestration, playbooksApp, appConfig);
 			
-			logger.info("Running {}", playbookConfig.getPlaybookAppClass());
-			ExitStatus exitStatus = playbooksApp.execute(SdkAppConfig.getInstance());
+			//retrieve the retry information for this app
+			final int retryAttempts = playbooksOrchestration.getRetryAttempts();
 			
+			//run this app
+			run(playbooksOrchestration, playbooksApp, appConfig, retryAttempts);
+		}
+		catch (Exception e)
+		{
+			throw new PlaybookRunnerException(e);
+		}
+	}
+	
+	private void run(final PlaybooksOrchestration playbooksOrchestration, final PlaybooksApp playbooksApp,
+		final AppConfig appConfig, final int retryAttemptsRemaining) throws Exception
+	{
+		//get the playbook config
+		PlaybookConfig playbookConfig = playbooksOrchestration.getPlaybookConfig();
+		
+		logger.info("Running {}", playbookConfig.getPlaybookAppClass());
+		ExitStatus exitStatus = playbooksApp.execute(appConfig);
+		
+		//check to see if this was successful
+		if (ExitStatus.Success.equals(exitStatus))
+		{
 			//log the output variables
 			logOutputs(playbooksOrchestration, playbooksApp);
 			
-			//check to see if this was successful
-			if (ExitStatus.Success.equals(exitStatus))
+			//validate that all the output variables were written out
+			validateOutputVariablesWereWritten(playbooksOrchestration, playbooksApp);
+			
+			logger.info("{} finished successfully", playbookConfig.getPlaybookAppClass());
+			
+			//check to see if there is an onsuccess defined
+			if (null != playbooksOrchestration.getOnSuccess())
 			{
-				//validate that all the output variables were written out
-				validateOutputVariablesWereWritten(playbooksOrchestration, playbooksApp);
-				
-				logger.info("{} finished successfully", playbookConfig.getPlaybookAppClass());
-				
-				//check to see if there is an onsuccess defined
-				if (null != playbooksOrchestration.getOnSuccess())
+				//check to see if there are tests to run
+				if (!playbooksOrchestration.getOnSuccess()
+					.getTests().isEmpty())
 				{
-					//check to see if there are tests to run
-					if (!playbooksOrchestration.getOnSuccess()
-						.getTests().isEmpty())
-					{
-						logger.info("Running tests for {}", playbookConfig.getPlaybookAppClass());
-						runTests(playbooksOrchestration.getOnSuccess().getTests(), playbooksApp);
-					}
-					
-					//check to see if this runner has an app to run
-					if (null != playbooksOrchestration.getOnSuccess().getRunApp())
-					{
-						run(playbooksOrchestration.getOnSuccess().getRunApp());
-					}
+					logger.info("Running tests for {}", playbookConfig.getPlaybookAppClass());
+					runTests(playbooksOrchestration.getOnSuccess().getTests(), playbooksApp);
 				}
-				//check to see if there is an onfailure definied
-				else if (null != playbooksOrchestration.getOnFailure())
+				
+				//check to see if this runner has an app to run
+				if (null != playbooksOrchestration.getOnSuccess().getRunApp())
 				{
-					//we were expecting the app to fail but it was successful
-					throw new PlaybookRunnerException(
-						playbookConfig.getPlaybookAppClass() + " finished with an unexpected status of \"" + exitStatus
-							.toString() + "\"");
+					run(playbooksOrchestration.getOnSuccess().getRunApp());
 				}
+			}
+			//check to see if there is an onfailure definied
+			else if (null != playbooksOrchestration.getOnFailure())
+			{
+				//we were expecting the app to fail but it was successful
+				throw new PlaybookRunnerException(
+					playbookConfig.getPlaybookAppClass() + " finished with an unexpected status of \"" + exitStatus
+						.toString() + "\"");
+			}
+		}
+		else
+		{
+			logger.info("{} failed", playbookConfig.getPlaybookAppClass());
+			
+			//check to see if retries are allowed
+			if (retryAttemptsRemaining > 0)
+			{
+				//hold for the delay
+				final int delaySeconds = playbooksOrchestration.getRetryDelaySeconds();
+				logger.info("Waiting {} seconds before retry", delaySeconds);
+				Thread.sleep(delaySeconds * 1000);
+				
+				//rerun this app
+				final int totalRetryAttempts = playbooksOrchestration.getRetryAttempts();
+				final int attempt = totalRetryAttempts - retryAttemptsRemaining + 1;
+				logger.info("Attempting retry {}/{}", attempt, totalRetryAttempts);
+				run(playbooksOrchestration, playbooksApp, appConfig, retryAttemptsRemaining - 1);
 			}
 			else
 			{
-				logger.info("{} failed", playbookConfig.getPlaybookAppClass());
+				//log the output variables
+				logOutputs(playbooksOrchestration, playbooksApp);
 				
 				//check to see if there is an onfailure defined
 				if (null != playbooksOrchestration.getOnFailure())
@@ -126,25 +167,22 @@ public class PlaybookRunner implements Runnable
 				}
 			}
 		}
-		catch (Exception e)
-		{
-			throw new PlaybookRunnerException(e);
-		}
 	}
 	
-	private void configureParams(final PlaybooksOrchestration playbooksOrchestration, final PlaybooksApp playbooksApp)
+	private void configureParams(final PlaybooksOrchestration playbooksOrchestration, final PlaybooksApp playbooksApp,
+		final AppConfig appConfig)
 		throws ContentException
 	{
 		//add all of the output params
 		final String paramOutVars = StringUtils.join(playbooksOrchestration.getOutputVariables(), ",");
-		SdkAppConfig.getInstance().set(PlaybooksAppConfig.PARAM_OUT_VARS, paramOutVars);
+		appConfig.set(PlaybooksAppConfig.PARAM_OUT_VARS, paramOutVars);
 		logger.debug("Setting \"{}\":\"{}\"", PlaybooksAppConfig.PARAM_OUT_VARS, paramOutVars);
 		
 		//for each of the app params
 		for (Map.Entry<String, String> appParams : playbooksOrchestration.getAppParams().entrySet())
 		{
 			//set this app param
-			SdkAppConfig.getInstance().set(appParams.getKey(), appParams.getValue());
+			appConfig.set(appParams.getKey(), appParams.getValue());
 			logger.debug("Setting App Param \"{}\":\"{}\"", appParams.getKey(), appParams.getValue());
 		}
 		
@@ -152,7 +190,7 @@ public class PlaybookRunner implements Runnable
 		for (Map.Entry<String, String> inputParam : playbooksOrchestration.getInputParams().entrySet())
 		{
 			//set this input
-			SdkAppConfig.getInstance().set(inputParam.getKey(), inputParam.getValue());
+			appConfig.set(inputParam.getKey(), inputParam.getValue());
 			logger.debug("Setting Input Param \"{}\":\"{}\"", inputParam.getKey(), inputParam.getValue());
 			
 			//write the data to the content service

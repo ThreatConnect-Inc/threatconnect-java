@@ -34,6 +34,9 @@ public class PlaybooksOrchestration
 	
 	private final ContentService contentService;
 	
+	private int retryAttempts;
+	private int retryDelaySeconds;
+	
 	PlaybooksOrchestration(final PlaybookConfig playbookConfig, final PlaybooksOrchestrationBuilder builder)
 	{
 		this(playbookConfig, builder, null, true);
@@ -94,6 +97,33 @@ public class PlaybooksOrchestration
 			//add this output param
 			addOutputParam(outputVariable.getName(), outputVariable.getType());
 		}
+		
+		return this;
+	}
+	
+	/**
+	 * In the event of an app failure, this allows the app to be rerun for a certain amount of attempts before it is
+	 * considered "failed". If the app completes successfully on any of the retry attempts, the playbook execution
+	 * continues as normal
+	 *
+	 * @param retryAttempts              the number of attempts to retry running this app
+	 * @param delayBetweenRetriesSeconds the number of seconds to wait between each retry attempt
+	 * @return
+	 */
+	public PlaybooksOrchestration allowRetries(final int retryAttempts, final int delayBetweenRetriesSeconds)
+	{
+		//make sure that retry attempts and delay are greater than or equal to 0
+		if (retryAttempts < 0)
+		{
+			throw new IllegalArgumentException("retryAttempts must be greater than or equal to 0");
+		}
+		if (delayBetweenRetriesSeconds < 0)
+		{
+			throw new IllegalArgumentException("delayBetweenRetriesSeconds must be greater than or equal to 0");
+		}
+		
+		this.retryAttempts = retryAttempts;
+		this.retryDelaySeconds = delayBetweenRetriesSeconds;
 		
 		return this;
 	}
@@ -218,5 +248,15 @@ public class PlaybooksOrchestration
 	POResult getOnFailure()
 	{
 		return onFailure;
+	}
+	
+	int getRetryAttempts()
+	{
+		return retryAttempts;
+	}
+	
+	int getRetryDelaySeconds()
+	{
+		return retryDelaySeconds;
 	}
 }
