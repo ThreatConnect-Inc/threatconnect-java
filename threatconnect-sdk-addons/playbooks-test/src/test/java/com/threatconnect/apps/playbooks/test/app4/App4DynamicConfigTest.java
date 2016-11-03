@@ -2,6 +2,7 @@ package com.threatconnect.apps.playbooks.test.app4;
 
 import com.threatconnect.apps.playbooks.test.config.PlaybooksTestConfiguration;
 import com.threatconnect.apps.playbooks.test.orc.PlaybooksOrchestrationBuilder;
+import com.threatconnect.sdk.addons.util.config.install.ParamDataType;
 import com.threatconnect.sdk.addons.util.config.install.PlaybookVariableType;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,8 +21,8 @@ public class App4DynamicConfigTest
 		//build the dynamic configuration for this app
 		PlaybooksTestConfiguration.getInstance()
 			.createPlaybookConfigBuilder(App4DynamicConfig.class)
-				.addPlaybookParam(App4DynamicConfig.PARAM_INPUT_FIRST_NAME, "String", PlaybookVariableType.String)
-				.addPlaybookParam(App4DynamicConfig.PARAM_INPUT_LAST_NAME, "String", PlaybookVariableType.String)
+				.addPlaybookParam(App4DynamicConfig.PARAM_INPUT_FIRST_NAME, ParamDataType.String, PlaybookVariableType.String)
+				.addPlaybookParam(App4DynamicConfig.PARAM_INPUT_LAST_NAME, ParamDataType.String, PlaybookVariableType.String)
 				.addOutputVariable(App4DynamicConfig.OUTPUT_NAME, PlaybookVariableType.String)
 			.build();
 		//@formatter:on

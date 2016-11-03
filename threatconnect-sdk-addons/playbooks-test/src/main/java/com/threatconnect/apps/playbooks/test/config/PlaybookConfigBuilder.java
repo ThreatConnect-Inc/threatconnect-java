@@ -1,6 +1,7 @@
 package com.threatconnect.apps.playbooks.test.config;
 
 import com.threatconnect.sdk.addons.util.config.install.Param;
+import com.threatconnect.sdk.addons.util.config.install.ParamDataType;
 import com.threatconnect.sdk.addons.util.config.install.PlaybookOutputVariable;
 import com.threatconnect.sdk.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.sdk.playbooks.app.PlaybooksApp;
@@ -36,7 +37,7 @@ public class PlaybookConfigBuilder
 		this.playbookOutputVariableList = new ArrayList<PlaybookOutputVariable>();
 	}
 	
-	public PlaybookConfigBuilder addAppParam(final String name, final String type)
+	public PlaybookConfigBuilder addAppParam(final String name, final ParamDataType type)
 	{
 		//create the new param object and add it to the list
 		Param param = new Param(name, type);
@@ -45,7 +46,7 @@ public class PlaybookConfigBuilder
 		return this;
 	}
 	
-	public PlaybookConfigBuilder addPlaybookParam(final String name, final String type,
+	public PlaybookConfigBuilder addPlaybookParam(final String name, final ParamDataType type,
 		final PlaybookVariableType... playbookVariableTypes)
 	{
 		//make sure the playbooks variable type is not null

@@ -4,8 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.threatconnect.sdk.addons.util.JsonUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,20 +13,18 @@ import java.util.List;
  */
 public class Param
 {
-	private static final Logger logger = LoggerFactory.getLogger(Param.class);
-	
 	private static final String NAME = "name";
 	private static final String TYPE = "type";
 	private static final String PLAYBOOK_DATA_TYPE = "playbookDataType";
 	
 	private final String name;
-	private final String type;
+	private final ParamDataType type;
 	private final List<PlaybookVariableType> playbookDataTypes;
 	
 	public Param(final JsonObject root)
 	{
 		this.name = JsonUtil.getAsString(root, NAME);
-		this.type = JsonUtil.getAsString(root, TYPE);
+		this.type = ParamDataType.fromString(JsonUtil.getAsString(root, TYPE));
 		this.playbookDataTypes = new ArrayList<PlaybookVariableType>();
 		
 		//retrieve the playbook data types and make sure it is not null
@@ -40,28 +36,17 @@ public class Param
 			for (JsonElement element : array)
 			{
 				//convert this json object to a playbook variable and add it to the results
-				try
-				{
-					PlaybookVariableType playbookVariableType = PlaybookVariableType.valueOf(element.getAsString());
-					playbookDataTypes.add(playbookVariableType);
-				}
-				catch (IllegalArgumentException e)
-				{
-					logger
-						.error("{} is not a valid PlaybookVariableType. Possible values are: {}", element.getAsString(),
-							PlaybookVariableType.values());
-					throw e;
-				}
+				playbookDataTypes.add(PlaybookVariableType.fromString(element.getAsString()));
 			}
 		}
 	}
 	
-	public Param(final String name, final String type)
+	public Param(final String name, final ParamDataType type)
 	{
 		this(name, type, null);
 	}
 	
-	public Param(final String name, final String type, final List<PlaybookVariableType> playbookDataTypes)
+	public Param(final String name, final ParamDataType type, final List<PlaybookVariableType> playbookDataTypes)
 	{
 		this.name = name;
 		this.type = type;
@@ -74,7 +59,7 @@ public class Param
 		return name;
 	}
 	
-	public String getType()
+	public ParamDataType getType()
 	{
 		return type;
 	}
