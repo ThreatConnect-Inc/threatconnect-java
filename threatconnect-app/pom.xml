@@ -13,6 +13,7 @@
 	<modules>
 		<module>apps-core</module>
 		<module>playbooks-core</module>
+		<module>playbooks-test</module>
 		<module>util</module>
 	</modules>
 
