@@ -1,9 +1,7 @@
 package com.threatconnect.sdk.app;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-
+import com.threatconnect.app.apps.AppConfig;
+import com.threatconnect.sdk.log.ServerLoggerAppender;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.appender.FileAppender;
@@ -11,7 +9,9 @@ import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 
-import com.threatconnect.sdk.log.ServerLoggerAppender;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 
 public class LoggerUtil
 {

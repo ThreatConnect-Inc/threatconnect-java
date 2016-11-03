@@ -1,5 +1,8 @@
 package com.threatconnect.sdk.app;
 
+import com.threatconnect.app.apps.App;
+import com.threatconnect.app.apps.AppConfig;
+import com.threatconnect.app.apps.ExitStatus;
 import com.threatconnect.sdk.app.exception.NoAppClassFoundException;
 import com.threatconnect.sdk.log.ServerLogger;
 import org.slf4j.Logger;
@@ -22,7 +25,7 @@ public class MultiAppMain extends AppMain
 		try
 		{
 			// create the app config object
-			AppConfig appConfig = AppConfig.getInstance();
+			AppConfig appConfig = SdkAppConfig.getInstance();
 			
 			// set whether or not api logging is enabled
 			ServerLogger.getInstance().setEnabled(appConfig.isTcLogToApi());

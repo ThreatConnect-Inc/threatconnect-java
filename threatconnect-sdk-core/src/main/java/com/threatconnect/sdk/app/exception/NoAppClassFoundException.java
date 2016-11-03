@@ -1,6 +1,6 @@
 package com.threatconnect.sdk.app.exception;
 
-import com.threatconnect.sdk.app.App;
+import com.threatconnect.app.apps.App;
 
 /**
  * @author Greg Marut

@@ -1,17 +1,32 @@
 package com.threatconnect.sdk.app;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.threatconnect.app.apps.App;
+import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.sdk.client.fluent.AdversaryBuilder;
 import com.threatconnect.sdk.client.fluent.AttributeBuilder;
 import com.threatconnect.sdk.client.fluent.TagBuilder;
 import com.threatconnect.sdk.client.fluent.ThreatBuilder;
-import com.threatconnect.sdk.client.reader.*;
+import com.threatconnect.sdk.client.reader.AbstractGroupReaderAdapter;
+import com.threatconnect.sdk.client.reader.AbstractIndicatorReaderAdapter;
+import com.threatconnect.sdk.client.reader.DataStoreReaderAdapter;
+import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
+import com.threatconnect.sdk.client.reader.TagReaderAdapter;
 import com.threatconnect.sdk.client.response.IterableResponse;
-import com.threatconnect.sdk.client.writer.*;
+import com.threatconnect.sdk.client.writer.AbstractGroupWriterAdapter;
+import com.threatconnect.sdk.client.writer.AbstractIndicatorWriterAdapter;
+import com.threatconnect.sdk.client.writer.DataStoreWriterAdapter;
+import com.threatconnect.sdk.client.writer.TagWriterAdapter;
+import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
 import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
-import com.threatconnect.sdk.server.entity.*;
+import com.threatconnect.sdk.server.entity.Adversary;
+import com.threatconnect.sdk.server.entity.Attribute;
+import com.threatconnect.sdk.server.entity.Group;
+import com.threatconnect.sdk.server.entity.Indicator;
+import com.threatconnect.sdk.server.entity.Tag;
+import com.threatconnect.sdk.server.entity.Threat;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.util.IndicatorUtil;
 import com.threatconnect.sdk.util.StringUtil;
@@ -29,7 +44,11 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.threatconnect.sdk.app.AppUtil.createClientBuilder;
 import static com.threatconnect.sdk.util.IndicatorUtil.getUniqueId;
@@ -74,7 +93,7 @@ public abstract class EnhancedApp extends App
 
 	public EnhancedApp()
 	{
-		this(AppConfig.getInstance());
+		this(new SdkAppConfig());
 	}
 
 	public EnhancedApp(AppConfig appConfig)
@@ -399,8 +418,8 @@ public abstract class EnhancedApp extends App
 	{
 		if (externalClient == null)
 		{
-			externalClient = createClientBuilder(AppConfig.getInstance().isExternalApplyProxy(),
-				AppConfig.getInstance().isVerifySSL()).build();
+			externalClient = createClientBuilder(getAppConfig().isExternalApplyProxy(),
+				getAppConfig().isVerifySSL()).build();
 		}
 		return externalClient;
 	}

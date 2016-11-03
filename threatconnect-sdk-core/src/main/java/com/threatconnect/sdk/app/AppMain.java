@@ -1,5 +1,9 @@
 package com.threatconnect.sdk.app;
 
+import com.threatconnect.app.apps.App;
+import com.threatconnect.app.apps.AppConfig;
+import com.threatconnect.app.apps.AppExecutor;
+import com.threatconnect.app.apps.ExitStatus;
 import com.threatconnect.sdk.app.exception.AppInstantiationException;
 import com.threatconnect.sdk.app.exception.MultipleAppClassFoundException;
 import com.threatconnect.sdk.app.exception.NoAppClassFoundException;
@@ -14,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class AppMain
+public class AppMain implements AppExecutor
 {
 	private static final Logger logger = LoggerFactory.getLogger(AppMain.class);
 	
@@ -26,7 +30,7 @@ public class AppMain
 		try
 		{
 			// create the app config object
-			AppConfig appConfig = AppConfig.getInstance();
+			AppConfig appConfig = new SdkAppConfig();
 			
 			// set whether or not api logging is enabled
 			ServerLogger.getInstance().setEnabled(appConfig.isTcLogToApi());
@@ -67,10 +71,11 @@ public class AppMain
 	 * @return
 	 * @throws ClassNotFoundException
 	 */
+	@Override
 	public Class<? extends App> getAppClassToExecute(final AppConfig appConfig) throws ClassNotFoundException
 	{
 		// check to see if there is an app class specified
-		if (null != appConfig.getTcMainAppClass() && !appConfig.getTcMainAppClass().isEmpty())
+		if (null != appConfig && null != appConfig.getTcMainAppClass() && !appConfig.getTcMainAppClass().isEmpty())
 		{
 			// load the class by name
 			Class<?> clazz = Class.forName(appConfig.getTcMainAppClass());
@@ -144,8 +149,8 @@ public class AppMain
 			// instantiate a new app class
 			App app = appClass.newInstance();
 			
-			// add the app config for this app
-			app.setAppConfig(appConfig);
+			// initialize this app
+			app.init(appConfig);
 			
 			// reconfigure the log file for this app
 			LoggerUtil.reconfigureGlobalLogger(app.getAppLogFile(), appConfig);

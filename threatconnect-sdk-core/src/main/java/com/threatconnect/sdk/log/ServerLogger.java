@@ -1,7 +1,8 @@
 package com.threatconnect.sdk.log;
 
-import com.threatconnect.sdk.app.AppConfig;
+import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.sdk.app.LoggerUtil;
+import com.threatconnect.sdk.app.SdkAppConfig;
 import com.threatconnect.sdk.client.writer.LogWriterAdapter;
 import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.conn.Connection;
@@ -192,7 +193,7 @@ public class ServerLogger
 	private Configuration createConfiguration()
 	{
 		// create the configuration for the threatconnect server
-		AppConfig appConfig = AppConfig.getInstance();
+		AppConfig appConfig = SdkAppConfig.getInstance();
 		Configuration configuration = new Configuration(appConfig.getTcApiPath(), appConfig.getTcApiAccessID(),
 			appConfig.getTcApiUserSecretKey(), appConfig.getApiDefaultOrg(), appConfig.getTcToken(),
 			appConfig.getTcTokenExpires());

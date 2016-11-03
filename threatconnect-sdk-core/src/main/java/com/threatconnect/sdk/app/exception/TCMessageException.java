@@ -14,4 +14,9 @@ public class TCMessageException extends RuntimeException
 	{
 		super(userFriendlyMessage);
 	}
+	
+	public TCMessageException(final String userFriendlyMessage, final Exception cause)
+	{
+		super(userFriendlyMessage, cause);
+	}
 }
