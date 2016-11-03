@@ -42,13 +42,16 @@ public class PlaybookConfig
 	
 	public PlaybookConfig(final Class<? extends PlaybooksApp> playbookAppClass, final InstallJson installJson)
 	{
+		this(playbookAppClass, installJson.getPlaybooksParams(),
+			installJson.getPlaybook().getPlaybooksOutputVariables());
+	}
+	
+	public PlaybookConfig(final Class<? extends PlaybooksApp> playbookAppClass, final List<Param> playbookParamList,
+		final List<PlaybookOutputVariable> playbookOutputVariableList)
+	{
 		this(playbookAppClass);
 		
-		List<Param> playbookParamList = installJson.getPlaybooksParams();
 		logger.debug("Found {} playbook params for \"{}\"", playbookParamList.size(), playbookAppClass.getName());
-		
-		List<PlaybookOutputVariable> playbookOutputVariableList =
-			installJson.getPlaybook().getPlaybooksOutputVariables();
 		logger.debug("Found {} playbook output variables for \"{}\"", playbookOutputVariableList.size(),
 			playbookAppClass.getName());
 		
@@ -106,9 +109,9 @@ public class PlaybookConfig
 		Param param = getInputParam(paramName);
 		
 		//for each of the playbook types
-		for (String dataType : param.getPlaybookDataTypes())
+		for (PlaybookVariableType playbookVariableType : param.getPlaybookDataTypes())
 		{
-			String variable = buildParam(this.appID, param.getName(), PlaybookVariableType.valueOf(dataType));
+			String variable = buildParam(this.appID, param.getName(), playbookVariableType);
 			results.add(variable);
 		}
 		
@@ -120,10 +123,10 @@ public class PlaybookConfig
 		Param param = getInputParam(paramName);
 		
 		//for each of the playbook types
-		for (String dataType : param.getPlaybookDataTypes())
+		for (PlaybookVariableType playbookVariableType : param.getPlaybookDataTypes())
 		{
 			//check to see if this datatype matches
-			if (type.toString().equals(dataType))
+			if (type.equals(playbookVariableType))
 			{
 				return buildParam(this.appID, param.getName(), type);
 			}

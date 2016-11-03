@@ -196,6 +196,37 @@ public class PlaybooksTestConfiguration
 		}
 	}
 	
+	/**
+	 * Creates a builder object for dynamically registering a playbook app config without a json file
+	 *
+	 * @param playbookAppClass
+	 * @return
+	 */
+	public PlaybookConfigBuilder createPlaybookConfigBuilder(final Class<? extends PlaybooksApp> playbookAppClass)
+	{
+		return new PlaybookConfigBuilder(playbookAppClass, this);
+	}
+	
+	/**
+	 * Adds a playbook configuration to the map and overrides any existing configuration
+	 *
+	 * @param playbookConfig
+	 */
+	void registerDynamicPlaybookConfiguration(final PlaybookConfig playbookConfig)
+	{
+		logger.info("Registering dynamic PlaybookConfig for \"{}\"", playbookConfig.getPlaybookAppClass().getName());
+		
+		//check to see if a playbooks configuration already exists for this class
+		if (configurationMap.containsKey(playbookConfig.getPlaybookAppClass()))
+		{
+			//notify the user via a warning
+			logger.warn("Overriding existing configuration for \"{}\"", playbookConfig.getPlaybookAppClass().getName());
+		}
+		
+		//add this config to the map
+		configurationMap.put(playbookConfig.getPlaybookAppClass(), playbookConfig);
+	}
+	
 	public Map<Class<? extends PlaybooksApp>, PlaybookConfig> getConfigurationMap()
 	{
 		return new HashMap<Class<? extends PlaybooksApp>, PlaybookConfig>(configurationMap);

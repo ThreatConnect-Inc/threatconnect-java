@@ -11,23 +11,11 @@
 	<artifactId>apps-core</artifactId>
 	<name>Apps Core</name>
 
-	<properties>
-		<version.commons-io>2.4</version.commons-io>
-		<log4j.version>2.6.1</log4j.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>${version.commons-io}</version>
-		</dependency>
-
-		<!-- Logging -->
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-slf4j-impl</artifactId>
-			<version>${log4j.version}</version>
 		</dependency>
 	</dependencies>
 </project>
