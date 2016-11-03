@@ -2,12 +2,13 @@ package com.threatconnect.apps.playbooks.test.orc;
 
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.ExitStatus;
+import com.threatconnect.app.apps.SystemPropertiesAppConfig;
 import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
+import com.threatconnect.apps.playbooks.test.config.PlaybooksTestConfiguration;
 import com.threatconnect.apps.playbooks.test.orc.test.TestFailureException;
 import com.threatconnect.apps.playbooks.test.orc.test.Testable;
 import com.threatconnect.apps.playbooks.test.util.ContentServiceUtil;
 import com.threatconnect.sdk.addons.util.config.install.PlaybookVariableType;
-import com.threatconnect.sdk.app.SdkAppConfig;
 import com.threatconnect.sdk.playbooks.app.PlaybooksApp;
 import com.threatconnect.sdk.playbooks.app.PlaybooksAppConfig;
 import com.threatconnect.sdk.playbooks.content.ContentService;
@@ -46,8 +47,9 @@ public class PlaybookRunner implements Runnable
 	{
 		try
 		{
-			//create an instance of the app config
-			AppConfig appConfig = SdkAppConfig.getInstance();
+			//create an instance of the app config object and copy the default params from the test config
+			AppConfig appConfig = new SystemPropertiesAppConfig()
+				.copyFrom(PlaybooksTestConfiguration.getInstance().getDefaultAppConfig());
 			
 			//get the playbook config
 			PlaybookConfig playbookConfig = playbooksOrchestration.getPlaybookConfig();

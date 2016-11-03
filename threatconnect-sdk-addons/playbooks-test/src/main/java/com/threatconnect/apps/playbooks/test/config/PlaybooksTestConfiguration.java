@@ -1,11 +1,12 @@
 package com.threatconnect.apps.playbooks.test.config;
 
 import com.threatconnect.app.apps.App;
+import com.threatconnect.app.apps.AppConfig;
+import com.threatconnect.app.apps.AppExecutor;
+import com.threatconnect.app.apps.DefaultAppConfig;
 import com.threatconnect.apps.playbooks.test.db.EmbeddedMapDBService;
 import com.threatconnect.sdk.addons.util.config.install.InstallJson;
 import com.threatconnect.sdk.addons.util.config.install.InvalidInstallJsonFileException;
-import com.threatconnect.sdk.app.AppMain;
-import com.threatconnect.sdk.app.SdkAppConfig;
 import com.threatconnect.sdk.playbooks.app.PlaybooksApp;
 import com.threatconnect.sdk.playbooks.app.PlaybooksAppConfig;
 import com.threatconnect.sdk.playbooks.db.DBServiceFactory;
@@ -13,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,9 +39,13 @@ public class PlaybooksTestConfiguration
 	//holds the playbook configuration map
 	private final Map<Class<? extends PlaybooksApp>, PlaybookConfig> configurationMap;
 	
+	//holds the default app config object
+	private final AppConfig defaultAppConfig;
+	
 	private PlaybooksTestConfiguration()
 	{
 		this.configurationMap = new HashMap<Class<? extends PlaybooksApp>, PlaybookConfig>();
+		this.defaultAppConfig = new DefaultAppConfig();
 		
 		logger.info("Loading Playbooks Test Configuration");
 		
@@ -60,7 +67,7 @@ public class PlaybooksTestConfiguration
 		
 		//register the inmemory database
 		DBServiceFactory.registerCustomDBService("Memory", new EmbeddedMapDBService());
-		SdkAppConfig.getInstance().set(PlaybooksAppConfig.PARAM_DB_TYPE, "Memory");
+		defaultAppConfig.set(PlaybooksAppConfig.PARAM_DB_TYPE, "Memory");
 	}
 	
 	private List<File> findInstallJsonFiles()
@@ -132,14 +139,23 @@ public class PlaybooksTestConfiguration
 		try
 		{
 			//get the program main class
-			Class<? extends AppMain> programMainClass =
-				(Class<? extends AppMain>) Class.forName(installJson.getProgramMain());
+			Class<? extends AppExecutor> programMainClass =
+				(Class<? extends AppExecutor>) Class.forName(installJson.getProgramMain());
 			
 			//instantiate this class
-			AppMain appMain = programMainClass.newInstance();
+			AppExecutor appExecutor = programMainClass.newInstance();
 			
 			//retrieve the classes that are executed from this main
-			Class<? extends App> appClass = appMain.getAppClassToExecute(SdkAppConfig.getInstance());
+			AppConfig appConfig = new DefaultAppConfig().copyFrom(defaultAppConfig);
+			Class<? extends App> appClass = appExecutor.getAppClassToExecute(appConfig);
+			
+			//ensure that this class has a declared static main method
+			Method method = appExecutor.getClass().getDeclaredMethod("main", String[].class);
+			if (!Modifier.isStatic(method.getModifiers()))
+			{
+				throw new UnsupposedPlaybookMainClassException(
+					installJson.getProgramMain() + " must have static main method.");
+			}
 			
 			//configure this app
 			configureApp(appClass, installJson);
@@ -157,7 +173,13 @@ public class PlaybooksTestConfiguration
 		catch (ClassCastException e)
 		{
 			throw new UnsupposedPlaybookMainClassException(installJson.getProgramMain() +
-				" is not supported. Only classes that extend " + AppMain.class.getName() + " are currently supported.");
+				" is not supported. Only classes that implement " + AppExecutor.class.getName()
+				+ " are currently supported.");
+		}
+		catch (NoSuchMethodException e)
+		{
+			throw new UnsupposedPlaybookMainClassException(
+				installJson.getProgramMain() + " must have static main method.");
 		}
 	}
 	
@@ -230,6 +252,11 @@ public class PlaybooksTestConfiguration
 	public Map<Class<? extends PlaybooksApp>, PlaybookConfig> getConfigurationMap()
 	{
 		return new HashMap<Class<? extends PlaybooksApp>, PlaybookConfig>(configurationMap);
+	}
+	
+	public AppConfig getDefaultAppConfig()
+	{
+		return defaultAppConfig;
 	}
 	
 	public static PlaybooksTestConfiguration getInstance()

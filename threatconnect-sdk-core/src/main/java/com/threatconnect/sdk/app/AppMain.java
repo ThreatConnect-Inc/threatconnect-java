@@ -2,6 +2,7 @@ package com.threatconnect.sdk.app;
 
 import com.threatconnect.app.apps.App;
 import com.threatconnect.app.apps.AppConfig;
+import com.threatconnect.app.apps.AppExecutor;
 import com.threatconnect.app.apps.ExitStatus;
 import com.threatconnect.sdk.app.exception.AppInstantiationException;
 import com.threatconnect.sdk.app.exception.MultipleAppClassFoundException;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class AppMain
+public class AppMain implements AppExecutor
 {
 	private static final Logger logger = LoggerFactory.getLogger(AppMain.class);
 	
@@ -70,10 +71,11 @@ public class AppMain
 	 * @return
 	 * @throws ClassNotFoundException
 	 */
+	@Override
 	public Class<? extends App> getAppClassToExecute(final AppConfig appConfig) throws ClassNotFoundException
 	{
 		// check to see if there is an app class specified
-		if (null != appConfig.getTcMainAppClass() && !appConfig.getTcMainAppClass().isEmpty())
+		if (null != appConfig && null != appConfig.getTcMainAppClass() && !appConfig.getTcMainAppClass().isEmpty())
 		{
 			// load the class by name
 			Class<?> clazz = Class.forName(appConfig.getTcMainAppClass());

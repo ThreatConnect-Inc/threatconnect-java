@@ -2,12 +2,12 @@ package com.threatconnect.apps.playbooks.test.app2;
 
 import com.threatconnect.app.apps.App;
 import com.threatconnect.app.apps.AppConfig;
-import com.threatconnect.sdk.app.AppMain;
+import com.threatconnect.app.apps.AppExecutor;
 
 /**
  * @author Greg Marut
  */
-public class App2Main extends AppMain
+public class App2Main implements AppExecutor
 {
 	@Override
 	public Class<? extends App> getAppClassToExecute(final AppConfig appConfig) throws ClassNotFoundException
@@ -17,6 +17,6 @@ public class App2Main extends AppMain
 	
 	public static void main(String[] args)
 	{
-		new App2Main().execute();
+		//this is just a test case so do nothing
 	}
 }

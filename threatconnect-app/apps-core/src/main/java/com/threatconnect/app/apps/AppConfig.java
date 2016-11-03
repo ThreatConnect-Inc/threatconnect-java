@@ -1,8 +1,6 @@
 package com.threatconnect.app.apps;
 
 import org.apache.logging.log4j.Level;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,8 +37,6 @@ public abstract class AppConfig
 	public static final String EXTERNAL_APPLY_PROXY = "apply_proxy_external";
 	public static final String VERIFY_SSL_EXTERNAL = "verify_ssl_external";
 	
-	private static final Logger logger = LoggerFactory.getLogger(AppConfig.class);
-	
 	// holds the map of all of the configuration settings
 	private final Map<String, String> configuration;
 	
@@ -48,6 +44,20 @@ public abstract class AppConfig
 	{
 		// holds the map of configuration settings
 		configuration = new HashMap<String, String>();
+	}
+	
+	/**
+	 * Copies the configuration from another app config object and returns this object's instance to allow for chaining
+	 *
+	 * @param appConfig
+	 * @return
+	 */
+	public AppConfig copyFrom(final AppConfig appConfig)
+	{
+		//copy all of the configurations from the other app config object
+		configuration.putAll(appConfig.configuration);
+		
+		return this;
 	}
 	
 	public String getTcMainAppClass()
