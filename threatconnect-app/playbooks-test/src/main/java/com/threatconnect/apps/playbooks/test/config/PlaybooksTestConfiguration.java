@@ -70,6 +70,11 @@ public class PlaybooksTestConfiguration
 		defaultAppConfig.set(PlaybooksAppConfig.PARAM_DB_TYPE, "Memory");
 	}
 	
+	public void setGlobalAppParam(final String name, final String value)
+	{
+		defaultAppConfig.set(name, value);
+	}
+	
 	private List<File> findInstallJsonFiles()
 	{
 		//holds the list of files to return
