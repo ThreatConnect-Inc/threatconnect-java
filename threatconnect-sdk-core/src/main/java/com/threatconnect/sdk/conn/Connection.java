@@ -99,7 +99,7 @@ public class Connection implements Closeable
 		if (apiClient == null)
 		{
 			// :TODO: should we add an SDK param to trust self signed certs?
-			apiClient = AppUtil.createClient(SdkAppConfig.getInstance().isTcApplyProxy(), true);
+			apiClient = AppUtil.createClient(SdkAppConfig.getInstance().isProxyTC(), true);
 		}
 		return apiClient;
 	}
@@ -109,7 +109,7 @@ public class Connection implements Closeable
 		if (externalClient == null)
 		{
 			// :TODO: should we add an SDK param to trust self signed certs?
-			externalClient = AppUtil.createClient(SdkAppConfig.getInstance().isExternalApplyProxy(), true);
+			externalClient = AppUtil.createClient(SdkAppConfig.getInstance().isProxyExternal(), true);
 		}
 		return externalClient;
 	}

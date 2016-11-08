@@ -16,6 +16,7 @@ public abstract class AppConfig
 	public static final String TC_TEMP_PATH = "tc_temp_path";
 	public static final String TC_OUT_PATH = "tc_out_path";
 	public static final String TC_IN_PATH = "tc_in_path";
+	public static final String TC_USER_ID = "tc_user_id";
 	public static final String TC_API_PATH = "tc_api_path";
 	public static final String TC_SPACE_ELEMENT_ID = "tc_space_element_id";
 	public static final String TC_API_ACCESS_ID = "api_access_id";
@@ -28,13 +29,13 @@ public abstract class AppConfig
 	public static final String TC_PROXY_USERNAME = "tc_proxy_username";
 	public static final String TC_PROXY_PASSWORD = "tc_proxy_password";
 	public static final String TC_API_MAX_RESULT = "api_max_results";
-	public static final String TC_APPLY_PROXY = "apply_proxy_tc";
 	public static final String TC_LOG_LEVEL = "tc_log_level";
 	public static final String TC_LOG_TO_API = "tc_log_to_api";
+	public static final String TC_PROXY_TC = "tc_proxy_tc";
+	public static final String TC_PROXY_EXTERNAL = "tc_proxy_external";
 	
 	public static final int DEFAULT_MAX_RESULTS = 350;
 	public static final String DEFAULT_LOG_LEVEL = "INFO";
-	public static final String EXTERNAL_APPLY_PROXY = "apply_proxy_external";
 	public static final String VERIFY_SSL_EXTERNAL = "verify_ssl_external";
 	
 	// holds the map of all of the configuration settings
@@ -88,6 +89,11 @@ public abstract class AppConfig
 	public String getTcApiPath()
 	{
 		return getString(TC_API_PATH);
+	}
+	
+	public Integer getTcUserId()
+	{
+		return getInteger(TC_USER_ID);
 	}
 	
 	public Integer getTcSpaceElementId()
@@ -150,14 +156,14 @@ public abstract class AppConfig
 		return getInteger(TC_API_MAX_RESULT, defaultMax);
 	}
 	
-	public boolean isTcApplyProxy()
+	public boolean isProxyTC()
 	{
-		return getBoolean(TC_APPLY_PROXY);
+		return getBoolean(TC_PROXY_TC);
 	}
 	
-	public boolean isExternalApplyProxy()
+	public boolean isProxyExternal()
 	{
-		return getBoolean(EXTERNAL_APPLY_PROXY);
+		return getBoolean(TC_PROXY_EXTERNAL);
 	}
 	
 	public boolean isVerifySSL()
@@ -366,6 +372,11 @@ public abstract class AppConfig
 		{
 			configuration.put(key, null);
 		}
+	}
+	
+	public void setAll(final Map<String, String> map)
+	{
+		configuration.putAll(map);
 	}
 	
 	/**

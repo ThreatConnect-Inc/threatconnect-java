@@ -418,7 +418,7 @@ public abstract class EnhancedApp extends App
 	{
 		if (externalClient == null)
 		{
-			externalClient = createClientBuilder(getAppConfig().isExternalApplyProxy(),
+			externalClient = createClientBuilder(getAppConfig().isProxyExternal(),
 				getAppConfig().isVerifySSL()).build();
 		}
 		return externalClient;
