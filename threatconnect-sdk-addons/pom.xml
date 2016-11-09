@@ -7,13 +7,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.threatconnect.sdk.addons</groupId>
 	<artifactId>threatconnect-sdk-addons</artifactId>
-	<version>2.7.1-SNAPSHOT</version>
+	<version>2.7.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<modules>
 		<module>threatconnect-parser</module>
 		<module>app-package-plugin</module>
-		<module>playbooks</module>
 	</modules>
 
 	<licenses>
@@ -58,7 +57,6 @@
 
 		<!-- Dependency Versions -->
 		<version.commons-io>2.4</version.commons-io>
-		<version.commons-validator>1.5.0</version.commons-validator>
 		<version.dozer>5.5.1</version.dozer>
 		<version.gson>2.3</version.gson>
 		<version.jsonpath>2.1.0</version.jsonpath>
@@ -70,12 +68,6 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>com.opencsv</groupId>
-			<artifactId>opencsv</artifactId>
-			<version>${version.opencsv}</version>
-		</dependency>
-
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
