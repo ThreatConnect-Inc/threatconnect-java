@@ -2,10 +2,10 @@ package com.threatconnect.apps.playbooks.test.orc;
 
 import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
 import com.threatconnect.apps.playbooks.test.db.EmbeddedMapDBService;
-import com.threatconnect.sdk.addons.util.config.install.PlaybookOutputVariable;
-import com.threatconnect.sdk.addons.util.config.install.PlaybookVariableType;
-import com.threatconnect.sdk.playbooks.app.PlaybooksApp;
-import com.threatconnect.sdk.playbooks.content.ContentService;
+import com.threatconnect.app.addons.util.config.install.PlaybookOutputVariable;
+import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.playbooks.app.PlaybooksApp;
+import com.threatconnect.app.playbooks.content.ContentService;
 
 import java.util.ArrayList;
 import java.util.HashMap;

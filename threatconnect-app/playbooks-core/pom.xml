@@ -23,7 +23,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.threatconnect.app</groupId>
-			<artifactId>util</artifactId>
+			<artifactId>apps-util</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

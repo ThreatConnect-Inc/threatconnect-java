@@ -1,13 +1,13 @@
 package com.threatconnect.apps.playbooks.test.orc;
 
 import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
-import com.threatconnect.sdk.addons.util.config.install.PlaybookVariableType;
-import com.threatconnect.sdk.playbooks.app.PlaybooksApp;
-import com.threatconnect.sdk.playbooks.content.ContentService;
-import com.threatconnect.sdk.playbooks.content.accumulator.ContentException;
-import com.threatconnect.sdk.playbooks.content.entity.StringKeyValue;
-import com.threatconnect.sdk.playbooks.content.entity.TCEntity;
-import com.threatconnect.sdk.playbooks.util.PlaybooksVariableUtil;
+import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.playbooks.app.PlaybooksApp;
+import com.threatconnect.app.playbooks.content.ContentService;
+import com.threatconnect.app.playbooks.content.accumulator.ContentException;
+import com.threatconnect.app.playbooks.content.entity.StringKeyValue;
+import com.threatconnect.app.playbooks.content.entity.TCEntity;
+import com.threatconnect.app.playbooks.util.PlaybooksVariableUtil;
 import org.junit.Assert;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.threatconnect.apps.playbooks.test.orc.test;
 
-import com.threatconnect.sdk.playbooks.app.PlaybooksApp;
+import com.threatconnect.app.playbooks.app.PlaybooksApp;
 
 /**
  * @author Greg Marut

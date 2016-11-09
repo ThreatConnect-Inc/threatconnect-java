@@ -5,11 +5,11 @@ import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.AppExecutor;
 import com.threatconnect.app.apps.DefaultAppConfig;
 import com.threatconnect.apps.playbooks.test.db.EmbeddedMapDBService;
-import com.threatconnect.sdk.addons.util.config.install.InstallJson;
-import com.threatconnect.sdk.addons.util.config.install.InvalidInstallJsonFileException;
-import com.threatconnect.sdk.playbooks.app.PlaybooksApp;
-import com.threatconnect.sdk.playbooks.app.PlaybooksAppConfig;
-import com.threatconnect.sdk.playbooks.db.DBServiceFactory;
+import com.threatconnect.app.addons.util.config.install.InstallJson;
+import com.threatconnect.app.addons.util.config.install.InvalidInstallJsonFileException;
+import com.threatconnect.app.playbooks.app.PlaybooksApp;
+import com.threatconnect.app.playbooks.app.PlaybooksAppConfig;
+import com.threatconnect.app.playbooks.db.DBServiceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

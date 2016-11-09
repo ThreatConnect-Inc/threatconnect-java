@@ -1,7 +1,7 @@
 package com.threatconnect.apps.playbooks.test.orc;
 
 import com.threatconnect.apps.playbooks.test.orc.test.Testable;
-import com.threatconnect.sdk.playbooks.app.PlaybooksApp;
+import com.threatconnect.app.playbooks.app.PlaybooksApp;
 
 import java.util.ArrayList;
 import java.util.List;

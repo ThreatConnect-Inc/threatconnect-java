@@ -1,8 +1,8 @@
 package com.threatconnect.apps.playbooks.test.db;
 
-import com.threatconnect.sdk.playbooks.db.DBReadException;
-import com.threatconnect.sdk.playbooks.db.DBService;
-import com.threatconnect.sdk.playbooks.db.DBWriteException;
+import com.threatconnect.app.playbooks.db.DBReadException;
+import com.threatconnect.app.playbooks.db.DBService;
+import com.threatconnect.app.playbooks.db.DBWriteException;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -2,7 +2,7 @@ package com.threatconnect.apps.playbooks.test.orc;
 
 import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
 import com.threatconnect.apps.playbooks.test.config.PlaybooksTestConfiguration;
-import com.threatconnect.sdk.playbooks.app.PlaybooksApp;
+import com.threatconnect.app.playbooks.app.PlaybooksApp;
 
 /**
  * @author Greg Marut

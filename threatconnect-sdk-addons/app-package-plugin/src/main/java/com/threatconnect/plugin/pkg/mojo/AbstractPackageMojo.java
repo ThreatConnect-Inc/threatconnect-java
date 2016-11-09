@@ -1,9 +1,9 @@
 package com.threatconnect.plugin.pkg.mojo;
 
+import com.threatconnect.app.addons.util.config.install.InstallJson;
+import com.threatconnect.app.addons.util.config.install.InvalidInstallJsonFileException;
 import com.threatconnect.plugin.pkg.Profile;
 import com.threatconnect.plugin.pkg.ZipUtil;
-import com.threatconnect.sdk.addons.util.config.install.InvalidInstallJsonFileException;
-import com.threatconnect.sdk.addons.util.config.install.InstallJson;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;

@@ -1,9 +1,9 @@
 package com.threatconnect.apps.playbooks.test.util;
 
-import com.threatconnect.sdk.addons.util.config.install.PlaybookVariableType;
-import com.threatconnect.sdk.playbooks.content.ContentService;
-import com.threatconnect.sdk.playbooks.content.accumulator.ContentException;
-import com.threatconnect.sdk.playbooks.util.PlaybooksVariableUtil;
+import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.playbooks.content.ContentService;
+import com.threatconnect.app.playbooks.content.accumulator.ContentException;
+import com.threatconnect.app.playbooks.util.PlaybooksVariableUtil;
 
 /**
  * @author Greg Marut
