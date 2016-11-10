@@ -42,6 +42,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -59,6 +61,8 @@ import static com.threatconnect.sdk.util.IndicatorUtil.setUniqueId;
  */
 public abstract class EnhancedApp extends App
 {
+	private static final Logger logger = LoggerFactory.getLogger(EnhancedApp.class);
+	
 	private Connection conn;
 	private String owner;
 	private int resultLimit = 500;
@@ -129,22 +133,22 @@ public abstract class EnhancedApp extends App
 
 	protected void debug(String msg, Object... fmtArgs)
 	{
-		getLogger().debug(String.format(msg, fmtArgs));
+		logger.debug(String.format(msg, fmtArgs));
 	}
 
 	protected void warn(String msg, Object... fmtArgs)
 	{
-		getLogger().warn(String.format(msg, fmtArgs) );
+		logger.warn(String.format(msg, fmtArgs) );
 	}
 
 	protected void info(String msg, Object... fmtArgs)
 	{
-		getLogger().info(String.format(msg, fmtArgs) );		
+		logger.info(String.format(msg, fmtArgs) );
 	}
 
 	protected void error(Exception e, String msg, Object... fmtArgs)
 	{
-		getLogger().error(e.getMessage(), msg, fmtArgs);
+		logger.error(e.getMessage(), msg, fmtArgs);
 	}
 
 	protected void sleep(long millis)

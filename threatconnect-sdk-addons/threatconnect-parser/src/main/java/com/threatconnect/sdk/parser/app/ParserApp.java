@@ -12,6 +12,8 @@ import com.threatconnect.sdk.parser.model.ItemType;
 import com.threatconnect.sdk.parser.service.save.BatchApiSaveService;
 import com.threatconnect.sdk.parser.service.save.SaveResults;
 import com.threatconnect.sdk.parser.service.save.SaveService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -20,6 +22,8 @@ import java.util.Map;
 
 public abstract class ParserApp extends App
 {
+	private static final Logger logger = LoggerFactory.getLogger(ParserApp.class);
+	
 	@Override
 	public ExitStatus execute(AppConfig appConfig) throws Exception
 	{
@@ -55,7 +59,7 @@ public abstract class ParserApp extends App
 						{
 							// parse the data
 							List<? extends Item> items = parser.parseData();
-							getLogger().info("Successfully parsed {} records", items.size());
+							logger.info("Successfully parsed {} records", items.size());
 							
 							// allow child classes to do something with the parsed data
 							onParsingFinished(items, parser);
@@ -83,7 +87,7 @@ public abstract class ParserApp extends App
 						}
 						catch (ParserException e)
 						{
-							getLogger().error(e.getMessage(), e);
+							logger.error(e.getMessage(), e);
 						}
 					}
 				}
@@ -140,7 +144,7 @@ public abstract class ParserApp extends App
 			foundMessage.append(" / ");
 			foundMessage.append("Groups Found: ");
 			foundMessage.append(entry.getValue().getGroups());
-			getLogger().info(foundMessage.toString());
+			logger.info(foundMessage.toString());
 			
 			// make sure that the save results is not null
 			if (null != saveResults)
@@ -155,7 +159,7 @@ public abstract class ParserApp extends App
 				savedMessage.append(" / ");
 				savedMessage.append("Groups Found: ");
 				savedMessage.append(entry.getValue().getGroups() - saveResults.countFailedItems(ItemType.GROUP));
-				getLogger().info(savedMessage.toString());
+				logger.info(savedMessage.toString());
 			}
 			else
 			{
@@ -163,7 +167,7 @@ public abstract class ParserApp extends App
 				StringBuilder savedMessage = new StringBuilder();
 				savedMessage.append(entry.getKey());
 				savedMessage.append("No indicators or groups saved!");
-				getLogger().warn(savedMessage.toString());
+				logger.warn(savedMessage.toString());
 			}
 		}
 		
@@ -184,8 +188,8 @@ public abstract class ParserApp extends App
 		savedMessage.append(totalGroupsSaved);
 		
 		// log the messages for the app
-		getLogger().info(foundMessage.toString());
-		getLogger().info(savedMessage.toString());
+		logger.info(foundMessage.toString());
+		logger.info(savedMessage.toString());
 		
 		// write the final message out to the file
 		writeMessageTc(foundMessage.toString() + " | " + savedMessage.toString());

@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public abstract class App
 {
-	private final Logger logger = LoggerFactory.getLogger(getClass());
+	private static final Logger logger = LoggerFactory.getLogger(App.class);
 	
 	// holds the reference to the app config object
 	private AppConfig appConfig;
@@ -123,11 +123,6 @@ public abstract class App
 		{
 			out.write(data);
 		}
-	}
-	
-	public Logger getLogger()
-	{
-		return logger;
 	}
 	
 	public AppConfig getAppConfig()
