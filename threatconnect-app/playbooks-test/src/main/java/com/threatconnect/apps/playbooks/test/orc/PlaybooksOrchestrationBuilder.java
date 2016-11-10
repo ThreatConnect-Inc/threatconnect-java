@@ -54,6 +54,11 @@ public final class PlaybooksOrchestrationBuilder
 		return runApp(playbookAppClass, true);
 	}
 	
+	public static PlaybooksOrchestration runApp(final PlaybooksApp playbookApp)
+	{
+		return runApp(playbookApp, true);
+	}
+	
 	public static PlaybooksOrchestration runApp(final Class<? extends PlaybooksApp> playbookAppClass,
 		final boolean addAllOutputParams)
 	{
