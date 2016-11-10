@@ -1,7 +1,7 @@
 package com.threatconnect.apps.playbooks.test.orc;
 
-import com.threatconnect.apps.playbooks.test.orc.test.Testable;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
+import com.threatconnect.apps.playbooks.test.orc.test.Testable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,14 +34,41 @@ public class POResult
 	
 	public PlaybooksOrchestration runApp(final Class<? extends PlaybooksApp> playbookAppClass)
 	{
-		return runApp(playbookAppClass, true);
+		try
+		{
+			return runApp(playbookAppClass.newInstance());
+		}
+		catch (IllegalAccessException | InstantiationException e)
+		{
+			throw new PlaybooksOrchestrationRuntimeException(e);
+		}
+	}
+	
+	public PlaybooksOrchestration runApp(final PlaybooksApp playbookApp)
+	{
+		return runApp(playbookApp, true);
 	}
 	
 	public PlaybooksOrchestration runApp(final Class<? extends PlaybooksApp> playbookAppClass,
 		final boolean addAllOutputParams)
 	{
+		try
+		{
+			return runApp(PlaybooksOrchestrationBuilder
+				.createPlaybookOrchestration(playbookAppClass.newInstance(), builder, playbooksOrchestration,
+					addAllOutputParams));
+		}
+		catch (IllegalAccessException | InstantiationException e)
+		{
+			throw new PlaybooksOrchestrationRuntimeException(e);
+		}
+	}
+	
+	public PlaybooksOrchestration runApp(final PlaybooksApp playbookApp,
+		final boolean addAllOutputParams)
+	{
 		return runApp(PlaybooksOrchestrationBuilder
-			.createPlaybookOrchestration(playbookAppClass, builder, playbooksOrchestration, addAllOutputParams));
+			.createPlaybookOrchestration(playbookApp, builder, playbooksOrchestration, addAllOutputParams));
 	}
 	
 	public AssertOutput assertOutput()

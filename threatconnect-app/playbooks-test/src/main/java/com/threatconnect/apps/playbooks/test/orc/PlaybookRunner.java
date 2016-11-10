@@ -1,14 +1,9 @@
 package com.threatconnect.apps.playbooks.test.orc;
 
+import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.ExitStatus;
 import com.threatconnect.app.apps.SystemPropertiesAppConfig;
-import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
-import com.threatconnect.apps.playbooks.test.config.PlaybooksTestConfiguration;
-import com.threatconnect.apps.playbooks.test.orc.test.TestFailureException;
-import com.threatconnect.apps.playbooks.test.orc.test.Testable;
-import com.threatconnect.apps.playbooks.test.util.ContentServiceUtil;
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
 import com.threatconnect.app.playbooks.app.PlaybooksAppConfig;
 import com.threatconnect.app.playbooks.content.ContentService;
@@ -16,6 +11,11 @@ import com.threatconnect.app.playbooks.content.accumulator.ContentException;
 import com.threatconnect.app.playbooks.db.DBReadException;
 import com.threatconnect.app.playbooks.db.DBService;
 import com.threatconnect.app.playbooks.util.PlaybooksVariableUtil;
+import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
+import com.threatconnect.apps.playbooks.test.config.PlaybooksTestConfiguration;
+import com.threatconnect.apps.playbooks.test.orc.test.TestFailureException;
+import com.threatconnect.apps.playbooks.test.orc.test.Testable;
+import com.threatconnect.apps.playbooks.test.util.ContentServiceUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.slf4j.Logger;
@@ -54,8 +54,8 @@ public class PlaybookRunner implements Runnable
 			//get the playbook config
 			PlaybookConfig playbookConfig = playbooksOrchestration.getPlaybookConfig();
 			
-			//instantiate the app
-			PlaybooksApp playbooksApp = playbookConfig.getPlaybookAppClass().newInstance();
+			//initialize the playbooks app
+			PlaybooksApp playbooksApp = playbooksOrchestration.getPlaybooksApp();
 			playbooksApp.init(appConfig);
 			
 			//configure the parameters before running this app
@@ -172,8 +172,7 @@ public class PlaybookRunner implements Runnable
 	}
 	
 	private void configureParams(final PlaybooksOrchestration playbooksOrchestration, final PlaybooksApp playbooksApp,
-		final AppConfig appConfig)
-		throws ContentException
+		final AppConfig appConfig) throws ContentException
 	{
 		//add all of the output params
 		final String paramOutVars = StringUtils.join(playbooksOrchestration.getOutputVariables(), ",");

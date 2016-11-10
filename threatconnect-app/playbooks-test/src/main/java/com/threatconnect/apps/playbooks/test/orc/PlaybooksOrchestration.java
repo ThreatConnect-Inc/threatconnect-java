@@ -1,11 +1,11 @@
 package com.threatconnect.apps.playbooks.test.orc;
 
-import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
-import com.threatconnect.apps.playbooks.test.db.EmbeddedMapDBService;
 import com.threatconnect.app.addons.util.config.install.PlaybookOutputVariable;
 import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
 import com.threatconnect.app.playbooks.content.ContentService;
+import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
+import com.threatconnect.apps.playbooks.test.db.EmbeddedMapDBService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +20,7 @@ import java.util.Set;
 public class PlaybooksOrchestration
 {
 	private final PlaybooksOrchestration parent;
+	private final PlaybooksApp playbooksApp;
 	private final PlaybookConfig playbookConfig;
 	private final PlaybooksOrchestrationBuilder builder;
 	private POResult onSuccess;
@@ -37,15 +38,18 @@ public class PlaybooksOrchestration
 	private int retryAttempts;
 	private int retryDelaySeconds;
 	
-	PlaybooksOrchestration(final PlaybookConfig playbookConfig, final PlaybooksOrchestrationBuilder builder)
+	PlaybooksOrchestration(final PlaybookConfig playbookConfig, final PlaybooksApp playbooksApp,
+		final PlaybooksOrchestrationBuilder builder)
 	{
-		this(playbookConfig, builder, null, true);
+		this(playbookConfig, playbooksApp, builder, null, true);
 	}
 	
-	PlaybooksOrchestration(final PlaybookConfig playbookConfig, final PlaybooksOrchestrationBuilder builder,
-		final PlaybooksOrchestration parent, final boolean addAllOutputParams)
+	PlaybooksOrchestration(final PlaybookConfig playbookConfig, final PlaybooksApp playbooksApp,
+		final PlaybooksOrchestrationBuilder builder, final PlaybooksOrchestration parent,
+		final boolean addAllOutputParams)
 	{
 		this.playbookConfig = playbookConfig;
+		this.playbooksApp = playbooksApp;
 		this.builder = builder;
 		this.parent = parent;
 		this.outputVariables = new HashSet<String>();
@@ -218,6 +222,11 @@ public class PlaybooksOrchestration
 		}
 		
 		return list;
+	}
+	
+	PlaybooksApp getPlaybooksApp()
+	{
+		return playbooksApp;
 	}
 	
 	PlaybookConfig getPlaybookConfig()

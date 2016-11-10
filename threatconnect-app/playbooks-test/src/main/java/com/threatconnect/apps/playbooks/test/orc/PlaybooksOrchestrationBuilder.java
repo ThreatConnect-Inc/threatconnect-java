@@ -1,8 +1,8 @@
 package com.threatconnect.apps.playbooks.test.orc;
 
+import com.threatconnect.app.playbooks.app.PlaybooksApp;
 import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
 import com.threatconnect.apps.playbooks.test.config.PlaybooksTestConfiguration;
-import com.threatconnect.app.playbooks.app.PlaybooksApp;
 
 /**
  * @author Greg Marut
@@ -12,10 +12,9 @@ public final class PlaybooksOrchestrationBuilder
 	//holds the initial playbook runner to execute
 	private final PlaybooksOrchestration playbooksOrchestration;
 	
-	private PlaybooksOrchestrationBuilder(final Class<? extends PlaybooksApp> playbookAppClass,
-		final boolean addAllOutputParams)
+	private PlaybooksOrchestrationBuilder(final PlaybooksApp playbookApp, final boolean addAllOutputParams)
 	{
-		playbooksOrchestration = createPlaybookOrchestration(playbookAppClass, this, null, addAllOutputParams);
+		playbooksOrchestration = createPlaybookOrchestration(playbookApp, this, null, addAllOutputParams);
 	}
 	
 	public PlaybookRunner build()
@@ -28,37 +27,26 @@ public final class PlaybooksOrchestrationBuilder
 		return playbooksOrchestration;
 	}
 	
-	static PlaybooksOrchestration createPlaybookOrchestration(final Class<? extends PlaybooksApp> playbookAppClass,
+	static PlaybooksOrchestration createPlaybookOrchestration(PlaybooksApp playbookApp,
 		final PlaybooksOrchestrationBuilder builder, final PlaybooksOrchestration parent,
 		final boolean addAllOutputParams)
 	{
 		//look up the configuration for this
 		PlaybookConfig playbookConfig =
-			PlaybooksTestConfiguration.getInstance().getConfigurationMap().get(playbookAppClass);
+			PlaybooksTestConfiguration.getInstance().getConfigurationMap().get(playbookApp.getClass());
 		
 		//make sure the playbooks app is not null
 		if (null != playbookConfig)
 		{
-			//create the new playbook runner
-			return new PlaybooksOrchestration(playbookConfig, builder, parent, addAllOutputParams);
+			//create the new playbook orchestration
+			return new PlaybooksOrchestration(playbookConfig, playbookApp, builder, parent, addAllOutputParams);
 		}
 		else
 		{
-			throw new IllegalArgumentException(playbookAppClass.getName() + " was not detected by the " +
+			throw new IllegalArgumentException(playbookApp.getClass().getName() + " was not detected by the " +
 				PlaybooksTestConfiguration.class.getSimpleName()
 				+ ". Please make sure there is a valid install.json file configured for this app.");
 		}
-	}
-	
-	public static PlaybooksOrchestrationBuilder create(final Class<? extends PlaybooksApp> playbookAppClass)
-	{
-		return create(playbookAppClass, true);
-	}
-	
-	public static PlaybooksOrchestrationBuilder create(final Class<? extends PlaybooksApp> playbookAppClass,
-		final boolean addAllOutputParams)
-	{
-		return new PlaybooksOrchestrationBuilder(playbookAppClass, addAllOutputParams);
 	}
 	
 	public static PlaybooksOrchestration runApp(final Class<? extends PlaybooksApp> playbookAppClass)
@@ -69,6 +57,19 @@ public final class PlaybooksOrchestrationBuilder
 	public static PlaybooksOrchestration runApp(final Class<? extends PlaybooksApp> playbookAppClass,
 		final boolean addAllOutputParams)
 	{
-		return new PlaybooksOrchestrationBuilder(playbookAppClass, addAllOutputParams).getPlaybooksOrchestration();
+		try
+		{
+			return new PlaybooksOrchestrationBuilder(playbookAppClass.newInstance(), addAllOutputParams)
+				.getPlaybooksOrchestration();
+		}
+		catch (IllegalAccessException | InstantiationException e)
+		{
+			throw new PlaybooksOrchestrationRuntimeException(e);
+		}
+	}
+	
+	public static PlaybooksOrchestration runApp(final PlaybooksApp playbookApp, final boolean addAllOutputParams)
+	{
+		return new PlaybooksOrchestrationBuilder(playbookApp, addAllOutputParams).getPlaybooksOrchestration();
 	}
 }
