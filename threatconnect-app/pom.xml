@@ -4,6 +4,12 @@
 	<description>The core implementation for Apps</description>
 	<url>https://github.com/ThreatConnect-Inc/threatconnect-java</url>
 
+	<parent>
+		<groupId>com.threatconnect</groupId>
+		<artifactId>sdk</artifactId>
+		<version>2.7.2-SNAPSHOT</version>
+	</parent>
+
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.threatconnect.app</groupId>
 	<artifactId>threatconnect-app</artifactId>
@@ -146,15 +152,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<distributionManagement>
-		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-		<repository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-		</repository>
-	</distributionManagement>
 </project>
