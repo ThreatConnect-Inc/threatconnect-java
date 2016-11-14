@@ -27,6 +27,8 @@ public class InstallJson
 	
 	private final File installJsonFile;
 	private final JsonObject root;
+	private final List<Param> allParams;
+	private final List<Param> playbookParams;
 	
 	public InstallJson(final File installJsonFile) throws InvalidInstallJsonFileException
 	{
@@ -36,13 +38,44 @@ public class InstallJson
 			throw new IllegalArgumentException("installJsonFile cannot be null");
 		}
 		
+		this.installJsonFile = installJsonFile;
+		this.allParams = new ArrayList<Param>();
+		this.playbookParams = new ArrayList<Param>();
+		
 		try
 		{
-			this.installJsonFile = installJsonFile;
-			
 			// parse the install file
 			JsonParser jsonParser = new JsonParser();
 			root = jsonParser.parse(new FileReader(installJsonFile)).getAsJsonObject();
+			
+			//retrieve the params and make sure it is not null
+			JsonElement paramsElement = root.get(PARAMS);
+			if (null != paramsElement)
+			{
+				//make sure this is an array
+				if(!paramsElement.isJsonArray())
+				{
+					throw new InvalidInstallJsonFileException(PARAMS + " must be an array");
+				}
+				
+				//for each of the params
+				JsonArray array = paramsElement.getAsJsonArray();
+				for (JsonElement element : array)
+				{
+					//convert this json object to a param
+					Param param = new Param(element.getAsJsonObject());
+					
+					//check to see if this is a playbook param
+					if (param.isPlaybookParam())
+					{
+						//add this playbook param
+						playbookParams.add(param);
+					}
+					
+					//add this to all of the params
+					allParams.add(param);
+				}
+			}
 		}
 		catch (JsonIOException | JsonSyntaxException | FileNotFoundException e)
 		{
@@ -80,30 +113,14 @@ public class InstallJson
 		return new Playbook(root.get(PLAYBOOK).getAsJsonObject());
 	}
 	
+	public List<Param> getAllParams()
+	{
+		return allParams;
+	}
+	
 	public List<Param> getPlaybooksParams()
 	{
-		List<Param> results = new ArrayList<Param>();
-		
-		//retrieve the params and make sure it is not null
-		JsonElement paramsElement = root.get(PARAMS);
-		if (null != paramsElement)
-		{
-			//for each of the params
-			JsonArray array = paramsElement.getAsJsonArray();
-			for (JsonElement element : array)
-			{
-				//convert this json object to a param
-				Param param = new Param(element.getAsJsonObject());
-				
-				//check to see if this is a playbook param
-				if (param.isPlaybookParam())
-				{
-					results.add(param);
-				}
-			}
-		}
-		
-		return results;
+		return playbookParams;
 	}
 	
 	public File getInstallJsonFile()

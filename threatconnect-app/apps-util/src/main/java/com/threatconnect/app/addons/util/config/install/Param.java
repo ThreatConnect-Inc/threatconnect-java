@@ -15,22 +15,50 @@ public class Param
 {
 	private static final String NAME = "name";
 	private static final String TYPE = "type";
+	private static final String VALID_VALUES = "validValues";
 	private static final String PLAYBOOK_DATA_TYPE = "playbookDataType";
 	
 	private final String name;
 	private final ParamDataType type;
+	private final List<String> validValues;
 	private final List<PlaybookVariableType> playbookDataTypes;
 	
-	public Param(final JsonObject root)
+	public Param(final JsonObject root) throws InvalidInstallJsonFileException
 	{
 		this.name = JsonUtil.getAsString(root, NAME);
 		this.type = ParamDataType.fromString(JsonUtil.getAsString(root, TYPE));
+		this.validValues = new ArrayList<String>();
 		this.playbookDataTypes = new ArrayList<PlaybookVariableType>();
+		
+		//retrieve the valid values element
+		JsonElement validValuesElement = root.get(VALID_VALUES);
+		if (null != validValuesElement)
+		{
+			//make sure this is an array
+			if(!validValuesElement.isJsonArray())
+			{
+				throw new InvalidInstallJsonFileException(VALID_VALUES + " must be an array");
+			}
+			
+			//for each of the data types
+			JsonArray array = validValuesElement.getAsJsonArray();
+			for (JsonElement element : array)
+			{
+				//convert this json object to a playbook variable and add it to the results
+				validValues.add(element.getAsString());
+			}
+		}
 		
 		//retrieve the playbook data types and make sure it is not null
 		JsonElement dataTypeElement = root.get(PLAYBOOK_DATA_TYPE);
 		if (null != dataTypeElement)
 		{
+			//make sure this is an array
+			if(!dataTypeElement.isJsonArray())
+			{
+				throw new InvalidInstallJsonFileException(PLAYBOOK_DATA_TYPE + " must be an array");
+			}
+			
 			//for each of the data types
 			JsonArray array = dataTypeElement.getAsJsonArray();
 			for (JsonElement element : array)
@@ -50,6 +78,7 @@ public class Param
 	{
 		this.name = name;
 		this.type = type;
+		this.validValues = new ArrayList<String>();
 		this.playbookDataTypes =
 			(null != playbookDataTypes ? playbookDataTypes : new ArrayList<PlaybookVariableType>());
 	}
@@ -62,6 +91,11 @@ public class Param
 	public ParamDataType getType()
 	{
 		return type;
+	}
+	
+	public static String getValidValues()
+	{
+		return getValidValues();
 	}
 	
 	public List<PlaybookVariableType> getPlaybookDataTypes()
