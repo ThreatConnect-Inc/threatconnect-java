@@ -99,7 +99,7 @@ public abstract class PlaybooksApp extends App
 	 * Given an input app parameter, this will read the underlying playbook key and check to see if the actual type and
 	 * the expected type are the same.
 	 *
-	 * @param inputParam the app param which corresponds to a
+	 * @param inputParam the app param which corresponds to a playbook variable
 	 * @param type       the expected variable type to check
 	 * @return true if the actual and expected types are the same, false otherwise
 	 */
@@ -128,6 +128,38 @@ public abstract class PlaybooksApp extends App
 		{
 			//the param resolves to null
 			return false;
+		}
+	}
+	
+	/**
+	 * Looks up the value of the input param and resolves the type of playbook variable that it represents
+	 * @param inputParam  the app param which corresponds to a playbook variable
+	 * @return the {@link PlaybookVariableType} that this inputParam represents
+	 * @throws IllegalArgumentException if the inputParam resolves to null
+	 */
+	protected final PlaybookVariableType getPlaybookTypeOfInputParam(final String inputParam)
+	{
+		//retrieve the DB key for this input param
+		final String key = getAppConfig().getString(inputParam);
+		
+		//make sure this param does not resolve to null
+		if (null != key)
+		{
+			//check to see if this is a valid variable
+			if (PlaybooksVariableUtil.isVariable(key))
+			{
+				//extract the actual type of this playbook variable
+				return PlaybooksVariableUtil.extractVariableType(key);
+			}
+			else
+			{
+				//since its not a variable, it can just be a literal string;
+				return PlaybookVariableType.String;
+			}
+		}
+		else
+		{
+			throw new IllegalArgumentException(inputParam + " resolves to a null value");
 		}
 	}
 	
