@@ -1,12 +1,12 @@
 package com.threatconnect.app.playbooks.app;
 
+import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.app.apps.App;
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.ExitStatus;
 import com.threatconnect.app.playbooks.content.ContentService;
-import com.threatconnect.app.playbooks.content.entity.StringKeyValue;
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.app.playbooks.content.accumulator.ContentException;
+import com.threatconnect.app.playbooks.content.entity.StringKeyValue;
 import com.threatconnect.app.playbooks.content.entity.TCEntity;
 import com.threatconnect.app.playbooks.db.DBServiceFactory;
 import com.threatconnect.app.playbooks.util.PlaybooksVariableUtil;
@@ -93,6 +93,42 @@ public abstract class PlaybooksApp extends App
 		}
 		
 		return outputVariables;
+	}
+	
+	/**
+	 * Given an input app parameter, this will read the underlying playbook key and check to see if the actual type and
+	 * the expected type are the same.
+	 *
+	 * @param inputParam the app param which corresponds to a
+	 * @param type       the expected variable type to check
+	 * @return true if the actual and expected types are the same, false otherwise
+	 */
+	protected final boolean isInputParamOfPlaybookType(final String inputParam, final PlaybookVariableType type)
+	{
+		//retrieve the DB key for this input param
+		final String key = getAppConfig().getString(inputParam);
+		
+		//make sure this param does not resolve to null
+		if (null != key)
+		{
+			//check to see if this is a valid variable
+			if (PlaybooksVariableUtil.isVariable(key))
+			{
+				//extract the actual type of this playbook variable
+				PlaybookVariableType actualType = PlaybooksVariableUtil.extractVariableType(key);
+				return actualType.equals(type);
+			}
+			else
+			{
+				//since its not a variable, it can just be a literal string so we should check if the expected type is a string
+				return PlaybookVariableType.String.equals(type);
+			}
+		}
+		else
+		{
+			//the param resolves to null
+			return false;
+		}
 	}
 	
 	/**
