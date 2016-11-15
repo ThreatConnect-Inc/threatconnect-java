@@ -15,6 +15,7 @@ import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
 import com.threatconnect.apps.playbooks.test.config.PlaybooksTestConfiguration;
 import com.threatconnect.apps.playbooks.test.orc.test.TestFailureException;
 import com.threatconnect.apps.playbooks.test.orc.test.Testable;
+import com.threatconnect.apps.playbooks.test.util.AppTestUtil;
 import com.threatconnect.apps.playbooks.test.util.ContentServiceUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
@@ -54,8 +55,13 @@ public class PlaybookRunner implements Runnable
 			//get the playbook config
 			PlaybookConfig playbookConfig = playbooksOrchestration.getPlaybookConfig();
 			
-			//initialize the playbooks app
+			//retrieve the playbooks app
 			PlaybooksApp playbooksApp = playbooksOrchestration.getPlaybooksApp();
+			
+			//set up the test directories for the app
+			AppTestUtil.configureAppTestDirectories(playbooksApp.getClass().getName(), appConfig);
+			
+			//initialize the playbooks app
 			playbooksApp.init(appConfig);
 			
 			//configure the parameters before running this app
