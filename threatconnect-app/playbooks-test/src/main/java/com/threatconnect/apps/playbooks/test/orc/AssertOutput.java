@@ -1,14 +1,19 @@
 package com.threatconnect.apps.playbooks.test.orc;
 
+import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.apps.App;
+import com.threatconnect.app.playbooks.app.PlaybooksApp;
 import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
 import com.threatconnect.apps.playbooks.test.orc.test.Testable;
 import com.threatconnect.apps.playbooks.test.util.ContentServiceUtil;
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
-import com.threatconnect.app.playbooks.app.PlaybooksApp;
+import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.List;
 
 /**
@@ -136,6 +141,37 @@ public class AssertOutput extends AbstractThen<POResult>
 				final String variable = getPlaybookConfig().createVariableForOutputVariable(outputParam, type);
 				List<String> result = playbooksApp.getContentService().readStringList(variable);
 				Assert.assertEquals(expected, result.size());
+			}
+		});
+		
+		return this;
+	}
+	
+	public AssertOutput assertMessageTcContains(final String text)
+	{
+		add(new Testable()
+		{
+			@Override
+			public void run(final PlaybooksApp playbooksApp) throws Exception
+			{
+				//read the message tc file
+				File file = playbooksApp.getMessageLogFile();
+				
+				try (FileInputStream fileInputStream = new FileInputStream(file))
+				{
+					ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+					IOUtils.copy(fileInputStream, byteArrayOutputStream);
+					String messageTcText = new String(byteArrayOutputStream.toByteArray());
+					
+					logger.debug("assertMessageTcContains \"{}\" contains \"{}\"", messageTcText, text);
+					
+					//check to see if the messageTcText does not contain the text
+					if (!messageTcText.contains(text))
+					{
+						throw new AssertionError(
+							App.MESSAGE_TC + " does not contain the following text: \"" + text + "\"");
+					}
+				}
 			}
 		});
 		

@@ -20,6 +20,9 @@ import java.util.Map;
  */
 public abstract class App
 {
+	public static final String MESSAGE_TC = "message.tc";
+	public static final String RESULTS_TC = "results.tc";
+	
 	private static final Logger logger = LoggerFactory.getLogger(App.class);
 	
 	// holds the reference to the app config object
@@ -147,7 +150,7 @@ public abstract class App
 	 */
 	public File getMessageLogFile()
 	{
-		return getOutFile("message.tc");
+		return getOutFile(MESSAGE_TC);
 	}
 	
 	/**
@@ -157,7 +160,7 @@ public abstract class App
 	 */
 	public File getResultsLogFile()
 	{
-		return getOutFile("results.tc");
+		return getOutFile(RESULTS_TC);
 	}
 	
 	public File getOutFile(final String fileName)

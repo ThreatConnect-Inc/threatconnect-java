@@ -299,6 +299,39 @@ public abstract class AppConfig
 	}
 	
 	/**
+	 * Returns a system property as a short. Returns null if the key does not exist or if the
+	 * value is not a short
+	 *
+	 * @param key System property name
+	 * @return A short value of System property key
+	 */
+	public Short getShort(final String key)
+	{
+		try
+		{
+			return Short.parseShort(getString(key));
+		}
+		catch (NullPointerException | NumberFormatException e)
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * Returns a system property as a short. Returns the defaultValue if the key does not exist
+	 * or if the value is not a short
+	 *
+	 * @param key          System property name
+	 * @param defaultValue Value to return if key doesn't exist
+	 * @return A short value of System property key
+	 */
+	public short getShort(final String key, final short defaultValue)
+	{
+		Short value = getShort(key);
+		return value == null ? defaultValue : value;
+	}
+	
+	/**
 	 * Returns a system property as a boolean. Returns false if the key does not exist or if the
 	 * value is not a boolean
 	 *
