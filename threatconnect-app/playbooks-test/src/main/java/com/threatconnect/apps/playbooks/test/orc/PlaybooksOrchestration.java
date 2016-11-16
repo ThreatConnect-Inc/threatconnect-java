@@ -4,7 +4,9 @@ import com.threatconnect.app.addons.util.config.install.PlaybookOutputVariable;
 import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
 import com.threatconnect.app.playbooks.content.ContentService;
-import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
+import com.threatconnect.apps.app.test.orc.AppOrchestration;
+import com.threatconnect.apps.app.test.orc.POResult;
+import com.threatconnect.apps.playbooks.test.config.PlaybookConfiguration;
 import com.threatconnect.apps.playbooks.test.db.EmbeddedMapDBService;
 
 import java.util.ArrayList;
@@ -17,14 +19,14 @@ import java.util.Set;
 /**
  * @author Greg Marut
  */
-public class PlaybooksOrchestration
+public class PlaybooksOrchestration extends AppOrchestration<PlaybooksApp>
 {
 	private final PlaybooksOrchestration parent;
 	private final PlaybooksApp playbooksApp;
-	private final PlaybookConfig playbookConfig;
+	private final PlaybookConfiguration playbookConfiguration;
 	private final PlaybooksOrchestrationBuilder builder;
-	private POResult onSuccess;
-	private POResult onFailure;
+	private POResult<PlaybooksApp> onSuccess;
+	private POResult<PlaybooksApp> onFailure;
 	
 	//holds the list of output variables
 	private final Set<String> outputVariables;
@@ -38,17 +40,18 @@ public class PlaybooksOrchestration
 	private int retryAttempts;
 	private int retryDelaySeconds;
 	
-	PlaybooksOrchestration(final PlaybookConfig playbookConfig, final PlaybooksApp playbooksApp,
+	PlaybooksOrchestration(final PlaybookConfiguration playbookConfiguration, final PlaybooksApp playbooksApp,
 		final PlaybooksOrchestrationBuilder builder)
 	{
-		this(playbookConfig, playbooksApp, builder, null, true);
+		this(playbookConfiguration, playbooksApp, builder, null, true);
 	}
 	
-	PlaybooksOrchestration(final PlaybookConfig playbookConfig, final PlaybooksApp playbooksApp,
+	PlaybooksOrchestration(final PlaybookConfiguration playbookConfiguration, final PlaybooksApp playbooksApp,
 		final PlaybooksOrchestrationBuilder builder, final PlaybooksOrchestration parent,
 		final boolean addAllOutputParams)
 	{
-		this.playbookConfig = playbookConfig;
+		this(playbookConfiguration, playbooksApp, builder, parent);
+		this.playbookConfiguration = playbookConfiguration;
 		this.playbooksApp = playbooksApp;
 		this.builder = builder;
 		this.parent = parent;
@@ -87,7 +90,7 @@ public class PlaybooksOrchestration
 	public PlaybooksOrchestration addOutputParam(final String outputVariable, final PlaybookVariableType type)
 	{
 		//retrieve this variable
-		String variable = playbookConfig.createVariableForOutputVariable(outputVariable, type);
+		String variable = playbookConfiguration.createVariableForOutputVariable(outputVariable, type);
 		outputVariables.add(variable);
 		
 		return this;
@@ -96,7 +99,7 @@ public class PlaybooksOrchestration
 	public PlaybooksOrchestration addAllOutputParams()
 	{
 		//for each of the output variables
-		for (PlaybookOutputVariable outputVariable : playbookConfig.getAllOutputVariables())
+		for (PlaybookOutputVariable outputVariable : playbookConfiguration.getAllOutputVariables())
 		{
 			//add this output param
 			addOutputParam(outputVariable.getName(), outputVariable.getType());
@@ -156,7 +159,7 @@ public class PlaybooksOrchestration
 	public String getVariableForOutputVariable(final String param, final PlaybookVariableType type)
 	{
 		//retrieve this variable
-		String variable = playbookConfig.createVariableForOutputVariable(param, type);
+		String variable = playbookConfiguration.createVariableForOutputVariable(param, type);
 		
 		//since this param has been requested, make sure it is added to the out params
 		addOutputParam(param, type);
@@ -214,7 +217,7 @@ public class PlaybooksOrchestration
 			list.addAll(parent.findUpstreamApps(playbookAppClass));
 			
 			//check to see if the parent's app class matches what we are looking for
-			if (parent.getPlaybookConfig().getPlaybookAppClass().equals(playbookAppClass))
+			if (parent.getPlaybookConfiguration().getPlaybookAppClass().equals(playbookAppClass))
 			{
 				//add it to the list
 				list.add(parent);
@@ -229,9 +232,9 @@ public class PlaybooksOrchestration
 		return playbooksApp;
 	}
 	
-	PlaybookConfig getPlaybookConfig()
+	PlaybookConfiguration getPlaybookConfiguration()
 	{
-		return playbookConfig;
+		return playbookConfiguration;
 	}
 	
 	Map<String, String> getAppParams()

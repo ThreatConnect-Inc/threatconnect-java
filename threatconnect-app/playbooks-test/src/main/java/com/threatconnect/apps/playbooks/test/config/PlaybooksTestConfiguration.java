@@ -37,14 +37,14 @@ public class PlaybooksTestConfiguration
 	private static final Object lock = new Object();
 	
 	//holds the playbook configuration map
-	private final Map<Class<? extends PlaybooksApp>, PlaybookConfig> configurationMap;
+	private final Map<Class<? extends PlaybooksApp>, PlaybookConfiguration> configurationMap;
 	
 	//holds the default app config object
 	private final AppConfig defaultAppConfig;
 	
 	private PlaybooksTestConfiguration()
 	{
-		this.configurationMap = new HashMap<Class<? extends PlaybooksApp>, PlaybookConfig>();
+		this.configurationMap = new HashMap<Class<? extends PlaybooksApp>, PlaybookConfiguration>();
 		this.defaultAppConfig = new DefaultAppConfig();
 		
 		logger.info("Loading Playbooks Test Configuration");
@@ -204,10 +204,10 @@ public class PlaybooksTestConfiguration
 			if (!configurationMap.containsKey(playbooksAppClass))
 			{
 				//create a new playbook configuration class
-				PlaybookConfig playbookConfig = new PlaybookConfig(playbooksAppClass, installJson);
+				PlaybookConfiguration playbookConfiguration = new PlaybookConfiguration(playbooksAppClass, installJson);
 				
 				//add this config to the map
-				configurationMap.put(playbooksAppClass, playbookConfig);
+				configurationMap.put(playbooksAppClass, playbookConfiguration);
 			}
 			else
 			{
@@ -229,34 +229,34 @@ public class PlaybooksTestConfiguration
 	 * @param playbookAppClass
 	 * @return
 	 */
-	public PlaybookConfigBuilder createPlaybookConfigBuilder(final Class<? extends PlaybooksApp> playbookAppClass)
+	public PlaybookConfigurationBuilder createPlaybookConfigBuilder(final Class<? extends PlaybooksApp> playbookAppClass)
 	{
-		return new PlaybookConfigBuilder(playbookAppClass, this);
+		return new PlaybookConfigurationBuilder(playbookAppClass, this);
 	}
 	
 	/**
 	 * Adds a playbook configuration to the map and overrides any existing configuration
 	 *
-	 * @param playbookConfig
+	 * @param playbookConfiguration
 	 */
-	void registerDynamicPlaybookConfiguration(final PlaybookConfig playbookConfig)
+	void registerDynamicPlaybookConfiguration(final PlaybookConfiguration playbookConfiguration)
 	{
-		logger.info("Registering dynamic PlaybookConfig for \"{}\"", playbookConfig.getPlaybookAppClass().getName());
+		logger.info("Registering dynamic PlaybookConfiguration for \"{}\"", playbookConfiguration.getPlaybookAppClass().getName());
 		
 		//check to see if a playbooks configuration already exists for this class
-		if (configurationMap.containsKey(playbookConfig.getPlaybookAppClass()))
+		if (configurationMap.containsKey(playbookConfiguration.getPlaybookAppClass()))
 		{
 			//notify the user via a warning
-			logger.warn("Overriding existing configuration for \"{}\"", playbookConfig.getPlaybookAppClass().getName());
+			logger.warn("Overriding existing configuration for \"{}\"", playbookConfiguration.getPlaybookAppClass().getName());
 		}
 		
 		//add this config to the map
-		configurationMap.put(playbookConfig.getPlaybookAppClass(), playbookConfig);
+		configurationMap.put(playbookConfiguration.getPlaybookAppClass(), playbookConfiguration);
 	}
 	
-	public Map<Class<? extends PlaybooksApp>, PlaybookConfig> getConfigurationMap()
+	public Map<Class<? extends PlaybooksApp>, PlaybookConfiguration> getConfigurationMap()
 	{
-		return new HashMap<Class<? extends PlaybooksApp>, PlaybookConfig>(configurationMap);
+		return new HashMap<Class<? extends PlaybooksApp>, PlaybookConfiguration>(configurationMap);
 	}
 	
 	public AppConfig getDefaultAppConfig()

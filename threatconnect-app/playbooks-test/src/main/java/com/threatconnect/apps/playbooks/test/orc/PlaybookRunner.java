@@ -11,7 +11,7 @@ import com.threatconnect.app.playbooks.content.accumulator.ContentException;
 import com.threatconnect.app.playbooks.db.DBReadException;
 import com.threatconnect.app.playbooks.db.DBService;
 import com.threatconnect.app.playbooks.util.PlaybooksVariableUtil;
-import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
+import com.threatconnect.apps.playbooks.test.config.PlaybookConfiguration;
 import com.threatconnect.apps.playbooks.test.config.PlaybooksTestConfiguration;
 import com.threatconnect.apps.playbooks.test.orc.test.TestFailureException;
 import com.threatconnect.apps.playbooks.test.orc.test.Testable;
@@ -53,7 +53,7 @@ public class PlaybookRunner implements Runnable
 				.copyFrom(PlaybooksTestConfiguration.getInstance().getDefaultAppConfig());
 			
 			//get the playbook config
-			PlaybookConfig playbookConfig = playbooksOrchestration.getPlaybookConfig();
+			PlaybookConfiguration playbookConfiguration = playbooksOrchestration.getPlaybookConfiguration();
 			
 			//retrieve the playbooks app
 			PlaybooksApp playbooksApp = playbooksOrchestration.getPlaybooksApp();
@@ -65,7 +65,7 @@ public class PlaybookRunner implements Runnable
 			playbooksApp.init(appConfig);
 			
 			//configure the parameters before running this app
-			logger.info("Configuring params for {}", playbookConfig.getPlaybookAppClass());
+			logger.info("Configuring params for {}", playbookConfiguration.getPlaybookAppClass());
 			configureParams(playbooksOrchestration, playbooksApp, appConfig);
 			
 			//retrieve the retry information for this app
@@ -84,9 +84,9 @@ public class PlaybookRunner implements Runnable
 		final AppConfig appConfig, final int retryAttemptsRemaining) throws Exception
 	{
 		//get the playbook config
-		PlaybookConfig playbookConfig = playbooksOrchestration.getPlaybookConfig();
+		PlaybookConfiguration playbookConfiguration = playbooksOrchestration.getPlaybookConfiguration();
 		
-		logger.info("Running {}", playbookConfig.getPlaybookAppClass());
+		logger.info("Running {}", playbookConfiguration.getPlaybookAppClass());
 		ExitStatus exitStatus = playbooksApp.execute(appConfig);
 		
 		//check to see if this was successful
@@ -98,7 +98,7 @@ public class PlaybookRunner implements Runnable
 			//validate that all the output variables were written out
 			validateOutputVariablesWereWritten(playbooksOrchestration, playbooksApp);
 			
-			logger.info("{} finished successfully", playbookConfig.getPlaybookAppClass());
+			logger.info("{} finished successfully", playbookConfiguration.getPlaybookAppClass());
 			
 			//check to see if there is an onsuccess defined
 			if (null != playbooksOrchestration.getOnSuccess())
@@ -107,7 +107,7 @@ public class PlaybookRunner implements Runnable
 				if (!playbooksOrchestration.getOnSuccess()
 					.getTests().isEmpty())
 				{
-					logger.info("Running tests for {}", playbookConfig.getPlaybookAppClass());
+					logger.info("Running tests for {}", playbookConfiguration.getPlaybookAppClass());
 					runTests(playbooksOrchestration.getOnSuccess().getTests(), playbooksApp);
 				}
 				
@@ -122,13 +122,13 @@ public class PlaybookRunner implements Runnable
 			{
 				//we were expecting the app to fail but it was successful
 				throw new PlaybookRunnerException(
-					playbookConfig.getPlaybookAppClass() + " finished with an unexpected status of \"" + exitStatus
+					playbookConfiguration.getPlaybookAppClass() + " finished with an unexpected status of \"" + exitStatus
 						.toString() + "\"");
 			}
 		}
 		else
 		{
-			logger.info("{} failed", playbookConfig.getPlaybookAppClass());
+			logger.info("{} failed", playbookConfiguration.getPlaybookAppClass());
 			
 			//check to see if retries are allowed
 			if (retryAttemptsRemaining > 0)
@@ -155,7 +155,7 @@ public class PlaybookRunner implements Runnable
 					//check to see if there are tests to run
 					if (!playbooksOrchestration.getOnFailure().getTests().isEmpty())
 					{
-						logger.info("Running tests for {}", playbookConfig.getPlaybookAppClass());
+						logger.info("Running tests for {}", playbookConfiguration.getPlaybookAppClass());
 						runTests(playbooksOrchestration.getOnFailure().getTests(), playbooksApp);
 					}
 					
@@ -170,7 +170,7 @@ public class PlaybookRunner implements Runnable
 				{
 					//we were expecting the app to succeed but it was failed
 					throw new PlaybookRunnerException(
-						playbookConfig.getPlaybookAppClass() + " finished with an unexpected status of \"" + exitStatus
+						playbookConfiguration.getPlaybookAppClass() + " finished with an unexpected status of \"" + exitStatus
 							.toString() + "\"");
 				}
 			}

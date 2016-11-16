@@ -14,31 +14,31 @@ import java.util.Map;
 /**
  * @author Greg Marut
  */
-public class AppConfiguration
+public class AppConfiguration<A extends App>
 {
 	private static final Logger logger = LoggerFactory.getLogger(AppConfiguration.class);
 	
-	private final Class<? extends App> appClass;
+	private final Class<? extends A> appClass;
 	
 	//holds the maps to index the params
 	private final Map<String, Param> appParams;
 	
-	public AppConfiguration(final Class<? extends App> appClass)
+	public AppConfiguration(final Class<? extends A> appClass)
 	{
 		this.appClass = appClass;
 		this.appParams = new HashMap<String, Param>();
 	}
 	
-	public AppConfiguration(final Class<? extends App> appClass, final InstallJson installJson)
+	public AppConfiguration(final Class<? extends A> appClass, final InstallJson installJson)
 	{
 		this(appClass, installJson.getAllParams());
 	}
 	
-	public AppConfiguration(final Class<? extends App> playbookAppClass, final List<Param> allParamList)
+	public AppConfiguration(final Class<? extends A> appClass, final List<Param> allParamList)
 	{
-		this(playbookAppClass);
+		this(appClass);
 		
-		logger.debug("Found {} params for \"{}\"", allParamList.size(), playbookAppClass.getName());
+		logger.debug("Found {} params for \"{}\"", allParamList.size(), appClass.getName());
 		
 		//for each of the params
 		for (Param param : allParamList)
@@ -57,7 +57,7 @@ public class AppConfiguration
 		}
 	}
 	
-	public Class<? extends App> getAppClass()
+	public Class<? extends A> getAppClass()
 	{
 		return appClass;
 	}

@@ -53,17 +53,17 @@ public class POResult<A extends App>
 		return builder.build(appOrchestration);
 	}
 	
-	AppOrchestration<A> getAppOrchestration()
+	protected AppOrchestration<A> getAppOrchestration()
 	{
 		return appOrchestration;
 	}
 	
-	AppOrchestration<A> getRunApp()
+	protected AppOrchestration<A> getRunApp()
 	{
 		return runApp;
 	}
 	
-	List<Testable<A>> getTests()
+	protected List<Testable<A>> getTests()
 	{
 		return tests;
 	}

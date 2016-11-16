@@ -1,7 +1,7 @@
 package com.threatconnect.apps.playbooks.test.orc;
 
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
-import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
+import com.threatconnect.apps.playbooks.test.config.PlaybookConfiguration;
 import com.threatconnect.apps.playbooks.test.config.PlaybooksTestConfiguration;
 
 /**
@@ -32,14 +32,14 @@ public final class PlaybooksOrchestrationBuilder
 		final boolean addAllOutputParams)
 	{
 		//look up the configuration for this
-		PlaybookConfig playbookConfig =
+		PlaybookConfiguration playbookConfiguration =
 			PlaybooksTestConfiguration.getInstance().getConfigurationMap().get(playbookApp.getClass());
 		
 		//make sure the playbooks app is not null
-		if (null != playbookConfig)
+		if (null != playbookConfiguration)
 		{
 			//create the new playbook orchestration
-			return new PlaybooksOrchestration(playbookConfig, playbookApp, builder, parent, addAllOutputParams);
+			return new PlaybooksOrchestration(playbookConfiguration, playbookApp, builder, parent, addAllOutputParams);
 		}
 		else
 		{

@@ -1,6 +1,6 @@
 package com.threatconnect.apps.playbooks.test.orc;
 
-import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
+import com.threatconnect.apps.playbooks.test.config.PlaybookConfiguration;
 import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
 import com.threatconnect.app.playbooks.content.ContentService;
@@ -276,7 +276,7 @@ public class WithInput extends AbstractThen<PlaybooksOrchestration>
 		return this;
 	}
 	
-	private PlaybookConfig getPlaybookConfig()
+	private PlaybookConfiguration getPlaybookConfig()
 	{
 		return getThen().getPlaybookConfig();
 	}

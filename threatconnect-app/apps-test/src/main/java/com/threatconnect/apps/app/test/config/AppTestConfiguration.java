@@ -22,25 +22,25 @@ import java.util.regex.Pattern;
 /**
  * @author Greg Marut
  */
-public class AppTestConfiguration
+public class AppTestConfiguration<A extends App>
 {
 	public static final Pattern PATTERN_INSTALL_JSON = Pattern.compile("^(?:(.*)\\.)?install\\.json$");
 	
 	private static final Logger logger = LoggerFactory.getLogger(AppTestConfiguration.class);
 	
 	//holds the instance to this singleton
-	private static AppTestConfiguration instance;
+	private static AppTestConfiguration<App> instance;
 	private static final Object lock = new Object();
 	
 	//holds the playbook configuration map
-	private final Map<Class<? extends App>, AppConfiguration> configurationMap;
+	private final Map<Class<? extends A>, AppConfiguration<A>> configurationMap;
 	
 	//holds the default app config object
 	private final AppConfig defaultAppConfig;
 	
 	private AppTestConfiguration()
 	{
-		this.configurationMap = new HashMap<Class<? extends App>, AppConfiguration>();
+		this.configurationMap = new HashMap<Class<? extends A>, AppConfiguration<A>>();
 		this.defaultAppConfig = new DefaultAppConfig();
 		
 		logger.info("Loading Playbooks Test Configuration");
@@ -142,7 +142,7 @@ public class AppTestConfiguration
 			}
 			
 			//configure this app
-			configureApp(appClass, installJson);
+			configureApp((Class<? extends A>) appClass, installJson);
 		}
 		catch (ClassNotFoundException e)
 		{
@@ -167,7 +167,7 @@ public class AppTestConfiguration
 		}
 	}
 	
-	private void configureApp(final Class<? extends App> appClass, final InstallJson installJson)
+	private void configureApp(final Class<? extends A> appClass, final InstallJson installJson)
 		throws InvalidAppException
 	{
 		logger.info("Configuring app \"{}\", loaded from file \"{}\"", appClass.getName(),
@@ -215,7 +215,7 @@ public class AppTestConfiguration
 	 *
 	 * @param appConfiguration
 	 */
-	void registerDynamicPlaybookConfiguration(final AppConfiguration appConfiguration)
+	void registerDynamicAppConfiguration(final AppConfiguration<A> appConfiguration)
 	{
 		logger
 			.info("Registering dynamic AppConfiguration for \"{}\"", appConfiguration.getAppClass().getName());
@@ -232,9 +232,9 @@ public class AppTestConfiguration
 		configurationMap.put(appConfiguration.getAppClass(), appConfiguration);
 	}
 	
-	public Map<Class<? extends App>, AppConfiguration> getConfigurationMap()
+	public Map<Class<? extends App>, AppConfiguration<A>> getConfigurationMap()
 	{
-		return new HashMap<Class<? extends App>, AppConfiguration>(configurationMap);
+		return new HashMap<Class<? extends App>, AppConfiguration<A>>(configurationMap);
 	}
 	
 	public AppConfig getDefaultAppConfig()
@@ -242,7 +242,7 @@ public class AppTestConfiguration
 		return defaultAppConfig;
 	}
 	
-	public static AppTestConfiguration getInstance()
+	public static AppTestConfiguration<App> getInstance()
 	{
 		//check to see if the instance is null
 		if (null == instance)
@@ -253,7 +253,7 @@ public class AppTestConfiguration
 				//now that a lock is in place, check again for null
 				if (null == instance)
 				{
-					instance = new AppTestConfiguration();
+					instance = new AppTestConfiguration<App>();
 				}
 			}
 		}

@@ -3,7 +3,9 @@ package com.threatconnect.apps.playbooks.test.orc;
 import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.app.apps.App;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
-import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
+import com.threatconnect.apps.app.test.orc.AssertOutput;
+import com.threatconnect.apps.app.test.orc.POResult;
+import com.threatconnect.apps.playbooks.test.config.PlaybookConfiguration;
 import com.threatconnect.apps.playbooks.test.orc.test.Testable;
 import com.threatconnect.apps.playbooks.test.util.ContentServiceUtil;
 import org.apache.commons.io.IOUtils;
@@ -19,34 +21,19 @@ import java.util.List;
 /**
  * @author Greg Marut
  */
-public class AssertOutput extends AbstractThen<POResult>
+public class PBAssertOutput extends AssertOutput<PlaybooksApp>
 {
-	private static final Logger logger = LoggerFactory.getLogger(AssertOutput.class);
+	private static final Logger logger = LoggerFactory.getLogger(PBAssertOutput.class);
 	
-	AssertOutput(final POResult poResult)
+	PBAssertOutput(final POResult<PlaybooksApp> poResult)
 	{
 		super(poResult);
 	}
 	
-	public AssertOutput fail()
-	{
-		add(new Testable()
-		{
-			@Override
-			public void run(final PlaybooksApp playbooksApp) throws Exception
-			{
-				logger.debug("fail()");
-				Assert.fail();
-			}
-		});
-		
-		return this;
-	}
-	
-	public AssertOutput assertNull(final String outputParam, final PlaybookVariableType type)
+	public PBAssertOutput assertNull(final String outputParam, final PlaybookVariableType type)
 	{
 		//since this param has been requested, make sure it is added to the out params
-		getThen().getPlaybooksOrchestration().addOutputParam(outputParam, type);
+		getAppOrchestration().addOutputParam(outputParam, type);
 		
 		add(new Testable()
 		{
@@ -62,10 +49,10 @@ public class AssertOutput extends AbstractThen<POResult>
 		return this;
 	}
 	
-	public AssertOutput assertNotNull(final String outputParam, final PlaybookVariableType type)
+	public PBAssertOutput assertNotNull(final String outputParam, final PlaybookVariableType type)
 	{
 		//since this param has been requested, make sure it is added to the out params
-		getThen().getPlaybooksOrchestration().addOutputParam(outputParam, type);
+		then().getPlaybooksOrchestration().addOutputParam(outputParam, type);
 		
 		add(new Testable()
 		{
@@ -81,7 +68,7 @@ public class AssertOutput extends AbstractThen<POResult>
 		return this;
 	}
 	
-	public AssertOutput assertEquals(final String outputParam, final PlaybookVariableType type, final Object expected)
+	public PBAssertOutput assertEquals(final String outputParam, final PlaybookVariableType type, final Object expected)
 	{
 		//since this param has been requested, make sure it is added to the out params
 		getThen().getPlaybooksOrchestration().addOutputParam(outputParam, type);
@@ -101,7 +88,7 @@ public class AssertOutput extends AbstractThen<POResult>
 		return this;
 	}
 	
-	public AssertOutput assertStringArrayEquals(final String outputParam, final PlaybookVariableType type,
+	public PBAssertOutput assertStringArrayEquals(final String outputParam, final PlaybookVariableType type,
 		final List<String> expected)
 	{
 		//since this param has been requested, make sure it is added to the out params
@@ -124,7 +111,7 @@ public class AssertOutput extends AbstractThen<POResult>
 		return this;
 	}
 	
-	public AssertOutput assertStringArraySize(final String outputParam, final PlaybookVariableType type,
+	public PBAssertOutput assertStringArraySize(final String outputParam, final PlaybookVariableType type,
 		final int expected)
 	{
 		//since this param has been requested, make sure it is added to the out params
@@ -147,7 +134,7 @@ public class AssertOutput extends AbstractThen<POResult>
 		return this;
 	}
 	
-	public AssertOutput assertMessageTcContains(final String text)
+	public PBAssertOutput assertMessageTcContains(final String text)
 	{
 		add(new Testable()
 		{
@@ -178,7 +165,7 @@ public class AssertOutput extends AbstractThen<POResult>
 		return this;
 	}
 	
-	private PlaybookConfig getPlaybookConfig()
+	private PlaybookConfiguration getPlaybookConfig()
 	{
 		return getThen().getPlaybooksOrchestration().getPlaybookConfig();
 	}

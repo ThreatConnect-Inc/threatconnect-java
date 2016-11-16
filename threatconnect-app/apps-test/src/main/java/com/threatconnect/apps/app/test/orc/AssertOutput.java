@@ -21,7 +21,7 @@ public class AssertOutput<A extends App> implements Then<POResult<A>>
 	
 	private final POResult<A> poResult;
 	
-	AssertOutput(final POResult<A> poResult)
+	protected AssertOutput(final POResult<A> poResult)
 	{
 		this.poResult = poResult;
 	}
@@ -72,7 +72,12 @@ public class AssertOutput<A extends App> implements Then<POResult<A>>
 		return this;
 	}
 	
-	private AppConfiguration getAppConfiguration()
+	protected AppOrchestration<A> getAppOrchestration()
+	{
+		return then().getAppOrchestration();
+	}
+	
+	protected AppConfiguration getAppConfiguration()
 	{
 		return then().getAppOrchestration().getAppConfiguration();
 	}

@@ -11,11 +11,11 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * A builder object for configuring {@link PlaybookConfig} objects dynamically
+ * A builder object for configuring {@link PlaybookConfiguration} objects dynamically
  *
  * @author Greg Marut
  */
-public class PlaybookConfigBuilder
+public class PlaybookConfigurationBuilder
 {
 	//holds the instance of the playbooks test configuration
 	private final PlaybooksTestConfiguration playbooksTestConfiguration;
@@ -27,7 +27,7 @@ public class PlaybookConfigBuilder
 	private final List<Param> playbookParamList;
 	private final List<PlaybookOutputVariable> playbookOutputVariableList;
 	
-	PlaybookConfigBuilder(final Class<? extends PlaybooksApp> playbookAppClass,
+	PlaybookConfigurationBuilder(final Class<? extends PlaybooksApp> playbookAppClass,
 		final PlaybooksTestConfiguration playbooksTestConfiguration)
 	{
 		this.playbookAppClass = playbookAppClass;
@@ -37,7 +37,7 @@ public class PlaybookConfigBuilder
 		this.playbookOutputVariableList = new ArrayList<PlaybookOutputVariable>();
 	}
 	
-	public PlaybookConfigBuilder addAppParam(final String name, final ParamDataType type)
+	public PlaybookConfigurationBuilder addAppParam(final String name, final ParamDataType type)
 	{
 		//create the new param object and add it to the list
 		Param param = new Param(name, type);
@@ -46,7 +46,7 @@ public class PlaybookConfigBuilder
 		return this;
 	}
 	
-	public PlaybookConfigBuilder addPlaybookParam(final String name, final ParamDataType type,
+	public PlaybookConfigurationBuilder addPlaybookParam(final String name, final ParamDataType type,
 		final PlaybookVariableType... playbookVariableTypes)
 	{
 		//make sure the playbooks variable type is not null
@@ -62,7 +62,7 @@ public class PlaybookConfigBuilder
 		return this;
 	}
 	
-	public PlaybookConfigBuilder addOutputVariable(final String name, final PlaybookVariableType playbookVariableType)
+	public PlaybookConfigurationBuilder addOutputVariable(final String name, final PlaybookVariableType playbookVariableType)
 	{
 		PlaybookOutputVariable playbookOutputVariable = new PlaybookOutputVariable(name, playbookVariableType);
 		playbookOutputVariableList.add(playbookOutputVariable);
@@ -76,10 +76,10 @@ public class PlaybookConfigBuilder
 	public void build()
 	{
 		//create a new playbook config
-		PlaybookConfig playbookConfig =
-			new PlaybookConfig(playbookAppClass, playbookParamList, playbookOutputVariableList);
+		PlaybookConfiguration playbookConfiguration =
+			new PlaybookConfiguration(playbookAppClass, playbookParamList, playbookOutputVariableList);
 		
 		//register this playbook config with the test configuration
-		playbooksTestConfiguration.registerDynamicPlaybookConfiguration(playbookConfig);
+		playbooksTestConfiguration.registerDynamicPlaybookConfiguration(playbookConfiguration);
 	}
 }

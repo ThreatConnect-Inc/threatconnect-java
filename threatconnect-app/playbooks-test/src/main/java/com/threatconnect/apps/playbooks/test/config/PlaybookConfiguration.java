@@ -5,6 +5,8 @@ import com.threatconnect.app.addons.util.config.install.Param;
 import com.threatconnect.app.addons.util.config.install.PlaybookOutputVariable;
 import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
+import com.threatconnect.apps.app.test.config.AppConfiguration;
+import com.threatconnect.apps.app.test.config.InvalidParamException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,35 +20,34 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * @author Greg Marut
  */
-public class PlaybookConfig
+public class PlaybookConfiguration extends AppConfiguration<PlaybooksApp>
 {
-	private static final Logger logger = LoggerFactory.getLogger(PlaybookConfig.class);
+	private static final Logger logger = LoggerFactory.getLogger(PlaybookConfiguration.class);
 	
 	//holds the counter for the playbook app id
 	private static final AtomicInteger counter = new AtomicInteger();
 	
 	private final int appID;
-	private final Class<? extends PlaybooksApp> playbookAppClass;
 	
 	//holds the maps to index the params and variables
 	private final Map<String, Param> playbookParams;
 	private final Map<String, PlaybookOutputVariable> playbookOutputVariables;
 	
-	public PlaybookConfig(final Class<? extends PlaybooksApp> playbookAppClass)
+	public PlaybookConfiguration(final Class<? extends PlaybooksApp> playbookAppClass)
 	{
+		super(playbookAppClass);
 		this.appID = counter.getAndIncrement();
-		this.playbookAppClass = playbookAppClass;
 		this.playbookParams = new HashMap<String, Param>();
 		this.playbookOutputVariables = new HashMap<String, PlaybookOutputVariable>();
 	}
 	
-	public PlaybookConfig(final Class<? extends PlaybooksApp> playbookAppClass, final InstallJson installJson)
+	public PlaybookConfiguration(final Class<? extends PlaybooksApp> playbookAppClass, final InstallJson installJson)
 	{
 		this(playbookAppClass, installJson.getPlaybooksParams(),
 			installJson.getPlaybook().getPlaybooksOutputVariables());
 	}
 	
-	public PlaybookConfig(final Class<? extends PlaybooksApp> playbookAppClass, final List<Param> playbookParamList,
+	public PlaybookConfiguration(final Class<? extends PlaybooksApp> playbookAppClass, final List<Param> playbookParamList,
 		final List<PlaybookOutputVariable> playbookOutputVariableList)
 	{
 		this(playbookAppClass);

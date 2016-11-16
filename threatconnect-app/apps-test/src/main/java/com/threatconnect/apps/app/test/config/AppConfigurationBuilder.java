@@ -47,7 +47,7 @@ public class AppConfigurationBuilder
 	public void build()
 	{
 		//create a new app configuration
-		AppConfiguration appConfiguration = new AppConfiguration(appClass, appParamList);
+		AppConfiguration<A> appConfiguration = new AppConfiguration<A>(appClass, appParamList);
 		
 		//register this app configuration with the test configuration
 		appTestConfiguration.registerDynamicPlaybookConfiguration(appConfiguration);
