@@ -42,12 +42,14 @@ public class ContentService
 		this.dbService = dbService;
 		
 		this.stringAccumulator = new StringAccumulator(dbService);
-		this.stringListAccumulator = new ContentAccumulator<List<String>>(dbService, PlaybookVariableType.StringArray, new
-			StringListConverter());
+		this.stringListAccumulator =
+			new ContentAccumulator<List<String>>(dbService, PlaybookVariableType.StringArray, new
+				StringListConverter());
 		this.tcEntityAccumulator =
 			new ContentAccumulator<TCEntity>(dbService, PlaybookVariableType.TCEntity, new TCEntityConverter());
-		this.tcEntityListAccumulator = new ContentAccumulator<List<TCEntity>>(dbService, PlaybookVariableType.TCEntityArray,
-			new TCEntityListConverter());
+		this.tcEntityListAccumulator =
+			new ContentAccumulator<List<TCEntity>>(dbService, PlaybookVariableType.TCEntityArray,
+				new TCEntityListConverter());
 		this.binaryAccumulator = new ContentAccumulator<byte[]>(dbService, PlaybookVariableType.Binary, new
 			ByteArrayConverter());
 		this.binaryArrayAccumulator = new ContentAccumulator<byte[][]>(dbService, PlaybookVariableType.BinaryArray, new
@@ -58,17 +60,8 @@ public class ContentService
 	
 	public String readString(final String content) throws ContentException
 	{
-		//check to see if this string input is a variable
-		if (null != content && PlaybooksVariableUtil.isVariable(content))
-		{
-			//read the content from the database
-			return stringAccumulator.readContent(content);
-		}
-		else
-		{
-			//this is a literal value
-			return content;
-		}
+		//read the content from the database
+		return stringAccumulator.readContent(content);
 	}
 	
 	public void writeString(final String key, final String value) throws ContentException

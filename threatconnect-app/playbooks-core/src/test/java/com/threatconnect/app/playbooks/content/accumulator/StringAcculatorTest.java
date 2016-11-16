@@ -14,31 +14,31 @@ import org.slf4j.LoggerFactory;
 public class StringAcculatorTest
 {
 	private static final Logger logger = LoggerFactory.getLogger(StringAcculatorTest.class);
-
+	
 	private StringAccumulator stringAccumulator;
-
+	
 	@Before
 	public void init()
 	{
 		//register the inmemory database
 		DBService dbService = new EmbeddedMapDBService();
-
+		
 		//create the string accumulator
 		stringAccumulator = new StringAccumulator(dbService);
 	}
-
+	
 	@Test
 	public void embeddedStringVariables() throws ContentException
 	{
 		stringAccumulator.writeContent("#App:123:name!String", "Greg");
 		stringAccumulator.writeContent("#App:123:hello!String", "Hello #App:123:name!String!");
-
+		
 		String result = stringAccumulator.readContent("#App:123:hello!String");
 		logger.info(result);
-
+		
 		Assert.assertEquals("Hello Greg!", result);
 	}
-
+	
 	@Test
 	public void multiEmbeddedStringVariables() throws ContentException
 	{
@@ -47,38 +47,68 @@ public class StringAcculatorTest
 		stringAccumulator
 			.writeContent("#App:123:fullname!String", "#App:123:firstname!String #App:123:lastname!String");
 		stringAccumulator.writeContent("#App:123:hello!String", "Hello #App:123:fullname!String!");
-
+		
 		String result = stringAccumulator.readContent("#App:123:hello!String");
 		logger.info(result);
-
+		
 		Assert.assertEquals("Hello Greg Marut!", result);
 	}
-
+	
 	@Test
 	public void repetitiveEmbeddedStringVariables() throws ContentException
 	{
 		stringAccumulator.writeContent("#App:123:test!String", "Test");
 		stringAccumulator
 			.writeContent("#App:123:test1!String", "#App:123:test!String #App:123:test!String #App:123:test!String");
-
+		
 		String result = stringAccumulator.readContent("#App:123:test1!String");
 		logger.info(result);
-
+		
 		Assert.assertEquals("Test Test Test", result);
 	}
-
+	
 	@Test
-	public void infiniteLoopEmbeddedStringVariables() throws ContentException
+	public void infiniteLoopEmbeddedStringVariables1() throws ContentException
 	{
 		stringAccumulator.writeContent("#App:123:one!String", "#App:123:two!String");
 		stringAccumulator.writeContent("#App:123:two!String", "#App:123:one!String");
-
+		
 		String result = stringAccumulator.readContent("#App:123:one!String");
 		logger.info(result);
-
-		// this should have resolved to "#App:123:two!String" and then detected that each variable pointed to each
-		// other. At this point, a warning will be logged and it will make no further attempt to resolve the next
-		// variable.
-		Assert.assertEquals("#App:123:two!String", result);
+		
+		// this should have resolved to StringAccumulator.CYCLICAL_VARIABLE_REFERENCE and then detected that each
+		// variable pointed to each other. At this point, a warning will be logged and it will make no further
+		// attempt to resolve the next variable.
+		Assert.assertEquals(StringAccumulator.CYCLICAL_VARIABLE_REFERENCE, result);
+	}
+	
+	@Test
+	public void infiniteLoopEmbeddedStringVariables2() throws ContentException
+	{
+		stringAccumulator.writeContent("#App:123:one!String", "#App:123:two!String");
+		stringAccumulator.writeContent("#App:123:two!String", "#App:123:one!String");
+		
+		String result = stringAccumulator.readContent("#App:123:one!String and some other text");
+		logger.info(result);
+		
+		// this should have resolved to StringAccumulator.CYCLICAL_VARIABLE_REFERENCE and then detected that each
+		// variable pointed to each other. At this point, a warning will be logged and it will make no further
+		// attempt to resolve the next variable.
+		Assert.assertEquals(StringAccumulator.CYCLICAL_VARIABLE_REFERENCE + " and some other text", result);
+	}
+	
+	@Test
+	public void infiniteLoopEmbeddedStringVariables3() throws ContentException
+	{
+		stringAccumulator.writeContent("#App:123:one!String", "#App:123:two!String extra text");
+		stringAccumulator.writeContent("#App:123:two!String", "#App:123:one!String");
+		
+		String result = stringAccumulator.readContent("#App:123:one!String and some more text");
+		logger.info(result);
+		
+		// this should have resolved to StringAccumulator.CYCLICAL_VARIABLE_REFERENCE and then detected that each
+		// variable pointed to each other. At this point, a warning will be logged and it will make no further
+		// attempt to resolve the next variable.
+		Assert.assertEquals(StringAccumulator.CYCLICAL_VARIABLE_REFERENCE + " extra text and some more text", result);
 	}
 }

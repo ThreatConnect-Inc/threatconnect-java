@@ -198,14 +198,14 @@ public class PlaybookRunner implements Runnable
 		{
 			//set this playbook param
 			appConfig.set(playbookParam.getKey(), playbookParam.getValue());
-			logger.debug("Setting Input Param \"{}\":\"{}\"", playbookParam.getKey(), playbookParam.getValue());
+			logger.debug("Setting Playbook Param \"{}\":\"{}\"", playbookParam.getKey(), playbookParam.getValue());
 			
 			//write the data to the content service
-			writeInputParam(playbooksOrchestration, playbooksApp, playbookParam);
+			writePlaybookParam(playbooksOrchestration, playbooksApp, playbookParam);
 		}
 	}
 	
-	private void writeInputParam(final PlaybooksOrchestration playbooksOrchestration, final PlaybooksApp playbooksApp,
+	private void writePlaybookParam(final PlaybooksOrchestration playbooksOrchestration, final PlaybooksApp playbooksApp,
 		final Map.Entry<String, String> entry) throws ContentException
 	{
 		final String variable = entry.getValue();

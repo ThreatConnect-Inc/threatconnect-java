@@ -25,7 +25,7 @@ public class MultiAppTest
 	}
 	
 	@Test
-	public void joinAnSplitStrings() throws Exception
+	public void joinAndSplitStrings() throws Exception
 	{
 		//@formatter:off
 		//create a new playbooks orchestration builder for defining our runtime

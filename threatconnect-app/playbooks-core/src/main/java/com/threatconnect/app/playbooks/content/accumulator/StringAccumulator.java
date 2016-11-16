@@ -1,8 +1,8 @@
 package com.threatconnect.app.playbooks.content.accumulator;
 
+import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.app.playbooks.content.converter.StringConverter;
 import com.threatconnect.app.playbooks.db.DBService;
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.app.playbooks.util.PlaybooksVariableUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,21 +18,23 @@ public class StringAccumulator extends ContentAccumulator<String>
 {
 	private static final Logger logger = LoggerFactory.getLogger(StringAccumulator.class);
 	
+	public static final String VARIABLE_NOT_FOUND = "<VARIABLE_NOT_FOUND>";
+	public static final String CYCLICAL_VARIABLE_REFERENCE = "<CYCLICAL_VARIABLE_REFERENCE>";
+	
 	public StringAccumulator(DBService dbService)
 	{
 		super(dbService, PlaybookVariableType.String, new StringConverter());
 	}
 	
 	@Override
-	public String readContent(String key) throws ContentException
+	public String readContent(String content) throws ContentException
 	{
-		return readContent(key, new Stack<String>());
+		return readContent(content, new Stack<String>());
 	}
 	
-	private String readContent(final String key, final Stack<String> stack) throws ContentException
+	private String readContent(final String content, final Stack<String> stack) throws ContentException
 	{
-		//lookup the value
-		String value = super.readContent(key);
+		String value = content;
 		
 		//make sure the value is not null
 		if (null != value)
@@ -54,8 +56,27 @@ public class StringAccumulator extends ContentAccumulator<String>
 					//add this variable to the stack
 					stack.add(variable);
 					
-					String embeddedResult = readContent(variable, stack);
-					value = value.replaceFirst(Pattern.quote(variable), embeddedResult);
+					//lookup the value
+					String resolvedVariable = super.readContent(variable);
+					
+					//recursively check the resolved variable to see if it contains any embedded variables that need to be resolved
+					String embeddedResult = readContent(resolvedVariable, stack);
+					
+					//make sure the embedded result is not null
+					if(null != embeddedResult)
+					{
+						value = value.replaceFirst(Pattern.quote(variable), embeddedResult);
+					}
+					//the variable resolved to null so now check to see if the entire value string was the variable
+					else if (value.equals(variable))
+					{
+						return null;
+					}
+					else
+					{
+						//this variable could not be resolved so replace it with the default text
+						value = value.replaceFirst(Pattern.quote(variable), VARIABLE_NOT_FOUND);
+					}
 					
 					//pop the variable off of the stack
 					stack.pop();
@@ -64,6 +85,9 @@ public class StringAccumulator extends ContentAccumulator<String>
 				{
 					logger.warn("Cyclical variable lookups detected. {} cannot be resolved to a concrete value.",
 						variable);
+					
+					//this variable is cyclical
+					value = value.replaceFirst(Pattern.quote(variable), CYCLICAL_VARIABLE_REFERENCE);
 				}
 			}
 		}
