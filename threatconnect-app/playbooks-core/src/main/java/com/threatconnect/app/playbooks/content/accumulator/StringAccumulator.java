@@ -39,7 +39,7 @@ public class StringAccumulator extends ContentAccumulator<String>
 		{
 			//create a matcher that will check to see if there are any embedded string variables in here that need to be
 			//resolved
-			Matcher matcher = PlaybooksVariableUtil.VARIABLE_PATTERN.matcher(value);
+			Matcher matcher = PlaybooksVariableUtil.getVariablePatternMatcher(value);
 			
 			//while there are more results
 			logger.trace("Looking for embedded variables.");

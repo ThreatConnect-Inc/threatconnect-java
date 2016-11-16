@@ -11,10 +11,10 @@ import java.util.regex.Pattern;
 public class PlaybooksVariableUtil
 {
 	//holds the regex pattern that identifies a variable
-	public static final String VARIABLE_REGEX = "(#(?:[A-Za-z]+):(?:[\\d]+):([A-Za-z0-9_.-]+)!([A-Za-z0-9_-]+))";
-	public static final Pattern VARIABLE_PATTERN = Pattern.compile(VARIABLE_REGEX);
+	private static final String VARIABLE_REGEX = "(#(?:[A-Za-z]+):(?:[\\d]+):([A-Za-z0-9_.-]+)!([A-Za-z0-9_-]+))";
+	private static final Pattern VARIABLE_PATTERN = Pattern.compile(VARIABLE_REGEX);
 	
-	public static boolean isVariable(final String input)
+	public static Matcher getVariablePatternMatcher(final String input)
 	{
 		//make sure the input is not null
 		if (null == input)
@@ -22,7 +22,12 @@ public class PlaybooksVariableUtil
 			throw new IllegalArgumentException("input cannot be null");
 		}
 		
-		return VARIABLE_PATTERN.matcher(input).matches();
+		return VARIABLE_PATTERN.matcher(input.trim());
+	}
+	
+	public static boolean isVariable(final String input)
+	{
+		return getVariablePatternMatcher(input).matches();
 	}
 	
 	public static String extractVariableName(final String variable)
@@ -33,7 +38,7 @@ public class PlaybooksVariableUtil
 			throw new IllegalArgumentException(variable + " is not a valid variable");
 		}
 		
-		Matcher matcher = VARIABLE_PATTERN.matcher(variable);
+		Matcher matcher = getVariablePatternMatcher(variable);
 		matcher.find();
 		return matcher.group(2);
 	}
@@ -46,7 +51,7 @@ public class PlaybooksVariableUtil
 			throw new IllegalArgumentException(variable + " is not a valid variable");
 		}
 		
-		Matcher matcher = VARIABLE_PATTERN.matcher(variable);
+		Matcher matcher = getVariablePatternMatcher(variable);
 		matcher.find();
 		return PlaybookVariableType.valueOf(matcher.group(3));
 	}
