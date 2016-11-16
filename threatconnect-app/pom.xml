@@ -19,8 +19,9 @@
 	<modules>
 		<module>apps-core</module>
 		<module>playbooks-core</module>
-		<module>playbooks-test</module>
 		<module>apps-util</module>
+		<module>apps-test</module>
+		<module>playbooks-test</module>
 	</modules>
 
 	<licenses>

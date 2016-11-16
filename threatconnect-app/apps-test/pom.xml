@@ -8,13 +8,18 @@
 		<version>2.7.2-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<name>Playbooks Testing Framework</name>
-	<artifactId>playbooks-test</artifactId>
+	<name>Apps Testing Framework</name>
+	<artifactId>apps-test</artifactId>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.threatconnect.app</groupId>
-			<artifactId>playbooks-core</artifactId>
+			<artifactId>apps-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.threatconnect.app</groupId>
+			<artifactId>apps-util</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

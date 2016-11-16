@@ -1,0 +1,25 @@
+{
+  "displayName": "App1",
+  "programVersion": "1.0.0",
+  "programLanguage": "JAVA",
+  "programMain": "com.threatconnect.apps.app.test.app1.App1Main",
+  "languageVersion": "7",
+  "listDelimiter": "|",
+  "runtimeLevel": "System",
+  "params": [
+    {
+      "name": "first_name",
+      "label": "First Name",
+      "sequence": 1,
+      "required": true,
+      "type": "String"
+    },
+    {
+      "name": "last_name",
+      "label": "Last Name",
+      "sequence": 2,
+      "required": true,
+      "type": "String"
+    }
+  ]
+}
