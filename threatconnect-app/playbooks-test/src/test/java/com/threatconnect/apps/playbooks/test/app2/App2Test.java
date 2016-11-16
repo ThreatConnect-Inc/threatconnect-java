@@ -31,7 +31,7 @@ public class App2Test
 				.withAppParam()
 					.set(App2.PARAM_JOIN_ON, ",")
 				.then()
-				.withInput()
+				.withPlaybookParam()
 					.asStringList(App2.PARAM_INPUT_ARRAY, Arrays.asList("one", "two", "three"))
 				.then()
 				.onSuccess().assertOutput()

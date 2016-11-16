@@ -193,15 +193,15 @@ public class PlaybookRunner implements Runnable
 			logger.debug("Setting App Param \"{}\":\"{}\"", appParams.getKey(), appParams.getValue());
 		}
 		
-		//for each of the input params
-		for (Map.Entry<String, String> inputParam : playbooksOrchestration.getInputParams().entrySet())
+		//for each of the playbook params
+		for (Map.Entry<String, String> playbookParam : playbooksOrchestration.getPlaybookParams().entrySet())
 		{
-			//set this input
-			appConfig.set(inputParam.getKey(), inputParam.getValue());
-			logger.debug("Setting Input Param \"{}\":\"{}\"", inputParam.getKey(), inputParam.getValue());
+			//set this playbook param
+			appConfig.set(playbookParam.getKey(), playbookParam.getValue());
+			logger.debug("Setting Input Param \"{}\":\"{}\"", playbookParam.getKey(), playbookParam.getValue());
 			
 			//write the data to the content service
-			writeInputParam(playbooksOrchestration, playbooksApp, inputParam);
+			writeInputParam(playbooksOrchestration, playbooksApp, playbookParam);
 		}
 	}
 	

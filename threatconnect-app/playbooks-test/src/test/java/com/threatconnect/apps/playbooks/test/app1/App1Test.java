@@ -27,7 +27,7 @@ public class App1Test
 		//create a new playbooks orchestration builder for defining our runtime
 		PlaybooksOrchestrationBuilder
 			.runApp(App1.class)
-				.withInput()
+				.withPlaybookParam()
 					.asString(App1.PARAM_INPUT_FIRST_NAME, "Greg")
 					.asString(App1.PARAM_INPUT_LAST_NAME, "Marut")
 				.then()

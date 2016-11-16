@@ -1,9 +1,9 @@
 package com.threatconnect.apps.playbooks.test.app4;
 
-import com.threatconnect.apps.playbooks.test.config.PlaybooksTestConfiguration;
-import com.threatconnect.apps.playbooks.test.orc.PlaybooksOrchestrationBuilder;
 import com.threatconnect.app.addons.util.config.install.ParamDataType;
 import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.apps.playbooks.test.config.PlaybooksTestConfiguration;
+import com.threatconnect.apps.playbooks.test.orc.PlaybooksOrchestrationBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,7 +35,7 @@ public class App4DynamicConfigTest
 		//create a new playbooks orchestration builder for defining our runtime
 		PlaybooksOrchestrationBuilder
 			.runApp(App4DynamicConfig.class)
-				.withInput()
+				.withPlaybookParam()
 					.asString(App4DynamicConfig.PARAM_INPUT_FIRST_NAME, "Greg")
 					.asString(App4DynamicConfig.PARAM_INPUT_LAST_NAME, "Marut")
 				.then()

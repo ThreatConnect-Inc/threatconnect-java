@@ -31,7 +31,7 @@ public class App3Test
 				.withAppParam()
 					.set(App3.PARAM_SPLIT_ON, ",")
 				.then()
-				.withInput()
+				.withPlaybookParam()
 					.asString(App3.PARAM_INPUT_CONCAT,"one,two,three")
 				.then()
 				.onSuccess().assertOutput()

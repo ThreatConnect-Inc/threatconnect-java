@@ -29,8 +29,8 @@ public class PlaybooksOrchestration
 	//holds the list of output variables
 	private final Set<String> outputVariables;
 	
-	//holds the set of all input params
-	private final Map<String, String> inputParams;
+	//holds the set of all playbook params
+	private final Map<String, String> playbookParams;
 	private final Map<String, String> appParams;
 	
 	private final ContentService contentService;
@@ -53,7 +53,7 @@ public class PlaybooksOrchestration
 		this.builder = builder;
 		this.parent = parent;
 		this.outputVariables = new HashSet<String>();
-		this.inputParams = new HashMap<String, String>();
+		this.playbookParams = new HashMap<String, String>();
 		this.appParams = new HashMap<String, String>();
 		this.contentService = new ContentService(new EmbeddedMapDBService());
 		
@@ -164,9 +164,20 @@ public class PlaybooksOrchestration
 		return variable;
 	}
 	
-	public WithInput withInput()
+	/**
+	 * This method has been deprecated in favor of withPlaybookParam()
+	 *
+	 * @return
+	 */
+	@Deprecated
+	public WithPlaybookParam withInput()
 	{
-		return new WithInput(this);
+		return new WithPlaybookParam(this);
+	}
+	
+	public WithPlaybookParam withPlaybookParam()
+	{
+		return new WithPlaybookParam(this);
 	}
 	
 	public WithAppParam withAppParam()
@@ -239,9 +250,9 @@ public class PlaybooksOrchestration
 		return appParams;
 	}
 	
-	Map<String, String> getInputParams()
+	Map<String, String> getPlaybookParams()
 	{
-		return inputParams;
+		return playbookParams;
 	}
 	
 	ContentService getContentService()
