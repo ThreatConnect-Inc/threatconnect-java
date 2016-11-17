@@ -40,12 +40,12 @@ public class PlaybooksTestConfiguration
 	private final Map<Class<? extends PlaybooksApp>, PlaybookConfig> configurationMap;
 	
 	//holds the default app config object
-	private final AppConfig defaultAppConfig;
+	private final AppConfig globalAppConfig;
 	
 	private PlaybooksTestConfiguration()
 	{
 		this.configurationMap = new HashMap<Class<? extends PlaybooksApp>, PlaybookConfig>();
-		this.defaultAppConfig = new DefaultAppConfig();
+		this.globalAppConfig = new DefaultAppConfig();
 		
 		logger.info("Loading Playbooks Test Configuration");
 		
@@ -67,12 +67,12 @@ public class PlaybooksTestConfiguration
 		
 		//register the inmemory database
 		DBServiceFactory.registerCustomDBService("Memory", new EmbeddedMapDBService());
-		defaultAppConfig.set(PlaybooksAppConfig.PARAM_DB_TYPE, "Memory");
+		globalAppConfig.set(PlaybooksAppConfig.PARAM_DB_TYPE, "Memory");
 	}
 	
 	public void setGlobalAppParam(final String name, final String value)
 	{
-		defaultAppConfig.set(name, value);
+		globalAppConfig.set(name, value);
 	}
 	
 	private List<File> findInstallJsonFiles()
@@ -151,7 +151,7 @@ public class PlaybooksTestConfiguration
 			AppExecutor appExecutor = programMainClass.newInstance();
 			
 			//retrieve the classes that are executed from this main
-			AppConfig appConfig = new DefaultAppConfig().copyFrom(defaultAppConfig);
+			AppConfig appConfig = new DefaultAppConfig().copyFrom(globalAppConfig);
 			Class<? extends App> appClass = appExecutor.getAppClassToExecute(appConfig);
 			
 			//ensure that this class has a declared static main method
@@ -259,9 +259,9 @@ public class PlaybooksTestConfiguration
 		return new HashMap<Class<? extends PlaybooksApp>, PlaybookConfig>(configurationMap);
 	}
 	
-	public AppConfig getDefaultAppConfig()
+	public AppConfig getGlobalAppConfig()
 	{
-		return defaultAppConfig;
+		return globalAppConfig;
 	}
 	
 	public static PlaybooksTestConfiguration getInstance()

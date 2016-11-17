@@ -42,7 +42,7 @@ public abstract class PlaybooksApp extends App
 	}
 	
 	@Override
-	public ExitStatus execute(AppConfig appConfig) throws Exception
+	public final ExitStatus execute(AppConfig appConfig) throws Exception
 	{
 		return execute(new PlaybooksAppConfig(appConfig));
 	}

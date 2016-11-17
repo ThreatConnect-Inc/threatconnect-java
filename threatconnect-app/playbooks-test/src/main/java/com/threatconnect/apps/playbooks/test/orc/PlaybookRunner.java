@@ -50,7 +50,7 @@ public class PlaybookRunner implements Runnable
 		{
 			//create an instance of the app config object and copy the default params from the test config
 			AppConfig appConfig = new SystemPropertiesAppConfig()
-				.copyFrom(PlaybooksTestConfiguration.getInstance().getDefaultAppConfig());
+				.copyFrom(PlaybooksTestConfiguration.getInstance().getGlobalAppConfig());
 			
 			//get the playbook config
 			PlaybookConfig playbookConfig = playbooksOrchestration.getPlaybookConfig();
