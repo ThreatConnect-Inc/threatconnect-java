@@ -66,7 +66,7 @@ public class ContentAccumulator<T>
 		try
 		{
 			//convert the value to a byte array and write the raw byte value to the database
-			dbService.saveValue(key, contentConverter.toByteArray(content));
+			dbService.saveValue(key.trim(), contentConverter.toByteArray(content));
 		}
 		catch (DBWriteException | ConversionException e)
 		{
@@ -118,12 +118,12 @@ public class ContentAccumulator<T>
 		try
 		{
 			//read the value from the database service as a raw byte array and check to see if the content is not null
-			byte[] content = dbService.getValue(key);
+			byte[] content = dbService.getValue(key.trim());
 			if (content == null)
 			{
 				return null;
 			}
-			
+
 			return contentConverter.fromByteArray(content);
 		}
 		catch (DBReadException | ConversionException e)
