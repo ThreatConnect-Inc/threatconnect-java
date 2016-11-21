@@ -111,4 +111,20 @@ public class StringAcculatorTest
 		// attempt to resolve the next variable.
 		Assert.assertEquals(StringAccumulator.CYCLICAL_VARIABLE_REFERENCE + " extra text and some more text", result);
 	}
+	
+	@Test
+	public void nonRecursiveResolution() throws ContentException
+	{
+		stringAccumulator.writeContent("#App:123:json!String", "{\"value\": \"#App:123:value!String\"}");
+		stringAccumulator.writeContent("#App:123:value!String", "123");
+		
+		String recursiveResolution = stringAccumulator.readContent("#App:123:json!String");
+		String nonRecursiveResolution = stringAccumulator.readContent("#App:123:json!String", false);
+		
+		logger.info(recursiveResolution);
+		logger.info(nonRecursiveResolution);
+		
+		Assert.assertEquals("{\"value\": \"123\"}", recursiveResolution);
+		Assert.assertEquals("{\"value\": \"#App:123:value!String\"}", nonRecursiveResolution);
+	}
 }

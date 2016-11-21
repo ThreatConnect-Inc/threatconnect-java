@@ -113,8 +113,7 @@ public class AssertOutput extends AbstractThen<POResult>
 			public void run(final PlaybooksApp playbooksApp) throws Exception
 			{
 				logger.debug("assertStringArrayEquals Output Param \"{}\" of type \"{}\" = \"{}\"", outputParam,
-					type.toString(),
-					expected);
+					type.toString(), expected);
 				final String variable = getPlaybookConfig().createVariableForOutputVariable(outputParam, type);
 				List<String> result = playbooksApp.getContentService().readStringList(variable);
 				Assert.assertArrayEquals(expected.toArray(new String[] {}), result.toArray(new String[] {}));
@@ -136,8 +135,7 @@ public class AssertOutput extends AbstractThen<POResult>
 			public void run(final PlaybooksApp playbooksApp) throws Exception
 			{
 				logger.debug("assertStringArraySize Output Param \"{}\" of type \"{}\" = \"{}\"", outputParam,
-					type.toString(),
-					expected);
+					type.toString(), expected);
 				final String variable = getPlaybookConfig().createVariableForOutputVariable(outputParam, type);
 				List<String> result = playbooksApp.getContentService().readStringList(variable);
 				Assert.assertEquals(expected, result.size());

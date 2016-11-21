@@ -21,18 +21,35 @@ public class StringAccumulator extends ContentAccumulator<String>
 	public static final String VARIABLE_NOT_FOUND = "<VARIABLE_NOT_FOUND>";
 	public static final String CYCLICAL_VARIABLE_REFERENCE = "<CYCLICAL_VARIABLE_REFERENCE>";
 	
-	public StringAccumulator(DBService dbService)
+	public StringAccumulator(final DBService dbService)
 	{
 		super(dbService, PlaybookVariableType.String, new StringConverter());
 	}
 	
 	@Override
-	public String readContent(String content) throws ContentException
+	public String readContent(final String content) throws ContentException
 	{
-		return readContent(content, new Stack<String>());
+		return readContent(content, true);
 	}
 	
-	private String readContent(final String content, final Stack<String> stack) throws ContentException
+	/**
+	 * Reads the content while looking for embedded variables and replacing them with their resolved value.
+	 *
+	 * @param content                     the content to check to resolve any embedded variables
+	 * @param recursiveVariableResolution when true, recursion is allowed when resolving variables. Therefore, if a
+	 *                                    variable is resolved and it contains more variables embedded in the string,
+	 *                                    the lookups continue until all variables have been recursively resolved or a
+	 *                                    variable could not be found.
+	 * @return
+	 * @throws ContentException
+	 */
+	public String readContent(final String content, final boolean recursiveVariableResolution) throws ContentException
+	{
+		return readContent(content, recursiveVariableResolution, new Stack<String>());
+	}
+	
+	private String readContent(final String content, final boolean recursiveVariableResolution,
+		final Stack<String> stack) throws ContentException
 	{
 		String value = content;
 		
@@ -57,13 +74,23 @@ public class StringAccumulator extends ContentAccumulator<String>
 					stack.add(variable);
 					
 					//lookup the value
-					String resolvedVariable = super.readContent(variable);
+					final String resolvedVariable = super.readContent(variable);
+					final String embeddedResult;
 					
-					//recursively check the resolved variable to see if it contains any embedded variables that need to be resolved
-					String embeddedResult = readContent(resolvedVariable, stack);
+					//check to see if variables should be looked up recursively
+					if (recursiveVariableResolution)
+					{
+						//recursively check the resolved variable to see if it contains any embedded variables that need to be resolved
+						embeddedResult = readContent(resolvedVariable, true, stack);
+					}
+					else
+					{
+						//since there was no recursive variable resolution, the result is limited to only 1 lookup
+						embeddedResult = resolvedVariable;
+					}
 					
 					//make sure the embedded result is not null
-					if(null != embeddedResult)
+					if (null != embeddedResult)
 					{
 						value = value.replaceFirst(Pattern.quote(variable), embeddedResult);
 					}

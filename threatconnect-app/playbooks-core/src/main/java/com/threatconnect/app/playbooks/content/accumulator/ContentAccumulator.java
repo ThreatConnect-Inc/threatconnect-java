@@ -1,11 +1,12 @@
 package com.threatconnect.app.playbooks.content.accumulator;
 
+import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.app.playbooks.content.converter.ContentConverter;
 import com.threatconnect.app.playbooks.content.converter.ConversionException;
-import com.threatconnect.app.playbooks.db.DBService;
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.app.playbooks.db.DBReadException;
+import com.threatconnect.app.playbooks.db.DBService;
 import com.threatconnect.app.playbooks.db.DBWriteException;
+import com.threatconnect.app.playbooks.util.PlaybooksVariableUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,8 +22,7 @@ public class ContentAccumulator<T>
 	private final ContentConverter<T> contentConverter;
 	
 	public ContentAccumulator(final DBService dbService, final PlaybookVariableType standardType,
-		final ContentConverter<T>
-			contentConverter)
+		final ContentConverter<T> contentConverter)
 	{
 		//make sure the db service is not null
 		if (null == dbService)
@@ -57,11 +57,7 @@ public class ContentAccumulator<T>
 	 */
 	public void writeContent(final String key, final T content) throws ContentException
 	{
-		//make sure the key is not null or empty
-		if (null == key || key.isEmpty())
-		{
-			throw new IllegalArgumentException("key cannot be null");
-		}
+		verifyKey(key);
 		
 		try
 		{
@@ -109,11 +105,7 @@ public class ContentAccumulator<T>
 	 */
 	public T readContent(final String key) throws ContentException
 	{
-		//make sure the key is not null or empty
-		if (null == key || key.isEmpty())
-		{
-			throw new IllegalArgumentException("key cannot be null");
-		}
+		verifyKey(key);
 		
 		try
 		{
@@ -123,12 +115,31 @@ public class ContentAccumulator<T>
 			{
 				return null;
 			}
-
+			
 			return contentConverter.fromByteArray(content);
 		}
 		catch (DBReadException | ConversionException e)
 		{
 			throw new ContentException(e);
+		}
+	}
+	
+	private void verifyKey(final String key)
+	{
+		//make sure the key is not null or empty
+		if (null == key || key.isEmpty())
+		{
+			throw new IllegalArgumentException("key cannot be null");
+		}
+		
+		//extract the type from this key
+		PlaybookVariableType actualType = PlaybooksVariableUtil.extractVariableType(key);
+		
+		//check to see if the actual type and the expected type do not match
+		if (!standardType.equals(actualType))
+		{
+			throw new IllegalArgumentException(
+				"key is of type " + actualType.toString() + ", expected " + standardType.toString());
 		}
 	}
 }
