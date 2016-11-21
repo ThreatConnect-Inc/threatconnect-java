@@ -28,7 +28,7 @@ public class ContentService
 	
 	//holds all of the content accumulators that will be responsible for reading/writing/converting data to and from
 	//the database
-	private final ContentAccumulator<String> stringAccumulator;
+	private final StringAccumulator stringAccumulator;
 	private final ContentAccumulator<List<String>> stringListAccumulator;
 	private final ContentAccumulator<TCEntity> tcEntityAccumulator;
 	private final ContentAccumulator<List<TCEntity>> tcEntityListAccumulator;
@@ -62,6 +62,23 @@ public class ContentService
 	{
 		//read the content from the database
 		return stringAccumulator.readContent(content);
+	}
+	
+	/**
+	 * Reads the content while looking for embedded variables and replacing them with their resolved value.
+	 *
+	 * @param content                     the content to check to resolve any embedded variables
+	 * @param recursiveVariableResolution when true, recursion is allowed when resolving variables. Therefore, if a
+	 *                                    variable is resolved and it contains more variables embedded in the string,
+	 *                                    the lookups continue until all variables have been recursively resolved or a
+	 *                                    variable could not be found.
+	 * @return
+	 * @throws ContentException
+	 */
+	public String readString(final String content, final boolean recursiveVariableResolution) throws ContentException
+	{
+		//read the content from the database
+		return stringAccumulator.readContent(content, recursiveVariableResolution);
 	}
 	
 	public void writeString(final String key, final String value) throws ContentException
