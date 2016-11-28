@@ -12,7 +12,6 @@ import java.util.Map;
 public class DBServiceFactory
 {
 	public static final String DB_TYPE_DISTRIBUTED = "Redis";
-	public static final String DB_TYPE_EMBEDDED = "RocksDB";
 	
 	//holds the map which will store customized db service objects
 	private static final Map<String, DBService> customDBServiceMap = new HashMap<String, DBService>();
@@ -27,11 +26,6 @@ public class DBServiceFactory
 		if (DB_TYPE_DISTRIBUTED.equals(dbType))
 		{
 			return new RedisDBService(playbooksAppConfig);
-		}
-		//check to see if the database is embedded
-		else if (DB_TYPE_EMBEDDED.equals(dbType))
-		{
-			return new RocksDBService(playbooksAppConfig);
 		}
 		//check to see if there is a custom database that was registered
 		else if (customDBServiceMap.containsKey(dbType))
@@ -49,7 +43,7 @@ public class DBServiceFactory
 	public static void registerCustomDBService(final String name, final DBService dbService)
 	{
 		//make sure the name is not a reserved name
-		if (DB_TYPE_DISTRIBUTED.equals(name) || DB_TYPE_EMBEDDED.equals(name))
+		if (DB_TYPE_DISTRIBUTED.equals(name))
 		{
 			throw new IllegalArgumentException(name + " is a reserved DBService and cannot be overwritten.");
 		}
