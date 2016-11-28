@@ -30,7 +30,7 @@ public class UrlDataSource implements DataSource
 	@Override
 	public boolean equals(Object obj)
 	{
-		if (obj instanceof FileDataSource)
+		if (obj instanceof UrlDataSource)
 		{
 			UrlDataSource other = (UrlDataSource) obj;
 			return url.equals(other.url);

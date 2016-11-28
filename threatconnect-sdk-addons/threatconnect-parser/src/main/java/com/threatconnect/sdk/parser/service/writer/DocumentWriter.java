@@ -8,6 +8,7 @@ import com.threatconnect.sdk.parser.service.save.SaveItemFailedException;
 import com.threatconnect.sdk.server.entity.Group.Type;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.util.UploadMethodType;
+import org.apache.commons.io.FileUtils;
 
 import java.io.IOException;
 
@@ -34,6 +35,8 @@ public class DocumentWriter extends GroupWriter<Document, com.threatconnect.sdk.
 			DocumentWriterAdapter documentWriterAdapter = createWriterAdapter();
 			ApiEntitySingleResponse<?, ?> uploadResponse;
 			
+			logger.debug("Document \"{}\" Status: {}", document.getId(), document.getStatus());
+			
 			// check to see if this document's file is in a success state
 			if (SUCCESS.equals(document.getStatus()))
 			{
@@ -51,8 +54,9 @@ public class DocumentWriter extends GroupWriter<Document, com.threatconnect.sdk.
 			// check to see if this was not successful
 			if (!uploadResponse.isSuccess())
 			{
-				logger.warn("Failed to upload file \"{}\" for group id: {}", groupSource.getFile().getAbsolutePath(),
-					getSavedGroupID());
+				logger.warn("Failed to upload file \"{}\" of size {} for group id: {}",
+					groupSource.getFile().getAbsolutePath(),
+					FileUtils.byteCountToDisplaySize(groupSource.getFile().length()), getSavedGroupID());
 				logger.warn(uploadResponse.getMessage());
 			}
 		}
