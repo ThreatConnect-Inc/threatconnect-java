@@ -12,6 +12,7 @@ public class App1 extends PlaybooksApp
 {
 	public static final String PARAM_INPUT_FIRST_NAME = "first_name";
 	public static final String PARAM_INPUT_LAST_NAME = "last_name";
+	public static final String PARAM_INPUT_KVS = "some_kvs";
 	
 	public static final String OUTPUT_NAME = "test.app1.name";
 	

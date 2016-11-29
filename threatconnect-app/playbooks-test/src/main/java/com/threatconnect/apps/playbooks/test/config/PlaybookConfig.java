@@ -2,6 +2,7 @@ package com.threatconnect.apps.playbooks.test.config;
 
 import com.threatconnect.app.addons.util.config.install.InstallJson;
 import com.threatconnect.app.addons.util.config.install.Param;
+import com.threatconnect.app.addons.util.config.install.ParamDataType;
 import com.threatconnect.app.addons.util.config.install.PlaybookOutputVariable;
 import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
@@ -122,13 +123,26 @@ public class PlaybookConfig
 	{
 		Param param = getInputParam(paramName);
 		
-		//for each of the playbook types
-		for (PlaybookVariableType playbookVariableType : param.getPlaybookDataTypes())
+		//:TODO: this logic should be revisited. Do we want to handle this as a special case?
+		//check to see if the param type is a KeyValueList as it requires special handling
+		if (ParamDataType.KeyValueList.equals(param.getType()))
 		{
 			//check to see if this datatype matches
-			if (type.equals(playbookVariableType))
+			if (type.equals(PlaybookVariableType.KeyValueArray))
 			{
 				return buildParam(this.appID, param.getName(), type);
+			}
+		}
+		else
+		{
+			//for each of the playbook types
+			for (PlaybookVariableType playbookVariableType : param.getPlaybookDataTypes())
+			{
+				//check to see if this datatype matches
+				if (type.equals(playbookVariableType))
+				{
+					return buildParam(this.appID, param.getName(), type);
+				}
 			}
 		}
 		

@@ -35,6 +35,16 @@
       "playbookDataType": [
         "String"
       ]
+    },
+    {
+      "name": "some_kvs",
+      "label": "KeyValues",
+      "sequence": 3,
+      "required": false,
+      "type": "KeyValueList",
+      "playbookDataType": [
+        "String"
+      ]
     }
   ]
 }
