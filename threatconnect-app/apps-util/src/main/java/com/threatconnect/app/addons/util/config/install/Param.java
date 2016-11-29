@@ -27,6 +27,7 @@ public class Param
 	{
 		this.name = JsonUtil.getAsString(root, NAME);
 		this.type = ParamDataType.fromString(JsonUtil.getAsString(root, TYPE));
+		System.out.println("name="+name+",type="+type);
 		this.validValues = new ArrayList<String>();
 		this.playbookDataTypes = new ArrayList<PlaybookVariableType>();
 		
