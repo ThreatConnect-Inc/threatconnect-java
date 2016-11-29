@@ -4,6 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.threatconnect.app.addons.util.JsonUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,8 @@ import java.util.List;
  */
 public class Param
 {
+	private static final Logger logger = LoggerFactory.getLogger(Param.class);
+	
 	private static final String NAME = "name";
 	private static final String TYPE = "type";
 	private static final String VALID_VALUES = "validValues";
@@ -27,16 +31,17 @@ public class Param
 	{
 		this.name = JsonUtil.getAsString(root, NAME);
 		this.type = ParamDataType.fromString(JsonUtil.getAsString(root, TYPE));
-		System.out.println("name="+name+",type="+type);
 		this.validValues = new ArrayList<String>();
 		this.playbookDataTypes = new ArrayList<PlaybookVariableType>();
+		
+		logger.debug("name={}, type={}", name, type);
 		
 		//retrieve the valid values element
 		JsonElement validValuesElement = root.get(VALID_VALUES);
 		if (null != validValuesElement)
 		{
 			//make sure this is an array
-			if(!validValuesElement.isJsonArray())
+			if (!validValuesElement.isJsonArray())
 			{
 				throw new InvalidInstallJsonFileException(VALID_VALUES + " must be an array");
 			}
@@ -55,7 +60,7 @@ public class Param
 		if (null != dataTypeElement)
 		{
 			//make sure this is an array
-			if(!dataTypeElement.isJsonArray())
+			if (!dataTypeElement.isJsonArray())
 			{
 				throw new InvalidInstallJsonFileException(PLAYBOOK_DATA_TYPE + " must be an array");
 			}
