@@ -1,7 +1,5 @@
 package com.threatconnect.app.playbooks.content;
 
-import com.threatconnect.app.playbooks.content.entity.StringKeyValue;
-import com.threatconnect.app.playbooks.db.DBService;
 import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.app.playbooks.content.accumulator.ContentAccumulator;
 import com.threatconnect.app.playbooks.content.accumulator.ContentException;
@@ -13,7 +11,9 @@ import com.threatconnect.app.playbooks.content.converter.ByteMatrixConverter;
 import com.threatconnect.app.playbooks.content.converter.StringListConverter;
 import com.threatconnect.app.playbooks.content.converter.TCEntityConverter;
 import com.threatconnect.app.playbooks.content.converter.TCEntityListConverter;
+import com.threatconnect.app.playbooks.content.entity.StringKeyValue;
 import com.threatconnect.app.playbooks.content.entity.TCEntity;
+import com.threatconnect.app.playbooks.db.DBService;
 import com.threatconnect.app.playbooks.util.PlaybooksVariableUtil;
 
 import java.util.List;
@@ -34,8 +34,8 @@ public class ContentService
 	private final ContentAccumulator<List<TCEntity>> tcEntityListAccumulator;
 	private final ContentAccumulator<byte[]> binaryAccumulator;
 	private final ContentAccumulator<byte[][]> binaryArrayAccumulator;
-	private final ContentAccumulator<StringKeyValue> stringKeyValueContentAccumulator;
-	private final ContentAccumulator<List<StringKeyValue>> stringKeyValueArrayContentAccumulator;
+	private final StringKeyValueAccumulator stringKeyValueContentAccumulator;
+	private final StringKeyValueArrayAccumulator stringKeyValueArrayContentAccumulator;
 	
 	public ContentService(final DBService dbService)
 	{
@@ -153,6 +153,12 @@ public class ContentService
 		return stringKeyValueContentAccumulator.readContent(key);
 	}
 	
+	public StringKeyValue readKeyValue(final String key, final boolean resolveEmbeddedVariables) throws ContentException
+	{
+		verifyKeyIsVariable(key);
+		return stringKeyValueContentAccumulator.readContent(key, resolveEmbeddedVariables);
+	}
+	
 	public void writeKeyValue(final String key, final StringKeyValue value) throws ContentException
 	{
 		verifyKeyIsVariable(key);
@@ -163,6 +169,13 @@ public class ContentService
 	{
 		verifyKeyIsVariable(key);
 		return stringKeyValueArrayContentAccumulator.readContent(key);
+	}
+	
+	public List<StringKeyValue> readKeyValueArray(final String key, final boolean resolveEmbeddedVariables)
+		throws ContentException
+	{
+		verifyKeyIsVariable(key);
+		return stringKeyValueArrayContentAccumulator.readContent(key, resolveEmbeddedVariables);
 	}
 	
 	public void writeKeyValueArray(final String key, final List<StringKeyValue> value) throws ContentException
