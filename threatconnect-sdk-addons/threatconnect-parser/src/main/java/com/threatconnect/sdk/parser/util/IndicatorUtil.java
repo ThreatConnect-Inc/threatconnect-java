@@ -1,13 +1,13 @@
 package com.threatconnect.sdk.parser.util;
 
-import java.util.regex.Matcher;
-
 import com.threatconnect.sdk.parser.model.Address;
 import com.threatconnect.sdk.parser.model.Host;
 import com.threatconnect.sdk.parser.model.Indicator;
 import com.threatconnect.sdk.parser.model.Url;
 import com.threatconnect.sdk.parser.util.regex.HostNameExtractor;
 import com.threatconnect.sdk.parser.util.regex.MatchNotFoundException;
+
+import java.util.regex.Matcher;
 
 public class IndicatorUtil
 {
@@ -28,17 +28,17 @@ public class IndicatorUtil
 	public static Url createUrl(final String url) throws InvalidURLException
 	{
 		// make sure the url is not null or empty
-		if (null != url && !url.isEmpty())
+		if (null != url && !url.trim().isEmpty())
 		{
 			String fullUrl;
 			
-			if (!UrlUtil.isAbsoluteURL(url))
+			if (!UrlUtil.isAbsoluteURL(url.trim()))
 			{
-				fullUrl = "http://" + url;
+				fullUrl = "http://" + url.trim();
 			}
 			else
 			{
-				fullUrl = url;
+				fullUrl = url.trim();
 			}
 			
 			Url result = new Url();
@@ -78,18 +78,18 @@ public class IndicatorUtil
 	public static Indicator createHostOrAddress(final String ipAddressOrHostName)
 	{
 		// check to see if this is an IP address
-		if (RegexUtil.REGEX_IP_FORMAT.matcher(ipAddressOrHostName).matches())
+		if (RegexUtil.REGEX_IP_FORMAT.matcher(ipAddressOrHostName.trim()).matches())
 		{
 			// create an address indicator
 			Address address = new Address();
-			address.setIp(cleanIP(ipAddressOrHostName));
+			address.setIp(cleanIP(ipAddressOrHostName.trim()));
 			return address;
 		}
 		else
 		{
 			// create a host indicator
 			Host host = new Host();
-			host.setHostName(ipAddressOrHostName);
+			host.setHostName(ipAddressOrHostName.trim());
 			return host;
 		}
 	}
@@ -107,19 +107,19 @@ public class IndicatorUtil
 	public static String cleanIP(final String ip)
 	{
 		// create a matcher for this ip
-		Matcher matcher = RegexUtil.REGEX_LEADING_ZEROS.matcher(ip);
+		Matcher matcher = RegexUtil.REGEX_LEADING_ZEROS.matcher(ip.trim());
 		
 		// check to see if there are any matches
 		if (matcher.find())
 		{
 			// remove all of the leading zeros and recursively call this again to ensure that the ip
 			// is now clean
-			return cleanIP(ip.replaceAll(RegexUtil.REGEX_LEADING_ZEROS.pattern(), ""));
+			return cleanIP(ip.trim().replaceAll(RegexUtil.REGEX_LEADING_ZEROS.pattern(), ""));
 		}
 		else
 		{
 			// the ip address is good
-			return ip;
+			return ip.trim();
 		}
 	}
 }
