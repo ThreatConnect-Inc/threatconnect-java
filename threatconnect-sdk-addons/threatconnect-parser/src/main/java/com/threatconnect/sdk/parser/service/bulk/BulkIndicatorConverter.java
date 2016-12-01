@@ -131,6 +131,7 @@ public class BulkIndicatorConverter
 				host.setHostName(summary);
 				return host;
 			case "Url":
+			case "URL":
 				Url url = new Url();
 				url.setText(summary);
 				return url;
@@ -270,7 +271,7 @@ public class BulkIndicatorConverter
 			case HOST:
 				return "Host";
 			case URL:
-				return "Url";
+				return "URL";
 			default:
 				throw new InvalidIndicatorException(indicatorType + "is not a valid indicatorType");
 		}
