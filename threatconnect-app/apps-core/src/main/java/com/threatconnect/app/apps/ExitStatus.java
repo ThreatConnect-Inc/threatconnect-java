@@ -5,7 +5,6 @@ package com.threatconnect.app.apps;
  */
 public enum ExitStatus
 {
-
     Success("Success", 0), Failure("Failure", 1), Partial_Failure("Partial Failure", 3);
 
     private final String status;
