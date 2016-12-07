@@ -1,9 +1,11 @@
 package com.threatconnect.sdk.parser.util;
 
 import com.threatconnect.sdk.parser.model.Address;
+import com.threatconnect.sdk.parser.model.File;
 import com.threatconnect.sdk.parser.model.Host;
 import com.threatconnect.sdk.parser.model.Indicator;
 import com.threatconnect.sdk.parser.model.Url;
+import com.threatconnect.sdk.parser.service.bulk.InvalidIndicatorException;
 import com.threatconnect.sdk.parser.util.regex.HostNameExtractor;
 import com.threatconnect.sdk.parser.util.regex.MatchNotFoundException;
 
@@ -13,17 +15,56 @@ public class IndicatorUtil
 {
 	private IndicatorUtil()
 	{
+		
+	}
 	
+	public static File createFile(final String summary) throws InvalidIndicatorException
+	{
+		//create a new file
+		File file = new File();
+		file.setMd5(extractHash(summary, File.MD5_LENGTH));
+		file.setSha1(extractHash(summary, File.SHA1_LENGTH));
+		file.setSha256(extractHash(summary, File.SHA256_LENGTH));
+		
+		//make sure that one of the values was set
+		if (null == file.getMd5() && null == file.getSha1() && null == file.getSha256())
+		{
+			throw new InvalidIndicatorException("summary does not contain any valid hash codes");
+		}
+		
+		return file;
+	}
+	
+	private static String extractHash(final String text, final int hashLength)
+	{
+		//make sure the text is not null
+		if (null != text)
+		{
+			//split the text on the separator
+			String[] hashCodes = text.split(":");
+			
+			//for each of the parts
+			for (String hash : hashCodes)
+			{
+				//check to see if this is the expected length
+				if (hash.trim().length() == hashLength)
+				{
+					//the hash was found
+					return hash.trim();
+				}
+			}
+		}
+		
+		//no hashcode was found
+		return null;
 	}
 	
 	/**
 	 * Creates a URL indicator and ensures that the url is wellformed
-	 * 
-	 * @param url
-	 * the url to use
+	 *
+	 * @param url the url to use
 	 * @return a Url indicator object
-	 * @throws InvalidURLException
-	 * if the url is not valid
+	 * @throws InvalidURLException if the url is not valid
 	 */
 	public static Url createUrl(final String url) throws InvalidURLException
 	{
@@ -54,12 +95,10 @@ public class IndicatorUtil
 	/**
 	 * Given a URL, this extracts either the hostname or the ipaddress of the url and returns the
 	 * indicator with the appropriate field populated
-	 * 
-	 * @param url
-	 * the url string to use
+	 *
+	 * @param url the url string to use
 	 * @return the indicator that was created
-	 * @throws MatchNotFoundException
-	 * if the url could not be identified as an indicator
+	 * @throws MatchNotFoundException if the url could not be identified as an indicator
 	 */
 	public static Indicator extractHostOrAddress(final String url) throws MatchNotFoundException
 	{
@@ -70,9 +109,8 @@ public class IndicatorUtil
 	
 	/**
 	 * Given a hostname or an ip address, an appropriate indicator is created
-	 * 
-	 * @param ipAddressOrHostName
-	 * the text to use
+	 *
+	 * @param ipAddressOrHostName the text to use
 	 * @return the indicator that was created
 	 */
 	public static Indicator createHostOrAddress(final String ipAddressOrHostName)
@@ -99,9 +137,8 @@ public class IndicatorUtil
 	 * <p>
 	 * 1. Strips all leading 0s that are not necessary
 	 * </p>
-	 * 
-	 * @param ip
-	 * the ip address to clean up
+	 *
+	 * @param ip the ip address to clean up
 	 * @return the clean ip address
 	 */
 	public static String cleanIP(final String ip)
