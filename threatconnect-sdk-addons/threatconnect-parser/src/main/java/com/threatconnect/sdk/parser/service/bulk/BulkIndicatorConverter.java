@@ -11,8 +11,8 @@ import com.threatconnect.sdk.parser.model.Host;
 import com.threatconnect.sdk.parser.model.Indicator;
 import com.threatconnect.sdk.parser.model.IndicatorType;
 import com.threatconnect.sdk.parser.model.Url;
+import com.threatconnect.sdk.parser.util.IndicatorUtil;
 import com.threatconnect.sdk.parser.util.TagUtil;
-import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -113,6 +113,8 @@ public class BulkIndicatorConverter
 		}
 		
 		final String summary = indicatorObject.get("summary").getAsString();
+		logger.debug("Converting: {}", summary);
+		
 		switch (indicatorType)
 		{
 			case "Address":
@@ -124,13 +126,13 @@ public class BulkIndicatorConverter
 				emailAddress.setAddress(summary);
 				return emailAddress;
 			case "File":
-				// :FIXME: finish this
-				throw new NotImplementedException("Need to know what file summary looks like");
+				return IndicatorUtil.createFile(summary);
 			case "Host":
 				Host host = new Host();
 				host.setHostName(summary);
 				return host;
 			case "Url":
+			case "URL":
 				Url url = new Url();
 				url.setText(summary);
 				return url;
@@ -270,7 +272,7 @@ public class BulkIndicatorConverter
 			case HOST:
 				return "Host";
 			case URL:
-				return "Url";
+				return "URL";
 			default:
 				throw new InvalidIndicatorException(indicatorType + "is not a valid indicatorType");
 		}

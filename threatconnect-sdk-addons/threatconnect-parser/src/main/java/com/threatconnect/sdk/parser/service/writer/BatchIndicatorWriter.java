@@ -1,18 +1,5 @@
 package com.threatconnect.sdk.parser.service.writer;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -36,6 +23,19 @@ import com.threatconnect.sdk.server.entity.BatchStatus.Status;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.server.response.entity.data.BatchStatusResponseData;
 import com.threatconnect.sdk.util.UploadMethodType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class BatchIndicatorWriter extends Writer
 {
@@ -55,7 +55,7 @@ public class BatchIndicatorWriter extends Writer
 	
 	public BatchIndicatorWriter(final Connection connection, final Collection<Indicator> source)
 	{
-		this(connection, source, null);
+		this(connection, source, new HashMap<Indicator, Set<Integer>>());
 	}
 	
 	public BatchIndicatorWriter(final Connection connection, final Collection<Indicator> source,
