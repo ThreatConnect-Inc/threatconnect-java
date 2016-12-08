@@ -19,7 +19,7 @@ public class TCEntity
 	
 	public TCEntity()
 	{
-		this(null, null);
+		
 	}
 	
 	public TCEntity(Object type, Object value)
@@ -32,6 +32,14 @@ public class TCEntity
 	{
 		this(type, value);
 		ownerName = owner;
+	}
+	
+	public TCEntity(Integer id, String type, String value, String ownerName)
+	{
+		this.id = id;
+		this.type = type;
+		this.value = value;
+		this.ownerName = ownerName;
 	}
 	
 	public Integer getId()
