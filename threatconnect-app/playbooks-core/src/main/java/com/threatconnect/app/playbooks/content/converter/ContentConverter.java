@@ -5,9 +5,20 @@ import org.codehaus.jackson.map.type.TypeFactory;
 import org.codehaus.jackson.type.JavaType;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 public abstract class ContentConverter<T>
 {
+	public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mmZ";
+	
+	private final ObjectMapper mapper;
+	
+	public ContentConverter()
+	{
+		mapper = new ObjectMapper();
+		mapper.setDateFormat(new SimpleDateFormat(DATE_FORMAT));
+	}
+	
 	/**
 	 * Converts the data to a byte array
 	 *
@@ -17,10 +28,9 @@ public abstract class ContentConverter<T>
 	 */
 	public byte[] toByteArray(final T source) throws ConversionException
 	{
-		ObjectMapper mapper = new ObjectMapper();
 		TypeFactory typeFactory = mapper.getTypeFactory();
 		JavaType type = constructType(typeFactory);
-
+		
 		try
 		{
 			String content = mapper.writerWithType(type).writeValueAsString(source);
@@ -31,7 +41,7 @@ public abstract class ContentConverter<T>
 			throw new ConversionException(e);
 		}
 	}
-
+	
 	/**
 	 * Converts the raw byte array data to an object
 	 *
@@ -43,10 +53,9 @@ public abstract class ContentConverter<T>
 	{
 		try
 		{
-			ObjectMapper mapper = new ObjectMapper();
 			TypeFactory typeFactory = mapper.getTypeFactory();
 			JavaType type = constructType(typeFactory);
-
+			
 			return new ObjectMapper().readValue(raw, type);
 		}
 		catch (IOException e)
@@ -54,6 +63,6 @@ public abstract class ContentConverter<T>
 			throw new ConversionException(e);
 		}
 	}
-
+	
 	protected abstract JavaType constructType(final TypeFactory typeFactory);
 }
