@@ -22,7 +22,7 @@ public class TCEntityConverterTest
 {
 	private static final Logger logger = LoggerFactory.getLogger(TCEntityConverterTest.class);
 	
-	private static final String DEFAULT_DATE = "2016-12-12T12:01-0500";
+	private static final String DEFAULT_DATE = "2016-12-12T12:01:00-0500";
 	
 	private BeanPropertyGenerator beanPropertyGenerator;
 	private Date defaultDate;

@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 
 public abstract class ContentConverter<T>
 {
-	public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mmZ";
+	public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
 	
 	private final ObjectMapper mapper;
 	
