@@ -10,9 +10,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -22,10 +20,9 @@ public class TCEntityConverterTest
 {
 	private static final Logger logger = LoggerFactory.getLogger(TCEntityConverterTest.class);
 	
-	private static final String DEFAULT_DATE = "2016-12-12T12:01:00-0500";
+	private static final String DEFAULT_DATE = "2016-12-08T20:56:11Z";
 	
 	private BeanPropertyGenerator beanPropertyGenerator;
-	private Date defaultDate;
 	
 	@Before
 	public void init() throws ParseException
@@ -33,8 +30,7 @@ public class TCEntityConverterTest
 		beanPropertyGenerator = new BeanPropertyGenerator();
 		
 		//create a new date formatter and set a static date to use for all date fields
-		DateFormat dateFormat = new SimpleDateFormat(ContentConverter.DATE_FORMAT);
-		defaultDate = dateFormat.parse(DEFAULT_DATE);
+		Date defaultDate = ContentConverter.DEFAULT_DATE_FORMATTER.parse(DEFAULT_DATE);
 		beanPropertyGenerator.getConfiguration().getDefaultValues().putStaticValue(Date.class, defaultDate);
 	}
 	
