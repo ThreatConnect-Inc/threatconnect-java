@@ -25,7 +25,7 @@ public class LoggingTest
 		
 		LoggerUtil.reconfigureGlobalLogger(logFile, appConfig);
 		Logger logger = LoggerFactory.getLogger(getClass());
-		logger.info("Log Test");
+		logger.warn("Log Test");
 		
 		Assert.assertTrue(logFile.length() > 0);
 	}

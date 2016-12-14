@@ -43,7 +43,7 @@ public abstract class AppConfig
 	public static final String APPLY_PROXY_TC = "apply_proxy_tc";
 	
 	public static final int DEFAULT_MAX_RESULTS = 350;
-	public static final String DEFAULT_LOG_LEVEL = "INFO";
+	public static final String DEFAULT_LOG_LEVEL = "WARN";
 	
 	// holds the map of all of the configuration settings
 	private final Map<String, String> configuration;
