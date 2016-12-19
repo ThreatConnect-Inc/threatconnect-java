@@ -2,12 +2,16 @@ package com.threatconnect.app.addons.util;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Greg Marut
  */
 public class JsonUtil
 {
+	private static final Logger logger = LoggerFactory.getLogger(JsonUtil.class);
+	
 	private JsonUtil()
 	{
 		
@@ -89,7 +93,32 @@ public class JsonUtil
 			// make sure the current is not null
 			if (null != current)
 			{
-				current = current.getAsJsonObject().get(path);
+				//check to see if the current object is a json object
+				if (current.isJsonObject())
+				{
+					current = current.getAsJsonObject().get(path);
+				}
+				//check to see if the current object is a json array
+				else if (current.isJsonArray())
+				{
+					JsonArray jsonArray = current.getAsJsonArray();
+					
+					//make sure the json array is not empty
+					if (jsonArray.size() > 0)
+					{
+						current = current.getAsJsonArray().get(0).getAsJsonObject().get(path);
+					}
+					else
+					{
+						current = null;
+					}
+				}
+				else
+				{
+					//unable to determine the type of this json element
+					logger.warn("Unable to determine json element type {}", current.toString());
+					current = null;
+				}
 			}
 		}
 		
