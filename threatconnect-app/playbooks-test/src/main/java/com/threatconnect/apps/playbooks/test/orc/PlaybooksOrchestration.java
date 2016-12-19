@@ -33,6 +33,9 @@ public class PlaybooksOrchestration
 	private final Map<String, String> playbookParams;
 	private final Map<String, String> appParams;
 	
+	//holds the list of pre run actions to be executed
+	private final List<PlaybooksAction> beforeExecute;
+	
 	private final ContentService contentService;
 	
 	private int retryAttempts;
@@ -56,6 +59,7 @@ public class PlaybooksOrchestration
 		this.playbookParams = new HashMap<String, String>();
 		this.appParams = new HashMap<String, String>();
 		this.contentService = new ContentService(new EmbeddedMapDBService());
+		this.beforeExecute = new ArrayList<PlaybooksAction>();
 		
 		if (addAllOutputParams)
 		{
@@ -185,6 +189,11 @@ public class PlaybooksOrchestration
 		return new WithAppParam(this);
 	}
 	
+	public DoAction beforeAppRun()
+	{
+		return new DoAction(this, beforeExecute);
+	}
+	
 	/**
 	 * Searches the chain of PlaybooksOrchestration objects looking for the last run playbook that matches the
 	 * playbookAppClass
@@ -253,6 +262,11 @@ public class PlaybooksOrchestration
 	Map<String, String> getPlaybookParams()
 	{
 		return playbookParams;
+	}
+	
+	List<PlaybooksAction> getBeforeExecute()
+	{
+		return beforeExecute;
 	}
 	
 	ContentService getContentService()

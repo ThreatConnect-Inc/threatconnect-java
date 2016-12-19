@@ -83,6 +83,17 @@ public class PlaybookRunner implements Runnable
 	private void run(final PlaybooksOrchestration playbooksOrchestration, final PlaybooksApp playbooksApp,
 		final AppConfig appConfig, final int retryAttemptsRemaining) throws Exception
 	{
+		//retrieve the list of pre run actions
+		List<PlaybooksAction> beforeExecute = playbooksOrchestration.getBeforeExecute();
+		
+		//for each of the runnable actions
+		for (PlaybooksAction action : beforeExecute)
+		{
+			//run this action
+			logger.info("BeforeRun: Executing action \"{}\"", action);
+			action.run(appConfig);
+		}
+		
 		//get the playbook config
 		PlaybookConfig playbookConfig = playbooksOrchestration.getPlaybookConfig();
 		
@@ -205,7 +216,8 @@ public class PlaybookRunner implements Runnable
 		}
 	}
 	
-	private void writePlaybookParam(final PlaybooksOrchestration playbooksOrchestration, final PlaybooksApp playbooksApp,
+	private void writePlaybookParam(final PlaybooksOrchestration playbooksOrchestration,
+		final PlaybooksApp playbooksApp,
 		final Map.Entry<String, String> entry) throws ContentException
 	{
 		final String variable = entry.getValue();
