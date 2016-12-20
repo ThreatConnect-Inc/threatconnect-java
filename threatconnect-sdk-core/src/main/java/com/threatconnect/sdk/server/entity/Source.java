@@ -19,6 +19,7 @@ public class Source extends Owner
     public Source()
     {
         super();
+        super.setType("Source");
     }
 
     public Source(Integer id, String name, String type)
