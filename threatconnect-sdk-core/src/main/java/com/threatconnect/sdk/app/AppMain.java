@@ -35,7 +35,7 @@ public class AppMain implements AppExecutor
 			// set whether or not api logging is enabled
 			ServerLogger.getInstance().setEnabled(appConfig.isTcLogToApi());
 			
-			//get the list of classes to execute
+			//get the class to execute
 			Class<? extends App> appClass = getAppClassToExecute(appConfig);
 			
 			// execute this app and save the status code
