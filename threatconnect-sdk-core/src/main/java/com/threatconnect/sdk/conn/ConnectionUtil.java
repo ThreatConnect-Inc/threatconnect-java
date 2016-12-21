@@ -5,6 +5,7 @@
  */
 package com.threatconnect.sdk.conn;
 
+import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.sdk.config.Configuration;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpHost;
@@ -312,5 +313,20 @@ public class ConnectionUtil
 	{
 		return createClientBuilder(proxyHost, proxyPort, proxyUserName, proxyPassword, trustSelfSignedCertificates)
 			.build();
+	}
+	
+	/**
+	 * Creates the configuration object from an AppConfig
+	 *
+	 * @param appConfig
+	 * @return
+	 */
+	public static Configuration createConfiguration(final AppConfig appConfig)
+	{
+		// create the configuration for the threatconnect server
+		Configuration configuration = new Configuration(appConfig.getTcApiPath(), appConfig.getTcApiAccessID(),
+			appConfig.getTcApiUserSecretKey(), appConfig.getApiDefaultOrg(), appConfig.getTcToken(), appConfig.getTcTokenExpires());
+		
+		return configuration;
 	}
 }
