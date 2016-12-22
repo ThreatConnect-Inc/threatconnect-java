@@ -317,7 +317,7 @@ public abstract class EnhancedApp extends App
 	private HttpResponse getHttpResponse(String url, Map<String, String> headerMap, int maxRetries, int retryNum,
 		HttpRequestBase request)
 	{
-		MetricUtil.tick("getResponse");
+		//MetricUtil.tick("getResponse");
 		debug("getResponse.URL=%s, retryNum=%d", url, retryNum);
 		// debug("getResponse.headers=%s", headerMap);
 		
@@ -333,14 +333,14 @@ public abstract class EnhancedApp extends App
 		}
 		catch (IOException e)
 		{
-			MetricUtil.tockUpdate("getResponse");
+			//MetricUtil.tockUpdate("getResponse");
 			error(e, "URL Failed to return data: %s", url);
 			throw new RuntimeException("URL failed to return data: " + url);
 		}
 		
 		if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
 		{
-			MetricUtil.tockUpdate("getResponse");
+			//MetricUtil.tockUpdate("getResponse");
 			return response;
 		}
 		else if (response.getStatusLine().getStatusCode() == HttpStatus.SC_SERVICE_UNAVAILABLE)
@@ -352,7 +352,7 @@ public abstract class EnhancedApp extends App
 			}
 		}
 		
-		MetricUtil.tockUpdate("getResponse");
+		//MetricUtil.tockUpdate("getResponse");
 		debug("URL failed to return data: response_code=" + response.getStatusLine().getStatusCode()
 			+ " response=" + response.toString());
 		throw new RuntimeException(
