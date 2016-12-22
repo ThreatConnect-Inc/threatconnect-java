@@ -17,7 +17,7 @@ public class MetricUtil
     static
     {
 
-        Threat t = new Thread(new Runnable()
+        Thread t = new Thread(new Runnable()
         {
             @Override
             public void run()
