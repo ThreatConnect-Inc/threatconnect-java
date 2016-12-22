@@ -1,7 +1,15 @@
 package com.threatconnect.app.playbooks.util;
 
 import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.playbooks.variable.InvalidVariableNamespace;
+import com.threatconnect.app.playbooks.variable.InvalidVariableType;
+import com.threatconnect.app.playbooks.variable.PlaybooksVariable;
+import com.threatconnect.app.playbooks.variable.PlaybooksVariableNamespace;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,9 +18,16 @@ import java.util.regex.Pattern;
  */
 public class PlaybooksVariableUtil
 {
+	private static final Logger logger = LoggerFactory.getLogger(PlaybooksVariableUtil.class);
+	
 	//holds the regex pattern that identifies a variable
-	private static final String VARIABLE_REGEX = "(#(?:[A-Za-z]+):(?:[\\d]+):([A-Za-z0-9_.-]+)!([A-Za-z0-9_-]+))";
-	private static final Pattern VARIABLE_PATTERN = Pattern.compile(VARIABLE_REGEX);
+	public static final String VARIABLE_REGEX = "#([A-Za-z]+):([\\d]+):([A-Za-z0-9_.-]+)!([A-Za-z0-9_-]+)";
+	public static final Pattern VARIABLE_PATTERN = Pattern.compile(VARIABLE_REGEX);
+	
+	public static final int VARIABLE_GROUP_NAMESPACE = 1;
+	public static final int VARIABLE_GROUP_ID = 2;
+	public static final int VARIABLE_GROUP_NAME = 3;
+	public static final int VARIABLE_GROUP_TYPE = 4;
 	
 	public static Matcher getVariablePatternMatcher(final String input)
 	{
@@ -40,7 +55,93 @@ public class PlaybooksVariableUtil
 		
 		Matcher matcher = getVariablePatternMatcher(variable);
 		matcher.find();
-		return matcher.group(2);
+		return matcher.group(VARIABLE_GROUP_NAME);
+	}
+	
+	/**
+	 * Returns a list of playbooks variables
+	 *
+	 * @param text
+	 * @return
+	 */
+	public static List<PlaybooksVariable> extractPlaybooksVariables(final String text)
+	{
+		return extractPlaybooksVariables(text, null);
+	}
+	
+	/**
+	 * Returns a list of playbooks variables that match the given namespace
+	 *
+	 * @param text the text to search for the playbooks
+	 * @param playbooksVariableNamespaceFilter only return results in this given namespace
+	 * @return
+	 */
+	public static List<PlaybooksVariable> extractPlaybooksVariables(final String text,
+		final PlaybooksVariableNamespace playbooksVariableNamespaceFilter)
+	{
+		//holds the list of playbooks variable results
+		List<PlaybooksVariable> results = new ArrayList<PlaybooksVariable>();
+		
+		//create a new matcher based on the text
+		Matcher matcher = getVariablePatternMatcher(text);
+		
+		//while there are more variables found in this text
+		while (matcher.find())
+		{
+			try
+			{
+				//create the playbooks variable object
+				PlaybooksVariable playbooksVariable = toPlaybookVariable(matcher);
+				
+				//determine if the playbooks variable namespace filter needs to be applied by either checking if the filter is either null or if they match
+				boolean namespaceFilterCheck =
+					null == playbooksVariableNamespaceFilter || playbooksVariableNamespaceFilter
+						.equals(playbooksVariable.getNamespace());
+				
+				//check to see if the filters passed before adding to the results
+				if (namespaceFilterCheck)
+				{
+					results.add(playbooksVariable);
+				}
+			}
+			catch (InvalidVariableNamespace | InvalidVariableType e)
+			{
+				logger.warn(e.getMessage(), e);
+			}
+		}
+		
+		return results;
+	}
+	
+	private static PlaybooksVariable toPlaybookVariable(final Matcher matcher)
+	{
+		PlaybooksVariableNamespace playbooksVariableNamespace;
+		PlaybookVariableType playbookVariableType;
+		
+		//extract all of the parts from the variable found
+		try
+		{
+			playbooksVariableNamespace = PlaybooksVariableNamespace.valueOf(matcher.group(VARIABLE_GROUP_NAMESPACE));
+		}
+		catch (IllegalArgumentException e)
+		{
+			throw new InvalidVariableNamespace(matcher.group(VARIABLE_GROUP_NAMESPACE));
+		}
+		
+		try
+		{
+			playbookVariableType = PlaybookVariableType.valueOf(matcher.group(VARIABLE_GROUP_TYPE));
+		}
+		catch (IllegalArgumentException e)
+		{
+			throw new InvalidVariableType(matcher.group(VARIABLE_GROUP_NAMESPACE));
+		}
+		
+		int id = Integer.parseInt(matcher.group(VARIABLE_GROUP_ID));
+		String name = matcher.group(VARIABLE_GROUP_NAME);
+		
+		//create a new playbooks variable
+		return new PlaybooksVariable(playbooksVariableNamespace, id, name, playbookVariableType);
 	}
 	
 	public static PlaybookVariableType extractVariableType(final String variable)
@@ -53,7 +154,7 @@ public class PlaybooksVariableUtil
 		
 		Matcher matcher = getVariablePatternMatcher(variable);
 		matcher.find();
-		return PlaybookVariableType.valueOf(matcher.group(3));
+		return PlaybookVariableType.valueOf(matcher.group(VARIABLE_GROUP_TYPE));
 	}
 	
 	public static boolean isStringType(final String variable)
