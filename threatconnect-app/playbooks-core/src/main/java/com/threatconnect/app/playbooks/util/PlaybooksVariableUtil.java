@@ -40,9 +40,14 @@ public class PlaybooksVariableUtil
 		return VARIABLE_PATTERN.matcher(input.trim());
 	}
 	
+	/**
+	 * Returns whether the input text either is or contains a variable.
+	 * @param input
+	 * @return true if the input is not null and contains a variable, false otherwise
+	 */
 	public static boolean isVariable(final String input)
 	{
-		return getVariablePatternMatcher(input).matches();
+		return (null != input) && getVariablePatternMatcher(input).matches();
 	}
 	
 	public static String extractVariableName(final String variable)
