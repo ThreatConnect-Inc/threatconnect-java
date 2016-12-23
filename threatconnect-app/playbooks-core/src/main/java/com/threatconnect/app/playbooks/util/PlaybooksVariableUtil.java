@@ -20,9 +20,17 @@ public class PlaybooksVariableUtil
 {
 	private static final Logger logger = LoggerFactory.getLogger(PlaybooksVariableUtil.class);
 	
-	//holds the regex pattern that identifies a variable
+	/**
+	 * Holds the regex pattern that identifies a variable anywhere in a string
+	 */
 	public static final String VARIABLE_REGEX = "#([A-Za-z]+):([\\d]+):([A-Za-z0-9_.-]+)!([A-Za-z0-9_-]+)";
 	public static final Pattern VARIABLE_PATTERN = Pattern.compile(VARIABLE_REGEX);
+	
+	/**
+	 * Holds the regex pattern that determines if a string is a variable with nothing else
+	 */
+	public static final String VARIABLE_REGEX_EXACT = "^" + VARIABLE_REGEX + "$";
+	public static final Pattern VARIABLE_PATTERN_EXACT = Pattern.compile(VARIABLE_REGEX_EXACT);
 	
 	public static final int VARIABLE_GROUP_NAMESPACE = 1;
 	public static final int VARIABLE_GROUP_ID = 2;
@@ -40,12 +48,33 @@ public class PlaybooksVariableUtil
 		return VARIABLE_PATTERN.matcher(input.trim());
 	}
 	
+	public static Matcher getVariablePatternExactMatcher(final String input)
+	{
+		//make sure the input is not null
+		if (null == input)
+		{
+			throw new IllegalArgumentException("input cannot be null");
+		}
+		
+		return VARIABLE_PATTERN_EXACT.matcher(input.trim());
+	}
+	
 	/**
-	 * Returns whether the input text either is or contains a variable.
+	 * Returns whether the input text is a variable
+	 * @param input
+	 * @return true if the input is not null and is a variable, false otherwise
+	 */
+	public static boolean isVariable(final String input)
+	{
+		return (null != input) && getVariablePatternExactMatcher(input).matches();
+	}
+	
+	/**
+	 * Returns whether the input text contains a variable anywhere.
 	 * @param input
 	 * @return true if the input is not null and contains a variable, false otherwise
 	 */
-	public static boolean isVariable(final String input)
+	public static boolean containsVariable(final String input)
 	{
 		return (null != input) && getVariablePatternMatcher(input).matches();
 	}
@@ -58,7 +87,7 @@ public class PlaybooksVariableUtil
 			throw new IllegalArgumentException(variable + " is not a valid variable");
 		}
 		
-		Matcher matcher = getVariablePatternMatcher(variable);
+		Matcher matcher = getVariablePatternExactMatcher(variable);
 		matcher.find();
 		return matcher.group(VARIABLE_GROUP_NAME);
 	}
@@ -157,7 +186,7 @@ public class PlaybooksVariableUtil
 			throw new IllegalArgumentException(variable + " is not a valid variable");
 		}
 		
-		Matcher matcher = getVariablePatternMatcher(variable);
+		Matcher matcher = getVariablePatternExactMatcher(variable);
 		matcher.find();
 		return PlaybookVariableType.valueOf(matcher.group(VARIABLE_GROUP_TYPE));
 	}
