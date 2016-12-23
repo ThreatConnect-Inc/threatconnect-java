@@ -76,7 +76,7 @@ public class PlaybooksVariableUtil
 	 */
 	public static boolean containsVariable(final String input)
 	{
-		return (null != input) && getVariablePatternMatcher(input).matches();
+		return (null != input) && getVariablePatternMatcher(input).find();
 	}
 	
 	public static String extractVariableName(final String variable)
