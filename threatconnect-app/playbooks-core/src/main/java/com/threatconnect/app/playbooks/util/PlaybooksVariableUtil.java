@@ -1,6 +1,6 @@
 package com.threatconnect.app.playbooks.util;
 
-import com.threatconnect.app.addons.util.config.install.type.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.app.playbooks.variable.InvalidVariableNamespace;
 import com.threatconnect.app.playbooks.variable.InvalidVariableType;
 import com.threatconnect.app.playbooks.variable.PlaybooksVariable;

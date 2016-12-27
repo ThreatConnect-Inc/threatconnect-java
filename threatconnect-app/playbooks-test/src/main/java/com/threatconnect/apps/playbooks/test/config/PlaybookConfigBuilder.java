@@ -2,8 +2,8 @@ package com.threatconnect.apps.playbooks.test.config;
 
 import com.threatconnect.app.addons.util.config.install.Param;
 import com.threatconnect.app.addons.util.config.install.PlaybookOutputVariable;
-import com.threatconnect.app.addons.util.config.install.type.ParamDataType;
-import com.threatconnect.app.addons.util.config.install.type.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.ParamDataType;
+import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
 
 import java.util.ArrayList;

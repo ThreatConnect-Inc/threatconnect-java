@@ -1,8 +1,5 @@
 package com.threatconnect.app.addons.util.config.install;
 
-import com.threatconnect.app.addons.util.config.install.type.ParamDataType;
-import com.threatconnect.app.addons.util.config.install.type.PlaybookVariableType;
-
 import java.util.ArrayList;
 import java.util.List;
 

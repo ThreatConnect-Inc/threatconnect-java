@@ -1,6 +1,6 @@
 package com.threatconnect.app.playbooks.content.accumulator;
 
-import com.threatconnect.app.addons.util.config.install.type.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.app.playbooks.content.converter.StringKeyValueListConverter;
 import com.threatconnect.app.playbooks.content.entity.StringKeyValue;
 import com.threatconnect.app.playbooks.db.DBService;

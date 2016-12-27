@@ -1,7 +1,6 @@
 package com.threatconnect.app.addons.util.config.install;
 
 import com.google.gson.Gson;
-import com.threatconnect.app.addons.util.config.install.type.PlaybookVariableType;
 import org.junit.Assert;
 import org.junit.Test;
 
