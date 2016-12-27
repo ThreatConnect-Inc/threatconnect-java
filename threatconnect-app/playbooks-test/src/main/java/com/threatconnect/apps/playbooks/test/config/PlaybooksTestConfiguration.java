@@ -1,15 +1,15 @@
 package com.threatconnect.apps.playbooks.test.config;
 
+import com.threatconnect.app.addons.util.config.InvalidJsonFileException;
+import com.threatconnect.app.addons.util.config.install.InstallJson;
 import com.threatconnect.app.apps.App;
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.AppExecutor;
 import com.threatconnect.app.apps.DefaultAppConfig;
-import com.threatconnect.apps.playbooks.test.db.EmbeddedMapDBService;
-import com.threatconnect.app.addons.util.config.install.InstallJson;
-import com.threatconnect.app.addons.util.config.InvalidJsonFileException;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
 import com.threatconnect.app.playbooks.app.PlaybooksAppConfig;
 import com.threatconnect.app.playbooks.db.DBServiceFactory;
+import com.threatconnect.apps.playbooks.test.db.EmbeddedMapDBService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -192,7 +192,7 @@ public class PlaybooksTestConfiguration
 		throws InvalidPlaybookAppException
 	{
 		logger.info("Configuring playbook \"{}\", loaded from file \"{}\"", appClass.getName(),
-			installJson.getInstallJsonFile().getAbsolutePath());
+			installJson.getFile().getAbsolutePath());
 		
 		//make sure this app is a playbooks app
 		if (PlaybooksApp.class.isAssignableFrom(appClass))
@@ -218,7 +218,7 @@ public class PlaybooksTestConfiguration
 		else
 		{
 			throw new InvalidPlaybookAppException(
-				appClass.getName() + ", loaded from " + installJson.getInstallJsonFile().getAbsolutePath()
+				appClass.getName() + ", loaded from " + installJson.getFile().getAbsolutePath()
 					+ ", must extend from " + PlaybooksApp.class.getName());
 		}
 	}
