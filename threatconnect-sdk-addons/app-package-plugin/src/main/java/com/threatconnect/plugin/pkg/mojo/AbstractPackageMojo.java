@@ -1,7 +1,8 @@
 package com.threatconnect.plugin.pkg.mojo;
 
-import com.threatconnect.app.addons.util.config.install.InstallJson;
+import com.threatconnect.app.addons.util.config.install.Install;
 import com.threatconnect.app.addons.util.config.InvalidJsonFileException;
+import com.threatconnect.app.addons.util.config.install.InstallUtil;
 import com.threatconnect.plugin.pkg.Profile;
 import com.threatconnect.plugin.pkg.ZipUtil;
 import org.apache.maven.plugin.AbstractMojo;
@@ -163,8 +164,8 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 		if (null != profile)
 		{
 			// retrieve the application name and program version from the install.json file
-			final String applicationName = profile.getInstallJson().getApplicationName();
-			final String programVersion = profile.getInstallJson().getProgramVersion();
+			final String applicationName = profile.getInstall().getApplicationName();
+			final String programVersion = profile.getInstall().getProgramVersion();
 			
 			// make sure that both the application name and program version are valid
 			if (null != applicationName && !applicationName.trim().isEmpty() && null != programVersion
@@ -206,7 +207,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	 *
 	 * @return
 	 */
-	protected List<Profile> getProfiles() throws InvalidJsonFileException
+	protected List<Profile> getProfiles() throws InvalidJsonFileException, IOException
 	{
 		// holds the list of install
 		List<Profile> profiles = new ArrayList<Profile>();
@@ -230,10 +231,10 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 					final String profileName = matcher.group(1);
 					
 					// create the install json object
-					InstallJson installJson = new InstallJson(file);
+					Install install = InstallUtil.load(file);
 					
 					// create a new profile
-					Profile profile = new Profile(profileName, file, installJson);
+					Profile profile = new Profile(profileName, file, install);
 					profiles.add(profile);
 				}
 			}

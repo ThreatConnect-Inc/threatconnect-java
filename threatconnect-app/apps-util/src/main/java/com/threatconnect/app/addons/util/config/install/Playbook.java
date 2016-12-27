@@ -1,11 +1,5 @@
 package com.threatconnect.app.addons.util.config.install;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.threatconnect.app.addons.util.JsonUtil;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,59 +7,38 @@ import java.util.List;
  */
 public class Playbook
 {
-	private static final String TYPE = "type";
-	private static final String OUTPUT_VARIABLES = "outputVariables";
-	private static final String RETRY = "retry";
-	private static final String ALLOWED = "allowed";
-	
-	private final JsonObject root;
-	
-	public Playbook(final JsonObject root)
-	{
-		//make sure the root object is not null
-		if(null == root)
-		{
-			throw new IllegalArgumentException("root cannot be null");
-		}
-		
-		this.root = root;
-	}
+	private String type;
+	private List<PlaybookOutputVariable> outputVariables;
+	private Retry retry;
 	
 	public String getType()
 	{
-		return JsonUtil.getAsString(root, TYPE);
+		return type;
 	}
 	
-	public boolean isRetryAllowed()
+	public void setType(final String type)
 	{
-		JsonElement allowedElement = JsonUtil.get(root, RETRY, ALLOWED);
-		if (null != allowedElement)
-		{
-			return allowedElement.getAsBoolean();
-		}
-		else
-		{
-			return false;
-		}
+		this.type = type;
 	}
 	
-	public List<PlaybookOutputVariable> getPlaybooksOutputVariables()
+	public List<PlaybookOutputVariable> getOutputVariables()
 	{
-		List<PlaybookOutputVariable> results = new ArrayList<PlaybookOutputVariable>();
-		
-		//retrieve the playbooks output variables and make sure it is not null
-		JsonElement variablesElement = root.get(OUTPUT_VARIABLES);
-		if (null != variablesElement)
-		{
-			//for each of the variables
-			JsonArray array = variablesElement.getAsJsonArray();
-			for (JsonElement element : array)
-			{
-				//convert this json object to a playbook variable and add it to the results list
-				results.add(new PlaybookOutputVariable(element.getAsJsonObject()));
-			}
-		}
-		
-		return results;
+		return outputVariables;
+	}
+	
+	public void setOutputVariables(
+		final List<PlaybookOutputVariable> outputVariables)
+	{
+		this.outputVariables = outputVariables;
+	}
+	
+	public Retry getRetry()
+	{
+		return retry;
+	}
+	
+	public void setRetry(final Retry retry)
+	{
+		this.retry = retry;
 	}
 }

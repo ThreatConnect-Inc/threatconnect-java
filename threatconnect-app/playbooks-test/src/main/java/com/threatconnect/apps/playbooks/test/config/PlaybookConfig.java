@@ -1,10 +1,10 @@
 package com.threatconnect.apps.playbooks.test.config;
 
-import com.threatconnect.app.addons.util.config.install.InstallJson;
+import com.threatconnect.app.addons.util.config.install.Install;
 import com.threatconnect.app.addons.util.config.install.Param;
-import com.threatconnect.app.addons.util.config.install.ParamDataType;
 import com.threatconnect.app.addons.util.config.install.PlaybookOutputVariable;
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.type.ParamDataType;
+import com.threatconnect.app.addons.util.config.install.type.PlaybookVariableType;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,10 +41,10 @@ public class PlaybookConfig
 		this.playbookOutputVariables = new HashMap<String, PlaybookOutputVariable>();
 	}
 	
-	public PlaybookConfig(final Class<? extends PlaybooksApp> playbookAppClass, final InstallJson installJson)
+	public PlaybookConfig(final Class<? extends PlaybooksApp> playbookAppClass, final Install install)
 	{
-		this(playbookAppClass, installJson.getPlaybooksParams(),
-			installJson.getPlaybook().getPlaybooksOutputVariables());
+		this(playbookAppClass, install.getPlaybookParams(),
+			install.getPlaybook().getOutputVariables());
 	}
 	
 	public PlaybookConfig(final Class<? extends PlaybooksApp> playbookAppClass, final List<Param> playbookParamList,
@@ -110,7 +110,7 @@ public class PlaybookConfig
 		Param param = getInputParam(paramName);
 		
 		//for each of the playbook types
-		for (PlaybookVariableType playbookVariableType : param.getPlaybookDataTypes())
+		for (PlaybookVariableType playbookVariableType : param.getPlaybookDataType())
 		{
 			String variable = buildParam(this.appID, param.getName(), playbookVariableType);
 			results.add(variable);
@@ -136,7 +136,7 @@ public class PlaybookConfig
 		else
 		{
 			//for each of the playbook types
-			for (PlaybookVariableType playbookVariableType : param.getPlaybookDataTypes())
+			for (PlaybookVariableType playbookVariableType : param.getPlaybookDataType())
 			{
 				//check to see if this datatype matches
 				if (type.equals(playbookVariableType))

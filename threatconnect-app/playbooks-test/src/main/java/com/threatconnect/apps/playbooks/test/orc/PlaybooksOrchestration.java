@@ -1,7 +1,7 @@
 package com.threatconnect.apps.playbooks.test.orc;
 
 import com.threatconnect.app.addons.util.config.install.PlaybookOutputVariable;
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.type.PlaybookVariableType;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
 import com.threatconnect.app.playbooks.content.ContentService;
 import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;

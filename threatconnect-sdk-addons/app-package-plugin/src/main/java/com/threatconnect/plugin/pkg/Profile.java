@@ -1,6 +1,6 @@
 package com.threatconnect.plugin.pkg;
 
-import com.threatconnect.app.addons.util.config.install.InstallJson;
+import com.threatconnect.app.addons.util.config.install.Install;
 
 import java.io.File;
 
@@ -9,13 +9,13 @@ public class Profile
 {
 	private final String profileName;
 	private final File installFile;
-	private final InstallJson installJson;
+	private final Install install;
 	
-	public Profile(final String profileName, final File installFile, final InstallJson installJson)
+	public Profile(final String profileName, final File installFile, final Install install)
 	{
 		this.profileName = profileName;
 		this.installFile = installFile;
-		this.installJson = installJson;
+		this.install = install;
 	}
 	
 	public String getProfileName()
@@ -28,8 +28,8 @@ public class Profile
 		return installFile;
 	}
 	
-	public InstallJson getInstallJson()
+	public Install getInstall()
 	{
-		return installJson;
+		return install;
 	}
 }

@@ -1,11 +1,5 @@
 package com.threatconnect.app.addons.util.config.install;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.threatconnect.app.addons.util.JsonUtil;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,53 +7,48 @@ import java.util.List;
  */
 public class Deprecation
 {
-	private static final String INDICATOR_TYPES = "indicatorTypes";
-	private static final String INTERVAL_DAYS = "intervalDays";
-	private static final String CONFIDENCE_AMOUNT = "confidenceAmount";
-	private static final String PERCENTAGE = "percentage";
+	private Integer intervalDays;
+	private Integer confidenceAmount;
+	private Boolean percentage;
+	private List<String> indicatorTypes;
 	
-	//holds the root json object
-	private JsonObject root;
-	
-	//holds the list of indicator types
-	private final List<String> indicatorTypes;
-	
-	public Deprecation(final JsonObject root)
+	public Integer getIntervalDays()
 	{
-		//make sure the root object is not null
-		if(null == root)
-		{
-			throw new IllegalArgumentException("root cannot be null");
-		}
-		
-		this.root = root;
-		indicatorTypes = new ArrayList<String>();
-		
-		//retrieve the array of indicator types from the json object
-		JsonArray indicatorTypesArray = JsonUtil.getAsJsonArray(root, INDICATOR_TYPES);
-		if (null != indicatorTypesArray)
-		{
-			//for each of the indicator types in the array
-			for (JsonElement jsonElement : indicatorTypesArray)
-			{
-				//add this type to the list
-				indicatorTypes.add(jsonElement.getAsString());
-			}
-		}
+		return intervalDays;
 	}
 	
-	public String getIntervalDays()
+	public void setIntervalDays(final Integer intervalDays)
 	{
-		return JsonUtil.getAsString(root, INTERVAL_DAYS);
+		this.intervalDays = intervalDays;
 	}
 	
-	public String getConfidenceAmount()
+	public Integer getConfidenceAmount()
 	{
-		return JsonUtil.getAsString(root, CONFIDENCE_AMOUNT);
+		return confidenceAmount;
 	}
 	
-	public boolean isPercentage()
+	public void setConfidenceAmount(final Integer confidenceAmount)
 	{
-		return JsonUtil.getAsBoolean(root, PERCENTAGE);
+		this.confidenceAmount = confidenceAmount;
+	}
+	
+	public Boolean getPercentage()
+	{
+		return percentage;
+	}
+	
+	public void setPercentage(final Boolean percentage)
+	{
+		this.percentage = percentage;
+	}
+	
+	public List<String> getIndicatorTypes()
+	{
+		return indicatorTypes;
+	}
+	
+	public void setIndicatorTypes(final List<String> indicatorTypes)
+	{
+		this.indicatorTypes = indicatorTypes;
 	}
 }

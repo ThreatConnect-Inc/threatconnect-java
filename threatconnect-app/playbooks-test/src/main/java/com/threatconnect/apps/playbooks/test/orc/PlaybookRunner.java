@@ -1,6 +1,6 @@
 package com.threatconnect.apps.playbooks.test.orc;
 
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.type.PlaybookVariableType;
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.ExitStatus;
 import com.threatconnect.app.apps.SystemPropertiesAppConfig;

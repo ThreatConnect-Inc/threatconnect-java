@@ -1,6 +1,6 @@
 package com.threatconnect.app.playbooks.util;
 
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.type.PlaybookVariableType;
 import com.threatconnect.app.playbooks.variable.PlaybooksVariable;
 import com.threatconnect.app.playbooks.variable.PlaybooksVariableNamespace;
 import org.junit.Assert;

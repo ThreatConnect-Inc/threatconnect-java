@@ -1,4 +1,4 @@
-package com.threatconnect.app.addons.util.config.install;
+package com.threatconnect.app.addons.util.config.install.type;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

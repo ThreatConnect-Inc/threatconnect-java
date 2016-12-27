@@ -1,6 +1,6 @@
 package com.threatconnect.app.playbooks.content;
 
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.type.PlaybookVariableType;
 import com.threatconnect.app.playbooks.content.accumulator.ContentAccumulator;
 import com.threatconnect.app.playbooks.content.accumulator.ContentException;
 import com.threatconnect.app.playbooks.content.accumulator.StringAccumulator;

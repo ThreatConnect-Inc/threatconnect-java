@@ -1,7 +1,7 @@
 package com.threatconnect.apps.playbooks.test.app4;
 
-import com.threatconnect.app.addons.util.config.install.ParamDataType;
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.type.ParamDataType;
+import com.threatconnect.app.addons.util.config.install.type.PlaybookVariableType;
 import com.threatconnect.apps.playbooks.test.config.PlaybooksTestConfiguration;
 import com.threatconnect.apps.playbooks.test.orc.PlaybooksOrchestrationBuilder;
 import org.junit.Before;

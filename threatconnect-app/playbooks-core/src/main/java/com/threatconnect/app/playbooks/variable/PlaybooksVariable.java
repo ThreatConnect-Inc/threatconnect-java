@@ -1,6 +1,6 @@
 package com.threatconnect.app.playbooks.variable;
 
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.type.PlaybookVariableType;
 
 /**
  * Represents
