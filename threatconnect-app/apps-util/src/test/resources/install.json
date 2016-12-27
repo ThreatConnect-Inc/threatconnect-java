@@ -12,6 +12,7 @@
       "label": "Username",
       "sequence": 1,
       "required": true,
+      "default": "default",
       "type": "String",
       "validValues": [
         "${TEXT}"

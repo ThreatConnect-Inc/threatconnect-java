@@ -26,6 +26,8 @@ public class InstallTest
 		Assert.assertEquals(RunLevel.System, install.getRuntimeLevel().get(0));
 		
 		Assert.assertEquals(2, install.getParams().size());
+		Assert.assertEquals("default", install.getParams().get(0).getDefaultValue());
+		
 		Assert.assertEquals(1, install.getFeeds().size());
 	}
 	

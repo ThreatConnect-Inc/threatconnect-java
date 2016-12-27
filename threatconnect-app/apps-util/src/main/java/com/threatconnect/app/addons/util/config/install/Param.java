@@ -1,5 +1,7 @@
 package com.threatconnect.app.addons.util.config.install;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +13,7 @@ public class Param
 	private String name;
 	private ParamDataType type;
 	private String label;
+	@SerializedName("default")
 	private String defaultValue;
 	private String allowMultiple;
 	private Boolean encrypt;
