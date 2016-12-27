@@ -12,16 +12,17 @@ public class Install
 	private String programMain;
 	private String languageVersion;
 	private String listDelimiter;
-	private String runtimeLevel;
 	
 	private Playbook playbook;
 	private final List<Param> params;
 	private final List<Feed> feeds;
+	private final List<RunLevel> runtimeLevel;
 	
 	public Install()
 	{
 		this.params = new ArrayList<Param>();
 		this.feeds = new ArrayList<Feed>();
+		this.runtimeLevel = new ArrayList<RunLevel>();
 	}
 	
 	public String getApplicationName()
@@ -94,14 +95,9 @@ public class Install
 		this.listDelimiter = listDelimiter;
 	}
 	
-	public String getRuntimeLevel()
+	public List<RunLevel> getRuntimeLevel()
 	{
 		return runtimeLevel;
-	}
-	
-	public void setRuntimeLevel(final String runtimeLevel)
-	{
-		this.runtimeLevel = runtimeLevel;
 	}
 	
 	public Playbook getPlaybook()
