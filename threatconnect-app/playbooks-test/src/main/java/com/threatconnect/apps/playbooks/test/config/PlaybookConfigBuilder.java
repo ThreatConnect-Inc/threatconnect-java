@@ -61,7 +61,7 @@ public class PlaybookConfigBuilder
 		Param param = new Param();
 		param.setName(name);
 		param.setType(type);
-		param.setPlaybookDataType(Arrays.asList(playbookVariableTypes));
+		param.getPlaybookDataType().addAll(Arrays.asList(playbookVariableTypes));
 		playbookParamList.add(param);
 		
 		return this;

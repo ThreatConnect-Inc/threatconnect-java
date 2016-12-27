@@ -15,8 +15,14 @@ public class Install
 	private String runtimeLevel;
 	
 	private Playbook playbook;
-	private List<Param> params;
-	private List<Feed> feeds;
+	private final List<Param> params;
+	private final List<Feed> feeds;
+	
+	public Install()
+	{
+		this.params = new ArrayList<Param>();
+		this.feeds = new ArrayList<Feed>();
+	}
 	
 	public String getApplicationName()
 	{
@@ -113,19 +119,9 @@ public class Install
 		return params;
 	}
 	
-	public void setParams(final List<Param> params)
-	{
-		this.params = params;
-	}
-	
 	public List<Feed> getFeeds()
 	{
 		return feeds;
-	}
-	
-	public void setFeeds(final List<Feed> feeds)
-	{
-		this.feeds = feeds;
 	}
 	
 	public List<Param> getPlaybookParams()
@@ -133,16 +129,13 @@ public class Install
 		//holds the list of playbook params
 		List<Param> playbookParams = new ArrayList<Param>();
 		
-		if (null != getParams())
+		//for each of the playbook params
+		for (Param param : getParams())
 		{
-			//for each of the playbook params
-			for (Param param : getParams())
+			if (null != param.getPlaybookDataType() && !param.getPlaybookDataType().isEmpty())
 			{
-				if (null != param.getPlaybookDataType() && !param.getPlaybookDataType().isEmpty())
-				{
-					//add this param to the playbook param list
-					playbookParams.add(param);
-				}
+				//add this param to the playbook param list
+				playbookParams.add(param);
 			}
 		}
 		

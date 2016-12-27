@@ -146,6 +146,7 @@ public class PlaybooksTestConfiguration
 		try
 		{
 			//get the program main class
+			@SuppressWarnings("unchecked")
 			Class<? extends AppExecutor> programMainClass =
 				(Class<? extends AppExecutor>) Class.forName(install.getProgramMain());
 			

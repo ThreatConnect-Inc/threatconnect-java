@@ -1,5 +1,6 @@
 package com.threatconnect.app.addons.util.config.install;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -8,8 +9,14 @@ import java.util.List;
 public class Playbook
 {
 	private String type;
-	private List<PlaybookOutputVariable> outputVariables;
 	private Retry retry;
+	
+	private final List<PlaybookOutputVariable> outputVariables;
+	
+	public Playbook()
+	{
+		this.outputVariables = new ArrayList<PlaybookOutputVariable>();
+	}
 	
 	public String getType()
 	{
@@ -24,12 +31,6 @@ public class Playbook
 	public List<PlaybookOutputVariable> getOutputVariables()
 	{
 		return outputVariables;
-	}
-	
-	public void setOutputVariables(
-		final List<PlaybookOutputVariable> outputVariables)
-	{
-		this.outputVariables = outputVariables;
 	}
 	
 	public Retry getRetry()

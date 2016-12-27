@@ -2,9 +2,8 @@ package com.threatconnect.app.addons.util.config.install;
 
 import com.threatconnect.app.addons.util.config.install.type.ParamDataType;
 import com.threatconnect.app.addons.util.config.install.type.PlaybookVariableType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,8 +11,6 @@ import java.util.List;
  */
 public class Param
 {
-	private static final Logger logger = LoggerFactory.getLogger(Param.class);
-	
 	private String name;
 	private ParamDataType type;
 	private String label;
@@ -27,12 +24,14 @@ public class Param
 	private String note;
 	private String viewType;
 	private Integer sequence;
-	private List<String> validValues;
-	private List<PlaybookVariableType> playbookDataType;
 	
-	public static Logger getLogger()
+	private final List<String> validValues;
+	private final List<PlaybookVariableType> playbookDataType;
+	
+	public Param()
 	{
-		return logger;
+		this.validValues = new ArrayList<String>();
+		this.playbookDataType = new ArrayList<PlaybookVariableType>();
 	}
 	
 	public String getName()
@@ -170,19 +169,8 @@ public class Param
 		return validValues;
 	}
 	
-	public void setValidValues(final List<String> validValues)
-	{
-		this.validValues = validValues;
-	}
-	
 	public List<PlaybookVariableType> getPlaybookDataType()
 	{
 		return playbookDataType;
-	}
-	
-	public void setPlaybookDataType(
-		final List<PlaybookVariableType> playbookDataType)
-	{
-		this.playbookDataType = playbookDataType;
 	}
 }
