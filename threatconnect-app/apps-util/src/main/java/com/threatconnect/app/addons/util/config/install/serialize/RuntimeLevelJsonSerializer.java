@@ -25,13 +25,13 @@ public class RuntimeLevelJsonSerializer implements JsonDeserializer<List<RunLeve
 			//for each of the elements in the json array
 			for (JsonElement element : json.getAsJsonArray())
 			{
-				values.add((RunLevel) ctx.deserialize(element, RunLevel.class));
+				values.add(toRunLevel(element.getAsString()));
 			}
 		}
 		//check to see if this object is a primitive
 		else if (json.isJsonPrimitive())
 		{
-			values.add((RunLevel) ctx.deserialize(json, RunLevel.class));
+			values.add(toRunLevel(json.getAsString()));
 		}
 		else
 		{
@@ -39,5 +39,30 @@ public class RuntimeLevelJsonSerializer implements JsonDeserializer<List<RunLeve
 		}
 		
 		return values;
+	}
+	
+	private RunLevel toRunLevel(final String runLevel)
+	{
+		try
+		{
+			return RunLevel.valueOf(runLevel);
+		}
+		catch (IllegalArgumentException e)
+		{
+			//build the values text for the error message
+			StringBuilder values = new StringBuilder();
+			for (RunLevel level : RunLevel.values())
+			{
+				if (values.length() > 0)
+				{
+					values.append(", ");
+				}
+				
+				values.append(level.toString());
+			}
+			
+			throw new IllegalArgumentException(
+				runLevel + " is not a valid runtimeLevel. Possible values are [" + values + "]", e);
+		}
 	}
 }

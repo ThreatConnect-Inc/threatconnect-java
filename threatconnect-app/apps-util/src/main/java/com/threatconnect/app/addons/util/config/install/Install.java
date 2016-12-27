@@ -12,17 +12,27 @@ public class Install
 	private String programMain;
 	private String languageVersion;
 	private String listDelimiter;
+	private String programIcon;
+	private String javaClasspath;
+	private Boolean allowOnDemand;
+	private Boolean apiUserTokenParam;
+	private Integer tokenExpireOffsetMinutes;
+	private String note;
 	
 	private Playbook playbook;
 	private final List<Param> params;
 	private final List<Feed> feeds;
 	private final List<RunLevel> runtimeLevel;
+	private final List<String> repeatingMinutes;
+	private final List<String> publishOutFiles;
 	
 	public Install()
 	{
 		this.params = new ArrayList<Param>();
 		this.feeds = new ArrayList<Feed>();
 		this.runtimeLevel = new ArrayList<RunLevel>();
+		this.repeatingMinutes = new ArrayList<String>();
+		this.publishOutFiles = new ArrayList<String>();
 	}
 	
 	public String getApplicationName()
@@ -95,9 +105,64 @@ public class Install
 		this.listDelimiter = listDelimiter;
 	}
 	
-	public List<RunLevel> getRuntimeLevel()
+	public String getProgramIcon()
 	{
-		return runtimeLevel;
+		return programIcon;
+	}
+	
+	public void setProgramIcon(final String programIcon)
+	{
+		this.programIcon = programIcon;
+	}
+	
+	public String getJavaClasspath()
+	{
+		return javaClasspath;
+	}
+	
+	public void setJavaClasspath(final String javaClasspath)
+	{
+		this.javaClasspath = javaClasspath;
+	}
+	
+	public Boolean getAllowOnDemand()
+	{
+		return allowOnDemand;
+	}
+	
+	public void setAllowOnDemand(final Boolean allowOnDemand)
+	{
+		this.allowOnDemand = allowOnDemand;
+	}
+	
+	public Boolean getApiUserTokenParam()
+	{
+		return apiUserTokenParam;
+	}
+	
+	public void setApiUserTokenParam(final Boolean apiUserTokenParam)
+	{
+		this.apiUserTokenParam = apiUserTokenParam;
+	}
+	
+	public Integer getTokenExpireOffsetMinutes()
+	{
+		return tokenExpireOffsetMinutes;
+	}
+	
+	public void setTokenExpireOffsetMinutes(final Integer tokenExpireOffsetMinutes)
+	{
+		this.tokenExpireOffsetMinutes = tokenExpireOffsetMinutes;
+	}
+	
+	public String getNote()
+	{
+		return note;
+	}
+	
+	public void setNote(final String note)
+	{
+		this.note = note;
 	}
 	
 	public Playbook getPlaybook()
@@ -118,6 +183,21 @@ public class Install
 	public List<Feed> getFeeds()
 	{
 		return feeds;
+	}
+	
+	public List<RunLevel> getRuntimeLevel()
+	{
+		return runtimeLevel;
+	}
+	
+	public List<String> getRepeatingMinutes()
+	{
+		return repeatingMinutes;
+	}
+	
+	public List<String> getPublishOutFiles()
+	{
+		return publishOutFiles;
 	}
 	
 	public List<Param> getPlaybookParams()
