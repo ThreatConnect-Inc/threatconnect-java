@@ -3,18 +3,16 @@ package com.threatconnect.app.addons.util.config.install;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonIOException;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.threatconnect.app.addons.util.JsonUtil;
+import com.threatconnect.app.addons.util.config.InvalidJsonFileException;
+import com.threatconnect.app.addons.util.config.JsonFile;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InstallJson
+public class InstallJson extends JsonFile
 {
 	private static final String APPLICATION_NAME = "applicationName";
 	private static final String PROGRAM_VERSION = "programVersion";
@@ -25,37 +23,26 @@ public class InstallJson
 	private static final String PLAYBOOK = "playbook";
 	private static final String PLAYBOOK_RUN_LEVEL = "Playbook";
 	
-	private final File installJsonFile;
-	private final JsonObject root;
 	private final List<Param> allParams;
 	private final List<Param> playbookParams;
 	
-	public InstallJson(final File installJsonFile) throws InvalidInstallJsonFileException
+	public InstallJson(final File file) throws InvalidJsonFileException
 	{
-		// make sure the file is not null
-		if (null == installJsonFile)
-		{
-			throw new IllegalArgumentException("installJsonFile cannot be null");
-		}
+		super(file);
 		
-		this.installJsonFile = installJsonFile;
 		this.allParams = new ArrayList<Param>();
 		this.playbookParams = new ArrayList<Param>();
 		
 		try
 		{
-			// parse the install file
-			JsonParser jsonParser = new JsonParser();
-			root = jsonParser.parse(new FileReader(installJsonFile)).getAsJsonObject();
-			
 			//retrieve the params and make sure it is not null
-			JsonElement paramsElement = root.get(PARAMS);
+			JsonElement paramsElement = getRoot().get(PARAMS);
 			if (null != paramsElement)
 			{
 				//make sure this is an array
 				if(!paramsElement.isJsonArray())
 				{
-					throw new InvalidInstallJsonFileException(PARAMS + " must be an array");
+					throw new InvalidJsonFileException(PARAMS + " must be an array");
 				}
 				
 				//for each of the params
@@ -77,30 +64,30 @@ public class InstallJson
 				}
 			}
 		}
-		catch (JsonIOException | JsonSyntaxException | FileNotFoundException e)
+		catch (JsonIOException | JsonSyntaxException e)
 		{
-			throw new InvalidInstallJsonFileException(installJsonFile, e);
+			throw new InvalidJsonFileException(getFile(), e);
 		}
 	}
 	
 	public String getApplicationName()
 	{
-		return JsonUtil.getAsString(root, APPLICATION_NAME);
+		return JsonUtil.getAsString(getRoot(), APPLICATION_NAME);
 	}
 	
 	public String getProgramVersion()
 	{
-		return JsonUtil.getAsString(root, PROGRAM_VERSION);
+		return JsonUtil.getAsString(getRoot(), PROGRAM_VERSION);
 	}
 	
 	public String getProgramMain()
 	{
-		return JsonUtil.getAsString(root, PROGRAM_MAIN);
+		return JsonUtil.getAsString(getRoot(), PROGRAM_MAIN);
 	}
 	
 	public String getRuntimeLevel()
 	{
-		return JsonUtil.getAsString(root, RUNTIME_LEVEL);
+		return JsonUtil.getAsString(getRoot(), RUNTIME_LEVEL);
 	}
 	
 	public boolean isPlaybookApp()
@@ -110,7 +97,7 @@ public class InstallJson
 	
 	public Playbook getPlaybook()
 	{
-		return new Playbook(root.get(PLAYBOOK).getAsJsonObject());
+		return new Playbook(getRoot().get(PLAYBOOK).getAsJsonObject());
 	}
 	
 	public List<Param> getAllParams()
@@ -121,10 +108,5 @@ public class InstallJson
 	public List<Param> getPlaybooksParams()
 	{
 		return playbookParams;
-	}
-	
-	public File getInstallJsonFile()
-	{
-		return installJsonFile;
 	}
 }

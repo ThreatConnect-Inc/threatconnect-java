@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.threatconnect.app.addons.util.JsonUtil;
+import com.threatconnect.app.addons.util.config.InvalidJsonFileException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +28,7 @@ public class Param
 	private final List<String> validValues;
 	private final List<PlaybookVariableType> playbookDataTypes;
 	
-	public Param(final JsonObject root) throws InvalidInstallJsonFileException
+	public Param(final JsonObject root) throws InvalidJsonFileException
 	{
 		this.name = JsonUtil.getAsString(root, NAME);
 		this.type = ParamDataType.fromString(JsonUtil.getAsString(root, TYPE));
@@ -43,7 +44,7 @@ public class Param
 			//make sure this is an array
 			if (!validValuesElement.isJsonArray())
 			{
-				throw new InvalidInstallJsonFileException(VALID_VALUES + " must be an array");
+				throw new InvalidJsonFileException(VALID_VALUES + " must be an array");
 			}
 			
 			//for each of the data types
@@ -62,7 +63,7 @@ public class Param
 			//make sure this is an array
 			if (!dataTypeElement.isJsonArray())
 			{
-				throw new InvalidInstallJsonFileException(PLAYBOOK_DATA_TYPE + " must be an array");
+				throw new InvalidJsonFileException(PLAYBOOK_DATA_TYPE + " must be an array");
 			}
 			
 			//for each of the data types

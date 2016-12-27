@@ -6,7 +6,7 @@ import com.threatconnect.app.apps.AppExecutor;
 import com.threatconnect.app.apps.DefaultAppConfig;
 import com.threatconnect.apps.playbooks.test.db.EmbeddedMapDBService;
 import com.threatconnect.app.addons.util.config.install.InstallJson;
-import com.threatconnect.app.addons.util.config.install.InvalidInstallJsonFileException;
+import com.threatconnect.app.addons.util.config.InvalidJsonFileException;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
 import com.threatconnect.app.playbooks.app.PlaybooksAppConfig;
 import com.threatconnect.app.playbooks.db.DBServiceFactory;
@@ -124,7 +124,7 @@ public class PlaybooksTestConfiguration
 					file.getAbsolutePath());
 			}
 		}
-		catch (UnsupposedPlaybookMainClassException | InvalidInstallJsonFileException | InvalidPlaybookAppException e)
+		catch (UnsupposedPlaybookMainClassException | InvalidJsonFileException | InvalidPlaybookAppException e)
 		{
 			throw new PlaybooksConfigurationException(e);
 		}
@@ -134,12 +134,12 @@ public class PlaybooksTestConfiguration
 	 * Reads an install.json file and configures the playbooks app according to the config
 	 *
 	 * @param installJson
-	 * @throws InvalidInstallJsonFileException
+	 * @throws InvalidJsonFileException
 	 * @throws ClassNotFoundException
 	 * @throws UnsupposedPlaybookMainClassException
 	 */
 	private void configureApp(final InstallJson installJson)
-		throws InvalidInstallJsonFileException, UnsupposedPlaybookMainClassException, InvalidPlaybookAppException
+		throws InvalidJsonFileException, UnsupposedPlaybookMainClassException, InvalidPlaybookAppException
 	{
 		try
 		{
