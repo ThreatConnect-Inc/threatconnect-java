@@ -22,6 +22,12 @@ public class Playbook
 	
 	public Playbook(final JsonObject root)
 	{
+		//make sure the root object is not null
+		if(null == root)
+		{
+			throw new IllegalArgumentException("root cannot be null");
+		}
+		
 		this.root = root;
 	}
 	

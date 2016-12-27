@@ -1,16 +1,14 @@
-package com.threatconnect.app.addons.util.config.feed;
+package com.threatconnect.app.addons.util.config.install;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.threatconnect.app.addons.util.JsonUtil;
 import com.threatconnect.app.addons.util.config.InvalidJsonFileException;
-import com.threatconnect.app.addons.util.config.JsonFile;
-
-import java.io.File;
 
 /**
  * @author Greg Marut
  */
-public class FeedJson extends JsonFile
+public class Feed
 {
 	private static final String SOURCE_NAME = "sourceName";
 	private static final String SOURCE_CATEGORY = "sourceCategory";
@@ -22,17 +20,24 @@ public class FeedJson extends JsonFile
 	private static final String DOCUMENT_STORAGE_LIMIT = "documentStorageLimitMb";
 	private static final String JOB_FILE = "jobFile";
 	
-	private static final String TRUE = "true";
+	//holds the root json object for this feed object
+	private final JsonObject root;
 	
 	//holds the deprecation object for the feed json file if one exists
 	private final Deprecation deprecation;
 	
-	public FeedJson(final File file) throws InvalidJsonFileException
+	public Feed(final JsonObject root) throws InvalidJsonFileException
 	{
-		super(file);
+		//make sure the root object is not null
+		if(null == root)
+		{
+			throw new IllegalArgumentException("root cannot be null");
+		}
+		
+		this.root = root;
 		
 		//retrieve the deprecation json object
-		JsonElement deprecationElement = JsonUtil.get(getRoot(), DEPRECATION);
+		JsonElement deprecationElement = JsonUtil.get(root, DEPRECATION);
 		if (null != deprecationElement)
 		{
 			this.deprecation = new Deprecation(deprecationElement.getAsJsonObject());
@@ -46,41 +51,46 @@ public class FeedJson extends JsonFile
 	
 	public String getSourceName()
 	{
-		return JsonUtil.getAsString(getRoot(), SOURCE_NAME);
+		return JsonUtil.getAsString(root, SOURCE_NAME);
 	}
 	
 	public String getSourceCategory()
 	{
-		return JsonUtil.getAsString(getRoot(), SOURCE_CATEGORY);
+		return JsonUtil.getAsString(root, SOURCE_CATEGORY);
 	}
 	
 	public String getSourceDescription()
 	{
-		return JsonUtil.getAsString(getRoot(), SOURCE_DESCRIPTION);
+		return JsonUtil.getAsString(root, SOURCE_DESCRIPTION);
 	}
 	
 	public String getAttributesFile()
 	{
-		return JsonUtil.getAsString(getRoot(), ATTRIBUTES_FILE);
+		return JsonUtil.getAsString(root, ATTRIBUTES_FILE);
 	}
 	
 	public boolean isEnableBulkJson()
 	{
-		return TRUE.equalsIgnoreCase(JsonUtil.getAsString(getRoot(), ENABLE_BULK_JSON));
+		return JsonUtil.getAsBoolean(root, ENABLE_BULK_JSON);
 	}
 	
 	public String getIndicatorLimit()
 	{
-		return JsonUtil.getAsString(getRoot(), INDICATOR_LIMIT);
+		return JsonUtil.getAsString(root, INDICATOR_LIMIT);
 	}
 	
 	public String getDocumentStorageLimit()
 	{
-		return JsonUtil.getAsString(getRoot(), DOCUMENT_STORAGE_LIMIT);
+		return JsonUtil.getAsString(root, DOCUMENT_STORAGE_LIMIT);
 	}
 	
 	public String getJobFile()
 	{
-		return JsonUtil.getAsString(getRoot(), JOB_FILE);
+		return JsonUtil.getAsString(root, JOB_FILE);
+	}
+	
+	public Deprecation getDeprecation()
+	{
+		return deprecation;
 	}
 }

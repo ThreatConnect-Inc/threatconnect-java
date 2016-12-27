@@ -1,4 +1,4 @@
-package com.threatconnect.app.addons.util.config.feed;
+package com.threatconnect.app.addons.util.config.install;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -18,8 +18,6 @@ public class Deprecation
 	private static final String CONFIDENCE_AMOUNT = "confidenceAmount";
 	private static final String PERCENTAGE = "percentage";
 	
-	private static final String TRUE = "true";
-	
 	//holds the root json object
 	private JsonObject root;
 	
@@ -28,15 +26,21 @@ public class Deprecation
 	
 	public Deprecation(final JsonObject root)
 	{
+		//make sure the root object is not null
+		if(null == root)
+		{
+			throw new IllegalArgumentException("root cannot be null");
+		}
+		
 		this.root = root;
 		indicatorTypes = new ArrayList<String>();
 		
 		//retrieve the array of indicator types from the json object
 		JsonArray indicatorTypesArray = JsonUtil.getAsJsonArray(root, INDICATOR_TYPES);
-		if(null != indicatorTypesArray)
+		if (null != indicatorTypesArray)
 		{
 			//for each of the indicator types in the array
-			for(JsonElement jsonElement : indicatorTypesArray)
+			for (JsonElement jsonElement : indicatorTypesArray)
 			{
 				//add this type to the list
 				indicatorTypes.add(jsonElement.getAsString());
@@ -56,6 +60,6 @@ public class Deprecation
 	
 	public boolean isPercentage()
 	{
-		return TRUE.equalsIgnoreCase(JsonUtil.getAsString(root, PERCENTAGE));
+		return JsonUtil.getAsBoolean(root, PERCENTAGE);
 	}
 }

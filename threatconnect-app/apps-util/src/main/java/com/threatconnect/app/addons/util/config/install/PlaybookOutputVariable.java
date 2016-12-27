@@ -16,6 +16,12 @@ public class PlaybookOutputVariable
 	
 	public PlaybookOutputVariable(final JsonObject root)
 	{
+		//make sure the root object is not null
+		if(null == root)
+		{
+			throw new IllegalArgumentException("root cannot be null");
+		}
+		
 		this.name = JsonUtil.getAsString(root, NAME);
 		this.type = PlaybookVariableType.fromString(JsonUtil.getAsString(root, TYPE));
 	}

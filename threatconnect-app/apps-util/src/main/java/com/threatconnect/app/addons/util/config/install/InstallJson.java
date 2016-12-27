@@ -19,12 +19,14 @@ public class InstallJson extends JsonFile
 	private static final String PROGRAM_MAIN = "programMain";
 	private static final String RUNTIME_LEVEL = "runtimeLevel";
 	private static final String PARAMS = "params";
+	private static final String FEED = "feed";
 	
 	private static final String PLAYBOOK = "playbook";
 	private static final String PLAYBOOK_RUN_LEVEL = "Playbook";
 	
 	private final List<Param> allParams;
 	private final List<Param> playbookParams;
+	private final List<Feed> feeds;
 	
 	public InstallJson(final File file) throws InvalidJsonFileException
 	{
@@ -32,25 +34,19 @@ public class InstallJson extends JsonFile
 		
 		this.allParams = new ArrayList<Param>();
 		this.playbookParams = new ArrayList<Param>();
+		this.feeds = new ArrayList<Feed>();
 		
 		try
 		{
 			//retrieve the params and make sure it is not null
-			JsonElement paramsElement = getRoot().get(PARAMS);
-			if (null != paramsElement)
+			JsonArray paramsArray = JsonUtil.getAsJsonArray(getRoot(), PARAMS);
+			if (null != paramsArray)
 			{
-				//make sure this is an array
-				if(!paramsElement.isJsonArray())
-				{
-					throw new InvalidJsonFileException(PARAMS + " must be an array");
-				}
-				
-				//for each of the params
-				JsonArray array = paramsElement.getAsJsonArray();
-				for (JsonElement element : array)
+				//for each of the elements in the params array
+				for (JsonElement paramsElement : paramsArray)
 				{
 					//convert this json object to a param
-					Param param = new Param(element.getAsJsonObject());
+					Param param = new Param(paramsElement.getAsJsonObject());
 					
 					//check to see if this is a playbook param
 					if (param.isPlaybookParam())
@@ -61,6 +57,18 @@ public class InstallJson extends JsonFile
 					
 					//add this to all of the params
 					allParams.add(param);
+				}
+			}
+			
+			//retrieve the array of feeds and check to see if they exist
+			JsonArray feedsArray = JsonUtil.getAsJsonArray(getRoot(), FEED);
+			if (null != feedsArray)
+			{
+				//for each of the feed elements in the array
+				for (JsonElement feedElement : feedsArray)
+				{
+					//create a new feed object with this element and add it to the list of feeds
+					feeds.add(new Feed(feedElement.getAsJsonObject()));
 				}
 			}
 		}
@@ -103,6 +111,11 @@ public class InstallJson extends JsonFile
 	public List<Param> getAllParams()
 	{
 		return allParams;
+	}
+	
+	public List<Feed> getFeeds()
+	{
+		return feeds;
 	}
 	
 	public List<Param> getPlaybooksParams()

@@ -30,6 +30,12 @@ public class Param
 	
 	public Param(final JsonObject root) throws InvalidJsonFileException
 	{
+		//make sure the root object is not null
+		if (null == root)
+		{
+			throw new IllegalArgumentException("root cannot be null");
+		}
+		
 		this.name = JsonUtil.getAsString(root, NAME);
 		this.type = ParamDataType.fromString(JsonUtil.getAsString(root, TYPE));
 		this.validValues = new ArrayList<String>();
@@ -100,9 +106,9 @@ public class Param
 		return type;
 	}
 	
-	public static String getValidValues()
+	public List<String> getValidValues()
 	{
-		return getValidValues();
+		return validValues;
 	}
 	
 	public List<PlaybookVariableType> getPlaybookDataTypes()
