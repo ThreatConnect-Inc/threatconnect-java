@@ -3,6 +3,7 @@ package com.threatconnect.plugin.pkg.mojo;
 import com.threatconnect.app.addons.util.config.install.Install;
 import com.threatconnect.app.addons.util.config.InvalidJsonFileException;
 import com.threatconnect.app.addons.util.config.install.InstallUtil;
+import com.threatconnect.app.addons.util.config.install.validation.ValidationException;
 import com.threatconnect.plugin.pkg.Profile;
 import com.threatconnect.plugin.pkg.ZipUtil;
 import org.apache.maven.plugin.AbstractMojo;
@@ -81,7 +82,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 				packageLegacy();
 			}
 		}
-		catch (InvalidJsonFileException | IOException e)
+		catch (InvalidJsonFileException | ValidationException | IOException e)
 		{
 			throw new MojoFailureException(e.getMessage(), e);
 		}
@@ -207,7 +208,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	 *
 	 * @return
 	 */
-	protected List<Profile> getProfiles() throws InvalidJsonFileException, IOException
+	protected List<Profile> getProfiles() throws InvalidJsonFileException, IOException, ValidationException
 	{
 		// holds the list of install
 		List<Profile> profiles = new ArrayList<Profile>();
