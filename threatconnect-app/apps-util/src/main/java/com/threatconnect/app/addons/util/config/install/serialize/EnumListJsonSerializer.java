@@ -32,13 +32,13 @@ public abstract class EnumListJsonSerializer<T extends Enum<T>> implements JsonD
 			//for each of the elements in the json array
 			for (JsonElement element : json.getAsJsonArray())
 			{
-				values.add(toEnum(element.getAsString(), enumClass));
+				values.add(EnumJsonSerializer.toEnum(element.getAsString(), enumClass));
 			}
 		}
 		//check to see if this object is a primitive
 		else if (json.isJsonPrimitive())
 		{
-			values.add(toEnum(json.getAsString(), enumClass));
+			values.add(EnumJsonSerializer.toEnum(json.getAsString(), enumClass));
 		}
 		else
 		{
@@ -46,31 +46,6 @@ public abstract class EnumListJsonSerializer<T extends Enum<T>> implements JsonD
 		}
 		
 		return values;
-	}
-	
-	protected T toEnum(final String runtimeContext, final Class<T> clazz)
-	{
-		try
-		{
-			return Enum.valueOf(clazz, runtimeContext);
-		}
-		catch (IllegalArgumentException e)
-		{
-			//build the values text for the error message
-			StringBuilder values = new StringBuilder();
-			for (T constant : clazz.getEnumConstants())
-			{
-				if (values.length() > 0)
-				{
-					values.append(", ");
-				}
-				
-				values.append(constant.toString());
-			}
-			
-			throw new IllegalArgumentException(
-				runtimeContext + " is not a valid value. Possible values are [" + values + "]", e);
-		}
 	}
 	
 	public abstract Type getType();

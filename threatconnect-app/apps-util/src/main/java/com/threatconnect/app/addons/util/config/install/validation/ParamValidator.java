@@ -23,6 +23,12 @@ public class ParamValidator extends Validator<Param>
 			throwMissingFieldValidationException("label", object);
 		}
 		
+		//validate the object type
+		if(null == object.getType())
+		{
+			throwMissingFieldValidationException("type", object);
+		}
+		
 		//validate that the valid values list exists if the datatype requires it
 		if ((object.getType() == ParamDataType.MultiChoice || object.getType() == ParamDataType.Choice)
 			&& object.getValidValues().isEmpty())
