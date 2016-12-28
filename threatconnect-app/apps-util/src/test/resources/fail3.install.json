@@ -1,0 +1,53 @@
+{
+  "displayName": "Sample App",
+  "programVersion": "1.0.0",
+  "programLanguage": "JAVA",
+  "programMain": "com.threatconnect.apps.example.ExampleMain",
+  "languageVersion": "7",
+  "listDelimiter": "|",
+  "runtimeLevel": "N/A",
+  "runtimeContext": ["Host", "Url"],
+  "params": [
+    {
+      "name": "username",
+      "label": "Username",
+      "sequence": 1,
+      "required": true,
+      "default": "default",
+      "type": "String",
+      "validValues": [
+        "${TEXT}"
+      ]
+    },
+    {
+      "name": "password",
+      "label": "Password",
+      "sequence": 2,
+      "required": true,
+      "encrypt": true,
+      "type": "String"
+    }
+  ],
+  "feeds": [
+    {
+      "sourceName": "Example Source Feed",
+      "sourceCategory": "Open Source",
+      "sourceDescription": "Testing",
+      "attributesFile": "test.attributes.csv",
+      "enableBulkJson": true,
+      "deprecation": {
+        "indicatorTypes": [
+          "Address",
+          "Host",
+          "ASN"
+        ],
+        "intervalDays": 3,
+        "confidenceAmount": 5,
+        "percentage": true
+      },
+      "indicatorLimit": 400000,
+      "documentStorageLimitMb": 1000,
+      "jobFile": "text.job.json"
+    }
+  ]
+}

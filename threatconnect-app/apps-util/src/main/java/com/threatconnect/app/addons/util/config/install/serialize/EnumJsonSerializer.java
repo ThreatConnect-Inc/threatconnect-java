@@ -52,7 +52,7 @@ public abstract class EnumJsonSerializer<T extends Enum<T>> implements JsonDeser
 				values.append(constant.toString());
 			}
 			
-			throw new IllegalArgumentException(
+			throw new InvalidEnumException(
 				value + " is not a valid value. Possible values are [" + values + "]", e);
 		}
 	}
