@@ -15,11 +15,11 @@ public class Param
 	private String label;
 	@SerializedName("default")
 	private String defaultValue;
-	private String allowMultiple;
-	private Boolean encrypt;
-	private Boolean required;
-	private Boolean hidden;
-	private Boolean setup;
+	private boolean allowMultiple;
+	private boolean encrypt;
+	private boolean required;
+	private boolean hidden;
+	private boolean setup;
 	private Integer viewRows;
 	private String note;
 	private String viewType;
@@ -74,52 +74,52 @@ public class Param
 		this.defaultValue = defaultValue;
 	}
 	
-	public String getAllowMultiple()
+	public boolean isAllowMultiple()
 	{
 		return allowMultiple;
 	}
 	
-	public void setAllowMultiple(final String allowMultiple)
+	public void setAllowMultiple(final boolean allowMultiple)
 	{
 		this.allowMultiple = allowMultiple;
 	}
 	
-	public Boolean getEncrypt()
+	public boolean isEncrypt()
 	{
 		return encrypt;
 	}
 	
-	public void setEncrypt(final Boolean encrypt)
+	public void setEncrypt(final boolean encrypt)
 	{
 		this.encrypt = encrypt;
 	}
 	
-	public Boolean getRequired()
+	public boolean isRequired()
 	{
 		return required;
 	}
 	
-	public void setRequired(final Boolean required)
+	public void setRequired(final boolean required)
 	{
 		this.required = required;
 	}
 	
-	public Boolean getHidden()
+	public boolean isHidden()
 	{
 		return hidden;
 	}
 	
-	public void setHidden(final Boolean hidden)
+	public void setHidden(final boolean hidden)
 	{
 		this.hidden = hidden;
 	}
 	
-	public Boolean getSetup()
+	public boolean isSetup()
 	{
 		return setup;
 	}
 	
-	public void setSetup(final Boolean setup)
+	public void setSetup(final boolean setup)
 	{
 		this.setup = setup;
 	}

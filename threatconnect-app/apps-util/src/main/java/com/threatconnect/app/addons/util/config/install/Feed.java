@@ -9,7 +9,7 @@ public class Feed
 	private String sourceCategory;
 	private String sourceDescription;
 	private String attributesFile;
-	private Boolean enableBulkJson;
+	private boolean enableBulkJson;
 	private Integer indicatorLimit;
 	private Integer documentStorageLimitMb;
 	private String jobFile;
@@ -55,12 +55,12 @@ public class Feed
 		this.attributesFile = attributesFile;
 	}
 	
-	public Boolean getEnableBulkJson()
+	public boolean isEnableBulkJson()
 	{
 		return enableBulkJson;
 	}
 	
-	public void setEnableBulkJson(final Boolean enableBulkJson)
+	public void setEnableBulkJson(final boolean enableBulkJson)
 	{
 		this.enableBulkJson = enableBulkJson;
 	}

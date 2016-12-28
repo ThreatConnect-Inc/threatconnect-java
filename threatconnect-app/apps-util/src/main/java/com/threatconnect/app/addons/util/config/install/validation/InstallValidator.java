@@ -2,6 +2,7 @@ package com.threatconnect.app.addons.util.config.install.validation;
 
 import com.threatconnect.app.addons.util.config.install.Install;
 import com.threatconnect.app.addons.util.config.install.Param;
+import com.threatconnect.app.addons.util.config.install.Playbook;
 import com.threatconnect.app.addons.util.config.install.RunLevel;
 
 /**
@@ -9,12 +10,13 @@ import com.threatconnect.app.addons.util.config.install.RunLevel;
  */
 public class InstallValidator extends Validator<Install>
 {
-	//holds the validator for validating parameters
 	private final Validator<Param> paramValidator;
+	private final Validator<Playbook> playbookValidator;
 	
 	public InstallValidator()
 	{
 		this.paramValidator = new ParamValidator();
+		this.playbookValidator = new PlaybookValidator();
 	}
 	
 	@Override
@@ -51,6 +53,19 @@ public class InstallValidator extends Validator<Install>
 			}
 		}
 		
+		//check to see if this is a playbook app
+		if (containsRunLevel(object, RunLevel.Playbook))
+		{
+			//check to see if the playbook object is missing
+			if (null == object.getPlaybook())
+			{
+				throw new ValidationException("'playbook' config must be defined for a playbook app.");
+			}
+			
+			//validate the playbook
+			playbookValidator.validate(object.getPlaybook());
+		}
+		
 		//validate the list delimiter
 		if (isNullOrEmpty(object.getListDelimiter()))
 		{
@@ -63,5 +78,19 @@ public class InstallValidator extends Validator<Install>
 			//validate this param
 			paramValidator.validate(param);
 		}
+	}
+	
+	private boolean containsRunLevel(final Install install, final RunLevel runLevel)
+	{
+		//for each of the run levels
+		for (RunLevel level : install.getRuntimeLevel())
+		{
+			if (level == runLevel)
+			{
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }

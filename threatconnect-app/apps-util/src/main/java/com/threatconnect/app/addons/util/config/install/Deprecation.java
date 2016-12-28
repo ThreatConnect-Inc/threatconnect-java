@@ -10,7 +10,7 @@ public class Deprecation
 {
 	private Integer intervalDays;
 	private Integer confidenceAmount;
-	private Boolean percentage;
+	private boolean percentage;
 	
 	private final List<String> indicatorTypes;
 	
@@ -39,12 +39,12 @@ public class Deprecation
 		this.confidenceAmount = confidenceAmount;
 	}
 	
-	public Boolean getPercentage()
+	public boolean isPercentage()
 	{
 		return percentage;
 	}
 	
-	public void setPercentage(final Boolean percentage)
+	public void setPercentage(final boolean percentage)
 	{
 		this.percentage = percentage;
 	}

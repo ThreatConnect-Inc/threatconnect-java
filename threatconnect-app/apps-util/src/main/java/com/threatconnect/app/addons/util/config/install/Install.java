@@ -14,8 +14,8 @@ public class Install
 	private String listDelimiter;
 	private String programIcon;
 	private String javaClasspath;
-	private Boolean allowOnDemand;
-	private Boolean apiUserTokenParam;
+	private boolean allowOnDemand;
+	private boolean apiUserTokenParam;
 	private Integer tokenExpireOffsetMinutes;
 	private String note;
 	
@@ -125,22 +125,22 @@ public class Install
 		this.javaClasspath = javaClasspath;
 	}
 	
-	public Boolean getAllowOnDemand()
+	public boolean isAllowOnDemand()
 	{
 		return allowOnDemand;
 	}
 	
-	public void setAllowOnDemand(final Boolean allowOnDemand)
+	public void setAllowOnDemand(final boolean allowOnDemand)
 	{
 		this.allowOnDemand = allowOnDemand;
 	}
 	
-	public Boolean getApiUserTokenParam()
+	public boolean isApiUserTokenParam()
 	{
 		return apiUserTokenParam;
 	}
 	
-	public void setApiUserTokenParam(final Boolean apiUserTokenParam)
+	public void setApiUserTokenParam(final boolean apiUserTokenParam)
 	{
 		this.apiUserTokenParam = apiUserTokenParam;
 	}
