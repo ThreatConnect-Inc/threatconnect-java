@@ -2,7 +2,7 @@ package com.threatconnect.app.addons.util.config.install;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
+import com.threatconnect.app.addons.util.config.install.serialize.RuntimeContextJsonSerializer;
 import com.threatconnect.app.addons.util.config.install.serialize.RuntimeLevelJsonSerializer;
 import com.threatconnect.app.addons.util.config.install.validation.InstallValidator;
 import com.threatconnect.app.addons.util.config.install.validation.ValidationException;
@@ -13,8 +13,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Type;
-import java.util.List;
 
 /**
  * @author Greg Marut
@@ -53,11 +51,13 @@ public class InstallUtil
 	
 	private static Gson createGson()
 	{
-		Type runLevelType = new TypeToken<List<RunLevel>>(){}.getType();
+		RuntimeLevelJsonSerializer runtimeLevelJsonSerializer = new RuntimeLevelJsonSerializer();
+		RuntimeContextJsonSerializer runtimeContextJsonSerializer = new RuntimeContextJsonSerializer();
 		
 		//create a new gson builder and register the serializer objects
 		GsonBuilder builder = new GsonBuilder();
-		builder.registerTypeAdapter(runLevelType, new RuntimeLevelJsonSerializer());
+		builder.registerTypeAdapter(runtimeLevelJsonSerializer.getType(), runtimeLevelJsonSerializer);
+		builder.registerTypeAdapter(runtimeContextJsonSerializer.getType(), runtimeContextJsonSerializer);
 		
 		return builder.create();
 	}

@@ -1,69 +1,24 @@
 package com.threatconnect.app.addons.util.config.install.serialize;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.threatconnect.app.addons.util.config.install.RunLevel;
+import com.google.gson.reflect.TypeToken;
+import com.threatconnect.app.addons.util.config.install.RunLevelType;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Greg Marut
  */
-public class RuntimeLevelJsonSerializer implements JsonDeserializer<List<RunLevel>>
+public class RuntimeLevelJsonSerializer extends EnumListJsonSerializer<RunLevelType>
 {
-	@Override
-	public List<RunLevel> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext ctx)
+	public RuntimeLevelJsonSerializer()
 	{
-		//holds the list of runlevel values to return
-		List<RunLevel> values = new ArrayList<RunLevel>();
-		
-		//check to see if this element is an array
-		if (json.isJsonArray())
-		{
-			//for each of the elements in the json array
-			for (JsonElement element : json.getAsJsonArray())
-			{
-				values.add(toRunLevel(element.getAsString()));
-			}
-		}
-		//check to see if this object is a primitive
-		else if (json.isJsonPrimitive())
-		{
-			values.add(toRunLevel(json.getAsString()));
-		}
-		else
-		{
-			throw new RuntimeException("Unexpected JSON type: " + json.getClass());
-		}
-		
-		return values;
+		super(RunLevelType.class);
 	}
 	
-	private RunLevel toRunLevel(final String runLevel)
+	@Override
+	public Type getType()
 	{
-		try
-		{
-			return RunLevel.valueOf(runLevel);
-		}
-		catch (IllegalArgumentException e)
-		{
-			//build the values text for the error message
-			StringBuilder values = new StringBuilder();
-			for (RunLevel level : RunLevel.values())
-			{
-				if (values.length() > 0)
-				{
-					values.append(", ");
-				}
-				
-				values.append(level.toString());
-			}
-			
-			throw new IllegalArgumentException(
-				runLevel + " is not a valid runtimeLevel. Possible values are [" + values + "]", e);
-		}
+		return new TypeToken<List<RunLevelType>>(){}.getType();
 	}
 }

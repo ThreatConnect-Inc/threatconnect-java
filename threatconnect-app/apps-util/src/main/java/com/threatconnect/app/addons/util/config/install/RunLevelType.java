@@ -3,7 +3,7 @@ package com.threatconnect.app.addons.util.config.install;
 /**
  * @author Greg Marut
  */
-public enum RunLevel
+public enum RunLevelType
 {
 	System, Organization, SpaceOrganization, SpaceSystem, Internal, StixParser, Playbook;
 }

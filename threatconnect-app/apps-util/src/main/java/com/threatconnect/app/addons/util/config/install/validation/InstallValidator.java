@@ -3,7 +3,7 @@ package com.threatconnect.app.addons.util.config.install.validation;
 import com.threatconnect.app.addons.util.config.install.Install;
 import com.threatconnect.app.addons.util.config.install.Param;
 import com.threatconnect.app.addons.util.config.install.Playbook;
-import com.threatconnect.app.addons.util.config.install.RunLevel;
+import com.threatconnect.app.addons.util.config.install.RunLevelType;
 
 /**
  * @author Greg Marut
@@ -43,10 +43,10 @@ public class InstallValidator extends Validator<Install>
 		else if (object.getRuntimeLevel().size() > 1)
 		{
 			//for each of the run levels
-			for (RunLevel runLevel : object.getRuntimeLevel())
+			for (RunLevelType runLevelType : object.getRuntimeLevel())
 			{
 				//this runlevel must either be an organization or a space organization to be multiple
-				if (runLevel != RunLevel.Organization && runLevel != RunLevel.SpaceOrganization)
+				if (runLevelType != RunLevelType.Organization && runLevelType != RunLevelType.SpaceOrganization)
 				{
 					throw new ValidationException("Multiple runLevels must be Organization and SpaceOrganization");
 				}
@@ -54,7 +54,7 @@ public class InstallValidator extends Validator<Install>
 		}
 		
 		//check to see if this is a playbook app
-		if (containsRunLevel(object, RunLevel.Playbook))
+		if (containsRunLevel(object, RunLevelType.Playbook))
 		{
 			//check to see if the playbook object is missing
 			if (null == object.getPlaybook())
@@ -80,12 +80,12 @@ public class InstallValidator extends Validator<Install>
 		}
 	}
 	
-	private boolean containsRunLevel(final Install install, final RunLevel runLevel)
+	private boolean containsRunLevel(final Install install, final RunLevelType runLevelType)
 	{
 		//for each of the run levels
-		for (RunLevel level : install.getRuntimeLevel())
+		for (RunLevelType level : install.getRuntimeLevel())
 		{
-			if (level == runLevel)
+			if (level == runLevelType)
 			{
 				return true;
 			}
