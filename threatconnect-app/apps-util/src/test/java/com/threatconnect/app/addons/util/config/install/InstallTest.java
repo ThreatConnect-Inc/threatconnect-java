@@ -29,6 +29,8 @@ public class InstallTest
 		Assert.assertEquals("default", install.getParams().get(0).getDefaultValue());
 		
 		Assert.assertEquals(1, install.getFeeds().size());
+		Assert.assertTrue(install.getFeeds().get(0).isEnableBulkJson());
+		Assert.assertTrue(install.getFeeds().get(0).getDeprecation().isPercentage());
 	}
 	
 	@Test
