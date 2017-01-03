@@ -49,6 +49,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	@Parameter(defaultValue = "${project.version}", required = true)
 	private String version;
 	
+	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException
 	{
 		getLog().info("Building ThreatConnect App file");
