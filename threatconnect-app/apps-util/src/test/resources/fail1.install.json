@@ -30,7 +30,7 @@
   ],
   "feeds": [
     {
-      "sourceName": "Example Source Feed",
+      "sourceName": "Fail 1 Source Feed",
       "sourceCategory": "Open Source",
       "sourceDescription": "Testing",
       "attributesFile": "test.attributes.csv",

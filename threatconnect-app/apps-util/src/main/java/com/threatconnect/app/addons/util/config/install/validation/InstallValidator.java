@@ -1,5 +1,6 @@
 package com.threatconnect.app.addons.util.config.install.validation;
 
+import com.threatconnect.app.addons.util.config.install.Feed;
 import com.threatconnect.app.addons.util.config.install.Install;
 import com.threatconnect.app.addons.util.config.install.Param;
 import com.threatconnect.app.addons.util.config.install.Playbook;
@@ -12,11 +13,13 @@ public class InstallValidator extends Validator<Install>
 {
 	private final Validator<Param> paramValidator;
 	private final Validator<Playbook> playbookValidator;
+	private final Validator<Feed> feedValidator;
 	
 	public InstallValidator()
 	{
 		this.paramValidator = new ParamValidator();
 		this.playbookValidator = new PlaybookValidator();
+		this.feedValidator = new FeedValidator();
 	}
 	
 	@Override
@@ -77,6 +80,13 @@ public class InstallValidator extends Validator<Install>
 		{
 			//validate this param
 			paramValidator.validate(param);
+		}
+		
+		//for each of the feeds
+		for(Feed feed : object.getFeeds())
+		{
+			//validate this feed
+			feedValidator.validate(feed);
 		}
 	}
 	
