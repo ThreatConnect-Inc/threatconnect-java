@@ -262,7 +262,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 				File file = new File(explodedDir.getAbsolutePath() + File.separator + feed.getAttributesFile());
 				if (!file.exists())
 				{
-					throw new ValidationException("Referenced file \"" + feed.getAttributesFile() + " does not exist.");
+					throw new ValidationException(generateReferencedFileMissingMessage(feed.getAttributesFile()));
 				}
 			}
 			
@@ -273,10 +273,15 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 				File file = new File(explodedDir.getAbsolutePath() + File.separator + feed.getJobFile());
 				if (!file.exists())
 				{
-					throw new ValidationException("Referenced file \"" + feed.getJobFile() + " does not exist.");
+					throw new ValidationException(generateReferencedFileMissingMessage(feed.getJobFile()));
 				}
 			}
 		}
+	}
+	
+	protected String generateReferencedFileMissingMessage(final String fileName)
+	{
+		return "Referenced file \"" + fileName + " does not exist. Make sure it is in the correct directory.";
 	}
 	
 	protected File getInstallConfFile()

@@ -35,6 +35,12 @@ public class AppPackageMojo extends AbstractPackageMojo
 		copyFileToDirectoryIfExists(getIncludeFolder(), targetDirectory);
 	}
 	
+	@Override
+	protected String generateReferencedFileMissingMessage(final String fileName)
+	{
+		return super.generateReferencedFileMissingMessage(fileName) + " Additional files must be added to the \"include\" directory?";
+	}
+	
 	protected File getSourceJarFile()
 	{
 		return getTargetFile(new File(getOutputDirectory()), getAppName(), getClassifier(), "jar");
