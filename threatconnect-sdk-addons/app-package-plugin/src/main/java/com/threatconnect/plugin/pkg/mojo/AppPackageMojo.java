@@ -1,14 +1,14 @@
 package com.threatconnect.plugin.pkg.mojo;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.regex.Pattern;
-
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.codehaus.plexus.util.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.regex.Pattern;
 
 @Mojo(name = "app-package", defaultPhase = LifecyclePhase.PACKAGE, threadSafe = true, requiresDependencyResolution = ResolutionScope.RUNTIME)
 public class AppPackageMojo extends AbstractPackageMojo
@@ -42,12 +42,12 @@ public class AppPackageMojo extends AbstractPackageMojo
 	
 	protected File getAttributesCsvFile()
 	{
-		return new File(getBaseDirectory() + "/attributes.csv");
+		return new File(getBaseDirectory() + File.separator + "attributes.csv");
 	}
 	
 	protected File getIncludeFolder()
 	{
-		return new File(getBaseDirectory() + "/include");
+		return new File(getBaseDirectory() + File.separator + "include");
 	}
 	
 	protected String getFinalNameAndClassifier(String finalName, String classifier)

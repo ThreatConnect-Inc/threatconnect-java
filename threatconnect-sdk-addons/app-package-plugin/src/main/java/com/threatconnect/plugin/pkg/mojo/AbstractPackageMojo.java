@@ -1,7 +1,8 @@
 package com.threatconnect.plugin.pkg.mojo;
 
-import com.threatconnect.app.addons.util.config.install.Install;
 import com.threatconnect.app.addons.util.config.InvalidJsonFileException;
+import com.threatconnect.app.addons.util.config.install.Feed;
+import com.threatconnect.app.addons.util.config.install.Install;
 import com.threatconnect.app.addons.util.config.install.InstallUtil;
 import com.threatconnect.app.addons.util.config.install.validation.ValidationException;
 import com.threatconnect.plugin.pkg.Profile;
@@ -96,7 +97,8 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	 */
 	protected void buildBundledArchive(final List<File> packagedApps) throws IOException
 	{
-		File bundledFile = new File(getOutputDirectory() + "/" + getAppName() + "." + TC_BUNDLED_FILE_EXTENSION);
+		File bundledFile =
+			new File(getOutputDirectory() + File.separator + getAppName() + "." + TC_BUNDLED_FILE_EXTENSION);
 		getLog().info("Packaging Bundle " + bundledFile.getName());
 		ZipUtil.zipFiles(packagedApps, bundledFile.getAbsolutePath());
 	}
@@ -109,7 +111,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	 * @param profile
 	 * @throws IOException
 	 */
-	protected File packageProfile(final Profile profile) throws IOException
+	protected File packageProfile(final Profile profile) throws IOException, ValidationException
 	{
 		// determine what this app name will be
 		final String appName = determineAppName(profile);
@@ -125,6 +127,9 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 		
 		// write the rest of the app contents out to the target folder
 		writeAppContentsToDirectory(explodedDir);
+		
+		//validate that all of the files referenced in the install.json file exist
+		validateReferencedFilesExist(explodedDir, profile);
 		
 		// zip up the app and return the file of the packaged app
 		return ZipUtil.zipFolder(explodedDir, TC_APP_FILE_EXTENSION);
@@ -245,14 +250,43 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 		return profiles;
 	}
 	
+	protected void validateReferencedFilesExist(File explodedDir, final Profile profile) throws ValidationException
+	{
+		//for each of the feeds in the install object
+		for (Feed feed : profile.getInstall().getFeeds())
+		{
+			//check to see if there is an attribute file
+			if (null != feed.getAttributesFile())
+			{
+				//make sure this file exists or throw an exception
+				File file = new File(explodedDir.getAbsolutePath() + File.separator + feed.getAttributesFile());
+				if (!file.exists())
+				{
+					throw new ValidationException("Referenced file \"" + feed.getAttributesFile() + " does not exist.");
+				}
+			}
+			
+			//check to see if there is a job file
+			if (null != feed.getJobFile())
+			{
+				//make sure this file exists or throw an exception
+				File file = new File(explodedDir.getAbsolutePath() + File.separator + feed.getJobFile());
+				if (!file.exists())
+				{
+					throw new ValidationException("Referenced file \"" + feed.getJobFile() + " does not exist.");
+				}
+			}
+		}
+	}
+	
 	protected File getInstallConfFile()
 	{
-		return new File(baseDirectory + "/install.conf");
+		return new File(baseDirectory + File.separator + "install.conf");
 	}
 	
 	protected File getExplodedDir(final String appName)
 	{
-		return new File(getOutputDirectory() + "/" + appName);
+		return new File(getOutputDirectory() + File.separator + appName);
 	}
 	
 	/**
