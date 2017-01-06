@@ -11,7 +11,7 @@ public class Feed
 	private String attributesFile;
 	private boolean enableBulkJson;
 	private Integer indicatorLimit;
-	private Integer documentStorageLimitMb;
+	private Long documentStorageLimitMb;
 	private String jobFile;
 	private Deprecation deprecation;
 	
@@ -75,12 +75,12 @@ public class Feed
 		this.indicatorLimit = indicatorLimit;
 	}
 	
-	public Integer getDocumentStorageLimitMb()
+	public Long getDocumentStorageLimitMb()
 	{
 		return documentStorageLimitMb;
 	}
 	
-	public void setDocumentStorageLimitMb(final Integer documentStorageLimitMb)
+	public void setDocumentStorageLimitMb(final Long documentStorageLimitMb)
 	{
 		this.documentStorageLimitMb = documentStorageLimitMb;
 	}

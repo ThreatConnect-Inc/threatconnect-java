@@ -166,7 +166,7 @@ public abstract class ParserApp extends App
 				// nothing was saved for this parser
 				StringBuilder savedMessage = new StringBuilder();
 				savedMessage.append(entry.getKey());
-				savedMessage.append("No indicators or groups saved!");
+				savedMessage.append(" No indicators or groups saved!");
 				logger.warn(savedMessage.toString());
 			}
 		}
