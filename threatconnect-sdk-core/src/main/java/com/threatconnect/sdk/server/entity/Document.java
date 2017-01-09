@@ -78,11 +78,6 @@ public class Document extends Group
         this.password = password;
     }
 
-    /**
-     * Ignore serialization of status because status isn't settable by API call.
-     * @return String reponse
-     */
-    @JsonIgnore
     public String getStatus()
     {
         return status;

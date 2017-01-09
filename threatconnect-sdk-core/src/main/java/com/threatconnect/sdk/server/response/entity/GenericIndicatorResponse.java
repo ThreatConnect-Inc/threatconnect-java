@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "customIndicatorResponse")
 @XmlSeeAlso(CustomIndicator.class)
-public class GenericIndicatorResponse extends ApiEntitySingleResponse<Indicator, GenericIndicatorResponseData>
+public class GenericIndicatorResponse extends ApiEntitySingleResponse<CustomIndicator, CustomIndicatorResponseData>
 {
     public void setData(CustomIndicatorResponseData data) {
         super.setData(data); 

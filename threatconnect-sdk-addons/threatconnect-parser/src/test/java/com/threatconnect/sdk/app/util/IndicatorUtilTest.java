@@ -1,9 +1,9 @@
 package com.threatconnect.sdk.app.util;
 
+import com.threatconnect.sdk.parser.model.Address;
+import com.threatconnect.sdk.parser.util.IndicatorUtil;
 import org.junit.Assert;
 import org.junit.Test;
-
-import com.threatconnect.sdk.parser.util.IndicatorUtil;
 
 public class IndicatorUtilTest
 {
@@ -20,5 +20,13 @@ public class IndicatorUtilTest
 		Assert.assertEquals("0.0.0.0", IndicatorUtil.cleanIP("0.0.0.0"));
 		Assert.assertEquals("0.0.0.0", IndicatorUtil.cleanIP("00.00.00.00"));
 		Assert.assertEquals("0.0.0.0", IndicatorUtil.cleanIP("000.000.000.000"));
+	}
+	
+	@Test
+	public void createHostOrAddressTest()
+	{
+		Assert.assertEquals(Address.class, IndicatorUtil.createHostOrAddress("178.159.38.81").getClass());
+		Assert.assertEquals(Address.class, IndicatorUtil.createHostOrAddress(" 178.159.38.81").getClass());
+		Assert.assertEquals(Address.class, IndicatorUtil.createHostOrAddress("178.159.38.81 ").getClass());
 	}
 }

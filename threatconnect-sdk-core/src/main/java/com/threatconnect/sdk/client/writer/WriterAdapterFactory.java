@@ -288,5 +288,12 @@ public class WriterAdapterFactory {
         return new TaskWriterAdapter(conn);
     }
 
-
+    public static DataStoreWriterAdapter createDataStoreWriterAdapter(Connection conn)
+    {
+        return new DataStoreWriterAdapter(conn);
+    }
+    
+    public static LogWriterAdapter createLogWriter(Connection conn) {
+        return new LogWriterAdapter(conn);
+    }
 }

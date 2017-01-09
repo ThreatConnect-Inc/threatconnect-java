@@ -1,15 +1,53 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>com.threatconnect</groupId>
-    <artifactId>sdk</artifactId>
-    <packaging>pom</packaging>
-    <version>2.6.2</version>
-    <name>tc-sdk</name>
-    <url>http://maven.apache.org</url>
-    <modules>
-        <module>threatconnect-sdk-core</module>
-        <module>threatconnect-sdk-addons/app-package-plugin</module>
-        <module>threatconnect-sdk-addons/threatconnect-parser</module>
-    </modules>
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.threatconnect</groupId>
+	<artifactId>sdk</artifactId>
+	<packaging>pom</packaging>
+	<version>2.7.2-SNAPSHOT</version>
+	<name>tc-sdk</name>
+	<url>http://maven.apache.org</url>
+	<modules>
+		<module>threatconnect-app</module>
+		<module>threatconnect-sdk-core</module>
+		<module>threatconnect-sdk-addons</module>
+	</modules>
+
+	<properties>
+		<dist.snapshot.id>tcnexus</dist.snapshot.id>
+		<dist.snapshot.url>http://git.c2int.com:8081/nexus/content/repositories/snapshots</dist.snapshot.url>
+		<dist.snapshot.url2>https://oss.sonatype.org/content/repositories/snapshots</dist.snapshot.url2>
+	</properties>
+
+	<profiles>
+		<profile>
+			<id>tcnexus</id>
+			<properties>
+				<dist.snapshot.id>tcnexus</dist.snapshot.id>
+				<dist.snapshot.url>http://git.c2int.com:8081/nexus/content/repositories/snapshots</dist.snapshot.url>
+				<dist.snapshot.url2>https://oss.sonatype.org/content/repositories/snapshots</dist.snapshot.url2>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>ossrh</id>
+			<properties>
+				<dist.snapshot.id>ossrh</dist.snapshot.id>
+				<dist.snapshot.url>https://oss.sonatype.org/content/repositories/snapshots</dist.snapshot.url>
+			</properties>
+		</profile>
+	</profiles>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>${dist.snapshot.id}</id>
+			<url>${dist.snapshot.url}</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
 </project>

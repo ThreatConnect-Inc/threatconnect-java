@@ -17,7 +17,7 @@ public class MetricUtil
     static
     {
 
-        new Thread(new Runnable()
+        Thread t = new Thread(new Runnable()
         {
             @Override
             public void run()
@@ -47,7 +47,9 @@ public class MetricUtil
                 }
 
             }
-        }).start();
+        });
+        t.setDaemon(true);
+        t.start();
     }
 
     public static void add(String name)

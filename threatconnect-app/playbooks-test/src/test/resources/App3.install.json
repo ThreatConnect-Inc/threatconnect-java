@@ -1,0 +1,37 @@
+{
+  "displayName": "App3",
+  "programVersion": "1.0.0",
+  "programLanguage": "JAVA",
+  "programMain": "com.threatconnect.apps.playbooks.test.app3.App3Main",
+  "languageVersion": "7",
+  "listDelimiter": "|",
+  "runtimeLevel": "Playbook",
+  "playbook": {
+    "type": "Basic",
+    "outputVariables": [
+      {
+        "type": "StringArray",
+        "name": "test.app3.split"
+      }
+    ]
+  },
+  "params": [
+    {
+      "name": "split_on",
+      "label": "Split On",
+      "sequence": 1,
+      "required": true,
+      "type": "String"
+    },
+    {
+      "name": "input_concat",
+      "label": "Concat String",
+      "sequence": 2,
+      "required": true,
+      "type": "String",
+      "playbookDataType": [
+        "String"
+      ]
+    }
+  ]
+}

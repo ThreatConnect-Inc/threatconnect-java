@@ -297,4 +297,9 @@ public class ReaderAdapterFactory
 	{
 		return new TaskReaderAdapter(conn);
 	}
+
+	public static DataStoreReaderAdapter createDataStoreReaderAdapter(Connection conn)
+	{
+		return new DataStoreReaderAdapter(conn);
+	}
 }

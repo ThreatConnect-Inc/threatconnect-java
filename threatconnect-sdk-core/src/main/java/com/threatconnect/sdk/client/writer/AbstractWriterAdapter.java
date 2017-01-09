@@ -5,18 +5,10 @@
  */
 package com.threatconnect.sdk.client.writer;
 
-import com.threatconnect.sdk.client.AbstractClientAdapter;
-import com.threatconnect.sdk.client.UrlTypeable;
-import com.threatconnect.sdk.client.response.WriteListResponse;
-import com.threatconnect.sdk.conn.AbstractRequestExecutor.HttpMethod;
-import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.exception.FailedResponseException;
-import com.threatconnect.sdk.server.entity.CustomIndicator;
-import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
-
 import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -24,8 +16,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.threatconnect.sdk.server.entity.CustomIndicator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.threatconnect.sdk.client.AbstractClientAdapter;
+import com.threatconnect.sdk.client.UrlTypeable;
+import com.threatconnect.sdk.client.response.WriteListResponse;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor.HttpMethod;
+import com.threatconnect.sdk.conn.Connection;
+import com.threatconnect.sdk.exception.FailedResponseException;
+import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
+import com.threatconnect.sdk.util.UploadMethodType;
 
 /**
  *
@@ -46,7 +49,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
+    protected final Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
 
     public AbstractWriterAdapter(Connection conn) {
         super(conn);
@@ -255,13 +258,12 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
             return modifyItem(propName, type, ownerName, paramMap, saveObject, HttpMethod.GET);
         }
 
-
-    protected <T extends ApiEntitySingleResponse> T uploadFile(String propName, Class<T> type, File file, Map<String, Object> paramMap) throws FailedResponseException, UnsupportedEncodingException
+    protected <T extends ApiEntitySingleResponse> T uploadFile(String propName, Class<T> type, InputStream inputStream, Map<String, Object> paramMap, UploadMethodType uploadMethodType) throws FailedResponseException, UnsupportedEncodingException
     {
-        return uploadFile(propName, type, null, file, paramMap);
+        return uploadFile(propName, type, null, inputStream, paramMap, uploadMethodType);
     }
 
-    protected <T extends ApiEntitySingleResponse> T uploadFile(String propName, Class<T> type, String ownerName, File file, Map<String, Object> paramMap) throws FailedResponseException, UnsupportedEncodingException
+    protected <T extends ApiEntitySingleResponse> T uploadFile(String propName, Class<T> type, String ownerName, InputStream inputStream, Map<String, Object> paramMap, UploadMethodType uploadMethodType) throws FailedResponseException, UnsupportedEncodingException
     {
         logger.trace("Getting URL: {}", propName);
         String url = getUrl(propName, ownerName);
@@ -277,7 +279,7 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
                 }
             }
             logger.trace("Calling url={}", url);
-            String content = executor.executeUploadByteStream(url, file);
+            String content = executor.executeUploadByteStream(url, inputStream, uploadMethodType);
             logger.trace("returning content={}", content);
             result = mapper.readValue(content, type);
         } catch (IOException e)
@@ -288,9 +290,8 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
         return result;
     }
 
-    private <T extends ApiEntitySingleResponse> T modifyItem(String propName, Class<T> type, String ownerName, Map<String, Object> paramMap, Object saveObject, HttpMethod requestType)
+    protected <T extends ApiEntitySingleResponse> T modifyItem(String propName, Class<T> type, String ownerName, Map<String, Object> paramMap, Object saveObject, HttpMethod requestType)
         throws IOException, FailedResponseException {
-
     	logger.trace("Getting URL: {}", propName);
         String url = getUrl(propName, ownerName);
 
@@ -313,15 +314,18 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
         }
 
         T result;
-        try {
-        	System.out.println("Calling url={}"+ url);
-            String content = executor.execute(url, requestType, saveObject);
-            System.out.println("returning content={}"+ content);
-            result = mapper.readValue(content, type);
-        } catch ( EOFException ex ) {
-        	logger.error(requestType + " Error ", ex);
-            throw new FailedResponseException( ex.toString() ); // rethrow using local exception
-        }
+		try
+		{
+			logger.trace("Calling url={}", url);
+			String content = executor.execute(url, requestType, saveObject);
+			logger.trace("returning content={}", content);
+			result = mapper.readValue(content, type);
+		}
+		catch (JsonMappingException | EOFException ex)
+		{
+			logger.error(requestType + " Error ", ex);
+			throw new FailedResponseException(ex);
+		}
 
         return result;
     }

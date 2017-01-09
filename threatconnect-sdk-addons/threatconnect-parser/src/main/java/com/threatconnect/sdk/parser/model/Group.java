@@ -1,19 +1,19 @@
 package com.threatconnect.sdk.parser.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public abstract class Group extends Item
 {
 	private final GroupType groupType;
-	private final List<Item> associatedItems;
+	private final Set<Item> associatedItems;
 	private String name;
 	
 	public Group(final GroupType groupType)
 	{
 		super(ItemType.GROUP);
 		this.groupType = groupType;
-		this.associatedItems = new ArrayList<Item>();
+		this.associatedItems = new LinkedHashSet<Item>();
 	}
 	
 	public final GroupType getGroupType()
@@ -32,8 +32,14 @@ public abstract class Group extends Item
 	}
 	
 	@Override
-	public List<Item> getAssociatedItems()
+	public Set<Item> getAssociatedItems()
 	{
 		return associatedItems;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return getName();
 	}
 }

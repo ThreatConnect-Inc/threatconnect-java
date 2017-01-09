@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.threatconnect.sdk.addons</groupId>
 		<artifactId>threatconnect-sdk-addons</artifactId>
-		<version>2.6.2</version>
+		<version>2.7.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>threatconnect-parser</artifactId>
 	<name>ThreatConnect Parser SDK</name>
@@ -17,7 +17,7 @@
 		<dependency>
 			<groupId>com.threatconnect.sdk.core</groupId>
 			<artifactId>threatconnect-sdk</artifactId>
-			<version>${version.this}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.dozer</groupId>
@@ -30,11 +30,6 @@
 			<version>${version.gson}</version>
 		</dependency>
 		<dependency>
-			<groupId>commons-validator</groupId>
-			<artifactId>commons-validator</artifactId>
-			<version>${version.commons-validator}</version>
-		</dependency>
-		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>${version.commons-io}</version>
@@ -43,6 +38,11 @@
 			<groupId>com.jayway.jsonpath</groupId>
 			<artifactId>json-path</artifactId>
 			<version>${version.jsonpath}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>${version.opencsv}</version>
 		</dependency>
 
 		<!-- Test -->

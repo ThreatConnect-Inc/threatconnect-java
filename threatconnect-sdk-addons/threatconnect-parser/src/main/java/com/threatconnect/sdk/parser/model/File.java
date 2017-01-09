@@ -5,6 +5,10 @@ import java.util.List;
 
 public class File extends Indicator
 {
+	public static final int MD5_LENGTH = 32;
+	public static final int SHA1_LENGTH = 40;
+	public static final int SHA256_LENGTH = 64;
+	
 	private String md5;
 	private String sha1;
 	private String sha256;
@@ -61,5 +65,16 @@ public class File extends Indicator
 	public List<FileOccurrence> getFileOccurrences()
 	{
 		return fileOccurrences;
+	}
+	
+	@Override
+	public String getIdentifier()
+	{
+		return emptyIfNull(getMd5()) + ":" + emptyIfNull(getSha1()) + ":" + emptyIfNull(getSha256());
+	}
+	
+	private String emptyIfNull(final String s)
+	{
+		return (null != s) ? s : "";
 	}
 }

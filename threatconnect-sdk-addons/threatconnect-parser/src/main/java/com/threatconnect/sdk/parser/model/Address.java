@@ -18,4 +18,10 @@ public class Address extends Indicator
 	{
 		this.ip = ip;
 	}
+	
+	@Override
+	public String getIdentifier()
+	{
+		return getIp();
+	}
 }

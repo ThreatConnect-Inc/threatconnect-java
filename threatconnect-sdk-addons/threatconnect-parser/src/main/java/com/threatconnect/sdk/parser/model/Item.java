@@ -2,6 +2,7 @@ package com.threatconnect.sdk.parser.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public abstract class Item
 {
@@ -31,5 +32,5 @@ public abstract class Item
 		return tags;
 	}
 	
-	public abstract List<? extends Item> getAssociatedItems();
+	public abstract Set<? extends Item> getAssociatedItems();
 }

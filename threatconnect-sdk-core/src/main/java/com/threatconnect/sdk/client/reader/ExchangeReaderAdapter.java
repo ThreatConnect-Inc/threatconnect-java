@@ -1,10 +1,5 @@
 package com.threatconnect.sdk.client.reader;
 
-import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.exception.FailedResponseException;
-import com.threatconnect.sdk.server.entity.SpaceState;
-import com.threatconnect.sdk.server.response.entity.SpaceStateResponse;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -12,6 +7,13 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.http.entity.ContentType;
+
+import com.threatconnect.sdk.conn.Connection;
+import com.threatconnect.sdk.exception.FailedResponseException;
+import com.threatconnect.sdk.server.entity.SpaceState;
+import com.threatconnect.sdk.server.response.entity.SpaceStateResponse;
 
 /**
  * Created by dtineo on 9/12/15.
@@ -29,7 +31,7 @@ public class ExchangeReaderAdapter extends AbstractReaderAdapter
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("id", spaceId);
         paramMap.put("fileName", fileName);
-        try (InputStream in = getFile("v2.spaces.file", /*owner=*/null, paramMap, /*bypassOwnerCheck=*/true))
+        try (InputStream in = getFile("v2.spaces.file", /*owner=*/null, paramMap, /*bypassOwnerCheck=*/true, ContentType.APPLICATION_OCTET_STREAM))
         {
             Files.copy(in, outputPath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e)

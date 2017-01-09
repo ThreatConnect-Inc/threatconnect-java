@@ -1,15 +1,15 @@
 package com.threatconnect.sdk.log;
 
-import java.io.File;
-import java.io.IOException;
-
+import com.threatconnect.app.apps.AppConfig;
+import com.threatconnect.sdk.app.LoggerUtil;
+import com.threatconnect.sdk.app.SdkAppConfig;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.threatconnect.sdk.app.AppConfig;
-import com.threatconnect.sdk.app.LoggerUtil;
+import java.io.File;
+import java.io.IOException;
 
 public class LoggingTest
 {
@@ -21,11 +21,11 @@ public class LoggingTest
 		File logFile = new File(LOG_FILE);
 		logFile.delete();
 		
-		AppConfig appConfig = AppConfig.getInstance();
+		AppConfig appConfig = SdkAppConfig.getInstance();
 		
 		LoggerUtil.reconfigureGlobalLogger(logFile, appConfig);
 		Logger logger = LoggerFactory.getLogger(getClass());
-		logger.info("Log Test");
+		logger.warn("Log Test");
 		
 		Assert.assertTrue(logFile.length() > 0);
 	}

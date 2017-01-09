@@ -4,9 +4,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.URLConnection;
-import java.util.Date;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -19,31 +18,34 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.threatconnect.sdk.parser.model.Item;
-import com.threatconnect.sdk.parser.result.PageResult;
+import com.threatconnect.sdk.parser.result.Result;
+import com.threatconnect.sdk.parser.source.DataSource;
 
-public abstract class AbstractXMLParser<I extends Item> extends AbstractPagedParser<I>
+public abstract class AbstractXMLParser<I extends Item> extends AbstractParser<I>
 {
-	public AbstractXMLParser(final String url)
+	private Document document;
+	
+	public AbstractXMLParser(final DataSource dataSource)
 	{
-		super(url);
+		super(dataSource);
 	}
 	
 	@Override
-	protected PageResult<I> parsePage(String pageUrl, Date startDate) throws ParserException
+	public List<I> parseData() throws ParserException
 	{
 		URLConnection connection = null;
 		
 		try
 		{
-			// load the url and read the xml as a string
-			URL url = new URL(pageUrl);
-			connection = url.openConnection();
-			String xml = preProcessXML(IOUtils.toString(connection.getInputStream()));
+			// read the xml as a string and allow any xml preproccessing if needed
+			String rawXML = IOUtils.toString(getDataSource().read());
+			String xml = preProcessXML(rawXML);
 			
-			Document doc = createDocument(xml);
+			// create a document from the processed xml
+			document = createDocument(xml);
 			
-			// process the rss feed
-			return processXmlDocument(doc, pageUrl, startDate);
+			// process the xml document
+			return processXmlDocument(document).getItems();
 		}
 		catch (MalformedURLException | ParserConfigurationException | SAXException | XPathExpressionException e)
 		{
@@ -73,14 +75,24 @@ public abstract class AbstractXMLParser<I extends Item> extends AbstractPagedPar
 		throw new ParserException(cause);
 	}
 	
-	protected Document createDocument(final String xml) throws ParserConfigurationException, SAXException, IOException
+	protected DocumentBuilder createDocumentBuilder() throws ParserConfigurationException
 	{
 		DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
 		domFactory.setNamespaceAware(true);
-		DocumentBuilder builder = domFactory.newDocumentBuilder();
+		return domFactory.newDocumentBuilder();
+	}
+	
+	protected Document createDocument(final String xml) throws ParserConfigurationException, SAXException, IOException
+	{
+		DocumentBuilder builder = createDocumentBuilder();
 		Reader reader = new StringReader(xml);
 		InputSource inputSource = new InputSource(reader);
 		return builder.parse(inputSource);
+	}
+	
+	protected Document getDocument()
+	{
+		return document;
 	}
 	
 	/**
@@ -91,6 +103,6 @@ public abstract class AbstractXMLParser<I extends Item> extends AbstractPagedPar
 	 * @return
 	 * @throws ParserException
 	 */
-	protected abstract PageResult<I> processXmlDocument(Document doc, String pageUrl, Date startDate)
+	protected abstract Result<I> processXmlDocument(Document document)
 		throws ParserException, XPathExpressionException;
 }

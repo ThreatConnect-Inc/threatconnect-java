@@ -5,19 +5,8 @@
  */
 package com.threatconnect.sdk.conn;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.InvalidKeyException;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Properties;
-
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLSession;
-
+import com.threatconnect.app.apps.AppConfig;
+import com.threatconnect.sdk.config.Configuration;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -35,7 +24,17 @@ import org.apache.http.ssl.SSLContextBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.threatconnect.sdk.config.Configuration;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSession;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Properties;
 
 /**
  * @author dtineo
@@ -103,9 +102,9 @@ public class ConnectionUtil
 	static void applyHeaders(Configuration config, AbstractHttpMessage message, String httpMethod, String urlPath,
 		String contentType, String acceptType)
 	{
-		if (config.getTcApiToken() != null)
+		if (config.getTcToken() != null)
 		{
-			message.addHeader("authorization", "TC-Token " + config.getTcApiToken());
+			message.addHeader("authorization", "TC-Token " + config.getTcToken());
 		}
 		else
 		{
@@ -178,6 +177,7 @@ public class ConnectionUtil
 	 */
 	public static void trustSelfSignedCerts(final HttpClientBuilder httpClientBuilder)
 	{
+		logger.debug("Trusting self-signed certs.");
 		try
 		{
 			SSLContextBuilder builder = new SSLContextBuilder();
@@ -313,5 +313,20 @@ public class ConnectionUtil
 	{
 		return createClientBuilder(proxyHost, proxyPort, proxyUserName, proxyPassword, trustSelfSignedCertificates)
 			.build();
+	}
+	
+	/**
+	 * Creates the configuration object from an AppConfig
+	 *
+	 * @param appConfig
+	 * @return
+	 */
+	public static Configuration createConfiguration(final AppConfig appConfig)
+	{
+		// create the configuration for the threatconnect server
+		Configuration configuration = new Configuration(appConfig.getTcApiPath(), appConfig.getTcApiAccessID(),
+			appConfig.getTcApiUserSecretKey(), appConfig.getApiDefaultOrg(), appConfig.getTcToken(), appConfig.getTcTokenExpires());
+		
+		return configuration;
 	}
 }

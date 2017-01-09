@@ -1,9 +1,5 @@
 package com.threatconnect.sdk.parser.service.writer;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-
 import com.google.gson.Gson;
 import com.threatconnect.sdk.client.reader.AbstractGroupReaderAdapter;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
@@ -27,6 +23,10 @@ import com.threatconnect.sdk.parser.service.save.SaveItemFailedException;
 import com.threatconnect.sdk.server.entity.Group.Type;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.util.ApiFilterType;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public abstract class GroupWriter<E extends Group, T extends com.threatconnect.sdk.server.entity.Group>
 	extends Writer
@@ -99,16 +99,20 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 					// for each of the attributes of this group
 					for (Attribute attribute : groupSource.getAttributes())
 					{
-						// save the attributes for this group
-						ApiEntitySingleResponse<?, ?> attrResponse = writer.addAttribute(getSavedGroupID(),
-							mapper.map(attribute, com.threatconnect.sdk.server.entity.Attribute.class));
+						// map the attribute to a server entity
+						com.threatconnect.sdk.server.entity.Attribute attr =
+							mapper.map(attribute, com.threatconnect.sdk.server.entity.Attribute.class);
 							
+						// save the attributes for this group
+						ApiEntitySingleResponse<?, ?> attrResponse = writer.addAttribute(getSavedGroupID(), attr);
+						
 						// check to see if this was not successful
 						if (!attrResponse.isSuccess())
 						{
 							logger.warn("Failed to save attribute \"{}\" for group id: {}", attribute.getType(),
 								getSavedGroupID());
 							logger.warn(attrResponse.getMessage());
+							logger.warn(attribute.getValue());
 						}
 					}
 				}
@@ -143,12 +147,12 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 			}
 			else
 			{
-				throw new SaveItemFailedException(response.getMessage());
+				throw new SaveItemFailedException(groupSource, response.getMessage());
 			}
 		}
 		catch (FailedResponseException e)
 		{
-			throw new SaveItemFailedException(e);
+			throw new SaveItemFailedException(groupSource, e);
 		}
 	}
 	
@@ -179,7 +183,7 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 					indicatorID = ((Address) indicator).getIp();
 					response = writer.associateIndicatorAddress(getSavedGroupID(), indicatorID);
 					break;
-				case EMAIL_ADDRESS:
+				case EMAILADDRESS:
 					indicatorID = ((EmailAddress) indicator).getAddress();
 					response = writer.associateIndicatorEmailAddress(getSavedGroupID(), indicatorID);
 					break;
@@ -345,8 +349,9 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 					// for each of the indicators
 					for (T group : readGroups)
 					{
-						// return the first group
-						return group;
+						// need to perform another lookup on the server to get all of the
+						// information for this group and not just the summary
+						return reader.getById(group.getId());
 					}
 				}
 			}

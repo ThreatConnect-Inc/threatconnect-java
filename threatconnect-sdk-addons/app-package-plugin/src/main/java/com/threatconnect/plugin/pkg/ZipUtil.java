@@ -4,34 +4,48 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class ZipUtil
 {
-	public static void zipFolder(File srcFolder) throws IOException
+	public static File zipFolder(File srcFolder, final String fileExtension) throws IOException
 	{
-		zipFolder(srcFolder.getAbsolutePath(), srcFolder.getAbsolutePath() + ".zip");
+		File destZipFile = new File(srcFolder.getAbsolutePath() + "." + fileExtension);
+		zipFolder(srcFolder, destZipFile);
+		return destZipFile;
 	}
 	
-	public static void zipFolder(String srcFolder, String destZipFile) throws IOException
+	public static void zipFolder(File srcFolder, File destZipFile) throws IOException
 	{
-		ZipOutputStream zip = null;
-		FileOutputStream fileWriter = null;
-		
-		fileWriter = new FileOutputStream(destZipFile);
-		zip = new ZipOutputStream(fileWriter);
-		
-		addFolderToZip("", srcFolder, zip);
-		zip.flush();
-		zip.close();
+		try (ZipOutputStream zip = new ZipOutputStream(new FileOutputStream(destZipFile)))
+		{
+			addFolderToZip(null, srcFolder, zip);
+		}
 	}
 	
-	private static void addFileToZip(String path, String srcFile, ZipOutputStream zip) throws IOException
+	public static File zipFiles(final List<File> sourceFiles, final String destZipFile) throws IOException
 	{
+		File destFile = new File(destZipFile);
 		
-		File folder = new File(srcFile);
-		if (folder.isDirectory())
+		try (ZipOutputStream zip = new ZipOutputStream(new FileOutputStream(destFile)))
+		{
+			//for each of the source files
+			for (File file : sourceFiles)
+			{
+				//add this file to the zip archive
+				addFileToZip(null, file, zip);
+			}
+			zip.flush();
+		}
+		
+		return destFile;
+	}
+	
+	private static void addFileToZip(String path, File srcFile, ZipOutputStream zip) throws IOException
+	{
+		if (srcFile.isDirectory())
 		{
 			addFolderToZip(path, srcFile, zip);
 		}
@@ -39,29 +53,30 @@ public class ZipUtil
 		{
 			byte[] buf = new byte[1024];
 			int len;
-			FileInputStream in = new FileInputStream(srcFile);
-			zip.putNextEntry(new ZipEntry(path + "/" + folder.getName()));
-			while ((len = in.read(buf)) > 0)
+			
+			try (FileInputStream in = new FileInputStream(srcFile))
 			{
-				zip.write(buf, 0, len);
+				//determine the path of this zip entry
+				final String zipPath = (null == path) ? srcFile.getName() : path + "/" + srcFile.getName();
+				zip.putNextEntry(new ZipEntry(zipPath));
+				
+				//write the contents of the file to this zip entry
+				while ((len = in.read(buf)) > 0)
+				{
+					zip.write(buf, 0, len);
+				}
 			}
 		}
 	}
 	
-	private static void addFolderToZip(String path, String srcFolder, ZipOutputStream zip) throws IOException
+	private static void addFolderToZip(String path, File srcFolder, ZipOutputStream zip) throws IOException
 	{
-		File folder = new File(srcFolder);
-		
-		for (String fileName : folder.list())
+		//for each of the child files
+		for (File file : srcFolder.listFiles())
 		{
-			if (path.equals(""))
-			{
-				addFileToZip(folder.getName(), srcFolder + "/" + fileName, zip);
-			}
-			else
-			{
-				addFileToZip(path + "/" + folder.getName(), srcFolder + "/" + fileName, zip);
-			}
+			//determine the path of this zip entry and add this file to the zip archive
+			final String zipPath = (null == path) ? srcFolder.getName() : path + "/" + srcFolder.getName();
+			addFileToZip(zipPath, file, zip);
 		}
 	}
 }

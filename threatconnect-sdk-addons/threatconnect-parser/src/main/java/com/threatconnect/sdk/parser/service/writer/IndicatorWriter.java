@@ -1,7 +1,5 @@
 package com.threatconnect.sdk.parser.service.writer;
 
-import java.io.IOException;
-
 import com.google.gson.Gson;
 import com.threatconnect.sdk.client.reader.AbstractIndicatorReaderAdapter;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
@@ -17,6 +15,8 @@ import com.threatconnect.sdk.parser.service.save.DeleteItemFailedException;
 import com.threatconnect.sdk.parser.service.save.SaveItemFailedException;
 import com.threatconnect.sdk.server.entity.Indicator.Type;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
+
+import java.io.IOException;
 
 public abstract class IndicatorWriter<E extends Indicator, T extends com.threatconnect.sdk.server.entity.Indicator>
 	extends Writer
@@ -38,12 +38,11 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 	
 	/**
 	 * Saves the indicator with the associated owner
-	 * 
+	 *
 	 * @param ownerName
 	 * @return
 	 * @throws SaveItemFailedException
-	 * @throws IOException
-	 * if there was an exception communicating with the server
+	 * @throws IOException             if there was an exception communicating with the server
 	 */
 	public T saveIndicator(final String ownerName)
 		throws SaveItemFailedException, IOException
@@ -87,15 +86,19 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 					// for each of the attributes of this group
 					for (Attribute attribute : indicatorSource.getAttributes())
 					{
+						// map the attribute to a server entity
+						com.threatconnect.sdk.server.entity.Attribute attr =
+							mapper.map(attribute, com.threatconnect.sdk.server.entity.Attribute.class);
+						
 						// save the attributes for this indicator
-						ApiEntitySingleResponse<?, ?> attrResponse = writer.addAttribute(buildID(),
-							mapper.map(attribute, com.threatconnect.sdk.server.entity.Attribute.class));
-							
+						ApiEntitySingleResponse<?, ?> attrResponse = writer.addAttribute(buildID(), attr);
+						
 						// check to see if this was not successful
 						if (!attrResponse.isSuccess())
 						{
 							logger.warn("Failed to save attribute \"{}\" for: {}", attribute.getType(), buildID());
 							logger.warn(attrResponse.getMessage());
+							logger.warn(attribute.getValue());
 						}
 					}
 				}
@@ -130,12 +133,12 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 			}
 			else
 			{
-				throw new SaveItemFailedException(response.getMessage());
+				throw new SaveItemFailedException(indicatorSource, response.getMessage());
 			}
 		}
 		catch (FailedResponseException e)
 		{
-			throw new SaveItemFailedException(e);
+			throw new SaveItemFailedException(indicatorSource, e);
 		}
 	}
 	
@@ -192,11 +195,9 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 	
 	/**
 	 * Deletes the indicator from the server
-	 * 
-	 * @param ownerName
-	 * the owner name of the indicator
-	 * @throws DeleteItemFailedException
-	 * if there was any reason the indicator could not be deleted
+	 *
+	 * @param ownerName the owner name of the indicator
+	 * @throws DeleteItemFailedException if there was any reason the indicator could not be deleted
 	 */
 	public void deleteIndicator(final String ownerName) throws DeleteItemFailedException
 	{
@@ -224,16 +225,12 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 	
 	/**
 	 * Looks up an indicator
-	 * 
-	 * @param lookupID
-	 * the id of the indicator to look up
-	 * @param ownerName
-	 * the name of the owner to use when looking up the indicator
+	 *
+	 * @param lookupID  the id of the indicator to look up
+	 * @param ownerName the name of the owner to use when looking up the indicator
 	 * @return the existing indicator
-	 * @throws FailedResponseException
-	 * if the server returned an invalid response
-	 * @throws IOException
-	 * if there was an exception communicating with the server
+	 * @throws FailedResponseException if the server returned an invalid response
+	 * @throws IOException             if there was an exception communicating with the server
 	 */
 	protected T lookupIndicator(final String lookupID, final String ownerName)
 	{
@@ -266,7 +263,7 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 	
 	/**
 	 * Creates a reader adapter for this class
-	 * 
+	 *
 	 * @return the reader adapter for this indicator
 	 */
 	protected AbstractIndicatorReaderAdapter<T> createReaderAdapter()
@@ -276,7 +273,7 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 	
 	/**
 	 * A convenience method for creating a writer adapter for this class
-	 * 
+	 *
 	 * @return the writer adapter for this indicator
 	 */
 	protected AbstractIndicatorWriterAdapter<T> createWriterAdapter()

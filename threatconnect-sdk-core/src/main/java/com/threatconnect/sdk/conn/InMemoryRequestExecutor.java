@@ -5,27 +5,12 @@
  */
 package com.threatconnect.sdk.conn;
 
-/*
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.threatconnect.sdk.server.response.service.ApiDataServiceResponse;
-import com.threatconnect.sdk.util.StringUtil;
-import org.jboss.resteasy.client.ClientRequest;
-import org.jboss.resteasy.client.ClientResponse;
-import org.jboss.resteasy.client.core.executors.InMemoryClientExecutor;
-import org.jboss.resteasy.core.Dispatcher;
-import org.jboss.resteasy.spi.Registry;
-import org.jboss.resteasy.spi.ResteasyProviderFactory;
+import com.threatconnect.sdk.util.UploadMethodType;
+import org.apache.http.entity.ContentType;
 
-import javax.ws.rs.core.MediaType;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.Level;
-*/
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.Map;
 
 /**
  *
@@ -45,13 +30,19 @@ public class InMemoryRequestExecutor extends AbstractRequestExecutor
     }
 
     @Override
-    public String executeUploadByteStream(String path, File file) throws IOException
+    public String execute(String path, HttpMethod type, Map<String, String> headers, Object ojb) throws IOException
     {
         return null;
     }
 
     @Override
-    public InputStream executeDownloadByteStream(String path) throws IOException
+    public String executeUploadByteStream(String path, InputStream inputStream, UploadMethodType uploadMethodType) throws IOException
+    {
+        return null;
+    }
+
+    @Override
+    public InputStream executeDownloadByteStream(String path, ContentType contentType) throws IOException
     {
         return null;
     }

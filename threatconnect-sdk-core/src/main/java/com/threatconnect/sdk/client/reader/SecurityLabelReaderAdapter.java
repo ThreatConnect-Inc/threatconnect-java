@@ -13,20 +13,7 @@ import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
-import com.threatconnect.sdk.server.entity.Address;
-import com.threatconnect.sdk.server.entity.Adversary;
-import com.threatconnect.sdk.server.entity.CustomIndicator;
-import com.threatconnect.sdk.server.entity.Email;
-import com.threatconnect.sdk.server.entity.EmailAddress;
-import com.threatconnect.sdk.server.entity.File;
-import com.threatconnect.sdk.server.entity.Group;
-import com.threatconnect.sdk.server.entity.Host;
-import com.threatconnect.sdk.server.entity.Incident;
-import com.threatconnect.sdk.server.entity.Indicator;
-import com.threatconnect.sdk.server.entity.SecurityLabel;
-import com.threatconnect.sdk.server.entity.Signature;
-import com.threatconnect.sdk.server.entity.Threat;
-import com.threatconnect.sdk.server.entity.Url;
+import com.threatconnect.sdk.server.entity.*;
 import com.threatconnect.sdk.server.response.entity.SecurityLabelListResponse;
 import com.threatconnect.sdk.server.response.entity.SecurityLabelResponse;
 
@@ -167,6 +154,30 @@ public class SecurityLabelReaderAdapter
     @Override
     public Incident getAssociatedGroupIncident(String uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupIncident(uniqueId, incidentId, ownerName);
+    }
+
+    @Override
+    public IterableResponse<Document> getAssociatedGroupDocuments(String uniqueId) throws IOException, FailedResponseException
+    {
+        return groupAssocReader.getAssociatedGroupDocuments(uniqueId);
+    }
+
+    @Override
+    public IterableResponse<Document> getAssociatedGroupDocuments(String uniqueId, String ownerName) throws IOException, FailedResponseException
+    {
+        return groupAssocReader.getAssociatedGroupDocuments(uniqueId, ownerName);
+    }
+
+    @Override
+    public Document getAssociatedGroupDocument(String uniqueId, Integer incidentId) throws IOException, FailedResponseException
+    {
+        return groupAssocReader.getAssociatedGroupDocument(uniqueId, incidentId);
+    }
+
+    @Override
+    public Document getAssociatedGroupDocument(String uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException
+    {
+        return groupAssocReader.getAssociatedGroupDocument(uniqueId, incidentId, ownerName);
     }
 
     @Override

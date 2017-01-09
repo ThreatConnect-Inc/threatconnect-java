@@ -1,13 +1,13 @@
 package com.threatconnect.sdk.parser.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public abstract class Indicator extends Item
 {
 	private final IndicatorType indicatorType;
-	private final List<Group> associatedItems;
+	private final Set<Group> associatedItems;
 	
 	private Double rating;
 	private Double confidence;
@@ -23,7 +23,7 @@ public abstract class Indicator extends Item
 	{
 		super(ItemType.INDICATOR);
 		this.indicatorType = indicatorType;
-		this.associatedItems = new ArrayList<Group>();
+		this.associatedItems = new LinkedHashSet<Group>();
 	}
 	
 	public final IndicatorType getIndicatorType()
@@ -122,8 +122,62 @@ public abstract class Indicator extends Item
 	}
 	
 	@Override
-	public List<Group> getAssociatedItems()
+	public Set<Group> getAssociatedItems()
 	{
 		return associatedItems;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return getIdentifier();
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		final String id = getIdentifier();
+		
+		// make sure the id is not null
+		if (null != id)
+		{
+			return id.hashCode();
+		}
+		else
+		{
+			return super.hashCode();
+		}
+	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		final String id = getIdentifier();
+		
+		// make sure the id is not null
+		if (null != id)
+		{
+			// make sure the other object is an indicator
+			if (obj instanceof Indicator)
+			{
+				final Indicator other = (Indicator) obj;
+				return id.equals(other.getIdentifier());
+			}
+			else
+			{
+				return super.equals(obj);
+			}
+		}
+		else
+		{
+			return super.equals(obj);
+		}
+	}
+	
+	/**
+	 * Returns the unique identifier for this indicator
+	 * 
+	 * @return
+	 */
+	public abstract String getIdentifier();
 }

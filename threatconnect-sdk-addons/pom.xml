@@ -1,13 +1,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<name>ThreatConnect SDK Addon Parent</name>
-	<description>The ThreatConnect Java SDK.  Used to communicate with the ThreatConnect API</description>
+	<description>The ThreatConnect Java SDK. Used to communicate with the ThreatConnect API</description>
 	<url>https://github.com/ThreatConnect-Inc/threatconnect-java</url>
+
+	<parent>
+		<groupId>com.threatconnect</groupId>
+		<artifactId>sdk</artifactId>
+		<version>2.7.2-SNAPSHOT</version>
+	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.threatconnect.sdk.addons</groupId>
 	<artifactId>threatconnect-sdk-addons</artifactId>
-	<version>2.6.2</version>
+	<version>2.7.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<modules>
@@ -55,15 +61,12 @@
 
 		<main.basedir>${project.basedir}</main.basedir>
 
-		<!-- ThreatConnect SDK Version -->
-		<version.this>2.6.2</version.this>
-
 		<!-- Dependency Versions -->
 		<version.commons-io>2.4</version.commons-io>
-		<version.commons-validator>1.5.0</version.commons-validator>
 		<version.dozer>5.5.1</version.dozer>
 		<version.gson>2.3</version.gson>
 		<version.jsonpath>2.1.0</version.jsonpath>
+		<version.opencsv>3.8</version.opencsv>
 
 		<!-- Test Dependency Versions -->
 		<version.junit>4.12</version.junit>
@@ -71,7 +74,6 @@
 	</properties>
 
 	<dependencies>
-
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -114,7 +116,7 @@
 				<version>2.10.1</version>
 				<configuration>
 					<show>public</show>
-					<failOnError>true</failOnError>
+					<failOnError>false</failOnError>
 				</configuration>
 				<executions>
 					<execution>
@@ -143,15 +145,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<distributionManagement>
-		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-		<repository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-		</repository>
-	</distributionManagement>
 </project>

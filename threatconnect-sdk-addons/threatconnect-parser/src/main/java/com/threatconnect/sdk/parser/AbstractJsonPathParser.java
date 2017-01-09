@@ -1,7 +1,6 @@
 package com.threatconnect.sdk.parser;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -9,27 +8,29 @@ import org.apache.commons.io.IOUtils;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import com.threatconnect.sdk.parser.model.Item;
+import com.threatconnect.sdk.parser.source.DataSource;
 
 public abstract class AbstractJsonPathParser<I extends Item> extends AbstractParser<I>
 {
-	public AbstractJsonPathParser(final String url)
+	public AbstractJsonPathParser(final DataSource dataSource)
 	{
-		super(url);
+		super(dataSource);
 	}
 	
 	@Override
-	public List<I> parseData(Date startDate) throws ParserException
+	public List<I> parseData() throws ParserException
 	{
 		try
 		{
-			// connect to the source and read the json as a string
-			String json = preProcessJson(IOUtils.toString(connect()));
+			// read the json as a string and allow it to be preprocessed if needed
+			String rawJson = IOUtils.toString(getDataSource().read());
+			String json = preProcessJson(rawJson);
 			
 			// parse the json into an element
 			DocumentContext context = JsonPath.parse(json);
 			
 			// process the json and retrieve the result
-			return processJson(context, startDate);
+			return processJson(context);
 		}
 		catch (IOException e)
 		{
@@ -52,10 +53,8 @@ public abstract class AbstractJsonPathParser<I extends Item> extends AbstractPar
 	 * Process the json context
 	 * 
 	 * @param context
-	 * @param startDate
 	 * @return
 	 * @throws ParserException
 	 */
-	protected abstract List<I> processJson(DocumentContext context, Date startDate)
-		throws ParserException;
+	protected abstract List<I> processJson(DocumentContext context) throws ParserException;
 }
