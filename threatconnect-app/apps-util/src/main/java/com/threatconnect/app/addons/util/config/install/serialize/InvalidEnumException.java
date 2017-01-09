@@ -5,8 +5,8 @@ package com.threatconnect.app.addons.util.config.install.serialize;
  */
 public class InvalidEnumException extends RuntimeException
 {
-	public InvalidEnumException(final String message, final Throwable cause)
+	public InvalidEnumException(final String message)
 	{
-		super(message, cause);
+		super(message);
 	}
 }

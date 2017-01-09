@@ -32,6 +32,9 @@ public class Param
 	{
 		this.validValues = new ArrayList<String>();
 		this.playbookDataType = new ArrayList<PlaybookVariableType>();
+		
+		//set the default data type for this param
+		this.type = ParamDataType.String;
 	}
 	
 	public String getName()

@@ -34,27 +34,31 @@ public abstract class EnumJsonSerializer<T extends Enum<T>> implements JsonDeser
 	
 	public static <T extends Enum<T>> T toEnum(final String value, final Class<T> clazz)
 	{
-		try
+		//for each of the enum constants
+		for (T enumConstant : clazz.getEnumConstants())
 		{
-			return Enum.valueOf(clazz, value);
-		}
-		catch (IllegalArgumentException e)
-		{
-			//build the values text for the error message
-			StringBuilder values = new StringBuilder();
-			for (T constant : clazz.getEnumConstants())
+			//check to see if the enum constants match (not case sensitive)
+			if (enumConstant.toString().equalsIgnoreCase(value))
 			{
-				if (values.length() > 0)
-				{
-					values.append(", ");
-				}
-				
-				values.append(constant.toString());
+				return enumConstant;
+			}
+		}
+		
+		//if the code gets this far then we were not able to find a valid enum
+		
+		//build the values text for the error message
+		StringBuilder values = new StringBuilder();
+		for (T constant : clazz.getEnumConstants())
+		{
+			if (values.length() > 0)
+			{
+				values.append(", ");
 			}
 			
-			throw new InvalidEnumException(
-				value + " is not a valid value. Possible values are [" + values + "]", e);
+			values.append(constant.toString());
 		}
+		
+		throw new InvalidEnumException(value + " is not a valid value. Possible values are [" + values + "]");
 	}
 	
 	public abstract Type getType();
