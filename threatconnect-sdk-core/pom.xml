@@ -285,9 +285,6 @@
 									<fileset dir="${project.build.directory}/site/apidocs"
 										includes="**" />
 								</copy>
-								<copy todir="${project.build.directory}/threatconnect-sdk/doc/guide">
-									<fileset dir="${basedir}/guide" includes="**" />
-								</copy>
 
 							</target>
 						</configuration>
