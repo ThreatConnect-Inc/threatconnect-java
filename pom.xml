@@ -14,6 +14,38 @@
 		<module>threatconnect-sdk-addons</module>
 	</modules>
 
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<name>Danny Tineo</name>
+			<email>dtineo@threatconnect.com</email>
+			<organization>ThreatConnect</organization>
+			<organizationUrl>https://www.threatconnect.com</organizationUrl>
+		</developer>
+		<developer>
+			<name>Mitchell Turner</name>
+			<email>mturner@threatconnect.com</email>
+			<organization>ThreatConnect</organization>
+			<organizationUrl>https://www.threatconnect.com</organizationUrl>
+		</developer>
+		<developer>
+			<name>Greg Marut</name>
+			<email>gmarut@threatconnect.com</email>
+			<organization>ThreatConnect</organization>
+			<organizationUrl>https://www.threatconnect.com</organizationUrl>
+		</developer>
+	</developers>
+	<scm>
+		<url>https://github.com/ThreatConnect-Inc/threatconnect-java</url>
+		<connection>scm:git:git@github.com:ThreatConnect-Inc/threatconnect-java.git</connection>
+		<developerConnection>scm:git:git@github.com:ThreatConnect-Inc/threatconnect-java.git</developerConnection>
+	</scm>
+
 	<properties>
 		<dist.snapshot.id>tcnexus</dist.snapshot.id>
 		<dist.snapshot.url>http://git.c2int.com:8081/nexus/content/repositories/snapshots</dist.snapshot.url>
