@@ -23,9 +23,9 @@ public abstract class ContentConverter<T>
 	/**
 	 * Converts the data to a byte array
 	 *
-	 * @param source
-	 * @return
-	 * @throws ConversionException
+	 * @param source the object to convert to a byte array
+	 * @return the serialized version of the source object
+	 * @throws ConversionException if there was an issue reading/writing to the database.
 	 */
 	public byte[] toByteArray(final T source) throws ConversionException
 	{
@@ -46,9 +46,9 @@ public abstract class ContentConverter<T>
 	/**
 	 * Converts the raw byte array data to an object
 	 *
-	 * @param raw
-	 * @return
-	 * @throws ConversionException
+	 * @param raw the serialized object
+	 * @return the object which was read from the serialized byte array
+	 * @throws ConversionException if there was an issue reading/writing to the database.
 	 */
 	public T fromByteArray(byte[] raw) throws ConversionException
 	{

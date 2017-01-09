@@ -133,7 +133,8 @@ public abstract class PlaybooksApp extends App
 	
 	/**
 	 * Looks up the value of the input param and resolves the type of playbook variable that it represents
-	 * @param inputParam  the app param which corresponds to a playbook variable
+	 *
+	 * @param inputParam the app param which corresponds to a playbook variable
 	 * @return the {@link PlaybookVariableType} that this inputParam represents
 	 * @throws IllegalArgumentException if the inputParam resolves to null
 	 */
@@ -205,7 +206,8 @@ public abstract class PlaybooksApp extends App
 	 * Serves as a shorthand method for reading a string value from the database where the param is a database key
 	 *
 	 * @param param the app parameter which represents a playbooks variable
-	 * @return
+	 * @return the value of the parameter in the database
+	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
 	public final String readStringContent(final String param) throws ContentException
 	{
@@ -217,7 +219,7 @@ public abstract class PlaybooksApp extends App
 	 *
 	 * @param param the app parameter which represents a playbooks variable
 	 * @param value the value to write to the variable
-	 * @throws ContentException
+	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
 	public final void writeStringContent(final String param, final String value) throws ContentException
 	{
@@ -228,7 +230,8 @@ public abstract class PlaybooksApp extends App
 	 * Serves as a shorthand method for reading a string list value from the database where the param is a database key
 	 *
 	 * @param param the app parameter which represents a playbooks variable
-	 * @return
+	 * @return the value of the parameter in the database
+	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
 	public final List<String> readStringListContent(final String param) throws ContentException
 	{
@@ -241,7 +244,7 @@ public abstract class PlaybooksApp extends App
 	 *
 	 * @param param  the app parameter which represents a playbooks variable
 	 * @param values the list of values to write to the variable
-	 * @throws ContentException
+	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
 	public final void writeStringListContent(final String param, final List<String> values) throws ContentException
 	{
@@ -252,7 +255,8 @@ public abstract class PlaybooksApp extends App
 	 * Serves as a shorthand method for reading a binary value from the database where the param is a database key
 	 *
 	 * @param param the app parameter which represents a playbooks variable
-	 * @return
+	 * @return the value of the parameter in the database
+	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
 	public final byte[] readBinaryContent(final String param) throws ContentException
 	{
@@ -264,7 +268,7 @@ public abstract class PlaybooksApp extends App
 	 *
 	 * @param param the app parameter which represents a playbooks variable
 	 * @param value the value to write to the variable
-	 * @throws ContentException
+	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
 	public final void writeBinaryContent(final String param, final byte[] value) throws ContentException
 	{
@@ -275,7 +279,8 @@ public abstract class PlaybooksApp extends App
 	 * Serves as a shorthand method for reading a binary array value from the database where the param is a database key
 	 *
 	 * @param param the app parameter which represents a playbooks variable
-	 * @return
+	 * @return the value of the parameter in the database
+	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
 	public final byte[][] readBinaryArrayContent(final String param) throws ContentException
 	{
@@ -287,7 +292,7 @@ public abstract class PlaybooksApp extends App
 	 *
 	 * @param param the app parameter which represents a playbooks variable
 	 * @param value the value to write to the variable
-	 * @throws ContentException
+	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
 	public final void writeBinaryArrayContent(final String param, final byte[][] value) throws ContentException
 	{
@@ -298,7 +303,8 @@ public abstract class PlaybooksApp extends App
 	 * Serves as a shorthand method for reading a key/value from the database where the param is a database key
 	 *
 	 * @param param the app parameter which represents a playbooks variable
-	 * @return
+	 * @return the value of the parameter in the database
+	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
 	public final StringKeyValue readKeyValueContent(final String param) throws ContentException
 	{
@@ -310,7 +316,7 @@ public abstract class PlaybooksApp extends App
 	 *
 	 * @param param the app parameter which represents a playbooks variable
 	 * @param value the value to write to the variable
-	 * @throws ContentException
+	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
 	public final void writeKeyValueContent(final String param, final StringKeyValue value) throws ContentException
 	{
@@ -321,7 +327,8 @@ public abstract class PlaybooksApp extends App
 	 * Serves as a shorthand method for reading a key/value list from the database where the param is a database key
 	 *
 	 * @param param the app parameter which represents a playbooks variable
-	 * @return
+	 * @return the value of the parameter in the database
+	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
 	public final List<StringKeyValue> readKeyValueArrayContent(final String param) throws ContentException
 	{
@@ -333,7 +340,7 @@ public abstract class PlaybooksApp extends App
 	 *
 	 * @param param the app parameter which represents a playbooks variable
 	 * @param value the value to write to the variable
-	 * @throws ContentException
+	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
 	public final void writeKeyValueArrayContent(final String param, final List<StringKeyValue> value)
 		throws ContentException
@@ -345,7 +352,8 @@ public abstract class PlaybooksApp extends App
 	 * Serves as a shorthand method for reading a TCEntity from the database where the param is a database key
 	 *
 	 * @param param the app parameter which represents a playbooks variable
-	 * @return
+	 * @return the value of the parameter in the database
+	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
 	public final TCEntity readTCEntityContent(final String param) throws ContentException
 	{
@@ -357,7 +365,7 @@ public abstract class PlaybooksApp extends App
 	 *
 	 * @param param the app parameter which represents a playbooks variable
 	 * @param value the value to write to the variable
-	 * @throws ContentException
+	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
 	public final void writeTCEntityContent(final String param, final TCEntity value) throws ContentException
 	{
@@ -368,7 +376,8 @@ public abstract class PlaybooksApp extends App
 	 * Serves as a shorthand method for reading a TCEntity from the database where the param is a database key
 	 *
 	 * @param param the app parameter which represents a playbooks variable
-	 * @return
+	 * @return the value of the parameter in the database
+	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
 	public final List<TCEntity> readTCEntityListContent(final String param) throws ContentException
 	{
@@ -380,7 +389,7 @@ public abstract class PlaybooksApp extends App
 	 *
 	 * @param param the app parameter which represents a playbooks variable
 	 * @param value the value to write to the variable
-	 * @throws ContentException
+	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
 	public final void writeTCEntityListContent(final String param, final List<TCEntity> value) throws ContentException
 	{

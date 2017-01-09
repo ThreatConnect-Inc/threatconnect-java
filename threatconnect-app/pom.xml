@@ -89,30 +89,6 @@
 		</dependency>
 	</dependencies>
 
-	<profiles>
-		<profile>
-			<id>sign</id>
-			<build>
-				<plugins>
-					<!--GPG Signing -->
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-gpg-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>sign-artifacts</id>
-								<phase>verify</phase>
-								<goals>
-									<goal>sign</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
-
 	<build>
 		<plugins>
 			<!-- javadoc -->
@@ -122,7 +98,7 @@
 				<version>2.10.1</version>
 				<configuration>
 					<show>public</show>
-					<failOnError>false</failOnError>
+					<failOnError>true</failOnError>
 				</configuration>
 				<executions>
 					<execution>

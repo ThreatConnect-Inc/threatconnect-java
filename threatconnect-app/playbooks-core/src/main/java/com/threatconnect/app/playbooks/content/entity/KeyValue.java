@@ -3,8 +3,8 @@ package com.threatconnect.app.playbooks.content.entity;
 /**
  * A generic class for holding a key value pair
  *
- * @param <K>
- * @param <V>
+ * @param <K> Key type
+ * @param <V> Value type
  * @author Greg Marut
  */
 public class KeyValue<K, V>
