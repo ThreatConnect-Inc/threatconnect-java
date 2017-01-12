@@ -453,4 +453,19 @@ public class VictimReaderAdapter
         return victimAssetAssocReader.getAssociatedVictimAssetWebsite(uniqueId, assetId, ownerName);
     }
 
+	@Override
+	public IterableResponse<Indicator> getAssociatedIndicatorsForCustomIndicators(Integer uniqueId,
+			String associationType) throws IOException, FailedResponseException {
+		throw new RuntimeException("not implemented yet");
+	}
+
+	@Override
+	public IterableResponse<Indicator> getAssociatedIndicatorsForCustomIndicators(Integer uniqueId,
+			String associationType, String targetType) throws IOException, FailedResponseException {
+		throw new RuntimeException("not implemented yet");
+	}
+
+
+	
+
 }

@@ -515,4 +515,11 @@ public class TagWriterAdapter
     public ApiEntitySingleResponse dissociateIndicatorUrl(String uniqueId, String urlText, String ownerName) throws IOException, FailedResponseException {
         return indAssocWriter.dissociateIndicatorUrl(uniqueId, urlText, ownerName);
     }
+
+	@Override
+	public ApiEntitySingleResponse associateCustomIndicatorToIndicator(String uniqueId, String targetId,
+			String assciateType, String targetType) throws IOException, FailedResponseException {
+		// TODO Auto-generated method stub
+		throw new RuntimeException("not implemented yet");
+	}
 }

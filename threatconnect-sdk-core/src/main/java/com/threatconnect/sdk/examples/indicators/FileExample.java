@@ -49,9 +49,10 @@ public class FileExample
         try
         {
 
-            System.getProperties().setProperty("threatconnect.api.config", "/config.properties");
-            conn = new Connection();
-
+        	  Configuration config = new Configuration("https://127.0.0.1:8443/api", "37821189919142416750", "J+xdst/-~$iC2vL{I]#tf<NxzYCZUL?Fn833QNsJxR)N{6J{Q}u@Q{Sn&RJsJ&W-",  "System");
+              conn = new Connection(config);
+              
+      		
             doGet(conn);
 
             doCreate(conn);

@@ -1,19 +1,22 @@
 package com.threatconnect.apps.playbooks.test.config;
 
+import com.threatconnect.app.addons.util.config.InvalidJsonFileException;
+import com.threatconnect.app.addons.util.config.install.Install;
+import com.threatconnect.app.addons.util.config.install.InstallUtil;
+import com.threatconnect.app.addons.util.config.install.validation.ValidationException;
 import com.threatconnect.app.apps.App;
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.AppExecutor;
 import com.threatconnect.app.apps.DefaultAppConfig;
-import com.threatconnect.apps.playbooks.test.db.EmbeddedMapDBService;
-import com.threatconnect.app.addons.util.config.install.InstallJson;
-import com.threatconnect.app.addons.util.config.install.InvalidInstallJsonFileException;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
 import com.threatconnect.app.playbooks.app.PlaybooksAppConfig;
 import com.threatconnect.app.playbooks.db.DBServiceFactory;
+import com.threatconnect.apps.playbooks.test.db.EmbeddedMapDBService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -110,13 +113,13 @@ public class PlaybooksTestConfiguration
 			logger.info("Loading {}", file.getAbsolutePath());
 			
 			//read the json file
-			InstallJson installJson = new InstallJson(file);
+			Install install = InstallUtil.load(file);
 			
 			//check to see if this is a playbooks app
-			if (installJson.isPlaybookApp())
+			if (install.isPlaybookApp())
 			{
 				//configure the app for this install.json file
-				configureApp(installJson);
+				configureApp(install, file);
 			}
 			else
 			{
@@ -124,7 +127,7 @@ public class PlaybooksTestConfiguration
 					file.getAbsolutePath());
 			}
 		}
-		catch (UnsupposedPlaybookMainClassException | InvalidInstallJsonFileException | InvalidPlaybookAppException e)
+		catch (UnsupposedPlaybookMainClassException | IOException | InvalidJsonFileException | ValidationException | InvalidPlaybookAppException e)
 		{
 			throw new PlaybooksConfigurationException(e);
 		}
@@ -133,19 +136,20 @@ public class PlaybooksTestConfiguration
 	/**
 	 * Reads an install.json file and configures the playbooks app according to the config
 	 *
-	 * @param installJson
-	 * @throws InvalidInstallJsonFileException
+	 * @param install
+	 * @throws InvalidJsonFileException
 	 * @throws ClassNotFoundException
 	 * @throws UnsupposedPlaybookMainClassException
 	 */
-	private void configureApp(final InstallJson installJson)
-		throws InvalidInstallJsonFileException, UnsupposedPlaybookMainClassException, InvalidPlaybookAppException
+	private void configureApp(final Install install, final File file)
+		throws InvalidJsonFileException, UnsupposedPlaybookMainClassException, InvalidPlaybookAppException
 	{
 		try
 		{
 			//get the program main class
+			@SuppressWarnings("unchecked")
 			Class<? extends AppExecutor> programMainClass =
-				(Class<? extends AppExecutor>) Class.forName(installJson.getProgramMain());
+				(Class<? extends AppExecutor>) Class.forName(install.getProgramMain());
 			
 			//instantiate this class
 			AppExecutor appExecutor = programMainClass.newInstance();
@@ -159,40 +163,40 @@ public class PlaybooksTestConfiguration
 			if (!Modifier.isStatic(method.getModifiers()))
 			{
 				throw new UnsupposedPlaybookMainClassException(
-					installJson.getProgramMain() + " must have static main method.");
+					install.getProgramMain() + " must have static main method.");
 			}
 			
 			//configure this app
-			configureApp(appClass, installJson);
+			configureApp(appClass, install, file);
 		}
 		catch (ClassNotFoundException e)
 		{
 			throw new UnsupposedPlaybookMainClassException(
-				installJson.getProgramMain() + " could not be found.");
+				install.getProgramMain() + " could not be found.");
 		}
 		catch (InstantiationException | IllegalAccessException e)
 		{
 			throw new UnsupposedPlaybookMainClassException(
-				installJson.getProgramMain() + " must have a public no-arg constructor.");
+				install.getProgramMain() + " must have a public no-arg constructor.");
 		}
 		catch (ClassCastException e)
 		{
-			throw new UnsupposedPlaybookMainClassException(installJson.getProgramMain() +
+			throw new UnsupposedPlaybookMainClassException(install.getProgramMain() +
 				" is not supported. Only classes that implement " + AppExecutor.class.getName()
 				+ " are currently supported.");
 		}
 		catch (NoSuchMethodException e)
 		{
 			throw new UnsupposedPlaybookMainClassException(
-				installJson.getProgramMain() + " must have static main method.");
+				install.getProgramMain() + " must have static main method.");
 		}
 	}
 	
-	private void configureApp(final Class<? extends App> appClass, final InstallJson installJson)
+	private void configureApp(final Class<? extends App> appClass, final Install install, final File file)
 		throws InvalidPlaybookAppException
 	{
 		logger.info("Configuring playbook \"{}\", loaded from file \"{}\"", appClass.getName(),
-			installJson.getInstallJsonFile().getAbsolutePath());
+			file.getAbsolutePath());
 		
 		//make sure this app is a playbooks app
 		if (PlaybooksApp.class.isAssignableFrom(appClass))
@@ -204,7 +208,7 @@ public class PlaybooksTestConfiguration
 			if (!configurationMap.containsKey(playbooksAppClass))
 			{
 				//create a new playbook configuration class
-				PlaybookConfig playbookConfig = new PlaybookConfig(playbooksAppClass, installJson);
+				PlaybookConfig playbookConfig = new PlaybookConfig(playbooksAppClass, install);
 				
 				//add this config to the map
 				configurationMap.put(playbooksAppClass, playbookConfig);
@@ -218,7 +222,7 @@ public class PlaybooksTestConfiguration
 		else
 		{
 			throw new InvalidPlaybookAppException(
-				appClass.getName() + ", loaded from " + installJson.getInstallJsonFile().getAbsolutePath()
+				appClass.getName() + ", loaded from " + file.getAbsolutePath()
 					+ ", must extend from " + PlaybooksApp.class.getName());
 		}
 	}

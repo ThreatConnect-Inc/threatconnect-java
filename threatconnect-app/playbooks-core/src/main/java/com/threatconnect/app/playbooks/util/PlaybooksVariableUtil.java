@@ -61,7 +61,8 @@ public class PlaybooksVariableUtil
 	
 	/**
 	 * Returns whether the input text is a variable
-	 * @param input
+	 *
+	 * @param input the text that is checked to see if it is a variable
 	 * @return true if the input is not null and is a variable, false otherwise
 	 */
 	public static boolean isVariable(final String input)
@@ -71,7 +72,8 @@ public class PlaybooksVariableUtil
 	
 	/**
 	 * Returns whether the input text contains a variable anywhere.
-	 * @param input
+	 *
+	 * @param input the text to use to look for variables
 	 * @return true if the input is not null and contains a variable, false otherwise
 	 */
 	public static boolean containsVariable(final String input)
@@ -95,8 +97,8 @@ public class PlaybooksVariableUtil
 	/**
 	 * Returns a list of playbooks variables
 	 *
-	 * @param text
-	 * @return
+	 * @param text the text to search for playbook variables
+	 * @return a list ok playbook variables that were found inside this text
 	 */
 	public static List<PlaybooksVariable> extractPlaybooksVariables(final String text)
 	{
@@ -106,9 +108,9 @@ public class PlaybooksVariableUtil
 	/**
 	 * Returns a list of playbooks variables that match the given namespace
 	 *
-	 * @param text the text to search for the playbooks
+	 * @param text                             the text to search for the playbooks
 	 * @param playbooksVariableNamespaceFilter only return results in this given namespace
-	 * @return
+	 * @return the list of playbook variables found in the text
 	 */
 	public static List<PlaybooksVariable> extractPlaybooksVariables(final String text,
 		final PlaybooksVariableNamespace playbooksVariableNamespaceFilter)

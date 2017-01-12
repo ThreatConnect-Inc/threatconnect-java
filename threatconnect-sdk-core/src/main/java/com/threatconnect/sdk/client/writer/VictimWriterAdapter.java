@@ -739,4 +739,11 @@ public class VictimWriterAdapter
     public ApiEntitySingleResponse dissociateVictimAssetWebsite(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocWriter.dissociateVictimAssetWebsite(uniqueId, assetId, ownerName);
     }
+
+	@Override
+	public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Integer uniqueId, String targetId,
+			String assciateType, String targetType) throws IOException, FailedResponseException {
+		// TODO Auto-generated method stub
+		throw new RuntimeException("not implemented yet");
+	}
 }

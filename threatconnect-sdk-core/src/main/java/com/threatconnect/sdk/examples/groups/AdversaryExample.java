@@ -10,6 +10,7 @@ import com.threatconnect.sdk.client.writer.AbstractIndicatorWriterAdapter;
 import com.threatconnect.sdk.client.writer.TagWriterAdapter;
 import com.threatconnect.sdk.client.writer.VictimWriterAdapter;
 import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
+import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Attribute;
@@ -37,9 +38,13 @@ public class AdversaryExample {
 
         try {
 
-            System.getProperties().setProperty("threatconnect.api.config", "/config.properties");
-            conn = new Connection();
+            //System.getProperties().setProperty("threatconnect.api.config", "/config.properties");
+            Configuration config = new Configuration("https://127.0.0.1:8443/api", "37821189919142416750", "J+xdst/-~$iC2vL{I]#tf<NxzYCZUL?Fn833QNsJxR)N{6J{Q}u@Q{Sn&RJsJ&W-", "System");
+            //String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner
+            conn = new Connection(config);
+            doAddAttribute(conn);
 
+            /*
             doGet(conn);
 
             doCreate(conn);
@@ -59,7 +64,7 @@ public class AdversaryExample {
             doAssociateVictim(conn);
 
             doDissociateTag(conn);
-
+*/
         } catch (IOException ex ) {
             System.err.println("Error: " + ex);
         } finally {

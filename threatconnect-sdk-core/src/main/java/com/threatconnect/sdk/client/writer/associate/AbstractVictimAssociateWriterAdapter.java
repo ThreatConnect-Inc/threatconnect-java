@@ -54,7 +54,7 @@ public abstract class AbstractVictimAssociateWriterAdapter<T,P> extends Abstract
     @Override
     public ApiEntitySingleResponse associateVictim(P uniqueId, Integer victimId, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = AbstractClientAdapter.createParamMap("id", uniqueId, "victimId", victimId);
-        VictimResponse data = createItem( getUrlBasePrefix() + ".byId.victims.byVictimId", VictimResponse.class, ownerName, map, null);
+        VictimResponse data = createItemWithGet( getUrlBasePrefix() + ".byId.victims.byVictimId", VictimResponse.class, ownerName, map, null);
 
         return data;
     }

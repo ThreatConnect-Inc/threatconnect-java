@@ -16,6 +16,7 @@ import com.threatconnect.sdk.server.entity.Host;
 import com.threatconnect.sdk.server.entity.Indicator;
 import com.threatconnect.sdk.server.entity.Url;
 import com.threatconnect.sdk.server.response.entity.AddressListResponse;
+import com.threatconnect.sdk.server.entity.Indicator;
 import com.threatconnect.sdk.server.response.entity.FileListResponse;
 import com.threatconnect.sdk.server.response.entity.FileOccurrenceListResponse;
 import com.threatconnect.sdk.server.response.entity.FileOccurrenceResponse;
@@ -100,7 +101,4 @@ public class FileIndicatorReaderAdapter extends AbstractIndicatorReaderAdapter<F
 
         return getItems(getUrlBasePrefix() + ".byId.indicatorFileAction.get", IndicatorListResponse.class, Indicator.class, ownerName, map);
     }
-
-   
-
 }

@@ -10,6 +10,7 @@ import com.threatconnect.sdk.client.writer.AbstractIndicatorWriterAdapter;
 import com.threatconnect.sdk.client.writer.TagWriterAdapter;
 import com.threatconnect.sdk.client.writer.VictimWriterAdapter;
 import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
+import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Attribute;
@@ -39,8 +40,9 @@ public class AddressExample {
 
         try {
 
-            System.getProperties().setProperty("threatconnect.api.config", "/config.properties");
-            conn = new Connection();
+            Configuration config = new Configuration("https://127.0.0.1:8443/api", "53597229568569709386", "DL6okSIkRFovChG0js9gAC^l6l36G^q6ulZ7wmIlPRlT9FP%IISbrU1uBnJg%uFu",  "System");
+            config.setResultLimit(1);
+            conn = new Connection(config);
 
             /*
             doGet(conn);
@@ -62,9 +64,10 @@ public class AddressExample {
             doAssociateVictim(conn);
 
             doDissociateTag(conn);
+             doObservationCountAndFalsePositive(conn);
             */
 
-            doObservationCountAndFalsePositive(conn);
+            doAssociateIndicator(conn);
 
         } catch (IOException ex ) {
             System.err.println("Error: " + ex);

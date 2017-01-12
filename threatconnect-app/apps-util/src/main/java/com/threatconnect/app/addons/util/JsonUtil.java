@@ -12,6 +12,8 @@ public class JsonUtil
 {
 	private static final Logger logger = LoggerFactory.getLogger(JsonUtil.class);
 	
+	public static final String TRUE = "true";
+	
 	private JsonUtil()
 	{
 		
@@ -80,6 +82,20 @@ public class JsonUtil
 		else
 		{
 			return null;
+		}
+	}
+	
+	public static boolean getAsBoolean(final JsonElement root, final String... paths)
+	{
+		// make sure the element is not null
+		JsonElement element = get(root, paths);
+		if (null != element)
+		{
+			return TRUE.equalsIgnoreCase(element.getAsString());
+		}
+		else
+		{
+			return false;
 		}
 	}
 	

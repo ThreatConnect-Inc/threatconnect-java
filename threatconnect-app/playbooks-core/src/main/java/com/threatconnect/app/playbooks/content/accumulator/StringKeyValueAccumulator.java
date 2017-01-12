@@ -27,8 +27,8 @@ public class StringKeyValueAccumulator extends ContentAccumulator<StringKeyValue
 	 *                                 variable is resolved and it contains more variables embedded in the string, the
 	 *                                 lookups continue until all variables have been recursively resolved or a variable
 	 *                                 could not be found.
-	 * @return
-	 * @throws ContentException
+	 * @return the content read from the database using the given key.
+	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
 	public StringKeyValue readContent(final String key, final boolean resolveEmbeddedVariables)
 		throws ContentException

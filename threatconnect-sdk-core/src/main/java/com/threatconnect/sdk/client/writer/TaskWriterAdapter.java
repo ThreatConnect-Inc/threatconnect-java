@@ -1,8 +1,10 @@
 package com.threatconnect.sdk.client.writer;
 
 import com.threatconnect.sdk.conn.Connection;
+import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Task;
 import com.threatconnect.sdk.server.entity.User;
+import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.server.response.entity.TaskResponse;
 import com.threatconnect.sdk.server.response.entity.UserResponse;
 
@@ -64,4 +66,11 @@ public class TaskWriterAdapter extends AbstractGroupWriterAdapter<Task>{
 
     @Override
     public String getUrlBasePrefix() { return "v2.tasks"; }
+
+	@Override
+	public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Integer uniqueId, String targetId,
+			String assciateType, String targetType) throws IOException, FailedResponseException {
+		// TODO Auto-generated method stub
+		throw new RuntimeException("not implemented yet");
+	}
 }

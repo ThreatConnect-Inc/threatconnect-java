@@ -22,6 +22,7 @@ import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Attribute;
 import com.threatconnect.sdk.server.entity.Indicator;
+import com.threatconnect.sdk.server.response.entity.AddressResponse;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 
 import java.io.IOException;
@@ -128,8 +129,11 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
 
             @Override
             public String getId(T item) {
+            	//TOD may need to update this for custom indicator, will see how it goes 
                 return AbstractIndicatorWriterAdapter.this.getId(item);
             }
+
+
         };
 
         secLabelAssocWriter = new AbstractSecurityLabelAssociateWriterAdapter<T,String>(
@@ -328,6 +332,7 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     public ApiEntitySingleResponse associateGroupThreat(String uniqueId, Integer threatId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupThreat(uniqueId, threatId, ownerName);
     }
+	
 
     @Override
     public WriteListResponse<String> associateIndicatorAddresses(String uniqueId, List<String> ipAddresses) throws IOException {
@@ -1071,5 +1076,11 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
 
         return data;
     }
+    
+    @Override
+	public ApiEntitySingleResponse associateCustomIndicatorToIndicator(String uniqueId, String targetId,
+			String assciateType, String targetType) throws IOException, FailedResponseException {
+    	return indAssocWriter.associateCustomIndicatorToIndicator(uniqueId, targetId, assciateType, targetType);
+	}
 
 }

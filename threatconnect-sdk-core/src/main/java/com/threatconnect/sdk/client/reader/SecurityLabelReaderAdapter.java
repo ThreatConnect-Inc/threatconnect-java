@@ -330,4 +330,16 @@ public class SecurityLabelReaderAdapter
         return indAssocReader.getAssociatedIndicatorUrl(uniqueId, urlText, ownerName);
     }
 
+	@Override
+	public IterableResponse<? extends Indicator> getAssociatedIndicatorsForCustomIndicators(String uniqueId,
+			String associationType) throws IOException, FailedResponseException {
+		return indAssocReader.getAssociatedIndicatorsForCustomIndicators(uniqueId, associationType);
+	}
+
+	@Override
+	public IterableResponse<? extends Indicator> getAssociatedIndicatorsForCustomIndicators(String uniqueId,
+			String associationType, String targetType) throws IOException, FailedResponseException {
+		return indAssocReader.getAssociatedIndicatorsForCustomIndicators(uniqueId, associationType, targetType);
+	}
+	
 }

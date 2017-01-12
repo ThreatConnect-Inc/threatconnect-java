@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.threatconnect.sdk.server.entity.CustomIndicator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -246,11 +247,16 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
         return createItem(propName, type, null, null, saveObject);
     }
 
+   
     protected <T extends ApiEntitySingleResponse> T createItem(String propName, Class<T> type, String ownerName, Map<String, Object> paramMap, Object saveObject)
         throws IOException, FailedResponseException {
-
         return modifyItem(propName, type, ownerName, paramMap, saveObject, HttpMethod.POST);
     }
+    
+    protected <T extends ApiEntitySingleResponse> T createItemWithGet(String propName, Class<T> type, String ownerName, Map<String, Object> paramMap, Object saveObject)
+            throws IOException, FailedResponseException {
+            return modifyItem(propName, type, ownerName, paramMap, saveObject, HttpMethod.GET);
+        }
 
     protected <T extends ApiEntitySingleResponse> T uploadFile(String propName, Class<T> type, InputStream inputStream, Map<String, Object> paramMap, UploadMethodType uploadMethodType) throws FailedResponseException, UnsupportedEncodingException
     {
@@ -289,9 +295,16 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
     	logger.trace("Getting URL: {}", propName);
         String url = getUrl(propName, ownerName);
 
-        if (this instanceof UrlTypeable) {
+        //overwrite if customIndicator
+        if(saveObject instanceof CustomIndicator) {
+        	CustomIndicator cIn = (CustomIndicator)saveObject;
+        	if(cIn.getIndicatorType() != null)
+        	url = url.replace("{type}", cIn.getIndicatorType());
+        }
+        else if (this instanceof UrlTypeable) {
             url = url.replace("{type}", ((UrlTypeable) this).getUrlType());
         }
+        
 
         if (paramMap != null) {
             for (Entry<String, Object> entry : paramMap.entrySet()) {

@@ -1,0 +1,52 @@
+{
+  "displayName": "Sample Playbook",
+  "programVersion": "1.0.0",
+  "programLanguage": "JAVA",
+  "programMain": "com.threatconnect.apps.playbooks.SamplePlaybookMain",
+  "languageVersion": "7",
+  "listDelimiter": "|",
+  "runtimeLevel": "Playbook",
+  "playbook": {
+    "type": "ThreatConnect",
+    "retry": {
+      "allowed": true,
+      "defaultDelayMinutes": 5,
+      "defaultMaxRetries": 12
+    },
+    "outputVariables": [
+      {
+        "type": "String",
+        "name": "pb.output1"
+      },
+      {
+        "type": "String",
+        "name": "pb.output2"
+      },
+      {
+        "type": "KeyValueArray",
+        "name": "pb.output3"
+      }
+    ]
+  },
+  "params": [
+    {
+      "name": "username",
+      "label": "Username",
+      "sequence": 1,
+      "required": true,
+      "encrypt": true,
+      "type": "String",
+      "validValues": ["${TEXT}"]
+    },
+    {
+      "name": "resource",
+      "label": "Resource",
+      "sequence": 2,
+      "required": true,
+      "type": "String",
+      "playbookDataType": [
+        "String"
+      ]
+    }
+  ]
+}

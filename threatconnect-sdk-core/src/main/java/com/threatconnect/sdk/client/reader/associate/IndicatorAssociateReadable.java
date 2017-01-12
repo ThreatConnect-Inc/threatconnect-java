@@ -5,9 +5,12 @@
  */
 package com.threatconnect.sdk.client.reader.associate;
 
+import java.io.IOException;
+
 import com.threatconnect.sdk.client.response.IterableResponse;
+import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Address;
-import com.threatconnect.sdk.server.entity.Email;
+import com.threatconnect.sdk.server.entity.CustomIndicator;
 import com.threatconnect.sdk.server.entity.EmailAddress;
 import com.threatconnect.sdk.server.entity.File;
 import com.threatconnect.sdk.server.entity.Host;
@@ -45,6 +48,12 @@ public interface IndicatorAssociateReadable<P> {
     public EmailAddress getAssociatedIndicatorEmailAddress(P uniqueId, String emailAddress, String ownerName)
             throws Exception;
 
+    //
+    public IterableResponse<? extends Indicator> getAssociatedIndicatorsForCustomIndicators(P uniqueId, String associationType) throws IOException, FailedResponseException;
+
+    public IterableResponse<? extends Indicator> getAssociatedIndicatorsForCustomIndicators(P uniqueId, String associationType, String targetType)
+            throws IOException, FailedResponseException;
+    //
     public IterableResponse<File> getAssociatedIndicatorFiles(P uniqueId) throws Exception;
 
     public IterableResponse<File> getAssociatedIndicatorFiles(P uniqueId, String ownerName)

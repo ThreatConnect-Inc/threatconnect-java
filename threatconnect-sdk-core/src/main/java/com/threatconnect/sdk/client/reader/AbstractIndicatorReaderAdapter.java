@@ -36,6 +36,7 @@ import com.threatconnect.sdk.server.entity.*;
 import com.threatconnect.sdk.server.response.entity.ApiEntityListResponse;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.server.response.entity.BulkStatusResponse;
+import com.threatconnect.sdk.server.response.entity.CustomIndicatorResponse;
 import com.threatconnect.sdk.server.response.entity.IndicatorListResponse;
 import com.threatconnect.sdk.server.response.entity.ObservationListResponse;
 import com.threatconnect.sdk.server.response.entity.data.ObservationListResponseData;
@@ -273,7 +274,9 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     public IterableResponse<Indicator> getIndicators() throws IOException, FailedResponseException {
 	    return getItems("v2.indicators.list", IndicatorListResponse.class, Indicator.class);
     }
-
+    
+   
+    
     @Override
     public IterableResponse<Group> getAssociatedGroups(String uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroups(uniqueId);
@@ -770,5 +773,16 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
         return (FalsePositive) item.getData().getData();
 
     }
-
+    
+    @Override
+    public IterableResponse<? extends Indicator> getAssociatedIndicatorsForCustomIndicators(String uniqueId, String associationType, String targetType)
+            throws IOException, FailedResponseException {
+    	return indAssocReader.getAssociatedIndicatorsForCustomIndicators(uniqueId, associationType, targetType);
+    }
+    @Override
+    public IterableResponse<? extends Indicator> getAssociatedIndicatorsForCustomIndicators(String uniqueId, String associationType)
+            throws IOException, FailedResponseException {
+    	return indAssocReader.getAssociatedIndicatorsForCustomIndicators(uniqueId, associationType);
+    }
+	
 }

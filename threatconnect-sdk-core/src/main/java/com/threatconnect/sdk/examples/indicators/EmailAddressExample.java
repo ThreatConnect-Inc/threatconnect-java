@@ -9,6 +9,7 @@ import com.threatconnect.sdk.client.writer.AbstractIndicatorWriterAdapter;
 import com.threatconnect.sdk.client.writer.TagWriterAdapter;
 import com.threatconnect.sdk.client.writer.VictimWriterAdapter;
 import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
+import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Attribute;
@@ -37,9 +38,27 @@ public class EmailAddressExample {
 
         try {
 
-            System.getProperties().setProperty("threatconnect.api.config", "/config.properties");
-            conn = new Connection();
-
+            //System.getProperties().setProperty("threatconnect.api.config", "/config.properties");
+            Configuration config = new Configuration("https://127.0.0.1:8443/api", "53597229568569709386", "DL6okSIkRFovChG0js9gAC^l6l36G^q6ulZ7wmIlPRlT9FP%IISbrU1uBnJg%uFu",  "System");
+            config.setResultLimit(1);
+            conn = new Connection(config);
+            /*
+    		System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
+    		System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
+    		System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "DEBUG");
+    		System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.conn", "DEBUG");
+    		System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.client", "DEBUG");
+    		System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.client", "DEBUG");
+    		System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "DEBUG");    
+    		*/        
+            doAssociateIndicator(conn);
+            //StackTraceElement[] stacks= Thread.currentThread().getStackTrace();
+            //new Throwable().getStackTrace();
+            //for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
+             //   System.out.println(ste);
+           // }
+            
+/*
             doGet(conn);
 
             doCreate(conn);
@@ -59,9 +78,10 @@ public class EmailAddressExample {
             doAssociateVictim(conn);
 
             doDissociateTag(conn);
-
+*/
         } catch (IOException ex ) {
-            System.err.println("Error: " + ex);
+            //System.err.println("Error: " + ex);
+            ex.printStackTrace();
         } finally {
             if (conn != null) {
                 conn.disconnect();
@@ -77,6 +97,7 @@ public class EmailAddressExample {
             // -----------------------------------------------------------------------------------------------------------
             // Get EmailAddress
             // -----------------------------------------------------------------------------------------------------------
+        	
             data = reader.getAll();
             for (Indicator g : data) {
                 System.out.println("EmailAddress: " + g);
@@ -183,7 +204,7 @@ public class EmailAddressExample {
 
     private static EmailAddress createTestEmailAddress() {
         EmailAddress emailAddress = new EmailAddressBuilder().createEmailAddress();
-        emailAddress.setAddress("test@test.com");
+        emailAddress.setAddress("test2@test.com");
         emailAddress.setDescription("Test EmailAddress");
         emailAddress.setOwnerName("System");
 
@@ -221,7 +242,7 @@ public class EmailAddressExample {
 
     private static Tag createTestTag() {
         Tag tag = new TagBuilder().createTag();
-        tag.setName("Test-Tag");
+        tag.setName("Information Security");
         tag.setDescription("Test Tag Description");
 
         return tag;
@@ -488,6 +509,16 @@ public class EmailAddressExample {
                 } else {
                     System.err.println("Failed to Associate Victim: " + assocResponse.getMessage());
                 }
+                
+                //retrieve email address associated victims
+                /*
+                AbstractIndicatorReaderAdapter<EmailAddress> reader = ReaderAdapterFactory.createEmailAddressIndicatorReader(conn);
+                IterableResponse<Victim> victims = reader.getAssociatedVictims(createResponseEmailAddress.getItem().getAddress());
+                for(Victim v : victims) {
+                	System.out.println(v.getDescription()+","+v.getName());
+                }
+                */
+                
 
             } else {
                 if ( !createResponseEmailAddress.isSuccess() ) System.err.println("Failed to Create EmailAddress: " + createResponseEmailAddress.getMessage());
@@ -496,6 +527,7 @@ public class EmailAddressExample {
 
         } catch (IOException | FailedResponseException ex) {
             System.err.println("Error: " + ex.toString());
+            ex.printStackTrace();
         }
         
     }

@@ -50,10 +50,9 @@ public class ContentAccumulator<T>
 	/**
 	 * Writes the content to the database. Returns whether or not the value was successfully saved
 	 *
-	 * @param key
-	 * @param content
-	 * @return whether or not the value was successfully saved
-	 * @throws DBWriteException
+	 * @param key     the database key to use
+	 * @param content the content to write to the database
+	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
 	public void writeContent(final String key, final T content) throws ContentException
 	{
@@ -73,9 +72,9 @@ public class ContentAccumulator<T>
 	/**
 	 * Retrieve a list of content for the given keys
 	 *
-	 * @param keys
-	 * @return
-	 * @throws ContentException
+	 * @param keys an array of keys to read from the database
+	 * @return the list of content associated with these keys
+	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
 	public List<T> readContentAsList(String... keys) throws ContentException
 	{
@@ -99,9 +98,9 @@ public class ContentAccumulator<T>
 	/**
 	 * Reads the content for the given key
 	 *
-	 * @param key
-	 * @return
-	 * @throws ContentException
+	 * @param key the database key to use
+	 * @return the content of the key
+	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
 	public T readContent(final String key) throws ContentException
 	{

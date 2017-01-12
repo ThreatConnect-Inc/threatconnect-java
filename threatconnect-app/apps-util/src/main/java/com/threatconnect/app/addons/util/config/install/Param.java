@@ -1,11 +1,6 @@
 package com.threatconnect.app.addons.util.config.install;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.threatconnect.app.addons.util.JsonUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,78 +10,31 @@ import java.util.List;
  */
 public class Param
 {
-	private static final Logger logger = LoggerFactory.getLogger(Param.class);
+	private String name;
+	private ParamDataType type;
+	private String label;
+	@SerializedName("default")
+	private String defaultValue;
+	private boolean allowMultiple;
+	private boolean encrypt;
+	private boolean required;
+	private boolean hidden;
+	private boolean setup;
+	private Integer viewRows;
+	private String note;
+	private String viewType;
+	private Integer sequence;
 	
-	private static final String NAME = "name";
-	private static final String TYPE = "type";
-	private static final String VALID_VALUES = "validValues";
-	private static final String PLAYBOOK_DATA_TYPE = "playbookDataType";
-	
-	private final String name;
-	private final ParamDataType type;
 	private final List<String> validValues;
-	private final List<PlaybookVariableType> playbookDataTypes;
+	private final List<PlaybookVariableType> playbookDataType;
 	
-	public Param(final JsonObject root) throws InvalidInstallJsonFileException
+	public Param()
 	{
-		this.name = JsonUtil.getAsString(root, NAME);
-		this.type = ParamDataType.fromString(JsonUtil.getAsString(root, TYPE));
 		this.validValues = new ArrayList<String>();
-		this.playbookDataTypes = new ArrayList<PlaybookVariableType>();
+		this.playbookDataType = new ArrayList<PlaybookVariableType>();
 		
-		logger.debug("name={}, type={}", name, type);
-		
-		//retrieve the valid values element
-		JsonElement validValuesElement = root.get(VALID_VALUES);
-		if (null != validValuesElement)
-		{
-			//make sure this is an array
-			if (!validValuesElement.isJsonArray())
-			{
-				throw new InvalidInstallJsonFileException(VALID_VALUES + " must be an array");
-			}
-			
-			//for each of the data types
-			JsonArray array = validValuesElement.getAsJsonArray();
-			for (JsonElement element : array)
-			{
-				//convert this json object to a playbook variable and add it to the results
-				validValues.add(element.getAsString());
-			}
-		}
-		
-		//retrieve the playbook data types and make sure it is not null
-		JsonElement dataTypeElement = root.get(PLAYBOOK_DATA_TYPE);
-		if (null != dataTypeElement)
-		{
-			//make sure this is an array
-			if (!dataTypeElement.isJsonArray())
-			{
-				throw new InvalidInstallJsonFileException(PLAYBOOK_DATA_TYPE + " must be an array");
-			}
-			
-			//for each of the data types
-			JsonArray array = dataTypeElement.getAsJsonArray();
-			for (JsonElement element : array)
-			{
-				//convert this json object to a playbook variable and add it to the results
-				playbookDataTypes.add(PlaybookVariableType.fromString(element.getAsString()));
-			}
-		}
-	}
-	
-	public Param(final String name, final ParamDataType type)
-	{
-		this(name, type, null);
-	}
-	
-	public Param(final String name, final ParamDataType type, final List<PlaybookVariableType> playbookDataTypes)
-	{
-		this.name = name;
-		this.type = type;
-		this.validValues = new ArrayList<String>();
-		this.playbookDataTypes =
-			(null != playbookDataTypes ? playbookDataTypes : new ArrayList<PlaybookVariableType>());
+		//set the default data type for this param
+		this.type = ParamDataType.String;
 	}
 	
 	public String getName()
@@ -94,23 +42,138 @@ public class Param
 		return name;
 	}
 	
+	public void setName(final String name)
+	{
+		this.name = name;
+	}
+	
 	public ParamDataType getType()
 	{
 		return type;
 	}
 	
-	public static String getValidValues()
+	public void setType(final ParamDataType type)
 	{
-		return getValidValues();
+		this.type = type;
 	}
 	
-	public List<PlaybookVariableType> getPlaybookDataTypes()
+	public String getLabel()
 	{
-		return playbookDataTypes;
+		return label;
 	}
 	
-	public boolean isPlaybookParam()
+	public void setLabel(final String label)
 	{
-		return !getPlaybookDataTypes().isEmpty();
+		this.label = label;
+	}
+	
+	public String getDefaultValue()
+	{
+		return defaultValue;
+	}
+	
+	public void setDefaultValue(final String defaultValue)
+	{
+		this.defaultValue = defaultValue;
+	}
+	
+	public boolean isAllowMultiple()
+	{
+		return allowMultiple;
+	}
+	
+	public void setAllowMultiple(final boolean allowMultiple)
+	{
+		this.allowMultiple = allowMultiple;
+	}
+	
+	public boolean isEncrypt()
+	{
+		return encrypt;
+	}
+	
+	public void setEncrypt(final boolean encrypt)
+	{
+		this.encrypt = encrypt;
+	}
+	
+	public boolean isRequired()
+	{
+		return required;
+	}
+	
+	public void setRequired(final boolean required)
+	{
+		this.required = required;
+	}
+	
+	public boolean isHidden()
+	{
+		return hidden;
+	}
+	
+	public void setHidden(final boolean hidden)
+	{
+		this.hidden = hidden;
+	}
+	
+	public boolean isSetup()
+	{
+		return setup;
+	}
+	
+	public void setSetup(final boolean setup)
+	{
+		this.setup = setup;
+	}
+	
+	public Integer getViewRows()
+	{
+		return viewRows;
+	}
+	
+	public void setViewRows(final Integer viewRows)
+	{
+		this.viewRows = viewRows;
+	}
+	
+	public String getNote()
+	{
+		return note;
+	}
+	
+	public void setNote(final String note)
+	{
+		this.note = note;
+	}
+	
+	public String getViewType()
+	{
+		return viewType;
+	}
+	
+	public void setViewType(final String viewType)
+	{
+		this.viewType = viewType;
+	}
+	
+	public Integer getSequence()
+	{
+		return sequence;
+	}
+	
+	public void setSequence(final Integer sequence)
+	{
+		this.sequence = sequence;
+	}
+	
+	public List<String> getValidValues()
+	{
+		return validValues;
+	}
+	
+	public List<PlaybookVariableType> getPlaybookDataType()
+	{
+		return playbookDataType;
 	}
 }

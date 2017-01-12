@@ -21,6 +21,7 @@ import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
+import com.threatconnect.sdk.server.entity.CustomIndicator;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.util.ApiFilterParser;
 import com.threatconnect.sdk.util.ApiFilterType;
@@ -53,6 +54,7 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
 
     protected String getAsText(String propName) throws IOException {
         String url = getConn().getUrlConfig().getUrl(propName);
+                
         
         if (this instanceof UrlTypeable) {
             url = url.replace("{type}", ((UrlTypeable) this).getUrlType());
@@ -122,8 +124,10 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
 
 
         logger.trace("Calling url={}", url);
+        System.out.println("Calling url={}"+url);
         String content = executor.execute(AbstractRequestExecutor.HttpMethod.GET, url);
         logger.trace("returning content={}", content);
+        System.out.println("returning content={}"+content);
 
         T result = mapper.readValue(content, type);
         if (!result.isSuccess()) {
@@ -154,6 +158,7 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
         }
 
         logger.trace("Calling url={}", url);
+        System.out.println("Calling url={}"+url);
         if (paramMap != null) {
             logger.trace("paramMap={}", paramMap);
             for(Entry<String,Object> entry : paramMap.entrySet()) {

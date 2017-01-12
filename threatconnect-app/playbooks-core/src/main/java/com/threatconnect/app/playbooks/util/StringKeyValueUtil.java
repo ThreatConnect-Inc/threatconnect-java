@@ -12,9 +12,9 @@ public class StringKeyValueUtil
 	/**
 	 * Checks the key and value of the StringKeyValue object to resolve any embedded variables
 	 *
-	 * @param result
-	 * @param stringAccumulator
-	 * @throws ContentException
+	 * @param result            the StringKeyValue object to use which will be checked for embedded variables
+	 * @param stringAccumulator the object that is used to read the content
+	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
 	public static void resolveEmbeddedVariables(StringKeyValue result, final StringAccumulator stringAccumulator)
 		throws ContentException

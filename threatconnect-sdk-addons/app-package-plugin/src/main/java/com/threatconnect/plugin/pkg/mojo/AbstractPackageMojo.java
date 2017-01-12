@@ -1,7 +1,10 @@
 package com.threatconnect.plugin.pkg.mojo;
 
-import com.threatconnect.app.addons.util.config.install.InstallJson;
-import com.threatconnect.app.addons.util.config.install.InvalidInstallJsonFileException;
+import com.threatconnect.app.addons.util.config.InvalidJsonFileException;
+import com.threatconnect.app.addons.util.config.install.Feed;
+import com.threatconnect.app.addons.util.config.install.Install;
+import com.threatconnect.app.addons.util.config.install.InstallUtil;
+import com.threatconnect.app.addons.util.config.install.validation.ValidationException;
 import com.threatconnect.plugin.pkg.Profile;
 import com.threatconnect.plugin.pkg.ZipUtil;
 import org.apache.maven.plugin.AbstractMojo;
@@ -47,6 +50,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	@Parameter(defaultValue = "${project.version}", required = true)
 	private String version;
 	
+	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException
 	{
 		getLog().info("Building ThreatConnect App file");
@@ -80,7 +84,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 				packageLegacy();
 			}
 		}
-		catch (InvalidInstallJsonFileException | IOException e)
+		catch (InvalidJsonFileException | ValidationException | IOException e)
 		{
 			throw new MojoFailureException(e.getMessage(), e);
 		}
@@ -93,7 +97,8 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	 */
 	protected void buildBundledArchive(final List<File> packagedApps) throws IOException
 	{
-		File bundledFile = new File(getOutputDirectory() + "/" + getAppName() + "." + TC_BUNDLED_FILE_EXTENSION);
+		File bundledFile =
+			new File(getOutputDirectory() + File.separator + getAppName() + "." + TC_BUNDLED_FILE_EXTENSION);
 		getLog().info("Packaging Bundle " + bundledFile.getName());
 		ZipUtil.zipFiles(packagedApps, bundledFile.getAbsolutePath());
 	}
@@ -106,7 +111,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	 * @param profile
 	 * @throws IOException
 	 */
-	protected File packageProfile(final Profile profile) throws IOException
+	protected File packageProfile(final Profile profile) throws IOException, ValidationException
 	{
 		// determine what this app name will be
 		final String appName = determineAppName(profile);
@@ -122,6 +127,9 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 		
 		// write the rest of the app contents out to the target folder
 		writeAppContentsToDirectory(explodedDir);
+		
+		//validate that all of the files referenced in the install.json file exist
+		validateReferencedFilesExist(explodedDir, profile);
 		
 		// zip up the app and return the file of the packaged app
 		return ZipUtil.zipFolder(explodedDir, TC_APP_FILE_EXTENSION);
@@ -163,8 +171,8 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 		if (null != profile)
 		{
 			// retrieve the application name and program version from the install.json file
-			final String applicationName = profile.getInstallJson().getApplicationName();
-			final String programVersion = profile.getInstallJson().getProgramVersion();
+			final String applicationName = profile.getInstall().getApplicationName();
+			final String programVersion = profile.getInstall().getProgramVersion();
 			
 			// make sure that both the application name and program version are valid
 			if (null != applicationName && !applicationName.trim().isEmpty() && null != programVersion
@@ -206,7 +214,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	 *
 	 * @return
 	 */
-	protected List<Profile> getProfiles() throws InvalidInstallJsonFileException
+	protected List<Profile> getProfiles() throws InvalidJsonFileException, IOException, ValidationException
 	{
 		// holds the list of install
 		List<Profile> profiles = new ArrayList<Profile>();
@@ -230,10 +238,10 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 					final String profileName = matcher.group(1);
 					
 					// create the install json object
-					InstallJson installJson = new InstallJson(file);
+					Install install = InstallUtil.load(file);
 					
 					// create a new profile
-					Profile profile = new Profile(profileName, file, installJson);
+					Profile profile = new Profile(profileName, file, install);
 					profiles.add(profile);
 				}
 			}
@@ -242,14 +250,48 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 		return profiles;
 	}
 	
+	protected void validateReferencedFilesExist(File explodedDir, final Profile profile) throws ValidationException
+	{
+		//for each of the feeds in the install object
+		for (Feed feed : profile.getInstall().getFeeds())
+		{
+			//check to see if there is an attribute file
+			if (null != feed.getAttributesFile())
+			{
+				//make sure this file exists or throw an exception
+				File file = new File(explodedDir.getAbsolutePath() + File.separator + feed.getAttributesFile());
+				if (!file.exists())
+				{
+					throw new ValidationException(generateReferencedFileMissingMessage(feed.getAttributesFile()));
+				}
+			}
+			
+			//check to see if there is a job file
+			if (null != feed.getJobFile())
+			{
+				//make sure this file exists or throw an exception
+				File file = new File(explodedDir.getAbsolutePath() + File.separator + feed.getJobFile());
+				if (!file.exists())
+				{
+					throw new ValidationException(generateReferencedFileMissingMessage(feed.getJobFile()));
+				}
+			}
+		}
+	}
+	
+	protected String generateReferencedFileMissingMessage(final String fileName)
+	{
+		return "Referenced file \"" + fileName + " does not exist. Make sure it is in the correct directory.";
+	}
+	
 	protected File getInstallConfFile()
 	{
-		return new File(baseDirectory + "/install.conf");
+		return new File(baseDirectory + File.separator + "install.conf");
 	}
 	
 	protected File getExplodedDir(final String appName)
 	{
-		return new File(getOutputDirectory() + "/" + appName);
+		return new File(getOutputDirectory() + File.separator + appName);
 	}
 	
 	/**
