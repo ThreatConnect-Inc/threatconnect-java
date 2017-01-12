@@ -15,6 +15,9 @@ import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.server.response.entity.FileOccurrenceListResponse;
 import com.threatconnect.sdk.server.response.entity.FileOccurrenceResponse;
 import com.threatconnect.sdk.server.response.entity.FileResponse;
+import com.threatconnect.sdk.util.FileActionType;
+import com.threatconnect.sdk.util.FileRelationshipIndicatorType;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -112,4 +115,39 @@ public class FileIndicatorWriterAdapter extends AbstractIndicatorWriterAdapter<F
 
         return item;
     }
+    
+    public ApiEntitySingleResponse createFileActionIndicatorRelationship(String fileHash, FileActionType action, FileRelationshipIndicatorType rType, String indicatorId, String ownerName)
+            throws IOException, FailedResponseException {
+        Map<String, Object> map = createParamMap("uniqueId", fileHash,"fileActionType", action.getName(), "indicatorType", rType.getName(), "indicatorId",indicatorId);
+        //I will reuse fileReponse here instead of creating a new one. 
+        FileResponse item = createItem(getUrlBasePrefix() + ".byId.fileActionSpecificTypeIndicators.set", FileResponse.class, ownerName, map, null);
+        return item;
+    }
+
+    public ApiEntitySingleResponse deleteFileActionIndicatorRelationship(String fileHash, FileActionType action, FileRelationshipIndicatorType rType, String indicatorId, String ownerName)
+    		throws IOException, FailedResponseException {
+    	Map<String, Object> map = createParamMap("uniqueId", fileHash,"fileActionType", action.getName(), "indicatorType", rType.getName(), "indicatorId",indicatorId);
+        ApiEntitySingleResponse item = deleteItem(getUrlBasePrefix() + ".byId.fileActionSpecificTypeIndicators.set", FileResponse.class, ownerName, map);
+
+        return item;
+    }
+
+    
+    public ApiEntitySingleResponse createIndicatorFileActionRelationship(String fileHash, FileActionType action, FileRelationshipIndicatorType rType, String indicatorId, String ownerName)
+            throws IOException, FailedResponseException {
+        Map<String, Object> map = createParamMap("uniqueId", fileHash,"fileActionType", action.getName(), "indicatorType", rType.getName(), "indicatorId",indicatorId);
+        //I will reuse fileReponse here instead of creating a new one. 
+        FileResponse item = createItem(getUrlBasePrefix() + ".byId.indicatorFileAction.set", FileResponse.class, ownerName, map, null);
+
+        return item;
+    }
+
+    public ApiEntitySingleResponse deleteIndicatorFileActionRelationship(String fileHash, FileActionType action, FileRelationshipIndicatorType rType, String indicatorId, String ownerName)
+    		throws IOException, FailedResponseException {
+    	Map<String, Object> map = createParamMap("uniqueId", fileHash,"fileActionType", action.getName(), "indicatorType", rType.getName(), "indicatorId",indicatorId);
+        ApiEntitySingleResponse item = deleteItem(getUrlBasePrefix() + ".byId.indicatorFileAction.set", FileResponse.class, ownerName, map);
+
+        return item;
+    }
+
 }

@@ -11,6 +11,7 @@ import com.threatconnect.sdk.client.writer.FileIndicatorWriterAdapter;
 import com.threatconnect.sdk.client.writer.TagWriterAdapter;
 import com.threatconnect.sdk.client.writer.VictimWriterAdapter;
 import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
+import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Attribute;
@@ -29,6 +30,8 @@ import com.threatconnect.sdk.client.fluent.ThreatBuilder;
 import com.threatconnect.sdk.server.entity.Victim;
 import com.threatconnect.sdk.client.fluent.VictimBuilder;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
+import com.threatconnect.sdk.util.FileActionType;
+import com.threatconnect.sdk.util.FileRelationshipIndicatorType;
 
 import java.io.IOException;
 import java.util.Date;
@@ -39,7 +42,8 @@ public class FileExample
 
     public static void main(String[] args)
     {
-
+        
+        
         Connection conn = null;
 
         try
@@ -69,6 +73,8 @@ public class FileExample
             doDissociateTag(conn);
 
             doFileOccurrences(conn);
+            
+            doFileAction(conn);
 
         } catch (IOException ex)
         {
@@ -82,7 +88,98 @@ public class FileExample
         }
     }
 
-    private static void doFileOccurrences(Connection conn) throws IOException
+    private static void doFileAction(Connection conn) {
+        AbstractIndicatorWriterAdapter<File> gWriter = WriterAdapterFactory.createFileIndicatorWriter(conn);
+        AbstractIndicatorWriterAdapter<Host> hWriter = WriterAdapterFactory.createHostIndicatorWriter(conn);
+
+        File file = createTestFile();
+        Host host = createTestHost();
+
+        try
+        {
+
+            // -----------------------------------------------------------------------------------------------------------
+            // Create File and Host
+            // -----------------------------------------------------------------------------------------------------------
+            ApiEntitySingleResponse<File, ?> createResponseFile = gWriter.create(file);
+            ApiEntitySingleResponse<Host, ?> createResponseHost = hWriter.create(host);
+            if (createResponseFile.isSuccess() && createResponseHost.isSuccess())
+            {
+            	System.out.println("Creating file with MD5 ="+file.getMd5());
+            	System.out.println("Creating host with name ="+host.getHostName());
+            	
+                FileIndicatorReaderAdapter reader = ReaderAdapterFactory.createFileIndicatorReader(conn);
+                FileIndicatorWriterAdapter writer = WriterAdapterFactory.createFileIndicatorWriter(conn);
+                //#########FILE ACTION: FILE->INDICATOR
+                //create relationship  file ->indicator
+                System.out.println("Creating file traffic relationship with above host.");
+            	
+                ApiEntitySingleResponse<File, ?> cResponse = writer.createFileActionIndicatorRelationship(file.getMd5(),  FileActionType.TRAFFIC, 
+                		FileRelationshipIndicatorType.HOSTS, host.getHostName(), "System");
+                if(cResponse.isSuccess()){
+	            	//retrieve relationship file->indicator
+                	IterableResponse<Indicator> data = reader.getFileActionRelatedIndicators(file.getMd5(), FileActionType.TRAFFIC, "System");
+                	System.out.println("Retrieving related file traffic indicators:");
+                	for (Indicator i : data) {
+                		System.out.println("indicator ="+i.getSummary());
+                	}
+                	//retrieve relationship file->host
+                	IterableResponse<Host> data2 = (IterableResponse<Host>) reader.getFileActionRelatedIndicatorsByType(file.getMd5(), FileActionType.TRAFFIC, FileRelationshipIndicatorType.HOSTS, "System");
+                	System.out.println("Retrieving related file traffic indicators:");
+                	for (Host i : data2) {
+                		System.out.println("host ="+i.getSummary());
+                	}
+                	
+	                //delete relationship
+                	 ApiEntitySingleResponse<File, ?> dResponse = writer.deleteFileActionIndicatorRelationship(file.getMd5(),  FileActionType.TRAFFIC, 
+                		FileRelationshipIndicatorType.HOSTS, host.getHostName(), "System");
+                	 if(dResponse.isSuccess()) {
+                		 System.out.println("deleted file traffic relationship with above host.");
+                	 }
+                	 else
+                		 System.err.println("Failed deleting file traffic relationship with above host.");
+                }
+            	
+              //#########FILE ACTION: INDICATOR->file
+                //create relationship  file ->indicator
+                System.out.println("Creating file traffic relationship with above host.");
+            	
+                cResponse = writer.createIndicatorFileActionRelationship(file.getMd5(),  FileActionType.TRAFFIC, 
+                		FileRelationshipIndicatorType.HOSTS, host.getHostName(), "System");
+                if(cResponse.isSuccess()){
+	            	//retrieve relationship indicator->file
+                	IterableResponse<Indicator> data = reader.getIndicatorRelatedFileAction(FileActionType.TRAFFIC, FileRelationshipIndicatorType.HOSTS, host.getHostName(), "System");
+                	System.out.println("Retrieving related file(indicator):");
+                	for (Indicator i : data) {
+                		System.out.println("indicator ="+i.getSummary());
+                	}
+                	
+	                //delete relationship
+                	 ApiEntitySingleResponse<File, ?> dResponse = writer.deleteIndicatorFileActionRelationship(file.getMd5(),  FileActionType.TRAFFIC, 
+                		FileRelationshipIndicatorType.HOSTS, host.getHostName(), "System");
+                	 if(dResponse.isSuccess()) {
+                		 System.out.println("deleted file traffic relationship from host to file.");
+                	 }
+                	 else
+                		 System.err.println("Failed deleting file traffic relationship from host to file.");
+                }
+            	            	
+            } else
+            {
+                if (!createResponseFile.isSuccess())
+                    System.err.println("Failed to Create File: " + createResponseFile.getMessage());
+                if (!createResponseHost.isSuccess())
+                    System.err.println("Failed to Create Host: " + createResponseHost.getMessage());
+            }
+
+        } catch (IOException | FailedResponseException ex)
+        {
+            System.err.println("Error: " + ex.toString());
+        }
+		
+	}
+
+	private static void doFileOccurrences(Connection conn) throws IOException
     {
         FileIndicatorReaderAdapter reader = ReaderAdapterFactory.createFileIndicatorReader(conn);
         FileIndicatorWriterAdapter writer = WriterAdapterFactory.createFileIndicatorWriter(conn);
