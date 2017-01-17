@@ -1,5 +1,8 @@
 package com.threatconnect.app.addons.util.config.install;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Greg Marut
  */
@@ -14,6 +17,13 @@ public class Feed
 	private Long documentStorageLimitMb;
 	private String jobFile;
 	private Deprecation deprecation;
+	
+	private final List<ParamOverride> firstRunParams;
+	
+	public Feed()
+	{
+		this.firstRunParams = new ArrayList<ParamOverride>();
+	}
 	
 	public String getSourceName()
 	{
@@ -103,5 +113,10 @@ public class Feed
 	public void setDeprecation(final Deprecation deprecation)
 	{
 		this.deprecation = deprecation;
+	}
+	
+	public List<ParamOverride> getFirstRunParams()
+	{
+		return firstRunParams;
 	}
 }
