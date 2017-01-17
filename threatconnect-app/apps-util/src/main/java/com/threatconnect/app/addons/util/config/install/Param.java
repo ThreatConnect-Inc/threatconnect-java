@@ -171,4 +171,9 @@ public class Param
 	{
 		return validValues;
 	}
+	
+	public List<PlaybookVariableType> getPlaybookDataType()
+	{
+		return playbookDataType;
+	}
 }

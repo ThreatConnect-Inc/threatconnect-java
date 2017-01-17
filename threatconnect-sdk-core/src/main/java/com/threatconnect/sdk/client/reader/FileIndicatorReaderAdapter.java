@@ -7,11 +7,9 @@ package com.threatconnect.sdk.client.reader;
 
 import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.File;
 import com.threatconnect.sdk.server.entity.FileOccurrence;
-import com.threatconnect.sdk.server.entity.Indicator;
 import com.threatconnect.sdk.server.response.entity.FileListResponse;
 import com.threatconnect.sdk.server.response.entity.FileOccurrenceListResponse;
 import com.threatconnect.sdk.server.response.entity.FileOccurrenceResponse;
@@ -19,7 +17,6 @@ import com.threatconnect.sdk.server.response.entity.FileResponse;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  *
