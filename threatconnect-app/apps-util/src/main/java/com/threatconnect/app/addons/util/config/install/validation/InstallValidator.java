@@ -6,6 +6,9 @@ import com.threatconnect.app.addons.util.config.install.Param;
 import com.threatconnect.app.addons.util.config.install.Playbook;
 import com.threatconnect.app.addons.util.config.install.RunLevelType;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author Greg Marut
  */
@@ -82,11 +85,26 @@ public class InstallValidator extends Validator<Install>
 			paramValidator.validate(param);
 		}
 		
+		//holds the set of source names for the feeds
+		Set<String> feedSourceNames = new HashSet<String>();
+		
 		//for each of the feeds
-		for(Feed feed : object.getFeeds())
+		for (Feed feed : object.getFeeds())
 		{
-			//validate this feed
-			feedValidator.validate(feed);
+			//make sure this feed source name does not already exist in the set
+			if (!feedSourceNames.contains(feed.getSourceName()))
+			{
+				//validate this feed
+				feedValidator.validate(feed);
+				
+				//add this feed source name to the map
+				feedSourceNames.add(feed.getSourceName());
+			}
+			else
+			{
+				throw new ValidationException("Multiple feeds with sourceName \"" + feed.getSourceName()
+					+ "\" were found. Please make sure sourceName is unique.");
+			}
 		}
 	}
 	
