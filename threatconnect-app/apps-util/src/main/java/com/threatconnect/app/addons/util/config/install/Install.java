@@ -5,6 +5,8 @@ import java.util.List;
 
 public class Install
 {
+	private static final String DEFAULT_LIST_DELIMITER = "|";
+	
 	private String applicationName;
 	private String displayName;
 	private String programVersion;
@@ -35,6 +37,7 @@ public class Install
 		this.repeatingMinutes = new ArrayList<String>();
 		this.publishOutFiles = new ArrayList<String>();
 		this.runtimeContext = new ArrayList<RuntimeContextType>();
+		this.listDelimiter = DEFAULT_LIST_DELIMITER;
 	}
 	
 	public String getApplicationName()

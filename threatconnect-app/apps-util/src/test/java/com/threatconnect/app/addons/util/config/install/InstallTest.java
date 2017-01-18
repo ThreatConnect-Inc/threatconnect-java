@@ -42,6 +42,7 @@ public class InstallTest
 		Assert.assertEquals("Sample App", install.getDisplayName());
 		Assert.assertEquals("1.0.0", install.getProgramVersion());
 		Assert.assertEquals("com.threatconnect.apps.example.ExampleMain", install.getProgramMain());
+		Assert.assertEquals("|", install.getListDelimiter());
 		
 		Assert.assertEquals(1, install.getRuntimeLevel().size());
 		Assert.assertEquals(RunLevelType.System, install.getRuntimeLevel().get(0));

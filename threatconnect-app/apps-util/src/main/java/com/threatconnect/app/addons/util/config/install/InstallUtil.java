@@ -22,33 +22,65 @@ import java.io.InputStreamReader;
  */
 public class InstallUtil
 {
+	private static final boolean VALIDATE_BY_DEFAULT = true;
+	
 	public static Install load(final String json) throws ValidationException
 	{
+		return load(json, VALIDATE_BY_DEFAULT);
+	}
+	
+	public static Install load(final String json, final boolean validate) throws ValidationException
+	{
 		Install install = createGson().fromJson(json, Install.class);
-		new InstallValidator().validate(install);
+		
+		if (validate)
+		{
+			new InstallValidator().validate(install);
+		}
+		
 		return install;
 	}
 	
 	public static Install load(final byte[] bytes) throws IOException, ValidationException
 	{
+		return load(bytes, VALIDATE_BY_DEFAULT);
+	}
+	
+	public static Install load(final byte[] bytes, final boolean validate) throws IOException, ValidationException
+	{
 		try (InputStream inputStream = new ByteArrayInputStream(bytes))
 		{
-			return load(inputStream);
+			return load(inputStream, validate);
 		}
 	}
 	
 	public static Install load(final File file) throws IOException, ValidationException
 	{
+		return load(file, VALIDATE_BY_DEFAULT);
+	}
+	
+	public static Install load(final File file, final boolean validate) throws IOException, ValidationException
+	{
 		try (InputStream inputStream = new FileInputStream(file))
 		{
-			return load(inputStream);
+			return load(inputStream, validate);
 		}
 	}
 	
 	public static Install load(final InputStream inputStream) throws ValidationException
 	{
+		return load(inputStream, VALIDATE_BY_DEFAULT);
+	}
+	
+	public static Install load(final InputStream inputStream, final boolean validate) throws ValidationException
+	{
 		Install install = createGson().fromJson(new InputStreamReader(inputStream), Install.class);
-		new InstallValidator().validate(install);
+		
+		if (validate)
+		{
+			new InstallValidator().validate(install);
+		}
+		
 		return install;
 	}
 	
@@ -56,8 +88,10 @@ public class InstallUtil
 	{
 		RuntimeLevelJsonSerializer runtimeLevelJsonSerializer = new RuntimeLevelJsonSerializer();
 		RuntimeContextJsonSerializer runtimeContextJsonSerializer = new RuntimeContextJsonSerializer();
-		PlaybookVariableTypeJsonSerializer playbookVariableTypeJsonSerializer = new PlaybookVariableTypeJsonSerializer();
-		PlaybookVariableTypeListJsonSerializer playbookVariableTypeListJsonSerializer = new PlaybookVariableTypeListJsonSerializer();
+		PlaybookVariableTypeJsonSerializer playbookVariableTypeJsonSerializer =
+			new PlaybookVariableTypeJsonSerializer();
+		PlaybookVariableTypeListJsonSerializer playbookVariableTypeListJsonSerializer =
+			new PlaybookVariableTypeListJsonSerializer();
 		ParamDataTypeJsonSerializer paramDataTypeJsonSerializer = new ParamDataTypeJsonSerializer();
 		
 		//create a new gson builder and register the serializer objects
@@ -65,7 +99,8 @@ public class InstallUtil
 		builder.registerTypeAdapter(runtimeLevelJsonSerializer.getType(), runtimeLevelJsonSerializer);
 		builder.registerTypeAdapter(runtimeContextJsonSerializer.getType(), runtimeContextJsonSerializer);
 		builder.registerTypeAdapter(playbookVariableTypeJsonSerializer.getType(), playbookVariableTypeJsonSerializer);
-		builder.registerTypeAdapter(playbookVariableTypeListJsonSerializer.getType(), playbookVariableTypeListJsonSerializer);
+		builder.registerTypeAdapter(playbookVariableTypeListJsonSerializer.getType(),
+			playbookVariableTypeListJsonSerializer);
 		builder.registerTypeAdapter(paramDataTypeJsonSerializer.getType(), paramDataTypeJsonSerializer);
 		
 		return builder.create();

@@ -72,12 +72,6 @@ public class InstallValidator extends Validator<Install>
 			playbookValidator.validate(object.getPlaybook());
 		}
 		
-		//validate the list delimiter
-		if (isNullOrEmpty(object.getListDelimiter()))
-		{
-			throw new ValidationException("listDelimiter is not defined.");
-		}
-		
 		//for each of the params
 		for (Param param : object.getParams())
 		{
