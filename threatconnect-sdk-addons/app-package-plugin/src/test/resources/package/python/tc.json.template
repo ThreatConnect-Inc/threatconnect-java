@@ -1,0 +1,13 @@
+{
+  "default": {
+    "api_access_id" : 11111111111111111111,
+    "api_secret_key" : "abcdefghijklmnopqrstuvwxyz01234567890abcdefghijklmnopqrstuvwxyz.",
+    "logging": "debug",
+    "tc_api_path": "https://mytc.threatconnect.com",
+    "tc_log_path": "log",
+    "tc_out_path": "log",
+    "tc_proxy_host": "127.0.0.1",
+    "tc_proxy_port": "3128",
+    "tc_temp_path": "log"
+  }
+}

@@ -1,11 +1,13 @@
 package com.threatconnect.plugin.pkg.mojo;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.testing.MojoRule;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * @author Greg Marut
@@ -35,6 +37,17 @@ public class PythonPackageTest
 		
 		PythonPackageMojo pythonPackageMojo = (PythonPackageMojo) rule.lookupMojo("python-package", pom);
 		Assert.assertNotNull(pythonPackageMojo);
+		
+		clean(new File(pythonPackageMojo.getOutputDirectory()));
+		
 		pythonPackageMojo.execute();
+	}
+	
+	private void clean(final File outputDirectory) throws IOException
+	{
+		//add protection against deleting any directory not in the target directory
+		Assert.assertTrue("outputDirectory must start be located in the \"target\" folder",
+			outputDirectory.getPath().startsWith("target" + File.separator));
+		FileUtils.deleteDirectory(outputDirectory);
 	}
 }
