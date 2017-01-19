@@ -14,8 +14,8 @@ public class PackageFileFilter
 {
 	public static final String POM_XML = "pom.xml";
 	public static final String TARGET = "target";
-	public static final String GIT = ".git";
-	public static final String GITIGNORE = ".gitignore";
+	public static final String DOT_STAR = ".*";
+	public static final String IML = "*.iml";
 	public static final String INSTALL_JSON = "*install.json";
 	public static final String INSTALL_CONF = "*install.conf";
 	
@@ -46,8 +46,8 @@ public class PackageFileFilter
 		{
 			getExclude().add(POM_XML);
 			getExclude().add(TARGET);
-			getExclude().add(GIT);
-			getExclude().add(GITIGNORE);
+			getExclude().add(DOT_STAR);
+			getExclude().add(IML);
 			getExclude().add(INSTALL_JSON);
 			getExclude().add(INSTALL_CONF);
 		}

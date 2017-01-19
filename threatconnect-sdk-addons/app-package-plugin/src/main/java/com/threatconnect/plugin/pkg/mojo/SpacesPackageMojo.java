@@ -1,11 +1,11 @@
 package com.threatconnect.plugin.pkg.mojo;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
+
+import java.io.File;
+import java.io.IOException;
 
 @Mojo(name = "spaces-package", defaultPhase = LifecyclePhase.PACKAGE, threadSafe = true, requiresDependencyResolution = ResolutionScope.RUNTIME)
 public class SpacesPackageMojo extends AbstractPackageMojo
@@ -18,7 +18,7 @@ public class SpacesPackageMojo extends AbstractPackageMojo
 		File outputDirectory = new File(getOutputDirectory());
 		
 		// loop through each of the files
-		for (File child : baseDirectory.listFiles())
+		for (File child : baseDirectory.listFiles(createPackageFileFilter().createFilenameFilter()))
 		{
 			// check to see if this child is a directory
 			if (child.isDirectory())

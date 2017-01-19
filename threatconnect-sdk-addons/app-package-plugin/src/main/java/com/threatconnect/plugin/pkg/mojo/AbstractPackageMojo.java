@@ -13,6 +13,8 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.plexus.util.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +25,8 @@ import java.util.regex.Pattern;
 
 public abstract class AbstractPackageMojo extends AbstractMojo
 {
+	private static final Logger logger = LoggerFactory.getLogger(AbstractPackageMojo.class);
+	
 	public static final Pattern PATTERN_INSTALL_JSON = Pattern.compile("^(?:(.*)\\.)?install\\.json$");
 	public static final String TC_APP_FILE_EXTENSION = "zip";
 	public static final String TC_BUNDLED_FILE_EXTENSION = "bundle.zip";
@@ -341,7 +345,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 				}
 				
 				// copy this file to the destination directory
-				FileUtils.copyFileToDirectory(source, destinationDirectory);
+				copyFileToDirectory(source, destinationDirectory);
 			}
 		}
 	}
@@ -371,11 +375,47 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 		return version;
 	}
 	
+	protected final void copyFileToDirectory(final File source, final File destinationDirectory)
+		throws IOException
+	{
+		// copy this file to the destination directory
+		logger.info("\tAdding file \"{}\" to package.", source.getName());
+		FileUtils.copyFileToDirectory(source, destinationDirectory);
+	}
+	
 	/**
 	 * Called when the app packager is ready to begin writing the files needed for building an app
 	 *
 	 * @param targetDirectory
 	 * @throws IOException
 	 */
-	protected abstract void writeAppContentsToDirectory(final File targetDirectory) throws IOException;
+	protected void writeAppContentsToDirectory(File targetDirectory) throws IOException
+	{
+		// retrieve the base directory folder
+		File baseDirectory = new File(getBaseDirectory());
+		File outputDirectory = new File(getOutputDirectory());
+		
+		// loop through each of the files
+		for (File child : baseDirectory.listFiles(createPackageFileFilter().createFilenameFilter()))
+		{
+			// make sure that this file is not hidden and that it is not the output folder
+			if (!child.isHidden() && !child.equals(outputDirectory))
+			{
+				// copy this directory to the target folder
+				final File target;
+				
+				//check to see if this child is a directory
+				if (child.isDirectory())
+				{
+					target = new File(targetDirectory.getAbsolutePath() + File.separator + child.getName());
+				}
+				else
+				{
+					target = targetDirectory;
+				}
+				
+				copyFileToDirectoryIfExists(child, target);
+			}
+		}
+	}
 }
