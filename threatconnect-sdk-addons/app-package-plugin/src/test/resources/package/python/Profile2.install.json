@@ -1,0 +1,46 @@
+{
+  "allowOnDemand": true,
+  "apiUserTokenParam": true,
+  "displayName": "Python Test App",
+  "languageVersion": "2.7",
+  "listDelimiter": "|",
+  "params": [
+    {
+      "label": "ThreatConnect API Access ID",
+      "name": "api_access_id",
+      "sequence": 1,
+      "type": "String",
+      "validValues": [
+        "${TEXT}"
+      ]
+    },
+    {
+      "encrypt": true,
+      "label": "ThreatConnect API Secret Key",
+      "name": "api_secret_key",
+      "sequence": 2,
+      "type": "String",
+      "validValues": [
+        "${KEYCHAIN}"
+      ]
+    },
+    {
+      "default": "info",
+      "label": "Logging Level",
+      "name": "logging",
+      "sequence": 3,
+      "type": "Choice",
+      "validValues": [
+        "debug",
+        "info",
+        "warning",
+        "error",
+        "critical"
+      ]
+    }
+  ],
+  "programLanguage": "PYTHON",
+  "programMain": "python_test",
+  "programVersion": "1.1.2",
+  "runtimeLevel": "Organization"
+}

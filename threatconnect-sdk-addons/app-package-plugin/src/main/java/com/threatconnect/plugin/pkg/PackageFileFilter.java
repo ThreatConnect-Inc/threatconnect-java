@@ -16,6 +16,8 @@ public class PackageFileFilter
 	public static final String TARGET = "target";
 	public static final String GIT = ".git";
 	public static final String GITIGNORE = ".gitignore";
+	public static final String INSTALL_JSON = "*install.json";
+	public static final String INSTALL_CONF = "*install.conf";
 	
 	//holds the list of files to exclude
 	private final List<String> exclude;
@@ -46,6 +48,8 @@ public class PackageFileFilter
 			getExclude().add(TARGET);
 			getExclude().add(GIT);
 			getExclude().add(GITIGNORE);
+			getExclude().add(INSTALL_JSON);
+			getExclude().add(INSTALL_CONF);
 		}
 	}
 	
