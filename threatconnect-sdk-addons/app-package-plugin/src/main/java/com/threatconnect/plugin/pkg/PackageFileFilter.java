@@ -14,6 +14,8 @@ public class PackageFileFilter
 {
 	public static final String POM_XML = "pom.xml";
 	public static final String TARGET = "target";
+	public static final String GIT = ".git";
+	public static final String GITIGNORE = ".gitignore";
 	
 	//holds the list of files to exclude
 	private final List<String> exclude;
@@ -42,6 +44,8 @@ public class PackageFileFilter
 		{
 			getExclude().add(POM_XML);
 			getExclude().add(TARGET);
+			getExclude().add(GIT);
+			getExclude().add(GITIGNORE);
 		}
 	}
 	

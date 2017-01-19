@@ -312,7 +312,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 			if (source.isDirectory())
 			{
 				// for each of the files
-				for (File file : source.listFiles())
+				for (File file : source.listFiles(createPackageFileFilter().createFilenameFilter()))
 				{
 					// check to see if this file is a directory
 					if (file.isDirectory())
