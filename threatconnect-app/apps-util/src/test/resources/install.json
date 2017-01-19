@@ -1,7 +1,7 @@
 {
   "displayName": "Sample App",
   "programVersion": "1.0.0",
-  "programLanguage": "JAVA",
+  "programLanguage": "Java",
   "programMain": "com.threatconnect.apps.example.ExampleMain",
   "languageVersion": "7",
   "listDelimiter": "|",

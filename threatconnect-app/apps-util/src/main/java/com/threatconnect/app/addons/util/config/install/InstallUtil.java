@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.threatconnect.app.addons.util.config.install.serialize.ParamDataTypeJsonSerializer;
 import com.threatconnect.app.addons.util.config.install.serialize.PlaybookVariableTypeJsonSerializer;
 import com.threatconnect.app.addons.util.config.install.serialize.PlaybookVariableTypeListJsonSerializer;
+import com.threatconnect.app.addons.util.config.install.serialize.ProgramLanguageTypeJsonSerializer;
 import com.threatconnect.app.addons.util.config.install.serialize.RuntimeContextJsonSerializer;
 import com.threatconnect.app.addons.util.config.install.serialize.RuntimeLevelJsonSerializer;
 import com.threatconnect.app.addons.util.config.install.validation.InstallValidator;
@@ -93,6 +94,7 @@ public class InstallUtil
 		PlaybookVariableTypeListJsonSerializer playbookVariableTypeListJsonSerializer =
 			new PlaybookVariableTypeListJsonSerializer();
 		ParamDataTypeJsonSerializer paramDataTypeJsonSerializer = new ParamDataTypeJsonSerializer();
+		ProgramLanguageTypeJsonSerializer programLanguageTypeJsonSerializer = new ProgramLanguageTypeJsonSerializer();
 		
 		//create a new gson builder and register the serializer objects
 		GsonBuilder builder = new GsonBuilder();
@@ -102,6 +104,7 @@ public class InstallUtil
 		builder.registerTypeAdapter(playbookVariableTypeListJsonSerializer.getType(),
 			playbookVariableTypeListJsonSerializer);
 		builder.registerTypeAdapter(paramDataTypeJsonSerializer.getType(), paramDataTypeJsonSerializer);
+		builder.registerTypeAdapter(programLanguageTypeJsonSerializer.getType(), programLanguageTypeJsonSerializer);
 		
 		return builder.create();
 	}

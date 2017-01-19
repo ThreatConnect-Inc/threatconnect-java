@@ -10,7 +10,7 @@ public class Install
 	private String applicationName;
 	private String displayName;
 	private String programVersion;
-	private String programLanguage;
+	private ProgramLanguageType programLanguage;
 	private String programMain;
 	private String languageVersion;
 	private String listDelimiter;
@@ -70,12 +70,12 @@ public class Install
 		this.programVersion = programVersion;
 	}
 	
-	public String getProgramLanguage()
+	public ProgramLanguageType getProgramLanguage()
 	{
 		return programLanguage;
 	}
 	
-	public void setProgramLanguage(final String programLanguage)
+	public void setProgramLanguage(final ProgramLanguageType programLanguage)
 	{
 		this.programLanguage = programLanguage;
 	}

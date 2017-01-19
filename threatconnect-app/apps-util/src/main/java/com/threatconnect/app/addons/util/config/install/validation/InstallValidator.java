@@ -4,6 +4,7 @@ import com.threatconnect.app.addons.util.config.install.Feed;
 import com.threatconnect.app.addons.util.config.install.Install;
 import com.threatconnect.app.addons.util.config.install.Param;
 import com.threatconnect.app.addons.util.config.install.Playbook;
+import com.threatconnect.app.addons.util.config.install.ProgramLanguageType;
 import com.threatconnect.app.addons.util.config.install.RunLevelType;
 
 import java.util.HashSet;
@@ -29,15 +30,20 @@ public class InstallValidator extends Validator<Install>
 	public void validate(final Install object) throws ValidationException
 	{
 		//validate the program language
-		if (isNullOrEmpty(object.getProgramLanguage()))
+		if (null == object.getProgramLanguage())
 		{
 			throw new ValidationException("programLanguage is not defined.");
 		}
 		
-		//validate the program main
-		if (isNullOrEmpty(object.getProgramMain()))
+		//check to see if the programming language is JAVA or PYTHON
+		if (ProgramLanguageType.JAVA.equals(object.getProgramLanguage()) || ProgramLanguageType.PYTHON
+			.equals(object.getProgramLanguage()))
 		{
-			throw new ValidationException("programMain is not defined.");
+			//validate the program main
+			if (isNullOrEmpty(object.getProgramMain()))
+			{
+				throw new ValidationException("programMain is not defined.");
+			}
 		}
 		
 		//validate the runtime levels
