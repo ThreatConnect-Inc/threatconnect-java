@@ -24,7 +24,17 @@ public class PythonPackageMojo extends AbstractPackageMojo
 			if (!child.isHidden() && !child.equals(outputDirectory))
 			{
 				// copy this directory to the target folder
-				File target = new File(targetDirectory.getAbsolutePath() + File.separator + child.getName());
+				final File target;
+				
+				if (child.isDirectory())
+				{
+					target = new File(targetDirectory.getAbsolutePath() + File.separator + child.getName());
+				}
+				else
+				{
+					target = targetDirectory;
+				}
+				
 				copyFileToDirectoryIfExists(child, target);
 			}
 		}
