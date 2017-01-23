@@ -1,7 +1,7 @@
 package com.threatconnect.app.addons.util.config.install;
 
 import com.threatconnect.app.addons.util.config.install.serialize.InvalidEnumException;
-import com.threatconnect.app.addons.util.config.install.validation.ValidationException;
+import com.threatconnect.app.addons.util.config.validation.ValidationException;
 import org.junit.Assert;
 import org.junit.Test;
 

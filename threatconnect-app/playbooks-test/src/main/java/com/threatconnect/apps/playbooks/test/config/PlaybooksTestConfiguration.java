@@ -3,7 +3,7 @@ package com.threatconnect.apps.playbooks.test.config;
 import com.threatconnect.app.addons.util.config.InvalidJsonFileException;
 import com.threatconnect.app.addons.util.config.install.Install;
 import com.threatconnect.app.addons.util.config.install.InstallUtil;
-import com.threatconnect.app.addons.util.config.install.validation.ValidationException;
+import com.threatconnect.app.addons.util.config.validation.ValidationException;
 import com.threatconnect.app.apps.App;
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.AppExecutor;

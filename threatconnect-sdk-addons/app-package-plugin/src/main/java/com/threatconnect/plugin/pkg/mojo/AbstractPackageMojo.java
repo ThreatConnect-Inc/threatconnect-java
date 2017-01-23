@@ -4,7 +4,7 @@ import com.threatconnect.app.addons.util.config.InvalidJsonFileException;
 import com.threatconnect.app.addons.util.config.install.Feed;
 import com.threatconnect.app.addons.util.config.install.Install;
 import com.threatconnect.app.addons.util.config.install.InstallUtil;
-import com.threatconnect.app.addons.util.config.install.validation.ValidationException;
+import com.threatconnect.app.addons.util.config.validation.ValidationException;
 import com.threatconnect.plugin.pkg.PackageFileFilter;
 import com.threatconnect.plugin.pkg.Profile;
 import com.threatconnect.plugin.pkg.ZipUtil;

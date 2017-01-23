@@ -8,8 +8,8 @@ import com.threatconnect.app.addons.util.config.install.serialize.PlaybookVariab
 import com.threatconnect.app.addons.util.config.install.serialize.ProgramLanguageTypeJsonSerializer;
 import com.threatconnect.app.addons.util.config.install.serialize.RuntimeContextJsonSerializer;
 import com.threatconnect.app.addons.util.config.install.serialize.RuntimeLevelJsonSerializer;
-import com.threatconnect.app.addons.util.config.install.validation.InstallValidator;
-import com.threatconnect.app.addons.util.config.install.validation.ValidationException;
+import com.threatconnect.app.addons.util.config.validation.InstallValidator;
+import com.threatconnect.app.addons.util.config.validation.ValidationException;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;

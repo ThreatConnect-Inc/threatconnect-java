@@ -1,4 +1,4 @@
-package com.threatconnect.app.addons.util.config.install.validation;
+package com.threatconnect.app.addons.util.config.validation;
 
 import com.threatconnect.app.addons.util.config.install.Param;
 import com.threatconnect.app.addons.util.config.install.ParamDataType;

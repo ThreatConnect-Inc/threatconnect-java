@@ -1,6 +1,8 @@
 package com.threatconnect.app.addons.util.config.attribute;
 
 import com.threatconnect.app.addons.util.config.InvalidCsvLineException;
+import com.threatconnect.app.addons.util.config.validation.AttributeValidator;
+import com.threatconnect.app.addons.util.config.validation.ValidationException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,7 +29,7 @@ public class AttributeReaderUtil
 	private static final String SPLIT_REGEX = ",(?=([^\\\"]*\\\"[^\\\"]*\\\")*[^\\\"]*$)";
 	private static final String FIELD_DELIMITER = "|";
 	
-	public static List<Attribute> read(final File csv) throws InvalidCsvLineException, IOException
+	public static List<Attribute> read(final File csv) throws InvalidCsvLineException, IOException, ValidationException
 	{
 		try (FileInputStream fileInputStream = new FileInputStream(csv))
 		{
@@ -35,7 +37,7 @@ public class AttributeReaderUtil
 		}
 	}
 	
-	public static List<Attribute> read(final InputStream csv) throws InvalidCsvLineException
+	public static List<Attribute> read(final InputStream csv) throws InvalidCsvLineException, ValidationException
 	{
 		//holds the list of attributes to return
 		List<Attribute> attributes = new ArrayList<Attribute>();
@@ -43,6 +45,9 @@ public class AttributeReaderUtil
 		//create a new scanner object to scan the input
 		Scanner in = new Scanner(csv);
 		int rowNum = 1;
+		
+		//holds the attribute validator
+		AttributeValidator attributeValidator = new AttributeValidator();
 		
 		//while there are more lines to parse
 		while (in.hasNextLine())
@@ -53,8 +58,13 @@ public class AttributeReaderUtil
 			//make sure the line is not empty
 			if (!line.isEmpty())
 			{
-				//parse the attribute and add it to the list
+				//parse the attribute
 				Attribute attribute = parseAttribute(line, rowNum);
+				
+				//validate this attribute
+				attributeValidator.validate(attribute);
+				
+				//add it to the list
 				attributes.add(attribute);
 			}
 			
