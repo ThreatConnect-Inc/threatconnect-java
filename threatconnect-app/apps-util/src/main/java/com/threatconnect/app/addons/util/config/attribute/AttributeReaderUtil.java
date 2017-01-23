@@ -1,5 +1,6 @@
 package com.threatconnect.app.addons.util.config.attribute;
 
+import com.threatconnect.app.addons.util.config.InvalidCsvFileException;
 import com.threatconnect.app.addons.util.config.InvalidCsvLineException;
 import com.threatconnect.app.addons.util.config.validation.AttributeValidator;
 import com.threatconnect.app.addons.util.config.validation.ValidationException;
@@ -29,11 +30,15 @@ public class AttributeReaderUtil
 	private static final String SPLIT_REGEX = ",(?=([^\\\"]*\\\"[^\\\"]*\\\")*[^\\\"]*$)";
 	private static final String FIELD_DELIMITER = "|";
 	
-	public static List<Attribute> read(final File csv) throws InvalidCsvLineException, IOException, ValidationException
+	public static List<Attribute> read(final File csv) throws InvalidCsvFileException
 	{
 		try (FileInputStream fileInputStream = new FileInputStream(csv))
 		{
 			return read(fileInputStream);
+		}
+		catch (InvalidCsvLineException | ValidationException | IOException e)
+		{
+			throw new InvalidCsvFileException(csv, e);
 		}
 	}
 	

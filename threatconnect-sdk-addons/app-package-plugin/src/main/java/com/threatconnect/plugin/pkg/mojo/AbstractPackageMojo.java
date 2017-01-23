@@ -1,6 +1,8 @@
 package com.threatconnect.plugin.pkg.mojo;
 
+import com.threatconnect.app.addons.util.config.InvalidCsvFileException;
 import com.threatconnect.app.addons.util.config.InvalidJsonFileException;
+import com.threatconnect.app.addons.util.config.attribute.AttributeReaderUtil;
 import com.threatconnect.app.addons.util.config.install.Feed;
 import com.threatconnect.app.addons.util.config.install.Install;
 import com.threatconnect.app.addons.util.config.install.InstallUtil;
@@ -89,7 +91,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 				packageLegacy();
 			}
 		}
-		catch (InvalidJsonFileException | ValidationException | IOException e)
+		catch (InvalidJsonFileException | ValidationException | IOException | InvalidCsvFileException e)
 		{
 			throw new MojoFailureException(e.getMessage(), e);
 		}
@@ -116,7 +118,8 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	 * @param profile
 	 * @throws IOException
 	 */
-	protected File packageProfile(final Profile profile) throws IOException, ValidationException
+	protected File packageProfile(final Profile profile)
+		throws IOException, ValidationException, InvalidCsvFileException
 	{
 		// determine what this app name will be
 		final String appName = determineAppName(profile);
@@ -134,7 +137,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 		writeAppContentsToDirectory(explodedDir);
 		
 		//validate that all of the files referenced in the install.json file exist
-		validateReferencedFilesExist(explodedDir, profile);
+		validateReferencedFiles(explodedDir, profile);
 		
 		// zip up the app and return the file of the packaged app
 		return ZipUtil.zipFolder(explodedDir, TC_APP_FILE_EXTENSION);
@@ -255,7 +258,8 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 		return profiles;
 	}
 	
-	protected void validateReferencedFilesExist(File explodedDir, final Profile profile) throws ValidationException
+	protected void validateReferencedFiles(File explodedDir, final Profile profile)
+		throws ValidationException, InvalidCsvFileException
 	{
 		//for each of the feeds in the install object
 		for (Feed feed : profile.getInstall().getFeeds())
@@ -268,6 +272,11 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 				if (!file.exists())
 				{
 					throw new ValidationException(generateReferencedFileMissingMessage(feed.getAttributesFile()));
+				}
+				else
+				{
+					//load the attributes file and validate it
+					AttributeReaderUtil.read(file);
 				}
 			}
 			

@@ -1,7 +1,6 @@
 package com.threatconnect.app.addons.util.config.attribute;
 
-import com.threatconnect.app.addons.util.config.InvalidCsvLineException;
-import com.threatconnect.app.addons.util.config.validation.ValidationException;
+import com.threatconnect.app.addons.util.config.InvalidCsvFileException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -15,7 +14,7 @@ import java.util.List;
 public class AttributeTest
 {
 	@Test
-	public void loadAttribute1() throws IOException, ValidationException, InvalidCsvLineException
+	public void loadAttribute1() throws IOException, InvalidCsvFileException
 	{
 		File file = new File("src/test/resources/attributes1.csv");
 		List<Attribute> attributes = AttributeReaderUtil.read(file);
@@ -32,7 +31,7 @@ public class AttributeTest
 	}
 	
 	@Test
-	public void loadAttribute2() throws IOException, ValidationException, InvalidCsvLineException
+	public void loadAttribute2() throws IOException, InvalidCsvFileException
 	{
 		File file = new File("src/test/resources/attributes2.csv");
 		List<Attribute> attributes = AttributeReaderUtil.read(file);

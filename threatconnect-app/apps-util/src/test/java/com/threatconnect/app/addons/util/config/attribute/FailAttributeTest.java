@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 /**
@@ -16,10 +17,9 @@ public class FailAttributeTest
 	@Test
 	public void failAttribute1() throws IOException, InvalidCsvLineException
 	{
-		try
+		try (FileInputStream fileInputStream = new FileInputStream(new File("src/test/resources/fail.attributes1.csv")))
 		{
-			File file = new File("src/test/resources/fail.attributes1.csv");
-			AttributeReaderUtil.read(file);
+			AttributeReaderUtil.read(fileInputStream);
 		}
 		catch (ValidationException e)
 		{
@@ -30,14 +30,15 @@ public class FailAttributeTest
 	@Test
 	public void failAttribute2() throws IOException, InvalidCsvLineException
 	{
-		try
+		try (FileInputStream fileInputStream = new FileInputStream(new File("src/test/resources/fail.attributes2.csv")))
 		{
-			File file = new File("src/test/resources/fail.attributes2.csv");
-			AttributeReaderUtil.read(file);
+			AttributeReaderUtil.read(fileInputStream);
 		}
 		catch (ValidationException e)
 		{
-			Assert.assertTrue(e.getMessage().contains("Attribute types contains an empty value."));
+			{
+				Assert.assertTrue(e.getMessage().contains("Attribute types contains an empty value."));
+			}
 		}
 	}
 }
