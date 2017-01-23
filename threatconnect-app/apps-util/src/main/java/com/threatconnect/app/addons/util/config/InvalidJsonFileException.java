@@ -4,8 +4,6 @@ import java.io.File;
 
 public class InvalidJsonFileException extends Exception
 {
-	private static final long serialVersionUID = 4151360644033827467L;
-	
 	public InvalidJsonFileException(final String message)
 	{
 		super(message);
