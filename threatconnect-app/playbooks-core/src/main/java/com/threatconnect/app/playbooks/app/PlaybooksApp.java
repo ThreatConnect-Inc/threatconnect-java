@@ -10,6 +10,7 @@ import com.threatconnect.app.playbooks.content.entity.StringKeyValue;
 import com.threatconnect.app.playbooks.content.entity.TCEntity;
 import com.threatconnect.app.playbooks.db.DBServiceFactory;
 import com.threatconnect.app.playbooks.util.PlaybooksVariableUtil;
+import com.threatconnect.app.playbooks.db.DBService;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -33,9 +34,17 @@ public abstract class PlaybooksApp extends App
 	// holds the reference to the playbook app config object
 	private PlaybooksAppConfig playbooksAppConfig;
 	
-	@Override
-	public void init(final AppConfig appConfig)
+	public void init(final AppConfig appConfig, final DBService customDBService)
 	{
+	    super.init(appConfig);
+	    this.playbooksAppConfig = new PlaybooksAppConfig(appConfig);
+	    this.contentService = new ContentService(customDBService);
+	}
+
+
+    @Override
+    public void init(final AppConfig appConfig)
+    {
 		super.init(appConfig);
 		this.playbooksAppConfig = new PlaybooksAppConfig(appConfig);
 		this.contentService = new ContentService(DBServiceFactory.buildFromAppConfig(appConfig));
