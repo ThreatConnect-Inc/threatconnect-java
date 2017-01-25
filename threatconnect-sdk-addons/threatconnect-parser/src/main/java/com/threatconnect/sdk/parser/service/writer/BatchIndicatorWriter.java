@@ -241,9 +241,16 @@ public class BatchIndicatorWriter extends Writer
 				// check to see if there are errors
 				if (batchStatusResponse.getItem().getErrorCount() > 0)
 				{
-					ByteArrayOutputStream baos = new ByteArrayOutputStream();
-					batchReaderAdapter.downloadErrors(batchUploadResponse.getBatchID(), ownerName, baos);
-					logger.warn(new String(baos.toByteArray()));
+					try
+					{
+						ByteArrayOutputStream baos = new ByteArrayOutputStream();
+						batchReaderAdapter.downloadErrors(batchUploadResponse.getBatchID(), ownerName, baos);
+						logger.warn(new String(baos.toByteArray()));
+					}
+					catch (FailedResponseException e)
+					{
+						logger.warn(e.getMessage(), e);
+					}
 				}
 				
 				// create a new save result
