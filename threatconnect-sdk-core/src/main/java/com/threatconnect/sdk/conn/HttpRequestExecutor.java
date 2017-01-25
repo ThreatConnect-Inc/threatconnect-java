@@ -289,7 +289,7 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 		switch (response.getStatusLine().getStatusCode())
 		{
 			case HttpStatus.SC_NOT_FOUND:
-				throw new HttpResourceNotFoundException();
+				throw new HttpResourceNotFoundException("Server responded with a 404: " + fullPath);
 		}
 		
 		HttpEntity entity = response.getEntity();
