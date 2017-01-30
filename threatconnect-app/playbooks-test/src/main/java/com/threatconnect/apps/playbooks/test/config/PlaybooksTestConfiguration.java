@@ -50,6 +50,11 @@ public class PlaybooksTestConfiguration
 		this.configurationMap = new HashMap<Class<? extends PlaybooksApp>, PlaybookConfig>();
 		this.globalAppConfig = new DefaultAppConfig();
 		
+		loadConfigurationFiles();
+	}
+	
+	public void loadConfigurationFiles()
+	{
 		logger.info("Loading Playbooks Test Configuration");
 		
 		//find all of the install.json files

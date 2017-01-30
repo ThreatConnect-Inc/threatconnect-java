@@ -230,6 +230,6 @@ public class Install
 	
 	public boolean isPlaybookApp()
 	{
-		return !getPlaybookParams().isEmpty();
+		return getRuntimeLevel().contains(RunLevelType.Playbook);
 	}
 }
