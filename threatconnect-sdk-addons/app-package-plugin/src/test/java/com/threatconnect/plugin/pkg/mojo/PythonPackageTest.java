@@ -41,6 +41,21 @@ public class PythonPackageTest
 		clean(new File(pythonPackageMojo.getOutputDirectory()));
 		
 		pythonPackageMojo.execute();
+		
+		assertExcludes();
+	}
+	
+	private void assertExcludes()
+	{
+		File root = new File("target/package/Profile1_v1.0");
+		Assert.assertTrue(root.exists());
+		Assert.assertTrue(root.isDirectory());
+		
+		File pom = new File(root.getPath() + "/pom.xml");
+		Assert.assertFalse(pom.exists());
+		
+		File customExclude = new File(root.getPath() + "/custom.exclude");
+		Assert.assertFalse(customExclude.exists());
 	}
 	
 	private void clean(final File outputDirectory) throws IOException

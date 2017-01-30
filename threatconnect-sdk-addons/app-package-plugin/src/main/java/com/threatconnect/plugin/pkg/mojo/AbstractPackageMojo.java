@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,6 +57,9 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	 */
 	@Parameter(defaultValue = "${project.version}", required = true)
 	private String version;
+	
+	@Parameter
+	private String[] exclude;
 	
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException
@@ -361,7 +365,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	
 	protected PackageFileFilter createPackageFileFilter()
 	{
-		return new PackageFileFilter();
+		return new PackageFileFilter(getExclude());
 	}
 	
 	public String getOutputDirectory()
@@ -382,6 +386,19 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	public String getVersion()
 	{
 		return version;
+	}
+	
+	public List<String> getExclude()
+	{
+		List<String> excludeList = new ArrayList<String>();
+		
+		if (null != exclude)
+		{
+			//add all of the custom excludes to the list
+			excludeList.addAll(Arrays.asList(exclude));
+		}
+		
+		return excludeList;
 	}
 	
 	protected final void copyFileToDirectory(final File source, final File destinationDirectory)

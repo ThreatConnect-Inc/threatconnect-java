@@ -25,6 +25,7 @@
 					<outputDirectory>target/package</outputDirectory>
 					<appName>PythonPackageTest</appName>
 					<version>1.0</version>
+					<exclude>custom.exclude</exclude>
 				</configuration>
 			</plugin>
 		</plugins>

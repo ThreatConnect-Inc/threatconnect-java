@@ -12,6 +12,6 @@ public class PythonPackageMojo extends AbstractPackageMojo
 	@Override
 	protected PackageFileFilter createPackageFileFilter()
 	{
-		return new PythonPackageFileFilter();
+		return new PythonPackageFileFilter(getExclude());
 	}
 }

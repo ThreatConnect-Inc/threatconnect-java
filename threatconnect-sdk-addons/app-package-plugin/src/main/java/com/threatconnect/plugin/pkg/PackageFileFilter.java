@@ -4,7 +4,6 @@ import org.apache.commons.io.filefilter.NotFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 
 import java.io.FilenameFilter;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,11 +20,6 @@ public class PackageFileFilter
 	
 	//holds the list of files to exclude
 	private final List<String> exclude;
-	
-	public PackageFileFilter()
-	{
-		this(new ArrayList<String>(), true);
-	}
 	
 	public PackageFileFilter(final List<String> exclude)
 	{

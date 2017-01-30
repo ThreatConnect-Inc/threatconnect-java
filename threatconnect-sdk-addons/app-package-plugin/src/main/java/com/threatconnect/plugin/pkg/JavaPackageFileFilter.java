@@ -1,6 +1,5 @@
 package com.threatconnect.plugin.pkg;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,9 +9,9 @@ public class JavaPackageFileFilter extends PackageFileFilter
 {
 	public static final String SRC = "src";
 	
-	public JavaPackageFileFilter()
+	public JavaPackageFileFilter(final List<String> exclude)
 	{
-		this(new ArrayList<String>(), true);
+		this(exclude, true);
 	}
 	
 	public JavaPackageFileFilter(final List<String> exclude, final boolean includeDefaults)

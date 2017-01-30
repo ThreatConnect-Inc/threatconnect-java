@@ -26,7 +26,7 @@ public class JavaPackageMojo extends AbstractPackageMojo
 	@Override
 	protected PackageFileFilter createPackageFileFilter()
 	{
-		return new JavaPackageFileFilter();
+		return new JavaPackageFileFilter(getExclude());
 	}
 	
 	@Override
