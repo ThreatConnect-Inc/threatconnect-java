@@ -119,7 +119,8 @@ public class PlaybooksTestConfiguration
 			if (install.isPlaybookApp())
 			{
 				//configure the app for this install.json file
-				configureApp(install, file);
+				PlaybookConfig playbookConfig = buildPlaybookConfig(install, file);
+				registerPlaybookConfig(playbookConfig);
 			}
 			else
 			{
@@ -141,7 +142,7 @@ public class PlaybooksTestConfiguration
 	 * @throws ClassNotFoundException
 	 * @throws UnsupposedPlaybookMainClassException
 	 */
-	private void configureApp(final Install install, final File file)
+	private PlaybookConfig buildPlaybookConfig(final Install install, final File file)
 		throws InvalidJsonFileException, UnsupposedPlaybookMainClassException, InvalidPlaybookAppException
 	{
 		try
@@ -167,7 +168,7 @@ public class PlaybooksTestConfiguration
 			}
 			
 			//configure this app
-			configureApp(appClass, install, file);
+			return buildPlaybookConfig(appClass, install, file);
 		}
 		catch (ClassNotFoundException e)
 		{
@@ -192,7 +193,8 @@ public class PlaybooksTestConfiguration
 		}
 	}
 	
-	private void configureApp(final Class<? extends App> appClass, final Install install, final File file)
+	private PlaybookConfig buildPlaybookConfig(final Class<? extends App> appClass, final Install install,
+		final File file)
 		throws InvalidPlaybookAppException
 	{
 		logger.info("Configuring playbook \"{}\", loaded from file \"{}\"", appClass.getName(),
@@ -204,26 +206,30 @@ public class PlaybooksTestConfiguration
 			//cast the class
 			Class<? extends PlaybooksApp> playbooksAppClass = (Class<? extends PlaybooksApp>) appClass;
 			
-			//make sure this configuration does not already exist
-			if (!configurationMap.containsKey(playbooksAppClass))
-			{
-				//create a new playbook configuration class
-				PlaybookConfig playbookConfig = new PlaybookConfig(playbooksAppClass, install);
-				
-				//add this config to the map
-				configurationMap.put(playbooksAppClass, playbookConfig);
-			}
-			else
-			{
-				//warn that this class was already loaded
-				logger.warn(playbooksAppClass.getName() + " already configured. Skipping configuration.");
-			}
+			//create a new playbook configuration class
+			return new PlaybookConfig(playbooksAppClass, install);
 		}
 		else
 		{
 			throw new InvalidPlaybookAppException(
 				appClass.getName() + ", loaded from " + file.getAbsolutePath()
 					+ ", must extend from " + PlaybooksApp.class.getName());
+		}
+	}
+	
+	private void registerPlaybookConfig(final PlaybookConfig playbookConfig)
+	{
+		//make sure this configuration does not already exist
+		if (!configurationMap.containsKey(playbookConfig.getPlaybookAppClass()))
+		{
+			//add this config to the map
+			configurationMap.put(playbookConfig.getPlaybookAppClass(), playbookConfig);
+		}
+		else
+		{
+			//warn that this class was already loaded
+			logger
+				.warn(playbookConfig.getPlaybookAppClass().getName() + " already configured. Skipping configuration.");
 		}
 	}
 	
@@ -236,6 +242,34 @@ public class PlaybooksTestConfiguration
 	public PlaybookConfigBuilder createPlaybookConfigBuilder(final Class<? extends PlaybooksApp> playbookAppClass)
 	{
 		return new PlaybookConfigBuilder(playbookAppClass, this);
+	}
+	
+	public PlaybookConfigBuilder createPlaybookConfigBuilder(final File file)
+	{
+		try
+		{
+			logger.info("Loading {}", file.getAbsolutePath());
+			
+			//read the json file
+			Install install = InstallUtil.load(file);
+			
+			//check to see if this is a playbooks app
+			if (install.isPlaybookApp())
+			{
+				//configure the app for this install.json file
+				PlaybookConfig playbookConfig = buildPlaybookConfig(install, file);
+				return new PlaybookConfigBuilder(playbookConfig, this);
+			}
+			else
+			{
+				throw new PlaybooksConfigurationException("Skipping \"" + file.getAbsolutePath()
+					+ "\" -- runtimeLevel indicates this config is not a playbooks app ");
+			}
+		}
+		catch (UnsupposedPlaybookMainClassException | IOException | InvalidJsonFileException | ValidationException | InvalidPlaybookAppException e)
+		{
+			throw new PlaybooksConfigurationException(e);
+		}
 	}
 	
 	/**

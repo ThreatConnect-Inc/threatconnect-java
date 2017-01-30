@@ -37,6 +37,16 @@ public class PlaybookConfigBuilder
 		this.playbookOutputVariableList = new ArrayList<PlaybookOutputVariable>();
 	}
 	
+	PlaybookConfigBuilder(final PlaybookConfig playbookConfig,
+		final PlaybooksTestConfiguration playbooksTestConfiguration)
+	{
+		this.playbookAppClass = playbookConfig.getPlaybookAppClass();
+		this.playbooksTestConfiguration = playbooksTestConfiguration;
+		
+		this.playbookParamList = new ArrayList<Param>(playbookConfig.getPlaybookParams());
+		this.playbookOutputVariableList = new ArrayList<PlaybookOutputVariable>(playbookConfig.getAllOutputVariables());
+	}
+	
 	public PlaybookConfigBuilder addAppParam(final String name, final ParamDataType type)
 	{
 		//create the new param object and add it to the list

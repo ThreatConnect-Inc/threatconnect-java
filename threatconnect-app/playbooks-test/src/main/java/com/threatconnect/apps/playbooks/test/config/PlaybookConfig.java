@@ -187,7 +187,7 @@ public class PlaybookConfig
 		}
 	}
 	
-	public Collection<Param> getAllInputParams()
+	public Collection<Param> getPlaybookParams()
 	{
 		return playbookParams.values();
 	}
