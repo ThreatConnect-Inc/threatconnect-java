@@ -208,7 +208,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 				// there is a profile, but it does not contain a valid name
 				else
 				{
-					appName = getAppName();
+					appName = getAppName() + "_v" + getVersion();
 				}
 			}
 		}
