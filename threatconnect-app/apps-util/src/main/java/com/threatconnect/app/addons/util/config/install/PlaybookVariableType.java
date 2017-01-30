@@ -15,7 +15,8 @@ public enum PlaybookVariableType
 	Binary,
 	BinaryArray,
 	KeyValue,
-	KeyValueArray;
+	KeyValueArray,
+	Any;
 	
 	private static final Logger logger = LoggerFactory.getLogger(PlaybookVariableType.class);
 	
