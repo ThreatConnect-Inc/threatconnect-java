@@ -218,7 +218,7 @@ public class Install
 		//for each of the playbook params
 		for (Param param : getParams())
 		{
-			if (null != param.getPlaybookDataType() && !param.getPlaybookDataType().isEmpty())
+			if (param.isPlaybookParam())
 			{
 				//add this param to the playbook param list
 				playbookParams.add(param);

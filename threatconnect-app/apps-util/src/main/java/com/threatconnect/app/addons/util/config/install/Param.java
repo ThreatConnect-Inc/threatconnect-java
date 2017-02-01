@@ -24,6 +24,7 @@ public class Param
 	private String note;
 	private String viewType;
 	private Integer sequence;
+	private PlaybookVariableType exposePlaybookKeyAs;
 	
 	private final List<String> validValues;
 	private final List<PlaybookVariableType> playbookDataType;
@@ -167,6 +168,16 @@ public class Param
 		this.sequence = sequence;
 	}
 	
+	public PlaybookVariableType getExposePlaybookKeyAs()
+	{
+		return exposePlaybookKeyAs;
+	}
+	
+	public void setExposePlaybookKeyAs(final PlaybookVariableType exposePlaybookKeyAs)
+	{
+		this.exposePlaybookKeyAs = exposePlaybookKeyAs;
+	}
+	
 	public List<String> getValidValues()
 	{
 		return validValues;
@@ -175,5 +186,10 @@ public class Param
 	public List<PlaybookVariableType> getPlaybookDataType()
 	{
 		return playbookDataType;
+	}
+	
+	public boolean isPlaybookParam()
+	{
+		return (null != getPlaybookDataType() && !getPlaybookDataType().isEmpty());
 	}
 }

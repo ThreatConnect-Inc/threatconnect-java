@@ -24,7 +24,7 @@ public class ParamValidator extends Validator<Param>
 		}
 		
 		//validate the object type
-		if(null == object.getType())
+		if (null == object.getType())
 		{
 			throwMissingFieldValidationException("type", object);
 		}
@@ -34,6 +34,16 @@ public class ParamValidator extends Validator<Param>
 			&& object.getValidValues().isEmpty())
 		{
 			throwMissingFieldValidationException("validValues", object);
+		}
+		
+		//check to see if this param is to be exposed as a playbook key
+		if (null != object.getExposePlaybookKeyAs())
+		{
+			//make sure that this is a playbook param
+			if (object.getType() != ParamDataType.KeyValueList)
+			{
+				throw new ValidationException("Params that specify exposePlaybookKeyAs must be of type " + ParamDataType.KeyValueList.toString());
+			}
 		}
 	}
 	
