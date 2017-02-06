@@ -4,6 +4,7 @@ import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.app.apps.App;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
 import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
+import com.threatconnect.apps.playbooks.test.orc.test.OutputTest;
 import com.threatconnect.apps.playbooks.test.orc.test.Testable;
 import com.threatconnect.apps.playbooks.test.util.ContentServiceUtil;
 import org.apache.commons.io.IOUtils;
@@ -170,6 +171,26 @@ public class AssertOutput extends AbstractThen<POResult>
 							App.MESSAGE_TC + " does not contain the following text: \"" + text + "\"");
 					}
 				}
+			}
+		});
+		
+		return this;
+	}
+	
+	public AssertOutput runTest(final String outputParam, final PlaybookVariableType type, final OutputTest outputTest)
+	{
+		//since this param has been requested, make sure it is added to the out params
+		getThen().getPlaybooksOrchestration().addOutputParam(outputParam, type);
+		
+		add(new Testable()
+		{
+			@Override
+			public void run(final PlaybooksApp playbooksApp) throws Exception
+			{
+				logger.debug("runTest Output Param \"{}\" of type \"{}\"", outputParam, type.toString());
+				final String variable = getPlaybookConfig().createVariableForOutputVariable(outputParam, type);
+				Assert.assertTrue("runTest Output Param \"{}\" of type \"{}\" failed.",
+					outputTest.test(ContentServiceUtil.read(variable, playbooksApp.getContentService())));
 			}
 		});
 		
