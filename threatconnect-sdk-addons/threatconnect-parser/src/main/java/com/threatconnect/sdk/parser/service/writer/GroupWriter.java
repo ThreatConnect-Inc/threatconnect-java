@@ -217,7 +217,9 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 					break;
 				default:
 					indicatorID = indicator.getIdentifier();
-					response = writer.associateIndicatorHost(getSavedGroupID(), indicatorID);
+					response = null;
+					//:FIXME: associate custom indicator to group? This method does not yet exist
+					//response = writer.associateIndicatorCustom(getSavedGroupID(), indicatorID);
 					break;
 			}
 			
