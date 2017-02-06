@@ -216,8 +216,8 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 					response = writer.associateIndicatorUrl(getSavedGroupID(), indicatorID);
 					break;
 				default:
-					indicatorID = null;
-					response = null;
+					indicatorID = indicator.getIdentifier();
+					response = writer.associateIndicatorHost(getSavedGroupID(), indicatorID);
 					break;
 			}
 			

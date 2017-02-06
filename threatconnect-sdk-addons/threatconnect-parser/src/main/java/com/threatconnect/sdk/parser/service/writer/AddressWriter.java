@@ -4,7 +4,7 @@ import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.parser.model.Address;
 import com.threatconnect.sdk.server.entity.Indicator.Type;
 
-public class AddressWriter extends IndicatorWriter<Address, com.threatconnect.sdk.server.entity.Address>
+public class AddressWriter extends TypedIndicatorWriter<Address, com.threatconnect.sdk.server.entity.Address>
 {
 	public AddressWriter(final Connection connection, final Address address)
 	{

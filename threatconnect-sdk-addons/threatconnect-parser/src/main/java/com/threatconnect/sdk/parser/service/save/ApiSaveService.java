@@ -4,6 +4,7 @@ import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.parser.model.Address;
 import com.threatconnect.sdk.parser.model.Adversary;
+import com.threatconnect.sdk.parser.model.CustomIndicator;
 import com.threatconnect.sdk.parser.model.Document;
 import com.threatconnect.sdk.parser.model.Email;
 import com.threatconnect.sdk.parser.model.EmailAddress;
@@ -18,6 +19,7 @@ import com.threatconnect.sdk.parser.model.Threat;
 import com.threatconnect.sdk.parser.model.Url;
 import com.threatconnect.sdk.parser.service.writer.AddressWriter;
 import com.threatconnect.sdk.parser.service.writer.AdversaryWriter;
+import com.threatconnect.sdk.parser.service.writer.CustomIndicatorWriter;
 import com.threatconnect.sdk.parser.service.writer.DocumentWriter;
 import com.threatconnect.sdk.parser.service.writer.EmailAddressWriter;
 import com.threatconnect.sdk.parser.service.writer.EmailWriter;
@@ -207,7 +209,8 @@ public class ApiSaveService implements SaveService
 				writer = new UrlWriter(connection, (Url) indicator);
 				break;
 			default:
-				throw new IllegalArgumentException("invalid indicator type");
+				//this must be a custom indicator type
+				writer = new CustomIndicatorWriter(connection, (CustomIndicator) indicator);
 		}
 		
 		return writer;

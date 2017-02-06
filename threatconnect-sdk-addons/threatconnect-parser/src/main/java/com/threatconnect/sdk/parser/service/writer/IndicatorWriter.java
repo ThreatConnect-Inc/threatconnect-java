@@ -2,9 +2,7 @@ package com.threatconnect.sdk.parser.service.writer;
 
 import com.google.gson.Gson;
 import com.threatconnect.sdk.client.reader.AbstractIndicatorReaderAdapter;
-import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
 import com.threatconnect.sdk.client.writer.AbstractIndicatorWriterAdapter;
-import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.parser.model.Attribute;
@@ -13,7 +11,6 @@ import com.threatconnect.sdk.parser.model.Indicator;
 import com.threatconnect.sdk.parser.service.save.AssociateFailedException;
 import com.threatconnect.sdk.parser.service.save.DeleteItemFailedException;
 import com.threatconnect.sdk.parser.service.save.SaveItemFailedException;
-import com.threatconnect.sdk.server.entity.Indicator.Type;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 
 import java.io.IOException;
@@ -23,17 +20,14 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 {
 	protected final E indicatorSource;
 	private final Class<T> tcModelClass;
-	private final Type tcIndicatorType;
 	
 	private T savedIndicator;
 	
-	public IndicatorWriter(final Connection connection, final E source, final Class<T> tcModelClass,
-		final Type tcIndicatorType)
+	public IndicatorWriter(final Connection connection, final E source, final Class<T> tcModelClass)
 	{
 		super(connection);
 		this.indicatorSource = source;
 		this.tcModelClass = tcModelClass;
-		this.tcIndicatorType = tcIndicatorType;
 	}
 	
 	/**
@@ -266,20 +260,14 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 	 *
 	 * @return the reader adapter for this indicator
 	 */
-	protected AbstractIndicatorReaderAdapter<T> createReaderAdapter()
-	{
-		return ReaderAdapterFactory.createIndicatorReader(tcIndicatorType, connection);
-	}
+	protected abstract AbstractIndicatorReaderAdapter<T> createReaderAdapter();
 	
 	/**
 	 * A convenience method for creating a writer adapter for this class
 	 *
 	 * @return the writer adapter for this indicator
 	 */
-	protected AbstractIndicatorWriterAdapter<T> createWriterAdapter()
-	{
-		return WriterAdapterFactory.createIndicatorWriter(tcIndicatorType, connection);
-	}
+	protected abstract AbstractIndicatorWriterAdapter<T> createWriterAdapter();
 	
 	public T getSavedIndicator()
 	{

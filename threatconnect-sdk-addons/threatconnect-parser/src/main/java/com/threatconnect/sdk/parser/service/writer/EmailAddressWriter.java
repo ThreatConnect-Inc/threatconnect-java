@@ -4,7 +4,7 @@ import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.parser.model.EmailAddress;
 import com.threatconnect.sdk.server.entity.Indicator.Type;
 
-public class EmailAddressWriter extends IndicatorWriter<EmailAddress, com.threatconnect.sdk.server.entity.EmailAddress>
+public class EmailAddressWriter extends TypedIndicatorWriter<EmailAddress, com.threatconnect.sdk.server.entity.EmailAddress>
 {
 	public EmailAddressWriter(final Connection connection, final EmailAddress emailAddress)
 	{

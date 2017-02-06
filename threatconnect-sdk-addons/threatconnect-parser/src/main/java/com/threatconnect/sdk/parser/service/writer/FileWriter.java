@@ -1,9 +1,5 @@
 package com.threatconnect.sdk.parser.service.writer;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.threatconnect.sdk.client.reader.FileIndicatorReaderAdapter;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
 import com.threatconnect.sdk.client.response.IterableResponse;
@@ -16,7 +12,11 @@ import com.threatconnect.sdk.parser.model.FileOccurrence;
 import com.threatconnect.sdk.parser.service.save.SaveItemFailedException;
 import com.threatconnect.sdk.server.entity.Indicator.Type;
 
-public class FileWriter extends IndicatorWriter<File, com.threatconnect.sdk.server.entity.File>
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+public class FileWriter extends TypedIndicatorWriter<File, com.threatconnect.sdk.server.entity.File>
 {
 	public FileWriter(final Connection connection, final File file)
 	{
