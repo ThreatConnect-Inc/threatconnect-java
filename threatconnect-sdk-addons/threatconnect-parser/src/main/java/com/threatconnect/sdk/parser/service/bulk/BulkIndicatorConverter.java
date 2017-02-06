@@ -9,7 +9,6 @@ import com.threatconnect.sdk.parser.model.Attribute;
 import com.threatconnect.sdk.parser.model.EmailAddress;
 import com.threatconnect.sdk.parser.model.Host;
 import com.threatconnect.sdk.parser.model.Indicator;
-import com.threatconnect.sdk.parser.model.IndicatorType;
 import com.threatconnect.sdk.parser.model.Url;
 import com.threatconnect.sdk.parser.util.IndicatorUtil;
 import com.threatconnect.sdk.parser.util.TagUtil;
@@ -190,7 +189,7 @@ public class BulkIndicatorConverter
 		
 		indicatorJsonObject.addProperty("summary", indicator.toString());
 		
-		indicatorJsonObject.addProperty("type", indicatorTypeToString(indicator.getIndicatorType()));
+		indicatorJsonObject.addProperty("type", indicator.getIndicatorType());
 		
 		// check to see if the associatedGroupIDs is not null or empty
 		if (null != associatedGroupIDs && !associatedGroupIDs.isEmpty())
@@ -252,29 +251,5 @@ public class BulkIndicatorConverter
 		// :TODO: displayed?
 		
 		return attributeJsonObject;
-	}
-	
-	private String indicatorTypeToString(final IndicatorType indicatorType) throws InvalidIndicatorException
-	{
-		if (null == indicatorType)
-		{
-			throw new IllegalArgumentException("indicatorType cannot be null");
-		}
-		
-		switch (indicatorType)
-		{
-			case ADDRESS:
-				return "Address";
-			case EMAILADDRESS:
-				return "EmailAddress";
-			case FILE:
-				return "File";
-			case HOST:
-				return "Host";
-			case URL:
-				return "URL";
-			default:
-				throw new InvalidIndicatorException(indicatorType + "is not a valid indicatorType");
-		}
 	}
 }

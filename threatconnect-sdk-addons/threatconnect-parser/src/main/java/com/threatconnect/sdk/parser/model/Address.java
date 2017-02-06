@@ -2,11 +2,13 @@ package com.threatconnect.sdk.parser.model;
 
 public class Address extends Indicator
 {
+	public static final String INDICATOR_TYPE = "Address";
+	
 	private String ip;
 	
 	public Address()
 	{
-		super(IndicatorType.ADDRESS);
+		super(INDICATOR_TYPE);
 	}
 	
 	public String getIp()

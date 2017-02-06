@@ -191,19 +191,19 @@ public class ApiSaveService implements SaveService
 		// switch based on the indicator type
 		switch (indicator.getIndicatorType())
 		{
-			case ADDRESS:
+			case Address.INDICATOR_TYPE:
 				writer = new AddressWriter(connection, (Address) indicator);
 				break;
-			case EMAILADDRESS:
+			case EmailAddress.INDICATOR_TYPE:
 				writer = new EmailAddressWriter(connection, (EmailAddress) indicator);
 				break;
-			case FILE:
+			case File.INDICATOR_TYPE:
 				writer = new FileWriter(connection, (File) indicator);
 				break;
-			case HOST:
+			case Host.INDICATOR_TYPE:
 				writer = new HostWriter(connection, (Host) indicator);
 				break;
-			case URL:
+			case Url.INDICATOR_TYPE:
 				writer = new UrlWriter(connection, (Url) indicator);
 				break;
 			default:

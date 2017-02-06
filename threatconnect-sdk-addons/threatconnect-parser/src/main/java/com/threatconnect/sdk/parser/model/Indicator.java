@@ -6,7 +6,7 @@ import java.util.Set;
 
 public abstract class Indicator extends Item
 {
-	private final IndicatorType indicatorType;
+	private final String indicatorType;
 	private final Set<Group> associatedItems;
 	
 	private Double rating;
@@ -19,14 +19,14 @@ public abstract class Indicator extends Item
 	private String summary;
 	private Date dateAdded;
 	
-	public Indicator(final IndicatorType indicatorType)
+	public Indicator(final String indicatorType)
 	{
 		super(ItemType.INDICATOR);
 		this.indicatorType = indicatorType;
 		this.associatedItems = new LinkedHashSet<Group>();
 	}
 	
-	public final IndicatorType getIndicatorType()
+	public final String getIndicatorType()
 	{
 		return indicatorType;
 	}

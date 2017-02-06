@@ -1,5 +1,14 @@
 package com.threatconnect.sdk.parser.util.attribute;
 
+import com.opencsv.CSVReader;
+import com.threatconnect.sdk.parser.model.Group;
+import com.threatconnect.sdk.parser.model.GroupType;
+import com.threatconnect.sdk.parser.model.Indicator;
+import com.threatconnect.sdk.parser.model.Item;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,17 +19,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
-
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.opencsv.CSVReader;
-import com.threatconnect.sdk.parser.model.Group;
-import com.threatconnect.sdk.parser.model.GroupType;
-import com.threatconnect.sdk.parser.model.Indicator;
-import com.threatconnect.sdk.parser.model.IndicatorType;
-import com.threatconnect.sdk.parser.model.Item;
 
 public class AttributeDefinitionUtil
 {
@@ -108,7 +106,7 @@ public class AttributeDefinitionUtil
 							}
 							
 							// for each of the indicator types
-							for (IndicatorType indicatorType : attributeDefinition.getIndicatorTypes())
+							for (String indicatorType : attributeDefinition.getIndicatorTypes())
 							{
 								// add an entry for this attribute and type combination
 								final String key = getKey(attributeDefinition.getName(), indicatorType);
@@ -167,19 +165,7 @@ public class AttributeDefinitionUtil
 		// for each of the types
 		for (String type : typesArray)
 		{
-			IndicatorType indicatorType;
 			GroupType groupType;
-			
-			try
-			{
-				// attempt to load this indicator type
-				indicatorType = IndicatorType.valueOf(type.trim().toUpperCase());
-			}
-			catch (IllegalArgumentException e)
-			{
-				// its ok if it does not exist
-				indicatorType = null;
-			}
 			
 			try
 			{
@@ -192,20 +178,16 @@ public class AttributeDefinitionUtil
 				groupType = null;
 			}
 			
-			// check to see if the indicator type is not null
-			if (null != indicatorType)
-			{
-				attributeDefinition.getIndicatorTypes().add(indicatorType);
-			}
 			// check to see if the group type is not null
-			else if (null != groupType)
+			if (null != groupType)
 			{
 				attributeDefinition.getGroupTypes().add(groupType);
 			}
-			// this is not a valid type
+			// this must be an indicator type (or custom indicator)
 			else
 			{
-				throw new InvalidAttributeDefinitionTypesException(type.trim() + " is not a valid group or indicator type");
+				String indicatorType = type.trim().toUpperCase();
+				attributeDefinition.getIndicatorTypes().add(indicatorType);
 			}
 		}
 	}
@@ -231,7 +213,7 @@ public class AttributeDefinitionUtil
 		}
 	}
 	
-	public boolean containsAttribute(final String attributeName, final IndicatorType indicatorType)
+	public boolean containsAttribute(final String attributeName, final String indicatorType)
 	{
 		return (null != getAttribute(attributeName, indicatorType));
 	}
@@ -262,7 +244,7 @@ public class AttributeDefinitionUtil
 		}
 	}
 	
-	public AttributeDefinition getAttribute(final String attributeName, final IndicatorType indicatorType)
+	public AttributeDefinition getAttribute(final String attributeName, final String indicatorType)
 	{
 		return attributeDefinitions.get(getKey(attributeName, indicatorType));
 	}
@@ -272,7 +254,7 @@ public class AttributeDefinitionUtil
 		return attributeDefinitions.get(getKey(attributeName, groupType));
 	}
 	
-	private String getKey(final String attributeName, final IndicatorType indicatorType)
+	private String getKey(final String attributeName, final String indicatorType)
 	{
 		return attributeName + "|I|" + indicatorType.toString();
 	}

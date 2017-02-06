@@ -2,11 +2,13 @@ package com.threatconnect.sdk.parser.model;
 
 public class EmailAddress extends Indicator
 {
+	public static final String INDICATOR_TYPE = "EmailAddress";
+	
 	private String address;
 	
 	public EmailAddress()
 	{
-		super(IndicatorType.EMAILADDRESS);
+		super(INDICATOR_TYPE);
 	}
 	
 	public String getAddress()

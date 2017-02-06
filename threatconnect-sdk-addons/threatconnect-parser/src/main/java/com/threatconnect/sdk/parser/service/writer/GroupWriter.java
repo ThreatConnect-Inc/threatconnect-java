@@ -179,15 +179,15 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 			// switch based on the indicator type
 			switch (indicator.getIndicatorType())
 			{
-				case ADDRESS:
+				case Address.INDICATOR_TYPE:
 					indicatorID = ((Address) indicator).getIp();
 					response = writer.associateIndicatorAddress(getSavedGroupID(), indicatorID);
 					break;
-				case EMAILADDRESS:
+				case EmailAddress.INDICATOR_TYPE:
 					indicatorID = ((EmailAddress) indicator).getAddress();
 					response = writer.associateIndicatorEmailAddress(getSavedGroupID(), indicatorID);
 					break;
-				case FILE:
+				case File.INDICATOR_TYPE:
 					File file = (File) indicator;
 					List<String> hashes = Arrays.asList(new String[]
 					{
@@ -207,11 +207,11 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 						}
 					}
 					break;
-				case HOST:
+				case Host.INDICATOR_TYPE:
 					indicatorID = ((Host) indicator).getHostName();
 					response = writer.associateIndicatorHost(getSavedGroupID(), indicatorID);
 					break;
-				case URL:
+				case Url.INDICATOR_TYPE:
 					indicatorID = ((Url) indicator).getText();
 					response = writer.associateIndicatorUrl(getSavedGroupID(), indicatorID);
 					break;

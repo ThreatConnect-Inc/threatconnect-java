@@ -1,22 +1,20 @@
 package com.threatconnect.sdk.app.bulk;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.junit.Assert;
-import org.junit.Test;
-
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.gregmarut.support.beangenerator.BeanPropertyGenerator;
 import com.threatconnect.sdk.parser.model.Attribute;
 import com.threatconnect.sdk.parser.model.Host;
 import com.threatconnect.sdk.parser.model.Indicator;
-import com.threatconnect.sdk.parser.model.IndicatorType;
 import com.threatconnect.sdk.parser.service.bulk.BulkIndicatorConverter;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class BulkIndicatorConverterTest
 {
@@ -56,17 +54,17 @@ public class BulkIndicatorConverterTest
 		Assert.assertEquals(3, indicators.size());
 		
 		// they should be hosts
-		Assert.assertEquals(IndicatorType.HOST, indicators.get(0).getIndicatorType());
-		Assert.assertEquals(IndicatorType.HOST, indicators.get(1).getIndicatorType());
-		Assert.assertEquals(IndicatorType.HOST, indicators.get(2).getIndicatorType());
+		Assert.assertEquals(Host.INDICATOR_TYPE, indicators.get(0).getIndicatorType());
+		Assert.assertEquals(Host.INDICATOR_TYPE, indicators.get(1).getIndicatorType());
+		Assert.assertEquals(Host.INDICATOR_TYPE, indicators.get(2).getIndicatorType());
 		
 		for (Indicator indicator : indicators)
 		{
 			Host host = (Host) indicator;
 			
 			// the rating and confidence should be 1
-			Assert.assertEquals(1.0, host.getRating().doubleValue(), 0);
-			Assert.assertEquals(1.0, host.getConfidence().doubleValue(), 0);
+			Assert.assertEquals(1.0, host.getRating(), 0);
+			Assert.assertEquals(1.0, host.getConfidence(), 0);
 			
 			// there should be one tag
 			Assert.assertEquals(1, host.getTags().size());

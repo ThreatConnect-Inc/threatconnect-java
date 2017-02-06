@@ -1,10 +1,9 @@
 package com.threatconnect.sdk.parser.util.attribute;
 
+import com.threatconnect.sdk.parser.model.GroupType;
+
 import java.util.HashSet;
 import java.util.Set;
-
-import com.threatconnect.sdk.parser.model.GroupType;
-import com.threatconnect.sdk.parser.model.IndicatorType;
 
 public class AttributeDefinition
 {
@@ -13,12 +12,12 @@ public class AttributeDefinition
 	private String errorMessage;
 	private int maxSize;
 	
-	private final Set<IndicatorType> indicatorTypes;
+	private final Set<String> indicatorTypes;
 	private final Set<GroupType> groupTypes;
 	
 	public AttributeDefinition()
 	{
-		this.indicatorTypes = new HashSet<IndicatorType>();
+		this.indicatorTypes = new HashSet<String>();
 		this.groupTypes = new HashSet<GroupType>();
 	}
 	
@@ -62,7 +61,7 @@ public class AttributeDefinition
 		this.maxSize = maxSize;
 	}
 	
-	public Set<IndicatorType> getIndicatorTypes()
+	public Set<String> getIndicatorTypes()
 	{
 		return indicatorTypes;
 	}

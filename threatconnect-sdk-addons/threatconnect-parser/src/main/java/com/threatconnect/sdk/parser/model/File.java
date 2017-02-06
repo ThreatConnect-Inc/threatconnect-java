@@ -5,6 +5,8 @@ import java.util.List;
 
 public class File extends Indicator
 {
+	public static final String INDICATOR_TYPE = "File";
+	
 	public static final int MD5_LENGTH = 32;
 	public static final int SHA1_LENGTH = 40;
 	public static final int SHA256_LENGTH = 64;
@@ -18,7 +20,7 @@ public class File extends Indicator
 	
 	public File()
 	{
-		super(IndicatorType.FILE);
+		super(INDICATOR_TYPE);
 		fileOccurrences = new ArrayList<FileOccurrence>();
 	}
 	

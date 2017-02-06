@@ -2,9 +2,11 @@ package com.threatconnect.sdk.parser.model;
 
 public class Host extends Indicator
 {
+	public static final String INDICATOR_TYPE = "Host";
+	
 	public Host()
 	{
-		super(IndicatorType.HOST);
+		super(INDICATOR_TYPE);
 	}
 	
 	private String hostName;
