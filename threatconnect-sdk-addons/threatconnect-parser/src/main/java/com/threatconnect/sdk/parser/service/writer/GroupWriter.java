@@ -174,25 +174,20 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 			// create a new group writer to do the association
 			AbstractGroupWriterAdapter<T> writer = createWriterAdapter();
 			ApiEntitySingleResponse<?, ?> response = null;
-			String indicatorID = null;
+			String indicatorID = indicator.getIdentifier();
 			
 			// switch based on the indicator type
 			switch (indicator.getIndicatorType())
 			{
 				case Address.INDICATOR_TYPE:
-					indicatorID = ((Address) indicator).getIp();
 					response = writer.associateIndicatorAddress(getSavedGroupID(), indicatorID);
 					break;
 				case EmailAddress.INDICATOR_TYPE:
-					indicatorID = ((EmailAddress) indicator).getAddress();
 					response = writer.associateIndicatorEmailAddress(getSavedGroupID(), indicatorID);
 					break;
 				case File.INDICATOR_TYPE:
 					File file = (File) indicator;
-					List<String> hashes = Arrays.asList(new String[]
-					{
-						file.getMd5(), file.getSha1(), file.getSha256()
-					});
+					List<String> hashes = Arrays.asList(file.getMd5(), file.getSha1(), file.getSha256());
 					
 					// :TODO: the plural version of this method throws an internal sdk error so we
 					// have to use the single method and loop through the hashes for each of the
@@ -208,15 +203,12 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 					}
 					break;
 				case Host.INDICATOR_TYPE:
-					indicatorID = ((Host) indicator).getHostName();
 					response = writer.associateIndicatorHost(getSavedGroupID(), indicatorID);
 					break;
 				case Url.INDICATOR_TYPE:
-					indicatorID = ((Url) indicator).getText();
 					response = writer.associateIndicatorUrl(getSavedGroupID(), indicatorID);
 					break;
 				default:
-					indicatorID = indicator.getIdentifier();
 					response = null;
 					//:FIXME: associate custom indicator to group? This method does not yet exist
 					//response = writer.associateIndicatorCustom(getSavedGroupID(), indicatorID);
