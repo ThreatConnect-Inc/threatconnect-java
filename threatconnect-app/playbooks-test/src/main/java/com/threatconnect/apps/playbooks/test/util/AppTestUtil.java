@@ -1,14 +1,20 @@
 package com.threatconnect.apps.playbooks.test.util;
 
 import com.threatconnect.app.apps.AppConfig;
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * @author Greg Marut
  */
 public class AppTestUtil
 {
+	private static final Logger logger = LoggerFactory.getLogger(AppTestUtil.class);
+	
 	public static void configureAppTestDirectories(final String appName, final AppConfig appConfig)
 	{
 		final String pathIn = "target/apptest/" + appName + "/in";
@@ -27,6 +33,19 @@ public class AppTestUtil
 			if (!dir.exists())
 			{
 				dir.mkdirs();
+			}
+			else
+			{
+				try
+				{
+					//clean the directory
+					logger.debug("Cleaning directory: " + dir.getAbsolutePath());
+					FileUtils.cleanDirectory(dir);
+				}
+				catch (IOException e)
+				{
+					logger.warn(e.getMessage(), e);
+				}
 			}
 		}
 		
