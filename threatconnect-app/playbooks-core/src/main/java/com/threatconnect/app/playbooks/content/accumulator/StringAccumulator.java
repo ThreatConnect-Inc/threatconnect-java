@@ -92,7 +92,13 @@ public class StringAccumulator extends ContentAccumulator<String>
 					//make sure the embedded result is not null
 					if (null != embeddedResult)
 					{
-						value = value.replaceFirst(Pattern.quote(variable), embeddedResult);
+						try
+						{
+							value = value.replaceFirst(Pattern.quote(variable), embeddedResult);
+						} catch(IllegalArgumentException e)
+						{
+							// ignore cases where the embedded variable can't be replaced
+						}
 					}
 					//the variable resolved to null so now check to see if the entire value string was the variable
 					else if (value.equals(variable))
