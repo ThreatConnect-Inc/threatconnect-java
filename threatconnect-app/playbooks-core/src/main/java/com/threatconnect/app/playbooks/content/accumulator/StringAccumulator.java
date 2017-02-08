@@ -92,7 +92,7 @@ public class StringAccumulator extends ContentAccumulator<String>
 					//make sure the embedded result is not null
 					if (null != embeddedResult)
 					{
-						value = value.replaceFirst(Pattern.quote(variable), embeddedResult);
+						value = value.replaceFirst(Pattern.quote(variable), Matcher.quoteReplacement(embeddedResult));
 					}
 					//the variable resolved to null so now check to see if the entire value string was the variable
 					else if (value.equals(variable))
@@ -102,7 +102,7 @@ public class StringAccumulator extends ContentAccumulator<String>
 					else
 					{
 						//this variable could not be resolved so replace it with the default text
-						value = value.replaceFirst(Pattern.quote(variable), VARIABLE_NOT_FOUND);
+						value = value.replaceFirst(Pattern.quote(variable), Matcher.quoteReplacement(VARIABLE_NOT_FOUND));
 					}
 					
 					//pop the variable off of the stack
@@ -114,7 +114,7 @@ public class StringAccumulator extends ContentAccumulator<String>
 						variable);
 					
 					//this variable is cyclical
-					value = value.replaceFirst(Pattern.quote(variable), CYCLICAL_VARIABLE_REFERENCE);
+					value = value.replaceFirst(Pattern.quote(variable), Matcher.quoteReplacement(CYCLICAL_VARIABLE_REFERENCE));
 				}
 			}
 		}
