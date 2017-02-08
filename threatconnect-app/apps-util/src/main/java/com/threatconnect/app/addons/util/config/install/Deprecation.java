@@ -1,22 +1,23 @@
 package com.threatconnect.app.addons.util.config.install;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author Greg Marut
  */
 public class Deprecation
 {
+	private  String indicatorType;
 	private Integer intervalDays;
 	private Integer confidenceAmount;
 	private boolean percentage;
 	
-	private final List<String> indicatorTypes;
-	
-	public Deprecation()
+	public String getIndicatorType()
 	{
-		this.indicatorTypes = new ArrayList<String>();
+		return indicatorType;
+	}
+	
+	public void setIndicatorType(final String indicatorType)
+	{
+		this.indicatorType = indicatorType;
 	}
 	
 	public Integer getIntervalDays()
@@ -47,10 +48,5 @@ public class Deprecation
 	public void setPercentage(final boolean percentage)
 	{
 		this.percentage = percentage;
-	}
-	
-	public List<String> getIndicatorTypes()
-	{
-		return indicatorTypes;
 	}
 }

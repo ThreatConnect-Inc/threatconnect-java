@@ -30,7 +30,7 @@ public class InstallTest
 		
 		Assert.assertEquals(1, install.getFeeds().size());
 		Assert.assertTrue(install.getFeeds().get(0).isEnableBulkJson());
-		Assert.assertTrue(install.getFeeds().get(0).getDeprecation().isPercentage());
+		Assert.assertTrue(install.getFeeds().get(0).getDeprecation().get(0).isPercentage());
 	}
 	
 	@Test

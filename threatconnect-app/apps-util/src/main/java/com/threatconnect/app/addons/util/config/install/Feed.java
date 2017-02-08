@@ -16,12 +16,13 @@ public class Feed
 	private Integer indicatorLimit;
 	private Long documentStorageLimitMb;
 	private String jobFile;
-	private Deprecation deprecation;
 	
+	private final List<Deprecation> deprecation;
 	private final List<ParamOverride> firstRunParams;
 	
 	public Feed()
 	{
+		this.deprecation = new ArrayList<Deprecation>();
 		this.firstRunParams = new ArrayList<ParamOverride>();
 	}
 	
@@ -105,14 +106,9 @@ public class Feed
 		this.jobFile = jobFile;
 	}
 	
-	public Deprecation getDeprecation()
+	public List<Deprecation> getDeprecation()
 	{
 		return deprecation;
-	}
-	
-	public void setDeprecation(final Deprecation deprecation)
-	{
-		this.deprecation = deprecation;
 	}
 	
 	public List<ParamOverride> getFirstRunParams()

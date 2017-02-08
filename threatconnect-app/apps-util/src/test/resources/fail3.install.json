@@ -35,16 +35,26 @@
       "sourceDescription": "Testing",
       "attributesFile": "test.attributes.csv",
       "enableBulkJson": true,
-      "deprecation": {
-        "indicatorTypes": [
-          "Address",
-          "Host",
-          "ASN"
-        ],
-        "intervalDays": 3,
-        "confidenceAmount": 5,
-        "percentage": true
-      },
+      "deprecation": [
+        {
+          "indicatorType": "Address",
+          "intervalDays": 3,
+          "confidenceAmount": 5,
+          "percentage": true
+        },
+        {
+          "indicatorType": "Host",
+          "intervalDays": 3,
+          "confidenceAmount": 5,
+          "percentage": true
+        },
+        {
+          "indicatorType": "ASN",
+          "intervalDays": 3,
+          "confidenceAmount": 5,
+          "percentage": true
+        }
+      ],
       "indicatorLimit": 400000,
       "documentStorageLimitMb": 1000,
       "jobFile": "text.job.json"
