@@ -39,12 +39,6 @@ public class FeedValidator extends Validator<Feed>
 		{
 			throwMissingFieldValidationException("jobFile", object);
 		}
-		
-		//make sure the deprecation list is not empty
-		if (object.getDeprecation().isEmpty())
-		{
-			throwMissingFieldValidationException("deprecation", object);
-		}
 	}
 	
 	private void throwMissingFieldValidationException(final String missingFieldName, final Feed object)
