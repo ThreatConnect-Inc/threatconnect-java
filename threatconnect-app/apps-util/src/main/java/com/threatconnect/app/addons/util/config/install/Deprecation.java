@@ -8,6 +8,7 @@ public class Deprecation
 	private  String indicatorType;
 	private Integer intervalDays;
 	private Integer confidenceAmount;
+	private boolean deleteAtMinimum;
 	private boolean percentage;
 	
 	public String getIndicatorType()
@@ -38,6 +39,16 @@ public class Deprecation
 	public void setConfidenceAmount(final Integer confidenceAmount)
 	{
 		this.confidenceAmount = confidenceAmount;
+	}
+	
+	public boolean isDeleteAtMinimum()
+	{
+		return deleteAtMinimum;
+	}
+	
+	public void setDeleteAtMinimum(final boolean deleteAtMinimum)
+	{
+		this.deleteAtMinimum = deleteAtMinimum;
 	}
 	
 	public boolean isPercentage()
