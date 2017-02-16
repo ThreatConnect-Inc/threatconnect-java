@@ -7,14 +7,14 @@ package com.threatconnect.sdk.client.writer;
 
 import com.threatconnect.sdk.client.response.WriteListResponse;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
-import com.threatconnect.sdk.server.entity.FileOccurrence;
 import com.threatconnect.sdk.server.entity.File;
+import com.threatconnect.sdk.server.entity.FileOccurrence;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.server.response.entity.FileOccurrenceListResponse;
 import com.threatconnect.sdk.server.response.entity.FileOccurrenceResponse;
 import com.threatconnect.sdk.server.response.entity.FileResponse;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -96,7 +96,15 @@ public class FileIndicatorWriterAdapter extends AbstractIndicatorWriterAdapter<F
         FileOccurrenceResponse item = createItem(getUrlBasePrefix() + ".byId.fileOccurrences"
                 , FileOccurrenceResponse.class, ownerName, map, fileOccurrence);
 
-        return (FileOccurrence) item.getData().getData();
+        if(item.isSuccess())
+        {
+            return item.getData().getData();
+        }
+        else
+        {
+            logger.warn(item.getMessage());
+            return null;
+        }
     }
 
     public ApiEntitySingleResponse deleteFileOccurrence(String fileHash, FileOccurrence fileOccurrence) throws IOException, FailedResponseException {
