@@ -13,9 +13,4 @@ public class StringKeyValue extends KeyValue<String, String>
 	{
 		super(key, value);
 	}
-	
-	public StringKeyValue(final String key, final String value, final String displayValue)
-	{
-		super(key, value, displayValue);
-	}
 }
