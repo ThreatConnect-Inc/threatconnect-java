@@ -33,7 +33,7 @@ public class ProxyEnabledURLDataSource extends UrlDataSource
 		return buildHttpClient().execute(get).getEntity().getContent();
 	}
 	
-	private CloseableHttpClient buildHttpClient()
+	protected CloseableHttpClient buildHttpClient()
 	{
 		return AppUtil.createClientBuilder(useProxyIfAvailable, true).build();
 	}
