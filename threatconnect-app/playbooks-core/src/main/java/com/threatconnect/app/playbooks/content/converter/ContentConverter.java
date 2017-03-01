@@ -59,7 +59,7 @@ public abstract class ContentConverter<T>
 			TypeFactory typeFactory = mapper.getTypeFactory();
 			JavaType type = constructType(typeFactory);
 			
-			return new ObjectMapper().readValue(raw, type);
+			return mapper.readValue(raw, type);
 		}
 		catch (IOException e)
 		{
