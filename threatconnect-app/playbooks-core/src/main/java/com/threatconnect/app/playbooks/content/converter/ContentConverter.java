@@ -1,5 +1,6 @@
 package com.threatconnect.app.playbooks.content.converter;
 
+import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.type.TypeFactory;
 import org.codehaus.jackson.map.util.ISO8601DateFormat;
@@ -18,6 +19,7 @@ public abstract class ContentConverter<T>
 	{
 		mapper = new ObjectMapper();
 		mapper.setDateFormat(DEFAULT_DATE_FORMATTER);
+		mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	}
 	
 	/**
