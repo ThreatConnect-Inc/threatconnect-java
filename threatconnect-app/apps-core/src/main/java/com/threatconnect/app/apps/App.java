@@ -110,13 +110,14 @@ public abstract class App
 	}
 	
 	/**
-	 * Writes data out to an output file for this app
+	 * Writes data out to an output file for this app  returns a file object
 	 *
 	 * @param fileName the filename to write to
 	 * @param data     the data to write
+	 * @return a File object corresponding to the written file
 	 * @throws IOException if there was an error writing the file
 	 */
-	public void writeOutFile(final String fileName, final byte[] data) throws IOException
+	public File writeOutFile(final String fileName, final byte[] data) throws IOException
 	{
 		// retrieve the file to write to
 		File file = getOutFile(fileName);
@@ -126,6 +127,30 @@ public abstract class App
 		{
 			out.write(data);
 		}
+		
+		return file;
+	}
+	
+	/**
+	 * Writes data out to a temp file for this app and returns a file object
+	 *
+	 * @param fileName the filename to write to
+	 * @param data     the data to write
+	 * @return a File object corresponding to the written file
+	 * @throws IOException if there was an error writing the file
+	 */
+	public File writeTempFile(final String fileName, final byte[] data) throws IOException
+	{
+		// retrieve the file to write to
+		File file = getTempFile(fileName);
+		
+		// write the data to this file
+		try (FileOutputStream out = new FileOutputStream(file))
+		{
+			out.write(data);
+		}
+		
+		return file;
 	}
 	
 	public AppConfig getAppConfig()
@@ -161,6 +186,11 @@ public abstract class App
 	public File getResultsLogFile()
 	{
 		return getOutFile(RESULTS_TC);
+	}
+	
+	public File getTempFile(final String fileName)
+	{
+		return new File(getAppConfig().getTcTempPath() + File.separator + fileName);
 	}
 	
 	public File getOutFile(final String fileName)
