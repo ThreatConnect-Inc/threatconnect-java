@@ -117,7 +117,11 @@ public class DataStoreWriterAdapter extends AbstractWriterAdapter
         }
 
         for (Map.Entry<String, String> param : params.entrySet()) {
-            url = url.replace(String.format("{%s}", param.getKey()), param.getValue());
+            System.out.println("URL = " + url + ", replacing {" + param.getKey() + ", " + param.getValue() + "}");
+
+            url = url.replace(
+                    String.format("{%s}", param.getKey()),
+                    param.getValue() != null ? param.getValue() : "");
         }
 
         Map<String, String> headers = new HashMap<>();

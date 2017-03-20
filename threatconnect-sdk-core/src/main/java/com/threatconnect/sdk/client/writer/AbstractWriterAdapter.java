@@ -5,8 +5,20 @@
  */
 package com.threatconnect.sdk.client.writer;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.threatconnect.sdk.client.AbstractClientAdapter;
+import com.threatconnect.sdk.client.UrlTypeable;
+import com.threatconnect.sdk.client.response.WriteListResponse;
+import com.threatconnect.sdk.conn.AbstractRequestExecutor.HttpMethod;
+import com.threatconnect.sdk.conn.Connection;
+import com.threatconnect.sdk.exception.FailedResponseException;
+import com.threatconnect.sdk.server.entity.CustomIndicator;
+import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
+import com.threatconnect.sdk.util.UploadMethodType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.EOFException;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -15,20 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import com.threatconnect.sdk.server.entity.CustomIndicator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.threatconnect.sdk.client.AbstractClientAdapter;
-import com.threatconnect.sdk.client.UrlTypeable;
-import com.threatconnect.sdk.client.response.WriteListResponse;
-import com.threatconnect.sdk.conn.AbstractRequestExecutor.HttpMethod;
-import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.exception.FailedResponseException;
-import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
-import com.threatconnect.sdk.util.UploadMethodType;
 
 /**
  *
@@ -308,8 +306,11 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
 
         if (paramMap != null) {
             for (Entry<String, Object> entry : paramMap.entrySet()) {
-                String value = URLEncoder.encode( entry.getValue().toString(), "UTF-8").replace("+", "%20");
-                url = url.replace(String.format("{%s}", entry.getKey()), value );
+                if (entry.getValue() != null)
+                {
+                    String value = URLEncoder.encode(entry.getValue().toString(), "UTF-8").replace("+", "%20");
+                    url = url.replace(String.format("{%s}", entry.getKey()), value);
+                }
             }
         }
 
