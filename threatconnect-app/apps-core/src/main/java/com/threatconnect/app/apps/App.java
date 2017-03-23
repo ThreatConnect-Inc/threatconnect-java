@@ -47,7 +47,10 @@ public abstract class App
 	 *
 	 * @return the name of the log file for this app to log to
 	 */
-	public abstract String getLogFilename();
+	public String getLogFilename()
+	{
+		return getClass().getSimpleName() + ".log";
+	}
 	
 	/**
 	 * Writes a message out to the application's message log file
