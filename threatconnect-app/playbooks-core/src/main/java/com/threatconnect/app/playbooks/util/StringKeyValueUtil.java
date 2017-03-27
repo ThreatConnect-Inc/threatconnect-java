@@ -26,7 +26,7 @@ public class StringKeyValueUtil
 			result.setKey(stringAccumulator.readContent(result.getKey()));
 			
 			//check to see if the value is a variable
-			if (PlaybooksVariableUtil.isVariable(result.getKey()))
+			if (PlaybooksVariableUtil.isVariable(result.getValue()))
 			{
 				//convert all embedded variables
 				String value = stringAccumulator.readContent(result.getValue());
