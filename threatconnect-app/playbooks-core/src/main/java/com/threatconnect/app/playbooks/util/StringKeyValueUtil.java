@@ -24,7 +24,28 @@ public class StringKeyValueUtil
 		{
 			//check the key and value to see if any variables need to be resolved within
 			result.setKey(stringAccumulator.readContent(result.getKey()));
-			result.setValue(stringAccumulator.readContent(result.getValue()));
+			
+			//check to see if the value is a variable
+			if (PlaybooksVariableUtil.isVariable(result.getKey()))
+			{
+				//convert all embedded variables
+				String value = stringAccumulator.readContent(result.getValue());
+				
+				//to eliminate the double-quotation mark issue, we need to remove the extra quotes that were added
+				//because multiple strings were deserialized
+				if (value.startsWith("\"") && value.endsWith("\""))
+				{
+					//chop off the beginning and ending quotation marks
+					value = value.substring(1, value.length() - 2);
+				}
+				
+				result.setValue(value);
+			}
+			else
+			{
+				//convert all embedded variables as needed
+				result.setValue(stringAccumulator.readContent(result.getValue()));
+			}
 		}
 	}
 }
