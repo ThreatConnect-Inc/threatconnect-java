@@ -30,7 +30,7 @@ public class AppMain implements AppExecutor
 		try
 		{
 			// create the app config object
-			AppConfig appConfig = new SdkAppConfig();
+			AppConfig appConfig = SdkAppConfig.getInstance();
 			
 			// set whether or not api logging is enabled
 			ServerLogger.getInstance().setEnabled(appConfig.isTcLogToApi());

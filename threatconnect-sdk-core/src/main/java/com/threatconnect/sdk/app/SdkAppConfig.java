@@ -13,6 +13,11 @@ public class SdkAppConfig extends AppConfig
 	
 	private static SdkAppConfig instance;
 	
+	private SdkAppConfig()
+	{
+		
+	}
+	
 	@Override
 	protected String loadSetting(final String key)
 	{

@@ -97,7 +97,7 @@ public abstract class EnhancedApp extends App
 
 	public EnhancedApp()
 	{
-		this(new SdkAppConfig());
+		this(SdkAppConfig.getInstance());
 	}
 
 	public EnhancedApp(AppConfig appConfig)
