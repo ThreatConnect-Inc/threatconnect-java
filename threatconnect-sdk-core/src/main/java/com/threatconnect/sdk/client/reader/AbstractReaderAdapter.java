@@ -5,26 +5,24 @@
  */
 package com.threatconnect.sdk.client.reader;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URLEncoder;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.apache.http.entity.ContentType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.threatconnect.sdk.client.AbstractClientAdapter;
 import com.threatconnect.sdk.client.UrlTypeable;
 import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
-import com.threatconnect.sdk.server.entity.CustomIndicator;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.util.ApiFilterParser;
 import com.threatconnect.sdk.util.ApiFilterType;
+import org.apache.http.entity.ContentType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLEncoder;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  *
@@ -61,7 +59,7 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
         }
 
         logger.trace("calling url={}", url);
-        String content = executor.execute(AbstractRequestExecutor.HttpMethod.GET, url);
+        String content = executor.execute(AbstractRequestExecutor.HttpMethod.GET, url).getEntity();
         logger.trace("returning content={}", content);
 
         return content;
@@ -125,7 +123,7 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
 
         logger.trace("Calling url={}", url);
         System.out.println("Calling url={}"+url);
-        String content = executor.execute(AbstractRequestExecutor.HttpMethod.GET, url);
+        String content = executor.execute(AbstractRequestExecutor.HttpMethod.GET, url).getEntity();
         logger.trace("returning content={}", content);
         System.out.println("returning content={}"+content);
 

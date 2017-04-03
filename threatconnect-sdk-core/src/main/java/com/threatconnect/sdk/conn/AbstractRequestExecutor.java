@@ -35,12 +35,12 @@ public abstract class AbstractRequestExecutor
 
     }
 
-    public abstract String execute(String path, HttpMethod type, Object obj) throws IOException;
-    public abstract String execute(String path, HttpMethod type, Map<String, String> headers, Object ojb) throws IOException;
+    public abstract HttpResponse execute(String path, HttpMethod type, Object obj) throws IOException;
+    public abstract HttpResponse execute(String path, HttpMethod type, Map<String, String> headers, Object ojb) throws IOException;
     public abstract String executeUploadByteStream(String path, InputStream inputStream, UploadMethodType uploadMethodType) throws IOException;
     public abstract InputStream executeDownloadByteStream(String path, ContentType contentType) throws IOException;
 
-    public String execute(HttpMethod method, String path) throws IOException
+    public HttpResponse execute(HttpMethod method, String path) throws IOException
     {
         return execute(path, method, null);
     }

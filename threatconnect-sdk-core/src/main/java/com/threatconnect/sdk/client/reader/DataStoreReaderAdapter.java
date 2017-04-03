@@ -74,7 +74,7 @@ public class DataStoreReaderAdapter extends AbstractReaderAdapter
         headers.put("DB-Method", esMethod.name());
 
         logger.trace("calling url={}", url);
-        String content = executor.execute(url, POST, headers, body);
+        String content = executor.execute(url, POST, headers, body).getEntity();
 
         logger.trace("returning content={}", content);
 

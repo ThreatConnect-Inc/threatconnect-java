@@ -318,7 +318,7 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter {
 		try
 		{
 			logger.trace("Calling url={}", url);
-			String content = executor.execute(url, requestType, saveObject);
+			String content = executor.execute(url, requestType, saveObject).getEntity();
 			logger.trace("returning content={}", content);
 			result = mapper.readValue(content, type);
 		}

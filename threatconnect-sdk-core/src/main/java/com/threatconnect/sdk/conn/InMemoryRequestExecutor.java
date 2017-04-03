@@ -24,15 +24,15 @@ public class InMemoryRequestExecutor extends AbstractRequestExecutor
     }
 
     @Override
-    public String execute(String path, HttpMethod type, Object obj) throws IOException
+    public HttpResponse execute(String path, HttpMethod type, Object obj) throws IOException
     {
-        return null;
+        return new HttpResponse();
     }
 
     @Override
-    public String execute(String path, HttpMethod type, Map<String, String> headers, Object ojb) throws IOException
+    public HttpResponse execute(String path, HttpMethod type, Map<String, String> headers, Object ojb) throws IOException
     {
-        return null;
+        return new HttpResponse();
     }
 
     @Override
