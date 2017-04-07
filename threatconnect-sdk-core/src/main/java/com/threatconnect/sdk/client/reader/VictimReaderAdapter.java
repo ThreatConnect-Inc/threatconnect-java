@@ -217,7 +217,27 @@ public class VictimReaderAdapter
     public Signature getAssociatedGroupSignature(Integer uniqueId, Integer signatureId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupSignature(uniqueId, signatureId, ownerName);
     }
-
+    
+    @Override
+    public IterableResponse<Campaign> getAssociatedGroupCampaigns(Integer uniqueId) throws IOException, FailedResponseException {
+        return groupAssocReader.getAssociatedGroupCampaigns(uniqueId);
+    }
+    
+    @Override
+    public IterableResponse<Campaign> getAssociatedGroupCampaigns(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocReader.getAssociatedGroupCampaigns(uniqueId, ownerName);
+    }
+    
+    @Override
+    public Campaign getAssociatedGroupCampaign(Integer uniqueId, Integer campaignId) throws IOException, FailedResponseException {
+        return groupAssocReader.getAssociatedGroupCampaign(uniqueId, campaignId);
+    }
+    
+    @Override
+    public Campaign getAssociatedGroupCampaign(Integer uniqueId, Integer campaignId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocReader.getAssociatedGroupCampaign(uniqueId, campaignId, ownerName);
+    }
+    
     @Override
     public IterableResponse<Threat> getAssociatedGroupThreats(Integer uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupThreats(uniqueId);

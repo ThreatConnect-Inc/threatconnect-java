@@ -81,5 +81,14 @@ public interface GroupAssociateReadable<P> {
 
     public Threat getAssociatedGroupThreat(P uniqueId, Integer threatId, String ownerName) 
             throws IOException, FailedResponseException;
-
+    
+    public IterableResponse<Campaign> getAssociatedGroupCampaigns(P uniqueId) throws IOException, FailedResponseException;
+    
+    public IterableResponse<Campaign> getAssociatedGroupCampaigns(P uniqueId, String ownerName)
+        throws IOException, FailedResponseException;
+    
+    public Campaign getAssociatedGroupCampaign(P uniqueId, Integer campaignId) throws IOException, FailedResponseException;
+    
+    public Campaign getAssociatedGroupCampaign(P uniqueId, Integer campaignId, String ownerName)
+        throws IOException, FailedResponseException;
 }

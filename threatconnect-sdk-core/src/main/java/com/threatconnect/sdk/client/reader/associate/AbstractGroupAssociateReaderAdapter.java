@@ -150,7 +150,35 @@ public abstract class AbstractGroupAssociateReaderAdapter<P> extends AbstractBas
 
         return (Signature)data.getData().getData();
     }
-
+    
+    @Override
+    public IterableResponse<Campaign> getAssociatedGroupCampaigns(P uniqueId) throws IOException, FailedResponseException {
+        return getAssociatedGroupCampaigns(uniqueId, null);
+    }
+    
+    @Override
+    public IterableResponse<Campaign> getAssociatedGroupCampaigns(P uniqueId, String ownerName)
+        throws IOException, FailedResponseException {
+        
+        Map<String,Object> map = createParamMap("id", uniqueId);
+        return getItems(getUrlBasePrefix() + ".byId.groups.campaigns", CampaignListResponse.class, Campaign.class, ownerName, map);
+    }
+    
+    @Override
+    public Campaign getAssociatedGroupCampaign(P uniqueId, Integer campaignId) throws IOException, FailedResponseException {
+        return getAssociatedGroupCampaign(uniqueId, campaignId, null);
+    }
+    
+    @Override
+    public Campaign getAssociatedGroupCampaign(P uniqueId, Integer campaignId, String ownerName)
+        throws IOException, FailedResponseException {
+        
+        Map<String,Object> map = createParamMap("id", uniqueId, "groupId", campaignId);
+        CampaignResponse data = getItem(getUrlBasePrefix() + ".byId.groups.campaigns.byGroupId", CampaignResponse.class, ownerName, map);
+        
+        return (Campaign)data.getData().getData();
+    }
+    
     @Override
     public IterableResponse<Threat> getAssociatedGroupThreats(P uniqueId) throws IOException, FailedResponseException {
         return getAssociatedGroupThreats(uniqueId, null); 

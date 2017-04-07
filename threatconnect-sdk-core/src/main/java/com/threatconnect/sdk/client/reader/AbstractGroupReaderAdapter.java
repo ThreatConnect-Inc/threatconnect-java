@@ -1,18 +1,49 @@
 package com.threatconnect.sdk.client.reader;
 
 import com.threatconnect.sdk.client.UrlTypeable;
-import com.threatconnect.sdk.client.reader.associate.*;
+import com.threatconnect.sdk.client.reader.associate.AbstractAttributeAssociateReaderAdapter;
+import com.threatconnect.sdk.client.reader.associate.AbstractGroupAssociateReaderAdapter;
+import com.threatconnect.sdk.client.reader.associate.AbstractIndicatorAssociateReaderAdapter;
+import com.threatconnect.sdk.client.reader.associate.AbstractSecurityLabelAssociateReaderAdapter;
+import com.threatconnect.sdk.client.reader.associate.AbstractTagAssociateReaderAdapter;
+import com.threatconnect.sdk.client.reader.associate.AbstractVictimAssetAssociateReaderAdapter;
+import com.threatconnect.sdk.client.reader.associate.AttributeAssociateReadable;
+import com.threatconnect.sdk.client.reader.associate.GroupAssociateReadable;
+import com.threatconnect.sdk.client.reader.associate.IndicatorAssociateReadable;
+import com.threatconnect.sdk.client.reader.associate.SecurityLabelAssociateReadable;
+import com.threatconnect.sdk.client.reader.associate.TagAssociateReadable;
+import com.threatconnect.sdk.client.reader.associate.VictimAssetAssociateReadable;
 import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
-import com.threatconnect.sdk.server.entity.*;
+import com.threatconnect.sdk.server.entity.Address;
+import com.threatconnect.sdk.server.entity.Adversary;
+import com.threatconnect.sdk.server.entity.Attribute;
+import com.threatconnect.sdk.server.entity.Campaign;
+import com.threatconnect.sdk.server.entity.Document;
+import com.threatconnect.sdk.server.entity.Email;
+import com.threatconnect.sdk.server.entity.EmailAddress;
+import com.threatconnect.sdk.server.entity.File;
+import com.threatconnect.sdk.server.entity.Group;
+import com.threatconnect.sdk.server.entity.Host;
+import com.threatconnect.sdk.server.entity.Incident;
+import com.threatconnect.sdk.server.entity.Indicator;
+import com.threatconnect.sdk.server.entity.SecurityLabel;
+import com.threatconnect.sdk.server.entity.Signature;
+import com.threatconnect.sdk.server.entity.Tag;
+import com.threatconnect.sdk.server.entity.Threat;
+import com.threatconnect.sdk.server.entity.Url;
+import com.threatconnect.sdk.server.entity.VictimAsset;
+import com.threatconnect.sdk.server.entity.VictimEmailAddress;
+import com.threatconnect.sdk.server.entity.VictimNetworkAccount;
+import com.threatconnect.sdk.server.entity.VictimPhone;
+import com.threatconnect.sdk.server.entity.VictimSocialNetwork;
+import com.threatconnect.sdk.server.entity.VictimWebSite;
 import com.threatconnect.sdk.server.response.entity.ApiEntityListResponse;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
-import com.threatconnect.sdk.server.response.entity.CustomIndicatorResponse;
 import com.threatconnect.sdk.server.response.entity.GroupListResponse;
 
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * EmailReaderAdapter is the primary client adapter for all Email group level objects.
@@ -273,7 +304,27 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     public Signature getAssociatedGroupSignature(Integer uniqueId, Integer signatureId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupSignature(uniqueId, signatureId, ownerName);
     }
-
+    
+    @Override
+    public IterableResponse<Campaign> getAssociatedGroupCampaigns(Integer uniqueId) throws IOException, FailedResponseException {
+        return groupAssocReader.getAssociatedGroupCampaigns(uniqueId);
+    }
+    
+    @Override
+    public IterableResponse<Campaign> getAssociatedGroupCampaigns(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocReader.getAssociatedGroupCampaigns(uniqueId, ownerName);
+    }
+    
+    @Override
+    public Campaign getAssociatedGroupCampaign(Integer uniqueId, Integer campaignId) throws IOException, FailedResponseException {
+        return groupAssocReader.getAssociatedGroupCampaign(uniqueId, campaignId);
+    }
+    
+    @Override
+    public Campaign getAssociatedGroupCampaign(Integer uniqueId, Integer campaignId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocReader.getAssociatedGroupCampaign(uniqueId, campaignId, ownerName);
+    }
+    
     @Override
     public IterableResponse<Threat> getAssociatedGroupThreats(Integer uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupThreats(uniqueId);

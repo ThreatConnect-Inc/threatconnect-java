@@ -199,7 +199,27 @@ public class TagReaderAdapter
     public Signature getAssociatedGroupSignature(String uniqueId, Integer signatureId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupSignature(uniqueId, signatureId, ownerName);
     }
-
+    
+    @Override
+    public IterableResponse<Campaign> getAssociatedGroupCampaigns(String uniqueId) throws IOException, FailedResponseException {
+        return groupAssocReader.getAssociatedGroupCampaigns(uniqueId);
+    }
+    
+    @Override
+    public IterableResponse<Campaign> getAssociatedGroupCampaigns(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocReader.getAssociatedGroupCampaigns(uniqueId, ownerName);
+    }
+    
+    @Override
+    public Campaign getAssociatedGroupCampaign(String uniqueId, Integer campaignId) throws IOException, FailedResponseException {
+        return groupAssocReader.getAssociatedGroupCampaign(uniqueId, campaignId);
+    }
+    
+    @Override
+    public Campaign getAssociatedGroupCampaign(String uniqueId, Integer campaignId, String ownerName) throws IOException, FailedResponseException {
+        return groupAssocReader.getAssociatedGroupCampaign(uniqueId, campaignId, ownerName);
+    }
+    
     @Override
     public IterableResponse<Threat> getAssociatedGroupThreats(String uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupThreats(uniqueId);
