@@ -5,13 +5,10 @@
  */
 package com.threatconnect.sdk.client.reader;
 
-import java.io.IOException;
-
-import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Address;
 import com.threatconnect.sdk.server.entity.Adversary;
+import com.threatconnect.sdk.server.entity.Campaign;
 import com.threatconnect.sdk.server.entity.CustomIndicator;
 import com.threatconnect.sdk.server.entity.Email;
 import com.threatconnect.sdk.server.entity.EmailAddress;
@@ -26,6 +23,8 @@ import com.threatconnect.sdk.server.response.entity.AddressListResponse;
 import com.threatconnect.sdk.server.response.entity.AddressResponse;
 import com.threatconnect.sdk.server.response.entity.AdversaryListResponse;
 import com.threatconnect.sdk.server.response.entity.AdversaryResponse;
+import com.threatconnect.sdk.server.response.entity.CampaignListResponse;
+import com.threatconnect.sdk.server.response.entity.CampaignResponse;
 import com.threatconnect.sdk.server.response.entity.CustomIndicatorListResponse;
 import com.threatconnect.sdk.server.response.entity.CustomIndicatorResponse;
 import com.threatconnect.sdk.server.response.entity.EmailAddressListResponse;
@@ -58,6 +57,19 @@ public class ReaderAdapterFactory
 			public String getUrlType()
 			{
 				return "adversaries";
+			}
+		};
+	}
+	
+	public static AbstractGroupReaderAdapter<Campaign> createCampaignGroupReader(Connection conn)
+	{
+		return new AbstractGroupReaderAdapter<Campaign>(conn, CampaignResponse.class, Campaign.class,
+			CampaignListResponse.class)
+		{
+			@Override
+			public String getUrlType()
+			{
+				return "campaigns";
 			}
 		};
 	}

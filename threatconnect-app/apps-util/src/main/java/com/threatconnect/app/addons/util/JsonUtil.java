@@ -2,6 +2,7 @@ package com.threatconnect.app.addons.util;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +35,28 @@ public class JsonUtil
 		if (null != element)
 		{
 			return element.getAsJsonArray();
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * Given a root node, traverses the json object and safely handles any null objects along the
+	 * way
+	 *
+	 * @param root
+	 * @param paths
+	 * @return
+	 */
+	public static JsonObject getAsJsonObject(final JsonElement root, final String... paths)
+	{
+		// make sure the element is not null
+		JsonElement element = get(root, paths);
+		if (null != element)
+		{
+			return element.getAsJsonObject();
 		}
 		else
 		{

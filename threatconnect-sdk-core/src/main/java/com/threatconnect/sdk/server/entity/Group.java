@@ -25,7 +25,7 @@ import java.util.TreeMap;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @XmlAccessorType(XmlAccessType.FIELD)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@XmlSeeAlso({Adversary.class, Document.class, Email.class, Incident.class, Signature.class, Task.class, Threat.class })
+@XmlSeeAlso({Adversary.class, Campaign.class, Document.class, Email.class, Incident.class, Signature.class, Task.class, Threat.class })
 public class Group implements AttributeHolder
 {
 
@@ -43,6 +43,7 @@ public class Group implements AttributeHolder
 
     public enum Type {
           Adversary
+        , Campaign
         , Document
         , Email
         , Incident

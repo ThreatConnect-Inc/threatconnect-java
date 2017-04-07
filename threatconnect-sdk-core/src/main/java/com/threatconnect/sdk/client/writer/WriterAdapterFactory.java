@@ -5,12 +5,35 @@
  */
 package com.threatconnect.sdk.client.writer;
 
-import java.io.IOException;
-
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
-import com.threatconnect.sdk.server.entity.*;
-import com.threatconnect.sdk.server.response.entity.*;
+import com.threatconnect.sdk.server.entity.Address;
+import com.threatconnect.sdk.server.entity.Adversary;
+import com.threatconnect.sdk.server.entity.Campaign;
+import com.threatconnect.sdk.server.entity.CustomIndicator;
+import com.threatconnect.sdk.server.entity.Email;
+import com.threatconnect.sdk.server.entity.EmailAddress;
+import com.threatconnect.sdk.server.entity.Group;
+import com.threatconnect.sdk.server.entity.Host;
+import com.threatconnect.sdk.server.entity.Incident;
+import com.threatconnect.sdk.server.entity.Indicator;
+import com.threatconnect.sdk.server.entity.Signature;
+import com.threatconnect.sdk.server.entity.Threat;
+import com.threatconnect.sdk.server.entity.Url;
+import com.threatconnect.sdk.server.response.entity.AddressResponse;
+import com.threatconnect.sdk.server.response.entity.AdversaryResponse;
+import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
+import com.threatconnect.sdk.server.response.entity.CampaignResponse;
+import com.threatconnect.sdk.server.response.entity.CustomIndicatorResponse;
+import com.threatconnect.sdk.server.response.entity.EmailAddressResponse;
+import com.threatconnect.sdk.server.response.entity.EmailResponse;
+import com.threatconnect.sdk.server.response.entity.HostResponse;
+import com.threatconnect.sdk.server.response.entity.IncidentResponse;
+import com.threatconnect.sdk.server.response.entity.SignatureResponse;
+import com.threatconnect.sdk.server.response.entity.ThreatResponse;
+import com.threatconnect.sdk.server.response.entity.UrlResponse;
+
+import java.io.IOException;
 
 /**
  *
@@ -32,6 +55,21 @@ public class WriterAdapterFactory {
 			}
         };
     }
+	
+	public static AbstractGroupWriterAdapter<Campaign> createCampaignGroupWriter(Connection conn) {
+		return new AbstractGroupWriterAdapter<Campaign>(conn, CampaignResponse.class) {
+			@Override
+			public String getUrlType() {
+				return "campaigns";
+			}
+			@Override
+			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Integer uniqueId, String targetId,
+				String assciateType, String targetType) throws IOException, FailedResponseException {
+				// TODO Auto-generated method stub
+				throw new RuntimeException("not implemented yet");
+			}
+		};
+	}
 
     public static AbstractGroupWriterAdapter<Email> createEmailGroupWriter(Connection conn) {
         return new AbstractGroupWriterAdapter<Email>(conn, EmailResponse.class) {
@@ -248,6 +286,8 @@ public class WriterAdapterFactory {
         switch (type) {
             case Adversary:
                 return createAdversaryGroupWriter(conn);
+			case Campaign:
+				return createCampaignGroupWriter(conn);
             case Document:
             	return createDocumentWriter(conn);
             case Email:
@@ -264,7 +304,7 @@ public class WriterAdapterFactory {
                 return null;
         }
     }
-
+	
     public static DocumentWriterAdapter createDocumentWriter(Connection conn) {
         return new DocumentWriterAdapter(conn);
     }

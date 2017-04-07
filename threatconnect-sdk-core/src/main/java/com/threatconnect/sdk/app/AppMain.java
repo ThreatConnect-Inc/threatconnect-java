@@ -103,10 +103,13 @@ public class AppMain implements AppExecutor
 			
 			// find the set of all classes that extend the App class
 			Set<Class<? extends App>> subTypes = scanForAppClasses();
+			logger.debug("Found {} classes of type {}", appClasses.size(), App.class.getName());
 			
 			// for each of the classes
 			for (Class<? extends App> appClass : subTypes)
 			{
+				logger.trace("Checking {}", appClass.getName());
+				
 				// make sure that this is not an abstract class
 				if (!Modifier.isAbstract(appClass.getModifiers()))
 				{
