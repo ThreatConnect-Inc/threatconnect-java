@@ -3,6 +3,7 @@ package com.threatconnect.sdk.parser.service.save;
 import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.parser.model.Adversary;
+import com.threatconnect.sdk.parser.model.Campaign;
 import com.threatconnect.sdk.parser.model.Document;
 import com.threatconnect.sdk.parser.model.Email;
 import com.threatconnect.sdk.parser.model.File;
@@ -15,6 +16,7 @@ import com.threatconnect.sdk.parser.model.Signature;
 import com.threatconnect.sdk.parser.model.Threat;
 import com.threatconnect.sdk.parser.service.writer.AdversaryWriter;
 import com.threatconnect.sdk.parser.service.writer.BatchIndicatorWriter;
+import com.threatconnect.sdk.parser.service.writer.CampaignWriter;
 import com.threatconnect.sdk.parser.service.writer.DocumentWriter;
 import com.threatconnect.sdk.parser.service.writer.EmailWriter;
 import com.threatconnect.sdk.parser.service.writer.GroupWriter;
@@ -269,6 +271,9 @@ public class BatchApiSaveService implements SaveService
 		{
 			case ADVERSARY:
 				writer = new AdversaryWriter(connection, (Adversary) group);
+				break;
+			case CAMPAIGN:
+				writer = new CampaignWriter(connection, (Campaign) group);
 				break;
 			case DOCUMENT:
 				writer = new DocumentWriter(connection, (Document) group);

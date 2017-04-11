@@ -226,6 +226,8 @@ public class ReaderAdapterFactory
 		{
 			case Adversary:
 				return createAdversaryGroupReader(conn);
+			case Campaign:
+				return createCampaignGroupReader(conn);
 			case Document:
 				return createDocumentReader(conn);
 			case Email:
@@ -239,7 +241,7 @@ public class ReaderAdapterFactory
 			case Task:
 				return createTaskReader(conn);
 			default:
-				throw new IllegalArgumentException(type + "is not a vaild GroupType");
+				throw new IllegalArgumentException(type + " is not a vaild GroupType");
 		}
 		
 	}
