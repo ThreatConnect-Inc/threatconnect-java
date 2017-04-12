@@ -8,9 +8,9 @@ import com.threatconnect.app.playbooks.content.ContentService;
 import com.threatconnect.app.playbooks.content.accumulator.ContentException;
 import com.threatconnect.app.playbooks.content.entity.StringKeyValue;
 import com.threatconnect.app.playbooks.content.entity.TCEntity;
+import com.threatconnect.app.playbooks.db.DBService;
 import com.threatconnect.app.playbooks.db.DBServiceFactory;
 import com.threatconnect.app.playbooks.util.PlaybooksVariableUtil;
-import com.threatconnect.app.playbooks.db.DBService;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -42,9 +42,9 @@ public abstract class PlaybooksApp extends App
 	
 	public void init(final AppConfig appConfig, final DBService customDBService)
 	{
-	    super.init(appConfig);
-	    this.playbooksAppConfig = new PlaybooksAppConfig(appConfig);
-	    this.contentService = new ContentService(customDBService);
+		super.init(appConfig);
+		this.playbooksAppConfig = new PlaybooksAppConfig(appConfig);
+		this.contentService = new ContentService(customDBService);
 	}
 	
 	@Override
@@ -225,11 +225,20 @@ public abstract class PlaybooksApp extends App
 	 *
 	 * @param param the app parameter which represents a playbooks variable
 	 * @param value the value to write to the variable
+	 * @return whether or not the value was written
 	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
-	public final void writeStringContent(final String param, final String value) throws ContentException
+	public final boolean writeStringContent(final String param, final String value) throws ContentException
 	{
-		getContentService().writeString(findOutputVariable(param, PlaybookVariableType.String), value);
+		if (isOutputParamExpected(param, PlaybookVariableType.String))
+		{
+			getContentService().writeString(findOutputVariable(param, PlaybookVariableType.String), value);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	/**
@@ -250,11 +259,20 @@ public abstract class PlaybooksApp extends App
 	 *
 	 * @param param  the app parameter which represents a playbooks variable
 	 * @param values the list of values to write to the variable
+	 * @return whether or not the value was written
 	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
-	public final void writeStringListContent(final String param, final List<String> values) throws ContentException
+	public final boolean writeStringListContent(final String param, final List<String> values) throws ContentException
 	{
-		getContentService().writeStringList(findOutputVariable(param, PlaybookVariableType.StringArray), values);
+		if (isOutputParamExpected(param, PlaybookVariableType.StringArray))
+		{
+			getContentService().writeStringList(findOutputVariable(param, PlaybookVariableType.StringArray), values);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	/**
@@ -274,11 +292,20 @@ public abstract class PlaybooksApp extends App
 	 *
 	 * @param param the app parameter which represents a playbooks variable
 	 * @param value the value to write to the variable
+	 * @return whether or not the value was written
 	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
-	public final void writeBinaryContent(final String param, final byte[] value) throws ContentException
+	public final boolean writeBinaryContent(final String param, final byte[] value) throws ContentException
 	{
-		getContentService().writeBinary(findOutputVariable(param, PlaybookVariableType.Binary), value);
+		if (isOutputParamExpected(param, PlaybookVariableType.Binary))
+		{
+			getContentService().writeBinary(findOutputVariable(param, PlaybookVariableType.Binary), value);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	/**
@@ -298,11 +325,20 @@ public abstract class PlaybooksApp extends App
 	 *
 	 * @param param the app parameter which represents a playbooks variable
 	 * @param value the value to write to the variable
+	 * @return whether or not the value was written
 	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
-	public final void writeBinaryArrayContent(final String param, final byte[][] value) throws ContentException
+	public final boolean writeBinaryArrayContent(final String param, final byte[][] value) throws ContentException
 	{
-		getContentService().writeBinaryArray(findOutputVariable(param, PlaybookVariableType.BinaryArray), value);
+		if (isOutputParamExpected(param, PlaybookVariableType.BinaryArray))
+		{
+			getContentService().writeBinaryArray(findOutputVariable(param, PlaybookVariableType.BinaryArray), value);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	/**
@@ -322,11 +358,20 @@ public abstract class PlaybooksApp extends App
 	 *
 	 * @param param the app parameter which represents a playbooks variable
 	 * @param value the value to write to the variable
+	 * @return whether or not the value was written
 	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
-	public final void writeKeyValueContent(final String param, final StringKeyValue value) throws ContentException
+	public final boolean writeKeyValueContent(final String param, final StringKeyValue value) throws ContentException
 	{
-		getContentService().writeKeyValue(findOutputVariable(param, PlaybookVariableType.KeyValue), value);
+		if (isOutputParamExpected(param, PlaybookVariableType.KeyValue))
+		{
+			getContentService().writeKeyValue(findOutputVariable(param, PlaybookVariableType.KeyValue), value);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	/**
@@ -346,12 +391,22 @@ public abstract class PlaybooksApp extends App
 	 *
 	 * @param param the app parameter which represents a playbooks variable
 	 * @param value the value to write to the variable
+	 * @return whether or not the value was written
 	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
-	public final void writeKeyValueArrayContent(final String param, final List<StringKeyValue> value)
+	public final boolean writeKeyValueArrayContent(final String param, final List<StringKeyValue> value)
 		throws ContentException
 	{
-		getContentService().writeKeyValueArray(findOutputVariable(param, PlaybookVariableType.KeyValueArray), value);
+		if (isOutputParamExpected(param, PlaybookVariableType.KeyValueArray))
+		{
+			getContentService().writeKeyValueArray(
+				findOutputVariable(param, PlaybookVariableType.KeyValueArray), value);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	/**
@@ -371,11 +426,20 @@ public abstract class PlaybooksApp extends App
 	 *
 	 * @param param the app parameter which represents a playbooks variable
 	 * @param value the value to write to the variable
+	 * @return whether or not the value was written
 	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
-	public final void writeTCEntityContent(final String param, final TCEntity value) throws ContentException
+	public final boolean writeTCEntityContent(final String param, final TCEntity value) throws ContentException
 	{
-		getContentService().writeTCEntity(findOutputVariable(param, PlaybookVariableType.TCEntity), value);
+		if (isOutputParamExpected(param, PlaybookVariableType.TCEntity))
+		{
+			getContentService().writeTCEntity(findOutputVariable(param, PlaybookVariableType.TCEntity), value);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	/**
@@ -395,11 +459,21 @@ public abstract class PlaybooksApp extends App
 	 *
 	 * @param param the app parameter which represents a playbooks variable
 	 * @param value the value to write to the variable
+	 * @return whether or not the value was written
 	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
-	public final void writeTCEntityListContent(final String param, final List<TCEntity> value) throws ContentException
+	public final boolean writeTCEntityListContent(final String param, final List<TCEntity> value)
+		throws ContentException
 	{
-		getContentService().writeTCEntityList(findOutputVariable(param, PlaybookVariableType.TCEntityArray), value);
+		if (isOutputParamExpected(param, PlaybookVariableType.TCEntityArray))
+		{
+			getContentService().writeTCEntityList(findOutputVariable(param, PlaybookVariableType.TCEntityArray), value);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	/**
