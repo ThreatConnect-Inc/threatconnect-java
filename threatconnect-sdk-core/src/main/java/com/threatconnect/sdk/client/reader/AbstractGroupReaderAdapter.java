@@ -42,10 +42,12 @@ import com.threatconnect.sdk.server.entity.VictimWebSite;
 import com.threatconnect.sdk.server.response.entity.ApiEntityListResponse;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.server.response.entity.GroupListResponse;
-import org.apache.http.entity.*;
+import org.apache.http.entity.ContentType;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * EmailReaderAdapter is the primary client adapter for all Email group level objects.
