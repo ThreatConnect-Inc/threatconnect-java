@@ -42,8 +42,10 @@ import com.threatconnect.sdk.server.entity.VictimWebSite;
 import com.threatconnect.sdk.server.response.entity.ApiEntityListResponse;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.server.response.entity.GroupListResponse;
+import org.apache.http.entity.*;
 
-import java.io.IOException;
+import java.io.*;
+import java.util.*;
 
 /**
  * EmailReaderAdapter is the primary client adapter for all Email group level objects.
@@ -651,5 +653,10 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
 		throw new RuntimeException("not implemented yet");
 	}
 
+	public InputStream downloadSignatureFile(Integer uniqueId, String ownerName) throws IOException {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("id", uniqueId);
+        return getFile("v2.signatures.download", ownerName, paramMap, ContentType.TEXT_PLAIN);
+    }
 
 }
