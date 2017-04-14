@@ -5,8 +5,11 @@ import com.threatconnect.sdk.parser.model.Indicator;
 import com.threatconnect.sdk.parser.model.Item;
 import com.threatconnect.sdk.parser.model.ItemType;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class ItemUtil
@@ -14,6 +17,21 @@ public class ItemUtil
 	private ItemUtil()
 	{
 		
+	}
+	
+	private static List<Item> getOrCreate(final Map<Item, List<Item>> duplicateMap, final Item item)
+	{
+		//retrieve the list of items from the duplicate map
+		List<Item> duplicateItems = duplicateMap.get(item);
+		
+		//check to see if the list is null
+		if (null == duplicateItems)
+		{
+			duplicateItems = new ArrayList<Item>();
+			duplicateMap.put(item, duplicateItems);
+		}
+		
+		return duplicateItems;
 	}
 	
 	/**
@@ -24,7 +42,7 @@ public class ItemUtil
 	 * @param groups     the set that will be used to store the groups
 	 * @param indicators the set that will be used to store the indicators
 	 */
-	public static void seperateGroupsAndIndicators(final Collection<? extends Item> items,
+	public static void separateGroupsAndIndicators(final Collection<? extends Item> items,
 		final Set<Group> groups, final Set<Indicator> indicators)
 	{
 		// for every item in this list
@@ -38,7 +56,7 @@ public class ItemUtil
 				if (groups.add(group))
 				{
 					// continue following the associated items
-					seperateGroupsAndIndicators(item.getAssociatedItems(), groups, indicators);
+					separateGroupsAndIndicators(item.getAssociatedItems(), groups, indicators);
 				}
 			}
 			else if (ItemType.INDICATOR.equals(item.getItemType()))
@@ -49,7 +67,7 @@ public class ItemUtil
 				if (indicators.add(indicator))
 				{
 					// continue following the associated items
-					seperateGroupsAndIndicators(item.getAssociatedItems(), groups, indicators);
+					separateGroupsAndIndicators(item.getAssociatedItems(), groups, indicators);
 				}
 			}
 		}

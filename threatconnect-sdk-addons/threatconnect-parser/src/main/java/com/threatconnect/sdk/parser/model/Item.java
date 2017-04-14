@@ -1,20 +1,19 @@
 package com.threatconnect.sdk.parser.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public abstract class Item
 {
 	private final ItemType itemType;
-	private final List<Attribute> attributes;
-	private final List<String> tags;
+	private final Set<Attribute> attributes;
+	private final Set<String> tags;
 	
 	public Item(final ItemType itemType)
 	{
 		this.itemType = itemType;
-		this.attributes = new ArrayList<Attribute>();
-		this.tags = new ArrayList<String>();
+		this.attributes = new LinkedHashSet<Attribute>();
+		this.tags = new LinkedHashSet<String>();
 	}
 	
 	public final ItemType getItemType()
@@ -22,12 +21,12 @@ public abstract class Item
 		return itemType;
 	}
 	
-	public List<Attribute> getAttributes()
+	public Set<Attribute> getAttributes()
 	{
 		return attributes;
 	}
 	
-	public List<String> getTags()
+	public Set<String> getTags()
 	{
 		return tags;
 	}

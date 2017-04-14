@@ -80,7 +80,7 @@ public class BatchApiSaveService implements SaveService
 		// break the list of items into sets of groups and indicators
 		Set<Group> groups = new HashSet<Group>();
 		Set<Indicator> indicators = new HashSet<Indicator>();
-		ItemUtil.seperateGroupsAndIndicators(items, groups, indicators);
+		ItemUtil.separateGroupsAndIndicators(items, groups, indicators);
 		
 		// save all of the groups
 		Map<Group, Integer> savedGroupMap = new HashMap<Group, Integer>();

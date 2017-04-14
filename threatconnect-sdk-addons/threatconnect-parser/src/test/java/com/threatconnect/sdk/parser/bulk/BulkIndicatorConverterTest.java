@@ -70,13 +70,13 @@ public class BulkIndicatorConverterTest
 			Assert.assertEquals(1, host.getTags().size());
 			
 			// it should be "Dell SecureWorks"
-			Assert.assertEquals("Dell SecureWorks", host.getTags().get(0));
+			Assert.assertEquals("Dell SecureWorks", host.getTags().iterator().next());
 			
 			// there should be one attribute
 			Assert.assertEquals(1, host.getAttributes().size());
 			
-			Assert.assertEquals("type", host.getAttributes().get(0).getType());
-			Assert.assertEquals("value", host.getAttributes().get(0).getValue());
+			Assert.assertEquals("type", host.getAttributes().iterator().next().getType());
+			Assert.assertEquals("value", host.getAttributes().iterator().next().getValue());
 		}
 	}
 }
