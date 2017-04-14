@@ -1,4 +1,4 @@
-package com.threatconnect.sdk.app;
+package com.threatconnect.sdk.parser;
 
 import com.threatconnect.sdk.parser.model.Address;
 import com.threatconnect.sdk.parser.model.CustomIndicator;

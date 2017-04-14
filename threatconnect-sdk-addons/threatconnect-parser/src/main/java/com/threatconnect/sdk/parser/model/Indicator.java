@@ -158,7 +158,7 @@ public abstract class Indicator extends Item
 		if (null != id)
 		{
 			// make sure the other object is an indicator
-			if (obj instanceof Indicator)
+			if (obj.getClass().isAssignableFrom(getClass()))
 			{
 				final Indicator other = (Indicator) obj;
 				return id.equals(other.getIdentifier());
