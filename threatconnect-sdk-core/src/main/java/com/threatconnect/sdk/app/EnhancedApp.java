@@ -40,6 +40,7 @@ import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.slf4j.Logger;
@@ -102,6 +103,8 @@ public abstract class EnhancedApp extends App
 
 	public EnhancedApp(AppConfig appConfig)
 	{
+	    init(appConfig);
+
 		Configuration config;
 		if (appConfig.getTcToken() != null)
 		{
@@ -365,7 +368,7 @@ public abstract class EnhancedApp extends App
 	private HttpResponse getHttpResponse(String url, Map<String, String> headerMap, int maxRetries, int retryNum,
 		HttpRequestBase request)
 	{
-		MetricUtil.tick("getResponse");
+		//MetricUtil.tick("getResponse");
 		debug("getResponse.URL=%s, retryNum=%d", url, retryNum);
 		// debug("getResponse.headers=%s", headerMap);
 		HttpClient client = getExternalClient();
@@ -381,14 +384,14 @@ public abstract class EnhancedApp extends App
 		}
 		catch (IOException e)
 		{
-			MetricUtil.tockUpdate("getResponse");
+			//MetricUtil.tockUpdate("getResponse");
 			error(e, "URL Failed to return data: %s", url);
 			throw new RuntimeException("URL failed to return data: " + url);
 		}
 
 		if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
 		{
-			MetricUtil.tockUpdate("getResponse");
+			//MetricUtil.tockUpdate("getResponse");
                         
                         //save any cookies that are set.  
                         Header[] headers = response.getAllHeaders();
@@ -410,12 +413,23 @@ public abstract class EnhancedApp extends App
 			}
 		}
 
-		MetricUtil.tockUpdate("getResponse");
+		//MetricUtil.tockUpdate("getResponse");
 		debug("URL failed to return data: response_code=" + response.getStatusLine().getStatusCode()
 			+ " response=" + response.toString());
 		throw new RuntimeException(
 			"URL failed to return data: response_code=" + response.getStatusLine().getStatusCode()
 				+ "reason=" + response.getStatusLine().getReasonPhrase());
+	}
+
+	protected void closeExternalClient()
+	{
+		if ( externalClient == null )
+		{
+			return;
+		}
+
+		HttpClientUtils.closeQuietly(externalClient);
+		externalClient = null;
 	}
 
 	protected HttpClient getExternalClient()
