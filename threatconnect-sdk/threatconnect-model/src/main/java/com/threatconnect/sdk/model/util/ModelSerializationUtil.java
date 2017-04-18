@@ -18,12 +18,24 @@ public class ModelSerializationUtil
 	
 	}
 	
-	public static String toJson(final Object src)
+	public static String toJson(final Item src)
 	{
 		return createJson().toJson(src);
 	}
 	
-	public static List<Item> fromJson(final String json)
+	public static String toJson(final List<Item> src)
+	{
+		return createJson().toJson(src);
+	}
+	
+	public static <T extends Item> T fromJson(final String json)
+	{
+		return createJson().fromJson(json, new TypeToken<Item>()
+		{
+		}.getType());
+	}
+	
+	public static List<Item> fromJsonList(final String json)
 	{
 		return createJson().fromJson(json, new TypeToken<List<Item>>()
 		{

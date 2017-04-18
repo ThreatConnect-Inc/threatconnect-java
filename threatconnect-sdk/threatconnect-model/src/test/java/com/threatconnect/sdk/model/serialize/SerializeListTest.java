@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.gregmarut.support.beangenerator.BeanPropertyGenerator;
 import com.threatconnect.sdk.model.File;
 import com.threatconnect.sdk.model.Incident;
+import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.Url;
 import com.threatconnect.sdk.model.util.ModelSerializationUtil;
 import org.junit.Assert;
@@ -11,17 +12,20 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author Greg Marut
  */
-public class SerializeTest
+public class SerializeListTest
 {
-	private static final Logger logger = LoggerFactory.getLogger(SerializeTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(SerializeListTest.class);
 	
 	private final BeanPropertyGenerator beanPropertyGenerator;
 	private final Gson gson;
 	
-	public SerializeTest()
+	public SerializeListTest()
 	{
 		this.beanPropertyGenerator = new BeanPropertyGenerator();
 		this.gson = ModelSerializationUtil.createJson();
@@ -31,13 +35,19 @@ public class SerializeTest
 	public void gsonTest1()
 	{
 		Incident incident = beanPropertyGenerator.get(Incident.class);
+		File file = beanPropertyGenerator.get(File.class);
+		Url url = beanPropertyGenerator.get(Url.class);
 		
-		//serialize the item
-		String json = gson.toJson(incident);
+		List<Item> items = Arrays.asList(incident, file, url);
+		
+		//serialize the items list
+		String json = gson.toJson(items);
 		logger.debug(json);
-		Incident restored = ModelSerializationUtil.fromJson(json);
+		List<Item> restored = ModelSerializationUtil.fromJsonList(json);
 		
-		Assert.assertEquals(incident.getClass(), restored.getClass());
+		Assert.assertEquals(incident.getClass(), restored.get(0).getClass());
+		Assert.assertEquals(file, restored.get(1));
+		Assert.assertEquals(url, restored.get(2));
 	}
 	
 	@Test
@@ -50,10 +60,16 @@ public class SerializeTest
 		incident.getAssociatedItems().add(file);
 		incident.getAssociatedItems().add(url);
 		
-		//serialize the item
-		String json = gson.toJson(incident);
+		List<Item> items = Arrays.asList((Item) incident);
+		
+		//serialize the items list
+		String json = gson.toJson(items);
 		logger.debug(json);
-		Incident restoredIncident = ModelSerializationUtil.fromJson(json);
+		List<Item> restored = ModelSerializationUtil.fromJsonList(json);
+		
+		Assert.assertEquals(1, restored.size());
+		Assert.assertEquals(incident.getClass(), restored.get(0).getClass());
+		Incident restoredIncident = (Incident) restored.get(0);
 		
 		Assert.assertTrue(restoredIncident.getAssociatedItems().contains(file));
 		Assert.assertTrue(restoredIncident.getAssociatedItems().contains(url));
@@ -62,11 +78,15 @@ public class SerializeTest
 	@Test
 	public void gsonTest3()
 	{
+		Incident incident = beanPropertyGenerator.get(Incident.class);
 		File file = beanPropertyGenerator.get(File.class);
+		Url url = beanPropertyGenerator.get(Url.class);
 		
-		//serialize the item
-		String json = gson.toJson(file);
-		File restored = ModelSerializationUtil.fromJson(json);
+		List<Item> items = Arrays.asList(incident, file, url);
+		
+		//serialize the items list
+		String json = gson.toJson(items);
+		List<Item> restored = ModelSerializationUtil.fromJsonList(json);
 		
 		//serialize the items list again
 		String json2 = gson.toJson(restored);
@@ -85,10 +105,11 @@ public class SerializeTest
 		incident.getAssociatedItems().add(file);
 		incident.getAssociatedItems().add(url);
 		
-		//serialize the item
-		String json = gson.toJson(incident);
-		logger.debug(json);
-		Incident restored = ModelSerializationUtil.fromJson(json);
+		List<Item> items = Arrays.asList((Item) incident);
+		
+		//serialize the items list
+		String json = gson.toJson(items);
+		List<Item> restored = ModelSerializationUtil.fromJsonList(json);
 		
 		//serialize the items list again
 		String json2 = gson.toJson(restored);
