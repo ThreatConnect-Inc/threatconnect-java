@@ -6,7 +6,7 @@
 	<description>The ThreatConnect Java SDK.</description>
 	<packaging>pom</packaging>
 	<version>2.7.4-SNAPSHOT</version>
-	<name>tc-sdk</name>
+	<name>ThreatConnect</name>
 	<url>http://maven.apache.org</url>
 	<modules>
 		<module>threatconnect-app</module>
