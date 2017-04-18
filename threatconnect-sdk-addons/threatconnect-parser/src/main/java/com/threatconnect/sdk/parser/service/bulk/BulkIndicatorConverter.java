@@ -11,7 +11,7 @@ import com.threatconnect.sdk.model.Host;
 import com.threatconnect.sdk.model.Indicator;
 import com.threatconnect.sdk.model.Url;
 import com.threatconnect.sdk.parser.util.IndicatorUtil;
-import com.threatconnect.sdk.parser.util.TagUtil;
+import com.threatconnect.sdk.model.util.TagUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

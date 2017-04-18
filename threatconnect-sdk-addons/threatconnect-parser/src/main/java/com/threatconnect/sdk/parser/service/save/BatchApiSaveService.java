@@ -14,6 +14,7 @@ import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.ItemType;
 import com.threatconnect.sdk.model.Signature;
 import com.threatconnect.sdk.model.Threat;
+import com.threatconnect.sdk.model.util.IndicatorUtil;
 import com.threatconnect.sdk.parser.service.writer.AdversaryWriter;
 import com.threatconnect.sdk.parser.service.writer.BatchIndicatorWriter;
 import com.threatconnect.sdk.parser.service.writer.CampaignWriter;
@@ -23,7 +24,7 @@ import com.threatconnect.sdk.parser.service.writer.GroupWriter;
 import com.threatconnect.sdk.parser.service.writer.IncidentWriter;
 import com.threatconnect.sdk.parser.service.writer.SignatureWriter;
 import com.threatconnect.sdk.parser.service.writer.ThreatWriter;
-import com.threatconnect.sdk.parser.util.ItemUtil;
+import com.threatconnect.sdk.model.util.ItemUtil;
 import com.threatconnect.sdk.server.entity.BatchConfig.AttributeWriteType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -213,7 +214,7 @@ public class BatchApiSaveService implements SaveService
 	private void saveFileOccurrences(final Collection<Indicator> indicators, final SaveResults saveResults)
 	{
 		//extract all of the file objects from the set of indicators
-		Set<File> files = ItemUtil.extractIndicatorSet(indicators, File.class);
+		Set<File> files = IndicatorUtil.extractIndicatorSet(indicators, File.class);
 		ApiSaveService apiSaveService = new ApiSaveService(configuration, ownerName);
 		
 		//for each of the files

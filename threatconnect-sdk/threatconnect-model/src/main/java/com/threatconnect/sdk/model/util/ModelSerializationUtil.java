@@ -13,6 +13,11 @@ import java.util.List;
  */
 public class ModelSerializationUtil
 {
+	private ModelSerializationUtil()
+	{
+	
+	}
+	
 	public static String toJson(final Object src)
 	{
 		return createJson().toJson(src);

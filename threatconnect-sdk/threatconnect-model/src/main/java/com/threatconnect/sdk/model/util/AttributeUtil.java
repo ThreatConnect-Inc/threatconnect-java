@@ -1,4 +1,4 @@
-package com.threatconnect.sdk.parser.util;
+package com.threatconnect.sdk.model.util;
 
 import com.threatconnect.sdk.model.Item;
 
@@ -9,6 +9,7 @@ public class AttributeUtil
 {
 	private AttributeUtil()
 	{
+	
 	}
 	
 	/**
