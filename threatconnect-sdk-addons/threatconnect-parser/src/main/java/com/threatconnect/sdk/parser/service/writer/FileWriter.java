@@ -7,8 +7,8 @@ import com.threatconnect.sdk.client.writer.FileIndicatorWriterAdapter;
 import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
 import com.threatconnect.sdk.conn.Connection;
 import com.threatconnect.sdk.exception.FailedResponseException;
-import com.threatconnect.sdk.parser.model.File;
-import com.threatconnect.sdk.parser.model.FileOccurrence;
+import com.threatconnect.sdk.model.File;
+import com.threatconnect.sdk.model.FileOccurrence;
 import com.threatconnect.sdk.parser.service.save.SaveItemFailedException;
 import com.threatconnect.sdk.server.entity.Indicator.Type;
 

@@ -1,6 +1,6 @@
 package com.threatconnect.sdk.parser;
 
-import com.threatconnect.sdk.parser.model.Item;
+import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.parser.result.PageResult;
 import com.threatconnect.sdk.parser.source.DataSource;
 import org.apache.commons.io.IOUtils;

@@ -2,7 +2,7 @@ package com.threatconnect.sdk.parser;
 
 import java.util.List;
 
-import com.threatconnect.sdk.parser.model.Item;
+import com.threatconnect.sdk.model.Item;
 
 public interface Parser<I extends Item>
 {

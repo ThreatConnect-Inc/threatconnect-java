@@ -1,15 +1,12 @@
 package com.threatconnect.sdk.parser.util;
 
-import com.threatconnect.sdk.parser.model.Group;
-import com.threatconnect.sdk.parser.model.Indicator;
-import com.threatconnect.sdk.parser.model.Item;
-import com.threatconnect.sdk.parser.model.ItemType;
+import com.threatconnect.sdk.model.Group;
+import com.threatconnect.sdk.model.Indicator;
+import com.threatconnect.sdk.model.Item;
+import com.threatconnect.sdk.model.ItemType;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class ItemUtil
@@ -17,21 +14,6 @@ public class ItemUtil
 	private ItemUtil()
 	{
 		
-	}
-	
-	private static List<Item> getOrCreate(final Map<Item, List<Item>> duplicateMap, final Item item)
-	{
-		//retrieve the list of items from the duplicate map
-		List<Item> duplicateItems = duplicateMap.get(item);
-		
-		//check to see if the list is null
-		if (null == duplicateItems)
-		{
-			duplicateItems = new ArrayList<Item>();
-			duplicateMap.put(item, duplicateItems);
-		}
-		
-		return duplicateItems;
 	}
 	
 	/**

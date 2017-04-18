@@ -1,6 +1,6 @@
 package com.threatconnect.sdk.parser.util;
 
-import com.threatconnect.sdk.parser.model.Item;
+import com.threatconnect.sdk.model.Item;
 
 /**
  * @author Greg Marut

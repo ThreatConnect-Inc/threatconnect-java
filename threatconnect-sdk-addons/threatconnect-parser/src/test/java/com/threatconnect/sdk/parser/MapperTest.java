@@ -6,8 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.gregmarut.support.beangenerator.BeanPropertyGenerator;
-import com.threatconnect.sdk.parser.model.Address;
-import com.threatconnect.sdk.parser.model.Attribute;
+import com.threatconnect.sdk.model.Address;
+import com.threatconnect.sdk.model.Attribute;
 import com.threatconnect.sdk.parser.util.MapperUtil;
 
 public class MapperTest

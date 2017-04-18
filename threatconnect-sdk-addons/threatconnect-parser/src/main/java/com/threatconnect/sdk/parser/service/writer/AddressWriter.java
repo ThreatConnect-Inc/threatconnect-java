@@ -1,7 +1,7 @@
 package com.threatconnect.sdk.parser.service.writer;
 
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.parser.model.Address;
+import com.threatconnect.sdk.model.Address;
 import com.threatconnect.sdk.server.entity.Indicator.Type;
 
 public class AddressWriter extends TypedIndicatorWriter<Address, com.threatconnect.sdk.server.entity.Address>

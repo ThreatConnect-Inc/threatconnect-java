@@ -7,7 +7,7 @@ import org.apache.commons.io.IOUtils;
 
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
-import com.threatconnect.sdk.parser.model.Item;
+import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.parser.source.DataSource;
 
 public abstract class AbstractJsonPathParser<I extends Item> extends AbstractParser<I>

@@ -1,7 +1,7 @@
 package com.threatconnect.sdk.parser.util;
 
-import com.threatconnect.sdk.parser.model.Group;
-import com.threatconnect.sdk.parser.model.Item;
+import com.threatconnect.sdk.model.Group;
+import com.threatconnect.sdk.model.Item;
 
 import java.util.Collections;
 import java.util.HashSet;

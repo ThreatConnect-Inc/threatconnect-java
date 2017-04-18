@@ -2,9 +2,9 @@ package com.threatconnect.sdk.parser;
 
 import org.junit.Assert;
 
-import com.threatconnect.sdk.parser.model.Address;
-import com.threatconnect.sdk.parser.model.Attribute;
-import com.threatconnect.sdk.parser.model.Indicator;
+import com.threatconnect.sdk.model.Address;
+import com.threatconnect.sdk.model.Attribute;
+import com.threatconnect.sdk.model.Indicator;
 
 public class MapperTestHelper
 {

@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.threatconnect.sdk.parser.model.Item;
+import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.parser.result.PageResult;
 import com.threatconnect.sdk.parser.source.DataSource;
 

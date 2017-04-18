@@ -1,6 +1,6 @@
 package com.threatconnect.sdk.parser.util;
 
-import com.threatconnect.sdk.parser.model.Address;
+import com.threatconnect.sdk.model.Address;
 import org.junit.Assert;
 import org.junit.Test;
 

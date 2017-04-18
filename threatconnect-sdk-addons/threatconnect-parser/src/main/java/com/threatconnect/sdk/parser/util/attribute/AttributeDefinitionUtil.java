@@ -1,10 +1,10 @@
 package com.threatconnect.sdk.parser.util.attribute;
 
 import com.opencsv.CSVReader;
-import com.threatconnect.sdk.parser.model.Group;
-import com.threatconnect.sdk.parser.model.GroupType;
-import com.threatconnect.sdk.parser.model.Indicator;
-import com.threatconnect.sdk.parser.model.Item;
+import com.threatconnect.sdk.model.Group;
+import com.threatconnect.sdk.model.GroupType;
+import com.threatconnect.sdk.model.Indicator;
+import com.threatconnect.sdk.model.Item;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

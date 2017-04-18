@@ -1,6 +1,6 @@
 package com.threatconnect.sdk.parser.service.save;
 
-import com.threatconnect.sdk.parser.model.Item;
+import com.threatconnect.sdk.model.Item;
 
 /**
  * Represents when the main item failed to save

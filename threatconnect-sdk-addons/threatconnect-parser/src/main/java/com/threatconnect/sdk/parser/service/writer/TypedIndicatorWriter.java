@@ -5,7 +5,7 @@ import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
 import com.threatconnect.sdk.client.writer.AbstractIndicatorWriterAdapter;
 import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.parser.model.Indicator;
+import com.threatconnect.sdk.model.Indicator;
 
 /**
  * @author Greg Marut

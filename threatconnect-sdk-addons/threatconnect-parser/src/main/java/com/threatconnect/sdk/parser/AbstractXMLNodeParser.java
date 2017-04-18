@@ -9,7 +9,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.threatconnect.sdk.parser.model.Item;
+import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.parser.result.PageResult;
 import com.threatconnect.sdk.parser.result.Result;
 import com.threatconnect.sdk.parser.source.DataSource;

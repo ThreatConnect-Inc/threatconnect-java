@@ -17,6 +17,7 @@
 
 	<modules>
 		<module>threatconnect-sdk-core</module>
+		<module>threatconnect-model</module>
 	</modules>
 
 	<licenses>

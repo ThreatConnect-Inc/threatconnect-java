@@ -1,18 +1,17 @@
 package com.threatconnect.sdk.parser.util;
 
+import com.threatconnect.sdk.model.Attribute;
+import com.threatconnect.sdk.model.Group;
+import com.threatconnect.sdk.model.Item;
+import com.threatconnect.sdk.parser.util.attribute.AttributeDefinition;
+import com.threatconnect.sdk.parser.util.attribute.AttributeDefinitionUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.threatconnect.sdk.parser.model.Attribute;
-import com.threatconnect.sdk.parser.model.Group;
-import com.threatconnect.sdk.parser.model.Item;
-import com.threatconnect.sdk.parser.util.attribute.AttributeDefinition;
-import com.threatconnect.sdk.parser.util.attribute.AttributeDefinitionUtil;
 
 /**
  * A utility class that adds some of the commonly used attributes to an item
