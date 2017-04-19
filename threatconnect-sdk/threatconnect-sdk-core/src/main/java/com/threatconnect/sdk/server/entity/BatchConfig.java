@@ -1,11 +1,11 @@
 package com.threatconnect.sdk.server.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Created by cblades on 6/10/2015.
@@ -27,6 +27,9 @@ public class BatchConfig
 	@XmlElement(name = "owner", required = true)
 	private String owner;
 	
+	@XmlElement(name = "version", required = false)
+	private Version version;
+	
 	public enum AttributeWriteType
 	{
 		Append,
@@ -40,16 +43,27 @@ public class BatchConfig
 		Delete
 	}
 	
+	public enum Version {
+		V1,
+		V2
+	}
+	
 	public BatchConfig()
 	{
 	}
 	
 	public BatchConfig(boolean haltOnError, AttributeWriteType attributeWriteType, Action action, String owner)
 	{
+		this(haltOnError, attributeWriteType, action, owner, Version.V1);
+	}
+	
+	public BatchConfig(boolean haltOnError, AttributeWriteType attributeWriteType, Action action, String owner, Version version)
+	{
 		this.haltOnError = haltOnError;
 		this.attributeWriteType = attributeWriteType;
 		this.action = action;
 		this.owner = owner;
+		this.version = version;
 	}
 	
 	public boolean isHaltOnError()
@@ -90,5 +104,15 @@ public class BatchConfig
 	public void setOwner(String owner)
 	{
 		this.owner = owner;
+	}
+	
+	public Version getVersion()
+	{
+		return version;
+	}
+	
+	public void setVersion(final Version version)
+	{
+		this.version = version;
 	}
 }
