@@ -28,7 +28,7 @@ public class Configuration
 
 	private boolean activityLogEnabled;
 
-	private final String contentType = ContentType.APPLICATION_JSON.getMimeType();
+	private String contentType;
 
 	public Configuration(String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner,
 		String tcToken, String tcTokenExpires)
@@ -57,6 +57,7 @@ public class Configuration
 		this.resultLimit = resultLimit;
 		this.tcToken = tcToken;
 		this.tcTokenExpires = tcTokenExpires;
+		this.contentType = ContentType.APPLICATION_JSON.getMimeType();
 	}
 
 	public Configuration(String tcApiUrl, String tcToken, String defaultOwner, Integer resultLimit)
@@ -65,6 +66,7 @@ public class Configuration
 		this.tcToken = tcToken;
 		this.defaultOwner = defaultOwner;
 		this.resultLimit = resultLimit;
+		this.contentType = ContentType.APPLICATION_JSON.getMimeType();
 	}
 
 	public void setProxy(String host, Integer port)
@@ -147,7 +149,12 @@ public class Configuration
 	{
 		this.tcApiUserSecretKey = tcApiUserSecretKey;
 	}
-
+	
+	public void setContentType(final String contentType)
+	{
+		this.contentType = contentType;
+	}
+	
 	/**
 	 * @return the contentType
 	 */
