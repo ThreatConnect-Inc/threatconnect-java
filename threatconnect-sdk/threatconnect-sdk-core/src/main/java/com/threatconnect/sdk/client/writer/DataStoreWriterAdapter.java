@@ -126,7 +126,7 @@ public class DataStoreWriterAdapter extends AbstractWriterAdapter
         headers.put("DB-Method", esMethod.name());
 
         logger.trace("calling url={}", url);
-        String content = executor.execute(url, POST, headers, body).getEntity();
+        String content = executor.execute(url, POST, headers, body).getEntityAsString();
 
         logger.trace("returning content={}", content);
 

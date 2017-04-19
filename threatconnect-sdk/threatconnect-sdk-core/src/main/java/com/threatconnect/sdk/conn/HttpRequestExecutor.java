@@ -10,6 +10,7 @@ import com.threatconnect.sdk.conn.exception.HttpResourceNotFoundException;
 import com.threatconnect.sdk.conn.exception.TokenRenewException;
 import com.threatconnect.sdk.util.StringUtil;
 import com.threatconnect.sdk.util.UploadMethodType;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -235,8 +236,8 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 				logger.trace("Response Headers: " + Arrays.toString(response.getAllHeaders()));
 				logger.trace("Content Encoding: " + entity.getContentEncoding());
 				
-				httpResponse.setEntity(EntityUtils.toString(entity, StandardCharsets.UTF_8));
-				logger.trace("Result:" + httpResponse.getEntity());
+				httpResponse.setEntity(IOUtils.toByteArray(entity.getContent()));
+				logger.trace("Result:" + httpResponse.getEntityAsString());
 				EntityUtils.consume(entity);
 			}
 			

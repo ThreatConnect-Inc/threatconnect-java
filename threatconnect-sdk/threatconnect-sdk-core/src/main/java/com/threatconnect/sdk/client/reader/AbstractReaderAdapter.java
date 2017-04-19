@@ -59,7 +59,7 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
         }
 
         logger.trace("calling url={}", url);
-        String content = executor.execute(AbstractRequestExecutor.HttpMethod.GET, url).getEntity();
+        String content = executor.execute(AbstractRequestExecutor.HttpMethod.GET, url).getEntityAsString();
         logger.trace("returning content={}", content);
 
         return content;
@@ -123,7 +123,7 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
 
         logger.trace("Calling url={}", url);
         System.out.println("Calling url={}"+url);
-        String content = executor.execute(AbstractRequestExecutor.HttpMethod.GET, url).getEntity();
+        String content = executor.execute(AbstractRequestExecutor.HttpMethod.GET, url).getEntityAsString();
         logger.trace("returning content={}", content);
         System.out.println("returning content={}"+content);
 

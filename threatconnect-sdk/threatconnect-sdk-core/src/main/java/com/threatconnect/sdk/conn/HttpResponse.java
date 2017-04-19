@@ -1,10 +1,12 @@
 package com.threatconnect.sdk.conn;
 
+import java.nio.charset.Charset;
+
 public class HttpResponse
 {
 	private String statusLine;
 	private int statusCode;
-	private String entity;
+	private byte[] entity;
 	
 	public String getStatusLine()
 	{
@@ -26,12 +28,17 @@ public class HttpResponse
 		this.statusCode = statusCode;
 	}
 	
-	public String getEntity()
+	public byte[] getEntity()
 	{
 		return entity;
 	}
 	
-	public void setEntity(final String entity)
+	public String getEntityAsString()
+	{
+		return new String(entity, Charset.forName("UTF-8"));
+	}
+	
+	public void setEntity(final byte[] entity)
 	{
 		this.entity = entity;
 	}
