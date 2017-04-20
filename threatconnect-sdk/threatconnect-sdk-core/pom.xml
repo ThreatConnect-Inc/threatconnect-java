@@ -198,7 +198,7 @@
 								<copy
 									todir="${project.build.directory}/threatconnect-sdk/examples/com/threatconnect/sdk/examples">
 									<fileset
-										dir="${basedir}/src/main/java/com/threatconnect/sdk/examples"
+										dir="${basedir}/src/test/java/com/threatconnect/sdk/examples"
 										includes="**" />
 								</copy>
 
