@@ -1,7 +1,7 @@
 package com.threatconnect.sdk.parser.service.writer;
 
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.parser.model.EmailAddress;
+import com.threatconnect.sdk.model.EmailAddress;
 import com.threatconnect.sdk.server.entity.Indicator.Type;
 
 public class EmailAddressWriter extends TypedIndicatorWriter<EmailAddress, com.threatconnect.sdk.server.entity.EmailAddress>

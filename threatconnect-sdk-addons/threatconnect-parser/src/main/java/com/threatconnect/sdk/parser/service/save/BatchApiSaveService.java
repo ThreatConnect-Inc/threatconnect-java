@@ -2,18 +2,19 @@ package com.threatconnect.sdk.parser.service.save;
 
 import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.parser.model.Adversary;
-import com.threatconnect.sdk.parser.model.Campaign;
-import com.threatconnect.sdk.parser.model.Document;
-import com.threatconnect.sdk.parser.model.Email;
-import com.threatconnect.sdk.parser.model.File;
-import com.threatconnect.sdk.parser.model.Group;
-import com.threatconnect.sdk.parser.model.Incident;
-import com.threatconnect.sdk.parser.model.Indicator;
-import com.threatconnect.sdk.parser.model.Item;
-import com.threatconnect.sdk.parser.model.ItemType;
-import com.threatconnect.sdk.parser.model.Signature;
-import com.threatconnect.sdk.parser.model.Threat;
+import com.threatconnect.sdk.model.Adversary;
+import com.threatconnect.sdk.model.Campaign;
+import com.threatconnect.sdk.model.Document;
+import com.threatconnect.sdk.model.Email;
+import com.threatconnect.sdk.model.File;
+import com.threatconnect.sdk.model.Group;
+import com.threatconnect.sdk.model.Incident;
+import com.threatconnect.sdk.model.Indicator;
+import com.threatconnect.sdk.model.Item;
+import com.threatconnect.sdk.model.ItemType;
+import com.threatconnect.sdk.model.Signature;
+import com.threatconnect.sdk.model.Threat;
+import com.threatconnect.sdk.model.util.IndicatorUtil;
 import com.threatconnect.sdk.parser.service.writer.AdversaryWriter;
 import com.threatconnect.sdk.parser.service.writer.BatchIndicatorWriter;
 import com.threatconnect.sdk.parser.service.writer.CampaignWriter;
@@ -23,7 +24,7 @@ import com.threatconnect.sdk.parser.service.writer.GroupWriter;
 import com.threatconnect.sdk.parser.service.writer.IncidentWriter;
 import com.threatconnect.sdk.parser.service.writer.SignatureWriter;
 import com.threatconnect.sdk.parser.service.writer.ThreatWriter;
-import com.threatconnect.sdk.parser.util.ItemUtil;
+import com.threatconnect.sdk.model.util.ItemUtil;
 import com.threatconnect.sdk.server.entity.BatchConfig.AttributeWriteType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,7 +81,7 @@ public class BatchApiSaveService implements SaveService
 		// break the list of items into sets of groups and indicators
 		Set<Group> groups = new HashSet<Group>();
 		Set<Indicator> indicators = new HashSet<Indicator>();
-		ItemUtil.seperateGroupsAndIndicators(items, groups, indicators);
+		ItemUtil.separateGroupsAndIndicators(items, groups, indicators);
 		
 		// save all of the groups
 		Map<Group, Integer> savedGroupMap = new HashMap<Group, Integer>();
@@ -213,7 +214,7 @@ public class BatchApiSaveService implements SaveService
 	private void saveFileOccurrences(final Collection<Indicator> indicators, final SaveResults saveResults)
 	{
 		//extract all of the file objects from the set of indicators
-		Set<File> files = ItemUtil.extractIndicatorSet(indicators, File.class);
+		Set<File> files = IndicatorUtil.extractIndicatorSet(indicators, File.class);
 		ApiSaveService apiSaveService = new ApiSaveService(configuration, ownerName);
 		
 		//for each of the files

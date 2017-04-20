@@ -3,7 +3,7 @@ package com.threatconnect.sdk.parser.service.save;
 import java.io.IOException;
 import java.util.Collection;
 
-import com.threatconnect.sdk.parser.model.Item;
+import com.threatconnect.sdk.model.Item;
 
 public interface SaveService
 {

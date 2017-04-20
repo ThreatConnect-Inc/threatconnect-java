@@ -5,12 +5,12 @@
 	<artifactId>sdk</artifactId>
 	<description>The ThreatConnect Java SDK.</description>
 	<packaging>pom</packaging>
-	<version>2.7.4-SNAPSHOT</version>
-	<name>tc-sdk</name>
+	<version>2.7.5-SNAPSHOT</version>
+	<name>ThreatConnect</name>
 	<url>http://maven.apache.org</url>
 	<modules>
 		<module>threatconnect-app</module>
-		<module>threatconnect-sdk-core</module>
+		<module>threatconnect-sdk</module>
 		<module>threatconnect-sdk-addons</module>
 	</modules>
 

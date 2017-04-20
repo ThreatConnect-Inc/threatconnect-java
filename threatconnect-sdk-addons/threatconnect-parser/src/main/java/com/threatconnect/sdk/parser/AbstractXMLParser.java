@@ -17,7 +17,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.threatconnect.sdk.parser.model.Item;
+import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.parser.result.Result;
 import com.threatconnect.sdk.parser.source.DataSource;
 

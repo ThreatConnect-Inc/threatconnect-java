@@ -1,7 +1,7 @@
 package com.threatconnect.sdk.parser.service.writer;
 
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.parser.model.Adversary;
+import com.threatconnect.sdk.model.Adversary;
 import com.threatconnect.sdk.server.entity.Group.Type;
 
 public class AdversaryWriter extends GroupWriter<Adversary, com.threatconnect.sdk.server.entity.Adversary>

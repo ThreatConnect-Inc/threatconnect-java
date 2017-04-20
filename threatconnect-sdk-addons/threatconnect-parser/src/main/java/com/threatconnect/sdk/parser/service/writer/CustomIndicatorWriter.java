@@ -5,7 +5,7 @@ import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
 import com.threatconnect.sdk.client.writer.AbstractIndicatorWriterAdapter;
 import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.parser.model.CustomIndicator;
+import com.threatconnect.sdk.model.CustomIndicator;
 
 public class CustomIndicatorWriter
 	extends IndicatorWriter<CustomIndicator, com.threatconnect.sdk.server.entity.CustomIndicator>

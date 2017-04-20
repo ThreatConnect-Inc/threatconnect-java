@@ -1,7 +1,7 @@
 package com.threatconnect.sdk.parser.service.writer;
 
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.parser.model.Campaign;
+import com.threatconnect.sdk.model.Campaign;
 import com.threatconnect.sdk.server.entity.Group.Type;
 
 public class CampaignWriter extends GroupWriter<Campaign, com.threatconnect.sdk.server.entity.Campaign>

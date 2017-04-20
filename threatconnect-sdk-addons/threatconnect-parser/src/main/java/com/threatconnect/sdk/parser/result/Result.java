@@ -1,9 +1,9 @@
 package com.threatconnect.sdk.parser.result;
 
+import com.threatconnect.sdk.model.Item;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.threatconnect.sdk.parser.model.Item;
 
 public class Result<I extends Item>
 {

@@ -1,14 +1,13 @@
 package com.threatconnect.sdk.parser;
 
-import java.io.IOException;
-import java.util.List;
-
-import org.apache.commons.io.IOUtils;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.threatconnect.sdk.parser.model.Item;
+import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.parser.source.DataSource;
+import org.apache.commons.io.IOUtils;
+
+import java.io.IOException;
+import java.util.List;
 
 public abstract class AbstractGsonParser<I extends Item> extends AbstractParser<I>
 {

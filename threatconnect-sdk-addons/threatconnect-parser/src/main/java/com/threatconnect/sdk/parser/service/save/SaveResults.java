@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.threatconnect.sdk.parser.model.Item;
-import com.threatconnect.sdk.parser.model.ItemType;
+import com.threatconnect.sdk.model.Item;
+import com.threatconnect.sdk.model.ItemType;
 
 public class SaveResults
 {

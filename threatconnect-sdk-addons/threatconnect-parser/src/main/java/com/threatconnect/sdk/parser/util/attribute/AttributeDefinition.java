@@ -1,6 +1,6 @@
 package com.threatconnect.sdk.parser.util.attribute;
 
-import com.threatconnect.sdk.parser.model.GroupType;
+import com.threatconnect.sdk.model.GroupType;
 
 import java.util.HashSet;
 import java.util.Set;

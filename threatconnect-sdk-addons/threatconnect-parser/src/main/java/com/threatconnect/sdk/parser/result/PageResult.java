@@ -2,7 +2,7 @@ package com.threatconnect.sdk.parser.result;
 
 import java.util.List;
 
-import com.threatconnect.sdk.parser.model.Item;
+import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.parser.source.DataSource;
 
 public class PageResult<I extends Item> extends Result<I>

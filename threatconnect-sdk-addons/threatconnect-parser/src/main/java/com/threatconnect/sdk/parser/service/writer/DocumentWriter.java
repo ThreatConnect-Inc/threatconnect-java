@@ -3,7 +3,7 @@ package com.threatconnect.sdk.parser.service.writer;
 import com.threatconnect.sdk.client.writer.DocumentWriterAdapter;
 import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.parser.model.Document;
+import com.threatconnect.sdk.model.Document;
 import com.threatconnect.sdk.parser.service.save.SaveItemFailedException;
 import com.threatconnect.sdk.server.entity.Group.Type;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
