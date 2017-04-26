@@ -314,15 +314,22 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter
 		Map<String, Object> paramMap, UploadMethodType uploadMethodType)
 		throws FailedResponseException, UnsupportedEncodingException
 	{
-		return uploadFile(propName, type, null, inputStream, paramMap, uploadMethodType);
+		return uploadFile(propName, type, null, inputStream, paramMap, uploadMethodType, null);
 	}
 	
 	protected <T extends ApiEntitySingleResponse> T uploadFile(String propName, Class<T> type, String ownerName,
-		InputStream inputStream, Map<String, Object> paramMap, UploadMethodType uploadMethodType)
+		InputStream inputStream, Map<String, Object> paramMap, UploadMethodType uploadMethodType, Boolean updateIfExists)
 		throws FailedResponseException, UnsupportedEncodingException
 	{
+		Map<String, String> queryParams = new HashMap<String, String>();
+		
+		if(null != updateIfExists && updateIfExists)
+		{
+			queryParams.put("updateIfExists", "true");
+		}
+		
 		logger.trace("Getting URL: {}", propName);
-		String url = getUrl(propName, ownerName);
+		String url = getUrl(propName, ownerName, false, queryParams);
 		logger.trace("\tURL: {}", url);
 		
 		T result;

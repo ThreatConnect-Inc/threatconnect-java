@@ -53,13 +53,8 @@ public class DocumentWriterAdapter extends AbstractGroupWriterAdapter<Document>
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("id", uniqueId);
 		
-		if (null != updateIfExists)
-		{
-			paramMap.put("updateIfExists", updateIfExists);
-		}
-		
 		return uploadFile("v2.documents.upload", DocumentResponse.class, ownerName, new FileInputStream(file), paramMap,
-			uploadMethodType);
+			uploadMethodType, updateIfExists);
 	}
 	
 	@Override

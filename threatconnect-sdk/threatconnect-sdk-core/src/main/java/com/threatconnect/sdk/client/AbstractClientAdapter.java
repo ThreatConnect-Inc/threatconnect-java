@@ -86,27 +86,61 @@ public abstract class AbstractClientAdapter {
 
     protected String getUrl(String propName, String ownerName) throws UnsupportedEncodingException
     {
-        return getUrl(propName, ownerName, false);
+        return getUrl(propName, ownerName, false, null);
     }
-
+    
     protected String getUrl(String propName, String ownerName, boolean bypassOwnerCheck) throws UnsupportedEncodingException
     {
-
+        return getUrl(propName, ownerName, bypassOwnerCheck, null);
+    }
+    
+    protected String getUrl(String propName, String ownerName, boolean bypassOwnerCheck, Map<String, String> queryParams) throws UnsupportedEncodingException
+    {
         String defaultOwner = getConn().getConfig().getDefaultOwner();
         if( !bypassOwnerCheck && ownerName == null && defaultOwner == null )
         {
             throw new IllegalStateException("No owner or default api owner defined");
         }
+        
         String url = getConn().getUrlConfig().getUrl(propName);
 
-        if ( bypassOwnerCheck )
+        boolean firstQueryParamAdded = false;
+        
+        //builds the url to return
+        StringBuilder sb = new StringBuilder();
+        sb.append(url);
+        
+        if (!bypassOwnerCheck)
         {
-            return url;
+            sb.append("?owner=");
+            sb.append(URLEncoder.encode(ownerName == null ? defaultOwner : ownerName, "UTF-8").replace("+", "%20"));
+            firstQueryParamAdded = true;
         }
-        else
+        
+        //check to see if there are additional query params
+        if(null != queryParams)
         {
-            return url + "?owner=" + URLEncoder.encode(ownerName == null ? defaultOwner : ownerName, "UTF-8").replace("+", "%20");
+            //for each of the query params
+            for(Map.Entry<String, String> param : queryParams.entrySet())
+            {
+                //check to see if the first query param already exists
+                if(firstQueryParamAdded)
+                {
+                    sb.append("&");
+                }
+                else
+                {
+                    sb.append("?");
+                    firstQueryParamAdded = true;
+                }
+                
+                sb.append(param.getKey());
+                sb.append("=");
+                sb.append(URLEncoder.encode(param.getValue(), "UTF-8"));
+            }
         }
+        
+        return sb.toString();
     }
 
 }
