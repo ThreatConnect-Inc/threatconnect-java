@@ -5,3 +5,5 @@ target/
 .idea
 *.iml
 .metadata
+/threatconnect-app/playbooks-core/.rebel.xml.bak
+/threatconnect-app/playbooks-core/src/main/resources/rebel.xml
