@@ -30,6 +30,9 @@ public class BatchConfig
 	@XmlElement(name = "version", required = false)
 	private Version version;
 	
+	@XmlElement(name = "removeOrphanIndicators")
+	private boolean removeOrphanIndicators;
+	
 	public enum AttributeWriteType
 	{
 		Append,
@@ -43,7 +46,8 @@ public class BatchConfig
 		Delete
 	}
 	
-	public enum Version {
+	public enum Version
+	{
 		V1,
 		V2
 	}
@@ -57,13 +61,21 @@ public class BatchConfig
 		this(haltOnError, attributeWriteType, action, owner, Version.V1);
 	}
 	
-	public BatchConfig(boolean haltOnError, AttributeWriteType attributeWriteType, Action action, String owner, Version version)
+	public BatchConfig(boolean haltOnError, AttributeWriteType attributeWriteType, Action action, String owner,
+		Version version)
+	{
+		this(haltOnError, attributeWriteType, action, owner, version, false);
+	}
+	
+	public BatchConfig(boolean haltOnError, AttributeWriteType attributeWriteType, Action action, String owner,
+		Version version, boolean removeOrphanIndicators)
 	{
 		this.haltOnError = haltOnError;
 		this.attributeWriteType = attributeWriteType;
 		this.action = action;
 		this.owner = owner;
 		this.version = version;
+		this.removeOrphanIndicators = removeOrphanIndicators;
 	}
 	
 	public boolean isHaltOnError()
@@ -114,5 +126,15 @@ public class BatchConfig
 	public void setVersion(final Version version)
 	{
 		this.version = version;
+	}
+	
+	public boolean isRemoveOrphanIndicators()
+	{
+		return removeOrphanIndicators;
+	}
+	
+	public void setRemoveOrphanIndicators(final boolean removeOrphanIndicators)
+	{
+		this.removeOrphanIndicators = removeOrphanIndicators;
 	}
 }
