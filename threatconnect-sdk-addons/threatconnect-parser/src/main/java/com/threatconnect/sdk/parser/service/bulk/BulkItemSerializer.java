@@ -1,5 +1,6 @@
 package com.threatconnect.sdk.parser.service.bulk;
 
+import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.threatconnect.sdk.model.Attribute;
@@ -12,41 +13,43 @@ import com.threatconnect.sdk.model.util.ItemUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
+import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public class BulkItemSerialize
+public class BulkItemSerializer
 {
-	private static final Logger logger = LoggerFactory.getLogger(BulkItemSerialize.class);
+	private static final Logger logger = LoggerFactory.getLogger(BulkItemSerializer.class);
+	
+	public static final DateFormat DEFAULT_DATE_FORMATTER = new ISO8601DateFormat();
 	
 	//holds the map of item to xids
 	private final Map<Item, String> xidMap;
 	
 	//holds the map to store the indicator and the list of associated group xids
-	private final Map<Indicator, List<String>> associatedGroupXids;
+	private final Map<Indicator, Set<String>> associatedGroupXids;
 	
 	//holds the collection of items to serialize
 	private final Collection<? extends Item> items;
 	
 	private JsonObject root;
 	
-	public BulkItemSerialize(final Item... items)
+	public BulkItemSerializer(final Item... items)
 	{
 		this(Arrays.asList(items));
 	}
 	
-	public BulkItemSerialize(final Collection<? extends Item> items)
+	public BulkItemSerializer(final Collection<? extends Item> items)
 	{
 		this.items = items;
 		this.xidMap = new HashMap<Item, String>();
-		this.associatedGroupXids = new HashMap<Indicator, List<String>>();
+		this.associatedGroupXids = new HashMap<Indicator, Set<String>>();
 	}
 	
 	public synchronized JsonObject convertToJson()
@@ -91,6 +94,14 @@ public class BulkItemSerialize
 				JsonObject groupJsonObject = convertToJson(group);
 				groupsArray.add(groupJsonObject);
 			}
+			
+			//for each of the indicators
+			for (Indicator indicator : indicators)
+			{
+				//convert this indicator to a json object to be added to the indicators array
+				JsonObject indicatorJsonObject = convertToJson(indicator);
+				indicatorsArray.add(indicatorJsonObject);
+			}
 		}
 		
 		return root;
@@ -101,8 +112,11 @@ public class BulkItemSerialize
 		// holds the json object that will represent this group
 		JsonObject groupJsonObject = new JsonObject();
 		
+		groupJsonObject.addProperty("xid", xidMap.get(group));
 		groupJsonObject.addProperty("name", group.getName());
 		groupJsonObject.addProperty("type", convertGroupType(group.getGroupType()));
+		
+		addTagsAndAttributes(groupJsonObject, group);
 		
 		JsonArray associatedGroupXidArray = new JsonArray();
 		groupJsonObject.add("associatedGroupXid", associatedGroupXidArray);
@@ -126,12 +140,37 @@ public class BulkItemSerialize
 		// holds the json object that will represent this indicator
 		JsonObject indicatorJsonObject = new JsonObject();
 		
+		indicatorJsonObject.addProperty("xid", xidMap.get(indicator));
 		indicatorJsonObject.addProperty("rating", indicator.getRating());
 		indicatorJsonObject.addProperty("confidence", indicator.getConfidence());
 		indicatorJsonObject.addProperty("summary", indicator.toString());
 		indicatorJsonObject.addProperty("type", indicator.getIndicatorType());
 		
 		addTagsAndAttributes(indicatorJsonObject, indicator);
+		
+		JsonArray associatedGroupsArray = new JsonArray();
+		indicatorJsonObject.add("associatedGroups", associatedGroupsArray);
+		
+		//for each of the associations on this group
+		for (Group group : indicator.getAssociatedItems())
+		{
+			//add this item's xid to the assocaited group xid array
+			associatedGroupsArray.add(xidMap.get(group));
+		}
+		
+		//for each of the associated group ids
+		Set<String> associations = associatedGroupXids.get(indicator);
+		if (null != associations)
+		{
+			//for each of the associations
+			for (String xid : associations)
+			{
+				JsonObject associatedGroup = new JsonObject();
+				associatedGroup.addProperty("groupXid", xid);
+				associatedGroup.addProperty("dateAdded", DEFAULT_DATE_FORMATTER.format(new Date()));
+				associatedGroupsArray.add(associatedGroup);
+			}
+		}
 		
 		return indicatorJsonObject;
 	}
@@ -187,7 +226,6 @@ public class BulkItemSerialize
 	{
 		switch (groupType)
 		{
-			
 			case ADVERSARY:
 				return "Adversary";
 			case CAMPAIGN:
@@ -209,13 +247,13 @@ public class BulkItemSerialize
 	
 	private void addAssociatedGroupXid(final Indicator indicator, final String xid)
 	{
-		//retrieve the list of group xids for this indicator
-		List<String> xids = associatedGroupXids.get(indicator);
+		//retrieve the set of group xids for this indicator
+		Set<String> xids = associatedGroupXids.get(indicator);
 		
 		//make sure the list is not null, otherwise, create it
 		if (null == xids)
 		{
-			xids = new ArrayList<String>();
+			xids = new HashSet<String>();
 			associatedGroupXids.put(indicator, xids);
 		}
 		
