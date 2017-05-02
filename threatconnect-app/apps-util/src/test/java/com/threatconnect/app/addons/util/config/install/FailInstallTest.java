@@ -19,7 +19,7 @@ public class FailInstallTest
 		try
 		{
 			File file = new File("src/test/resources/fail1.install.json");
-			Install install = InstallUtil.load(file);
+			InstallUtil.load(file);
 		}
 		catch (InvalidEnumException e)
 		{
@@ -28,12 +28,12 @@ public class FailInstallTest
 	}
 	
 	@Test
-	public void fail2() throws IOException, ValidationException
+	public void fail2() throws IOException
 	{
 		try
 		{
 			File file = new File("src/test/resources/fail2.install.json");
-			Install install = InstallUtil.load(file);
+			InstallUtil.load(file);
 		}
 		catch (ValidationException e)
 		{
@@ -47,11 +47,26 @@ public class FailInstallTest
 		try
 		{
 			File file = new File("src/test/resources/fail3.install.json");
-			Install install = InstallUtil.load(file);
+			InstallUtil.load(file);
 		}
 		catch (InvalidEnumException e)
 		{
 			Assert.assertTrue(e.getMessage().contains("N/A is not a valid value"));
+		}
+	}
+	
+	@Test
+	public void fail4() throws IOException
+	{
+		try
+		{
+			File file = new File("src/test/resources/fail4.install.json");
+			InstallUtil.load(file);
+		}
+		catch (ValidationException e)
+		{
+			Assert.assertTrue(e.getMessage()
+				.contains("Invalid programVersion. Must be in <MAJOR>.<MINOR>.<PATCH> format (e.g. 1.0.0)"));
 		}
 	}
 }

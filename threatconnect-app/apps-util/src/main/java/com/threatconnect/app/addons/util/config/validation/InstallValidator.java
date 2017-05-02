@@ -5,6 +5,7 @@ import com.threatconnect.app.addons.util.config.install.Install;
 import com.threatconnect.app.addons.util.config.install.Param;
 import com.threatconnect.app.addons.util.config.install.Playbook;
 import com.threatconnect.app.addons.util.config.install.ProgramLanguageType;
+import com.threatconnect.app.addons.util.config.install.ProgramVersion;
 import com.threatconnect.app.addons.util.config.install.RunLevelType;
 
 import java.util.HashSet;
@@ -29,6 +30,17 @@ public class InstallValidator extends Validator<Install>
 	@Override
 	public void validate(final Install object) throws ValidationException
 	{
+		//validate the program version
+		if (null == object.getProgramVersion())
+		{
+			throw new ValidationException("programVersion is not defined.");
+		}
+		else
+		{
+			//validate the format of the program version
+			ProgramVersion.validate(object.getProgramVersion());
+		}
+		
 		//validate the program language
 		if (null == object.getProgramLanguage())
 		{
