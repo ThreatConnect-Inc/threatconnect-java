@@ -68,7 +68,7 @@ public class ProgramVersion implements Comparable<ProgramVersion>
 			if (getMinor() == o.getMinor())
 			{
 				//compare the patch versions
-				if (getPatch() == getPatch())
+				if (getPatch() == o.getPatch())
 				{
 					return 0;
 				}
