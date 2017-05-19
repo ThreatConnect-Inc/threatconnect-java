@@ -10,14 +10,6 @@ import com.threatconnect.sdk.conn.exception.HttpResourceNotFoundException;
 import com.threatconnect.sdk.conn.exception.TokenRenewException;
 import com.threatconnect.sdk.util.StringUtil;
 import com.threatconnect.sdk.util.UploadMethodType;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Map.Entry;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
@@ -33,6 +25,15 @@ import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * @author dtineo
@@ -249,7 +250,10 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 		}
 		finally
 		{
-			response.close();
+			if(null != response)
+			{
+				response.close();
+			}
 		}
 	}
 
