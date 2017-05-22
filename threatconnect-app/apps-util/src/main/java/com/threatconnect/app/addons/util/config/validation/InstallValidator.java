@@ -30,20 +30,20 @@ public class InstallValidator extends Validator<Install>
 	@Override
 	public void validate(final Install object) throws ValidationException
 	{
-		//validate the program version
-		if (null == object.getProgramVersion())
-		{
-			throw new ValidationException("programVersion is not defined.");
-		}
-		else
-		{
-			//validate the format of the program version
-			ProgramVersion.validate(object.getProgramVersion());
-		}
-		
 		//make sure that the runtime level is not third party
 		if(!isRunLevel(object, RunLevelType.ThirdParty))
 		{
+			//validate the program version
+			if (null == object.getProgramVersion())
+			{
+				throw new ValidationException("programVersion is not defined.");
+			}
+			else
+			{
+				//validate the format of the program version
+				ProgramVersion.validate(object.getProgramVersion());
+			}
+			
 			//validate the program language
 			if (null == object.getProgramLanguage())
 			{
