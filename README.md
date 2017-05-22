@@ -19,7 +19,7 @@ This project contains additional addons that are outside of the core SDK
 ## Documentation
 This README provides a quick-start on the Java SDK. For detailed documentation, visit the ThreatConnect&trade; SDK documentation:
 
-https://docs.threatconnect.com/en/latest/java_sdk/#getting-started-with-java-sdk
+https://docs.threatconnect.com/en/latest/java/java_sdk.html#getting-started-with-java-sdk
 
 ## Contact
 
