@@ -5,5 +5,5 @@ package com.threatconnect.app.addons.util.config.install;
  */
 public enum ProgramLanguageType
 {
-	PYTHON, JAVA, NONE, NATIVE;
+	PYTHON, JAVA, NONE, NATIVE, THIRDPARTY;
 }

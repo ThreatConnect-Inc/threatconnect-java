@@ -41,20 +41,24 @@ public class InstallValidator extends Validator<Install>
 			ProgramVersion.validate(object.getProgramVersion());
 		}
 		
-		//validate the program language
-		if (null == object.getProgramLanguage())
+		//make sure that the runtime level is not third party
+		if(!isRunLevel(object, RunLevelType.ThirdParty))
 		{
-			throw new ValidationException("programLanguage is not defined.");
-		}
-		
-		//check to see if the programming language is JAVA or PYTHON
-		if (ProgramLanguageType.JAVA.equals(object.getProgramLanguage()) || ProgramLanguageType.PYTHON
-			.equals(object.getProgramLanguage()))
-		{
-			//validate the program main
-			if (isNullOrEmpty(object.getProgramMain()))
+			//validate the program language
+			if (null == object.getProgramLanguage())
 			{
-				throw new ValidationException("programMain is not defined.");
+				throw new ValidationException("programLanguage is not defined.");
+			}
+			
+			//check to see if the programming language is JAVA or PYTHON
+			if (ProgramLanguageType.JAVA.equals(object.getProgramLanguage()) || ProgramLanguageType.PYTHON
+				.equals(object.getProgramLanguage()))
+			{
+				//validate the program main
+				if (isNullOrEmpty(object.getProgramMain()))
+				{
+					throw new ValidationException("programMain is not defined.");
+				}
 			}
 		}
 		
@@ -132,5 +136,11 @@ public class InstallValidator extends Validator<Install>
 		}
 		
 		return false;
+	}
+	
+	private boolean isRunLevel(final Install install, final RunLevelType runLevelType)
+	{
+		//make sure there are run levels
+		return !install.getRuntimeLevel().isEmpty() && runLevelType == install.getRuntimeLevel().get(0);
 	}
 }

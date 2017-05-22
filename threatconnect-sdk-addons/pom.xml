@@ -66,6 +66,7 @@
 		<version.gson>2.8.0</version.gson>
 		<version.jsonpath>2.1.0</version.jsonpath>
 		<version.opencsv>3.8</version.opencsv>
+		<log4j.version>2.6.1</log4j.version>
 
 		<!-- Test Dependency Versions -->
 		<version.junit>4.12</version.junit>

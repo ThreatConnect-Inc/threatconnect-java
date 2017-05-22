@@ -140,6 +140,9 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 		// write the rest of the app contents out to the target folder
 		writeAppContentsToDirectory(explodedDir);
 		
+		//validate all of the required files are there
+		validateRequiredFiles(explodedDir, profile);
+		
 		//validate that all of the files referenced in the install.json file exist
 		validateReferencedFiles(explodedDir, profile);
 		
@@ -266,6 +269,16 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 		return profiles;
 	}
 	
+	protected void validateRequiredFiles(File explodedDir, final Profile profile)
+		throws ValidationException
+	{
+		File readmeFile = getReadmeFile();
+		if (!readmeFile.exists())
+		{
+			throw new ValidationException(generateRequiredFileMissingMessage(readmeFile.getName()));
+		}
+	}
+	
 	protected void validateReferencedFiles(File explodedDir, final Profile profile)
 		throws ValidationException, InvalidCsvFileException
 	{
@@ -299,6 +312,11 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 				}
 			}
 		}
+	}
+	
+	protected String generateRequiredFileMissingMessage(final String fileName)
+	{
+		return "Required file \"" + fileName + " does not exist. Make sure it is in the correct directory.";
 	}
 	
 	protected String generateReferencedFileMissingMessage(final String fileName)
@@ -365,6 +383,11 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 				copyFileToDirectory(source, destinationDirectory);
 			}
 		}
+	}
+	
+	protected File getReadmeFile()
+	{
+		return new File(getBaseDirectory() + File.separator + "README.md");
 	}
 	
 	protected PackageFileFilter createPackageFileFilter()
