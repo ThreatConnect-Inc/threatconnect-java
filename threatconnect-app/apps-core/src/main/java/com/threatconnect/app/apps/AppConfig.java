@@ -32,28 +32,28 @@ public abstract class AppConfig
 	public static final String TC_PROXY_TC = "tc_proxy_tc";
 	public static final String TC_PROXY_EXTERNAL = "tc_proxy_external";
 	public static final String VERIFY_SSL_EXTERNAL = "verify_ssl_external";
-	
+
 	@Deprecated
 	public static final String APPLY_PROXY_EXTERNAL = "apply_proxy_external";
-	
+
 	@Deprecated
 	public static final String APPLY_PROXY_EXT = "apply_proxy_ext";
-	
+
 	@Deprecated
 	public static final String APPLY_PROXY_TC = "apply_proxy_tc";
-	
+
 	public static final int DEFAULT_MAX_RESULTS = 350;
 	public static final String DEFAULT_LOG_LEVEL = "WARN";
-	
+
 	// holds the map of all of the configuration settings
 	private final Map<String, String> configuration;
-	
+
 	public AppConfig()
 	{
 		// holds the map of configuration settings
 		configuration = new HashMap<String, String>();
 	}
-	
+
 	/**
 	 * Copies the configuration from another app config object and returns this object's instance to allow for chaining
 	 *
@@ -64,105 +64,105 @@ public abstract class AppConfig
 	{
 		//copy all of the configurations from the other app config object
 		configuration.putAll(appConfig.configuration);
-		
+
 		return this;
 	}
-	
+
 	public String getTcMainAppClass()
 	{
 		return getString(TC_MAIN_APP_CLASS);
 	}
-	
+
 	public String getTcLogPath()
 	{
 		return getString(TC_LOG_PATH);
 	}
-	
+
 	public String getTcTempPath()
 	{
 		return getString(TC_TEMP_PATH);
 	}
-	
+
 	public String getTcOutPath()
 	{
 		return getString(TC_OUT_PATH);
 	}
-	
+
 	public String getTcInPath()
 	{
 		return getString(TC_IN_PATH);
 	}
-	
+
 	public String getTcApiPath()
 	{
 		return getString(TC_API_PATH);
 	}
-	
+
 	public Integer getTcUserId()
 	{
 		return getInteger(TC_USER_ID);
 	}
-	
+
 	public Integer getTcSpaceElementId()
 	{
 		return getInteger(TC_SPACE_ELEMENT_ID);
 	}
-	
+
 	public String getTcApiAccessID()
 	{
 		return getString(TC_API_ACCESS_ID);
 	}
-	
+
 	public String getTcApiUserSecretKey()
 	{
 		return getString(TC_API_SECRET);
 	}
-	
+
 	public String getTcToken()
 	{
 		return getString(TC_TOKEN);
 	}
-	
+
 	public String getTcTokenExpires()
 	{
 		return getString(TC_TOKEN_EXPIRES);
 	}
-	
+
 	public String getApiDefaultOrg()
 	{
 		return getString(TC_API_DEFAULT_ORG);
 	}
-	
+
 	public String getTcProxyHost()
 	{
 		return getString(TC_PROXY_HOST);
 	}
-	
+
 	public Integer getTcProxyPort()
 	{
 		return getInteger(TC_PROXY_PORT);
 	}
-	
+
 	public String getTcProxyUsername()
 	{
 		return getString(TC_PROXY_USERNAME);
 	}
-	
+
 	public String getTcProxyPassword()
 	{
 		return getString(TC_PROXY_PASSWORD);
 	}
-	
+
 	public Integer getApiMaxResults()
 	{
 		return getApiMaxResults(DEFAULT_MAX_RESULTS);
 	}
-	
+
 	public int getApiMaxResults(int defaultMax)
 	{
 		return getInteger(TC_API_MAX_RESULT, defaultMax);
 	}
-	
+
 	public boolean isProxyTC()
 	{
 		//need to check all past proxy values too to support old apps.
@@ -172,11 +172,11 @@ public abstract class AppConfig
 		}
 		if (getString(APPLY_PROXY_TC) != null)
 		{
-			return getBoolean(TC_PROXY_TC);
+			return getBoolean(APPLY_PROXY_TC);
 		}
 		return false;
 	}
-	
+
 	public boolean isProxyExternal()
 	{
 		//need to check all past proxy values too to support old apps.
@@ -194,28 +194,28 @@ public abstract class AppConfig
 		}
 		return false;
 	}
-	
+
 	public boolean isVerifySSL()
 	{
 		return getBoolean(VERIFY_SSL_EXTERNAL, true);
 	}
-	
+
 	public String getTcLogLevel()
 	{
 		return getTcLogLevel(DEFAULT_LOG_LEVEL);
 	}
-	
+
 	public String getTcLogLevel(String defaultLevel)
 	{
 		String level = getString(TC_LOG_LEVEL);
 		return null == level ? defaultLevel : level.toUpperCase();
 	}
-	
+
 	public boolean isTcLogToApi()
 	{
 		return getBoolean(TC_LOG_TO_API);
 	}
-	
+
 	/**
 	 * Returns a system property as a string
 	 *
@@ -237,7 +237,7 @@ public abstract class AppConfig
 			return value;
 		}
 	}
-	
+
 	/**
 	 * Returns a value as a list by splitting the string using the delimiter
 	 *
@@ -248,7 +248,7 @@ public abstract class AppConfig
 	public List<String> getStringList(final String key, final String delimiter)
 	{
 		String value = getString(key);
-		
+
 		// make sure that the value is not null
 		if (null != value && !value.isEmpty())
 		{
@@ -260,7 +260,7 @@ public abstract class AppConfig
 			return new ArrayList<String>();
 		}
 	}
-	
+
 	/**
 	 * Returns a system property as an integer. Returns null if the key does not exist or if the
 	 * value is not an integer
@@ -279,7 +279,7 @@ public abstract class AppConfig
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Returns a system property as an integer. Returns the defaultValue if the key does not exist
 	 * or if the value is not an integer
@@ -293,7 +293,7 @@ public abstract class AppConfig
 		Integer value = getInteger(key);
 		return value == null ? defaultValue : value;
 	}
-	
+
 	/**
 	 * Returns a system property as a long. Returns null if the key does not exist or if the
 	 * value is not a long
@@ -312,7 +312,7 @@ public abstract class AppConfig
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Returns a system property as a long. Returns the defaultValue if the key does not exist
 	 * or if the value is not a long
@@ -326,7 +326,7 @@ public abstract class AppConfig
 		Long value = getLong(key);
 		return value == null ? defaultValue : value;
 	}
-	
+
 	/**
 	 * Returns a system property as a short. Returns null if the key does not exist or if the
 	 * value is not a short
@@ -345,7 +345,7 @@ public abstract class AppConfig
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Returns a system property as a short. Returns the defaultValue if the key does not exist
 	 * or if the value is not a short
@@ -359,7 +359,7 @@ public abstract class AppConfig
 		Short value = getShort(key);
 		return value == null ? defaultValue : value;
 	}
-	
+
 	/**
 	 * Returns a system property as a boolean. Returns false if the key does not exist or if the
 	 * value is not a boolean
@@ -371,7 +371,7 @@ public abstract class AppConfig
 	{
 		return Boolean.parseBoolean(getString(key));
 	}
-	
+
 	public boolean getBoolean(final String key, final boolean dfault)
 	{
 		String value = getString(key);
@@ -379,10 +379,10 @@ public abstract class AppConfig
 		{
 			return dfault;
 		}
-		
+
 		return Boolean.parseBoolean(value);
 	}
-	
+
 	/**
 	 * Returns a system property as an integer. Returns null if the key does not exist or if the
 	 * value is not an double
@@ -401,7 +401,7 @@ public abstract class AppConfig
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Returns a system property as an double. Returns the defaultValue if the key does not exist
 	 * or if the value is not a double
@@ -415,7 +415,7 @@ public abstract class AppConfig
 		Double value = getDouble(key);
 		return value == null ? defaultValue : value;
 	}
-	
+
 	/**
 	 * Sets a string value in the configuration map. The object's toString() method is used to
 	 * calculate the string
@@ -435,12 +435,12 @@ public abstract class AppConfig
 			configuration.put(key, null);
 		}
 	}
-	
+
 	public void setAll(final Map<String, String> map)
 	{
 		configuration.putAll(map);
 	}
-	
+
 	/**
 	 * Loads one individual setting given the key
 	 *
