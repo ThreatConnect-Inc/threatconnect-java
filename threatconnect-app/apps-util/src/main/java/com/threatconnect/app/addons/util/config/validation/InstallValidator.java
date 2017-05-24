@@ -30,26 +30,40 @@ public class InstallValidator extends Validator<Install>
 	@Override
 	public void validate(final Install object) throws ValidationException
 	{
-		//make sure that the runtime level is not third party
-		if(!isRunLevel(object, RunLevelType.ThirdParty))
+		//validate the program version
+		if (null == object.getProgramVersion())
 		{
-			//validate the program version
-			if (null == object.getProgramVersion())
+			throw new ValidationException("programVersion is not defined.");
+		}
+		else
+		{
+			//validate the format of the program version
+			ProgramVersion.validate(object.getProgramVersion());
+		}
+		
+		//validate the program language
+		if (null == object.getProgramLanguage())
+		{
+			throw new ValidationException("programLanguage is not defined.");
+		}
+		
+		//check to see if this is a third party app
+		if (isRunLevel(object, RunLevelType.ThirdParty))
+		{
+			//validate the display name
+			if (null == object.getDisplayName())
 			{
-				throw new ValidationException("programVersion is not defined.");
-			}
-			else
-			{
-				//validate the format of the program version
-				ProgramVersion.validate(object.getProgramVersion());
+				throw new ValidationException("displayName is not defined.");
 			}
 			
-			//validate the program language
-			if (null == object.getProgramLanguage())
+			//make sure the program languate type is NONE
+			if (!ProgramLanguageType.NONE.equals(object.getProgramLanguage()))
 			{
-				throw new ValidationException("programLanguage is not defined.");
+				throw new ValidationException("programLanguage is expected to be NONE for Third Party Apps.");
 			}
-			
+		}
+		else
+		{
 			//check to see if the programming language is JAVA or PYTHON
 			if (ProgramLanguageType.JAVA.equals(object.getProgramLanguage()) || ProgramLanguageType.PYTHON
 				.equals(object.getProgramLanguage()))

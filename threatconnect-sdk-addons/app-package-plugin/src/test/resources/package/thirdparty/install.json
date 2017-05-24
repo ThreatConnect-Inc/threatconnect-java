@@ -1,4 +1,6 @@
 {
   "displayName": "Third Party App",
+  "programVersion": "1.0.0",
+  "programLanguage": "NONE",
   "runtimeLevel": "ThirdParty"
 }
