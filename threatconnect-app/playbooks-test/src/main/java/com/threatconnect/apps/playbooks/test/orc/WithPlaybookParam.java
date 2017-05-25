@@ -4,7 +4,7 @@ import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
 import com.threatconnect.app.playbooks.content.ContentService;
 import com.threatconnect.app.playbooks.content.accumulator.ContentException;
-import com.threatconnect.app.playbooks.content.entity.StringKeyValue;
+import com.threatconnect.app.playbooks.content.entity.KeyValue;
 import com.threatconnect.app.playbooks.content.entity.TCEntity;
 import com.threatconnect.app.playbooks.util.PlaybooksVariableUtil;
 import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
@@ -137,7 +137,7 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 		return this;
 	}
 	
-	public WithPlaybookParam asKeyValue(final String playbookParam, final StringKeyValue value)
+	public WithPlaybookParam asKeyValue(final String playbookParam, final KeyValue value)
 		throws ContentException
 	{
 		//store this object in the local content service
@@ -164,7 +164,7 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 		return this;
 	}
 	
-	public WithPlaybookParam asKeyValueArray(final String playbookParam, final List<StringKeyValue> value)
+	public WithPlaybookParam asKeyValueArray(final String playbookParam, final List<KeyValue> value)
 		throws ContentException
 	{
 		//store this object in the local content service

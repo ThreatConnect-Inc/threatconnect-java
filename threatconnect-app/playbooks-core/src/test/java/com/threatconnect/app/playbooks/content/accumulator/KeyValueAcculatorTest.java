@@ -1,7 +1,7 @@
 package com.threatconnect.app.playbooks.content.accumulator;
 
 import com.threatconnect.app.apps.AppConfig;
-import com.threatconnect.app.playbooks.content.entity.StringKeyValue;
+import com.threatconnect.app.playbooks.content.entity.KeyValue;
 import com.threatconnect.app.playbooks.db.DBService;
 import com.threatconnect.app.playbooks.db.EmbeddedMapDBService;
 import org.junit.Assert;
@@ -16,15 +16,17 @@ import java.util.List;
 /**
  * @author Greg Marut
  */
-public class StringKeyValueAcculatorTest
+public class KeyValueAcculatorTest
 {
-	private static final Logger logger = LoggerFactory.getLogger(StringKeyValueAcculatorTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(KeyValueAcculatorTest.class);
 	
 	private AppConfig appConfig;
 	
 	private StringAccumulator stringAccumulator;
-	private StringKeyValueAccumulator stringKeyValueAccumulator;
-	private StringKeyValueArrayAccumulator stringKeyValueArrayAccumulator;
+	private KeyValueAccumulator keyValueAccumulator;
+	private KeyValueArrayAccumulator keyValueArrayAccumulator;
+	
+	
 	
 	@Before
 	public void init()
@@ -34,20 +36,18 @@ public class StringKeyValueAcculatorTest
 		
 		//create the string accumulator
 		stringAccumulator = new StringAccumulator(dbService);
-		stringKeyValueAccumulator = new StringKeyValueAccumulator(dbService);
-		stringKeyValueArrayAccumulator = new StringKeyValueArrayAccumulator(dbService);
+		keyValueAccumulator = new KeyValueAccumulator(dbService);
+		keyValueArrayAccumulator = new KeyValueArrayAccumulator(dbService);
 	}
 	
 	@Test
 	public void basicTest() throws ContentException
 	{
-		StringKeyValue kv = new StringKeyValue();
-		kv.setKey("somekey");
-		kv.setValue("somevalue");
+		KeyValue kv = new KeyValue("somekey", "somevalue");
 		
-		stringKeyValueAccumulator.writeContent("#App:123:kv!KeyValue", kv);
+		keyValueAccumulator.writeContent("#App:123:kv!KeyValue", kv);
 		
-		StringKeyValue result = stringKeyValueAccumulator.readContent("#App:123:kv!KeyValue");
+		KeyValue result = keyValueAccumulator.readContent("#App:123:kv!KeyValue");
 		
 		Assert.assertNotNull(result);
 		Assert.assertEquals(kv.getKey(), result.getKey());
@@ -57,20 +57,14 @@ public class StringKeyValueAcculatorTest
 	@Test
 	public void arrayTest() throws ContentException
 	{
-		StringKeyValue[] kvs = new StringKeyValue[3];
-		kvs[0] = new StringKeyValue();
-		kvs[0].setKey("key0");
-		kvs[0].setValue("value0");
-		kvs[1] = new StringKeyValue();
-		kvs[1].setKey("key1");
-		kvs[1].setValue("value1");
-		kvs[2] = new StringKeyValue();
-		kvs[2].setKey("key2");
-		kvs[2].setValue("value2");
+		KeyValue[] kvs = new KeyValue[3];
+		kvs[0] = new KeyValue("key0", "value0");
+		kvs[1] = new KeyValue("key1", "value1");
+		kvs[2] = new KeyValue("key2", "value2");
 		
-		stringKeyValueArrayAccumulator.writeContent("#App:123:kvs!KeyValueArray", Arrays.asList(kvs));
+		keyValueArrayAccumulator.writeContent("#App:123:kvs!KeyValueArray", Arrays.asList(kvs));
 		
-		List<StringKeyValue> result = stringKeyValueArrayAccumulator.readContent("#App:123:kvs!KeyValueArray");
+		List<KeyValue> result = keyValueArrayAccumulator.readContent("#App:123:kvs!KeyValueArray");
 		
 		Assert.assertNotNull(result);
 		Assert.assertEquals(3, result.size());
@@ -88,13 +82,11 @@ public class StringKeyValueAcculatorTest
 		stringAccumulator.writeContent("#App:123:name!String", "Greg");
 		stringAccumulator.writeContent("#App:123:hello!String", "Hello #App:123:name!String!");
 		
-		StringKeyValue kv = new StringKeyValue();
-		kv.setKey("somekey");
-		kv.setValue("#App:123:hello!String");
+		KeyValue kv = new KeyValue("somekey", "#App:123:hello!String");
 		
-		stringKeyValueAccumulator.writeContent("#App:123:kv!KeyValue", kv);
+		keyValueAccumulator.writeContent("#App:123:kv!KeyValue", kv);
 		
-		StringKeyValue result = stringKeyValueAccumulator.readContent("#App:123:kv!KeyValue");
+		KeyValue result = keyValueAccumulator.readContent("#App:123:kv!KeyValue");
 		
 		Assert.assertNotNull(result);
 		Assert.assertEquals(kv.getKey(), result.getKey());

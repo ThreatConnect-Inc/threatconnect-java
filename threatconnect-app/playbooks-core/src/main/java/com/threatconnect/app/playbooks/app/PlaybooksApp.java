@@ -6,7 +6,7 @@ import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.ExitStatus;
 import com.threatconnect.app.playbooks.content.ContentService;
 import com.threatconnect.app.playbooks.content.accumulator.ContentException;
-import com.threatconnect.app.playbooks.content.entity.StringKeyValue;
+import com.threatconnect.app.playbooks.content.entity.KeyValue;
 import com.threatconnect.app.playbooks.content.entity.TCEntity;
 import com.threatconnect.app.playbooks.db.DBService;
 import com.threatconnect.app.playbooks.db.DBServiceFactory;
@@ -348,7 +348,7 @@ public abstract class PlaybooksApp extends App
 	 * @return the value of the parameter in the database
 	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
-	public final StringKeyValue readKeyValueContent(final String param) throws ContentException
+	public final KeyValue readKeyValueContent(final String param) throws ContentException
 	{
 		return getContentService().readKeyValue(getAppConfig().getString(param));
 	}
@@ -361,7 +361,7 @@ public abstract class PlaybooksApp extends App
 	 * @return whether or not the value was written
 	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
-	public final boolean writeKeyValueContent(final String param, final StringKeyValue value) throws ContentException
+	public final boolean writeKeyValueContent(final String param, final KeyValue value) throws ContentException
 	{
 		if (isOutputParamExpected(param, PlaybookVariableType.KeyValue))
 		{
@@ -381,7 +381,7 @@ public abstract class PlaybooksApp extends App
 	 * @return the value of the parameter in the database
 	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
-	public final List<StringKeyValue> readKeyValueArrayContent(final String param) throws ContentException
+	public final List<KeyValue> readKeyValueArrayContent(final String param) throws ContentException
 	{
 		return getContentService().readKeyValueArray(getAppConfig().getString(param));
 	}
@@ -394,7 +394,7 @@ public abstract class PlaybooksApp extends App
 	 * @return whether or not the value was written
 	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
-	public final boolean writeKeyValueArrayContent(final String param, final List<StringKeyValue> value)
+	public final boolean writeKeyValueArrayContent(final String param, final List<KeyValue> value)
 		throws ContentException
 	{
 		if (isOutputParamExpected(param, PlaybookVariableType.KeyValueArray))

@@ -3,20 +3,23 @@ package com.threatconnect.app.playbooks.content;
 import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.app.playbooks.content.accumulator.ContentAccumulator;
 import com.threatconnect.app.playbooks.content.accumulator.ContentException;
+import com.threatconnect.app.playbooks.content.accumulator.KeyValueAccumulator;
+import com.threatconnect.app.playbooks.content.accumulator.KeyValueArrayAccumulator;
 import com.threatconnect.app.playbooks.content.accumulator.StringAccumulator;
-import com.threatconnect.app.playbooks.content.accumulator.StringKeyValueAccumulator;
-import com.threatconnect.app.playbooks.content.accumulator.StringKeyValueArrayAccumulator;
 import com.threatconnect.app.playbooks.content.converter.ByteArrayConverter;
 import com.threatconnect.app.playbooks.content.converter.ByteMatrixConverter;
 import com.threatconnect.app.playbooks.content.converter.StringListConverter;
 import com.threatconnect.app.playbooks.content.converter.TCEntityConverter;
 import com.threatconnect.app.playbooks.content.converter.TCEntityListConverter;
-import com.threatconnect.app.playbooks.content.entity.StringKeyValue;
+import com.threatconnect.app.playbooks.content.entity.KeyValue;
 import com.threatconnect.app.playbooks.content.entity.TCEntity;
 import com.threatconnect.app.playbooks.db.DBService;
 import com.threatconnect.app.playbooks.util.PlaybooksVariableUtil;
+import com.threatconnect.app.playbooks.variable.PlaybooksVariable;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Greg Marut
@@ -34,8 +37,8 @@ public class ContentService
 	private final ContentAccumulator<List<TCEntity>> tcEntityListAccumulator;
 	private final ContentAccumulator<byte[]> binaryAccumulator;
 	private final ContentAccumulator<byte[][]> binaryArrayAccumulator;
-	private final StringKeyValueAccumulator stringKeyValueContentAccumulator;
-	private final StringKeyValueArrayAccumulator stringKeyValueArrayContentAccumulator;
+	private final KeyValueAccumulator keyValueContentAccumulator;
+	private final KeyValueArrayAccumulator keyValueArrayContentAccumulator;
 	
 	public ContentService(final DBService dbService)
 	{
@@ -54,8 +57,8 @@ public class ContentService
 			ByteArrayConverter());
 		this.binaryArrayAccumulator = new ContentAccumulator<byte[][]>(dbService, PlaybookVariableType.BinaryArray, new
 			ByteMatrixConverter());
-		this.stringKeyValueContentAccumulator = new StringKeyValueAccumulator(dbService);
-		this.stringKeyValueArrayContentAccumulator = new StringKeyValueArrayAccumulator(dbService);
+		this.keyValueContentAccumulator = new KeyValueAccumulator(dbService);
+		this.keyValueArrayContentAccumulator = new KeyValueArrayAccumulator(dbService);
 	}
 	
 	public String readString(final String content) throws ContentException
@@ -147,41 +150,166 @@ public class ContentService
 		binaryArrayAccumulator.writeContent(key, value);
 	}
 	
-	public StringKeyValue readKeyValue(final String key) throws ContentException
+	public KeyValue readKeyValue(final String key) throws ContentException
 	{
 		verifyKeyIsVariable(key);
-		return stringKeyValueContentAccumulator.readContent(key);
+		KeyValue kv = keyValueContentAccumulator.readContent(key);
+		postRead(kv);
+		return kv;
 	}
 	
-	public StringKeyValue readKeyValue(final String key, final boolean resolveEmbeddedVariables) throws ContentException
+	public KeyValue readKeyValue(final String key, final boolean resolveEmbeddedVariables) throws ContentException
 	{
 		verifyKeyIsVariable(key);
-		return stringKeyValueContentAccumulator.readContent(key, resolveEmbeddedVariables);
+		KeyValue kv = keyValueContentAccumulator.readContent(key, resolveEmbeddedVariables);
+		postRead(kv);
+		return kv;
 	}
 	
-	public void writeKeyValue(final String key, final StringKeyValue value) throws ContentException
+	public void writeKeyValue(final String key, final KeyValue value) throws ContentException
 	{
 		verifyKeyIsVariable(key);
-		stringKeyValueContentAccumulator.writeContent(key, value);
+		
+		//clone the key value object since we will be modifying the original
+		KeyValue kv = new KeyValue(value);
+		
+		preWrite(key, kv);
+		keyValueContentAccumulator.writeContent(key, kv);
 	}
 	
-	public List<StringKeyValue> readKeyValueArray(final String key) throws ContentException
+	public List<KeyValue> readKeyValueArray(final String key) throws ContentException
 	{
 		verifyKeyIsVariable(key);
-		return stringKeyValueArrayContentAccumulator.readContent(key);
+		
+		List<KeyValue> kvs = keyValueArrayContentAccumulator.readContent(key);
+		for (KeyValue keyValue : kvs)
+		{
+			postRead(keyValue);
+		}
+		
+		return kvs;
 	}
 	
-	public List<StringKeyValue> readKeyValueArray(final String key, final boolean resolveEmbeddedVariables)
+	public List<KeyValue> readKeyValueArray(final String key, final boolean resolveEmbeddedVariables)
 		throws ContentException
 	{
 		verifyKeyIsVariable(key);
-		return stringKeyValueArrayContentAccumulator.readContent(key, resolveEmbeddedVariables);
+		return keyValueArrayContentAccumulator.readContent(key, resolveEmbeddedVariables);
 	}
 	
-	public void writeKeyValueArray(final String key, final List<StringKeyValue> value) throws ContentException
+	public void writeKeyValueArray(final String key, final List<KeyValue> value) throws ContentException
 	{
 		verifyKeyIsVariable(key);
-		stringKeyValueArrayContentAccumulator.writeContent(key, value);
+		
+		//clone the list of key value objects since we will be modifying the originals
+		List<KeyValue> kvs = new ArrayList<KeyValue>();
+		for (KeyValue keyValue : value)
+		{
+			KeyValue kv = new KeyValue(keyValue);
+			preWrite(key, kv);
+			kvs.add(kv);
+		}
+		
+		keyValueArrayContentAccumulator.writeContent(key, kvs);
+	}
+	
+	/**
+	 * Update the key value objects before writing
+	 *
+	 * @param originalKey
+	 * @param keyValue
+	 * @throws ContentException
+	 */
+	private void preWrite(final String originalKey, final KeyValue keyValue) throws ContentException
+	{
+		//break apart the original key which will be used for creating the new key
+		PlaybooksVariable originalVariable = PlaybooksVariableUtil.extractPlaybooksVariable(originalKey);
+		PlaybooksVariable valueVariable;
+		
+		//determine what type of variable is stored in the key value
+		switch (keyValue.getVariableType())
+		{
+			case StringArray:
+				//create a new variable to store the value and update the key value's value with a variable
+				valueVariable = new PlaybooksVariable(originalVariable.getNamespace(), originalVariable.getId(),
+					UUID.randomUUID().toString(), PlaybookVariableType.StringArray);
+				stringListAccumulator.writeContent(valueVariable.toString(), (List<String>) keyValue.getValue());
+				keyValue.setStringValue(valueVariable.toString());
+				break;
+			case Binary:
+				//create a new variable to store the value and update the key value's value with a variable
+				valueVariable = new PlaybooksVariable(originalVariable.getNamespace(), originalVariable.getId(),
+					UUID.randomUUID().toString(), PlaybookVariableType.Binary);
+				binaryAccumulator.writeContent(valueVariable.toString(), (byte[]) keyValue.getValue());
+				keyValue.setStringValue(valueVariable.toString());
+				break;
+			case BinaryArray:
+				//create a new variable to store the value and update the key value's value with a variable
+				valueVariable = new PlaybooksVariable(originalVariable.getNamespace(), originalVariable.getId(),
+					UUID.randomUUID().toString(), PlaybookVariableType.BinaryArray);
+				binaryArrayAccumulator.writeContent(valueVariable.toString(), (byte[][]) keyValue.getValue());
+				keyValue.setStringValue(valueVariable.toString());
+				break;
+			case TCEntity:
+				//create a new variable to store the value and update the key value's value with a variable
+				valueVariable = new PlaybooksVariable(originalVariable.getNamespace(), originalVariable.getId(),
+					UUID.randomUUID().toString(), PlaybookVariableType.TCEntity);
+				tcEntityAccumulator.writeContent(valueVariable.toString(), (TCEntity) keyValue.getValue());
+				keyValue.setStringValue(valueVariable.toString());
+				break;
+			case TCEntityArray:
+				//create a new variable to store the value and update the key value's value with a variable
+				valueVariable = new PlaybooksVariable(originalVariable.getNamespace(), originalVariable.getId(),
+					UUID.randomUUID().toString(), PlaybookVariableType.TCEntityArray);
+				tcEntityListAccumulator.writeContent(valueVariable.toString(), (List<TCEntity>) keyValue.getValue());
+				keyValue.setStringValue(valueVariable.toString());
+				break;
+			case String:
+				//ignore strings, no extra work needs to be done here
+				break;
+			default:
+				throw new IllegalArgumentException(
+					keyValue.getVariableType() + " is an unsupported value for KeyValue");
+		}
+	}
+	
+	private void postRead(final KeyValue keyValue) throws ContentException
+	{
+		//check to see if this key value is a string
+		if (keyValue.getValue() instanceof String)
+		{
+			//check to see if the value is actually a variable
+			if (PlaybooksVariableUtil.isVariable(keyValue.getValue().toString()))
+			{
+				//determine what type of variable is stored in the key value
+				switch (PlaybooksVariableUtil.extractVariableType(keyValue.getValue().toString()))
+				{
+					case StringArray:
+						keyValue.setStringArrayValue(stringListAccumulator.readContent(keyValue.getValue().toString()));
+						break;
+					case Binary:
+						keyValue.setBinaryValue(binaryAccumulator.readContent(keyValue.getValue().toString()));
+						break;
+					case BinaryArray:
+						keyValue
+							.setBinaryArrayValue(binaryArrayAccumulator.readContent(keyValue.getValue().toString()));
+						break;
+					case TCEntity:
+						keyValue.setTCEntityValue(tcEntityAccumulator.readContent(keyValue.getValue().toString()));
+						break;
+					case TCEntityArray:
+						keyValue
+							.setTCEntityArrayValue(tcEntityListAccumulator.readContent(keyValue.getValue().toString()));
+						break;
+					case String:
+						//ignore strings, no extra work needs to be done here
+						break;
+					default:
+						throw new IllegalArgumentException(
+							keyValue.getVariableType() + " is an unsupported value for KeyValue");
+				}
+			}
+		}
 	}
 	
 	public DBService getDbService()

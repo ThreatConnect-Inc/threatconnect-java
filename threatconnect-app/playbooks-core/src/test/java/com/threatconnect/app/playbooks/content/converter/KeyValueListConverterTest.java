@@ -1,6 +1,6 @@
 package com.threatconnect.app.playbooks.content.converter;
 
-import com.threatconnect.app.playbooks.content.entity.StringKeyValue;
+import com.threatconnect.app.playbooks.content.entity.KeyValue;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author Greg Marut
  */
-public class StringKeyValueListConverterTest
+public class KeyValueListConverterTest
 {
 	@Test
 	public void embeddedVariablesTest() throws ConversionException
@@ -17,8 +17,8 @@ public class StringKeyValueListConverterTest
 		final String sample =
 			"[{\"key\":\"api_key\",\"value\":\"redacted\"},{\"key\":\"ip\",\"value\": #Trigger:430:trg.tc.address!String}]";
 		
-		StringKeyValueListConverter converter = new StringKeyValueListConverter();
-		List<StringKeyValue> values = converter.fromByteArray(sample.getBytes());
+		KeyValueListConverter converter = new KeyValueListConverter();
+		List<KeyValue> values = converter.fromByteArray(sample.getBytes());
 		
 		Assert.assertEquals("api_key", values.get(0).getKey());
 		Assert.assertEquals("redacted", values.get(0).getValue());

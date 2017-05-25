@@ -97,6 +97,26 @@ public class PlaybooksVariableUtil
 	/**
 	 * Returns a list of playbooks variables
 	 *
+	 * @param variable the variable text
+	 * @return a list ok playbook variables that were found inside this text
+	 */
+	public static PlaybooksVariable extractPlaybooksVariable(final String variable)
+	{
+		//make sure this is a variable
+		if (!isVariable(variable))
+		{
+			throw new IllegalArgumentException(variable + " is not a valid variable");
+		}
+		
+		//create a new matcher based on the text
+		Matcher matcher = getVariablePatternMatcher(variable);
+		matcher.find();
+		return toPlaybookVariable(matcher);
+	}
+	
+	/**
+	 * Returns a list of playbooks variables
+	 *
 	 * @param text the text to search for playbook variables
 	 * @return a list ok playbook variables that were found inside this text
 	 */

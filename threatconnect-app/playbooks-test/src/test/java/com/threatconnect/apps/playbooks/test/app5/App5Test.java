@@ -1,7 +1,7 @@
 package com.threatconnect.apps.playbooks.test.app5;
 
 import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
-import com.threatconnect.app.playbooks.content.entity.StringKeyValue;
+import com.threatconnect.app.playbooks.content.entity.KeyValue;
 import com.threatconnect.apps.playbooks.test.config.PlaybooksTestConfiguration;
 import com.threatconnect.apps.playbooks.test.orc.PlaybooksOrchestrationBuilder;
 import org.junit.Before;
@@ -39,10 +39,10 @@ public class App5Test
 	@Test
 	public void test() throws Exception
 	{
-		List<StringKeyValue> mapping = new ArrayList<StringKeyValue>();
-		mapping.add(new StringKeyValue(FIRST, "0"));
-		mapping.add(new StringKeyValue(SECOND, "1"));
-		mapping.add(new StringKeyValue(THIRD, "2"));
+		List<KeyValue> mapping = new ArrayList<KeyValue>();
+		mapping.add(new KeyValue(FIRST, "0"));
+		mapping.add(new KeyValue(SECOND, "1"));
+		mapping.add(new KeyValue(THIRD, "2"));
 		
 		//@formatter:off
 		//create a new playbooks orchestration builder for defining our runtime

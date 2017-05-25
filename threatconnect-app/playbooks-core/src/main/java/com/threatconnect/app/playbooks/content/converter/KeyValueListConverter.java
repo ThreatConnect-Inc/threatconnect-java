@@ -1,6 +1,6 @@
 package com.threatconnect.app.playbooks.content.converter;
 
-import com.threatconnect.app.playbooks.content.entity.StringKeyValue;
+import com.threatconnect.app.playbooks.content.entity.KeyValue;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -9,19 +9,19 @@ import java.util.regex.Pattern;
 /**
  * @author Greg Marut
  */
-public class StringKeyValueListConverter extends ListContentConverter<StringKeyValue>
+public class KeyValueListConverter extends ListContentConverter<KeyValue>
 {
 	private static final String FIX_EMBEDDED_VARIABLE_REGEX =
 		"\\\"value\\\":\\s?(#([A-Za-z]+):([\\d]+):([A-Za-z0-9_.-]+)!([A-Za-z0-9_-]+))\\}";
 	private static final Pattern FIX_EMBEDDED_VARIABLE_PATTERN = Pattern.compile(FIX_EMBEDDED_VARIABLE_REGEX);
 	
-	public StringKeyValueListConverter()
+	public KeyValueListConverter()
 	{
-		super(StringKeyValue.class);
+		super(KeyValue.class);
 	}
 	
 	@Override
-	public List<StringKeyValue> fromByteArray(final byte[] raw) throws ConversionException
+	public List<KeyValue> fromByteArray(final byte[] raw) throws ConversionException
 	{
 		//convert the raw data to a string to fix the json by replacing the embedded variables as needed
 		String data = replaceAllEmbeddedVariables(new String(raw));

@@ -1,21 +1,21 @@
 package com.threatconnect.app.playbooks.content.accumulator;
 
 import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
-import com.threatconnect.app.playbooks.content.converter.StringKeyValueConverter;
-import com.threatconnect.app.playbooks.content.entity.StringKeyValue;
+import com.threatconnect.app.playbooks.content.converter.KeyValueConverter;
+import com.threatconnect.app.playbooks.content.entity.KeyValue;
 import com.threatconnect.app.playbooks.db.DBService;
-import com.threatconnect.app.playbooks.util.StringKeyValueUtil;
+import com.threatconnect.app.playbooks.util.KeyValueUtil;
 
 /**
  * @author Greg Marut
  */
-public class StringKeyValueAccumulator extends ContentAccumulator<StringKeyValue>
+public class KeyValueAccumulator extends ContentAccumulator<KeyValue>
 {
 	private final StringAccumulator stringAccumulator;
 	
-	public StringKeyValueAccumulator(final DBService dbService)
+	public KeyValueAccumulator(final DBService dbService)
 	{
-		super(dbService, PlaybookVariableType.KeyValue, new StringKeyValueConverter());
+		super(dbService, PlaybookVariableType.KeyValue, new KeyValueConverter());
 		this.stringAccumulator = new StringAccumulator(dbService);
 	}
 	
@@ -30,23 +30,23 @@ public class StringKeyValueAccumulator extends ContentAccumulator<StringKeyValue
 	 * @return the content read from the database using the given key.
 	 * @throws ContentException if there was an issue reading/writing to the database.
 	 */
-	public StringKeyValue readContent(final String key, final boolean resolveEmbeddedVariables)
+	public KeyValue readContent(final String key, final boolean resolveEmbeddedVariables)
 		throws ContentException
 	{
 		//read the key value object and check for variables
-		StringKeyValue result = super.readContent(key);
+		KeyValue result = super.readContent(key);
 		
 		//ensure that embedded variables should be resolved
 		if (resolveEmbeddedVariables)
 		{
-			StringKeyValueUtil.resolveEmbeddedVariables(result, stringAccumulator);
+			KeyValueUtil.resolveEmbeddedVariables(result, stringAccumulator);
 		}
 		
 		return result;
 	}
 	
 	@Override
-	public StringKeyValue readContent(final String key) throws ContentException
+	public KeyValue readContent(final String key) throws ContentException
 	{
 		return readContent(key, true);
 	}

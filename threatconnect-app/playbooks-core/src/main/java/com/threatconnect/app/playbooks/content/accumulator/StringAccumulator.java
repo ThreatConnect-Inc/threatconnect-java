@@ -73,36 +73,42 @@ public class StringAccumulator extends ContentAccumulator<String>
 					//add this variable to the stack
 					stack.add(variable);
 					
-					//lookup the value
-					final String resolvedVariable = super.readContent(variable);
-					final String embeddedResult;
-					
-					//check to see if variables should be looked up recursively
-					if (recursiveVariableResolution)
+					//make sure that this variable is another string
+					if (PlaybooksVariableUtil.isStringType(variable))
 					{
-						//recursively check the resolved variable to see if it contains any embedded variables that need to be resolved
-						embeddedResult = readContent(resolvedVariable, true, stack);
-					}
-					else
-					{
-						//since there was no recursive variable resolution, the result is limited to only 1 lookup
-						embeddedResult = resolvedVariable;
-					}
-					
-					//make sure the embedded result is not null
-					if (null != embeddedResult)
-					{
-						value = value.replaceFirst(Pattern.quote(variable), Matcher.quoteReplacement(embeddedResult));
-					}
-					//the variable resolved to null so now check to see if the entire value string was the variable
-					else if (value.equals(variable))
-					{
-						return null;
-					}
-					else
-					{
-						//this variable could not be resolved so replace it with the default text
-						value = value.replaceFirst(Pattern.quote(variable), Matcher.quoteReplacement(VARIABLE_NOT_FOUND));
+						//lookup the value
+						final String resolvedVariable = super.readContent(variable);
+						final String embeddedResult;
+						
+						//check to see if variables should be looked up recursively
+						if (recursiveVariableResolution)
+						{
+							//recursively check the resolved variable to see if it contains any embedded variables that need to be resolved
+							embeddedResult = readContent(resolvedVariable, true, stack);
+						}
+						else
+						{
+							//since there was no recursive variable resolution, the result is limited to only 1 lookup
+							embeddedResult = resolvedVariable;
+						}
+						
+						//make sure the embedded result is not null
+						if (null != embeddedResult)
+						{
+							value =
+								value.replaceFirst(Pattern.quote(variable), Matcher.quoteReplacement(embeddedResult));
+						}
+						//the variable resolved to null so now check to see if the entire value string was the variable
+						else if (value.equals(variable))
+						{
+							return null;
+						}
+						else
+						{
+							//this variable could not be resolved so replace it with the default text
+							value = value
+								.replaceFirst(Pattern.quote(variable), Matcher.quoteReplacement(VARIABLE_NOT_FOUND));
+						}
 					}
 					
 					//pop the variable off of the stack
@@ -114,7 +120,8 @@ public class StringAccumulator extends ContentAccumulator<String>
 						variable);
 					
 					//this variable is cyclical
-					value = value.replaceFirst(Pattern.quote(variable), Matcher.quoteReplacement(CYCLICAL_VARIABLE_REFERENCE));
+					value = value
+						.replaceFirst(Pattern.quote(variable), Matcher.quoteReplacement(CYCLICAL_VARIABLE_REFERENCE));
 				}
 			}
 		}

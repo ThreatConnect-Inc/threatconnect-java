@@ -4,7 +4,7 @@ import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.app.apps.ExitStatus;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
 import com.threatconnect.app.playbooks.app.PlaybooksAppConfig;
-import com.threatconnect.app.playbooks.content.entity.StringKeyValue;
+import com.threatconnect.app.playbooks.content.entity.KeyValue;
 
 import java.util.List;
 
@@ -23,16 +23,16 @@ public class App5 extends PlaybooksApp
 	{
 		//read the parameters
 		List<String> arrayList = readStringListContent(PARAM_INPUT_ARRAY);
-		List<StringKeyValue> mappings = readKeyValueArrayContent(PARAM_INPUT_MAPPING);
+		List<KeyValue> mappings = readKeyValueArrayContent(PARAM_INPUT_MAPPING);
 		
 		//for each of the mappings
-		for (StringKeyValue mapping : mappings)
+		for (KeyValue mapping : mappings)
 		{
 			//check to see if the output needs to be written
 			if (isOutputParamExpected(mapping.getKey(), PlaybookVariableType.String))
 			{
 				//write the output
-				writeStringContent(mapping.getKey(), arrayList.get(Integer.parseInt(mapping.getValue())));
+				writeStringContent(mapping.getKey(), arrayList.get(Integer.parseInt(mapping.getValue().toString())));
 			}
 		}
 		

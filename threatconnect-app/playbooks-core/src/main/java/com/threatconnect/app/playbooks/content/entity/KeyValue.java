@@ -1,45 +1,87 @@
 package com.threatconnect.app.playbooks.content.entity;
 
-/**
- * A generic class for holding a key value pair
- *
- * @param <K> Key type
- * @param <V> Value type
- * @author Greg Marut
- */
-public class KeyValue<K, V>
+import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+
+import java.util.List;
+
+public class KeyValue
 {
-	private K key;
-	private V value;
+	private String key;
+	private Object value;
+	private PlaybookVariableType variableType;
 	
 	public KeyValue()
 	{
+		setStringValue(null);
 	}
 	
-	public KeyValue(K key, V value)
+	public KeyValue(final KeyValue other)
+	{
+		this.key = other.key;
+		this.value = other.value;
+		this.variableType = other.variableType;
+	}
+	
+	public KeyValue(String key, String value)
 	{
 		this.key = key;
-		this.value = value;
+		setStringValue(value);
 	}
 	
-	public void setKey(K key)
+	public void setKey(String key)
 	{
 		this.key = key;
 	}
 	
-	public void setValue(V value)
-	{
-		this.value = value;
-	}
-	
-	public K getKey()
+	public String getKey()
 	{
 		return key;
 	}
 	
-	public V getValue()
+	public void setStringValue(final String value)
+	{
+		this.value = value;
+		this.variableType = PlaybookVariableType.String;
+	}
+	
+	public void setStringArrayValue(final List<String> value)
+	{
+		this.value = value;
+		this.variableType = PlaybookVariableType.StringArray;
+	}
+	
+	public void setBinaryValue(final byte[] value)
+	{
+		this.value = value;
+		this.variableType = PlaybookVariableType.Binary;
+	}
+	
+	public void setBinaryArrayValue(final byte[][] value)
+	{
+		this.value = value;
+		this.variableType = PlaybookVariableType.BinaryArray;
+	}
+	
+	public void setTCEntityValue(final TCEntity value)
+	{
+		this.value = value;
+		this.variableType = PlaybookVariableType.TCEntity;
+	}
+	
+	public void setTCEntityArrayValue(final List<TCEntity> value)
+	{
+		this.value = value;
+		this.variableType = PlaybookVariableType.TCEntityArray;
+	}
+	
+	public Object getValue()
 	{
 		return value;
+	}
+	
+	public PlaybookVariableType getVariableType()
+	{
+		return variableType;
 	}
 	
 	@Override
