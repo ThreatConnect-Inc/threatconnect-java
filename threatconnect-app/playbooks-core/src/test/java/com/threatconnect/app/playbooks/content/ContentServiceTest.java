@@ -9,6 +9,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Greg Marut
  */
@@ -80,5 +83,31 @@ public class ContentServiceTest
 		Assert.assertEquals(keyValue.getKey(), result.getKey());
 		Assert.assertArrayEquals(value, resultValue);
 		Assert.assertEquals(new String(value), new String(resultValue));
+	}
+	
+	@Test
+	public void keyValueTest4() throws ContentException
+	{
+		List<String> values = new ArrayList<String>();
+		values.add("1");
+		values.add("2");
+		values.add("3");
+		values.add("4");
+		
+		KeyValue keyValue = new KeyValue();
+		keyValue.setKey("key4");
+		keyValue.setStringArrayValue(values);
+		
+		contentService.writeKeyValue("#App:123:kv3!KeyValue", keyValue);
+		
+		KeyValue result = contentService.readKeyValue("#App:123:kv3!KeyValue");
+		List<String> resultValues = (List<String>) result.getValue();
+		
+		Assert.assertEquals(keyValue.getKey(), result.getKey());
+		Assert.assertEquals(values.get(0), resultValues.get(0));
+		Assert.assertEquals(values.get(1), resultValues.get(1));
+		Assert.assertEquals(values.get(2), resultValues.get(2));
+		Assert.assertEquals(values.get(3), resultValues.get(3));
+		
 	}
 }
