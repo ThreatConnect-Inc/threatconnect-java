@@ -108,6 +108,5 @@ public class ContentServiceTest
 		Assert.assertEquals(values.get(1), resultValues.get(1));
 		Assert.assertEquals(values.get(2), resultValues.get(2));
 		Assert.assertEquals(values.get(3), resultValues.get(3));
-		
 	}
 }

@@ -170,11 +170,19 @@ public class ContentService
 	{
 		verifyKeyIsVariable(key);
 		
-		//clone the key value object since we will be modifying the original
-		KeyValue kv = new KeyValue(value);
-		
-		preWrite(key, kv);
-		keyValueContentAccumulator.writeContent(key, kv);
+		//make sure the value is not null
+		if(null != value)
+		{
+			//clone the key value object since we will be modifying the original
+			KeyValue kv = new KeyValue(value);
+			
+			preWrite(key, kv);
+			keyValueContentAccumulator.writeContent(key, kv);
+		}
+		else
+		{
+			keyValueContentAccumulator.writeContent(key, null);
+		}
 	}
 	
 	public List<KeyValue> readKeyValueArray(final String key) throws ContentException
@@ -182,9 +190,14 @@ public class ContentService
 		verifyKeyIsVariable(key);
 		
 		List<KeyValue> kvs = keyValueArrayContentAccumulator.readContent(key);
-		for (KeyValue keyValue : kvs)
+		
+		//make sure the list of values is not null
+		if (null != kvs)
 		{
-			postRead(keyValue);
+			for (KeyValue keyValue : kvs)
+			{
+				postRead(keyValue);
+			}
 		}
 		
 		return kvs;
@@ -201,16 +214,25 @@ public class ContentService
 	{
 		verifyKeyIsVariable(key);
 		
-		//clone the list of key value objects since we will be modifying the originals
-		List<KeyValue> kvs = new ArrayList<KeyValue>();
-		for (KeyValue keyValue : value)
+		//make sure the list of values is not null
+		if (null != value)
 		{
-			KeyValue kv = new KeyValue(keyValue);
-			preWrite(key, kv);
-			kvs.add(kv);
+			//clone the list of key value objects since we will be modifying the originals
+			List<KeyValue> kvs = new ArrayList<KeyValue>();
+			for (KeyValue keyValue : value)
+			{
+				KeyValue kv = new KeyValue(keyValue);
+				preWrite(key, kv);
+				kvs.add(kv);
+			}
+			
+			keyValueArrayContentAccumulator.writeContent(key, kvs);
 		}
-		
-		keyValueArrayContentAccumulator.writeContent(key, kvs);
+		else
+		{
+			//just write null
+			keyValueArrayContentAccumulator.writeContent(key, null);
+		}
 	}
 	
 	/**
@@ -275,38 +297,45 @@ public class ContentService
 	
 	private void postRead(final KeyValue keyValue) throws ContentException
 	{
-		//check to see if this key value is a string
-		if (keyValue.getValue() instanceof String)
+		//make sure the key value object is not null
+		if (null != keyValue)
 		{
-			//check to see if the value is actually a variable
-			if (PlaybooksVariableUtil.isVariable(keyValue.getValue().toString()))
+			//check to see if this key value is a string
+			if (keyValue.getValue() instanceof String)
 			{
-				//determine what type of variable is stored in the key value
-				switch (PlaybooksVariableUtil.extractVariableType(keyValue.getValue().toString()))
+				//check to see if the value is actually a variable
+				if (PlaybooksVariableUtil.isVariable(keyValue.getValue().toString()))
 				{
-					case StringArray:
-						keyValue.setStringArrayValue(stringListAccumulator.readContent(keyValue.getValue().toString()));
-						break;
-					case Binary:
-						keyValue.setBinaryValue(binaryAccumulator.readContent(keyValue.getValue().toString()));
-						break;
-					case BinaryArray:
-						keyValue
-							.setBinaryArrayValue(binaryArrayAccumulator.readContent(keyValue.getValue().toString()));
-						break;
-					case TCEntity:
-						keyValue.setTCEntityValue(tcEntityAccumulator.readContent(keyValue.getValue().toString()));
-						break;
-					case TCEntityArray:
-						keyValue
-							.setTCEntityArrayValue(tcEntityListAccumulator.readContent(keyValue.getValue().toString()));
-						break;
-					case String:
-						//ignore strings, no extra work needs to be done here
-						break;
-					default:
-						throw new IllegalArgumentException(
-							keyValue.getVariableType() + " is an unsupported value for KeyValue");
+					//determine what type of variable is stored in the key value
+					switch (PlaybooksVariableUtil.extractVariableType(keyValue.getValue().toString()))
+					{
+						case StringArray:
+							keyValue
+								.setStringArrayValue(stringListAccumulator.readContent(keyValue.getValue().toString()));
+							break;
+						case Binary:
+							keyValue.setBinaryValue(binaryAccumulator.readContent(keyValue.getValue().toString()));
+							break;
+						case BinaryArray:
+							keyValue
+								.setBinaryArrayValue(
+									binaryArrayAccumulator.readContent(keyValue.getValue().toString()));
+							break;
+						case TCEntity:
+							keyValue.setTCEntityValue(tcEntityAccumulator.readContent(keyValue.getValue().toString()));
+							break;
+						case TCEntityArray:
+							keyValue
+								.setTCEntityArrayValue(
+									tcEntityListAccumulator.readContent(keyValue.getValue().toString()));
+							break;
+						case String:
+							//ignore strings, no extra work needs to be done here
+							break;
+						default:
+							throw new IllegalArgumentException(
+								keyValue.getVariableType() + " is an unsupported value for KeyValue");
+					}
 				}
 			}
 		}

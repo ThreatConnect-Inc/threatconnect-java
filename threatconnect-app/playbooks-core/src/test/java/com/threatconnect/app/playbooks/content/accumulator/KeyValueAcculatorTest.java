@@ -26,8 +26,6 @@ public class KeyValueAcculatorTest
 	private KeyValueAccumulator keyValueAccumulator;
 	private KeyValueArrayAccumulator keyValueArrayAccumulator;
 	
-	
-	
 	@Before
 	public void init()
 	{
