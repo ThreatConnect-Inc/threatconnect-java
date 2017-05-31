@@ -1,9 +1,9 @@
 package com.threatconnect.sdk.parser.service.save;
 
+import com.threatconnect.sdk.model.Item;
+
 import java.io.IOException;
 import java.util.Collection;
-
-import com.threatconnect.sdk.model.Item;
 
 public interface SaveService
 {
@@ -18,5 +18,5 @@ public interface SaveService
 	 * class is the general class of exceptions produced by failed or
 	 * interrupted I/O operations.
 	 */
-	public SaveResults saveItems(Collection<? extends Item> items) throws IOException;
+	SaveResults saveItems(Collection<? extends Item> items) throws IOException;
 }
