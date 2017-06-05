@@ -1,11 +1,11 @@
-package com.threatconnect.sdk.parser.bulk;
+package com.threatconnect.sdk.model.serialize;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.gregmarut.support.beangenerator.BeanPropertyGenerator;
+import com.gregmarut.support.beangenerator.rule.RuleBuilder;
+import com.gregmarut.support.beangenerator.rule.condition.FieldNameMatchesCondition;
+import com.gregmarut.support.beangenerator.value.NullValue;
 import com.threatconnect.sdk.model.Address;
 import com.threatconnect.sdk.model.Attribute;
 import com.threatconnect.sdk.model.Group;
@@ -17,9 +17,6 @@ import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.ItemType;
 import com.threatconnect.sdk.model.Url;
 import com.threatconnect.sdk.model.util.TagUtil;
-import com.threatconnect.sdk.parser.service.bulk.BulkItemDeserializer;
-import com.threatconnect.sdk.parser.service.bulk.BulkItemSerializer;
-import com.threatconnect.sdk.parser.util.AttributeHelper;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -36,14 +33,17 @@ public class BulkItemSerializerTest
 	private static final Logger logger = LoggerFactory.getLogger(BulkItemSerializerTest.class);
 	
 	private final BeanPropertyGenerator beanPropertyGenerator;
-	private final Gson gson;
 	private final JsonParser jsonParser;
 	
 	public BulkItemSerializerTest()
 	{
-		beanPropertyGenerator = new BeanPropertyGenerator(false);
-		this.gson = new GsonBuilder().setPrettyPrinting().create();
 		this.jsonParser = new JsonParser();
+		beanPropertyGenerator = new BeanPropertyGenerator(false);
+		RuleBuilder ruleBuilder = new RuleBuilder(beanPropertyGenerator.getConfiguration().getRuleMapping());
+		ruleBuilder.forType(String.class).when(new FieldNameMatchesCondition("xid")).thenReturn(new NullValue<String>(String.class));
+		ruleBuilder.forType(String.class).when(new FieldNameMatchesCondition("md5")).thenReturn("098f6bcd4621d373cade4e832627b4f6");
+		ruleBuilder.forType(String.class).when(new FieldNameMatchesCondition("sha1")).thenReturn("a94a8fe5ccb19ba61c4c0873d391e987982fbbd3");
+		ruleBuilder.forType(String.class).when(new FieldNameMatchesCondition("sha256")).thenReturn("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08");
 	}
 	
 	@Test
@@ -59,17 +59,23 @@ public class BulkItemSerializerTest
 		
 		TagUtil.addTag("GroupTag", incident);
 		TagUtil.addTag("IndicatorTag", host);
-		AttributeHelper.addSourceAttribute(incident, "GroupUnitTest");
-		AttributeHelper.addSourceAttribute(host, "IndicatorUnitTest");
+		Attribute incidentAttribute = new Attribute();
+		incidentAttribute.setType("Source");
+		incidentAttribute.setValue("GroupUnitTest");
+		incident.getAttributes().add(incidentAttribute);
+		Attribute hostAttribute = new Attribute();
+		hostAttribute.setType("Source");
+		hostAttribute.setValue("IndicatorUnitTest");
+		host.getAttributes().add(hostAttribute);
 		
 		//serialize the results
 		List<? extends Item> items = Arrays.asList(incident, host);
 		BulkItemSerializer bulkItemSerializer = new BulkItemSerializer(items);
-		JsonObject root = bulkItemSerializer.convertToJson();
-		logger.info(gson.toJson(root));
+		String json = bulkItemSerializer.convertToJsonString();
+		logger.info(json);
 		
 		//deserialize the results
-		BulkItemDeserializer bulkItemDeserializer = new BulkItemDeserializer(root);
+		BulkItemDeserializer bulkItemDeserializer = new BulkItemDeserializer(json);
 		List<Item> restoredItems = bulkItemDeserializer.convertToItems();
 		
 		Assert.assertEquals(2, restoredItems.size());
@@ -109,7 +115,7 @@ public class BulkItemSerializerTest
 			//read the items in
 			JsonElement jsonElement = jsonParser.parse(reader);
 			
-			logger.info(gson.toJson(jsonElement));
+			logger.info(jsonElement.toString());
 			BulkItemDeserializer bulkItemDeserializer = new BulkItemDeserializer(jsonElement.getAsJsonObject());
 			List<Item> items = bulkItemDeserializer.convertToItems();
 		}

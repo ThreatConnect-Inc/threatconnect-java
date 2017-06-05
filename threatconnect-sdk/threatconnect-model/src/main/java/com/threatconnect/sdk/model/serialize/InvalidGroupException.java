@@ -1,4 +1,4 @@
-package com.threatconnect.sdk.parser.service.bulk;
+package com.threatconnect.sdk.model.serialize;
 
 public class InvalidGroupException extends Exception
 {

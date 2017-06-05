@@ -5,7 +5,7 @@ import com.threatconnect.sdk.model.File;
 import com.threatconnect.sdk.model.Host;
 import com.threatconnect.sdk.model.Indicator;
 import com.threatconnect.sdk.model.Url;
-import com.threatconnect.sdk.parser.service.bulk.InvalidIndicatorException;
+import com.threatconnect.sdk.model.serialize.InvalidIndicatorException;
 import com.threatconnect.sdk.parser.util.regex.HostNameExtractor;
 import com.threatconnect.sdk.parser.util.regex.MatchNotFoundException;
 

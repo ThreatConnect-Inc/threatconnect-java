@@ -1,9 +1,9 @@
-package com.threatconnect.sdk.parser.service.bulk;
+package com.threatconnect.sdk.model.serialize;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.threatconnect.app.addons.util.JsonUtil;
+import com.google.gson.JsonParser;
 import com.threatconnect.sdk.model.Address;
 import com.threatconnect.sdk.model.Adversary;
 import com.threatconnect.sdk.model.Attribute;
@@ -22,8 +22,9 @@ import com.threatconnect.sdk.model.ItemType;
 import com.threatconnect.sdk.model.Signature;
 import com.threatconnect.sdk.model.Threat;
 import com.threatconnect.sdk.model.Url;
+import com.threatconnect.sdk.model.util.IndicatorUtil;
+import com.threatconnect.sdk.model.util.JsonUtil;
 import com.threatconnect.sdk.model.util.TagUtil;
-import com.threatconnect.sdk.parser.util.IndicatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +41,11 @@ public class BulkItemDeserializer
 	
 	//holds the map of xids to item
 	private final Map<String, Item> xidMap;
+	
+	public BulkItemDeserializer(final String root)
+	{
+		this(JsonUtil.getAsJsonObject(new JsonParser().parse(root)));
+	}
 	
 	public BulkItemDeserializer(final JsonObject root)
 	{
@@ -69,6 +75,7 @@ public class BulkItemDeserializer
 					//determine the group type for this element
 					GroupType groupType = determineGroupType(groupElement);
 					Group group = createGroup(groupType, groupElement);
+					group.setXid(xid);
 					
 					group.setName(JsonUtil.getAsString(groupElement, "name"));
 					
@@ -102,6 +109,7 @@ public class BulkItemDeserializer
 					{
 						// inflate the indicator and save the xid to the map
 						Indicator indicator = convertToIndicator(indicatorElement);
+						indicator.setXid(xid);
 						xidMap.put(xid, indicator);
 						
 						//copy the rating and confidence values

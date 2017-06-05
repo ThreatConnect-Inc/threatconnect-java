@@ -16,7 +16,7 @@ import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.ItemType;
 import com.threatconnect.sdk.model.util.ItemUtil;
 import com.threatconnect.sdk.parser.service.bulk.BulkIndicatorConverter;
-import com.threatconnect.sdk.parser.service.bulk.BulkItemSerializer;
+import com.threatconnect.sdk.model.serialize.BulkItemSerializer;
 import com.threatconnect.sdk.parser.service.save.SaveItemFailedException;
 import com.threatconnect.sdk.parser.service.save.SaveResults;
 import com.threatconnect.sdk.server.entity.BatchConfig;

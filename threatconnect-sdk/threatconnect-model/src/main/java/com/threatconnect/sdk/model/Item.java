@@ -8,6 +8,7 @@ public abstract class Item
 	private final ItemType itemType;
 	private final Set<Attribute> attributes;
 	private final Set<String> tags;
+	private String xid;
 	
 	public Item(final ItemType itemType)
 	{
@@ -29,6 +30,16 @@ public abstract class Item
 	public Set<String> getTags()
 	{
 		return tags;
+	}
+	
+	public String getXid()
+	{
+		return xid;
+	}
+	
+	public void setXid(final String xid)
+	{
+		this.xid = xid;
 	}
 	
 	public abstract Set<? extends Item> getAssociatedItems();

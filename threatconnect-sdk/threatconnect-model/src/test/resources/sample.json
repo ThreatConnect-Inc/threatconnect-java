@@ -1,0 +1,542 @@
+{
+  "group": [
+    {
+      "name": "MikeyIncident2",
+      "type": "Incident",
+      "dateAdded": "2017-04-04T09:12:19-05:00",
+      "attribute": [
+        {
+          "type": "Description",
+          "dateAdded": "2017-04-04T09:12:19-05:00",
+          "lastModified": "2017-04-04T09:12:19-05:00",
+          "displayed": false,
+          "value": "Hello this is a description"
+        },
+        {
+          "type": "Threat Level",
+          "dateAdded": "2017-04-04T09:12:19-05:00",
+          "lastModified": "2017-04-04T09:12:19-05:00",
+          "displayed": false,
+          "value": "Low"
+        }
+      ],
+      "xid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:57",
+      "associatedGroupXid": [
+        "e336e2dd-5dfb-48cd-a33a-f8809e83e904:58",
+        "e336e2dd-5dfb-48cd-a33a-f8809e83e904:27",
+        "e336e2dd-5dfb-48cd-a33a-f8809e83e904:28",
+        "e336e2dd-5dfb-48cd-a33a-f8809e83e904:29"
+      ],
+      "tag": [
+        {
+          "name": "China"
+        }
+      ]
+    },
+    {
+      "name": "MikeyIncident1",
+      "type": "Incident",
+      "dateAdded": "2017-04-04T09:12:19-05:00",
+      "xid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:58",
+      "associatedGroupXid": [
+        "e336e2dd-5dfb-48cd-a33a-f8809e83e904:57"
+      ]
+    },
+    {
+      "name": "AnotherTestAdversary",
+      "type": "Adversary",
+      "dateAdded": "2017-04-04T09:12:20-05:00",
+      "xid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:61",
+      "associatedGroupXid": [
+        "e336e2dd-5dfb-48cd-a33a-f8809e83e904:57"
+      ]
+    },
+    {
+      "type": "File Archive",
+      "dateAdded": "2017-03-15T13:37:26-05:00",
+      "xid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:27",
+      "associatedGroupXid": [
+        "e336e2dd-5dfb-48cd-a33a-f8809e83e904:28"
+      ]
+    },
+    {
+      "type": "File Drop",
+      "dateAdded": "2017-03-15T13:37:26-05:00",
+      "xid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:28",
+      "associatedGroupXid": [
+        "e336e2dd-5dfb-48cd-a33a-f8809e83e904:27"
+      ]
+    },
+    {
+      "type": "ASN to Address",
+      "dateAdded": "2017-03-15T13:37:26-05:00",
+      "xid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:29"
+    },
+    {
+      "name": "MikeyThreat",
+      "type": "Threat",
+      "dateAdded": "2017-04-04T09:12:19-05:00",
+      "xid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:59",
+      "associatedGroupXid": [
+        "e336e2dd-5dfb-48cd-a33a-f8809e83e904:58"
+      ]
+    }
+  ],
+  "indicator": [
+    {
+      "type": "Address",
+      "dateAdded": "2017-04-04T09:12:19-05:00",
+      "lastModified": "2017-04-04T09:12:19-05:00",
+      "summary": "1.1.1.1",
+      "xid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170134",
+      "flag1": false,
+      "intValue1": 16843009,
+      "associatedGroups": [
+        {
+          "groupXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:57",
+          "dateAdded": "2017-02-25T11:18:47-06:00"
+        }
+      ]
+    },
+    {
+      "type": "Address",
+      "dateAdded": "2017-04-04T09:12:19-05:00",
+      "lastModified": "2017-04-04T09:12:19-05:00",
+      "summary": "1.1.1.2",
+      "xid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170135",
+      "flag1": false,
+      "intValue1": 16843010,
+      "associatedGroups": [
+        {
+          "groupXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:57",
+          "dateAdded": "2017-02-25T11:18:47-06:00"
+        }
+      ]
+    },
+    {
+      "type": "Address",
+      "dateAdded": "2017-04-04T09:12:19-05:00",
+      "lastModified": "2017-04-04T09:12:19-05:00",
+      "summary": "1.1.1.3",
+      "xid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170136",
+      "flag1": false,
+      "intValue1": 16843011,
+      "associatedGroups": [
+        {
+          "groupXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:57",
+          "dateAdded": "2017-02-25T11:18:48-06:00"
+        }
+      ]
+    },
+    {
+      "type": "Address",
+      "dateAdded": "2017-04-04T09:12:19-05:00",
+      "lastModified": "2017-04-04T09:12:19-05:00",
+      "rating": 1.00,
+      "confidence": 15,
+      "summary": "173.199.166.68",
+      "attribute": [
+        {
+          "type": "Source",
+          "dateAdded": "2017-04-04T09:12:19-05:00",
+          "lastModified": "2017-04-04T09:12:19-05:00",
+          "displayed": true,
+          "value": "Imported from ThreatConnect Passive DNS"
+        }
+      ],
+      "xid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170137",
+      "flag1": false,
+      "intValue1": 2915542596,
+      "associatedGroups": [
+        {
+          "groupXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:57",
+          "dateAdded": "2017-02-25T11:18:48-06:00"
+        }
+      ]
+    },
+    {
+      "type": "Address",
+      "dateAdded": "2017-04-04T09:12:19-05:00",
+      "lastModified": "2017-04-04T09:12:19-05:00",
+      "rating": 1.00,
+      "confidence": 15,
+      "summary": "173.199.176.92",
+      "attribute": [
+        {
+          "type": "Source",
+          "dateAdded": "2017-04-04T09:12:19-05:00",
+          "lastModified": "2017-04-04T09:12:19-05:00",
+          "displayed": true,
+          "value": "Imported from ThreatConnect Passive DNS"
+        }
+      ],
+      "tag": [
+        {
+          "name": "China"
+        },
+        {
+          "name": "hehehe"
+        }
+      ],
+      "xid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170138",
+      "flag1": false,
+      "intValue1": 2915545180,
+      "associatedGroups": [
+        {
+          "groupXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:57",
+          "dateAdded": "2017-02-25T11:18:48-06:00"
+        },
+        {
+          "groupXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:29",
+          "associationNumber": 2,
+          "dateAdded": "2017-03-08T13:28:59-06:00"
+        }
+      ]
+    },
+    {
+      "type": "File",
+      "dateAdded": "2017-04-04T09:12:19-05:00",
+      "lastModified": "2017-04-04T09:12:19-05:00",
+      "rating": 5.00,
+      "confidence": 50,
+      "summary": "2FFA00BB67FC936B01E3DE234A01A8D8",
+      "attribute": [
+        {
+          "type": "Source",
+          "dateAdded": "2017-04-04T09:12:19-05:00",
+          "lastModified": "2017-04-04T09:12:19-05:00",
+          "displayed": true,
+          "value": "Malware Analysis provided by Joe Sandbox (www.joesecurity.org)"
+        },
+        {
+          "type": "Description",
+          "dateAdded": "2017-04-04T09:12:19-05:00",
+          "lastModified": "2017-04-04T09:12:19-05:00",
+          "displayed": true,
+          "value": "APT backdoor binary."
+        }
+      ],
+      "xid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170139",
+      "value1": "2FFA00BB67FC936B01E3DE234A01A8D8",
+      "associatedGroups": [
+        {
+          "groupXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:57",
+          "dateAdded": "2017-03-07T09:40:05-06:00"
+        },
+        {
+          "groupXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:27",
+          "associationNumber": 1,
+          "dateAdded": null
+        },
+        {
+          "groupXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:28",
+          "associationNumber": 1,
+          "dateAdded": null
+        }
+      ],
+      "fileAction": {
+        "fileData": {
+          "fileName": "drop1.exe",
+          "path": "C:\\test\\",
+          "date": "2017-03-03T18:00:00-06:00"
+        },
+        "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170139",
+        "children": [
+          {
+            "relationship": "File Archive",
+            "children": [
+              {
+                "relationship": "File Archive",
+                "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170141",
+                "parentIndicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170139",
+                "children": [
+                  {
+                    "relationship": "File Archive",
+                    "children": [
+                      {
+                        "relationship": "File Archive",
+                        "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170141"
+                      }
+                    ]
+                  },
+                  {
+                    "relationship": "File Drop",
+                    "children": [
+                      {
+                        "relationship": "File Drop",
+                        "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170141"
+                      }
+                    ]
+                  },
+                  {
+                    "relationship": "File Traffic",
+                    "children": [
+                      {
+                        "relationship": "File Traffic",
+                        "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170141"
+                      }
+                    ]
+                  },
+                  {
+                    "relationship": "File Mutex",
+                    "children": [
+                      {
+                        "relationship": "File Mutex",
+                        "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170141"
+                      }
+                    ]
+                  },
+                  {
+                    "relationship": "File Registry Key",
+                    "children": [
+                      {
+                        "relationship": "File Registry Key",
+                        "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170141"
+                      }
+                    ]
+                  },
+                  {
+                    "relationship": "File User Agent",
+                    "children": [
+                      {
+                        "relationship": "File User Agent",
+                        "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170141"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "relationship": "File Archive",
+                "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170139"
+              }
+            ]
+          },
+          {
+            "relationship": "File Drop",
+            "children": [
+              {
+                "relationship": "File Drop",
+                "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170141",
+                "parentIndicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170139",
+                "children": [
+                  {
+                    "relationship": "File Archive",
+                    "children": [
+                      {
+                        "relationship": "File Archive",
+                        "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170141"
+                      }
+                    ]
+                  },
+                  {
+                    "relationship": "File Drop",
+                    "children": [
+                      {
+                        "relationship": "File Drop",
+                        "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170141"
+                      }
+                    ]
+                  },
+                  {
+                    "relationship": "File Traffic",
+                    "children": [
+                      {
+                        "relationship": "File Traffic",
+                        "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170141"
+                      }
+                    ]
+                  },
+                  {
+                    "relationship": "File Mutex",
+                    "children": [
+                      {
+                        "relationship": "File Mutex",
+                        "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170141"
+                      }
+                    ]
+                  },
+                  {
+                    "relationship": "File Registry Key",
+                    "children": [
+                      {
+                        "relationship": "File Registry Key",
+                        "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170141"
+                      }
+                    ]
+                  },
+                  {
+                    "relationship": "File User Agent",
+                    "children": [
+                      {
+                        "relationship": "File User Agent",
+                        "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170141"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "relationship": "File Drop",
+                "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170139"
+              }
+            ]
+          },
+          {
+            "relationship": "File Traffic",
+            "children": [
+              {
+                "relationship": "File Traffic",
+                "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170139"
+              }
+            ]
+          },
+          {
+            "relationship": "File Mutex",
+            "children": [
+              {
+                "relationship": "File Mutex",
+                "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170139"
+              }
+            ]
+          },
+          {
+            "relationship": "File Registry Key",
+            "children": [
+              {
+                "relationship": "File Registry Key",
+                "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170139"
+              }
+            ]
+          },
+          {
+            "relationship": "File User Agent",
+            "children": [
+              {
+                "relationship": "File User Agent",
+                "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170139"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "ASN",
+      "dateAdded": "2017-04-04T09:12:19-05:00",
+      "lastModified": "2017-04-04T09:12:19-05:00",
+      "summary": "ASN123",
+      "xid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170140",
+      "value1": "ASN123",
+      "associatedGroups": [
+        {
+          "groupXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:57",
+          "dateAdded": "2017-03-09T14:28:46-06:00"
+        },
+        {
+          "groupXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:29",
+          "associationNumber": 1,
+          "dateAdded": null
+        }
+      ]
+    },
+    {
+      "type": "File",
+      "dateAdded": "2017-04-04T09:12:19-05:00",
+      "lastModified": "2017-04-04T09:12:19-05:00",
+      "rating": 4.00,
+      "confidence": 50,
+      "summary": "0B4D7C73F4201A7A172C580DD6B72F96",
+      "attribute": [
+        {
+          "type": "Source",
+          "dateAdded": "2017-04-04T09:12:19-05:00",
+          "lastModified": "2017-04-04T09:12:19-05:00",
+          "displayed": true,
+          "value": "https://www.virustotal.com/en/file/5b9d52c4005dd33b57898856d969f7528fbdf8dd9f90a8172f52a0df0c5c4922/analysis/"
+        },
+        {
+          "type": "Description",
+          "dateAdded": "2017-04-04T09:12:19-05:00",
+          "lastModified": "2017-04-04T09:12:19-05:00",
+          "displayed": true,
+          "value": "CVE-2012-0158 RTF exploit."
+        }
+      ],
+      "xid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170141",
+      "value1": "0B4D7C73F4201A7A172C580DD6B72F96",
+      "associatedGroups": [
+        {
+          "groupXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:27",
+          "associationNumber": 2,
+          "dateAdded": "2017-03-13T09:20:00-05:00"
+        },
+        {
+          "groupXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:28",
+          "associationNumber": 2,
+          "dateAdded": "2017-03-07T09:40:20-06:00"
+        }
+      ],
+      "fileAction": {
+        "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170141",
+        "children": [
+          {
+            "relationship": "File Archive",
+            "children": [
+              {
+                "relationship": "File Archive",
+                "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170141"
+              }
+            ]
+          },
+          {
+            "relationship": "File Drop",
+            "children": [
+              {
+                "relationship": "File Drop",
+                "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170141"
+              }
+            ]
+          },
+          {
+            "relationship": "File Traffic",
+            "children": [
+              {
+                "relationship": "File Traffic",
+                "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170141"
+              }
+            ]
+          },
+          {
+            "relationship": "File Mutex",
+            "children": [
+              {
+                "relationship": "File Mutex",
+                "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170141"
+              }
+            ]
+          },
+          {
+            "relationship": "File Registry Key",
+            "children": [
+              {
+                "relationship": "File Registry Key",
+                "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170141"
+              }
+            ]
+          },
+          {
+            "relationship": "File User Agent",
+            "children": [
+              {
+                "relationship": "File User Agent",
+                "indicatorXid": "e336e2dd-5dfb-48cd-a33a-f8809e83e904:170141"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "association": []
+}

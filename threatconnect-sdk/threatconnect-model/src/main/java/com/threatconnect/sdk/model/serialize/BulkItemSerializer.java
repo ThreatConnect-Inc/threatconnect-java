@@ -1,8 +1,8 @@
-package com.threatconnect.sdk.parser.service.bulk;
+package com.threatconnect.sdk.model.serialize;
 
-import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.threatconnect.sdk.model.Attribute;
 import com.threatconnect.sdk.model.Group;
 import com.threatconnect.sdk.model.GroupType;
@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -27,7 +28,8 @@ public class BulkItemSerializer
 {
 	private static final Logger logger = LoggerFactory.getLogger(BulkItemSerializer.class);
 	
-	public static final DateFormat DEFAULT_DATE_FORMATTER = new ISO8601DateFormat();
+	public static final String ISO_DATE_FORMAT = "yyyy-MM-dd'T'hh:mm.ssZ";
+	public static final DateFormat DEFAULT_DATE_FORMATTER = new SimpleDateFormat(ISO_DATE_FORMAT);
 	
 	//holds the map of item to xids
 	private final Map<Item, String> xidMap;
@@ -50,6 +52,19 @@ public class BulkItemSerializer
 		this.items = items;
 		this.xidMap = new HashMap<Item, String>();
 		this.associatedGroupXids = new HashMap<Indicator, Set<String>>();
+	}
+	
+	public synchronized String convertToJsonString()
+	{
+		JsonObject value = convertToJson();
+		if (null != value)
+		{
+			return value.toString();
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	public synchronized JsonObject convertToJson()
@@ -128,7 +143,7 @@ public class BulkItemSerializer
 			if (ItemType.GROUP.equals(item.getItemType()))
 			{
 				//add this item's xid to the assocaited group xid array
-				associatedGroupXidArray.add(xidMap.get(item));
+				associatedGroupXidArray.add(new JsonPrimitive(xidMap.get(item)));
 			}
 		}
 		
@@ -155,7 +170,7 @@ public class BulkItemSerializer
 		for (Group group : indicator.getAssociatedItems())
 		{
 			//add this item's xid to the assocaited group xid array
-			associatedGroupsArray.add(xidMap.get(group));
+			associatedGroupsArray.add(new JsonPrimitive(xidMap.get(group)));
 		}
 		
 		//for each of the associated group ids
@@ -265,18 +280,36 @@ public class BulkItemSerializer
 		//for each of the groups
 		for (Group group : groups)
 		{
-			xidMap.put(group, generateXid());
+			//check to see if an xid needs to be generated for this group
+			if(null == group.getXid())
+			{
+				group.setXid(generateXid());
+			}
+			
+			xidMap.put(group, group.getXid());
 		}
 		
 		//for each of the indicators
 		for (Indicator indicator : indicators)
 		{
-			xidMap.put(indicator, generateXid());
+			//check to see if an xid needs to be generated for this indicator
+			if(null == indicator.getXid())
+			{
+				indicator.setXid(generateXid());
+			}
+			
+			xidMap.put(indicator, indicator.getXid());
 		}
 	}
 	
 	private String generateXid()
 	{
 		return UUID.randomUUID().toString();
+	}
+	
+	@Override
+	public String toString()
+	{
+		return convertToJsonString();
 	}
 }

@@ -1,12 +1,13 @@
 package com.threatconnect.sdk.model.serialize;
 
-import com.google.gson.Gson;
 import com.gregmarut.support.beangenerator.BeanPropertyGenerator;
+import com.gregmarut.support.beangenerator.rule.RuleBuilder;
+import com.gregmarut.support.beangenerator.rule.condition.FieldNameMatchesCondition;
+import com.gregmarut.support.beangenerator.value.NullValue;
 import com.threatconnect.sdk.model.File;
 import com.threatconnect.sdk.model.Incident;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.Url;
-import com.threatconnect.sdk.model.util.ModelSerializationUtil;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -23,12 +24,15 @@ public class SerializeListTest
 	private static final Logger logger = LoggerFactory.getLogger(SerializeListTest.class);
 	
 	private final BeanPropertyGenerator beanPropertyGenerator;
-	private final Gson gson;
 	
 	public SerializeListTest()
 	{
 		this.beanPropertyGenerator = new BeanPropertyGenerator();
-		this.gson = ModelSerializationUtil.createJson();
+		RuleBuilder ruleBuilder = new RuleBuilder(beanPropertyGenerator.getConfiguration().getRuleMapping());
+		ruleBuilder.forType(String.class).when(new FieldNameMatchesCondition("xid")).thenReturn(new NullValue<String>(String.class));
+		ruleBuilder.forType(String.class).when(new FieldNameMatchesCondition("md5")).thenReturn("098f6bcd4621d373cade4e832627b4f6");
+		ruleBuilder.forType(String.class).when(new FieldNameMatchesCondition("sha1")).thenReturn("a94a8fe5ccb19ba61c4c0873d391e987982fbbd3");
+		ruleBuilder.forType(String.class).when(new FieldNameMatchesCondition("sha256")).thenReturn("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08");
 	}
 	
 	@Test
@@ -41,13 +45,15 @@ public class SerializeListTest
 		List<Item> items = Arrays.asList(incident, file, url);
 		
 		//serialize the items list
-		String json = gson.toJson(items);
+		BulkItemSerializer bulkItemSerializer = new BulkItemSerializer(items);
+		String json = bulkItemSerializer.convertToJsonString();
 		logger.debug(json);
-		List<Item> restored = ModelSerializationUtil.fromJsonList(json);
+		BulkItemDeserializer bulkItemDeserializer = new BulkItemDeserializer(json);
+		List<Item> restored = bulkItemDeserializer.convertToItems();
 		
 		Assert.assertEquals(incident.getClass(), restored.get(0).getClass());
-		Assert.assertEquals(file, restored.get(1));
-		Assert.assertEquals(url, restored.get(2));
+		Assert.assertEquals(url, restored.get(1));
+		Assert.assertEquals(file, restored.get(2));
 	}
 	
 	@Test
@@ -63,9 +69,11 @@ public class SerializeListTest
 		List<Item> items = Arrays.asList((Item) incident);
 		
 		//serialize the items list
-		String json = gson.toJson(items);
+		BulkItemSerializer bulkItemSerializer = new BulkItemSerializer(items);
+		String json = bulkItemSerializer.convertToJsonString();
 		logger.debug(json);
-		List<Item> restored = ModelSerializationUtil.fromJsonList(json);
+		BulkItemDeserializer bulkItemDeserializer = new BulkItemDeserializer(json);
+		List<Item> restored = bulkItemDeserializer.convertToItems();
 		
 		Assert.assertEquals(1, restored.size());
 		Assert.assertEquals(incident.getClass(), restored.get(0).getClass());
@@ -85,11 +93,14 @@ public class SerializeListTest
 		List<Item> items = Arrays.asList(incident, file, url);
 		
 		//serialize the items list
-		String json = gson.toJson(items);
-		List<Item> restored = ModelSerializationUtil.fromJsonList(json);
+		BulkItemSerializer bulkItemSerializer = new BulkItemSerializer(items);
+		String json = bulkItemSerializer.convertToJsonString();
+		BulkItemDeserializer bulkItemDeserializer = new BulkItemDeserializer(json);
+		List<Item> restored = bulkItemDeserializer.convertToItems();
 		
 		//serialize the items list again
-		String json2 = gson.toJson(restored);
+		BulkItemSerializer bulkItemSerializer2 = new BulkItemSerializer(restored);
+		String json2 = bulkItemSerializer2.convertToJsonString();
 		
 		//make sure both json objects are the same
 		Assert.assertEquals(json, json2);
@@ -108,11 +119,15 @@ public class SerializeListTest
 		List<Item> items = Arrays.asList((Item) incident);
 		
 		//serialize the items list
-		String json = gson.toJson(items);
-		List<Item> restored = ModelSerializationUtil.fromJsonList(json);
+		BulkItemSerializer bulkItemSerializer = new BulkItemSerializer(items);
+		String json = bulkItemSerializer.convertToJsonString();
+		BulkItemDeserializer bulkItemDeserializer = new BulkItemDeserializer(json);
+		List<Item> restored = bulkItemDeserializer.convertToItems();
 		
 		//serialize the items list again
-		String json2 = gson.toJson(restored);
+		//serialize the items list again
+		BulkItemSerializer bulkItemSerializer2 = new BulkItemSerializer(restored);
+		String json2 = bulkItemSerializer2.convertToJsonString();
 		
 		//make sure both json objects are the same
 		Assert.assertEquals(json, json2);
