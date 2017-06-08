@@ -6,6 +6,7 @@ import com.gregmarut.support.beangenerator.BeanPropertyGenerator;
 import com.gregmarut.support.beangenerator.rule.RuleBuilder;
 import com.gregmarut.support.beangenerator.rule.condition.FieldNameMatchesCondition;
 import com.gregmarut.support.beangenerator.value.NullValue;
+import com.gregmarut.support.beangenerator.value.StringValue;
 import com.threatconnect.sdk.model.Address;
 import com.threatconnect.sdk.model.Attribute;
 import com.threatconnect.sdk.model.Group;
@@ -15,6 +16,7 @@ import com.threatconnect.sdk.model.Incident;
 import com.threatconnect.sdk.model.Indicator;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.ItemType;
+import com.threatconnect.sdk.model.Threat;
 import com.threatconnect.sdk.model.Url;
 import com.threatconnect.sdk.model.util.TagUtil;
 import org.junit.Assert;
@@ -25,8 +27,10 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class BulkItemSerializerTest
 {
@@ -39,11 +43,31 @@ public class BulkItemSerializerTest
 	{
 		this.jsonParser = new JsonParser();
 		beanPropertyGenerator = new BeanPropertyGenerator(false);
+		
+		StringValue xidGenValue = new StringValue()
+		{
+			@Override
+			public String getValue()
+			{
+				return UUID.randomUUID().toString();
+			}
+			
+			@Override
+			public String getValue(final Field field)
+			{
+				return getValue();
+			}
+		};
+		
 		RuleBuilder ruleBuilder = new RuleBuilder(beanPropertyGenerator.getConfiguration().getRuleMapping());
-		ruleBuilder.forType(String.class).when(new FieldNameMatchesCondition("xid")).thenReturn(new NullValue<String>(String.class));
-		ruleBuilder.forType(String.class).when(new FieldNameMatchesCondition("md5")).thenReturn("098f6bcd4621d373cade4e832627b4f6");
-		ruleBuilder.forType(String.class).when(new FieldNameMatchesCondition("sha1")).thenReturn("a94a8fe5ccb19ba61c4c0873d391e987982fbbd3");
-		ruleBuilder.forType(String.class).when(new FieldNameMatchesCondition("sha256")).thenReturn("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08");
+		ruleBuilder.forType(String.class).when(new FieldNameMatchesCondition("xid"))
+			.thenReturn(new NullValue<String>(String.class));
+		ruleBuilder.forType(String.class).when(new FieldNameMatchesCondition("md5"))
+			.thenReturn("098f6bcd4621d373cade4e832627b4f6");
+		ruleBuilder.forType(String.class).when(new FieldNameMatchesCondition("sha1"))
+			.thenReturn("a94a8fe5ccb19ba61c4c0873d391e987982fbbd3");
+		ruleBuilder.forType(String.class).when(new FieldNameMatchesCondition("sha256"))
+			.thenReturn("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08");
 	}
 	
 	@Test
@@ -119,5 +143,34 @@ public class BulkItemSerializerTest
 			BulkItemDeserializer bulkItemDeserializer = new BulkItemDeserializer(jsonElement.getAsJsonObject());
 			List<Item> items = bulkItemDeserializer.convertToItems();
 		}
+	}
+	
+	@Test
+	public void serializeInflate3() throws IOException
+	{
+		//build some test objects with some associations
+		Incident incident = beanPropertyGenerator.get(Incident.class);
+		Threat threat = beanPropertyGenerator.get(Threat.class);
+		incident.getAssociatedItems().add(threat);
+		
+		//serialize the results
+		List<? extends Item> items = Arrays.asList(incident);
+		BulkItemSerializer bulkItemSerializer = new BulkItemSerializer(items);
+		String json = bulkItemSerializer.convertToJsonString();
+		logger.info(json);
+		
+		//deserialize the results
+		BulkItemDeserializer bulkItemDeserializer = new BulkItemDeserializer(json);
+		List<Item> restoredItems = bulkItemDeserializer.convertToItems();
+		
+		Assert.assertEquals(1, restoredItems.size());
+		Assert.assertEquals(ItemType.GROUP, restoredItems.get(0).getItemType());
+		
+		Incident restoredIncident = (Incident) restoredItems.get(0);
+		Assert.assertEquals(incident.getXid(), restoredIncident.getXid());
+		Assert.assertEquals(1, restoredIncident.getAssociatedItems().size());
+		
+		Threat restoredThreat = (Threat) restoredIncident.getAssociatedItems().iterator().next();
+		Assert.assertEquals(threat.getXid(), restoredThreat.getXid());
 	}
 }

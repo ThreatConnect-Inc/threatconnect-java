@@ -93,6 +93,39 @@ public class BulkItemDeserializer
 					logger.warn("Skipping group - invalid group type");
 				}
 			}
+			
+			// make a second pass through the groups to make group-group associations
+			for (JsonElement groupElement : groupArray)
+			{
+				//retrieve the array of associatedGroups
+				JsonArray associatedGroupsArray = JsonUtil.getAsJsonArray(groupElement, "associatedGroupXid");
+				if (null != associatedGroupsArray)
+				{
+					//retrieve the xid for this group element
+					final String xid = JsonUtil.getAsString(groupElement, "xid");
+					final Group group = (Group) xidMap.get(xid);
+					
+					//make sure the group is not null
+					if (null != group)
+					{
+						//for each of the associated groups
+						for (JsonElement associatedGroupElement : associatedGroupsArray)
+						{
+							//get the group xid
+							String groupXid = associatedGroupElement.getAsString();
+							
+							//retrieve the item and make sure it exists and is a group
+							Item associatedItem = xidMap.get(groupXid);
+							if (null != associatedItem && ItemType.GROUP.equals(associatedItem.getItemType()))
+							{
+								//associate this group with the parent group
+								group.getAssociatedItems().add(associatedItem);
+								items.remove(associatedItem);
+							}
+						}
+					}
+				}
+			}
 		}
 		
 		//check to see if there is an indicator array
