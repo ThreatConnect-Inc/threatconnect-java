@@ -24,9 +24,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public class BulkItemSerializer
+public class BatchItemSerializer
 {
-	private static final Logger logger = LoggerFactory.getLogger(BulkItemSerializer.class);
+	private static final Logger logger = LoggerFactory.getLogger(BatchItemSerializer.class);
 	
 	public static final String ISO_DATE_FORMAT = "yyyy-MM-dd'T'hh:mm.ssZ";
 	public static final DateFormat DEFAULT_DATE_FORMATTER = new SimpleDateFormat(ISO_DATE_FORMAT);
@@ -42,12 +42,12 @@ public class BulkItemSerializer
 	
 	private JsonObject root;
 	
-	public BulkItemSerializer(final Item... items)
+	public BatchItemSerializer(final Item... items)
 	{
 		this(Arrays.asList(items));
 	}
 	
-	public BulkItemSerializer(final Collection<? extends Item> items)
+	public BatchItemSerializer(final Collection<? extends Item> items)
 	{
 		this.items = items;
 		this.xidMap = new HashMap<Item, String>();

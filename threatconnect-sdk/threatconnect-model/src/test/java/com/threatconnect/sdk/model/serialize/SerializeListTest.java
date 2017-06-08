@@ -45,11 +45,11 @@ public class SerializeListTest
 		List<Item> items = Arrays.asList(incident, file, url);
 		
 		//serialize the items list
-		BulkItemSerializer bulkItemSerializer = new BulkItemSerializer(items);
-		String json = bulkItemSerializer.convertToJsonString();
+		BatchItemSerializer batchItemSerializer = new BatchItemSerializer(items);
+		String json = batchItemSerializer.convertToJsonString();
 		logger.debug(json);
-		BulkItemDeserializer bulkItemDeserializer = new BulkItemDeserializer(json);
-		List<Item> restored = bulkItemDeserializer.convertToItems();
+		BatchItemDeserializer batchItemDeserializer = new BatchItemDeserializer(json);
+		List<Item> restored = batchItemDeserializer.convertToItems();
 		
 		Assert.assertEquals(incident.getClass(), restored.get(0).getClass());
 		Assert.assertEquals(url, restored.get(1));
@@ -69,11 +69,11 @@ public class SerializeListTest
 		List<Item> items = Arrays.asList((Item) incident);
 		
 		//serialize the items list
-		BulkItemSerializer bulkItemSerializer = new BulkItemSerializer(items);
-		String json = bulkItemSerializer.convertToJsonString();
+		BatchItemSerializer batchItemSerializer = new BatchItemSerializer(items);
+		String json = batchItemSerializer.convertToJsonString();
 		logger.debug(json);
-		BulkItemDeserializer bulkItemDeserializer = new BulkItemDeserializer(json);
-		List<Item> restored = bulkItemDeserializer.convertToItems();
+		BatchItemDeserializer batchItemDeserializer = new BatchItemDeserializer(json);
+		List<Item> restored = batchItemDeserializer.convertToItems();
 		
 		Assert.assertEquals(1, restored.size());
 		Assert.assertEquals(incident.getClass(), restored.get(0).getClass());
@@ -93,14 +93,14 @@ public class SerializeListTest
 		List<Item> items = Arrays.asList(incident, file, url);
 		
 		//serialize the items list
-		BulkItemSerializer bulkItemSerializer = new BulkItemSerializer(items);
-		String json = bulkItemSerializer.convertToJsonString();
-		BulkItemDeserializer bulkItemDeserializer = new BulkItemDeserializer(json);
-		List<Item> restored = bulkItemDeserializer.convertToItems();
+		BatchItemSerializer batchItemSerializer = new BatchItemSerializer(items);
+		String json = batchItemSerializer.convertToJsonString();
+		BatchItemDeserializer batchItemDeserializer = new BatchItemDeserializer(json);
+		List<Item> restored = batchItemDeserializer.convertToItems();
 		
 		//serialize the items list again
-		BulkItemSerializer bulkItemSerializer2 = new BulkItemSerializer(restored);
-		String json2 = bulkItemSerializer2.convertToJsonString();
+		BatchItemSerializer batchItemSerializer2 = new BatchItemSerializer(restored);
+		String json2 = batchItemSerializer2.convertToJsonString();
 		
 		//make sure both json objects are the same
 		Assert.assertEquals(json, json2);
@@ -119,15 +119,15 @@ public class SerializeListTest
 		List<Item> items = Arrays.asList((Item) incident);
 		
 		//serialize the items list
-		BulkItemSerializer bulkItemSerializer = new BulkItemSerializer(items);
-		String json = bulkItemSerializer.convertToJsonString();
-		BulkItemDeserializer bulkItemDeserializer = new BulkItemDeserializer(json);
-		List<Item> restored = bulkItemDeserializer.convertToItems();
+		BatchItemSerializer batchItemSerializer = new BatchItemSerializer(items);
+		String json = batchItemSerializer.convertToJsonString();
+		BatchItemDeserializer batchItemDeserializer = new BatchItemDeserializer(json);
+		List<Item> restored = batchItemDeserializer.convertToItems();
 		
 		//serialize the items list again
 		//serialize the items list again
-		BulkItemSerializer bulkItemSerializer2 = new BulkItemSerializer(restored);
-		String json2 = bulkItemSerializer2.convertToJsonString();
+		BatchItemSerializer batchItemSerializer2 = new BatchItemSerializer(restored);
+		String json2 = batchItemSerializer2.convertToJsonString();
 		
 		//make sure both json objects are the same
 		Assert.assertEquals(json, json2);

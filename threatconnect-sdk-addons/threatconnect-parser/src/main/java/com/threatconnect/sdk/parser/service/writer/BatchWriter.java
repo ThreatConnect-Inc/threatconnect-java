@@ -16,7 +16,7 @@ import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.ItemType;
 import com.threatconnect.sdk.model.util.ItemUtil;
 import com.threatconnect.sdk.parser.service.bulk.BulkIndicatorConverter;
-import com.threatconnect.sdk.model.serialize.BulkItemSerializer;
+import com.threatconnect.sdk.model.serialize.BatchItemSerializer;
 import com.threatconnect.sdk.parser.service.save.SaveItemFailedException;
 import com.threatconnect.sdk.parser.service.save.SaveResults;
 import com.threatconnect.sdk.server.entity.BatchConfig;
@@ -151,8 +151,8 @@ public class BatchWriter extends Writer
 		
 		// create a new bulk indicator converter
 		logger.trace("Marshalling indicator list to JSON");
-		BulkItemSerializer bulkItemSerializer = new BulkItemSerializer(source);
-		JsonElement json = bulkItemSerializer.convertToJson();
+		BatchItemSerializer batchItemSerializer = new BatchItemSerializer(source);
+		JsonElement json = batchItemSerializer.convertToJson();
 		
 		// upload the batch indicators and add it to the list
 		BatchUploadResponse batchUploadResponse = uploadIndicators(json, ownerName,

@@ -33,21 +33,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BulkItemDeserializer
+public class BatchItemDeserializer
 {
-	private static final Logger logger = LoggerFactory.getLogger(BulkItemDeserializer.class);
+	private static final Logger logger = LoggerFactory.getLogger(BatchItemDeserializer.class);
 	
 	private final JsonObject root;
 	
 	//holds the map of xids to item
 	private final Map<String, Item> xidMap;
 	
-	public BulkItemDeserializer(final String root)
+	public BatchItemDeserializer(final String root)
 	{
 		this(JsonUtil.getAsJsonObject(new JsonParser().parse(root)));
 	}
 	
-	public BulkItemDeserializer(final JsonObject root)
+	public BatchItemDeserializer(final JsonObject root)
 	{
 		this.root = root;
 		this.xidMap = new HashMap<String, Item>();

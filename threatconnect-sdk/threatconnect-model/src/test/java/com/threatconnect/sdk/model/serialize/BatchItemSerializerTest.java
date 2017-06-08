@@ -32,14 +32,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-public class BulkItemSerializerTest
+public class BatchItemSerializerTest
 {
-	private static final Logger logger = LoggerFactory.getLogger(BulkItemSerializerTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(BatchItemSerializerTest.class);
 	
 	private final BeanPropertyGenerator beanPropertyGenerator;
 	private final JsonParser jsonParser;
 	
-	public BulkItemSerializerTest()
+	public BatchItemSerializerTest()
 	{
 		this.jsonParser = new JsonParser();
 		beanPropertyGenerator = new BeanPropertyGenerator(false);
@@ -94,13 +94,13 @@ public class BulkItemSerializerTest
 		
 		//serialize the results
 		List<? extends Item> items = Arrays.asList(incident, host);
-		BulkItemSerializer bulkItemSerializer = new BulkItemSerializer(items);
-		String json = bulkItemSerializer.convertToJsonString();
+		BatchItemSerializer batchItemSerializer = new BatchItemSerializer(items);
+		String json = batchItemSerializer.convertToJsonString();
 		logger.info(json);
 		
 		//deserialize the results
-		BulkItemDeserializer bulkItemDeserializer = new BulkItemDeserializer(json);
-		List<Item> restoredItems = bulkItemDeserializer.convertToItems();
+		BatchItemDeserializer batchItemDeserializer = new BatchItemDeserializer(json);
+		List<Item> restoredItems = batchItemDeserializer.convertToItems();
 		
 		Assert.assertEquals(2, restoredItems.size());
 		Assert.assertEquals(ItemType.GROUP, restoredItems.get(0).getItemType());
@@ -140,8 +140,8 @@ public class BulkItemSerializerTest
 			JsonElement jsonElement = jsonParser.parse(reader);
 			
 			logger.info(jsonElement.toString());
-			BulkItemDeserializer bulkItemDeserializer = new BulkItemDeserializer(jsonElement.getAsJsonObject());
-			List<Item> items = bulkItemDeserializer.convertToItems();
+			BatchItemDeserializer batchItemDeserializer = new BatchItemDeserializer(jsonElement.getAsJsonObject());
+			List<Item> items = batchItemDeserializer.convertToItems();
 		}
 	}
 	
@@ -155,13 +155,13 @@ public class BulkItemSerializerTest
 		
 		//serialize the results
 		List<? extends Item> items = Arrays.asList(incident);
-		BulkItemSerializer bulkItemSerializer = new BulkItemSerializer(items);
-		String json = bulkItemSerializer.convertToJsonString();
+		BatchItemSerializer batchItemSerializer = new BatchItemSerializer(items);
+		String json = batchItemSerializer.convertToJsonString();
 		logger.info(json);
 		
 		//deserialize the results
-		BulkItemDeserializer bulkItemDeserializer = new BulkItemDeserializer(json);
-		List<Item> restoredItems = bulkItemDeserializer.convertToItems();
+		BatchItemDeserializer batchItemDeserializer = new BatchItemDeserializer(json);
+		List<Item> restoredItems = batchItemDeserializer.convertToItems();
 		
 		Assert.assertEquals(1, restoredItems.size());
 		Assert.assertEquals(ItemType.GROUP, restoredItems.get(0).getItemType());
