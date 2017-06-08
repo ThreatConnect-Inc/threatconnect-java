@@ -4,6 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.threatconnect.sdk.model.Attribute;
+import com.threatconnect.sdk.model.File;
+import com.threatconnect.sdk.model.FileOccurrence;
 import com.threatconnect.sdk.model.Group;
 import com.threatconnect.sdk.model.GroupType;
 import com.threatconnect.sdk.model.Indicator;
@@ -32,7 +34,7 @@ public class BatchItemSerializer
 	public static final DateFormat DEFAULT_DATE_FORMATTER = new SimpleDateFormat(ISO_DATE_FORMAT);
 	
 	//holds the map of item to xids
-	private final Map<Item, String> xidMap;
+	private Map<Item, String> xidMap;
 	
 	//holds the map to store the indicator and the list of associated group xids
 	private final Map<Indicator, Set<String>> associatedGroupXids;
@@ -166,6 +168,13 @@ public class BatchItemSerializer
 		JsonArray associatedGroupsArray = new JsonArray();
 		indicatorJsonObject.add("associatedGroups", associatedGroupsArray);
 		
+		//check to see if this indicator is a file
+		if (indicator instanceof File)
+		{
+			//write additional data for this file
+			writeAdditionalData((File) indicator, indicatorJsonObject);
+		}
+		
 		//for each of the associations on this group
 		for (Group group : indicator.getAssociatedItems())
 		{
@@ -188,6 +197,31 @@ public class BatchItemSerializer
 		}
 		
 		return indicatorJsonObject;
+	}
+	
+	private void writeAdditionalData(final File file, final JsonObject indicatorJsonObject)
+	{
+		//check to see if there are file occurrences
+		if (!file.getFileOccurrences().isEmpty())
+		{
+			//:FIXME: json only supports 1 occurrence at the moment
+			FileOccurrence fileOccurrence = file.getFileOccurrences().get(0);
+			
+			JsonObject fileActionObject = new JsonObject();
+			JsonObject fileDataObject = new JsonObject();
+			
+			fileDataObject.addProperty("fileName", fileOccurrence.getFileName());
+			fileDataObject.addProperty("path", fileOccurrence.getPath());
+			
+			if (null != fileOccurrence.getDate())
+			{
+				fileDataObject.addProperty("date",
+					new SimpleDateFormat(Constants.FILE_OCCURRENCE_DATE_TIME_FORMAT).format(fileOccurrence.getDate()));
+			}
+			
+			fileActionObject.add("fileData", fileDataObject);
+			indicatorJsonObject.add("fileAction", fileActionObject);
+		}
 	}
 	
 	private void addTagsAndAttributes(final JsonObject jsonObject, final Item item)
@@ -281,7 +315,7 @@ public class BatchItemSerializer
 		for (Group group : groups)
 		{
 			//check to see if an xid needs to be generated for this group
-			if(null == group.getXid())
+			if (null == group.getXid())
 			{
 				group.setXid(generateXid());
 			}
@@ -293,7 +327,7 @@ public class BatchItemSerializer
 		for (Indicator indicator : indicators)
 		{
 			//check to see if an xid needs to be generated for this indicator
-			if(null == indicator.getXid())
+			if (null == indicator.getXid())
 			{
 				indicator.setXid(generateXid());
 			}

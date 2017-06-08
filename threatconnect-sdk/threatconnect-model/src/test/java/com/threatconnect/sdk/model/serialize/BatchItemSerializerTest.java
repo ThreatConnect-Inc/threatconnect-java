@@ -9,6 +9,8 @@ import com.gregmarut.support.beangenerator.value.NullValue;
 import com.gregmarut.support.beangenerator.value.StringValue;
 import com.threatconnect.sdk.model.Address;
 import com.threatconnect.sdk.model.Attribute;
+import com.threatconnect.sdk.model.File;
+import com.threatconnect.sdk.model.FileOccurrence;
 import com.threatconnect.sdk.model.Group;
 import com.threatconnect.sdk.model.GroupType;
 import com.threatconnect.sdk.model.Host;
@@ -24,12 +26,15 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class BatchItemSerializerTest
@@ -129,9 +134,9 @@ public class BatchItemSerializerTest
 	}
 	
 	@Test
-	public void serializeInflate2() throws IOException
+	public void serializeInflate2() throws IOException, NoSuchFieldException, IllegalAccessException, ParseException
 	{
-		File source = new File("src/test/resources/sample.json");
+		java.io.File source = new java.io.File("src/test/resources/sample.json");
 		Assert.assertTrue(source.exists());
 		
 		try (FileReader reader = new FileReader(source))
@@ -141,7 +146,24 @@ public class BatchItemSerializerTest
 			
 			logger.info(jsonElement.toString());
 			BatchItemDeserializer batchItemDeserializer = new BatchItemDeserializer(jsonElement.getAsJsonObject());
-			List<Item> items = batchItemDeserializer.convertToItems();
+			batchItemDeserializer.convertToItems();
+			
+			//use reflection to read the xid map from this class
+			Field field = BatchItemDeserializer.class.getDeclaredField("xidMap");
+			field.setAccessible(true);
+			Map<String, Item> xidMap = (Map<String, Item>) field.get(batchItemDeserializer);
+			File file = (File) xidMap.get("e336e2dd-5dfb-48cd-a33a-f8809e83e904:170139");
+			Assert.assertNotNull(file);
+			
+			Assert.assertEquals(1, file.getFileOccurrences().size());
+			FileOccurrence fileOccurrence = file.getFileOccurrences().get(0);
+			
+			Assert.assertEquals("drop1.exe", fileOccurrence.getFileName());
+			Assert.assertEquals("C:\\test\\", fileOccurrence.getPath());
+			
+			Date d = new SimpleDateFormat(Constants.FILE_OCCURRENCE_DATE_TIME_FORMAT).parse(
+				"2017-03-03T18:00:00-06:00");
+			Assert.assertEquals(d, fileOccurrence.getDate());
 		}
 	}
 	
@@ -172,5 +194,35 @@ public class BatchItemSerializerTest
 		
 		Threat restoredThreat = (Threat) restoredIncident.getAssociatedItems().iterator().next();
 		Assert.assertEquals(threat.getXid(), restoredThreat.getXid());
+	}
+	
+	@Test
+	public void serializeInflate4() throws IOException, ParseException
+	{
+		File file = beanPropertyGenerator.get(File.class);
+		file.getFileOccurrences().clear();
+		
+		FileOccurrence fileOccurrence = beanPropertyGenerator.get(FileOccurrence.class);
+		fileOccurrence.setDate(
+			new SimpleDateFormat(Constants.FILE_OCCURRENCE_DATE_TIME_FORMAT).parse("2017-03-03T18:00:00-06:00"));
+		file.getFileOccurrences().add(fileOccurrence);
+		
+		//serialize the results
+		List<? extends Item> items = Arrays.asList(file);
+		BatchItemSerializer batchItemSerializer = new BatchItemSerializer(items);
+		String json = batchItemSerializer.convertToJsonString();
+		logger.info(json);
+		
+		//deserialize the results
+		BatchItemDeserializer batchItemDeserializer = new BatchItemDeserializer(json);
+		List<Item> restoredItems = batchItemDeserializer.convertToItems();
+		
+		File restoredFile = (File) restoredItems.get(0);
+		Assert.assertEquals(1, restoredFile.getFileOccurrences().size());
+		FileOccurrence restoreFileOccurrence = restoredFile.getFileOccurrences().get(0);
+		
+		Assert.assertEquals(fileOccurrence.getFileName(), restoreFileOccurrence.getFileName());
+		Assert.assertEquals(fileOccurrence.getPath(), restoreFileOccurrence.getPath());
+		Assert.assertEquals(fileOccurrence.getDate(), restoreFileOccurrence.getDate());
 	}
 }

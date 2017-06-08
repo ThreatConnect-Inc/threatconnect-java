@@ -12,6 +12,8 @@ import com.threatconnect.sdk.model.CustomIndicator;
 import com.threatconnect.sdk.model.Document;
 import com.threatconnect.sdk.model.Email;
 import com.threatconnect.sdk.model.EmailAddress;
+import com.threatconnect.sdk.model.File;
+import com.threatconnect.sdk.model.FileOccurrence;
 import com.threatconnect.sdk.model.Group;
 import com.threatconnect.sdk.model.GroupType;
 import com.threatconnect.sdk.model.Host;
@@ -28,7 +30,10 @@ import com.threatconnect.sdk.model.util.TagUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -152,6 +157,13 @@ public class BatchItemDeserializer
 						//copy tags and attributes for the indicator
 						copyTagsAndAttributes(indicatorElement, indicator);
 						
+						//check to see if this indicator is a file
+						if (indicator instanceof File)
+						{
+							//load additional data for this file
+							loadAdditionalData((File) indicator, indicatorElement);
+						}
+						
 						//determines if this indicator was already associated with a group
 						boolean associatedWithGroup = false;
 						
@@ -200,6 +212,31 @@ public class BatchItemDeserializer
 		}
 		
 		return items;
+	}
+	
+	private void loadAdditionalData(final File file, final JsonElement indicatorElement)
+	{
+		//check to see if there is a file action
+		JsonElement fileDataElement = JsonUtil.get(indicatorElement, "fileAction", "fileData");
+		if (null != fileDataElement)
+		{
+			FileOccurrence fileOccurrence = new FileOccurrence();
+			fileOccurrence.setFileName(JsonUtil.getAsString(fileDataElement, "fileName"));
+			fileOccurrence.setPath(JsonUtil.getAsString(fileDataElement, "path"));
+			
+			try
+			{
+				String date = JsonUtil.getAsString(fileDataElement, "date");
+				Date d = new SimpleDateFormat(Constants.FILE_OCCURRENCE_DATE_TIME_FORMAT).parse(date);
+				fileOccurrence.setDate(d);
+			}
+			catch (ParseException e)
+			{
+				logger.warn(e.getMessage(), e);
+			}
+			
+			file.getFileOccurrences().add(fileOccurrence);
+		}
 	}
 	
 	private void copyTagsAndAttributes(JsonElement element, final Item item)
