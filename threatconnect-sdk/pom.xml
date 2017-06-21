@@ -68,7 +68,7 @@
 		<version.reflections>0.9.10</version.reflections>
 		<log4j.version>2.6.1</log4j.version>
 		<es.version>2.3.4</es.version>
-		<version.gson>2.3</version.gson>
+		<version.gson>2.6.2</version.gson>
 
 		<!-- Logging Versions -->
 		<version.slf4j>1.7.12</version.slf4j>
