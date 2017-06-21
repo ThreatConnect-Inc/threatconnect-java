@@ -161,7 +161,7 @@ public class BatchItemSerializerTest
 			Assert.assertEquals("drop1.exe", fileOccurrence.getFileName());
 			Assert.assertEquals("C:\\test\\", fileOccurrence.getPath());
 			
-			Date d = new SimpleDateFormat(Constants.FILE_OCCURRENCE_DATE_TIME_FORMAT).parse(
+			Date d = new SimpleDateFormat(Constants.ISO_DATE_TIME_FORMAT).parse(
 				"2017-03-03T18:00:00-06:00");
 			Assert.assertEquals(d, fileOccurrence.getDate());
 		}
@@ -204,7 +204,7 @@ public class BatchItemSerializerTest
 		
 		FileOccurrence fileOccurrence = beanPropertyGenerator.get(FileOccurrence.class);
 		fileOccurrence.setDate(
-			new SimpleDateFormat(Constants.FILE_OCCURRENCE_DATE_TIME_FORMAT).parse("2017-03-03T18:00:00-06:00"));
+			new SimpleDateFormat(Constants.ISO_DATE_TIME_FORMAT).parse("2017-03-03T18:00:00-06:00"));
 		file.getFileOccurrences().add(fileOccurrence);
 		
 		//serialize the results

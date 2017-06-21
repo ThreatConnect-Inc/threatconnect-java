@@ -30,8 +30,7 @@ public class BatchItemSerializer
 {
 	private static final Logger logger = LoggerFactory.getLogger(BatchItemSerializer.class);
 	
-	public static final String ISO_DATE_FORMAT = "yyyy-MM-dd'T'hh:mm.ssZ";
-	public static final DateFormat DEFAULT_DATE_FORMATTER = new SimpleDateFormat(ISO_DATE_FORMAT);
+	public static final DateFormat DEFAULT_DATE_FORMATTER = new SimpleDateFormat(Constants.ISO_DATE_TIME_FORMAT);
 	
 	//holds the map of item to xids
 	private Map<Item, String> xidMap;
@@ -216,7 +215,7 @@ public class BatchItemSerializer
 			if (null != fileOccurrence.getDate())
 			{
 				fileDataObject.addProperty("date",
-					new SimpleDateFormat(Constants.FILE_OCCURRENCE_DATE_TIME_FORMAT).format(fileOccurrence.getDate()));
+					new SimpleDateFormat(Constants.ISO_DATE_TIME_FORMAT).format(fileOccurrence.getDate()));
 			}
 			
 			fileActionObject.add("fileData", fileDataObject);
