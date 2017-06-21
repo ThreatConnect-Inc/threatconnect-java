@@ -13,7 +13,7 @@ public abstract class ContentConverter<T>
 {
 	public static final DateFormat DEFAULT_DATE_FORMATTER = new ISO8601DateFormat();
 	
-	private final ObjectMapper mapper;
+	protected final ObjectMapper mapper;
 	
 	public ContentConverter()
 	{

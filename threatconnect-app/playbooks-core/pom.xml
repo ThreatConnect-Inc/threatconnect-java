@@ -26,6 +26,11 @@
 			<artifactId>apps-util</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.threatconnect.sdk</groupId>
+			<artifactId>threatconnect-model</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>

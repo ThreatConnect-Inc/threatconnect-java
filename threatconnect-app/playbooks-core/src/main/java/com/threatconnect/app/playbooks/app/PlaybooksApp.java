@@ -11,6 +11,7 @@ import com.threatconnect.app.playbooks.content.entity.TCEntity;
 import com.threatconnect.app.playbooks.db.DBService;
 import com.threatconnect.app.playbooks.db.DBServiceFactory;
 import com.threatconnect.app.playbooks.util.PlaybooksVariableUtil;
+import com.threatconnect.sdk.model.Item;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -468,6 +469,76 @@ public abstract class PlaybooksApp extends App
 		if (isOutputParamExpected(param, PlaybookVariableType.TCEntityArray))
 		{
 			getContentService().writeTCEntityList(findOutputVariable(param, PlaybookVariableType.TCEntityArray), value);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * Serves as a shorthand method for reading a TCEnhancedEntity from the database where the param is a database key
+	 *
+	 * @param param the app parameter which represents a playbooks variable
+	 * @return the value of the parameter in the database
+	 * @throws ContentException if there was an issue reading/writing to the database.
+	 */
+	public final Item readTCEnhancedEntityContent(final String param) throws ContentException
+	{
+		return getContentService().readTCEnhancedEntity(getAppConfig().getString(param));
+	}
+	
+	/**
+	 * Serves as a shorthand method for writing a TCEnhancedEntity to the database where the param is a database key
+	 *
+	 * @param param the app parameter which represents a playbooks variable
+	 * @param value the value to write to the variable
+	 * @return whether or not the value was written
+	 * @throws ContentException if there was an issue reading/writing to the database.
+	 */
+	public final boolean writeTCEnhancedEntityContent(final String param, final Item value) throws ContentException
+	{
+		if (isOutputParamExpected(param, PlaybookVariableType.TCEnhancedEntity))
+		{
+			getContentService()
+				.writeTCEnhancedEntity(findOutputVariable(param, PlaybookVariableType.TCEnhancedEntity), value);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * Serves as a shorthand method for reading a TCEnhancedEntity from the database where the param is a database key
+	 *
+	 * @param param the app parameter which represents a playbooks variable
+	 * @return the value of the parameter in the database
+	 * @throws ContentException if there was an issue reading/writing to the database.
+	 */
+	public final List<Item> readTCEnhancedEntityListContent(final String param) throws ContentException
+	{
+		return getContentService().readTCEnhancedEntityList(getAppConfig().getString(param));
+	}
+	
+	/**
+	 * Serves as a shorthand method for writing a TCEnhancedEntity to the database where the param is a database key
+	 *
+	 * @param param the app parameter which represents a playbooks variable
+	 * @param value the value to write to the variable
+	 * @return whether or not the value was written
+	 * @throws ContentException if there was an issue reading/writing to the database.
+	 */
+	public final boolean writeTCEnhancedEntityListContent(final String param, final List<Item> value)
+		throws ContentException
+	{
+		if (isOutputParamExpected(param, PlaybookVariableType.TCEnhancedEntityArray))
+		{
+			getContentService()
+				.writeTCEnhancedEntityList(findOutputVariable(param, PlaybookVariableType.TCEnhancedEntityArray),
+					value);
 			return true;
 		}
 		else

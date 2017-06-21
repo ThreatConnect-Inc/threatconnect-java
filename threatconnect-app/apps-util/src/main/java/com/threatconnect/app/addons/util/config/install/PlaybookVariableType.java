@@ -12,6 +12,8 @@ public enum PlaybookVariableType
 	StringArray,
 	TCEntity,
 	TCEntityArray,
+	TCEnhancedEntity,
+	TCEnhancedEntityArray,
 	Binary,
 	BinaryArray,
 	KeyValue,

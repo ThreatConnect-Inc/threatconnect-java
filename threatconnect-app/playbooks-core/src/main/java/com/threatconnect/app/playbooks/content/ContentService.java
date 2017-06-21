@@ -9,6 +9,8 @@ import com.threatconnect.app.playbooks.content.accumulator.StringAccumulator;
 import com.threatconnect.app.playbooks.content.converter.ByteArrayConverter;
 import com.threatconnect.app.playbooks.content.converter.ByteMatrixConverter;
 import com.threatconnect.app.playbooks.content.converter.StringListConverter;
+import com.threatconnect.app.playbooks.content.converter.TCEnhancedEntityConverter;
+import com.threatconnect.app.playbooks.content.converter.TCEnhancedEntityListConverter;
 import com.threatconnect.app.playbooks.content.converter.TCEntityConverter;
 import com.threatconnect.app.playbooks.content.converter.TCEntityListConverter;
 import com.threatconnect.app.playbooks.content.entity.KeyValue;
@@ -16,6 +18,7 @@ import com.threatconnect.app.playbooks.content.entity.TCEntity;
 import com.threatconnect.app.playbooks.db.DBService;
 import com.threatconnect.app.playbooks.util.PlaybooksVariableUtil;
 import com.threatconnect.app.playbooks.variable.PlaybooksVariable;
+import com.threatconnect.sdk.model.Item;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +38,8 @@ public class ContentService
 	private final ContentAccumulator<List<String>> stringListAccumulator;
 	private final ContentAccumulator<TCEntity> tcEntityAccumulator;
 	private final ContentAccumulator<List<TCEntity>> tcEntityListAccumulator;
+	private final ContentAccumulator<Item> tcEnhancedEntityAccumulator;
+	private final ContentAccumulator<List<Item>> tcEnhancedEntityListAccumulator;
 	private final ContentAccumulator<byte[]> binaryAccumulator;
 	private final ContentAccumulator<byte[][]> binaryArrayAccumulator;
 	private final KeyValueAccumulator keyValueContentAccumulator;
@@ -53,6 +58,12 @@ public class ContentService
 		this.tcEntityListAccumulator =
 			new ContentAccumulator<List<TCEntity>>(dbService, PlaybookVariableType.TCEntityArray,
 				new TCEntityListConverter());
+		this.tcEnhancedEntityAccumulator =
+			new ContentAccumulator<Item>(dbService, PlaybookVariableType.TCEnhancedEntity, new
+				TCEnhancedEntityConverter());
+		this.tcEnhancedEntityListAccumulator =
+			new ContentAccumulator<List<Item>>(dbService, PlaybookVariableType.TCEnhancedEntityArray, new
+				TCEnhancedEntityListConverter());
 		this.binaryAccumulator = new ContentAccumulator<byte[]>(dbService, PlaybookVariableType.Binary, new
 			ByteArrayConverter());
 		this.binaryArrayAccumulator = new ContentAccumulator<byte[][]>(dbService, PlaybookVariableType.BinaryArray, new
@@ -126,6 +137,30 @@ public class ContentService
 		tcEntityListAccumulator.writeContent(key, value);
 	}
 	
+	public Item readTCEnhancedEntity(final String key) throws ContentException
+	{
+		verifyKeyIsVariable(key);
+		return tcEnhancedEntityAccumulator.readContent(key);
+	}
+	
+	public void writeTCEnhancedEntity(final String key, final Item value) throws ContentException
+	{
+		verifyKeyIsVariable(key);
+		tcEnhancedEntityAccumulator.writeContent(key, value);
+	}
+	
+	public List<Item> readTCEnhancedEntityList(final String key) throws ContentException
+	{
+		verifyKeyIsVariable(key);
+		return tcEnhancedEntityListAccumulator.readContent(key);
+	}
+	
+	public void writeTCEnhancedEntityList(final String key, final List<Item> value) throws ContentException
+	{
+		verifyKeyIsVariable(key);
+		tcEnhancedEntityListAccumulator.writeContent(key, value);
+	}
+	
 	public byte[] readBinary(final String key) throws ContentException
 	{
 		verifyKeyIsVariable(key);
@@ -171,7 +206,7 @@ public class ContentService
 		verifyKeyIsVariable(key);
 		
 		//make sure the value is not null
-		if(null != value)
+		if (null != value)
 		{
 			//clone the key value object since we will be modifying the original
 			KeyValue kv = new KeyValue(value);
