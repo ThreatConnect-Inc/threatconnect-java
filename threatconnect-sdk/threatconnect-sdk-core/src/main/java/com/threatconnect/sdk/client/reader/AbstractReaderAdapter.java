@@ -52,19 +52,22 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
 
     protected String getAsText(String propName) throws IOException {
         String url = getConn().getUrlConfig().getUrl(propName);
-                
         
         if (this instanceof UrlTypeable) {
             url = url.replace("{type}", ((UrlTypeable) this).getUrlType());
         }
 
+        return executeAsString(AbstractRequestExecutor.HttpMethod.GET, url);
+    }
+    
+    protected String executeAsString(AbstractRequestExecutor.HttpMethod method, String url) throws IOException {
         logger.trace("calling url={}", url);
-        String content = executor.execute(AbstractRequestExecutor.HttpMethod.GET, url).getEntityAsString();
+        String content = executor.execute(method, url).getEntityAsString();
         logger.trace("returning content={}", content);
-
+        
         return content;
     }
-
+    
     protected InputStream getFile(String propName, String ownerName, Map<String,Object> paramMap) throws IOException
     {
         return getFile(propName, ownerName, paramMap, false, ContentType.APPLICATION_OCTET_STREAM);

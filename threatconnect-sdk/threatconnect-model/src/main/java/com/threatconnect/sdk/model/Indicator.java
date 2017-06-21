@@ -13,6 +13,7 @@ public abstract class Indicator extends Item
 	private Double confidence;
 	private Double threatAssessRating;
 	private Double threatAssessConfidence;
+	private Double threatAssessScore;
 	private String webLink;
 	private String source;
 	private String description;
@@ -69,6 +70,16 @@ public abstract class Indicator extends Item
 	public void setThreatAssessConfidence(Double threatAssessConfidence)
 	{
 		this.threatAssessConfidence = threatAssessConfidence;
+	}
+	
+	public Double getThreatAssessScore()
+	{
+		return threatAssessScore;
+	}
+	
+	public void setThreatAssessScore(final Double threatAssessScore)
+	{
+		this.threatAssessScore = threatAssessScore;
 	}
 	
 	public String getWebLink()

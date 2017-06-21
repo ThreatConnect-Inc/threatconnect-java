@@ -107,7 +107,7 @@ public class BatchWriter extends Writer
 				// create a new bulk indicator converter
 				logger.trace("Marshalling indicator list to JSON {}/{}", index, total);
 				BulkIndicatorConverter converter = new BulkIndicatorConverter();
-				JsonElement json = converter.convertToJson(partition, null);
+				JsonElement json = converter.convertToJson(partition);
 				
 				// upload the batch indicators and add it to the list
 				BatchUploadResponse batchUploadResponse = uploadIndicators(json, ownerName,
@@ -134,7 +134,7 @@ public class BatchWriter extends Writer
 			// create a new bulk indicator converter
 			logger.trace("Marshalling indicator list to JSON {}/{}", 1, 1);
 			BulkIndicatorConverter converter = new BulkIndicatorConverter();
-			JsonElement json = converter.convertToJson(indicators, null);
+			JsonElement json = converter.convertToJson(indicators);
 			
 			BatchUploadResponse batchUploadResponse =
 				uploadIndicators(json, ownerName, AttributeWriteType.Replace, Action.Delete, 1, 1,

@@ -54,7 +54,7 @@ public class JsonUtil
 	{
 		// make sure the element is not null
 		JsonElement element = get(root, paths);
-		if (null != element)
+		if (null != element && !element.isJsonNull())
 		{
 			return element.getAsJsonObject();
 		}
@@ -76,7 +76,7 @@ public class JsonUtil
 	{
 		// make sure the element is not null
 		JsonElement element = get(root, paths);
-		if (null != element)
+		if (null != element && !element.isJsonNull())
 		{
 			return element.getAsString();
 		}
@@ -98,7 +98,7 @@ public class JsonUtil
 	{
 		// make sure the element is not null
 		JsonElement element = get(root, paths);
-		if (null != element)
+		if (null != element && !element.isJsonNull())
 		{
 			return element.getAsInt();
 		}
@@ -120,7 +120,7 @@ public class JsonUtil
 	{
 		// make sure the element is not null
 		JsonElement element = get(root, paths);
-		if (null != element)
+		if (null != element && !element.isJsonNull())
 		{
 			return element.getAsDouble();
 		}
@@ -134,7 +134,7 @@ public class JsonUtil
 	{
 		// make sure the element is not null
 		JsonElement element = get(root, paths);
-		if (null != element)
+		if (null != element && !element.isJsonNull())
 		{
 			return TRUE.equalsIgnoreCase(element.getAsString());
 		}

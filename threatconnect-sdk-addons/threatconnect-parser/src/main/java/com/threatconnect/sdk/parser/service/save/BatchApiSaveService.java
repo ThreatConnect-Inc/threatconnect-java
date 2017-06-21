@@ -122,7 +122,7 @@ public class BatchApiSaveService implements SaveService
 		}
 	}
 	
-	protected SaveResults deleteIndicators(final Collection<Indicator> indicators, final Connection connection)
+	public SaveResults deleteIndicators(final Collection<Indicator> indicators, final Connection connection)
 		throws IOException
 	{
 		try

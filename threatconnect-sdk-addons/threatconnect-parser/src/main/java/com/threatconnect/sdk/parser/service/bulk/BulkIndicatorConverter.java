@@ -3,7 +3,6 @@ package com.threatconnect.sdk.parser.service.bulk;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import com.threatconnect.sdk.model.Address;
 import com.threatconnect.sdk.model.Attribute;
 import com.threatconnect.sdk.model.EmailAddress;
@@ -11,16 +10,14 @@ import com.threatconnect.sdk.model.Host;
 import com.threatconnect.sdk.model.Indicator;
 import com.threatconnect.sdk.model.Url;
 import com.threatconnect.sdk.model.serialize.InvalidIndicatorException;
-import com.threatconnect.sdk.parser.util.IndicatorUtil;
 import com.threatconnect.sdk.model.util.TagUtil;
+import com.threatconnect.sdk.parser.util.IndicatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class BulkIndicatorConverter
 {
@@ -150,8 +147,7 @@ public class BulkIndicatorConverter
 		return attribute;
 	}
 	
-	public JsonObject convertToJson(final Collection<? extends Indicator> indicators,
-		final Map<Indicator, Set<Integer>> associatedIndicatorGroupsIDs)
+	public JsonObject convertToJson(final Collection<? extends Indicator> indicators)
 	{
 		// create the root indicator json object
 		JsonObject indicatorJsonObject = new JsonObject();
@@ -163,12 +159,10 @@ public class BulkIndicatorConverter
 		// for each indicator in the collection
 		for (Indicator indicator : indicators)
 		{
-			Set<Integer> ids = associatedIndicatorGroupsIDs.get(indicator);
-			
 			try
 			{
 				// convert this indicator and add it to the array
-				indicatorsJsonArray.add(convertToJson(indicator, ids));
+				indicatorsJsonArray.add(convertToJson(indicator));
 			}
 			catch (InvalidIndicatorException e)
 			{
@@ -179,8 +173,7 @@ public class BulkIndicatorConverter
 		return indicatorJsonObject;
 	}
 	
-	public JsonObject convertToJson(final Indicator indicator, final Set<Integer> associatedGroupIDs)
-		throws InvalidIndicatorException
+	public JsonObject convertToJson(final Indicator indicator) throws InvalidIndicatorException
 	{
 		// holds the json object that will represent this indicator
 		JsonObject indicatorJsonObject = new JsonObject();
@@ -192,20 +185,10 @@ public class BulkIndicatorConverter
 		
 		indicatorJsonObject.addProperty("type", indicator.getIndicatorType());
 		
-		// check to see if the associatedGroupIDs is not null or empty
-		if (null != associatedGroupIDs && !associatedGroupIDs.isEmpty())
-		{
-			// create a new json array of the ids
-			JsonArray associatedGroups = new JsonArray();
-			
-			// for each of the ids
-			for (Integer id : associatedGroupIDs)
-			{
-				associatedGroups.add(new JsonPrimitive(id));
-			}
-			
-			indicatorJsonObject.add("associatedGroup", associatedGroups);
-		}
+		// create a new json array of the ids
+		JsonArray associatedGroups = new JsonArray();
+		
+		indicatorJsonObject.add("associatedGroup", associatedGroups);
 		
 		// check to see if this indicator has attributes
 		if (!indicator.getAttributes().isEmpty())

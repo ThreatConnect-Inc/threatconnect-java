@@ -195,9 +195,12 @@ public class ReaderAdapterFactory
 	
 	public static OwnerReaderAdapter createOwnerReader(Connection conn)
 	{
-		return new OwnerReaderAdapter(conn)
-		{
-		};
+		return new OwnerReaderAdapter(conn);
+	}
+	
+	public static IndicatorTypeReaderAdapter createIndicatorTypeReaderAdapter(Connection conn)
+	{
+		return new IndicatorTypeReaderAdapter(conn);
 	}
 	
 	public static SecurityLabelReaderAdapter createSecurityLabelReader(Connection conn)
