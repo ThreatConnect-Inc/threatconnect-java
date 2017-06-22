@@ -136,7 +136,8 @@ public class JsonUtil
 		JsonElement element = get(root, paths);
 		if (null != element && !element.isJsonNull())
 		{
-			return TRUE.equalsIgnoreCase(element.getAsString());
+			final String value = element.getAsString();
+			return TRUE.equalsIgnoreCase(value) || "1".equals(value);
 		}
 		else
 		{
