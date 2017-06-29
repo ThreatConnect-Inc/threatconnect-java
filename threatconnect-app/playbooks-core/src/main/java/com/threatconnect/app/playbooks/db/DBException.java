@@ -5,8 +5,13 @@ package com.threatconnect.app.playbooks.db;
  */
 public class DBException extends Exception
 {
-	public DBException(Exception cause)
+	public DBException(final Exception cause)
 	{
 		super(cause);
+	}
+	
+	public DBException(final String message)
+	{
+		super(message);
 	}
 }

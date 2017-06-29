@@ -5,8 +5,13 @@ package com.threatconnect.app.playbooks.db;
  */
 public class DBWriteException extends DBException
 {
-	public DBWriteException(Exception cause)
+	public DBWriteException(final Exception cause)
 	{
 		super(cause);
+	}
+	
+	public DBWriteException(final String message)
+	{
+		super(message);
 	}
 }

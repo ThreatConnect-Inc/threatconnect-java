@@ -9,4 +9,9 @@ public class DBReadException extends DBException
 	{
 		super(cause);
 	}
+	
+	public DBReadException(final String message)
+	{
+		super(message);
+	}
 }
