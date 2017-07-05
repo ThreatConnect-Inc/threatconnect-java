@@ -54,6 +54,8 @@ public class TCApiDBService implements DBService
 		{
 			//create the put request
 			HttpPut httpPut = new HttpPut(buildUrl(key));
+			applyHeaders(httpPut);
+			
 			httpPut.setEntity(new ByteArrayEntity(value));
 			try (CloseableHttpResponse response = httpClient.execute(httpPut))
 			{
@@ -65,7 +67,7 @@ public class TCApiDBService implements DBService
 				}
 			}
 		}
-		catch (IOException e)
+		catch (TokenRenewException | IOException e)
 		{
 			throw new DBWriteException(e);
 		}
@@ -78,6 +80,8 @@ public class TCApiDBService implements DBService
 		{
 			//create the get request
 			HttpGet httpGet = new HttpGet(buildUrl(key));
+			applyHeaders(httpGet);
+			
 			try (CloseableHttpResponse response = httpClient.execute(httpGet))
 			{
 				//check to make sure the response code is invalid
@@ -92,7 +96,7 @@ public class TCApiDBService implements DBService
 				}
 			}
 		}
-		catch (IOException e)
+		catch (TokenRenewException | IOException e)
 		{
 			throw new DBReadException(e);
 		}
@@ -111,12 +115,23 @@ public class TCApiDBService implements DBService
 		
 		sb.append(URLEncoder.encode(key, "UTF-8"));
 		
+		logger.trace("TCApi: Using url {}", sb.toString());
 		return sb.toString();
+	}
+	
+	private void applyHeaders(HttpRequestBase httpBase) throws IOException, TokenRenewException
+	{
+		//attempt to refresh the token if it is needed
+		refreshTokenIfNeeded();
+		
+		//apply the tc token to the header
+		logger.trace("Applying TC-Token: {}", appConfig.getTcToken());
+		httpBase.addHeader("authorization", "TC-Token " + appConfig.getTcToken());
 	}
 	
 	//Copied from the SDK to prevent importing the entire dependency
 	//:TODO: this code should be shared somewhere
-	private void getNewToken(HttpRequestBase httpBase) throws IOException, TokenRenewException
+	private void refreshTokenIfNeeded() throws IOException, TokenRenewException
 	{
 		if (null != appConfig.getTcToken() && null != appConfig.getTcTokenExpires())
 		{
