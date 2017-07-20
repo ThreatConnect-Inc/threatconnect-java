@@ -64,7 +64,7 @@
 		<version.commons-io>2.4</version.commons-io>
 		<version.dozer>5.5.1</version.dozer>
 		<version.gson>2.8.0</version.gson>
-		<version.jsonpath>2.1.0</version.jsonpath>
+		<version.jsonpath>2.4.0</version.jsonpath>
 		<version.opencsv>3.8</version.opencsv>
 		<log4j.version>2.6.1</log4j.version>
 
