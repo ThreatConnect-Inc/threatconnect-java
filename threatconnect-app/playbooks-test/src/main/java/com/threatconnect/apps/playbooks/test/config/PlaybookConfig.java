@@ -147,7 +147,8 @@ public class PlaybookConfig
 		}
 		
 		throw new IllegalArgumentException(
-			"Cannot create input param variable. Invalid combination of paramName and type");
+			"Cannot create input param variable. Invalid combination of paramName and type: "
+				+ paramName + " - " + type.toString());
 	}
 	
 	public String createVariableForOutputVariable(final String outputVariable, final PlaybookVariableType type)
