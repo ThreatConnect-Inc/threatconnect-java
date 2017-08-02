@@ -52,8 +52,8 @@ public class SerializeListTest
 		List<Item> restored = batchItemDeserializer.convertToItems();
 		
 		Assert.assertEquals(incident.getClass(), restored.get(0).getClass());
-		Assert.assertEquals(url, restored.get(1));
-		Assert.assertEquals(file, restored.get(2));
+		Assert.assertEquals(file, restored.get(1));
+		Assert.assertEquals(url, restored.get(2));
 	}
 	
 	@Test
