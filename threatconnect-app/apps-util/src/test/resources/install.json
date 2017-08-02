@@ -4,6 +4,7 @@
   "programLanguage": "Java",
   "programMain": "com.threatconnect.apps.example.ExampleMain",
   "languageVersion": "7",
+  "minServerVersion": "5.2.0",
   "listDelimiter": "|",
   "runtimeLevel": "System",
   "runtimeContext": ["Host", "Url"],

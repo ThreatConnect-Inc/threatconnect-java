@@ -5,17 +5,17 @@ import com.threatconnect.app.addons.util.config.validation.ValidationException;
 /**
  * @author Greg Marut
  */
-public class ProgramVersion extends MajorMinorPatchVersion
+public class ServerVersion extends MajorMinorPatchVersion
 {
 	private static final String ERROR_MESSAGE =
-		"Invalid programVersion. Must be in <MAJOR>.<MINOR>.<PATCH> format (e.g. 1.0.0)";
+		"Invalid minServerVersion. Must be in <MAJOR>.<MINOR>.<PATCH> format (e.g. 1.0.0)";
 	
-	public ProgramVersion(final int major, final int minor, final int patch)
+	public ServerVersion(final int major, final int minor, final int patch)
 	{
 		super(major, minor, patch);
 	}
 	
-	public ProgramVersion(final String version) throws ValidationException
+	public ServerVersion(final String version) throws ValidationException
 	{
 		super(version, ERROR_MESSAGE);
 	}
