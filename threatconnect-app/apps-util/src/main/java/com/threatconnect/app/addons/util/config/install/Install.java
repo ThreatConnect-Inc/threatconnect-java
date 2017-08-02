@@ -10,6 +10,7 @@ public class Install
 	private String applicationName;
 	private String displayName;
 	private String programVersion;
+	private String minServerVersion;
 	private ProgramLanguageType programLanguage;
 	private String programMain;
 	private String languageVersion;
@@ -68,6 +69,16 @@ public class Install
 	public void setProgramVersion(final String programVersion)
 	{
 		this.programVersion = programVersion;
+	}
+	
+	public String getMinServerVersion()
+	{
+		return minServerVersion;
+	}
+	
+	public void setMinServerVersion(final String minServerVersion)
+	{
+		this.minServerVersion = minServerVersion;
 	}
 	
 	public ProgramLanguageType getProgramLanguage()
