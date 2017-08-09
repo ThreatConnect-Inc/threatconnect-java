@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.apps.playbooks.test.config.PlaybooksTestConfiguration;
 import com.threatconnect.apps.playbooks.test.orc.PlaybooksOrchestrationBuilder;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -71,5 +72,32 @@ public class App6Test
 			//execute the apps
 			.build().run();
 		//@formatter:on
+	}
+	
+	@Test
+	public void testReservedPlaybookType() throws Exception
+	{
+		try
+		{
+			//@formatter:off
+			//create a new playbooks orchestration builder for defining our runtime
+			PlaybooksOrchestrationBuilder
+				.runApp(App6Create.class)
+					.withPlaybookParam()
+						.asCustomType(App6Create.PARAM_INPUT_FIRST_NAME, "Greg".getBytes(), PlaybookVariableType.String)
+						.asCustomType(App6Create.PARAM_INPUT_LAST_NAME, "Marut".getBytes(), PlaybookVariableType.String)
+					.then().onSuccess()
+				//execute the apps
+				.build().run();
+			//@formatter:on
+			
+			Assert.fail("Above code was expected to fail");
+		}
+		catch (IllegalArgumentException e)
+		{
+			Assert.assertEquals(
+				"\"String\" is a reserved data type and may not be used to read or write custom data type values",
+				e.getMessage());
+		}
 	}
 }
