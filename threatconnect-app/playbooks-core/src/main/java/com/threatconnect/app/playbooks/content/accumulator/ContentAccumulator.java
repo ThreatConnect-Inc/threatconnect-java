@@ -17,23 +17,15 @@ public class ContentAccumulator<T>
 {
 	private static final Logger logger = LoggerFactory.getLogger(ContentAccumulator.class.getName());
 	
-	private final PlaybookVariableType standardType;
 	private final DBService dbService;
 	private final ContentConverter<T> contentConverter;
 	
-	public ContentAccumulator(final DBService dbService, final PlaybookVariableType standardType,
-		final ContentConverter<T> contentConverter)
+	public ContentAccumulator(final DBService dbService, final ContentConverter<T> contentConverter)
 	{
 		//make sure the db service is not null
 		if (null == dbService)
 		{
 			throw new IllegalArgumentException("dbService cannot be null");
-		}
-		
-		//make sure the standard type is not null
-		if (null == standardType)
-		{
-			throw new IllegalArgumentException("standardType cannot be null or empty");
 		}
 		
 		//make sure the content contentConverter is not null
@@ -43,7 +35,6 @@ public class ContentAccumulator<T>
 		}
 		
 		this.dbService = dbService;
-		this.standardType = standardType;
 		this.contentConverter = contentConverter;
 	}
 	
@@ -123,7 +114,7 @@ public class ContentAccumulator<T>
 		}
 	}
 	
-	private void verifyKey(final String key)
+	protected PlaybookVariableType verifyKey(final String key)
 	{
 		//make sure the key is not null or empty
 		if (null == key || key.isEmpty())
@@ -132,13 +123,6 @@ public class ContentAccumulator<T>
 		}
 		
 		//extract the type from this key
-		PlaybookVariableType actualType = PlaybooksVariableUtil.extractVariableType(key);
-		
-		//check to see if the actual type and the expected type do not match
-		if (!standardType.equals(actualType))
-		{
-			throw new IllegalArgumentException(
-				"key is of type " + actualType.toString() + ", expected " + standardType.toString());
-		}
+		return PlaybooksVariableUtil.extractVariableType(key);
 	}
 }

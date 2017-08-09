@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @author Greg Marut
  */
-public class KeyValueArrayAccumulator extends ContentAccumulator<List<KeyValue>>
+public class KeyValueArrayAccumulator extends TypedContentAccumulator<List<KeyValue>>
 {
 	private final StringAccumulator stringAccumulator;
 	

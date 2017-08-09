@@ -9,7 +9,7 @@ import com.threatconnect.app.playbooks.util.KeyValueUtil;
 /**
  * @author Greg Marut
  */
-public class KeyValueAccumulator extends ContentAccumulator<KeyValue>
+public class KeyValueAccumulator extends TypedContentAccumulator<KeyValue>
 {
 	private final StringAccumulator stringAccumulator;
 	

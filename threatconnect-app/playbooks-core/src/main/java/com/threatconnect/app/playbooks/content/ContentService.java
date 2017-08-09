@@ -6,6 +6,7 @@ import com.threatconnect.app.playbooks.content.accumulator.ContentException;
 import com.threatconnect.app.playbooks.content.accumulator.KeyValueAccumulator;
 import com.threatconnect.app.playbooks.content.accumulator.KeyValueArrayAccumulator;
 import com.threatconnect.app.playbooks.content.accumulator.StringAccumulator;
+import com.threatconnect.app.playbooks.content.accumulator.TypedContentAccumulator;
 import com.threatconnect.app.playbooks.content.converter.ByteArrayConverter;
 import com.threatconnect.app.playbooks.content.converter.ByteMatrixConverter;
 import com.threatconnect.app.playbooks.content.converter.StringListConverter;
@@ -45,31 +46,36 @@ public class ContentService
 	private final KeyValueAccumulator keyValueContentAccumulator;
 	private final KeyValueArrayAccumulator keyValueArrayContentAccumulator;
 	
+	private final ContentAccumulator<byte[]> customDataTypeAccumulator;
+	
 	public ContentService(final DBService dbService)
 	{
 		this.dbService = dbService;
 		
 		this.stringAccumulator = new StringAccumulator(dbService);
 		this.stringListAccumulator =
-			new ContentAccumulator<List<String>>(dbService, PlaybookVariableType.StringArray, new
+			new TypedContentAccumulator<List<String>>(dbService, PlaybookVariableType.StringArray, new
 				StringListConverter());
 		this.tcEntityAccumulator =
-			new ContentAccumulator<TCEntity>(dbService, PlaybookVariableType.TCEntity, new TCEntityConverter());
+			new TypedContentAccumulator<TCEntity>(dbService, PlaybookVariableType.TCEntity, new TCEntityConverter());
 		this.tcEntityListAccumulator =
-			new ContentAccumulator<List<TCEntity>>(dbService, PlaybookVariableType.TCEntityArray,
+			new TypedContentAccumulator<List<TCEntity>>(dbService, PlaybookVariableType.TCEntityArray,
 				new TCEntityListConverter());
 		this.tcEnhancedEntityAccumulator =
-			new ContentAccumulator<Item>(dbService, PlaybookVariableType.TCEnhancedEntity, new
+			new TypedContentAccumulator<Item>(dbService, PlaybookVariableType.TCEnhancedEntity, new
 				TCEnhancedEntityConverter());
 		this.tcEnhancedEntityListAccumulator =
-			new ContentAccumulator<List<Item>>(dbService, PlaybookVariableType.TCEnhancedEntityArray, new
+			new TypedContentAccumulator<List<Item>>(dbService, PlaybookVariableType.TCEnhancedEntityArray, new
 				TCEnhancedEntityListConverter());
-		this.binaryAccumulator = new ContentAccumulator<byte[]>(dbService, PlaybookVariableType.Binary, new
+		this.binaryAccumulator = new TypedContentAccumulator<byte[]>(dbService, PlaybookVariableType.Binary, new
 			ByteArrayConverter());
-		this.binaryArrayAccumulator = new ContentAccumulator<byte[][]>(dbService, PlaybookVariableType.BinaryArray, new
-			ByteMatrixConverter());
+		this.binaryArrayAccumulator =
+			new TypedContentAccumulator<byte[][]>(dbService, PlaybookVariableType.BinaryArray, new
+				ByteMatrixConverter());
 		this.keyValueContentAccumulator = new KeyValueAccumulator(dbService);
 		this.keyValueArrayContentAccumulator = new KeyValueArrayAccumulator(dbService);
+		
+		this.customDataTypeAccumulator = new ContentAccumulator<byte[]>(dbService, new ByteArrayConverter());
 	}
 	
 	public String readString(final String content) throws ContentException
@@ -270,6 +276,18 @@ public class ContentService
 		}
 	}
 	
+	public byte[] readCustomType(final String key) throws ContentException
+	{
+		verifyKeyIsVariable(key);
+		return customDataTypeAccumulator.readContent(key);
+	}
+	
+	public void writeCustomType(final String key, final byte[] value) throws ContentException
+	{
+		verifyKeyIsVariable(key);
+		customDataTypeAccumulator.writeContent(key, value);
+	}
+	
 	/**
 	 * Update the key value objects before writing
 	 *
@@ -346,10 +364,20 @@ public class ContentService
 		{
 			//ignore strings, no extra work needs to be done here
 		}
+		else if (PlaybookVariableType.KeyValue.equals(keyValue.getVariableType()) || PlaybookVariableType.KeyValueArray
+			.equals(keyValue.getVariableType()))
+		{
+			//prevent a recursive variable type
+			throw new IllegalArgumentException(keyValue.getVariableType() + " is an unsupported value for KeyValue");
+		}
+		//this must be a custom data type
 		else
 		{
-			throw new IllegalArgumentException(
-				keyValue.getVariableType() + " is an unsupported value for KeyValue");
+			//create a new variable to store the value and update the key value's value with a variable
+			valueVariable = new PlaybooksVariable(originalVariable.getNamespace(), originalVariable.getId(),
+				UUID.randomUUID().toString(), keyValue.getVariableType());
+			customDataTypeAccumulator.writeContent(valueVariable.toString(), (byte[]) keyValue.getValue());
+			keyValue.setStringValue(valueVariable.toString());
 		}
 	}
 	
@@ -391,7 +419,8 @@ public class ContentService
 					}
 					else if (PlaybookVariableType.TCEnhancedEntity.equals(extracted))
 					{
-						keyValue.setTCEnhancedEntityValue(tcEnhancedEntityAccumulator.readContent(keyValue.getValue().toString()));
+						keyValue.setTCEnhancedEntityValue(
+							tcEnhancedEntityAccumulator.readContent(keyValue.getValue().toString()));
 					}
 					else if (PlaybookVariableType.TCEnhancedEntityArray.equals(extracted))
 					{
@@ -402,10 +431,18 @@ public class ContentService
 					{
 						//ignore strings, no extra work needs to be done here
 					}
-					else
+					else if (PlaybookVariableType.KeyValue.equals(extracted) || PlaybookVariableType.KeyValueArray
+						.equals(extracted))
 					{
+						//prevent a recursive variable type
 						throw new IllegalArgumentException(
 							keyValue.getVariableType() + " is an unsupported value for KeyValue");
+					}
+					//this must be a custom data type
+					else
+					{
+						keyValue.setCustomTypeValue(customDataTypeAccumulator.readContent(
+							keyValue.getValue().toString()), extracted);
 					}
 				}
 			}

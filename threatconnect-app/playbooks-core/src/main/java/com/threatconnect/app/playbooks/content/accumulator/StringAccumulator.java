@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 /**
  * @author Greg Marut
  */
-public class StringAccumulator extends ContentAccumulator<String>
+public class StringAccumulator extends TypedContentAccumulator<String>
 {
 	private static final Logger logger = LoggerFactory.getLogger(StringAccumulator.class);
 	
