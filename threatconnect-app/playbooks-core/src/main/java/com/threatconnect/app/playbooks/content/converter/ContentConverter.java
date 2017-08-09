@@ -1,7 +1,11 @@
 package com.threatconnect.app.playbooks.content.converter;
 
+import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.playbooks.content.serialize.PlaybookVariableTypeJsonSerializer;
+import org.codehaus.jackson.Version;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.module.SimpleModule;
 import org.codehaus.jackson.map.type.TypeFactory;
 import org.codehaus.jackson.map.util.ISO8601DateFormat;
 import org.codehaus.jackson.type.JavaType;
@@ -20,6 +24,9 @@ public abstract class ContentConverter<T>
 		mapper = new ObjectMapper();
 		mapper.setDateFormat(DEFAULT_DATE_FORMATTER);
 		mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		SimpleModule module = new SimpleModule("PlaybookVariableTypeJsonSerializer", Version.unknownVersion());
+		module.addDeserializer(PlaybookVariableType.class, new PlaybookVariableTypeJsonSerializer());
+		mapper.registerModule(module);
 	}
 	
 	/**

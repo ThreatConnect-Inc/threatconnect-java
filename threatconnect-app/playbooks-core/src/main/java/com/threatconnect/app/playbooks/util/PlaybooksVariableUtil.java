@@ -186,7 +186,7 @@ public class PlaybooksVariableUtil
 		
 		try
 		{
-			playbookVariableType = PlaybookVariableType.valueOf(matcher.group(VARIABLE_GROUP_TYPE));
+			playbookVariableType = new PlaybookVariableType(matcher.group(VARIABLE_GROUP_TYPE));
 		}
 		catch (IllegalArgumentException e)
 		{
@@ -210,7 +210,7 @@ public class PlaybooksVariableUtil
 		
 		Matcher matcher = getVariablePatternExactMatcher(variable);
 		matcher.find();
-		return PlaybookVariableType.valueOf(matcher.group(VARIABLE_GROUP_TYPE));
+		return new PlaybookVariableType(matcher.group(VARIABLE_GROUP_TYPE));
 	}
 	
 	public static boolean isStringType(final String variable)

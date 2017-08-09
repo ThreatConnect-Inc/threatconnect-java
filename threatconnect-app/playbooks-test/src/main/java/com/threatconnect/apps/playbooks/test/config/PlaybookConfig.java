@@ -215,6 +215,6 @@ public class PlaybookConfig
 	
 	private String buildParam(final int appID, final String paramName, final PlaybookVariableType paramType)
 	{
-		return "#App:" + appID + ":" + paramName + "!" + paramType.toString();
+		return "#App:" + appID + ":" + paramName + "!" + paramType.getType();
 	}
 }

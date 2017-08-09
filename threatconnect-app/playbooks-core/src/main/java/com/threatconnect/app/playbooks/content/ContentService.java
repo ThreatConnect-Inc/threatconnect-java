@@ -284,49 +284,72 @@ public class ContentService
 		PlaybooksVariable valueVariable;
 		
 		//determine what type of variable is stored in the key value
-		switch (keyValue.getVariableType())
+		if (PlaybookVariableType.StringArray.equals(keyValue.getVariableType()))
 		{
-			case StringArray:
-				//create a new variable to store the value and update the key value's value with a variable
-				valueVariable = new PlaybooksVariable(originalVariable.getNamespace(), originalVariable.getId(),
-					UUID.randomUUID().toString(), PlaybookVariableType.StringArray);
-				stringListAccumulator.writeContent(valueVariable.toString(), (List<String>) keyValue.getValue());
-				keyValue.setStringValue(valueVariable.toString());
-				break;
-			case Binary:
-				//create a new variable to store the value and update the key value's value with a variable
-				valueVariable = new PlaybooksVariable(originalVariable.getNamespace(), originalVariable.getId(),
-					UUID.randomUUID().toString(), PlaybookVariableType.Binary);
-				binaryAccumulator.writeContent(valueVariable.toString(), (byte[]) keyValue.getValue());
-				keyValue.setStringValue(valueVariable.toString());
-				break;
-			case BinaryArray:
-				//create a new variable to store the value and update the key value's value with a variable
-				valueVariable = new PlaybooksVariable(originalVariable.getNamespace(), originalVariable.getId(),
-					UUID.randomUUID().toString(), PlaybookVariableType.BinaryArray);
-				binaryArrayAccumulator.writeContent(valueVariable.toString(), (byte[][]) keyValue.getValue());
-				keyValue.setStringValue(valueVariable.toString());
-				break;
-			case TCEntity:
-				//create a new variable to store the value and update the key value's value with a variable
-				valueVariable = new PlaybooksVariable(originalVariable.getNamespace(), originalVariable.getId(),
-					UUID.randomUUID().toString(), PlaybookVariableType.TCEntity);
-				tcEntityAccumulator.writeContent(valueVariable.toString(), (TCEntity) keyValue.getValue());
-				keyValue.setStringValue(valueVariable.toString());
-				break;
-			case TCEntityArray:
-				//create a new variable to store the value and update the key value's value with a variable
-				valueVariable = new PlaybooksVariable(originalVariable.getNamespace(), originalVariable.getId(),
-					UUID.randomUUID().toString(), PlaybookVariableType.TCEntityArray);
-				tcEntityListAccumulator.writeContent(valueVariable.toString(), (List<TCEntity>) keyValue.getValue());
-				keyValue.setStringValue(valueVariable.toString());
-				break;
-			case String:
-				//ignore strings, no extra work needs to be done here
-				break;
-			default:
-				throw new IllegalArgumentException(
-					keyValue.getVariableType() + " is an unsupported value for KeyValue");
+			//create a new variable to store the value and update the key value's value with a variable
+			valueVariable = new PlaybooksVariable(originalVariable.getNamespace(), originalVariable.getId(),
+				UUID.randomUUID().toString(), PlaybookVariableType.StringArray);
+			stringListAccumulator.writeContent(valueVariable.toString(), (List<String>) keyValue.getValue());
+			keyValue.setStringValue(valueVariable.toString());
+		}
+		else if (PlaybookVariableType.Binary.equals(keyValue.getVariableType()))
+		{
+			//create a new variable to store the value and update the key value's value with a variable
+			valueVariable = new PlaybooksVariable(originalVariable.getNamespace(), originalVariable.getId(),
+				UUID.randomUUID().toString(), PlaybookVariableType.Binary);
+			binaryAccumulator.writeContent(valueVariable.toString(), (byte[]) keyValue.getValue());
+			keyValue.setStringValue(valueVariable.toString());
+		}
+		else if (PlaybookVariableType.BinaryArray.equals(keyValue.getVariableType()))
+		{
+			//create a new variable to store the value and update the key value's value with a variable
+			valueVariable = new PlaybooksVariable(originalVariable.getNamespace(), originalVariable.getId(),
+				UUID.randomUUID().toString(), PlaybookVariableType.BinaryArray);
+			binaryArrayAccumulator.writeContent(valueVariable.toString(), (byte[][]) keyValue.getValue());
+			keyValue.setStringValue(valueVariable.toString());
+		}
+		else if (PlaybookVariableType.TCEntity.equals(keyValue.getVariableType()))
+		{
+			//create a new variable to store the value and update the key value's value with a variable
+			valueVariable = new PlaybooksVariable(originalVariable.getNamespace(), originalVariable.getId(),
+				UUID.randomUUID().toString(), PlaybookVariableType.TCEntity);
+			tcEntityAccumulator.writeContent(valueVariable.toString(), (TCEntity) keyValue.getValue());
+			keyValue.setStringValue(valueVariable.toString());
+		}
+		else if (PlaybookVariableType.TCEntityArray.equals(keyValue.getVariableType()))
+		{
+			//create a new variable to store the value and update the key value's value with a variable
+			valueVariable = new PlaybooksVariable(originalVariable.getNamespace(), originalVariable.getId(),
+				UUID.randomUUID().toString(), PlaybookVariableType.TCEntityArray);
+			tcEntityListAccumulator
+				.writeContent(valueVariable.toString(), (List<TCEntity>) keyValue.getValue());
+			keyValue.setStringValue(valueVariable.toString());
+		}
+		else if (PlaybookVariableType.TCEnhancedEntity.equals(keyValue.getVariableType()))
+		{
+			//create a new variable to store the value and update the key value's value with a variable
+			valueVariable = new PlaybooksVariable(originalVariable.getNamespace(), originalVariable.getId(),
+				UUID.randomUUID().toString(), PlaybookVariableType.TCEnhancedEntity);
+			tcEnhancedEntityAccumulator.writeContent(valueVariable.toString(), (Item) keyValue.getValue());
+			keyValue.setStringValue(valueVariable.toString());
+		}
+		else if (PlaybookVariableType.TCEnhancedEntityArray.equals(keyValue.getVariableType()))
+		{
+			//create a new variable to store the value and update the key value's value with a variable
+			valueVariable = new PlaybooksVariable(originalVariable.getNamespace(), originalVariable.getId(),
+				UUID.randomUUID().toString(), PlaybookVariableType.TCEnhancedEntityArray);
+			tcEnhancedEntityListAccumulator
+				.writeContent(valueVariable.toString(), (List<Item>) keyValue.getValue());
+			keyValue.setStringValue(valueVariable.toString());
+		}
+		else if (PlaybookVariableType.String.equals(keyValue.getVariableType()))
+		{
+			//ignore strings, no extra work needs to be done here
+		}
+		else
+		{
+			throw new IllegalArgumentException(
+				keyValue.getVariableType() + " is an unsupported value for KeyValue");
 		}
 	}
 	
@@ -342,34 +365,47 @@ public class ContentService
 				if (PlaybooksVariableUtil.isVariable(keyValue.getValue().toString()))
 				{
 					//determine what type of variable is stored in the key value
-					switch (PlaybooksVariableUtil.extractVariableType(keyValue.getValue().toString()))
+					PlaybookVariableType extracted =
+						PlaybooksVariableUtil.extractVariableType(keyValue.getValue().toString());
+					if (PlaybookVariableType.StringArray.equals(extracted))
 					{
-						case StringArray:
-							keyValue
-								.setStringArrayValue(stringListAccumulator.readContent(keyValue.getValue().toString()));
-							break;
-						case Binary:
-							keyValue.setBinaryValue(binaryAccumulator.readContent(keyValue.getValue().toString()));
-							break;
-						case BinaryArray:
-							keyValue
-								.setBinaryArrayValue(
-									binaryArrayAccumulator.readContent(keyValue.getValue().toString()));
-							break;
-						case TCEntity:
-							keyValue.setTCEntityValue(tcEntityAccumulator.readContent(keyValue.getValue().toString()));
-							break;
-						case TCEntityArray:
-							keyValue
-								.setTCEntityArrayValue(
-									tcEntityListAccumulator.readContent(keyValue.getValue().toString()));
-							break;
-						case String:
-							//ignore strings, no extra work needs to be done here
-							break;
-						default:
-							throw new IllegalArgumentException(
-								keyValue.getVariableType() + " is an unsupported value for KeyValue");
+						keyValue.setStringArrayValue(stringListAccumulator.readContent(keyValue.getValue().toString()));
+					}
+					else if (PlaybookVariableType.Binary.equals(extracted))
+					{
+						keyValue.setBinaryValue(binaryAccumulator.readContent(keyValue.getValue().toString()));
+					}
+					else if (PlaybookVariableType.BinaryArray.equals(extracted))
+					{
+						keyValue.setBinaryArrayValue(
+							binaryArrayAccumulator.readContent(keyValue.getValue().toString()));
+					}
+					else if (PlaybookVariableType.TCEntity.equals(extracted))
+					{
+						keyValue.setTCEntityValue(tcEntityAccumulator.readContent(keyValue.getValue().toString()));
+					}
+					else if (PlaybookVariableType.TCEntityArray.equals(extracted))
+					{
+						keyValue.setTCEntityArrayValue(
+							tcEntityListAccumulator.readContent(keyValue.getValue().toString()));
+					}
+					else if (PlaybookVariableType.TCEnhancedEntity.equals(extracted))
+					{
+						keyValue.setTCEnhancedEntityValue(tcEnhancedEntityAccumulator.readContent(keyValue.getValue().toString()));
+					}
+					else if (PlaybookVariableType.TCEnhancedEntityArray.equals(extracted))
+					{
+						keyValue.setTCEnhancedEntityArrayValue(
+							tcEnhancedEntityListAccumulator.readContent(keyValue.getValue().toString()));
+					}
+					else if (PlaybookVariableType.String.equals(extracted))
+					{
+						//ignore strings, no extra work needs to be done here
+					}
+					else
+					{
+						throw new IllegalArgumentException(
+							keyValue.getVariableType() + " is an unsupported value for KeyValue");
 					}
 				}
 			}

@@ -1,6 +1,7 @@
 package com.threatconnect.app.playbooks.content.entity;
 
 import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.sdk.model.Item;
 
 import java.util.List;
 
@@ -63,15 +64,27 @@ public class KeyValue
 	}
 	
 	public void setTCEntityValue(final TCEntity value)
-	{
-		this.value = value;
-		this.variableType = PlaybookVariableType.TCEntity;
-	}
+{
+	this.value = value;
+	this.variableType = PlaybookVariableType.TCEntity;
+}
 	
 	public void setTCEntityArrayValue(final List<TCEntity> value)
 	{
 		this.value = value;
 		this.variableType = PlaybookVariableType.TCEntityArray;
+	}
+	
+	public void setTCEnhancedEntityValue(final Item value)
+	{
+		this.value = value;
+		this.variableType = PlaybookVariableType.TCEnhancedEntity;
+	}
+	
+	public void setTCEnhancedEntityArrayValue(final List<Item> value)
+	{
+		this.value = value;
+		this.variableType = PlaybookVariableType.TCEnhancedEntityArray;
 	}
 	
 	public Object getValue()

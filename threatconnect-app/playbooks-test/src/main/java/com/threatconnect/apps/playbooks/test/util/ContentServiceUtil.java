@@ -14,26 +14,49 @@ public class ContentServiceUtil
 	{
 		PlaybookVariableType type = PlaybooksVariableUtil.extractVariableType(variable);
 		
-		switch (type)
+		if (PlaybookVariableType.String.equals(type))
 		{
-			case String:
-				return contentService.readString(variable);
-			case StringArray:
-				return contentService.readStringList(variable);
-			case TCEntity:
-				return contentService.readTCEntity(variable);
-			case TCEntityArray:
-				return contentService.readTCEntityList(variable);
-			case Binary:
-				return contentService.readBinary(variable);
-			case BinaryArray:
-				return contentService.readBinaryArray(variable);
-			case KeyValue:
-				return contentService.readKeyValue(variable);
-			case KeyValueArray:
-				return contentService.readKeyValueArray(variable);
-			default:
-				throw new IllegalArgumentException("Could not resolve the type of variable: " + variable);
+			return contentService.readString(variable);
+		}
+		else if (PlaybookVariableType.StringArray.equals(type))
+		{
+			return contentService.readStringList(variable);
+		}
+		else if (PlaybookVariableType.TCEntity.equals(type))
+		{
+			return contentService.readTCEntity(variable);
+		}
+		else if (PlaybookVariableType.TCEntityArray.equals(type))
+		{
+			return contentService.readTCEntityList(variable);
+		}
+		else if (PlaybookVariableType.TCEnhancedEntity.equals(type))
+		{
+			return contentService.readTCEnhancedEntity(variable);
+		}
+		else if (PlaybookVariableType.TCEnhancedEntityArray.equals(type))
+		{
+			return contentService.readTCEnhancedEntityList(variable);
+		}
+		else if (PlaybookVariableType.Binary.equals(type))
+		{
+			return contentService.readBinary(variable);
+		}
+		else if (PlaybookVariableType.BinaryArray.equals(type))
+		{
+			return contentService.readBinaryArray(variable);
+		}
+		else if (PlaybookVariableType.KeyValue.equals(type))
+		{
+			return contentService.readKeyValue(variable);
+		}
+		else if (PlaybookVariableType.KeyValueArray.equals(type))
+		{
+			return contentService.readKeyValueArray(variable);
+		}
+		else
+		{
+			throw new IllegalArgumentException("Could not resolve the type of variable: " + variable);
 		}
 	}
 }
