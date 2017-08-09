@@ -178,6 +178,18 @@ public abstract class PlaybooksApp extends App
 	 * @param type        the output type of the output param
 	 * @return whether or not this app is expected to write this output parameter
 	 */
+	protected final boolean isOutputParamExpected(final String outputParam, final String type)
+	{
+		return null != findOutputVariable(outputParam, new PlaybookVariableType(type));
+	}
+	
+	/**
+	 * Checks to see if a specific output param is expected to be written by this app
+	 *
+	 * @param outputParam the output param to check
+	 * @param type        the output type of the output param
+	 * @return whether or not this app is expected to write this output parameter
+	 */
 	protected final boolean isOutputParamExpected(final String outputParam, final PlaybookVariableType type)
 	{
 		return null != findOutputVariable(outputParam, type);
@@ -539,6 +551,52 @@ public abstract class PlaybooksApp extends App
 			getContentService()
 				.writeTCEnhancedEntityList(findOutputVariable(param, PlaybookVariableType.TCEnhancedEntityArray),
 					value);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * Serves as a shorthand method for reading a custom type value from the database where the param is a database key
+	 *
+	 * @param param the app parameter which represents a playbooks variable
+	 * @return the value of the parameter in the database
+	 * @throws ContentException if there was an issue reading/writing to the database.
+	 */
+	public final byte[] readCustomTypeContent(final String param) throws ContentException
+	{
+		return getContentService().readCustomType(getAppConfig().getString(param));
+	}
+	
+	/**
+	 * Serves as a shorthand method for writing a custom type value to the database where the param is a database key
+	 *
+	 * @param param the app parameter which represents a playbooks variable
+	 * @param value the value to write to the variable
+	 * @return whether or not the value was written
+	 * @throws ContentException if there was an issue reading/writing to the database.
+	 */
+	public final boolean writeCustomTypeContent(final String param, final byte[] value, final String type) throws ContentException
+	{
+		return writeCustomTypeContent(param, value, new PlaybookVariableType(type));
+	}
+	
+	/**
+	 * Serves as a shorthand method for writing a custom type value to the database where the param is a database key
+	 *
+	 * @param param the app parameter which represents a playbooks variable
+	 * @param value the value to write to the variable
+	 * @return whether or not the value was written
+	 * @throws ContentException if there was an issue reading/writing to the database.
+	 */
+	public final boolean writeCustomTypeContent(final String param, final byte[] value, final PlaybookVariableType type) throws ContentException
+	{
+		if (isOutputParamExpected(param, type))
+		{
+			getContentService().writeCustomType(findOutputVariable(param, type), value);
 			return true;
 		}
 		else

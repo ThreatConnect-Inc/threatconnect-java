@@ -348,8 +348,15 @@ public class PlaybookRunner implements Runnable
 		}
 		else
 		{
-			throw new IllegalArgumentException(
-				"Could not write param " + variable + ". " + type + " is not a valid type.");
+			if (null != source.readCustomType(variable))
+			{
+				target.writeCustomType(variable, source.readCustomType(variable));
+			}
+			else if (null == target.readCustomType(variable))
+			{
+				throw new IllegalStateException(variable
+					+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
+			}
 		}
 	}
 	

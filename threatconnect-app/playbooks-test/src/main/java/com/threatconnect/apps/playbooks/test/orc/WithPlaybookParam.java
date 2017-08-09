@@ -246,6 +246,56 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 		return this;
 	}
 	
+	public WithPlaybookParam asCustomType(final String playbookParam, final byte[] value, final String type)
+		throws ContentException
+	{
+		return asCustomType(playbookParam, value, new PlaybookVariableType(type));
+	}
+	
+	public WithPlaybookParam asCustomType(final String playbookParam, final byte[] value,
+		final PlaybookVariableType type) throws ContentException
+	{
+		//store this object in the local content service
+		final String variable =
+			getPlaybookConfig().createVariableForInputParam(playbookParam, type);
+		getContentService().writeCustomType(variable, value);
+		getPlaybookParams().put(playbookParam, variable);
+		
+		return this;
+	}
+	
+	public WithPlaybookParam asCustomTypeVariable(final String playbookParam, final String value)
+		throws ContentException
+	{
+		if (PlaybooksVariableUtil.isVariable(value))
+		{
+			getPlaybookParams().put(playbookParam, value);
+		}
+		else
+		{
+			throw new IllegalArgumentException(value + " is not a valid Playbooks variable");
+		}
+		
+		return this;
+	}
+	
+	/**
+	 * Sets the playbook param for this app to be the value from the output of an upstream app
+	 *
+	 * @param playbookParam            the playbook param name
+	 * @param upstreamPlaybookAppClass the class from the upstream app to pull the value from after it executes
+	 * @param outputParam              the name of the upstream app's output param
+	 * @param outputType               the type of the upstream app's output param
+	 * @return
+	 */
+	public WithPlaybookParam fromLastRunUpstreamApp(final String playbookParam,
+		final Class<? extends PlaybooksApp> upstreamPlaybookAppClass,
+		final String outputParam, final String outputType)
+	{
+		return fromLastRunUpstreamApp(playbookParam, upstreamPlaybookAppClass, outputParam,
+			new PlaybookVariableType(outputType));
+	}
+	
 	/**
 	 * Sets the playbook param for this app to be the value from the output of an upstream app
 	 *

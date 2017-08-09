@@ -64,10 +64,10 @@ public class KeyValue
 	}
 	
 	public void setTCEntityValue(final TCEntity value)
-{
-	this.value = value;
-	this.variableType = PlaybookVariableType.TCEntity;
-}
+	{
+		this.value = value;
+		this.variableType = PlaybookVariableType.TCEntity;
+	}
 	
 	public void setTCEntityArrayValue(final List<TCEntity> value)
 	{
@@ -85,6 +85,12 @@ public class KeyValue
 	{
 		this.value = value;
 		this.variableType = PlaybookVariableType.TCEnhancedEntityArray;
+	}
+	
+	public void setCustomTypeValue(final byte[] value, final PlaybookVariableType type)
+	{
+		this.value = value;
+		this.variableType = type;
 	}
 	
 	public Object getValue()

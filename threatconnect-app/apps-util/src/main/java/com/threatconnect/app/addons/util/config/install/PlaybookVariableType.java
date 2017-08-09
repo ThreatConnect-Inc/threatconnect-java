@@ -50,6 +50,12 @@ public class PlaybookVariableType
 	}
 	
 	@Override
+	public String toString()
+	{
+		return type;
+	}
+	
+	@Override
 	public boolean equals(final Object o)
 	{
 		if (this == o)

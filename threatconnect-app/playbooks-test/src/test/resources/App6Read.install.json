@@ -1,0 +1,30 @@
+{
+  "displayName": "App6Read",
+  "programVersion": "1.0.0",
+  "programLanguage": "JAVA",
+  "programMain": "com.threatconnect.apps.playbooks.test.app6.App6ReadMain",
+  "languageVersion": "7",
+  "listDelimiter": "|",
+  "runtimeLevel": "Playbook",
+  "playbook": {
+    "type": "Basic",
+    "outputVariables": [
+      {
+        "type": "String",
+        "name": "test.app6.value"
+      }
+    ]
+  },
+  "params": [
+    {
+      "name": "user",
+      "label": "User",
+      "sequence": 1,
+      "required": true,
+      "type": "String",
+      "playbookDataType": [
+        "User"
+      ]
+    }
+  ]
+}

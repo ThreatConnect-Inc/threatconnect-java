@@ -56,7 +56,7 @@ public class ContentServiceUtil
 		}
 		else
 		{
-			throw new IllegalArgumentException("Could not resolve the type of variable: " + variable);
+			return contentService.readCustomType(variable);
 		}
 	}
 }
