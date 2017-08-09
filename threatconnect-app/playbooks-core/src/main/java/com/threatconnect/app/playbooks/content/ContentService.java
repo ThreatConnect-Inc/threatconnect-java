@@ -3,6 +3,7 @@ package com.threatconnect.app.playbooks.content;
 import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.app.playbooks.content.accumulator.ContentAccumulator;
 import com.threatconnect.app.playbooks.content.accumulator.ContentException;
+import com.threatconnect.app.playbooks.content.accumulator.CustomTypeContentAccumulator;
 import com.threatconnect.app.playbooks.content.accumulator.KeyValueAccumulator;
 import com.threatconnect.app.playbooks.content.accumulator.KeyValueArrayAccumulator;
 import com.threatconnect.app.playbooks.content.accumulator.StringAccumulator;
@@ -46,7 +47,7 @@ public class ContentService
 	private final KeyValueAccumulator keyValueContentAccumulator;
 	private final KeyValueArrayAccumulator keyValueArrayContentAccumulator;
 	
-	private final ContentAccumulator<byte[]> customDataTypeAccumulator;
+	private final CustomTypeContentAccumulator customDataTypeAccumulator;
 	
 	public ContentService(final DBService dbService)
 	{
@@ -75,7 +76,7 @@ public class ContentService
 		this.keyValueContentAccumulator = new KeyValueAccumulator(dbService);
 		this.keyValueArrayContentAccumulator = new KeyValueArrayAccumulator(dbService);
 		
-		this.customDataTypeAccumulator = new ContentAccumulator<byte[]>(dbService, new ByteArrayConverter());
+		this.customDataTypeAccumulator = new CustomTypeContentAccumulator(dbService, new ByteArrayConverter());
 	}
 	
 	public String readString(final String content) throws ContentException

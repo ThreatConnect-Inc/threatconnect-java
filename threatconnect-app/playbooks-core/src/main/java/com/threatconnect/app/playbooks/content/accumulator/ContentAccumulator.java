@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContentAccumulator<T>
+public abstract class ContentAccumulator<T>
 {
 	private static final Logger logger = LoggerFactory.getLogger(ContentAccumulator.class.getName());
 	
