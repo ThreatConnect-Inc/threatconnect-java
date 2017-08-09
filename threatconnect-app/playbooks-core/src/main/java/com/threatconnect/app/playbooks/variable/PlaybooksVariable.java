@@ -46,7 +46,7 @@ public class PlaybooksVariable
 	@Override
 	public String toString()
 	{
-		return "#" + namespace.toString() + ":" + id + ":" + name + "!" + playbookVariableType.toString();
+		return "#" + namespace.toString() + ":" + id + ":" + name + "!" + playbookVariableType.getType();
 	}
 	
 	@Override
