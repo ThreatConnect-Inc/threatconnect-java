@@ -1,10 +1,10 @@
 package com.threatconnect.apps.playbooks.test;
 
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.apps.playbooks.test.app2.App2;
 import com.threatconnect.apps.playbooks.test.app3.App3;
 import com.threatconnect.apps.playbooks.test.config.PlaybooksTestConfiguration;
 import com.threatconnect.apps.playbooks.test.orc.PlaybooksOrchestrationBuilder;
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,19 +38,19 @@ public class MultiAppTest
 					.asStringList(App2.PARAM_INPUT_ARRAY, Arrays.asList("one", "two", "three", "four"))
 				.then()
 				.onSuccess().assertOutput()
-					.assertEquals(App2.PARAM_OUTPUT_CONCAT, PlaybookVariableType.String, "one,two,three,four")
+					.assertEquals(App2.PARAM_OUTPUT_CONCAT, StandardPlaybookType.String, "one,two,three,four")
 				.then()
 			.runApp(App3.class)
 				.withAppParam()
 					.set(App3.PARAM_SPLIT_ON, ",")
 				.then()
 				.withInput()
-					.fromLastRunUpstreamApp(App3.PARAM_INPUT_CONCAT, App2.class, App2.PARAM_OUTPUT_CONCAT, PlaybookVariableType.String)
+					.fromLastRunUpstreamApp(App3.PARAM_INPUT_CONCAT, App2.class, App2.PARAM_OUTPUT_CONCAT, StandardPlaybookType.String)
 				.then()
 				.onSuccess().assertOutput()
-					.assertNotNull(App3.PARAM_OUTPUT_SPLIT, PlaybookVariableType.StringArray)
-					.assertStringArraySize(App3.PARAM_OUTPUT_SPLIT, PlaybookVariableType.StringArray, 4)
-					.assertStringArrayEquals(App3.PARAM_OUTPUT_SPLIT, PlaybookVariableType.StringArray, Arrays.asList("one", "two", "three", "four"))
+					.assertNotNull(App3.PARAM_OUTPUT_SPLIT, StandardPlaybookType.StringArray)
+					.assertStringArraySize(App3.PARAM_OUTPUT_SPLIT, StandardPlaybookType.StringArray, 4)
+					.assertStringArrayEquals(App3.PARAM_OUTPUT_SPLIT, StandardPlaybookType.StringArray, Arrays.asList("one", "two", "three", "four"))
 				.then()
 			//execute the apps
 			.build().run();

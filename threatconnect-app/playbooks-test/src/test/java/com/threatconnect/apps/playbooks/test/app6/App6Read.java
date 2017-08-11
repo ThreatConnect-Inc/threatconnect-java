@@ -1,7 +1,7 @@
 package com.threatconnect.apps.playbooks.test.app6;
 
 import com.google.gson.Gson;
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.app.apps.ExitStatus;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
 import com.threatconnect.app.playbooks.app.PlaybooksAppConfig;
@@ -25,7 +25,7 @@ public class App6Read extends PlaybooksApp
 		final byte[] custom = readCustomTypeContent(PARAM_USER);
 		final User user = new Gson().fromJson(new InputStreamReader(new ByteArrayInputStream(custom)), User.class);
 		
-		if (isOutputParamExpected(OUTPUT_NAME, PlaybookVariableType.String))
+		if (isOutputParamExpected(OUTPUT_NAME, StandardPlaybookType.String))
 		{
 			writeStringContent(OUTPUT_NAME, user.getFirstName() + " " + user.getLastName());
 		}

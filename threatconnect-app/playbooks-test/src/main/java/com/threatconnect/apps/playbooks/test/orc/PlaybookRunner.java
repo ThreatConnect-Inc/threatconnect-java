@@ -1,6 +1,6 @@
 package com.threatconnect.apps.playbooks.test.orc;
 
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.ExitStatus;
 import com.threatconnect.app.apps.SystemPropertiesAppConfig;
@@ -220,13 +220,13 @@ public class PlaybookRunner implements Runnable
 		final PlaybooksApp playbooksApp, final Map.Entry<String, String> entry) throws ContentException
 	{
 		final String variable = entry.getValue();
-		PlaybookVariableType type = PlaybooksVariableUtil.extractVariableType(variable);
+		String type = PlaybooksVariableUtil.extractVariableType(variable);
 		
 		//retrieve the source and target content services for copying the data
 		ContentService source = playbooksOrchestration.getContentService();
 		ContentService target = playbooksApp.getContentService();
 		
-		if (PlaybookVariableType.String.equals(type))
+		if (StandardPlaybookType.String.toString().equalsIgnoreCase(type))
 		{
 			if (null != source.readString(variable))
 			{
@@ -238,7 +238,7 @@ public class PlaybookRunner implements Runnable
 					+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
 			}
 		}
-		else if (PlaybookVariableType.StringArray.equals(type))
+		else if (StandardPlaybookType.StringArray.toString().equalsIgnoreCase(type))
 		{
 			if (null != source.readStringList(variable))
 			{
@@ -250,7 +250,7 @@ public class PlaybookRunner implements Runnable
 					+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
 			}
 		}
-		else if (PlaybookVariableType.TCEntity.equals(type))
+		else if (StandardPlaybookType.TCEntity.toString().equalsIgnoreCase(type))
 		{
 			if (null != source.readTCEntity(variable))
 			{
@@ -262,7 +262,7 @@ public class PlaybookRunner implements Runnable
 					+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
 			}
 		}
-		else if (PlaybookVariableType.TCEntityArray.equals(type))
+		else if (StandardPlaybookType.TCEntityArray.toString().equalsIgnoreCase(type))
 		{
 			if (null != source.readTCEntityList(variable))
 			{
@@ -274,7 +274,7 @@ public class PlaybookRunner implements Runnable
 					+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
 			}
 		}
-		else if (PlaybookVariableType.TCEnhancedEntity.equals(type))
+		else if (StandardPlaybookType.TCEnhancedEntity.toString().equalsIgnoreCase(type))
 		{
 			if (null != source.readTCEntity(variable))
 			{
@@ -286,7 +286,7 @@ public class PlaybookRunner implements Runnable
 					+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
 			}
 		}
-		else if (PlaybookVariableType.TCEnhancedEntityArray.equals(type))
+		else if (StandardPlaybookType.TCEnhancedEntityArray.toString().equalsIgnoreCase(type))
 		{
 			if (null != source.readTCEnhancedEntityList(variable))
 			{
@@ -298,7 +298,7 @@ public class PlaybookRunner implements Runnable
 					+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
 			}
 		}
-		else if (PlaybookVariableType.Binary.equals(type))
+		else if (StandardPlaybookType.Binary.toString().equalsIgnoreCase(type))
 		{
 			if (null != source.readBinary(variable))
 			{
@@ -310,7 +310,7 @@ public class PlaybookRunner implements Runnable
 					+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
 			}
 		}
-		else if (PlaybookVariableType.BinaryArray.equals(type))
+		else if (StandardPlaybookType.BinaryArray.toString().equalsIgnoreCase(type))
 		{
 			if (null != source.readBinaryArray(variable))
 			{
@@ -322,7 +322,7 @@ public class PlaybookRunner implements Runnable
 					+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
 			}
 		}
-		else if (PlaybookVariableType.KeyValue.equals(type))
+		else if (StandardPlaybookType.KeyValue.toString().equalsIgnoreCase(type))
 		{
 			if (null != source.readKeyValue(variable))
 			{
@@ -334,7 +334,7 @@ public class PlaybookRunner implements Runnable
 					+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
 			}
 		}
-		else if (PlaybookVariableType.KeyValueArray.equals(type))
+		else if (StandardPlaybookType.KeyValueArray.toString().equalsIgnoreCase(type))
 		{
 			if (null != source.readKeyValueArray(variable))
 			{

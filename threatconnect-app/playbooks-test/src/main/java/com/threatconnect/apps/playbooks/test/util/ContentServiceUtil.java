@@ -1,6 +1,6 @@
 package com.threatconnect.apps.playbooks.test.util;
 
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.app.playbooks.content.ContentService;
 import com.threatconnect.app.playbooks.content.accumulator.ContentException;
 import com.threatconnect.app.playbooks.util.PlaybooksVariableUtil;
@@ -12,45 +12,45 @@ public class ContentServiceUtil
 {
 	public static Object read(final String variable, final ContentService contentService) throws ContentException
 	{
-		PlaybookVariableType type = PlaybooksVariableUtil.extractVariableType(variable);
+		String type = PlaybooksVariableUtil.extractVariableType(variable);
 		
-		if (PlaybookVariableType.String.equals(type))
+		if (StandardPlaybookType.String.toString().equalsIgnoreCase(type))
 		{
 			return contentService.readString(variable);
 		}
-		else if (PlaybookVariableType.StringArray.equals(type))
+		else if (StandardPlaybookType.StringArray.toString().equalsIgnoreCase(type))
 		{
 			return contentService.readStringList(variable);
 		}
-		else if (PlaybookVariableType.TCEntity.equals(type))
+		else if (StandardPlaybookType.TCEntity.toString().equalsIgnoreCase(type))
 		{
 			return contentService.readTCEntity(variable);
 		}
-		else if (PlaybookVariableType.TCEntityArray.equals(type))
+		else if (StandardPlaybookType.TCEntityArray.toString().equalsIgnoreCase(type))
 		{
 			return contentService.readTCEntityList(variable);
 		}
-		else if (PlaybookVariableType.TCEnhancedEntity.equals(type))
+		else if (StandardPlaybookType.TCEnhancedEntity.toString().equalsIgnoreCase(type))
 		{
 			return contentService.readTCEnhancedEntity(variable);
 		}
-		else if (PlaybookVariableType.TCEnhancedEntityArray.equals(type))
+		else if (StandardPlaybookType.TCEnhancedEntityArray.toString().equalsIgnoreCase(type))
 		{
 			return contentService.readTCEnhancedEntityList(variable);
 		}
-		else if (PlaybookVariableType.Binary.equals(type))
+		else if (StandardPlaybookType.Binary.toString().equalsIgnoreCase(type))
 		{
 			return contentService.readBinary(variable);
 		}
-		else if (PlaybookVariableType.BinaryArray.equals(type))
+		else if (StandardPlaybookType.BinaryArray.toString().equalsIgnoreCase(type))
 		{
 			return contentService.readBinaryArray(variable);
 		}
-		else if (PlaybookVariableType.KeyValue.equals(type))
+		else if (StandardPlaybookType.KeyValue.toString().equalsIgnoreCase(type))
 		{
 			return contentService.readKeyValue(variable);
 		}
-		else if (PlaybookVariableType.KeyValueArray.equals(type))
+		else if (StandardPlaybookType.KeyValueArray.toString().equalsIgnoreCase(type))
 		{
 			return contentService.readKeyValueArray(variable);
 		}

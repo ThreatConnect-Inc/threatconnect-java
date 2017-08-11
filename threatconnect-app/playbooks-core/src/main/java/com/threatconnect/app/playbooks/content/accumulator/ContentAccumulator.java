@@ -1,6 +1,5 @@
 package com.threatconnect.app.playbooks.content.accumulator;
 
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.app.playbooks.content.converter.ContentConverter;
 import com.threatconnect.app.playbooks.content.converter.ConversionException;
 import com.threatconnect.app.playbooks.db.DBReadException;
@@ -114,7 +113,7 @@ public abstract class ContentAccumulator<T>
 		}
 	}
 	
-	protected PlaybookVariableType verifyKey(final String key)
+	protected String verifyKey(final String key)
 	{
 		//make sure the key is not null or empty
 		if (null == key || key.isEmpty())

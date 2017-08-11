@@ -1,6 +1,6 @@
 package com.threatconnect.app.playbooks.util;
 
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.app.playbooks.variable.InvalidVariableNamespace;
 import com.threatconnect.app.playbooks.variable.InvalidVariableType;
 import com.threatconnect.app.playbooks.variable.PlaybooksVariable;
@@ -172,7 +172,7 @@ public class PlaybooksVariableUtil
 	private static PlaybooksVariable toPlaybookVariable(final Matcher matcher)
 	{
 		PlaybooksVariableNamespace playbooksVariableNamespace;
-		PlaybookVariableType playbookVariableType;
+		String playbookVariableType;
 		
 		//extract all of the parts from the variable found
 		try
@@ -186,7 +186,7 @@ public class PlaybooksVariableUtil
 		
 		try
 		{
-			playbookVariableType = new PlaybookVariableType(matcher.group(VARIABLE_GROUP_TYPE));
+			playbookVariableType = matcher.group(VARIABLE_GROUP_TYPE);
 		}
 		catch (IllegalArgumentException e)
 		{
@@ -200,7 +200,7 @@ public class PlaybooksVariableUtil
 		return new PlaybooksVariable(playbooksVariableNamespace, id, name, playbookVariableType);
 	}
 	
-	public static PlaybookVariableType extractVariableType(final String variable)
+	public static String extractVariableType(final String variable)
 	{
 		//make sure this is a variable
 		if (!isVariable(variable))
@@ -210,46 +210,46 @@ public class PlaybooksVariableUtil
 		
 		Matcher matcher = getVariablePatternExactMatcher(variable);
 		matcher.find();
-		return new PlaybookVariableType(matcher.group(VARIABLE_GROUP_TYPE));
+		return matcher.group(VARIABLE_GROUP_TYPE);
 	}
 	
 	public static boolean isStringType(final String variable)
 	{
-		return PlaybookVariableType.String.equals(extractVariableType(variable));
+		return StandardPlaybookType.String.toString().equalsIgnoreCase(extractVariableType(variable));
 	}
 	
 	public static boolean isStringArrayType(final String variable)
 	{
-		return PlaybookVariableType.StringArray.equals(extractVariableType(variable));
+		return StandardPlaybookType.StringArray.toString().equalsIgnoreCase(extractVariableType(variable));
 	}
 	
 	public static boolean isBinaryType(final String variable)
 	{
-		return PlaybookVariableType.Binary.equals(extractVariableType(variable));
+		return StandardPlaybookType.Binary.toString().equalsIgnoreCase(extractVariableType(variable));
 	}
 	
 	public static boolean isBinaryArrayType(final String variable)
 	{
-		return PlaybookVariableType.BinaryArray.equals(extractVariableType(variable));
+		return StandardPlaybookType.BinaryArray.toString().equalsIgnoreCase(extractVariableType(variable));
 	}
 	
 	public static boolean isKeyValueType(final String variable)
 	{
-		return PlaybookVariableType.KeyValue.equals(extractVariableType(variable));
+		return StandardPlaybookType.KeyValue.toString().equalsIgnoreCase(extractVariableType(variable));
 	}
 	
 	public static boolean isKeyValueArrayType(final String variable)
 	{
-		return PlaybookVariableType.KeyValueArray.equals(extractVariableType(variable));
+		return StandardPlaybookType.KeyValueArray.toString().equalsIgnoreCase(extractVariableType(variable));
 	}
 	
 	public static boolean isTCEntityType(final String variable)
 	{
-		return PlaybookVariableType.TCEntity.equals(extractVariableType(variable));
+		return StandardPlaybookType.TCEntity.toString().equalsIgnoreCase(extractVariableType(variable));
 	}
 	
 	public static boolean isTCEntityArrayType(final String variable)
 	{
-		return PlaybookVariableType.TCEntityArray.equals(extractVariableType(variable));
+		return StandardPlaybookType.TCEntityArray.toString().equalsIgnoreCase(extractVariableType(variable));
 	}
 }

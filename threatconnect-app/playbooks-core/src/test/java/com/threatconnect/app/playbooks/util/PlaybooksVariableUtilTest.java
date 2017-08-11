@@ -1,6 +1,6 @@
 package com.threatconnect.app.playbooks.util;
 
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.app.playbooks.variable.PlaybooksVariable;
 import com.threatconnect.app.playbooks.variable.PlaybooksVariableNamespace;
 import org.junit.Assert;
@@ -18,7 +18,7 @@ public class PlaybooksVariableUtilTest
 	{
 		variableTestData = "#Global:0:gbl.test!String";
 		playbooksVariableTestData = new PlaybooksVariable(PlaybooksVariableNamespace.App, 1, "app.name.var",
-			PlaybookVariableType.String);
+			StandardPlaybookType.String);
 	}
 	
 	@Test
@@ -42,6 +42,6 @@ public class PlaybooksVariableUtilTest
 	{
 		Assert.assertTrue(PlaybooksVariableUtil.isStringType(variableTestData));
 		Assert.assertFalse(PlaybooksVariableUtil.isStringArrayType(variableTestData));
-		Assert.assertEquals(PlaybookVariableType.String, PlaybooksVariableUtil.extractVariableType(variableTestData));
+		Assert.assertEquals(StandardPlaybookType.String.toString(), PlaybooksVariableUtil.extractVariableType(variableTestData));
 	}
 }

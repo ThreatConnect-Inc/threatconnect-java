@@ -1,8 +1,8 @@
 package com.threatconnect.apps.playbooks.test.app2;
 
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.apps.playbooks.test.config.PlaybooksTestConfiguration;
 import com.threatconnect.apps.playbooks.test.orc.PlaybooksOrchestrationBuilder;
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,7 +35,7 @@ public class App2Test
 					.asStringList(App2.PARAM_INPUT_ARRAY, Arrays.asList("one", "two", "three"))
 				.then()
 				.onSuccess().assertOutput()
-					.assertEquals(App2.PARAM_OUTPUT_CONCAT, PlaybookVariableType.String, "one,two,three")
+					.assertEquals(App2.PARAM_OUTPUT_CONCAT, StandardPlaybookType.String, "one,two,three")
 				.then()
 			//execute the apps
 			.build().run();

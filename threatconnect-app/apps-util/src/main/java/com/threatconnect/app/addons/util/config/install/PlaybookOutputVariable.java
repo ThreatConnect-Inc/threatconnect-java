@@ -6,7 +6,7 @@ package com.threatconnect.app.addons.util.config.install;
 public class PlaybookOutputVariable
 {
 	private String name;
-	private PlaybookVariableType type;
+	private String type;
 	
 	public String getName()
 	{
@@ -18,12 +18,12 @@ public class PlaybookOutputVariable
 		this.name = name;
 	}
 	
-	public PlaybookVariableType getType()
+	public String getType()
 	{
 		return type;
 	}
 	
-	public void setType(final PlaybookVariableType type)
+	public void setType(final String type)
 	{
 		this.type = type;
 	}

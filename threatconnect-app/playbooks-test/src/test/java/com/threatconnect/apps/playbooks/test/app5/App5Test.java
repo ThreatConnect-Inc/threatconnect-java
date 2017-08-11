@@ -1,6 +1,6 @@
 package com.threatconnect.apps.playbooks.test.app5;
 
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.app.playbooks.content.entity.KeyValue;
 import com.threatconnect.apps.playbooks.test.config.PlaybooksTestConfiguration;
 import com.threatconnect.apps.playbooks.test.orc.PlaybooksOrchestrationBuilder;
@@ -29,9 +29,9 @@ public class App5Test
 		//@formatter:off
 		PlaybooksTestConfiguration.getInstance()
 			.createPlaybookConfigBuilder(new File("src/test/resources/App5.install.json"))
-				.addOutputVariable(FIRST, PlaybookVariableType.String)
-				.addOutputVariable(SECOND, PlaybookVariableType.String)
-				.addOutputVariable(THIRD, PlaybookVariableType.String)
+				.addOutputVariable(FIRST, StandardPlaybookType.String)
+				.addOutputVariable(SECOND, StandardPlaybookType.String)
+				.addOutputVariable(THIRD, StandardPlaybookType.String)
 			.build();
 		//@formatter:on
 	}
@@ -53,9 +53,9 @@ public class App5Test
 					.asKeyValueArray(App5.PARAM_INPUT_MAPPING, mapping)
 				.then()
 				.onSuccess().assertOutput()
-					.assertEquals(FIRST, PlaybookVariableType.String, "one")
-					.assertEquals(SECOND, PlaybookVariableType.String, "two")
-					.assertEquals(THIRD, PlaybookVariableType.String, "three")
+					.assertEquals(FIRST, StandardPlaybookType.String, "one")
+					.assertEquals(SECOND, StandardPlaybookType.String, "two")
+					.assertEquals(THIRD, StandardPlaybookType.String, "three")
 				.then()
 			//execute the apps
 			.build().run();

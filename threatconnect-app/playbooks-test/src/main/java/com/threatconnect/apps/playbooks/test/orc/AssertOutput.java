@@ -1,6 +1,6 @@
 package com.threatconnect.apps.playbooks.test.orc;
 
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.app.apps.App;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
 import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
@@ -44,7 +44,12 @@ public class AssertOutput extends AbstractThen<POResult>
 		return this;
 	}
 	
-	public AssertOutput assertNull(final String outputParam, final PlaybookVariableType type)
+	public AssertOutput assertNull(final String outputParam, final StandardPlaybookType type)
+	{
+		return assertNull(outputParam, type.toString());
+	}
+	
+	public AssertOutput assertNull(final String outputParam, final String type)
 	{
 		//since this param has been requested, make sure it is added to the out params
 		getThen().getPlaybooksOrchestration().addOutputParam(outputParam, type);
@@ -54,7 +59,7 @@ public class AssertOutput extends AbstractThen<POResult>
 			@Override
 			public void run(final PlaybooksApp playbooksApp) throws Exception
 			{
-				logger.debug("assertNull Output Param \"{}\" of type \"{}\"", outputParam, type.toString());
+				logger.debug("assertNull Output Param \"{}\" of type \"{}\"", outputParam, type);
 				final String variable = getPlaybookConfig().createVariableForOutputVariable(outputParam, type);
 				Assert.assertNull(ContentServiceUtil.read(variable, playbooksApp.getContentService()));
 			}
@@ -63,7 +68,12 @@ public class AssertOutput extends AbstractThen<POResult>
 		return this;
 	}
 	
-	public AssertOutput assertNotNull(final String outputParam, final PlaybookVariableType type)
+	public AssertOutput assertNotNull(final String outputParam, final StandardPlaybookType type)
+	{
+		return assertNotNull(outputParam, type.toString());
+	}
+	
+	public AssertOutput assertNotNull(final String outputParam, final String type)
 	{
 		//since this param has been requested, make sure it is added to the out params
 		getThen().getPlaybooksOrchestration().addOutputParam(outputParam, type);
@@ -73,7 +83,7 @@ public class AssertOutput extends AbstractThen<POResult>
 			@Override
 			public void run(final PlaybooksApp playbooksApp) throws Exception
 			{
-				logger.debug("assertNotNull Output Param \"{}\" of type \"{}\"", outputParam, type.toString());
+				logger.debug("assertNotNull Output Param \"{}\" of type \"{}\"", outputParam, type);
 				final String variable = getPlaybookConfig().createVariableForOutputVariable(outputParam, type);
 				Assert.assertNotNull(ContentServiceUtil.read(variable, playbooksApp.getContentService()));
 			}
@@ -82,7 +92,12 @@ public class AssertOutput extends AbstractThen<POResult>
 		return this;
 	}
 	
-	public AssertOutput assertEquals(final String outputParam, final PlaybookVariableType type, final Object expected)
+	public AssertOutput assertEquals(final String outputParam, final StandardPlaybookType type, final Object expected)
+	{
+		return assertEquals(outputParam, type.toString(), expected);
+	}
+	
+	public AssertOutput assertEquals(final String outputParam, final String type, final Object expected)
 	{
 		//since this param has been requested, make sure it is added to the out params
 		getThen().getPlaybooksOrchestration().addOutputParam(outputParam, type);
@@ -92,7 +107,7 @@ public class AssertOutput extends AbstractThen<POResult>
 			@Override
 			public void run(final PlaybooksApp playbooksApp) throws Exception
 			{
-				logger.debug("assertEquals Output Param \"{}\" of type \"{}\" = \"{}\"", outputParam, type.toString(),
+				logger.debug("assertEquals Output Param \"{}\" of type \"{}\" = \"{}\"", outputParam, type,
 					expected);
 				final String variable = getPlaybookConfig().createVariableForOutputVariable(outputParam, type);
 				Assert.assertEquals(expected, ContentServiceUtil.read(variable, playbooksApp.getContentService()));
@@ -102,7 +117,13 @@ public class AssertOutput extends AbstractThen<POResult>
 		return this;
 	}
 	
-	public AssertOutput assertStringArrayEquals(final String outputParam, final PlaybookVariableType type,
+	public AssertOutput assertStringArrayEquals(final String outputParam, final StandardPlaybookType type,
+		final List<String> expected)
+	{
+		return assertStringArrayEquals(outputParam, type.toString(), expected);
+	}
+	
+	public AssertOutput assertStringArrayEquals(final String outputParam, final String type,
 		final List<String> expected)
 	{
 		//since this param has been requested, make sure it is added to the out params
@@ -114,7 +135,7 @@ public class AssertOutput extends AbstractThen<POResult>
 			public void run(final PlaybooksApp playbooksApp) throws Exception
 			{
 				logger.debug("assertStringArrayEquals Output Param \"{}\" of type \"{}\" = \"{}\"", outputParam,
-					type.toString(), expected);
+					type, expected);
 				final String variable = getPlaybookConfig().createVariableForOutputVariable(outputParam, type);
 				List<String> result = playbooksApp.getContentService().readStringList(variable);
 				Assert.assertArrayEquals(expected.toArray(new String[] {}), result.toArray(new String[] {}));
@@ -124,7 +145,13 @@ public class AssertOutput extends AbstractThen<POResult>
 		return this;
 	}
 	
-	public AssertOutput assertStringArraySize(final String outputParam, final PlaybookVariableType type,
+	public AssertOutput assertStringArraySize(final String outputParam, final StandardPlaybookType type,
+		final int expected)
+	{
+		return assertStringArraySize(outputParam, type.toString(), expected);
+	}
+	
+	public AssertOutput assertStringArraySize(final String outputParam, final String type,
 		final int expected)
 	{
 		//since this param has been requested, make sure it is added to the out params
@@ -136,7 +163,7 @@ public class AssertOutput extends AbstractThen<POResult>
 			public void run(final PlaybooksApp playbooksApp) throws Exception
 			{
 				logger.debug("assertStringArraySize Output Param \"{}\" of type \"{}\" = \"{}\"", outputParam,
-					type.toString(), expected);
+					type, expected);
 				final String variable = getPlaybookConfig().createVariableForOutputVariable(outputParam, type);
 				List<String> result = playbooksApp.getContentService().readStringList(variable);
 				Assert.assertEquals(expected, result.size());
@@ -177,7 +204,12 @@ public class AssertOutput extends AbstractThen<POResult>
 		return this;
 	}
 	
-	public AssertOutput runTest(final String outputParam, final PlaybookVariableType type, final OutputTest outputTest)
+	public AssertOutput runTest(final String outputParam, final StandardPlaybookType type, final OutputTest outputTest)
+	{
+		return runTest(outputParam, type.toString(), outputTest);
+	}
+	
+	public AssertOutput runTest(final String outputParam, final String type, final OutputTest outputTest)
 	{
 		//since this param has been requested, make sure it is added to the out params
 		getThen().getPlaybooksOrchestration().addOutputParam(outputParam, type);
@@ -187,7 +219,7 @@ public class AssertOutput extends AbstractThen<POResult>
 			@Override
 			public void run(final PlaybooksApp playbooksApp) throws Exception
 			{
-				logger.debug("runTest Output Param \"{}\" of type \"{}\"", outputParam, type.toString());
+				logger.debug("runTest Output Param \"{}\" of type \"{}\"", outputParam, type);
 				final String variable = getPlaybookConfig().createVariableForOutputVariable(outputParam, type);
 				Assert.assertTrue("runTest Output Param \"{}\" of type \"{}\" failed.",
 					outputTest.test(ContentServiceUtil.read(variable, playbooksApp.getContentService())));
