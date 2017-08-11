@@ -1,7 +1,7 @@
 package com.threatconnect.apps.playbooks.test.app6;
 
 import com.google.gson.Gson;
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.apps.playbooks.test.config.PlaybooksTestConfiguration;
 import com.threatconnect.apps.playbooks.test.orc.PlaybooksOrchestrationBuilder;
 import org.junit.Assert;
@@ -43,7 +43,7 @@ public class App6Test
 					.fromLastRunUpstreamApp(App6Read.PARAM_USER, App6Create.class, App6Create.OUTPUT_NAME, App6Test.CUSTOM_PLAYBOOK_TYPE)
 				.then()
 				.onSuccess().assertOutput()
-					.assertEquals(App6Read.OUTPUT_NAME, PlaybookVariableType.String, "Greg Marut")
+					.assertEquals(App6Read.OUTPUT_NAME, StandardPlaybookType.String, "Greg Marut")
 				.then()
 			//execute the apps
 			.build().run();
@@ -67,7 +67,7 @@ public class App6Test
 					.asCustomType(App6Read.PARAM_USER, data, App6Test.CUSTOM_PLAYBOOK_TYPE)
 				.then()
 				.onSuccess().assertOutput()
-					.assertEquals(App6Read.OUTPUT_NAME, PlaybookVariableType.String, "Greg Marut")
+					.assertEquals(App6Read.OUTPUT_NAME, StandardPlaybookType.String, "Greg Marut")
 				.then()
 			//execute the apps
 			.build().run();
@@ -84,8 +84,8 @@ public class App6Test
 			PlaybooksOrchestrationBuilder
 				.runApp(App6Create.class)
 					.withPlaybookParam()
-						.asCustomType(App6Create.PARAM_INPUT_FIRST_NAME, "Greg".getBytes(), PlaybookVariableType.String)
-						.asCustomType(App6Create.PARAM_INPUT_LAST_NAME, "Marut".getBytes(), PlaybookVariableType.String)
+						.asCustomType(App6Create.PARAM_INPUT_FIRST_NAME, "Greg".getBytes(), StandardPlaybookType.String.toString())
+						.asCustomType(App6Create.PARAM_INPUT_LAST_NAME, "Marut".getBytes(), StandardPlaybookType.String.toString())
 					.then().onSuccess()
 				//execute the apps
 				.build().run();

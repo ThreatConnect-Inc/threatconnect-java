@@ -1,7 +1,6 @@
 package com.threatconnect.apps.playbooks.test.orc;
 
 import com.threatconnect.app.addons.util.config.install.PlaybookOutputVariable;
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
 import com.threatconnect.app.playbooks.content.ContentService;
 import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
@@ -88,7 +87,7 @@ public class PlaybooksOrchestration
 		return onFailure;
 	}
 	
-	public PlaybooksOrchestration addOutputParam(final String outputVariable, final PlaybookVariableType type)
+	public PlaybooksOrchestration addOutputParam(final String outputVariable, final String type)
 	{
 		//retrieve this variable
 		String variable = playbookConfig.createVariableForOutputVariable(outputVariable, type);
@@ -157,7 +156,7 @@ public class PlaybooksOrchestration
 		return builder.build();
 	}
 	
-	public String getVariableForOutputVariable(final String param, final PlaybookVariableType type)
+	public String getVariableForOutputVariable(final String param, final String type)
 	{
 		//retrieve this variable
 		String variable = playbookConfig.createVariableForOutputVariable(param, type);

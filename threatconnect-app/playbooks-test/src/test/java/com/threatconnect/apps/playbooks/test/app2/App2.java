@@ -1,6 +1,6 @@
 package com.threatconnect.apps.playbooks.test.app2;
 
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.app.apps.ExitStatus;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
 import com.threatconnect.app.playbooks.app.PlaybooksAppConfig;
@@ -29,7 +29,7 @@ public class App2 extends PlaybooksApp
 		String outputValue = StringUtils.join(arrayList, joinOn);
 		
 		//check to see if the output needs to be written
-		if (isOutputParamExpected(PARAM_OUTPUT_CONCAT, PlaybookVariableType.String))
+		if (isOutputParamExpected(PARAM_OUTPUT_CONCAT, StandardPlaybookType.String))
 		{
 			//write the output
 			writeStringContent(PARAM_OUTPUT_CONCAT, outputValue);

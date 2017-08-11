@@ -1,6 +1,6 @@
 package com.threatconnect.apps.playbooks.test.app5;
 
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.app.apps.ExitStatus;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
 import com.threatconnect.app.playbooks.app.PlaybooksAppConfig;
@@ -29,7 +29,7 @@ public class App5 extends PlaybooksApp
 		for (KeyValue mapping : mappings)
 		{
 			//check to see if the output needs to be written
-			if (isOutputParamExpected(mapping.getKey(), PlaybookVariableType.String))
+			if (isOutputParamExpected(mapping.getKey(), StandardPlaybookType.String))
 			{
 				//write the output
 				writeStringContent(mapping.getKey(), arrayList.get(Integer.parseInt(mapping.getValue().toString())));

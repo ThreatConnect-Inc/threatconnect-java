@@ -1,6 +1,6 @@
 package com.threatconnect.app.playbooks.variable;
 
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 
 /**
  * Represents
@@ -12,10 +12,16 @@ public class PlaybooksVariable
 	private final PlaybooksVariableNamespace namespace;
 	private final int id;
 	private final String name;
-	private final PlaybookVariableType playbookVariableType;
+	private final String playbookVariableType;
 	
 	public PlaybooksVariable(final PlaybooksVariableNamespace namespace, final int id, final String name,
-		final PlaybookVariableType playbookVariableType)
+		final StandardPlaybookType playbookVariableType)
+	{
+		this(namespace, id, name, playbookVariableType.toString());
+	}
+	
+	public PlaybooksVariable(final PlaybooksVariableNamespace namespace, final int id, final String name,
+		final String playbookVariableType)
 	{
 		this.namespace = namespace;
 		this.id = id;
@@ -38,7 +44,7 @@ public class PlaybooksVariable
 		return name;
 	}
 	
-	public PlaybookVariableType getPlaybookVariableType()
+	public String getPlaybookVariableType()
 	{
 		return playbookVariableType;
 	}
@@ -46,7 +52,7 @@ public class PlaybooksVariable
 	@Override
 	public String toString()
 	{
-		return "#" + namespace.toString() + ":" + id + ":" + name + "!" + playbookVariableType.getType();
+		return "#" + namespace.toString() + ":" + id + ":" + name + "!" + playbookVariableType;
 	}
 	
 	@Override

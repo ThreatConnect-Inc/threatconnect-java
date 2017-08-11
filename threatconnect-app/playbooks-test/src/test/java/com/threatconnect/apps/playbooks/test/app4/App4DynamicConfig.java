@@ -1,7 +1,7 @@
 package com.threatconnect.apps.playbooks.test.app4;
 
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.app.apps.ExitStatus;
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
 import com.threatconnect.app.playbooks.app.PlaybooksAppConfig;
 
@@ -22,7 +22,7 @@ public class App4DynamicConfig extends PlaybooksApp
 		final String firstName = readStringContent(PARAM_INPUT_FIRST_NAME);
 		final String lastName = readStringContent(PARAM_INPUT_LAST_NAME);
 		
-		if (isOutputParamExpected(OUTPUT_NAME, PlaybookVariableType.String))
+		if (isOutputParamExpected(OUTPUT_NAME, StandardPlaybookType.String))
 		{
 			writeStringContent(OUTPUT_NAME, firstName + " " + lastName);
 		}
