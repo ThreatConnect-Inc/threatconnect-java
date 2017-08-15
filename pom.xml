@@ -46,31 +46,7 @@
 		<developerConnection>scm:git:git@github.com:ThreatConnect-Inc/threatconnect-java.git</developerConnection>
 	</scm>
 
-	<properties>
-		<dist.snapshot.id>tcnexus</dist.snapshot.id>
-		<dist.snapshot.url>http://git.c2int.com:8081/nexus/content/repositories/snapshots</dist.snapshot.url>
-		<dist.snapshot.url2>https://oss.sonatype.org/content/repositories/snapshots</dist.snapshot.url2>
-	</properties>
-
 	<profiles>
-		<profile>
-			<id>tcnexus</id>
-			<properties>
-				<dist.snapshot.id>tcnexus</dist.snapshot.id>
-				<dist.snapshot.url>http://git.c2int.com:8081/nexus/content/repositories/snapshots</dist.snapshot.url>
-				<dist.snapshot.url2>https://oss.sonatype.org/content/repositories/snapshots</dist.snapshot.url2>
-			</properties>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-		</profile>
-		<profile>
-			<id>ossrh</id>
-			<properties>
-				<dist.snapshot.id>ossrh</dist.snapshot.id>
-				<dist.snapshot.url>https://oss.sonatype.org/content/repositories/snapshots</dist.snapshot.url>
-			</properties>
-		</profile>
 		<profile>
 			<id>sign</id>
 			<build>
