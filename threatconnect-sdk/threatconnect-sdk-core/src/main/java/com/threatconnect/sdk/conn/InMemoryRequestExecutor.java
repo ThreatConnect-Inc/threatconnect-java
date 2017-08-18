@@ -6,6 +6,7 @@
 package com.threatconnect.sdk.conn;
 
 import com.threatconnect.sdk.util.UploadMethodType;
+import org.apache.http.HttpEntity;
 import org.apache.http.entity.ContentType;
 
 import java.io.IOException;
@@ -40,8 +41,22 @@ public class InMemoryRequestExecutor extends AbstractRequestExecutor
     {
         return null;
     }
-
-    @Override
+	
+	@Override
+	public String executeUpload(final String path, final HttpEntity httpEntity, final UploadMethodType uploadMethodType)
+		throws IOException
+	{
+		return null;
+	}
+	
+	@Override
+	public String executeUpload(final String path, final HttpEntity requestEntity,
+		final UploadMethodType uploadMethodType, final String contentType) throws IOException
+	{
+		return null;
+	}
+	
+	@Override
     public InputStream executeDownloadByteStream(String path, ContentType contentType) throws IOException
     {
         return null;

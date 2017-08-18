@@ -69,7 +69,7 @@ public class BatchApiSaveService implements SaveService
 		try
 		{
 			// create a new batch indicator writer
-			BatchWriter batchWriter = new BatchWriter(connection, items);
+			BatchWriter batchWriter = createBatchWriter(connection, items);
 			
 			// save the indicators
 			SaveResults batchSaveResults = batchWriter.save(ownerName, attributeWriteType);
@@ -106,7 +106,7 @@ public class BatchApiSaveService implements SaveService
 		try
 		{
 			// create a new batch indicator writer
-			BatchWriter batchWriter = new BatchWriter(connection, indicators);
+			BatchWriter batchWriter = createBatchWriter(connection, indicators);
 			
 			// delete the indicators
 			return batchWriter.deleteIndicators(ownerName);
@@ -118,5 +118,10 @@ public class BatchApiSaveService implements SaveService
 			saveResults.addFailedItems(ItemType.INDICATOR, indicators.size());
 			return saveResults;
 		}
+	}
+	
+	protected BatchWriter createBatchWriter(final Connection connection, final Collection<? extends Item> source)
+	{
+		return new BatchWriter(connection, source);
 	}
 }

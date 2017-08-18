@@ -165,7 +165,7 @@ public class BatchWriter extends Writer
 		return saveResults;
 	}
 	
-	private BatchUploadResponse uploadIndicators(final JsonElement json,
+	protected BatchUploadResponse uploadIndicators(final JsonElement json,
 		final String ownerName, final AttributeWriteType attributeWriteType, final Action action, int batchIndex,
 		int batchTotal, BatchConfig.Version version) throws SaveItemFailedException, IOException
 	{
@@ -189,7 +189,7 @@ public class BatchWriter extends Writer
 			if (batchConfigResponse.isSuccess())
 			{
 				// retrieve the batch id and upload the file
-				int batchID = batchConfigResponse.getItem();
+				Integer batchID = batchConfigResponse.getItem();
 				ApiEntitySingleResponse<?, ?> batchUploadResponse =
 					batchWriterAdapter.uploadFile(batchID, jsonToInputStream(json), UploadMethodType.POST);
 				return new BatchUploadResponse(batchID, batchUploadResponse);
@@ -211,79 +211,89 @@ public class BatchWriter extends Writer
 		// check to see if the response was successful
 		if (batchUploadResponse.getResponse().isSuccess())
 		{
-			boolean processing = true;
-			long delay = POLL_INITIAL_DELAY;
+			Integer batchID = batchUploadResponse.getBatchID();
 			
-			// create the batch reader object
-			BatchReaderAdapter<com.threatconnect.sdk.server.entity.Indicator> batchReaderAdapter =
-				createReaderAdapter();
-			
-			// holds the response object
-			ApiEntitySingleResponse<BatchStatus, BatchStatusResponseData> batchStatusResponse = null;
-			
-			// continue while the batch job is still processing
-			while (processing)
+			//make sure the batch id is not null
+			if (null != batchID)
 			{
-				try
-				{
-					logger.debug("Waiting {}ms for batch job {}/{}: {}", delay, batchIndex, batchTotal,
-						batchUploadResponse.getBatchID());
-					Thread.sleep(delay);
-				}
-				catch (InterruptedException e)
-				{
-					throw new IOException(e);
-				}
+				boolean processing = true;
+				long delay = POLL_INITIAL_DELAY;
 				
-				// check the status of the batch job
-				batchStatusResponse = batchReaderAdapter.getStatus(batchUploadResponse.getBatchID(), ownerName);
-				Status status = batchStatusResponse.getItem().getStatus();
+				// create the batch reader object
+				BatchReaderAdapter<com.threatconnect.sdk.server.entity.Indicator> batchReaderAdapter =
+					createReaderAdapter();
 				
-				// this job is still considered processing as long as the status is not
-				// completed
-				processing = (status != Status.Completed);
+				// holds the response object
+				ApiEntitySingleResponse<BatchStatus, BatchStatusResponseData> batchStatusResponse = null;
 				
-				// make sure the delay is less than the maximum
-				if (delay < POLL_MAX_DELAY)
-				{
-					// increment the delay
-					delay *= 2;
-				}
-				
-				// make sure that the delay does not exceed the maximum
-				if (delay > POLL_MAX_DELAY)
-				{
-					delay = POLL_MAX_DELAY;
-				}
-			}
-			
-			// make sure the response is not null
-			if (null != batchStatusResponse)
-			{
-				// check to see if there are errors
-				if (batchStatusResponse.getItem().getErrorCount() > 0)
+				// continue while the batch job is still processing
+				while (processing)
 				{
 					try
 					{
-						ByteArrayOutputStream baos = new ByteArrayOutputStream();
-						batchReaderAdapter.downloadErrors(batchUploadResponse.getBatchID(), ownerName, baos);
-						logger.warn(new String(baos.toByteArray()));
+						logger.debug("Waiting {}ms for batch job {}/{}: {}", delay, batchIndex, batchTotal, batchID);
+						Thread.sleep(delay);
 					}
-					catch (FailedResponseException e)
+					catch (InterruptedException e)
 					{
-						logger.warn(e.getMessage(), e);
+						throw new IOException(e);
+					}
+					
+					// check the status of the batch job
+					batchStatusResponse = batchReaderAdapter.getStatus(batchID, ownerName);
+					Status status = batchStatusResponse.getItem().getStatus();
+					
+					// this job is still considered processing as long as the status is not
+					// completed
+					processing = (status != Status.Completed);
+					
+					// make sure the delay is less than the maximum
+					if (delay < POLL_MAX_DELAY)
+					{
+						// increment the delay
+						delay *= 2;
+					}
+					
+					// make sure that the delay does not exceed the maximum
+					if (delay > POLL_MAX_DELAY)
+					{
+						delay = POLL_MAX_DELAY;
 					}
 				}
 				
-				// create a new save result
-				SaveResults saveResults = new SaveResults();
-				saveResults.addFailedItems(ItemType.INDICATOR, batchStatusResponse.getItem().getErrorCount());
-				return saveResults;
+				// make sure the response is not null
+				if (null != batchStatusResponse)
+				{
+					// check to see if there are errors
+					if (batchStatusResponse.getItem().getErrorCount() > 0)
+					{
+						try
+						{
+							ByteArrayOutputStream baos = new ByteArrayOutputStream();
+							batchReaderAdapter.downloadErrors(batchUploadResponse.getBatchID(), ownerName, baos);
+							logger.warn(new String(baos.toByteArray()));
+						}
+						catch (FailedResponseException e)
+						{
+							logger.warn(e.getMessage(), e);
+						}
+					}
+					
+					// create a new save result
+					SaveResults saveResults = new SaveResults();
+					saveResults.addFailedItems(ItemType.INDICATOR, batchStatusResponse.getItem().getErrorCount());
+					return saveResults;
+				}
+				else
+				{
+					// this should never happen
+					throw new IllegalStateException();
+				}
 			}
 			else
 			{
-				// this should never happen
-				throw new IllegalStateException();
+				//:TODO: is this how we want to handle this situation?
+				return new SaveResults();
 			}
 		}
 		else
@@ -323,18 +333,18 @@ public class BatchWriter extends Writer
 		this.indicatorLimitPerBatch = indicatorLimitPerBatch;
 	}
 	
-	private class BatchUploadResponse
+	protected class BatchUploadResponse
 	{
-		private final int batchID;
+		private final Integer batchID;
 		private final ApiEntitySingleResponse<?, ?> response;
 		
-		public BatchUploadResponse(final int batchID, final ApiEntitySingleResponse<?, ?> response)
+		public BatchUploadResponse(final Integer batchID, final ApiEntitySingleResponse<?, ?> response)
 		{
 			this.batchID = batchID;
 			this.response = response;
 		}
 		
-		public int getBatchID()
+		public Integer getBatchID()
 		{
 			return batchID;
 		}
