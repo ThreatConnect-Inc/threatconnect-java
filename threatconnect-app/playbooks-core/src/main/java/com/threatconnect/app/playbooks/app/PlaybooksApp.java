@@ -141,7 +141,7 @@ public abstract class PlaybooksApp extends App
 			else
 			{
 				//since its not a variable, it can just be a literal string so we should check if the expected type is a string
-				return StandardPlaybookType.String.equals(type);
+				return StandardPlaybookType.String.toString().equalsIgnoreCase(type);
 			}
 		}
 		else
