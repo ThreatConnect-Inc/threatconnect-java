@@ -9,14 +9,15 @@ import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
 import com.threatconnect.sdk.client.writer.AbstractBatchWriterAdapter;
 import com.threatconnect.sdk.client.writer.WriterAdapterFactory;
 import com.threatconnect.sdk.conn.Connection;
+import com.threatconnect.sdk.conn.exception.HttpResourceNotFoundException;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.model.Group;
 import com.threatconnect.sdk.model.Indicator;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.ItemType;
+import com.threatconnect.sdk.model.serialize.BatchItemSerializer;
 import com.threatconnect.sdk.model.util.ItemUtil;
 import com.threatconnect.sdk.parser.service.bulk.BulkIndicatorConverter;
-import com.threatconnect.sdk.model.serialize.BatchItemSerializer;
 import com.threatconnect.sdk.parser.service.save.SaveItemFailedException;
 import com.threatconnect.sdk.parser.service.save.SaveResults;
 import com.threatconnect.sdk.server.entity.BatchConfig;
@@ -264,20 +265,8 @@ public class BatchWriter extends Writer
 				// make sure the response is not null
 				if (null != batchStatusResponse)
 				{
-					// check to see if there are errors
-					if (batchStatusResponse.getItem().getErrorCount() > 0)
-					{
-						try
-						{
-							ByteArrayOutputStream baos = new ByteArrayOutputStream();
-							batchReaderAdapter.downloadErrors(batchUploadResponse.getBatchID(), ownerName, baos);
-							logger.warn(new String(baos.toByteArray()));
-						}
-						catch (FailedResponseException e)
-						{
-							logger.warn(e.getMessage(), e);
-						}
-					}
+					//download the batch errors for this job
+					downloadBatchErrors(batchUploadResponse, batchStatusResponse, batchReaderAdapter, ownerName, true);
 					
 					// create a new save result
 					SaveResults saveResults = new SaveResults();
@@ -299,6 +288,52 @@ public class BatchWriter extends Writer
 		else
 		{
 			throw new SaveItemFailedException(batchUploadResponse.getResponse().getMessage());
+		}
+	}
+	
+	private void downloadBatchErrors(
+		final BatchUploadResponse batchUploadResponse,
+		final ApiEntitySingleResponse<BatchStatus, BatchStatusResponseData> batchStatusResponse,
+		final BatchReaderAdapter<com.threatconnect.sdk.server.entity.Indicator> batchReaderAdapter,
+		final String ownerName,
+		final boolean allowRetry)
+	{
+		// check to see if there are errors
+		if (batchStatusResponse.getItem().getErrorCount() > 0)
+		{
+			try
+			{
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				batchReaderAdapter.downloadErrors(batchUploadResponse.getBatchID(), ownerName, baos);
+				logger.warn(new String(baos.toByteArray()));
+			}
+			catch (HttpResourceNotFoundException e)
+			{
+				//check to see if a retry is allowed
+				if (allowRetry)
+				{
+					try
+					{
+						//sleep for 5 seconds before trying again
+						logger.info("Batch Errors not yet available. Waiting 5 seconds and trying again.");
+						Thread.sleep(5000);
+					}
+					catch (InterruptedException e1)
+					{
+						logger.warn(e1.getMessage(), e1);
+					}
+					
+					downloadBatchErrors(batchUploadResponse, batchStatusResponse, batchReaderAdapter, ownerName, false);
+				}
+				else
+				{
+					logger.warn(e.getMessage(), e);
+				}
+			}
+			catch (FailedResponseException e)
+			{
+				logger.warn(e.getMessage(), e);
+			}
 		}
 	}
 	
