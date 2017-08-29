@@ -18,6 +18,7 @@ public class Install
 	private String programIcon;
 	private String javaClasspath;
 	private boolean allowOnDemand;
+	private boolean allowRunAsUser;
 	private boolean apiUserTokenParam;
 	private Integer tokenExpireOffsetMinutes;
 	private String note;
@@ -149,6 +150,16 @@ public class Install
 	public void setAllowOnDemand(final boolean allowOnDemand)
 	{
 		this.allowOnDemand = allowOnDemand;
+	}
+	
+	public boolean isAllowRunAsUser()
+	{
+		return allowRunAsUser;
+	}
+	
+	public void setAllowRunAsUser(final boolean allowRunAsUser)
+	{
+		this.allowRunAsUser = allowRunAsUser;
 	}
 	
 	public boolean isApiUserTokenParam()
