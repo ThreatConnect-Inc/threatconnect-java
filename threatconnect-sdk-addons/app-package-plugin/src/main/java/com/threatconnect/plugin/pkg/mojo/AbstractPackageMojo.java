@@ -2,17 +2,11 @@ package com.threatconnect.plugin.pkg.mojo;
 
 import com.threatconnect.app.addons.util.config.InvalidCsvFileException;
 import com.threatconnect.app.addons.util.config.InvalidJsonFileException;
-import com.threatconnect.app.addons.util.config.attribute.AttributeReaderUtil;
-import com.threatconnect.app.addons.util.config.install.Feed;
-import com.threatconnect.app.addons.util.config.install.Install;
-import com.threatconnect.app.addons.util.config.install.InstallUtil;
 import com.threatconnect.app.addons.util.config.validation.ValidationException;
 import com.threatconnect.plugin.pkg.PackageFileFilter;
 import com.threatconnect.plugin.pkg.Profile;
 import com.threatconnect.plugin.pkg.ZipUtil;
 import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.plexus.util.FileUtils;
 import org.slf4j.Logger;
@@ -26,13 +20,21 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class AbstractPackageMojo extends AbstractMojo
+public abstract class AbstractPackageMojo<T> extends AbstractMojo
 {
 	private static final Logger logger = LoggerFactory.getLogger(AbstractPackageMojo.class);
 	
-	public static final Pattern PATTERN_INSTALL_JSON = Pattern.compile("^(?:(.*)\\.)?install\\.json$");
-	public static final String TC_APP_FILE_EXTENSION = "zip";
-	public static final String TC_BUNDLED_FILE_EXTENSION = "bundle.zip";
+	private final Pattern profilePattern;
+	private final String primaryJsonFileName;
+	private final String packageExtension;
+	
+	public AbstractPackageMojo(final Pattern profilePattern, final String primaryJsonFileName,
+		final String packageExtension)
+	{
+		this.profilePattern = profilePattern;
+		this.primaryJsonFileName = primaryJsonFileName;
+		this.packageExtension = packageExtension;
+	}
 	
 	/**
 	 * The base directory for the application
@@ -61,59 +63,6 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	@Parameter
 	private String[] exclude;
 	
-	@Override
-	public void execute() throws MojoExecutionException, MojoFailureException
-	{
-		getLog().info("Building ThreatConnect App file");
-		
-		try
-		{
-			// retrieve the list of profiles
-			List<Profile> profiles = getProfiles();
-			List<File> packagedApps = new ArrayList<File>();
-			
-			// check to see if there are any profiles
-			if (!profiles.isEmpty())
-			{
-				// for each of the profiles
-				for (Profile profile : profiles)
-				{
-					// package an app profile
-					packagedApps.add(packageProfile(profile));
-				}
-				
-				//check to see if there are multiple profiles
-				if (profiles.size() > 1)
-				{
-					//build a bundled archive of all the apps
-					buildBundledArchive(packagedApps);
-				}
-			}
-			else
-			{
-				// package a legacy app (no install.json file)
-				packageLegacy();
-			}
-		}
-		catch (InvalidJsonFileException | ValidationException | IOException | InvalidCsvFileException e)
-		{
-			throw new MojoFailureException(e.getMessage(), e);
-		}
-	}
-	
-	/**
-	 * Given a list of packed app files, this builds a bundled archive containing all of them
-	 *
-	 * @param packagedApps
-	 */
-	protected void buildBundledArchive(final List<File> packagedApps) throws IOException
-	{
-		File bundledFile =
-			new File(getOutputDirectory() + File.separator + getAppName() + "." + TC_BUNDLED_FILE_EXTENSION);
-		getLog().info("Packaging Bundle " + bundledFile.getName());
-		ZipUtil.zipFiles(packagedApps, bundledFile.getAbsolutePath());
-	}
-	
 	/**
 	 * Packages a profile. A profile is determined by an install.json file. If multiple install.json
 	 * files are found, they are each built using their profile name. Otherwise, if only an
@@ -122,7 +71,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	 * @param profile
 	 * @throws IOException
 	 */
-	protected File packageProfile(final Profile profile)
+	protected File packageProfile(final Profile<T> profile)
 		throws IOException, ValidationException, InvalidCsvFileException
 	{
 		// determine what this app name will be
@@ -133,9 +82,9 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 		File explodedDir = getExplodedDir(appName);
 		explodedDir.mkdirs();
 		
-		// copy the install.json file
-		File installJsonDestination = new File(explodedDir.getAbsolutePath() + File.separator + "install.json");
-		FileUtils.copyFile(profile.getInstallFile(), installJsonDestination);
+		// copy the primary json file
+		File primaryJsonDestination = new File(explodedDir.getAbsolutePath() + File.separator + primaryJsonFileName);
+		FileUtils.copyFile(profile.getSourceFile(), primaryJsonDestination);
 		
 		// write the rest of the app contents out to the target folder
 		writeAppContentsToDirectory(explodedDir);
@@ -147,27 +96,7 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 		validateReferencedFiles(explodedDir, profile);
 		
 		// zip up the app and return the file of the packaged app
-		return ZipUtil.zipFolder(explodedDir, TC_APP_FILE_EXTENSION);
-	}
-	
-	/**
-	 * Packages a legacy app which consists of an install.conf file.
-	 *
-	 * @throws IOException
-	 */
-	protected void packageLegacy() throws IOException
-	{
-		File explodedDir = getExplodedDir(determineAppName(null));
-		explodedDir.mkdirs();
-		
-		// copy the install conf file if it exists
-		copyFileToDirectoryIfExists(getInstallConfFile(), explodedDir);
-		
-		// write the rest of the app contents out to the target folder
-		writeAppContentsToDirectory(explodedDir);
-		
-		// zip up the app
-		ZipUtil.zipFolder(explodedDir, TC_APP_FILE_EXTENSION);
+		return ZipUtil.zipFolder(explodedDir, packageExtension);
 	}
 	
 	/**
@@ -178,45 +107,32 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	 * @param profile
 	 * @return
 	 */
-	protected String determineAppName(final Profile profile)
+	protected String determineAppName(final Profile<T> profile)
 	{
 		String appName;
 		
 		// first check to see if the profile is not null
 		if (null != profile)
 		{
-			// retrieve the application name and program version from the install.json file
-			final String applicationName = profile.getInstall().getApplicationName();
-			final String programVersion = profile.getInstall().getProgramVersion();
-			
-			// make sure that both the application name and program version are valid
-			if (null != applicationName && !applicationName.trim().isEmpty() && null != programVersion
-				&& !programVersion.trim().isEmpty())
+			// check to see if a valid profile name exists
+			if (null != profile.getProfileName() && !profile.getProfileName().trim().isEmpty())
 			{
-				appName = applicationName + "_v" + programVersion;
+				appName = profile.getProfileName();
+				
+				// check to see if the app name needs the version
+				if (!appName.endsWith(getVersion()))
+				{
+					appName = appName + "_v" + getVersion();
+				}
+			}
+			// check to see if the app name does not already contain the version at the end
+			else if (!getAppName().endsWith(getVersion()))
+			{
+				appName = getAppName() + "_v" + getVersion();
 			}
 			else
 			{
-				// check to see if a valid profile name exists
-				if (null != profile.getProfileName() && !profile.getProfileName().trim().isEmpty())
-				{
-					appName = profile.getProfileName();
-					
-					// check to see if the app name needs the version
-					if (!appName.endsWith(getVersion()))
-					{
-						appName = appName + "_v" + getVersion();
-					}
-				}
-				// check to see if the app name does not already contain the version at the end
-				else if (!getAppName().endsWith(getVersion()))
-				{
-					appName = getAppName() + "_v" + getVersion();
-				}
-				else
-				{
-					appName = getAppName();
-				}
+				appName = getAppName();
 			}
 		}
 		// there is not profile object
@@ -233,13 +149,13 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	 *
 	 * @return
 	 */
-	protected List<Profile> getProfiles() throws InvalidJsonFileException, IOException, ValidationException
+	protected List<Profile<T>> getProfiles() throws InvalidJsonFileException, IOException, ValidationException
 	{
 		// holds the list of install
-		List<Profile> profiles = new ArrayList<Profile>();
+		List<Profile<T>> profiles = new ArrayList<Profile<T>>();
 		
 		// retrieve the base directory file
-		File root = new File(baseDirectory);
+		File root = new File(getBaseDirectory());
 		
 		// for each file in the root
 		for (File file : root.listFiles())
@@ -248,19 +164,19 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 			if (file.isFile())
 			{
 				// retrieve the matcher for this filename
-				Matcher matcher = PATTERN_INSTALL_JSON.matcher(file.getName());
+				Matcher matcher = profilePattern.matcher(file.getName());
 				
-				// make sure this is an install file
+				// make sure this is a valid profile file
 				if (matcher.matches())
 				{
-					// retrieve the profile name for this install file
+					// retrieve the profile name for this profile file
 					final String profileName = matcher.group(1);
 					
-					// create the install json object
-					Install install = InstallUtil.load(file);
+					// create the json object
+					T source = loadFile(file);
 					
 					// create a new profile
-					Profile profile = new Profile(profileName, file, install);
+					Profile<T> profile = new Profile<T>(profileName, file, source);
 					profiles.add(profile);
 				}
 			}
@@ -269,50 +185,13 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 		return profiles;
 	}
 	
-	protected void validateRequiredFiles(File explodedDir, final Profile profile)
-		throws ValidationException
-	{
-		File readmeFile = getReadmeFile();
-		if (!readmeFile.exists())
-		{
-			throw new ValidationException(generateRequiredFileMissingMessage(readmeFile.getName()));
-		}
-	}
+	protected abstract T loadFile(final File file) throws IOException, ValidationException;
 	
-	protected void validateReferencedFiles(File explodedDir, final Profile profile)
-		throws ValidationException, InvalidCsvFileException
-	{
-		//for each of the feeds in the install object
-		for (Feed feed : profile.getInstall().getFeeds())
-		{
-			//check to see if there is an attribute file
-			if (null != feed.getAttributesFile())
-			{
-				//make sure this file exists or throw an exception
-				File file = new File(explodedDir.getAbsolutePath() + File.separator + feed.getAttributesFile());
-				if (!file.exists())
-				{
-					throw new ValidationException(generateReferencedFileMissingMessage(feed.getAttributesFile()));
-				}
-				else
-				{
-					//load the attributes file and validate it
-					AttributeReaderUtil.read(file);
-				}
-			}
-			
-			//check to see if there is a job file
-			if (null != feed.getJobFile())
-			{
-				//make sure this file exists or throw an exception
-				File file = new File(explodedDir.getAbsolutePath() + File.separator + feed.getJobFile());
-				if (!file.exists())
-				{
-					throw new ValidationException(generateReferencedFileMissingMessage(feed.getJobFile()));
-				}
-			}
-		}
-	}
+	protected abstract void validateRequiredFiles(File explodedDir, final Profile<T> profile)
+		throws ValidationException;
+	
+	protected abstract void validateReferencedFiles(File explodedDir, final Profile<T> profile)
+		throws ValidationException, InvalidCsvFileException;
 	
 	protected String generateRequiredFileMissingMessage(final String fileName)
 	{
@@ -322,11 +201,6 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 	protected String generateReferencedFileMissingMessage(final String fileName)
 	{
 		return "Referenced file \"" + fileName + " does not exist. Make sure it is in the correct directory.";
-	}
-	
-	protected File getInstallConfFile()
-	{
-		return new File(baseDirectory + File.separator + "install.conf");
 	}
 	
 	protected File getExplodedDir(final String appName)
@@ -383,11 +257,6 @@ public abstract class AbstractPackageMojo extends AbstractMojo
 				copyFileToDirectory(source, destinationDirectory);
 			}
 		}
-	}
-	
-	protected File getReadmeFile()
-	{
-		return new File(getBaseDirectory() + File.separator + "README.md");
 	}
 	
 	protected PackageFileFilter createPackageFileFilter()

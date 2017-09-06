@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.regex.Pattern;
 
 @Mojo(name = "java-package", defaultPhase = LifecyclePhase.PACKAGE, threadSafe = true, requiresDependencyResolution = ResolutionScope.RUNTIME)
-public class JavaPackageMojo extends AbstractPackageMojo
+public class JavaPackageMojo extends AbstractAppPackageMojo
 {
 	public static final Pattern PATTERN_INSTALL_JSON = Pattern.compile("^(?:(.*)\\.)?install\\.json$");
 	

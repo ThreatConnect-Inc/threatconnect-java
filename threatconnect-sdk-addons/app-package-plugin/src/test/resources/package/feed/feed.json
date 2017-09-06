@@ -1,0 +1,9 @@
+{
+  "sourceName": "ThreatConnect Intelligence",
+  "sourceCategory": "ThreatConnect",
+  "sourceDescription": "ThreatConnect Intelligence is a premium intelligence source focused on criminal and nation-state threats produced by the ThreatConnect Research Team.",
+  "enableBulkJson": true,
+  "indicatorLimit": 200000,
+  "documentStorageLimitMb": 3000,
+  "jobFile": "tcintel.job.json"
+}

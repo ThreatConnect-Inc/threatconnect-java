@@ -1,21 +1,18 @@
 package com.threatconnect.plugin.pkg;
 
-import com.threatconnect.app.addons.util.config.install.Install;
-
 import java.io.File;
 
-
-public class Profile
+public class Profile<T>
 {
 	private final String profileName;
-	private final File installFile;
-	private final Install install;
+	private final File sourceFile;
+	private final T obj;
 	
-	public Profile(final String profileName, final File installFile, final Install install)
+	public Profile(final String profileName, final File sourceFile, final T obj)
 	{
 		this.profileName = profileName;
-		this.installFile = installFile;
-		this.install = install;
+		this.sourceFile = sourceFile;
+		this.obj = obj;
 	}
 	
 	public String getProfileName()
@@ -23,13 +20,13 @@ public class Profile
 		return profileName;
 	}
 	
-	public File getInstallFile()
+	public File getSourceFile()
 	{
-		return installFile;
+		return sourceFile;
 	}
 	
-	public Install getInstall()
+	public T getSource()
 	{
-		return install;
+		return obj;
 	}
 }

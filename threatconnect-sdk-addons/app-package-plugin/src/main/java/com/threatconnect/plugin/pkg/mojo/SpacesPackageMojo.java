@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 
 @Mojo(name = "spaces-package", defaultPhase = LifecyclePhase.PACKAGE, threadSafe = true, requiresDependencyResolution = ResolutionScope.RUNTIME)
-public class SpacesPackageMojo extends AbstractPackageMojo
+public class SpacesPackageMojo extends AbstractAppPackageMojo
 {
 	@Override
 	protected void writeAppContentsToDirectory(File targetDirectory) throws IOException
