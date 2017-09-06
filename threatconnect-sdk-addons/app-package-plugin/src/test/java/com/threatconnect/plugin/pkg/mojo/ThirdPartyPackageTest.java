@@ -47,7 +47,7 @@ public class ThirdPartyPackageTest
 	
 	private void assertExcludes()
 	{
-		File root = new File("target/package/ThirdPartyPackageTest_v1.0");
+		File root = new File("target/package/thirdparty/ThirdPartyPackageTest_v1.0");
 		Assert.assertTrue(root.exists());
 		Assert.assertTrue(root.isDirectory());
 		

@@ -22,7 +22,7 @@
 				</executions>
 				<configuration>
 					<baseDirectory>src/test/resources/package/thirdparty</baseDirectory>
-					<outputDirectory>target/package</outputDirectory>
+					<outputDirectory>target/package/thirdparty</outputDirectory>
 					<appName>ThirdPartyPackageTest</appName>
 					<version>1.0</version>
 				</configuration>

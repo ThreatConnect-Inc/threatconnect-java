@@ -47,7 +47,7 @@ public class PythonPackageTest
 	
 	private void assertExcludes()
 	{
-		File root = new File("target/package/PythonPackageTest_v1.0");
+		File root = new File("target/package/python/PythonPackageTest_v1.0");
 		Assert.assertTrue(root.exists());
 		Assert.assertTrue(root.isDirectory());
 		

@@ -22,7 +22,7 @@
 				</executions>
 				<configuration>
 					<baseDirectory>src/test/resources/package/python</baseDirectory>
-					<outputDirectory>target/package</outputDirectory>
+					<outputDirectory>target/package/python</outputDirectory>
 					<appName>PythonPackageTest</appName>
 					<version>1.0</version>
 					<exclude>custom.exclude</exclude>

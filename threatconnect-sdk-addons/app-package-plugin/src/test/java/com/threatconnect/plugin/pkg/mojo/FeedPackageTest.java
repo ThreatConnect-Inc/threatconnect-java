@@ -47,7 +47,7 @@ public class FeedPackageTest
 	
 	private void assertExcludes()
 	{
-		File root = new File("target/package/FeedPackageTest_v1.0");
+		File root = new File("target/package/feed/FeedPackageTest_v1.0");
 		Assert.assertTrue(root.exists());
 		Assert.assertTrue(root.isDirectory());
 		
