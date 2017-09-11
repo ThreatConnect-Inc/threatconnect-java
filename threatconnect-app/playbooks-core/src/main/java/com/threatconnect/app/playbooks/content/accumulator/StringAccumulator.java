@@ -1,6 +1,6 @@
 package com.threatconnect.app.playbooks.content.accumulator;
 
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.app.playbooks.content.converter.StringConverter;
 import com.threatconnect.app.playbooks.db.DBService;
 import com.threatconnect.app.playbooks.util.PlaybooksVariableUtil;
@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 /**
  * @author Greg Marut
  */
-public class StringAccumulator extends ContentAccumulator<String>
+public class StringAccumulator extends TypedContentAccumulator<String>
 {
 	private static final Logger logger = LoggerFactory.getLogger(StringAccumulator.class);
 	
@@ -23,7 +23,7 @@ public class StringAccumulator extends ContentAccumulator<String>
 	
 	public StringAccumulator(final DBService dbService)
 	{
-		super(dbService, PlaybookVariableType.String, new StringConverter());
+		super(dbService, StandardPlaybookType.String, new StringConverter());
 	}
 	
 	@Override

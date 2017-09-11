@@ -1,6 +1,6 @@
 package com.threatconnect.app.playbooks.content.accumulator;
 
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.app.playbooks.content.converter.KeyValueConverter;
 import com.threatconnect.app.playbooks.content.entity.KeyValue;
 import com.threatconnect.app.playbooks.db.DBService;
@@ -9,13 +9,13 @@ import com.threatconnect.app.playbooks.util.KeyValueUtil;
 /**
  * @author Greg Marut
  */
-public class KeyValueAccumulator extends ContentAccumulator<KeyValue>
+public class KeyValueAccumulator extends TypedContentAccumulator<KeyValue>
 {
 	private final StringAccumulator stringAccumulator;
 	
 	public KeyValueAccumulator(final DBService dbService)
 	{
-		super(dbService, PlaybookVariableType.KeyValue, new KeyValueConverter());
+		super(dbService, StandardPlaybookType.KeyValue, new KeyValueConverter());
 		this.stringAccumulator = new StringAccumulator(dbService);
 	}
 	

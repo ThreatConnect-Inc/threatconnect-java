@@ -1,8 +1,8 @@
 package com.threatconnect.apps.playbooks.test.app3;
 
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.apps.playbooks.test.config.PlaybooksTestConfiguration;
 import com.threatconnect.apps.playbooks.test.orc.PlaybooksOrchestrationBuilder;
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,9 +35,9 @@ public class App3Test
 					.asString(App3.PARAM_INPUT_CONCAT,"one,two,three")
 				.then()
 				.onSuccess().assertOutput()
-					.assertNotNull(App3.PARAM_OUTPUT_SPLIT, PlaybookVariableType.StringArray)
-					.assertStringArraySize(App3.PARAM_OUTPUT_SPLIT, PlaybookVariableType.StringArray, 3)
-					.assertStringArrayEquals(App3.PARAM_OUTPUT_SPLIT, PlaybookVariableType.StringArray, Arrays.asList("one", "two", "three"))
+					.assertNotNull(App3.PARAM_OUTPUT_SPLIT, StandardPlaybookType.StringArray)
+					.assertStringArraySize(App3.PARAM_OUTPUT_SPLIT, StandardPlaybookType.StringArray, 3)
+					.assertStringArrayEquals(App3.PARAM_OUTPUT_SPLIT, StandardPlaybookType.StringArray, Arrays.asList("one", "two", "three"))
 				.then()
 			//execute the apps
 			.build().run();

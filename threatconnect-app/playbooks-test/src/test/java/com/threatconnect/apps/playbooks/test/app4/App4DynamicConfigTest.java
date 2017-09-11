@@ -1,7 +1,7 @@
 package com.threatconnect.apps.playbooks.test.app4;
 
 import com.threatconnect.app.addons.util.config.install.ParamDataType;
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.apps.playbooks.test.config.PlaybooksTestConfiguration;
 import com.threatconnect.apps.playbooks.test.orc.PlaybooksOrchestrationBuilder;
 import org.junit.Before;
@@ -21,9 +21,9 @@ public class App4DynamicConfigTest
 		//build the dynamic configuration for this app
 		PlaybooksTestConfiguration.getInstance()
 			.createPlaybookConfigBuilder(App4DynamicConfig.class)
-				.addPlaybookParam(App4DynamicConfig.PARAM_INPUT_FIRST_NAME, ParamDataType.String, PlaybookVariableType.String)
-				.addPlaybookParam(App4DynamicConfig.PARAM_INPUT_LAST_NAME, ParamDataType.String, PlaybookVariableType.String)
-				.addOutputVariable(App4DynamicConfig.OUTPUT_NAME, PlaybookVariableType.String)
+				.addPlaybookParam(App4DynamicConfig.PARAM_INPUT_FIRST_NAME, ParamDataType.String, StandardPlaybookType.String)
+				.addPlaybookParam(App4DynamicConfig.PARAM_INPUT_LAST_NAME, ParamDataType.String, StandardPlaybookType.String)
+				.addOutputVariable(App4DynamicConfig.OUTPUT_NAME, StandardPlaybookType.String)
 			.build();
 		//@formatter:on
 	}
@@ -40,7 +40,7 @@ public class App4DynamicConfigTest
 					.asString(App4DynamicConfig.PARAM_INPUT_LAST_NAME, "Marut")
 				.then()
 				.onSuccess().assertOutput()
-					.assertEquals(App4DynamicConfig.OUTPUT_NAME, PlaybookVariableType.String, "Greg Marut")
+					.assertEquals(App4DynamicConfig.OUTPUT_NAME, StandardPlaybookType.String, "Greg Marut")
 				.then()
 			//execute the apps
 			.build().run();

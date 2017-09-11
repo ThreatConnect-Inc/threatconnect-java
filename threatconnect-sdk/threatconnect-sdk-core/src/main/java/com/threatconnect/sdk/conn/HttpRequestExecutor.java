@@ -313,9 +313,23 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 		}
 		return stream;
 	}
-
+	
 	@Override
 	public String executeUploadByteStream(String path, InputStream inputStream, UploadMethodType uploadMethodType)
+		throws IOException
+	{
+		return executeUpload(path, new InputStreamEntity(inputStream), uploadMethodType);
+	}
+	
+	@Override
+	public String executeUpload(String path, HttpEntity requestEntity, UploadMethodType uploadMethodType)
+		throws IOException
+	{
+		return executeUpload(path, requestEntity, uploadMethodType, ContentType.APPLICATION_OCTET_STREAM.toString());
+	}
+	
+	@Override
+	public String executeUpload(String path, HttpEntity requestEntity, UploadMethodType uploadMethodType, String contentType)
 		throws IOException
 	{
 		if (this.conn.getConfig() == null)
@@ -338,10 +352,9 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 			httpBase = new HttpPut(fullPath);
 		}
 
-		httpBase.setEntity(new InputStreamEntity(inputStream));
+		httpBase.setEntity(requestEntity);
 		String headerPath = httpBase.getURI().getRawPath() + "?" + httpBase.getURI().getRawQuery();
-		ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), headerPath,
-			ContentType.APPLICATION_OCTET_STREAM.toString());
+		ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), headerPath, contentType);
 
 		logger.trace("Request: " + httpBase.getRequestLine());
 
@@ -349,14 +362,14 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 		String result = null;
 
 		logger.trace(response.getStatusLine().toString());
-		HttpEntity entity = response.getEntity();
-		if (entity != null)
+		HttpEntity responseEntity = response.getEntity();
+		if (responseEntity != null)
 		{
 			try
 			{
-				result = EntityUtils.toString(entity, "iso-8859-1");
+				result = EntityUtils.toString(responseEntity, "iso-8859-1");
 				logger.trace("Result:" + result);
-				EntityUtils.consume(entity);
+				EntityUtils.consume(responseEntity);
 			}
 			finally
 			{

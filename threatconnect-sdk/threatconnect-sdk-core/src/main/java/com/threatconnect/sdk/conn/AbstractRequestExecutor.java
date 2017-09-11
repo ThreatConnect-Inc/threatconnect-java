@@ -2,6 +2,7 @@ package com.threatconnect.sdk.conn;
 
 
 import com.threatconnect.sdk.util.UploadMethodType;
+import org.apache.http.HttpEntity;
 import org.apache.http.entity.ContentType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +38,8 @@ public abstract class AbstractRequestExecutor
 
     public abstract HttpResponse execute(String path, HttpMethod type, Object obj) throws IOException;
     public abstract HttpResponse execute(String path, HttpMethod type, Map<String, String> headers, Object ojb) throws IOException;
+    public abstract String executeUpload(String path, HttpEntity httpEntity, UploadMethodType uploadMethodType) throws IOException;
+    public abstract String executeUpload(String path, HttpEntity requestEntity, UploadMethodType uploadMethodType, String contentType) throws IOException;
     public abstract String executeUploadByteStream(String path, InputStream inputStream, UploadMethodType uploadMethodType) throws IOException;
     public abstract InputStream executeDownloadByteStream(String path, ContentType contentType) throws IOException;
 

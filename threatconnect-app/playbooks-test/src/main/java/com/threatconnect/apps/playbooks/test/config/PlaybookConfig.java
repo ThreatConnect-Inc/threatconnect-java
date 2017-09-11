@@ -2,9 +2,9 @@ package com.threatconnect.apps.playbooks.test.config;
 
 import com.threatconnect.app.addons.util.config.install.Install;
 import com.threatconnect.app.addons.util.config.install.Param;
-import com.threatconnect.app.addons.util.config.install.PlaybookOutputVariable;
 import com.threatconnect.app.addons.util.config.install.ParamDataType;
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.PlaybookOutputVariable;
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -110,7 +110,7 @@ public class PlaybookConfig
 		Param param = getInputParam(paramName);
 		
 		//for each of the playbook types
-		for (PlaybookVariableType playbookVariableType : param.getPlaybookDataType())
+		for (String playbookVariableType : param.getPlaybookDataType())
 		{
 			String variable = buildParam(this.appID, param.getName(), playbookVariableType);
 			results.add(variable);
@@ -119,7 +119,7 @@ public class PlaybookConfig
 		return results.toArray(new String[] {});
 	}
 	
-	public String createVariableForInputParam(final String paramName, final PlaybookVariableType type)
+	public String createVariableForInputParam(final String paramName, final String type)
 	{
 		Param param = getInputParam(paramName);
 		
@@ -128,7 +128,7 @@ public class PlaybookConfig
 		if (ParamDataType.KeyValueList.equals(param.getType()))
 		{
 			//check to see if this datatype matches
-			if (type.equals(PlaybookVariableType.KeyValueArray))
+			if (type.equalsIgnoreCase(StandardPlaybookType.KeyValueArray.toString()))
 			{
 				return buildParam(this.appID, param.getName(), type);
 			}
@@ -136,7 +136,7 @@ public class PlaybookConfig
 		else
 		{
 			//for each of the playbook types
-			for (PlaybookVariableType playbookVariableType : param.getPlaybookDataType())
+			for (String playbookVariableType : param.getPlaybookDataType())
 			{
 				//check to see if this datatype matches
 				if (type.equals(playbookVariableType))
@@ -147,10 +147,11 @@ public class PlaybookConfig
 		}
 		
 		throw new IllegalArgumentException(
-			"Cannot create input param variable. Invalid combination of paramName and type");
+			"Cannot create input param variable. Invalid combination of paramName and type: "
+				+ paramName + " - " + type);
 	}
 	
-	public String createVariableForOutputVariable(final String outputVariable, final PlaybookVariableType type)
+	public String createVariableForOutputVariable(final String outputVariable, final String type)
 	{
 		PlaybookOutputVariable playbookOutputVariable = getOutputVariable(outputVariable, type);
 		return buildParam(this.appID, playbookOutputVariable.getName(), playbookOutputVariable.getType());
@@ -171,7 +172,7 @@ public class PlaybookConfig
 		}
 	}
 	
-	public PlaybookOutputVariable getOutputVariable(final String outputVariable, final PlaybookVariableType type)
+	public PlaybookOutputVariable getOutputVariable(final String outputVariable, final String type)
 	{
 		//make sure this output param name exists
 		if (isValidOutputVariable(outputVariable, type))
@@ -181,7 +182,7 @@ public class PlaybookConfig
 		else
 		{
 			throw new InvalidParamException(
-				"\"" + outputVariable + "\" of type " + type.toString()
+				"\"" + outputVariable + "\" of type " + type
 					+ " is not a valid output variable for playbook app \"" + getPlaybookAppClass()
 					.getName() + "\"");
 		}
@@ -202,18 +203,18 @@ public class PlaybookConfig
 		return playbookParams.containsKey(paramName);
 	}
 	
-	public boolean isValidOutputVariable(final String outputVariable, final PlaybookVariableType type)
+	public boolean isValidOutputVariable(final String outputVariable, final String type)
 	{
 		return playbookOutputVariables.containsKey(buildPlaybookOutputVariableKey(outputVariable, type));
 	}
 	
-	private String buildPlaybookOutputVariableKey(final String outputVariable, final PlaybookVariableType type)
+	private String buildPlaybookOutputVariableKey(final String outputVariable, final String type)
 	{
-		return outputVariable + "!" + type.toString();
+		return outputVariable + "!" + type;
 	}
 	
-	private String buildParam(final int appID, final String paramName, final PlaybookVariableType paramType)
+	private String buildParam(final int appID, final String paramName, final String paramType)
 	{
-		return "#App:" + appID + ":" + paramName + "!" + paramType.toString();
+		return "#App:" + appID + ":" + paramName + "!" + paramType;
 	}
 }

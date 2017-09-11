@@ -1,6 +1,6 @@
 package com.threatconnect.apps.playbooks.test.orc;
 
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.ExitStatus;
 import com.threatconnect.app.apps.SystemPropertiesAppConfig;
@@ -217,109 +217,146 @@ public class PlaybookRunner implements Runnable
 	}
 	
 	private void writePlaybookParam(final PlaybooksOrchestration playbooksOrchestration,
-		final PlaybooksApp playbooksApp,
-		final Map.Entry<String, String> entry) throws ContentException
+		final PlaybooksApp playbooksApp, final Map.Entry<String, String> entry) throws ContentException
 	{
 		final String variable = entry.getValue();
-		PlaybookVariableType type = PlaybooksVariableUtil.extractVariableType(variable);
+		String type = PlaybooksVariableUtil.extractVariableType(variable);
 		
 		//retrieve the source and target content services for copying the data
 		ContentService source = playbooksOrchestration.getContentService();
 		ContentService target = playbooksApp.getContentService();
 		
-		switch (type)
+		if (StandardPlaybookType.String.toString().equalsIgnoreCase(type))
 		{
-			case String:
-				if (null != source.readString(variable))
-				{
-					target.writeString(variable, source.readString(variable));
-				}
-				else if (null == target.readString(variable))
-				{
-					throw new IllegalStateException(variable
-						+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
-				}
-				break;
-			case StringArray:
-				if (null != source.readStringList(variable))
-				{
-					target.writeStringList(variable, source.readStringList(variable));
-				}
-				else if (null == target.readStringList(variable))
-				{
-					throw new IllegalStateException(variable
-						+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
-				}
-				break;
-			case TCEntity:
-				if (null != source.readTCEntity(variable))
-				{
-					target.writeTCEntity(variable, source.readTCEntity(variable));
-				}
-				else if (null == target.readTCEntity(variable))
-				{
-					throw new IllegalStateException(variable
-						+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
-				}
-				break;
-			case TCEntityArray:
-				if (null != source.readTCEntityList(variable))
-				{
-					target.writeTCEntityList(variable, source.readTCEntityList(variable));
-				}
-				else if (null == target.readTCEntityList(variable))
-				{
-					throw new IllegalStateException(variable
-						+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
-				}
-				break;
-			case Binary:
-				if (null != source.readBinary(variable))
-				{
-					target.writeBinary(variable, source.readBinary(variable));
-				}
-				else if (null == target.readBinary(variable))
-				{
-					throw new IllegalStateException(variable
-						+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
-				}
-				break;
-			case BinaryArray:
-				if (null != source.readBinaryArray(variable))
-				{
-					target.writeBinaryArray(variable, source.readBinaryArray(variable));
-				}
-				else if (null == target.readBinaryArray(variable))
-				{
-					throw new IllegalStateException(variable
-						+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
-				}
-				break;
-			case KeyValue:
-				if (null != source.readKeyValue(variable))
-				{
-					target.writeKeyValue(variable, source.readKeyValue(variable));
-				}
-				else if (null == target.readKeyValue(variable))
-				{
-					throw new IllegalStateException(variable
-						+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
-				}
-				break;
-			case KeyValueArray:
-				if (null != source.readKeyValueArray(variable))
-				{
-					target.writeKeyValueArray(variable, source.readKeyValueArray(variable));
-				}
-				else if (null == target.readKeyValueArray(variable))
-				{
-					throw new IllegalStateException(variable
-						+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
-				}
-				break;
-			default:
-				throw new IllegalArgumentException(
-					"Could not write param " + variable + ". " + type + " is not a valid type.");
+			if (null != source.readString(variable))
+			{
+				target.writeString(variable, source.readString(variable));
+			}
+			else if (null == target.readString(variable))
+			{
+				throw new IllegalStateException(variable
+					+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
+			}
+		}
+		else if (StandardPlaybookType.StringArray.toString().equalsIgnoreCase(type))
+		{
+			if (null != source.readStringList(variable))
+			{
+				target.writeStringList(variable, source.readStringList(variable));
+			}
+			else if (null == target.readStringList(variable))
+			{
+				throw new IllegalStateException(variable
+					+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
+			}
+		}
+		else if (StandardPlaybookType.TCEntity.toString().equalsIgnoreCase(type))
+		{
+			if (null != source.readTCEntity(variable))
+			{
+				target.writeTCEntity(variable, source.readTCEntity(variable));
+			}
+			else if (null == target.readTCEntity(variable))
+			{
+				throw new IllegalStateException(variable
+					+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
+			}
+		}
+		else if (StandardPlaybookType.TCEntityArray.toString().equalsIgnoreCase(type))
+		{
+			if (null != source.readTCEntityList(variable))
+			{
+				target.writeTCEntityList(variable, source.readTCEntityList(variable));
+			}
+			else if (null == target.readTCEntityList(variable))
+			{
+				throw new IllegalStateException(variable
+					+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
+			}
+		}
+		else if (StandardPlaybookType.TCEnhancedEntity.toString().equalsIgnoreCase(type))
+		{
+			if (null != source.readTCEntity(variable))
+			{
+				target.writeTCEnhancedEntity(variable, source.readTCEnhancedEntity(variable));
+			}
+			else if (null == target.readTCEnhancedEntity(variable))
+			{
+				throw new IllegalStateException(variable
+					+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
+			}
+		}
+		else if (StandardPlaybookType.TCEnhancedEntityArray.toString().equalsIgnoreCase(type))
+		{
+			if (null != source.readTCEnhancedEntityList(variable))
+			{
+				target.writeTCEnhancedEntityList(variable, source.readTCEnhancedEntityList(variable));
+			}
+			else if (null == target.readTCEnhancedEntityList(variable))
+			{
+				throw new IllegalStateException(variable
+					+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
+			}
+		}
+		else if (StandardPlaybookType.Binary.toString().equalsIgnoreCase(type))
+		{
+			if (null != source.readBinary(variable))
+			{
+				target.writeBinary(variable, source.readBinary(variable));
+			}
+			else if (null == target.readBinary(variable))
+			{
+				throw new IllegalStateException(variable
+					+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
+			}
+		}
+		else if (StandardPlaybookType.BinaryArray.toString().equalsIgnoreCase(type))
+		{
+			if (null != source.readBinaryArray(variable))
+			{
+				target.writeBinaryArray(variable, source.readBinaryArray(variable));
+			}
+			else if (null == target.readBinaryArray(variable))
+			{
+				throw new IllegalStateException(variable
+					+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
+			}
+		}
+		else if (StandardPlaybookType.KeyValue.toString().equalsIgnoreCase(type))
+		{
+			if (null != source.readKeyValue(variable))
+			{
+				target.writeKeyValue(variable, source.readKeyValue(variable));
+			}
+			else if (null == target.readKeyValue(variable))
+			{
+				throw new IllegalStateException(variable
+					+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
+			}
+		}
+		else if (StandardPlaybookType.KeyValueArray.toString().equalsIgnoreCase(type))
+		{
+			if (null != source.readKeyValueArray(variable))
+			{
+				target.writeKeyValueArray(variable, source.readKeyValueArray(variable));
+			}
+			else if (null == target.readKeyValueArray(variable))
+			{
+				throw new IllegalStateException(variable
+					+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
+			}
+		}
+		else
+		{
+			if (null != source.readCustomType(variable))
+			{
+				target.writeCustomType(variable, source.readCustomType(variable));
+			}
+			else if (null == target.readCustomType(variable))
+			{
+				throw new IllegalStateException(variable
+					+ " could not be resolved. Please make sure that this value was previously set by the PlaybooksOrchestration or from an upstream Playbooks app.");
+			}
 		}
 	}
 	

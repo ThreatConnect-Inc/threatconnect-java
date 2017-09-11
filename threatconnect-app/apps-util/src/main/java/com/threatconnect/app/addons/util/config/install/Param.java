@@ -24,15 +24,15 @@ public class Param
 	private String note;
 	private String viewType;
 	private Integer sequence;
-	private PlaybookVariableType exposePlaybookKeyAs;
+	private String exposePlaybookKeyAs;
 	
 	private final List<String> validValues;
-	private final List<PlaybookVariableType> playbookDataType;
+	private final List<String> playbookDataType;
 	
 	public Param()
 	{
 		this.validValues = new ArrayList<String>();
-		this.playbookDataType = new ArrayList<PlaybookVariableType>();
+		this.playbookDataType = new ArrayList<String>();
 		
 		//set the default data type for this param
 		this.type = ParamDataType.String;
@@ -168,12 +168,12 @@ public class Param
 		this.sequence = sequence;
 	}
 	
-	public PlaybookVariableType getExposePlaybookKeyAs()
+	public String getExposePlaybookKeyAs()
 	{
 		return exposePlaybookKeyAs;
 	}
 	
-	public void setExposePlaybookKeyAs(final PlaybookVariableType exposePlaybookKeyAs)
+	public void setExposePlaybookKeyAs(final String exposePlaybookKeyAs)
 	{
 		this.exposePlaybookKeyAs = exposePlaybookKeyAs;
 	}
@@ -183,7 +183,7 @@ public class Param
 		return validValues;
 	}
 	
-	public List<PlaybookVariableType> getPlaybookDataType()
+	public List<String> getPlaybookDataType()
 	{
 		return playbookDataType;
 	}

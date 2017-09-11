@@ -75,11 +75,11 @@ public class InstallTest
 		Assert.assertEquals("pb.output2", install.getPlaybook().getOutputVariables().get(1).getName());
 		Assert.assertEquals("pb.output3", install.getPlaybook().getOutputVariables().get(2).getName());
 		
-		Assert
-			.assertEquals(PlaybookVariableType.String, install.getPlaybook().getOutputVariables().get(0).getType());
-		Assert
-			.assertEquals(PlaybookVariableType.String, install.getPlaybook().getOutputVariables().get(1).getType());
-		Assert.assertEquals(PlaybookVariableType.KeyValueArray,
+		assertEqualsIgnoreCase(StandardPlaybookType.String.toString(),
+			install.getPlaybook().getOutputVariables().get(0).getType());
+		assertEqualsIgnoreCase(StandardPlaybookType.String.toString(),
+			install.getPlaybook().getOutputVariables().get(1).getType());
+		assertEqualsIgnoreCase(StandardPlaybookType.KeyValueArray.toString(),
 			install.getPlaybook().getOutputVariables().get(2).getType());
 	}
 	
@@ -105,11 +105,16 @@ public class InstallTest
 		Assert.assertEquals("pb.output2", install.getPlaybook().getOutputVariables().get(1).getName());
 		Assert.assertEquals("pb.output3", install.getPlaybook().getOutputVariables().get(2).getName());
 		
-		Assert
-			.assertEquals(PlaybookVariableType.String, install.getPlaybook().getOutputVariables().get(0).getType());
-		Assert
-			.assertEquals(PlaybookVariableType.String, install.getPlaybook().getOutputVariables().get(1).getType());
-		Assert.assertEquals(PlaybookVariableType.KeyValueArray,
+		assertEqualsIgnoreCase(StandardPlaybookType.String.toString(),
+			install.getPlaybook().getOutputVariables().get(0).getType());
+		assertEqualsIgnoreCase(StandardPlaybookType.String.toString(),
+			install.getPlaybook().getOutputVariables().get(1).getType());
+		assertEqualsIgnoreCase(StandardPlaybookType.KeyValueArray.toString(),
 			install.getPlaybook().getOutputVariables().get(2).getType());
+	}
+	
+	public void assertEqualsIgnoreCase(final String expected, final String actual)
+	{
+		Assert.assertTrue(expected.equalsIgnoreCase(actual));
 	}
 }

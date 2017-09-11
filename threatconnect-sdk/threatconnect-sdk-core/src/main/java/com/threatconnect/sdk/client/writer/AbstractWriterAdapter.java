@@ -15,6 +15,9 @@ import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.CustomIndicator;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.util.UploadMethodType;
+import org.apache.http.HttpEntity;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.InputStreamEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -318,7 +321,26 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter
 	}
 	
 	protected <T extends ApiEntitySingleResponse> T uploadFile(String propName, Class<T> type, String ownerName,
-		InputStream inputStream, Map<String, Object> paramMap, UploadMethodType uploadMethodType, Boolean updateIfExists)
+		InputStream inputStream, Map<String, Object> paramMap, UploadMethodType uploadMethodType,
+		Boolean updateIfExists)
+		throws FailedResponseException, UnsupportedEncodingException
+	{
+		return uploadFile(propName, type, ownerName, new InputStreamEntity(inputStream), paramMap, uploadMethodType,
+			updateIfExists);
+	}
+	
+	protected <T extends ApiEntitySingleResponse> T uploadFile(String propName, Class<T> type, String ownerName,
+		HttpEntity requestEntity, Map<String, Object> paramMap, UploadMethodType uploadMethodType,
+		Boolean updateIfExists)
+		throws FailedResponseException, UnsupportedEncodingException
+	{
+		return uploadFile(propName, type, ownerName, requestEntity, paramMap, uploadMethodType,
+			updateIfExists, ContentType.APPLICATION_OCTET_STREAM.toString());
+	}
+	
+	protected <T extends ApiEntitySingleResponse> T uploadFile(String propName, Class<T> type, String ownerName,
+		HttpEntity requestEntity, Map<String, Object> paramMap, UploadMethodType uploadMethodType,
+		Boolean updateIfExists, String contentType)
 		throws FailedResponseException, UnsupportedEncodingException
 	{
 		Map<String, String> queryParams = new HashMap<String, String>();
@@ -344,7 +366,7 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter
 				}
 			}
 			logger.trace("Calling url={}", url);
-			String content = executor.executeUploadByteStream(url, inputStream, uploadMethodType);
+			String content = executor.executeUpload(url, requestEntity, uploadMethodType, contentType);
 			logger.trace("returning content={}", content);
 			result = mapper.readValue(content, type);
 		}

@@ -1,6 +1,6 @@
 package com.threatconnect.app.playbooks.app;
 
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.app.apps.App;
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.ExitStatus;
@@ -110,7 +110,20 @@ public abstract class PlaybooksApp extends App
 	 * @param type       the expected variable type to check
 	 * @return true if the actual and expected types are the same, false otherwise
 	 */
-	protected final boolean isInputParamOfPlaybookType(final String inputParam, final PlaybookVariableType type)
+	protected final boolean isInputParamOfPlaybookType(final String inputParam, final StandardPlaybookType type)
+	{
+		return isInputParamOfPlaybookType(inputParam, type.toString());
+	}
+	
+	/**
+	 * Given an input app parameter, this will read the underlying playbook key and check to see if the actual type and
+	 * the expected type are the same.
+	 *
+	 * @param inputParam the app param which corresponds to a playbook variable
+	 * @param type       the expected variable type to check
+	 * @return true if the actual and expected types are the same, false otherwise
+	 */
+	protected final boolean isInputParamOfPlaybookType(final String inputParam, final String type)
 	{
 		//retrieve the DB key for this input param
 		final String key = getAppConfig().getString(inputParam);
@@ -122,13 +135,13 @@ public abstract class PlaybooksApp extends App
 			if (PlaybooksVariableUtil.isVariable(key))
 			{
 				//extract the actual type of this playbook variable
-				PlaybookVariableType actualType = PlaybooksVariableUtil.extractVariableType(key);
+				String actualType = PlaybooksVariableUtil.extractVariableType(key);
 				return actualType.equals(type);
 			}
 			else
 			{
 				//since its not a variable, it can just be a literal string so we should check if the expected type is a string
-				return PlaybookVariableType.String.equals(type);
+				return StandardPlaybookType.String.toString().equalsIgnoreCase(type);
 			}
 		}
 		else
@@ -142,10 +155,10 @@ public abstract class PlaybooksApp extends App
 	 * Looks up the value of the input param and resolves the type of playbook variable that it represents
 	 *
 	 * @param inputParam the app param which corresponds to a playbook variable
-	 * @return the {@link PlaybookVariableType} that this inputParam represents
+	 * @return the type that this inputParam represents
 	 * @throws IllegalArgumentException if the inputParam resolves to null
 	 */
-	protected final PlaybookVariableType getPlaybookTypeOfInputParam(final String inputParam)
+	protected final String getPlaybookTypeOfInputParam(final String inputParam)
 	{
 		//retrieve the DB key for this input param
 		final String key = getAppConfig().getString(inputParam);
@@ -162,7 +175,7 @@ public abstract class PlaybooksApp extends App
 			else
 			{
 				//since its not a variable, it can just be a literal string;
-				return PlaybookVariableType.String;
+				return StandardPlaybookType.String.toString();
 			}
 		}
 		else
@@ -178,7 +191,19 @@ public abstract class PlaybooksApp extends App
 	 * @param type        the output type of the output param
 	 * @return whether or not this app is expected to write this output parameter
 	 */
-	protected final boolean isOutputParamExpected(final String outputParam, final PlaybookVariableType type)
+	protected final boolean isOutputParamExpected(final String outputParam, final StandardPlaybookType type)
+	{
+		return null != findOutputVariable(outputParam, type.toString());
+	}
+	
+	/**
+	 * Checks to see if a specific output param is expected to be written by this app
+	 *
+	 * @param outputParam the output param to check
+	 * @param type        the output type of the output param
+	 * @return whether or not this app is expected to write this output parameter
+	 */
+	protected final boolean isOutputParamExpected(final String outputParam, final String type)
 	{
 		return null != findOutputVariable(outputParam, type);
 	}
@@ -190,16 +215,28 @@ public abstract class PlaybooksApp extends App
 	 * @param type        the output type of the output param
 	 * @return the database variable key
 	 */
-	protected final String findOutputVariable(final String outputParam, final PlaybookVariableType type)
+	protected final String findOutputVariable(final String outputParam, final StandardPlaybookType type)
+	{
+		return findOutputVariable(outputParam, type.toString());
+	}
+	
+	/**
+	 * Checks the output variables list looking for a specific name/type
+	 *
+	 * @param outputParam the output param to check
+	 * @param type        the output type of the output param
+	 * @return the database variable key
+	 */
+	protected final String findOutputVariable(final String outputParam, final String type)
 	{
 		//for each of the output params
 		for (String outputVariable : getOutputVariables())
 		{
 			final String variableName = PlaybooksVariableUtil.extractVariableName(outputVariable);
-			final PlaybookVariableType variableType = PlaybooksVariableUtil.extractVariableType(outputVariable);
+			final String variableType = PlaybooksVariableUtil.extractVariableType(outputVariable);
 			
 			//check to see if this output param was found in one of the variables
-			if (variableName.equals(outputParam) && variableType.equals(type))
+			if (variableName.equals(outputParam) && variableType.equalsIgnoreCase(type))
 			{
 				return outputVariable;
 			}
@@ -231,9 +268,9 @@ public abstract class PlaybooksApp extends App
 	 */
 	public final boolean writeStringContent(final String param, final String value) throws ContentException
 	{
-		if (isOutputParamExpected(param, PlaybookVariableType.String))
+		if (isOutputParamExpected(param, StandardPlaybookType.String))
 		{
-			getContentService().writeString(findOutputVariable(param, PlaybookVariableType.String), value);
+			getContentService().writeString(findOutputVariable(param, StandardPlaybookType.String), value);
 			return true;
 		}
 		else
@@ -265,9 +302,9 @@ public abstract class PlaybooksApp extends App
 	 */
 	public final boolean writeStringListContent(final String param, final List<String> values) throws ContentException
 	{
-		if (isOutputParamExpected(param, PlaybookVariableType.StringArray))
+		if (isOutputParamExpected(param, StandardPlaybookType.StringArray))
 		{
-			getContentService().writeStringList(findOutputVariable(param, PlaybookVariableType.StringArray), values);
+			getContentService().writeStringList(findOutputVariable(param, StandardPlaybookType.StringArray), values);
 			return true;
 		}
 		else
@@ -298,9 +335,9 @@ public abstract class PlaybooksApp extends App
 	 */
 	public final boolean writeBinaryContent(final String param, final byte[] value) throws ContentException
 	{
-		if (isOutputParamExpected(param, PlaybookVariableType.Binary))
+		if (isOutputParamExpected(param, StandardPlaybookType.Binary))
 		{
-			getContentService().writeBinary(findOutputVariable(param, PlaybookVariableType.Binary), value);
+			getContentService().writeBinary(findOutputVariable(param, StandardPlaybookType.Binary), value);
 			return true;
 		}
 		else
@@ -331,9 +368,9 @@ public abstract class PlaybooksApp extends App
 	 */
 	public final boolean writeBinaryArrayContent(final String param, final byte[][] value) throws ContentException
 	{
-		if (isOutputParamExpected(param, PlaybookVariableType.BinaryArray))
+		if (isOutputParamExpected(param, StandardPlaybookType.BinaryArray))
 		{
-			getContentService().writeBinaryArray(findOutputVariable(param, PlaybookVariableType.BinaryArray), value);
+			getContentService().writeBinaryArray(findOutputVariable(param, StandardPlaybookType.BinaryArray), value);
 			return true;
 		}
 		else
@@ -364,9 +401,9 @@ public abstract class PlaybooksApp extends App
 	 */
 	public final boolean writeKeyValueContent(final String param, final KeyValue value) throws ContentException
 	{
-		if (isOutputParamExpected(param, PlaybookVariableType.KeyValue))
+		if (isOutputParamExpected(param, StandardPlaybookType.KeyValue))
 		{
-			getContentService().writeKeyValue(findOutputVariable(param, PlaybookVariableType.KeyValue), value);
+			getContentService().writeKeyValue(findOutputVariable(param, StandardPlaybookType.KeyValue), value);
 			return true;
 		}
 		else
@@ -398,10 +435,10 @@ public abstract class PlaybooksApp extends App
 	public final boolean writeKeyValueArrayContent(final String param, final List<KeyValue> value)
 		throws ContentException
 	{
-		if (isOutputParamExpected(param, PlaybookVariableType.KeyValueArray))
+		if (isOutputParamExpected(param, StandardPlaybookType.KeyValueArray))
 		{
 			getContentService().writeKeyValueArray(
-				findOutputVariable(param, PlaybookVariableType.KeyValueArray), value);
+				findOutputVariable(param, StandardPlaybookType.KeyValueArray), value);
 			return true;
 		}
 		else
@@ -432,9 +469,9 @@ public abstract class PlaybooksApp extends App
 	 */
 	public final boolean writeTCEntityContent(final String param, final TCEntity value) throws ContentException
 	{
-		if (isOutputParamExpected(param, PlaybookVariableType.TCEntity))
+		if (isOutputParamExpected(param, StandardPlaybookType.TCEntity))
 		{
-			getContentService().writeTCEntity(findOutputVariable(param, PlaybookVariableType.TCEntity), value);
+			getContentService().writeTCEntity(findOutputVariable(param, StandardPlaybookType.TCEntity), value);
 			return true;
 		}
 		else
@@ -466,9 +503,9 @@ public abstract class PlaybooksApp extends App
 	public final boolean writeTCEntityListContent(final String param, final List<TCEntity> value)
 		throws ContentException
 	{
-		if (isOutputParamExpected(param, PlaybookVariableType.TCEntityArray))
+		if (isOutputParamExpected(param, StandardPlaybookType.TCEntityArray))
 		{
-			getContentService().writeTCEntityList(findOutputVariable(param, PlaybookVariableType.TCEntityArray), value);
+			getContentService().writeTCEntityList(findOutputVariable(param, StandardPlaybookType.TCEntityArray), value);
 			return true;
 		}
 		else
@@ -499,10 +536,10 @@ public abstract class PlaybooksApp extends App
 	 */
 	public final boolean writeTCEnhancedEntityContent(final String param, final Item value) throws ContentException
 	{
-		if (isOutputParamExpected(param, PlaybookVariableType.TCEnhancedEntity))
+		if (isOutputParamExpected(param, StandardPlaybookType.TCEnhancedEntity))
 		{
 			getContentService()
-				.writeTCEnhancedEntity(findOutputVariable(param, PlaybookVariableType.TCEnhancedEntity), value);
+				.writeTCEnhancedEntity(findOutputVariable(param, StandardPlaybookType.TCEnhancedEntity), value);
 			return true;
 		}
 		else
@@ -534,11 +571,59 @@ public abstract class PlaybooksApp extends App
 	public final boolean writeTCEnhancedEntityListContent(final String param, final List<Item> value)
 		throws ContentException
 	{
-		if (isOutputParamExpected(param, PlaybookVariableType.TCEnhancedEntityArray))
+		if (isOutputParamExpected(param, StandardPlaybookType.TCEnhancedEntityArray))
 		{
 			getContentService()
-				.writeTCEnhancedEntityList(findOutputVariable(param, PlaybookVariableType.TCEnhancedEntityArray),
+				.writeTCEnhancedEntityList(findOutputVariable(param, StandardPlaybookType.TCEnhancedEntityArray),
 					value);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * Serves as a shorthand method for reading a custom type value from the database where the param is a database key
+	 *
+	 * @param param the app parameter which represents a playbooks variable
+	 * @return the value of the parameter in the database
+	 * @throws ContentException if there was an issue reading/writing to the database.
+	 */
+	public final byte[] readCustomTypeContent(final String param) throws ContentException
+	{
+		return getContentService().readCustomType(getAppConfig().getString(param));
+	}
+	
+	/**
+	 * Serves as a shorthand method for writing a custom type value to the database where the param is a database key
+	 *
+	 * @param param the app parameter which represents a playbooks variable
+	 * @param value the value to write to the variable
+	 * @return whether or not the value was written
+	 * @throws ContentException if there was an issue reading/writing to the database.
+	 */
+	public final boolean writeCustomTypeContent(final String param, final byte[] value, final StandardPlaybookType type)
+		throws ContentException
+	{
+		return writeCustomTypeContent(param, value, type.toString());
+	}
+	
+	/**
+	 * Serves as a shorthand method for writing a custom type value to the database where the param is a database key
+	 *
+	 * @param param the app parameter which represents a playbooks variable
+	 * @param value the value to write to the variable
+	 * @return whether or not the value was written
+	 * @throws ContentException if there was an issue reading/writing to the database.
+	 */
+	public final boolean writeCustomTypeContent(final String param, final byte[] value, final String type)
+		throws ContentException
+	{
+		if (isOutputParamExpected(param, type))
+		{
+			getContentService().writeCustomType(findOutputVariable(param, type), value);
 			return true;
 		}
 		else

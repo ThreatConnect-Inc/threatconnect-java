@@ -10,6 +10,7 @@ public class Install
 	private String applicationName;
 	private String displayName;
 	private String programVersion;
+	private String minServerVersion;
 	private ProgramLanguageType programLanguage;
 	private String programMain;
 	private String languageVersion;
@@ -17,6 +18,7 @@ public class Install
 	private String programIcon;
 	private String javaClasspath;
 	private boolean allowOnDemand;
+	private boolean allowRunAsUser;
 	private boolean apiUserTokenParam;
 	private Integer tokenExpireOffsetMinutes;
 	private String note;
@@ -68,6 +70,16 @@ public class Install
 	public void setProgramVersion(final String programVersion)
 	{
 		this.programVersion = programVersion;
+	}
+	
+	public String getMinServerVersion()
+	{
+		return minServerVersion;
+	}
+	
+	public void setMinServerVersion(final String minServerVersion)
+	{
+		this.minServerVersion = minServerVersion;
 	}
 	
 	public ProgramLanguageType getProgramLanguage()
@@ -138,6 +150,16 @@ public class Install
 	public void setAllowOnDemand(final boolean allowOnDemand)
 	{
 		this.allowOnDemand = allowOnDemand;
+	}
+	
+	public boolean isAllowRunAsUser()
+	{
+		return allowRunAsUser;
+	}
+	
+	public void setAllowRunAsUser(final boolean allowRunAsUser)
+	{
+		this.allowRunAsUser = allowRunAsUser;
 	}
 	
 	public boolean isApiUserTokenParam()

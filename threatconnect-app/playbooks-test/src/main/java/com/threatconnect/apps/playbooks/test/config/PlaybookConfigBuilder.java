@@ -1,9 +1,9 @@
 package com.threatconnect.apps.playbooks.test.config;
 
 import com.threatconnect.app.addons.util.config.install.Param;
-import com.threatconnect.app.addons.util.config.install.PlaybookOutputVariable;
 import com.threatconnect.app.addons.util.config.install.ParamDataType;
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.PlaybookOutputVariable;
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
 
 import java.util.ArrayList;
@@ -59,7 +59,14 @@ public class PlaybookConfigBuilder
 	}
 	
 	public PlaybookConfigBuilder addPlaybookParam(final String name, final ParamDataType type,
-		final PlaybookVariableType... playbookVariableTypes)
+		final StandardPlaybookType... playbookVariableTypes)
+	{
+		return addPlaybookParam(name, type,
+			Arrays.stream(playbookVariableTypes).map(StandardPlaybookType::toString).toArray(String[]::new));
+	}
+	
+	public PlaybookConfigBuilder addPlaybookParam(final String name, final ParamDataType type,
+		final String... playbookVariableTypes)
 	{
 		//make sure the playbooks variable type is not null
 		if (null == playbookVariableTypes || playbookVariableTypes.length == 0)
@@ -77,7 +84,12 @@ public class PlaybookConfigBuilder
 		return this;
 	}
 	
-	public PlaybookConfigBuilder addOutputVariable(final String name, final PlaybookVariableType playbookVariableType)
+	public PlaybookConfigBuilder addOutputVariable(final String name, final StandardPlaybookType playbookVariableType)
+	{
+		return addOutputVariable(name, playbookVariableType.toString());
+	}
+	
+	public PlaybookConfigBuilder addOutputVariable(final String name, final String playbookVariableType)
 	{
 		PlaybookOutputVariable playbookOutputVariable = new PlaybookOutputVariable();
 		playbookOutputVariable.setName(name);

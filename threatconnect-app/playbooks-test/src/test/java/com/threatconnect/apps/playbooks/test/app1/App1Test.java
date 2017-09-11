@@ -1,6 +1,6 @@
 package com.threatconnect.apps.playbooks.test.app1;
 
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.app.playbooks.content.entity.KeyValue;
 import com.threatconnect.apps.playbooks.test.config.PlaybooksTestConfiguration;
 import com.threatconnect.apps.playbooks.test.orc.PlaybooksOrchestrationBuilder;
@@ -39,7 +39,7 @@ public class App1Test
 					.asKeyValueArray(App1.PARAM_INPUT_KVS, kvs)
 				.then()
 				.onSuccess().assertOutput()
-					.assertEquals(App1.OUTPUT_NAME, PlaybookVariableType.String, "Greg Marut")
+					.assertEquals(App1.OUTPUT_NAME, StandardPlaybookType.String, "Greg Marut")
 				.then()
 			//execute the apps
 			.build().run();

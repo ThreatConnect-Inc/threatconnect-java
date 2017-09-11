@@ -72,7 +72,7 @@ public class File extends Indicator
 	@Override
 	public String getIdentifier()
 	{
-		return emptyIfNull(getMd5()) + ":" + emptyIfNull(getSha1()) + ":" + emptyIfNull(getSha256());
+		return emptyIfNull(getMd5()) + " : " + emptyIfNull(getSha1()) + " : " + emptyIfNull(getSha256());
 	}
 	
 	private String emptyIfNull(final String s)

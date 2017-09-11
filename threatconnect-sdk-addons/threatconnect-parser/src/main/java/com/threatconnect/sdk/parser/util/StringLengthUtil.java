@@ -2,22 +2,43 @@ package com.threatconnect.sdk.parser.util;
 
 public class StringLengthUtil
 {
-	public static final int ML_INCIDENT_NAME = 100;
+	public static final String ELLIPSIS = "...";
+	public static final int ML_GROUP_NAME = 100;
 	
-	public static final String trimIncidentName(final String incidentName)
+	public static String trimGroupName(final String groupName)
 	{
-		return trimString(incidentName, ML_INCIDENT_NAME);
+		return trimString(groupName, ML_GROUP_NAME);
 	}
 	
-	public static final String trimString(final String string, final int maxLength)
+	public static String trimString(final String string, final int maxLength)
 	{
-		if (string.trim().length() > maxLength)
+		return trimString(string, maxLength, false);
+	}
+	
+	public static String trimString(final String string, final int maxLength, final boolean ellipsis)
+	{
+		//make sure the string is not null
+		if (null != string)
 		{
-			return string.trim().substring(0, maxLength);
+			if (string.trim().length() > maxLength)
+			{
+				if (ellipsis)
+				{
+					return string.trim().substring(0, maxLength - ELLIPSIS.length()) + ELLIPSIS;
+				}
+				else
+				{
+					return string.trim().substring(0, maxLength);
+				}
+			}
+			else
+			{
+				return string.trim();
+			}
 		}
 		else
 		{
-			return string.trim();
+			return null;
 		}
 	}
 }

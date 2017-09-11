@@ -1,6 +1,6 @@
 package com.threatconnect.apps.playbooks.test.orc;
 
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
 import com.threatconnect.app.playbooks.content.ContentService;
 import com.threatconnect.app.playbooks.content.accumulator.ContentException;
@@ -29,7 +29,7 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 		{
 			//store this object in the local content service
 			final String variable =
-				getPlaybookConfig().createVariableForInputParam(playbookParam, PlaybookVariableType.String);
+				getPlaybookConfig().createVariableForInputParam(playbookParam, StandardPlaybookType.String.toString());
 			getContentService().writeString(variable, value);
 			getPlaybookParams().put(playbookParam, variable);
 		}
@@ -45,7 +45,7 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
-			Assert.assertEquals(PlaybookVariableType.String, PlaybooksVariableUtil.extractVariableType(value));
+			Assert.assertEquals(StandardPlaybookType.String.toString(), PlaybooksVariableUtil.extractVariableType(value));
 			getPlaybookParams().put(playbookParam, value);
 		}
 		else
@@ -61,7 +61,7 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 	{
 		//store this object in the local content service
 		final String variable =
-			getPlaybookConfig().createVariableForInputParam(playbookParam, PlaybookVariableType.StringArray);
+			getPlaybookConfig().createVariableForInputParam(playbookParam, StandardPlaybookType.StringArray.toString());
 		getContentService().writeStringList(variable, value);
 		getPlaybookParams().put(playbookParam, variable);
 		
@@ -73,7 +73,7 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
-			Assert.assertEquals(PlaybookVariableType.StringArray, PlaybooksVariableUtil.extractVariableType(value));
+			Assert.assertEquals(StandardPlaybookType.StringArray.toString(), PlaybooksVariableUtil.extractVariableType(value));
 			getPlaybookParams().put(playbookParam, value);
 		}
 		else
@@ -88,7 +88,7 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 	{
 		//store this object in the local content service
 		final String variable =
-			getPlaybookConfig().createVariableForInputParam(playbookParam, PlaybookVariableType.Binary);
+			getPlaybookConfig().createVariableForInputParam(playbookParam, StandardPlaybookType.Binary.toString());
 		getContentService().writeBinary(variable, value);
 		getPlaybookParams().put(playbookParam, variable);
 		
@@ -99,7 +99,7 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
-			Assert.assertEquals(PlaybookVariableType.Binary, PlaybooksVariableUtil.extractVariableType(value));
+			Assert.assertEquals(StandardPlaybookType.Binary.toString(), PlaybooksVariableUtil.extractVariableType(value));
 			getPlaybookParams().put(playbookParam, value);
 		}
 		else
@@ -114,7 +114,7 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 	{
 		//store this object in the local content service
 		final String variable =
-			getPlaybookConfig().createVariableForInputParam(playbookParam, PlaybookVariableType.BinaryArray);
+			getPlaybookConfig().createVariableForInputParam(playbookParam, StandardPlaybookType.BinaryArray.toString());
 		getContentService().writeBinaryArray(variable, value);
 		getPlaybookParams().put(playbookParam, variable);
 		
@@ -126,7 +126,7 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
-			Assert.assertEquals(PlaybookVariableType.BinaryArray, PlaybooksVariableUtil.extractVariableType(value));
+			Assert.assertEquals(StandardPlaybookType.BinaryArray.toString(), PlaybooksVariableUtil.extractVariableType(value));
 			getPlaybookParams().put(playbookParam, value);
 		}
 		else
@@ -142,7 +142,7 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 	{
 		//store this object in the local content service
 		final String variable =
-			getPlaybookConfig().createVariableForInputParam(playbookParam, PlaybookVariableType.KeyValue);
+			getPlaybookConfig().createVariableForInputParam(playbookParam, StandardPlaybookType.KeyValue.toString());
 		getContentService().writeKeyValue(variable, value);
 		getPlaybookParams().put(playbookParam, variable);
 		
@@ -153,7 +153,7 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
-			Assert.assertEquals(PlaybookVariableType.KeyValue, PlaybooksVariableUtil.extractVariableType(value));
+			Assert.assertEquals(StandardPlaybookType.KeyValue, PlaybooksVariableUtil.extractVariableType(value));
 			getPlaybookParams().put(playbookParam, value);
 		}
 		else
@@ -169,7 +169,7 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 	{
 		//store this object in the local content service
 		final String variable =
-			getPlaybookConfig().createVariableForInputParam(playbookParam, PlaybookVariableType.KeyValueArray);
+			getPlaybookConfig().createVariableForInputParam(playbookParam, StandardPlaybookType.KeyValueArray.toString());
 		getContentService().writeKeyValueArray(variable, value);
 		getPlaybookParams().put(playbookParam, variable);
 		
@@ -181,7 +181,7 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
-			Assert.assertEquals(PlaybookVariableType.KeyValueArray, PlaybooksVariableUtil.extractVariableType(value));
+			Assert.assertEquals(StandardPlaybookType.KeyValueArray, PlaybooksVariableUtil.extractVariableType(value));
 			getPlaybookParams().put(playbookParam, value);
 		}
 		else
@@ -196,7 +196,7 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 	{
 		//store this object in the local content service
 		final String variable =
-			getPlaybookConfig().createVariableForInputParam(playbookParam, PlaybookVariableType.TCEntity);
+			getPlaybookConfig().createVariableForInputParam(playbookParam, StandardPlaybookType.TCEntity.toString());
 		getContentService().writeTCEntity(variable, value);
 		getPlaybookParams().put(playbookParam, variable);
 		
@@ -207,7 +207,7 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
-			Assert.assertEquals(PlaybookVariableType.TCEntity, PlaybooksVariableUtil.extractVariableType(value));
+			Assert.assertEquals(StandardPlaybookType.TCEntity.toString(), PlaybooksVariableUtil.extractVariableType(value));
 			getPlaybookParams().put(playbookParam, value);
 		}
 		else
@@ -223,7 +223,7 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 	{
 		//store this object in the local content service
 		final String variable =
-			getPlaybookConfig().createVariableForInputParam(playbookParam, PlaybookVariableType.TCEntityArray);
+			getPlaybookConfig().createVariableForInputParam(playbookParam, StandardPlaybookType.TCEntityArray.toString());
 		getContentService().writeTCEntityList(variable, value);
 		getPlaybookParams().put(playbookParam, variable);
 		
@@ -235,7 +235,34 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
-			Assert.assertEquals(PlaybookVariableType.TCEntityArray, PlaybooksVariableUtil.extractVariableType(value));
+			Assert
+				.assertEquals(StandardPlaybookType.TCEntityArray.toString(), PlaybooksVariableUtil.extractVariableType(value));
+			getPlaybookParams().put(playbookParam, value);
+		}
+		else
+		{
+			throw new IllegalArgumentException(value + " is not a valid Playbooks variable");
+		}
+		
+		return this;
+	}
+	
+	public WithPlaybookParam asCustomType(final String playbookParam, final byte[] value,
+		final String type) throws ContentException
+	{
+		//store this object in the local content service
+		final String variable = getPlaybookConfig().createVariableForInputParam(playbookParam, type);
+		getContentService().writeCustomType(variable, value);
+		getPlaybookParams().put(playbookParam, variable);
+		
+		return this;
+	}
+	
+	public WithPlaybookParam asCustomTypeVariable(final String playbookParam, final String value)
+		throws ContentException
+	{
+		if (PlaybooksVariableUtil.isVariable(value))
+		{
 			getPlaybookParams().put(playbookParam, value);
 		}
 		else
@@ -257,7 +284,23 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 	 */
 	public WithPlaybookParam fromLastRunUpstreamApp(final String playbookParam,
 		final Class<? extends PlaybooksApp> upstreamPlaybookAppClass,
-		final String outputParam, final PlaybookVariableType outputType)
+		final String outputParam, final StandardPlaybookType outputType)
+	{
+		return fromLastRunUpstreamApp(playbookParam, upstreamPlaybookAppClass, outputParam, outputType.toString());
+	}
+	
+	/**
+	 * Sets the playbook param for this app to be the value from the output of an upstream app
+	 *
+	 * @param playbookParam            the playbook param name
+	 * @param upstreamPlaybookAppClass the class from the upstream app to pull the value from after it executes
+	 * @param outputParam              the name of the upstream app's output param
+	 * @param outputType               the type of the upstream app's output param
+	 * @return
+	 */
+	public WithPlaybookParam fromLastRunUpstreamApp(final String playbookParam,
+		final Class<? extends PlaybooksApp> upstreamPlaybookAppClass,
+		final String outputParam, final String outputType)
 	{
 		//find the last run upstream app with this playbooks class
 		PlaybooksOrchestration upstream = getThen().findLastRunUpsteamApp(upstreamPlaybookAppClass);

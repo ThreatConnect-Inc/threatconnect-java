@@ -5,11 +5,11 @@ import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.ExitStatus;
 import com.threatconnect.sdk.app.LoggerUtil;
 import com.threatconnect.sdk.config.Configuration;
-import com.threatconnect.sdk.parser.Parser;
-import com.threatconnect.sdk.parser.ParserException;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.ItemType;
-import com.threatconnect.sdk.parser.service.save.BatchApiSaveService;
+import com.threatconnect.sdk.parser.Parser;
+import com.threatconnect.sdk.parser.ParserException;
+import com.threatconnect.sdk.parser.service.save.LegacyBatchApiSaveService;
 import com.threatconnect.sdk.parser.service.save.SaveResults;
 import com.threatconnect.sdk.parser.service.save.SaveService;
 import org.slf4j.Logger;
@@ -218,7 +218,7 @@ public abstract class ParserApp extends App
 	 */
 	protected SaveService getSaveService(final AppConfig appConfig)
 	{
-		return new BatchApiSaveService(getConfiguration(appConfig), appConfig.getApiDefaultOrg());
+		return new LegacyBatchApiSaveService(getConfiguration(appConfig), appConfig.getApiDefaultOrg());
 	}
 	
 	/**

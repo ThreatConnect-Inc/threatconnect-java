@@ -1,6 +1,6 @@
 package com.threatconnect.apps.playbooks.test.util;
 
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.app.playbooks.content.ContentService;
 import com.threatconnect.app.playbooks.content.accumulator.ContentException;
 import com.threatconnect.app.playbooks.util.PlaybooksVariableUtil;
@@ -12,28 +12,51 @@ public class ContentServiceUtil
 {
 	public static Object read(final String variable, final ContentService contentService) throws ContentException
 	{
-		PlaybookVariableType type = PlaybooksVariableUtil.extractVariableType(variable);
+		String type = PlaybooksVariableUtil.extractVariableType(variable);
 		
-		switch (type)
+		if (StandardPlaybookType.String.toString().equalsIgnoreCase(type))
 		{
-			case String:
-				return contentService.readString(variable);
-			case StringArray:
-				return contentService.readStringList(variable);
-			case TCEntity:
-				return contentService.readTCEntity(variable);
-			case TCEntityArray:
-				return contentService.readTCEntityList(variable);
-			case Binary:
-				return contentService.readBinary(variable);
-			case BinaryArray:
-				return contentService.readBinaryArray(variable);
-			case KeyValue:
-				return contentService.readKeyValue(variable);
-			case KeyValueArray:
-				return contentService.readKeyValueArray(variable);
-			default:
-				throw new IllegalArgumentException("Could not resolve the type of variable: " + variable);
+			return contentService.readString(variable);
+		}
+		else if (StandardPlaybookType.StringArray.toString().equalsIgnoreCase(type))
+		{
+			return contentService.readStringList(variable);
+		}
+		else if (StandardPlaybookType.TCEntity.toString().equalsIgnoreCase(type))
+		{
+			return contentService.readTCEntity(variable);
+		}
+		else if (StandardPlaybookType.TCEntityArray.toString().equalsIgnoreCase(type))
+		{
+			return contentService.readTCEntityList(variable);
+		}
+		else if (StandardPlaybookType.TCEnhancedEntity.toString().equalsIgnoreCase(type))
+		{
+			return contentService.readTCEnhancedEntity(variable);
+		}
+		else if (StandardPlaybookType.TCEnhancedEntityArray.toString().equalsIgnoreCase(type))
+		{
+			return contentService.readTCEnhancedEntityList(variable);
+		}
+		else if (StandardPlaybookType.Binary.toString().equalsIgnoreCase(type))
+		{
+			return contentService.readBinary(variable);
+		}
+		else if (StandardPlaybookType.BinaryArray.toString().equalsIgnoreCase(type))
+		{
+			return contentService.readBinaryArray(variable);
+		}
+		else if (StandardPlaybookType.KeyValue.toString().equalsIgnoreCase(type))
+		{
+			return contentService.readKeyValue(variable);
+		}
+		else if (StandardPlaybookType.KeyValueArray.toString().equalsIgnoreCase(type))
+		{
+			return contentService.readKeyValueArray(variable);
+		}
+		else
+		{
+			return contentService.readCustomType(variable);
 		}
 	}
 }

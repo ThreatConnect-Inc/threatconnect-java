@@ -3,8 +3,6 @@ package com.threatconnect.app.addons.util.config.install;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.threatconnect.app.addons.util.config.install.serialize.ParamDataTypeJsonSerializer;
-import com.threatconnect.app.addons.util.config.install.serialize.PlaybookVariableTypeJsonSerializer;
-import com.threatconnect.app.addons.util.config.install.serialize.PlaybookVariableTypeListJsonSerializer;
 import com.threatconnect.app.addons.util.config.install.serialize.ProgramLanguageTypeJsonSerializer;
 import com.threatconnect.app.addons.util.config.install.serialize.RuntimeContextJsonSerializer;
 import com.threatconnect.app.addons.util.config.install.serialize.RuntimeLevelJsonSerializer;
@@ -89,10 +87,6 @@ public class InstallUtil
 	{
 		RuntimeLevelJsonSerializer runtimeLevelJsonSerializer = new RuntimeLevelJsonSerializer();
 		RuntimeContextJsonSerializer runtimeContextJsonSerializer = new RuntimeContextJsonSerializer();
-		PlaybookVariableTypeJsonSerializer playbookVariableTypeJsonSerializer =
-			new PlaybookVariableTypeJsonSerializer();
-		PlaybookVariableTypeListJsonSerializer playbookVariableTypeListJsonSerializer =
-			new PlaybookVariableTypeListJsonSerializer();
 		ParamDataTypeJsonSerializer paramDataTypeJsonSerializer = new ParamDataTypeJsonSerializer();
 		ProgramLanguageTypeJsonSerializer programLanguageTypeJsonSerializer = new ProgramLanguageTypeJsonSerializer();
 		
@@ -100,9 +94,6 @@ public class InstallUtil
 		GsonBuilder builder = new GsonBuilder();
 		builder.registerTypeAdapter(runtimeLevelJsonSerializer.getType(), runtimeLevelJsonSerializer);
 		builder.registerTypeAdapter(runtimeContextJsonSerializer.getType(), runtimeContextJsonSerializer);
-		builder.registerTypeAdapter(playbookVariableTypeJsonSerializer.getType(), playbookVariableTypeJsonSerializer);
-		builder.registerTypeAdapter(playbookVariableTypeListJsonSerializer.getType(),
-			playbookVariableTypeListJsonSerializer);
 		builder.registerTypeAdapter(paramDataTypeJsonSerializer.getType(), paramDataTypeJsonSerializer);
 		builder.registerTypeAdapter(programLanguageTypeJsonSerializer.getType(), programLanguageTypeJsonSerializer);
 		

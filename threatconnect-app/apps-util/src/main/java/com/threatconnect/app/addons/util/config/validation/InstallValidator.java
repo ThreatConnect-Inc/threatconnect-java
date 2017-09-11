@@ -7,6 +7,7 @@ import com.threatconnect.app.addons.util.config.install.Playbook;
 import com.threatconnect.app.addons.util.config.install.ProgramLanguageType;
 import com.threatconnect.app.addons.util.config.install.ProgramVersion;
 import com.threatconnect.app.addons.util.config.install.RunLevelType;
+import com.threatconnect.app.addons.util.config.install.ServerVersion;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -45,6 +46,13 @@ public class InstallValidator extends Validator<Install>
 		if (null == object.getProgramLanguage())
 		{
 			throw new ValidationException("programLanguage is not defined.");
+		}
+		
+		//check to see if min server version is set
+		if (null != object.getMinServerVersion())
+		{
+			//validate the format of the server version
+			ServerVersion.validate(object.getMinServerVersion());
 		}
 		
 		//check to see if this is a third party app

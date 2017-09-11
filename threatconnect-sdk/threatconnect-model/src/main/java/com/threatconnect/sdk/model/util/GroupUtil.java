@@ -3,6 +3,7 @@ package com.threatconnect.sdk.model.util;
 import com.threatconnect.sdk.model.Group;
 import com.threatconnect.sdk.model.Item;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -13,6 +14,30 @@ public class GroupUtil
 	private GroupUtil()
 	{
 	
+	}
+	
+	/**
+	 * Extracts a specific type of group from the set
+	 *
+	 * @param groups
+	 * @param clazz
+	 */
+	public static <T extends Group> Set<T> extractIndicatorSet(final Collection<Group> groups,
+		final Class<T> clazz)
+	{
+		final Set<T> results = new HashSet<T>();
+		
+		//for each of the groups
+		for (Group group : groups)
+		{
+			//check to see if this group is of this type
+			if (clazz.isAssignableFrom(group.getClass()))
+			{
+				results.add((T) group);
+			}
+		}
+		
+		return results;
 	}
 	
 	/**

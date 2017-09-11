@@ -1,6 +1,7 @@
 package com.threatconnect.app.playbooks.content.entity;
 
-import com.threatconnect.app.addons.util.config.install.PlaybookVariableType;
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
+import com.threatconnect.sdk.model.Item;
 
 import java.util.List;
 
@@ -8,7 +9,7 @@ public class KeyValue
 {
 	private String key;
 	private Object value;
-	private PlaybookVariableType variableType;
+	private String variableType;
 	
 	public KeyValue()
 	{
@@ -41,37 +42,55 @@ public class KeyValue
 	public void setStringValue(final String value)
 	{
 		this.value = value;
-		this.variableType = PlaybookVariableType.String;
+		this.variableType = StandardPlaybookType.String.toString();
 	}
 	
 	public void setStringArrayValue(final List<String> value)
 	{
 		this.value = value;
-		this.variableType = PlaybookVariableType.StringArray;
+		this.variableType = StandardPlaybookType.StringArray.toString();
 	}
 	
 	public void setBinaryValue(final byte[] value)
 	{
 		this.value = value;
-		this.variableType = PlaybookVariableType.Binary;
+		this.variableType = StandardPlaybookType.Binary.toString();
 	}
 	
 	public void setBinaryArrayValue(final byte[][] value)
 	{
 		this.value = value;
-		this.variableType = PlaybookVariableType.BinaryArray;
+		this.variableType = StandardPlaybookType.BinaryArray.toString();
 	}
 	
 	public void setTCEntityValue(final TCEntity value)
 	{
 		this.value = value;
-		this.variableType = PlaybookVariableType.TCEntity;
+		this.variableType = StandardPlaybookType.TCEntity.toString();
 	}
 	
 	public void setTCEntityArrayValue(final List<TCEntity> value)
 	{
 		this.value = value;
-		this.variableType = PlaybookVariableType.TCEntityArray;
+		this.variableType = StandardPlaybookType.TCEntityArray.toString();
+	}
+	
+	public void setTCEnhancedEntityValue(final Item value)
+	{
+		this.value = value;
+		this.variableType = StandardPlaybookType.TCEnhancedEntity.toString();
+	}
+	
+	public void setTCEnhancedEntityArrayValue(final List<Item> value)
+	{
+		this.value = value;
+		this.variableType = StandardPlaybookType.TCEnhancedEntityArray.toString();
+	}
+	
+	public void setCustomTypeValue(final byte[] value, final String type)
+	{
+		this.value = value;
+		this.variableType = type;
 	}
 	
 	public Object getValue()
@@ -79,7 +98,7 @@ public class KeyValue
 		return value;
 	}
 	
-	public PlaybookVariableType getVariableType()
+	public String getVariableType()
 	{
 		return variableType;
 	}
