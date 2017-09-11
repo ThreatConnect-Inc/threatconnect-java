@@ -18,14 +18,13 @@ import com.threatconnect.sdk.client.writer.associate.TagAssociateWritable;
 import com.threatconnect.sdk.client.writer.associate.VictimAssetAssociateWritable;
 import com.threatconnect.sdk.client.writer.associate.VictimAssociateWritable;
 import com.threatconnect.sdk.conn.Connection;
-import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.entity.Attribute;
 import com.threatconnect.sdk.server.entity.Indicator;
-import com.threatconnect.sdk.server.response.entity.AddressResponse;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
-
+import com.threatconnect.sdk.server.response.entity.GenericIndicatorResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,13 +33,13 @@ import java.util.Map;
  * It uses the {@link com.threatconnect.sdk.conn.Connection} object to execute requests against the {@link com.threatconnect.sdk.conn.AbstractRequestExecutor} object.
  * The responsibility of this class is to encapsulate all the low level ThreatConnect API calls
  * specifically targeted at data under the Indicator T type.
- * 
+ *
  *
  * @author dtineo
  * @param <T> Parameter
  */
-public abstract class AbstractIndicatorWriterAdapter<T extends Indicator> 
-    extends AbstractBaseWriterAdapter<T,String> 
+public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
+    extends AbstractBaseWriterAdapter<T,String>
     implements UrlTypeable, GroupAssociateWritable<String>, IndicatorAssociateWritable<String>
              , AttributeAssociateWritable<String>, TagAssociateWritable<String>
              , SecurityLabelAssociateWritable<String>, VictimAssetAssociateWritable<String>
@@ -59,7 +58,7 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
      * Package level constructor. Use the {@link WriterAdapterFactory} to access this object.
      * @param conn      Primary connection object to the ThreatConnect API
      * @param singleType Single type
-     * 
+     *
      * @see WriterAdapterFactory
      */
     protected AbstractIndicatorWriterAdapter(Connection conn
@@ -129,7 +128,7 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
 
             @Override
             public String getId(T item) {
-            	//TOD may need to update this for custom indicator, will see how it goes 
+            	//TOD may need to update this for custom indicator, will see how it goes
                 return AbstractIndicatorWriterAdapter.this.getId(item);
             }
 
@@ -237,12 +236,12 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     public ApiEntitySingleResponse associateGroupAdversary(String uniqueId, Integer adversaryId) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupAdversary(uniqueId, adversaryId);
     }
-    
+
     @Override
     public ApiEntitySingleResponse associateGroupDocument(String uniqueId, Integer adversaryId) throws IOException, FailedResponseException {
     	 return groupAssocWriter.associateGroupDocument(uniqueId, adversaryId);
     }
-    
+
     @Override
     public ApiEntitySingleResponse associateGroupDocument(String uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
     	return groupAssocWriter.associateGroupDocument(uniqueId, adversaryId);
@@ -332,7 +331,7 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
     public ApiEntitySingleResponse associateGroupThreat(String uniqueId, Integer threatId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocWriter.associateGroupThreat(uniqueId, threatId, ownerName);
     }
-	
+
 
     @Override
     public WriteListResponse<String> associateIndicatorAddresses(String uniqueId, List<String> ipAddresses) throws IOException {
@@ -1055,12 +1054,17 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
 
     public ApiEntitySingleResponse createObservation(String uniqueId) throws IOException, FailedResponseException
     {
-        return createObservation(uniqueId, null);
+        return createObservation(uniqueId, null, 1);
     }
 
-    public ApiEntitySingleResponse createObservation(String uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse createObservation(String uniqueId, String ownerName, int count) throws IOException, FailedResponseException {
         Map<String, Object> map = AbstractClientAdapter.createParamMap("id", uniqueId);
-        ApiEntitySingleResponse data = createItem( getUrlBasePrefix() + ".byId.observations", ApiEntitySingleResponse.class, ownerName, map, null);
+
+        Map<String, Integer> observationBody = new HashMap<>();
+        observationBody.put("count", new Integer(count));
+        ApiEntitySingleResponse data =
+                createItem( getUrlBasePrefix() + ".byId.observations", GenericIndicatorResponse.class,
+                        ownerName, map, observationBody);
 
         return data;
     }
@@ -1072,11 +1076,11 @@ public abstract class AbstractIndicatorWriterAdapter<T extends Indicator>
 
     public ApiEntitySingleResponse updateFalsePositive(String uniqueId, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = AbstractClientAdapter.createParamMap("id", uniqueId);
-        ApiEntitySingleResponse data = createItem( getUrlBasePrefix() + ".byId.falsePositive", ApiEntitySingleResponse.class, ownerName, map, null);
+        ApiEntitySingleResponse data = createItem( getUrlBasePrefix() + ".byId.falsePositive", GenericIndicatorResponse.class, ownerName, map, null);
 
         return data;
     }
-    
+
     @Override
 	public ApiEntitySingleResponse associateCustomIndicatorToIndicator(String uniqueId, String targetId,
 			String assciateType, String targetType) throws IOException, FailedResponseException {
