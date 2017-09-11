@@ -7,6 +7,18 @@ import com.threatconnect.app.addons.util.config.install.Feed;
  */
 public class FeedValidator extends Validator<Feed>
 {
+	public final boolean allowVariables;
+	
+	public FeedValidator()
+	{
+		this(true);
+	}
+	
+	public FeedValidator(final boolean allowVariables)
+	{
+		this.allowVariables = allowVariables;
+	}
+	
 	@Override
 	public void validate(final Feed object) throws ValidationException
 	{
@@ -38,6 +50,12 @@ public class FeedValidator extends Validator<Feed>
 		if (isNullOrEmpty(object.getJobFile()))
 		{
 			throwMissingFieldValidationException("jobFile", object);
+		}
+		
+		//check to see if variables are not allowed
+		if(!allowVariables)
+		{
+		
 		}
 	}
 	

@@ -24,6 +24,8 @@ public abstract class AbstractPackageMojo<T> extends AbstractMojo
 {
 	private static final Logger logger = LoggerFactory.getLogger(AbstractPackageMojo.class);
 	
+	public static Pattern REGEX_PACKAGE_VERSION_SUFFIX = Pattern.compile("_v[0-9]+\\.[0-9]+$");
+	
 	private final Pattern profilePattern;
 	private final String primaryJsonFileName;
 	private final String packageExtension;
@@ -120,13 +122,13 @@ public abstract class AbstractPackageMojo<T> extends AbstractMojo
 				appName = profile.getProfileName();
 				
 				// check to see if the app name needs the version
-				if (!appName.endsWith(getVersion()))
+				if (!REGEX_PACKAGE_VERSION_SUFFIX.matcher(appName).find())
 				{
 					appName = appName + "_v" + getVersion();
 				}
 			}
 			// check to see if the app name does not already contain the version at the end
-			else if (!getAppName().endsWith(getVersion()))
+			else if (!REGEX_PACKAGE_VERSION_SUFFIX.matcher(getAppName()).find())
 			{
 				appName = getAppName() + "_v" + getVersion();
 			}
