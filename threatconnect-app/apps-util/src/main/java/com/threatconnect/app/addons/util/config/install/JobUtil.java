@@ -2,7 +2,7 @@ package com.threatconnect.app.addons.util.config.install;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.threatconnect.app.addons.util.config.validation.FeedValidator;
+import com.threatconnect.app.addons.util.config.validation.JobValidator;
 import com.threatconnect.app.addons.util.config.validation.ValidationException;
 
 import java.io.ByteArrayInputStream;
@@ -15,33 +15,33 @@ import java.io.InputStreamReader;
 /**
  * @author Greg Marut
  */
-public class FeedUtil
+public class JobUtil
 {
 	private static final boolean VALIDATE_BY_DEFAULT = true;
 	
-	public static Feed load(final String json) throws ValidationException
+	public static Job load(final String json) throws ValidationException
 	{
 		return load(json, VALIDATE_BY_DEFAULT);
 	}
 	
-	public static Feed load(final String json, final boolean validate) throws ValidationException
+	public static Job load(final String json, final boolean validate) throws ValidationException
 	{
-		Feed feed = createGson().fromJson(json, Feed.class);
+		Job job = createGson().fromJson(json, Job.class);
 		
 		if (validate)
 		{
-			new FeedValidator().validate(feed);
+			new JobValidator().validate(job);
 		}
 		
-		return feed;
+		return job;
 	}
 	
-	public static Feed load(final byte[] bytes) throws IOException, ValidationException
+	public static Job load(final byte[] bytes) throws IOException, ValidationException
 	{
 		return load(bytes, VALIDATE_BY_DEFAULT);
 	}
 	
-	public static Feed load(final byte[] bytes, final boolean validate) throws IOException, ValidationException
+	public static Job load(final byte[] bytes, final boolean validate) throws IOException, ValidationException
 	{
 		try (InputStream inputStream = new ByteArrayInputStream(bytes))
 		{
@@ -49,12 +49,12 @@ public class FeedUtil
 		}
 	}
 	
-	public static Feed load(final File file) throws IOException, ValidationException
+	public static Job load(final File file) throws IOException, ValidationException
 	{
 		return load(file, VALIDATE_BY_DEFAULT);
 	}
 	
-	public static Feed load(final File file, final boolean validate) throws IOException, ValidationException
+	public static Job load(final File file, final boolean validate) throws IOException, ValidationException
 	{
 		try (InputStream inputStream = new FileInputStream(file))
 		{
@@ -62,21 +62,21 @@ public class FeedUtil
 		}
 	}
 	
-	public static Feed load(final InputStream inputStream) throws ValidationException
+	public static Job load(final InputStream inputStream) throws ValidationException
 	{
 		return load(inputStream, VALIDATE_BY_DEFAULT);
 	}
 	
-	public static Feed load(final InputStream inputStream, final boolean validate) throws ValidationException
+	public static Job load(final InputStream inputStream, final boolean validate) throws ValidationException
 	{
-		Feed Feed = createGson().fromJson(new InputStreamReader(inputStream), Feed.class);
+		Job Job = createGson().fromJson(new InputStreamReader(inputStream), Job.class);
 		
 		if (validate)
 		{
-			new FeedValidator().validate(Feed);
+			new JobValidator().validate(Job);
 		}
 		
-		return Feed;
+		return Job;
 	}
 	
 	private static Gson createGson()
