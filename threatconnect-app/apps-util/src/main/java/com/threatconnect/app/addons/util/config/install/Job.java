@@ -11,12 +11,12 @@ public class Job
 	private String programName;
 	private String programVersion;
 	private String jobName;
-
-	private final List<JobParam> jobParams;
+	
+	private final List<JobParam> params;
 	
 	public Job()
 	{
-		this.jobParams = new ArrayList<JobParam>();
+		this.params = new ArrayList<JobParam>();
 	}
 	
 	public String getProgramName()
@@ -49,8 +49,8 @@ public class Job
 		this.jobName = jobName;
 	}
 	
-	public List<JobParam> getJobParams()
+	public List<JobParam> getParams()
 	{
-		return jobParams;
+		return params;
 	}
 }

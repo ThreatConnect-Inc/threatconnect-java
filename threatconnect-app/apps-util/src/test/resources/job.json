@@ -1,0 +1,48 @@
+{
+  "programName": "TC - CrossIntelSharing v1.0",
+  "programVersion": "1.0.0",
+  "jobName": "ThreatConnect",
+  "allowOnDemand": true,
+  "publishAuth": false,
+  "scheduleType": "Daily",
+  "scheduleCronFormat": "00 00 0 * * ? *",
+  "scheduleStartDate": 1499796402000,
+  "enableNotifications": false,
+  "notifyOnFailure": true,
+  "notifyOnPartialFailure": false,
+  "notifyOnComplete": false,
+  "notifyEmail": "",
+  "notifyIncludeLogFiles": false,
+  "params": [
+    {
+      "name": "api_default_org",
+      "preventUpdates": true,
+      "default": "ThreatConnect"
+    },
+    {
+      "name": "source_api_access_id",
+      "preventUpdates": false,
+      "default": "guest"
+    },
+    {
+      "name": "source_api_secret_key",
+      "preventUpdates": false,
+      "default": "guest"
+    },
+    {
+      "name": "tc_log_level",
+      "preventUpdates": false,
+      "default": "INFO"
+    },
+    {
+      "name": "source_org_id",
+      "preventUpdates": true,
+      "default": "10651"
+    },
+    {
+      "name": "source_api_url",
+      "preventUpdates": true,
+      "default": "https://api.threatconnect.com"
+    }
+  ]
+}

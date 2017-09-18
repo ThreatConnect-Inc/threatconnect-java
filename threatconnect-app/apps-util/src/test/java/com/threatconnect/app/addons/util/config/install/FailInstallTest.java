@@ -20,24 +20,11 @@ public class FailInstallTest
 		{
 			File file = new File("src/test/resources/fail1.install.json");
 			InstallUtil.load(file);
+			Assert.fail();
 		}
 		catch (InvalidEnumException e)
 		{
 			Assert.assertTrue(e.getMessage().contains("NOT A VALID TYPE is not a valid value"));
-		}
-	}
-	
-	@Test
-	public void fail2() throws IOException
-	{
-		try
-		{
-			File file = new File("src/test/resources/fail2.install.json");
-			InstallUtil.load(file);
-		}
-		catch (ValidationException e)
-		{
-			Assert.assertTrue(e.getMessage().contains("No type is defined for parameter username"));
 		}
 	}
 	
@@ -48,6 +35,7 @@ public class FailInstallTest
 		{
 			File file = new File("src/test/resources/fail3.install.json");
 			InstallUtil.load(file);
+			Assert.fail();
 		}
 		catch (InvalidEnumException e)
 		{
@@ -62,6 +50,7 @@ public class FailInstallTest
 		{
 			File file = new File("src/test/resources/fail4.install.json");
 			InstallUtil.load(file);
+			Assert.fail();
 		}
 		catch (ValidationException e)
 		{

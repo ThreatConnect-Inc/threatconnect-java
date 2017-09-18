@@ -1,4 +1,4 @@
-package com.threatconnect.plugin.pkg.util;
+package com.threatconnect.app.addons.util;
 
 /**
  * @author Greg Marut

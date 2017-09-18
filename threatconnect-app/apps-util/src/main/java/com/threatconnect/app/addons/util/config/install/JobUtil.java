@@ -21,16 +21,16 @@ public class JobUtil
 	
 	public static Job load(final String json) throws ValidationException
 	{
-		return load(json, VALIDATE_BY_DEFAULT);
+		return load(json, VALIDATE_BY_DEFAULT, new JobValidator());
 	}
 	
-	public static Job load(final String json, final boolean validate) throws ValidationException
+	public static Job load(final String json, final boolean validate, final JobValidator jobValidator) throws ValidationException
 	{
 		Job job = createGson().fromJson(json, Job.class);
 		
 		if (validate)
 		{
-			new JobValidator().validate(job);
+			jobValidator.validate(job);
 		}
 		
 		return job;
@@ -45,35 +45,35 @@ public class JobUtil
 	{
 		try (InputStream inputStream = new ByteArrayInputStream(bytes))
 		{
-			return load(inputStream, validate);
+			return load(inputStream, validate, new JobValidator());
 		}
 	}
 	
 	public static Job load(final File file) throws IOException, ValidationException
 	{
-		return load(file, VALIDATE_BY_DEFAULT);
+		return load(file, VALIDATE_BY_DEFAULT, new JobValidator());
 	}
 	
-	public static Job load(final File file, final boolean validate) throws IOException, ValidationException
+	public static Job load(final File file, final boolean validate, final JobValidator jobValidator) throws IOException, ValidationException
 	{
 		try (InputStream inputStream = new FileInputStream(file))
 		{
-			return load(inputStream, validate);
+			return load(inputStream, validate, jobValidator);
 		}
 	}
 	
 	public static Job load(final InputStream inputStream) throws ValidationException
 	{
-		return load(inputStream, VALIDATE_BY_DEFAULT);
+		return load(inputStream, VALIDATE_BY_DEFAULT, new JobValidator());
 	}
 	
-	public static Job load(final InputStream inputStream, final boolean validate) throws ValidationException
+	public static Job load(final InputStream inputStream, final boolean validate, final JobValidator jobValidator) throws ValidationException
 	{
 		Job Job = createGson().fromJson(new InputStreamReader(inputStream), Job.class);
 		
 		if (validate)
 		{
-			new JobValidator().validate(Job);
+			jobValidator.validate(Job);
 		}
 		
 		return Job;

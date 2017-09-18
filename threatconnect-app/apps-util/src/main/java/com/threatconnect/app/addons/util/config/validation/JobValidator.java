@@ -1,6 +1,7 @@
 package com.threatconnect.app.addons.util.config.validation;
 
 import com.threatconnect.app.addons.util.config.install.Job;
+import com.threatconnect.app.addons.util.config.install.JobParam;
 
 /**
  * @author Greg Marut
@@ -38,6 +39,13 @@ public class JobValidator extends Validator<Job>
 		if (isNullOrEmpty(object.getProgramVersion()))
 		{
 			throwMissingFieldValidationException("programVersion", object);
+		}
+		
+		//create a new job param validator
+		JobParamValidator jobParamValidator = new JobParamValidator(allowVariables);
+		for(JobParam jobParam : object.getParams())
+		{
+			jobParamValidator.validate(jobParam);
 		}
 	}
 	
