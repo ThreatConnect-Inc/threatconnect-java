@@ -5,6 +5,8 @@ import com.threatconnect.app.addons.util.config.InvalidJsonFileException;
 import com.threatconnect.app.addons.util.config.attribute.AttributeReaderUtil;
 import com.threatconnect.app.addons.util.config.install.Feed;
 import com.threatconnect.app.addons.util.config.install.FeedUtil;
+import com.threatconnect.app.addons.util.config.install.JobUtil;
+import com.threatconnect.app.addons.util.config.validation.JobValidator;
 import com.threatconnect.app.addons.util.config.validation.ValidationException;
 import com.threatconnect.plugin.pkg.PackageFileFilter;
 import com.threatconnect.plugin.pkg.Profile;
@@ -107,6 +109,18 @@ public class FeedPackageMojo extends AbstractPackageMojo<Feed>
 			if (!file.exists())
 			{
 				throw new ValidationException(generateReferencedFileMissingMessage(feed.getJobFile()));
+			}
+			else
+			{
+				try
+				{
+					//validate the job file
+					JobUtil.load(file, true, new JobValidator(true));
+				}
+				catch (IOException e)
+				{
+					throw new ValidationException(e.getMessage());
+				}
 			}
 		}
 	}

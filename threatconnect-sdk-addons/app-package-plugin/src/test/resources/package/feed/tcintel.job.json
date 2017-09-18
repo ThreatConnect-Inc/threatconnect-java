@@ -46,7 +46,8 @@
     },
     {
       "name": "last_ref_id",
-      "preventUpdates": false
+      "preventUpdates": false,
+      "default": "0"
     }
   ]
 }
