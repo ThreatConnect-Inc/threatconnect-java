@@ -1,6 +1,7 @@
 package com.threatconnect.sdk.model;
 
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public abstract class Item
@@ -43,4 +44,22 @@ public abstract class Item
 	}
 	
 	public abstract Set<? extends Item> getAssociatedItems();
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Item item = (Item) o;
+		return getItemType() == item.getItemType() &&
+				Objects.equals(getAttributes(), item.getAttributes()) &&
+				Objects.equals(getTags(), item.getTags()) &&
+				Objects.equals(getXid(), item.getXid());
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return Objects.hash(getItemType(), getAttributes(), getTags(), getXid());
+	}
 }
