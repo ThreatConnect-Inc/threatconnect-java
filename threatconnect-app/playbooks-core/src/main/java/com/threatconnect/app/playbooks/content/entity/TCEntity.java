@@ -3,7 +3,6 @@ package com.threatconnect.app.playbooks.content.entity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.util.Date;
-import java.util.Objects;
 
 public class TCEntity
 {
@@ -161,26 +160,7 @@ public class TCEntity
         //just output in json format
         Gson gson = new Gson();
         java.lang.reflect.Type type = new TypeToken<TCEntity>(){}.getType();
-		return gson.toJson(this, type);
+        String json = gson.toJson(this, type);
+        return json;
     }
-
-	@Override
-	public boolean equals(Object o)
-	{
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		TCEntity tcEntity = (TCEntity) o;
-		return Objects.equals(getId(), tcEntity.getId()) &&
-				Objects.equals(getType(), tcEntity.getType()) &&
-				Objects.equals(getValue(), tcEntity.getValue()) &&
-				Objects.equals(getOwnerName(), tcEntity.getOwnerName()) &&
-				Objects.equals(getDateAdded(), tcEntity.getDateAdded()) &&
-				Objects.equals(getWebLink(), tcEntity.getWebLink());
-	}
-
-	@Override
-	public int hashCode()
-	{
-		return Objects.hash(getId(), getType(), getValue(), getOwnerName(), getDateAdded(), getWebLink());
-	}
 }

@@ -4,7 +4,6 @@ import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.sdk.model.Item;
 
 import java.util.List;
-import java.util.Objects;
 
 public class KeyValue
 {
@@ -111,22 +110,5 @@ public class KeyValue
 			"key=" + key +
 			", value=" + value +
 			'}';
-	}
-
-	@Override
-	public boolean equals(Object o)
-	{
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		KeyValue keyValue = (KeyValue) o;
-		return Objects.equals(getKey(), keyValue.getKey()) &&
-				Objects.equals(getValue(), keyValue.getValue()) &&
-				Objects.equals(getVariableType(), keyValue.getVariableType());
-	}
-
-	@Override
-	public int hashCode()
-	{
-		return Objects.hash(getKey(), getValue(), getVariableType());
 	}
 }
