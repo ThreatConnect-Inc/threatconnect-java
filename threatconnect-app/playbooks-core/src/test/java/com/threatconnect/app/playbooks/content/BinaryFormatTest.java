@@ -12,6 +12,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author Greg Marut
  */
@@ -39,6 +42,8 @@ public class BinaryFormatTest
 		
 		//create the sample and expected data sets
 		String value = "This is a test";
+		
+		//these are the exact bytes expected to be written to the database
 		byte[] expected = "\"This is a test\"".getBytes();
 		
 		//write the value to the content service
@@ -58,6 +63,34 @@ public class BinaryFormatTest
 	}
 	
 	@Test
+	public void stringArrayTest() throws ContentException, DBReadException
+	{
+		//the database key
+		final String key = "#App:123:value!StringArray";
+		
+		//create the sample and expected data sets
+		List<String> values = Arrays.asList("one", "two", "three");
+		
+		//these are the exact bytes expected to be written to the database
+		byte[] expected = "[\"one\",\"two\",\"three\"]".getBytes();
+		
+		//write the value to the content service
+		contentService.writeStringList(key, values);
+		
+		//extract the raw bytes from the underlying data storage
+		byte[] raw = embeddedMapDBService.getValue(key);
+		List<String> results = contentService.readStringList(key);
+		logger.debug("Expected: {}", new String(expected));
+		logger.debug("Actual:   {}", new String(raw));
+		
+		//ensure that the raw bytes equal the expected bytes
+		Assert.assertArrayEquals(expected, raw);
+		
+		//ensure that the resulting value is the same as the original value saved
+		Assert.assertEquals(values, results);
+	}
+	
+	@Test
 	public void binaryTest() throws ContentException, DBReadException
 	{
 		//the database key
@@ -65,7 +98,9 @@ public class BinaryFormatTest
 		
 		//create the sample and expected data sets
 		byte[] value = "This is a test".getBytes();
-		byte[] expected = merge("\"".getBytes(), Base64.encodeBase64(value), "\"".getBytes());
+		
+		//these are the exact bytes expected to be written to the database
+		byte[] expected = "\"VGhpcyBpcyBhIHRlc3Q=\"".getBytes();
 		
 		//write the value to the content service
 		contentService.writeBinary(key, value);
@@ -87,6 +122,35 @@ public class BinaryFormatTest
 		Assert.assertArrayEquals(value, result);
 	}
 	
+	@Test
+	public void binaryArrayTest() throws ContentException, DBReadException
+	{
+		//the database key
+		final String key = "#App:123:value!BinaryArray";
+		
+		//create the sample and expected data sets
+		byte[][] values = new byte[][] { "one".getBytes(), "two".getBytes(), "three".getBytes() };
+		
+		//these are the exact bytes expected to be written to the database
+		byte[] expected = "[\"b25l\",\"dHdv\",\"dGhyZWU=\"]".getBytes();
+		
+		Assert.assertArrayEquals("b25l".getBytes(), Base64.encodeBase64("one".getBytes()));
+		Assert.assertArrayEquals("dHdv".getBytes(), Base64.encodeBase64("two".getBytes()));
+		Assert.assertArrayEquals("dGhyZWU=".getBytes(), Base64.encodeBase64("three".getBytes()));
+		
+		//write the value to the content service
+		contentService.writeBinaryArray(key, values);
+		
+		//extract the raw bytes from the underlying data storage
+		byte[] raw = embeddedMapDBService.getValue(key);
+		byte[][] result = contentService.readBinaryArray(key);
+		logger.debug("Expected: {}", new String(expected));
+		logger.debug("Actual:   {}", new String(raw));
+		
+		//ensure that the raw bytes equal the expected bytes
+		Assert.assertArrayEquals(expected, raw);
+	}
+	
 	private byte[] stripQuotes(byte[] bytes)
 	{
 		if ("\"".equals(new String(new byte[] { bytes[0] })) && "\"".equals(new String(new byte[] { bytes[bytes.length - 1] })))
@@ -97,18 +161,5 @@ public class BinaryFormatTest
 		{
 			return bytes;
 		}
-	}
-	
-	private byte[] merge(final byte[]... byteArrays)
-	{
-		byte[] merged = new byte[] {};
-		
-		//for each of the byte arrays
-		for (byte[] bytes : byteArrays)
-		{
-			merged = ArrayUtils.addAll(merged, bytes);
-		}
-		
-		return merged;
 	}
 }
