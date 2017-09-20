@@ -1,5 +1,6 @@
 package com.threatconnect.app.playbooks.content.converter;
 
+import org.apache.commons.codec.binary.Base64;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.type.TypeFactory;
@@ -36,8 +37,7 @@ public abstract class ContentConverter<T>
 		
 		try
 		{
-			String content = mapper.writerWithType(type).writeValueAsString(source);
-			return content.getBytes();
+			return mapper.writerWithType(type).writeValueAsBytes(source);
 		}
 		catch (IOException e)
 		{

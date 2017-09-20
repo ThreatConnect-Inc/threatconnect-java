@@ -47,6 +47,12 @@
 			<artifactId>httpclient</artifactId>
 			<version>${version.apache-http}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${version.apache-commons}</version>
+		</dependency>
+
 
 		<!-- Testing -->
 		<dependency>
