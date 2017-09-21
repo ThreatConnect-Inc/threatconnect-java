@@ -204,7 +204,7 @@ public class BinaryFormatTest
 		
 		//these are the exact bytes expected to be written to the database
 		byte[] expected =
-			"{\"indicator\":[{\"xid\":\"ABCDEFG\",\"rating\":null,\"confidence\":null,\"summary\":\"10.11.12.13\",\"type\":\"Address\",\"associatedGroups\":[]}],\"group\":[]}"
+			"{\"indicator\":[{\"xid\":\"ABCDEFG\",\"rating\":null,\"confidence\":null,\"summary\":\"10.11.12.13\",\"type\":\"Address\",\"associatedGroups\":[],\"securityLabel\":[]}],\"group\":[]}"
 				.getBytes();
 		
 		//write the value to the content service
