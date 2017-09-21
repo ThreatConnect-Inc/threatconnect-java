@@ -18,6 +18,7 @@ import com.threatconnect.sdk.model.Incident;
 import com.threatconnect.sdk.model.Indicator;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.ItemType;
+import com.threatconnect.sdk.model.SecurityLabel;
 import com.threatconnect.sdk.model.Threat;
 import com.threatconnect.sdk.model.Url;
 import com.threatconnect.sdk.model.util.TagUtil;
@@ -97,6 +98,12 @@ public class BatchItemSerializerTest
 		hostAttribute.setValue("IndicatorUnitTest");
 		host.getAttributes().add(hostAttribute);
 		
+		SecurityLabel securityLabel = new SecurityLabel();
+		securityLabel.setName("TLP:GREEN");
+		securityLabel.setDescription("This is a security label");
+		incident.getSecurityLabels().add(securityLabel);
+		address.getSecurityLabels().add(securityLabel);
+		
 		//serialize the results
 		List<? extends Item> items = Arrays.asList(incident, host);
 		BatchItemSerializer batchItemSerializer = new BatchItemSerializer(items);
@@ -131,6 +138,9 @@ public class BatchItemSerializerTest
 		Attribute indicatorAttribute = indicator.getAttributes().iterator().next();
 		Assert.assertEquals("IndicatorUnitTest", indicatorAttribute.getValue());
 		Assert.assertEquals("Source", indicatorAttribute.getType());
+		
+		Assert.assertEquals("TLP:GREEN", group.getSecurityLabels().get(0).getName());
+		Assert.assertEquals("This is a security label", group.getSecurityLabels().get(0).getDescription());
 	}
 	
 	@Test

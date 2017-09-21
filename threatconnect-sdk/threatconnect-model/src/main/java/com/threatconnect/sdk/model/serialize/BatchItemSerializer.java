@@ -11,6 +11,7 @@ import com.threatconnect.sdk.model.GroupType;
 import com.threatconnect.sdk.model.Indicator;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.ItemType;
+import com.threatconnect.sdk.model.SecurityLabel;
 import com.threatconnect.sdk.model.util.ItemUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -137,6 +139,8 @@ public class BatchItemSerializer
 		JsonArray associatedGroupXidArray = new JsonArray();
 		groupJsonObject.add("associatedGroupXid", associatedGroupXidArray);
 		
+		groupJsonObject.add("securityLabel", buildSecurityLabelArray(group.getSecurityLabels()));
+		
 		//for each of the associations on this group
 		for (Item item : group.getAssociatedItems())
 		{
@@ -166,6 +170,8 @@ public class BatchItemSerializer
 		
 		JsonArray associatedGroupsArray = new JsonArray();
 		indicatorJsonObject.add("associatedGroups", associatedGroupsArray);
+		
+		indicatorJsonObject.add("securityLabel", buildSecurityLabelArray(indicator.getSecurityLabels()));
 		
 		//check to see if this indicator is a file
 		if (indicator instanceof File)
@@ -333,6 +339,29 @@ public class BatchItemSerializer
 			
 			xidMap.put(indicator, indicator.getXid());
 		}
+	}
+	
+	private JsonArray buildSecurityLabelArray(final List<SecurityLabel> securityLabels)
+	{
+		JsonArray securityLabelArray = new JsonArray();
+		
+		//for each of the security labels
+		for (SecurityLabel securityLabel : securityLabels)
+		{
+			JsonObject jsonObject = new JsonObject();
+			jsonObject.addProperty("name", securityLabel.getName());
+			jsonObject.addProperty("description", securityLabel.getDescription());
+			jsonObject.addProperty("color", securityLabel.getColor());
+			
+			if (null != securityLabel.getDateAdded())
+			{
+				jsonObject.addProperty("dateAdded", DEFAULT_DATE_FORMATTER.format(securityLabel.getDateAdded()));
+			}
+			
+			securityLabelArray.add(jsonObject);
+		}
+		
+		return securityLabelArray;
 	}
 	
 	private String generateXid()

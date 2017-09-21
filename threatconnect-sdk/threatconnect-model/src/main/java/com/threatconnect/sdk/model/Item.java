@@ -1,6 +1,8 @@
 package com.threatconnect.sdk.model;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -9,6 +11,7 @@ public abstract class Item
 	private final ItemType itemType;
 	private final Set<Attribute> attributes;
 	private final Set<String> tags;
+	private final List<SecurityLabel> securityLabels;
 	private String xid;
 
 	public Item(final ItemType itemType)
@@ -16,6 +19,7 @@ public abstract class Item
 		this.itemType = itemType;
 		this.attributes = new LinkedHashSet<Attribute>();
 		this.tags = new LinkedHashSet<String>();
+		this.securityLabels = new ArrayList<SecurityLabel>();
 	}
 
 	public final ItemType getItemType()
@@ -32,7 +36,12 @@ public abstract class Item
 	{
 		return tags;
 	}
-
+	
+	public List<SecurityLabel> getSecurityLabels()
+	{
+		return securityLabels;
+	}
+	
 	public String getXid()
 	{
 		return xid;

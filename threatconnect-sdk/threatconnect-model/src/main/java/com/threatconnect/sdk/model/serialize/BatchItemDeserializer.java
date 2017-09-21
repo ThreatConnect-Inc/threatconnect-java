@@ -21,6 +21,7 @@ import com.threatconnect.sdk.model.Incident;
 import com.threatconnect.sdk.model.Indicator;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.ItemType;
+import com.threatconnect.sdk.model.SecurityLabel;
 import com.threatconnect.sdk.model.Signature;
 import com.threatconnect.sdk.model.Threat;
 import com.threatconnect.sdk.model.Url;
@@ -84,7 +85,10 @@ public class BatchItemDeserializer
 					
 					group.setName(JsonUtil.getAsString(groupElement, "name"));
 					
-					//copy tags and attributes for the indicator
+					//copy the security labels for the group
+					copySecurityLabels(JsonUtil.getAsJsonArray(groupElement, "securityLabel"), group);
+					
+					//copy tags and attributes for the group
 					copyTagsAndAttributes(groupElement, group);
 					
 					//add this group to the list of items
@@ -153,6 +157,9 @@ public class BatchItemDeserializer
 						//copy the rating and confidence values
 						indicator.setRating(JsonUtil.getAsDouble(indicatorElement, "rating"));
 						indicator.setConfidence(JsonUtil.getAsDouble(indicatorElement, "confidence"));
+						
+						//copy the security labels for the indicator
+						copySecurityLabels(JsonUtil.getAsJsonArray(indicatorElement, "securityLabel"), indicator);
 						
 						//copy tags and attributes for the indicator
 						copyTagsAndAttributes(indicatorElement, indicator);
@@ -355,6 +362,37 @@ public class BatchItemDeserializer
 				CustomIndicator customIndicator = new CustomIndicator(indicatorType);
 				customIndicator.setSummary(summary);
 				return customIndicator;
+		}
+	}
+	
+	private void copySecurityLabels(final JsonArray securityLabelArray, final Item item)
+	{
+		//make sure the array is not null
+		if (null != securityLabelArray)
+		{
+			// for each of the elements in the array
+			for (JsonElement securityLabelElement : securityLabelArray)
+			{
+				SecurityLabel securityLabel = new SecurityLabel();
+				securityLabel.setName(JsonUtil.getAsString(securityLabelElement, "name"));
+				securityLabel.setDescription(JsonUtil.getAsString(securityLabelElement, "description"));
+				securityLabel.setColor(JsonUtil.getAsString(securityLabelElement, "color"));
+				
+				String dateAdded = JsonUtil.getAsString(securityLabelElement, "dateAdded");
+				if (null != dateAdded)
+				{
+					try
+					{
+						securityLabel.setDateAdded(BatchItemSerializer.DEFAULT_DATE_FORMATTER.parse(dateAdded));
+					}
+					catch (ParseException e)
+					{
+						logger.warn(e.getMessage(), e);
+					}
+				}
+				
+				item.getSecurityLabels().add(securityLabel);
+			}
 		}
 	}
 	
