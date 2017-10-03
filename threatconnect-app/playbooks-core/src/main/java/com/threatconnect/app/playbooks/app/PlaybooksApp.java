@@ -65,8 +65,8 @@ public abstract class PlaybooksApp extends App
 	}
 	
 	/**
-	 * Returns the list of output parameters that this app is expected to write. This will be a subset of any number
-	 * of of the output parameters that are originally defined by the app's install file.
+	 * Returns the list of output parameters that this app is expected to write. This will be a subset of any number of
+	 * of the output parameters that are originally defined by the app's install file.
 	 *
 	 * @return the list of output params that this app is expected to write
 	 */
@@ -255,7 +255,15 @@ public abstract class PlaybooksApp extends App
 	 */
 	public final String readStringContent(final String param) throws ContentException
 	{
-		return getContentService().readString(getAppConfig().getString(param));
+		final String key = getAppConfig().getString(param);
+		if (null != key)
+		{
+			return getContentService().readString(getAppConfig().getString(param));
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	/**
@@ -288,7 +296,15 @@ public abstract class PlaybooksApp extends App
 	 */
 	public final List<String> readStringListContent(final String param) throws ContentException
 	{
-		return getContentService().readStringList(getAppConfig().getString(param));
+		final String key = getAppConfig().getString(param);
+		if (null != key)
+		{
+			return getContentService().readStringList(getAppConfig().getString(param));
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	/**
@@ -322,7 +338,15 @@ public abstract class PlaybooksApp extends App
 	 */
 	public final byte[] readBinaryContent(final String param) throws ContentException
 	{
-		return getContentService().readBinary(getAppConfig().getString(param));
+		final String key = getAppConfig().getString(param);
+		if (null != key)
+		{
+			return getContentService().readBinary(getAppConfig().getString(param));
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	/**
@@ -347,7 +371,8 @@ public abstract class PlaybooksApp extends App
 	}
 	
 	/**
-	 * Serves as a shorthand method for reading a binary array value from the database where the param is a database key
+	 * Serves as a shorthand method for reading a binary array value from the database where the param is a database
+	 * key
 	 *
 	 * @param param the app parameter which represents a playbooks variable
 	 * @return the value of the parameter in the database
@@ -355,7 +380,15 @@ public abstract class PlaybooksApp extends App
 	 */
 	public final byte[][] readBinaryArrayContent(final String param) throws ContentException
 	{
-		return getContentService().readBinaryArray(getAppConfig().getString(param));
+		final String key = getAppConfig().getString(param);
+		if (null != key)
+		{
+			return getContentService().readBinaryArray(key);
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	/**
@@ -388,7 +421,15 @@ public abstract class PlaybooksApp extends App
 	 */
 	public final KeyValue readKeyValueContent(final String param) throws ContentException
 	{
-		return getContentService().readKeyValue(getAppConfig().getString(param));
+		final String key = getAppConfig().getString(param);
+		if (null != key)
+		{
+			return getContentService().readKeyValue(getAppConfig().getString(param));
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	/**
@@ -421,7 +462,15 @@ public abstract class PlaybooksApp extends App
 	 */
 	public final List<KeyValue> readKeyValueArrayContent(final String param) throws ContentException
 	{
-		return getContentService().readKeyValueArray(getAppConfig().getString(param));
+		final String key = getAppConfig().getString(param);
+		if (null != key)
+		{
+			return getContentService().readKeyValueArray(getAppConfig().getString(param));
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	/**
@@ -456,7 +505,15 @@ public abstract class PlaybooksApp extends App
 	 */
 	public final TCEntity readTCEntityContent(final String param) throws ContentException
 	{
-		return getContentService().readTCEntity(getAppConfig().getString(param));
+		final String key = getAppConfig().getString(param);
+		if (null != key)
+		{
+			return getContentService().readTCEntity(getAppConfig().getString(param));
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	/**
@@ -489,7 +546,15 @@ public abstract class PlaybooksApp extends App
 	 */
 	public final List<TCEntity> readTCEntityListContent(final String param) throws ContentException
 	{
-		return getContentService().readTCEntityList(getAppConfig().getString(param));
+		final String key = getAppConfig().getString(param);
+		if (null != key)
+		{
+			return getContentService().readTCEntityList(getAppConfig().getString(param));
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	/**
@@ -523,7 +588,15 @@ public abstract class PlaybooksApp extends App
 	 */
 	public final Item readTCEnhancedEntityContent(final String param) throws ContentException
 	{
-		return getContentService().readTCEnhancedEntity(getAppConfig().getString(param));
+		final String key = getAppConfig().getString(param);
+		if (null != key)
+		{
+			return getContentService().readTCEnhancedEntity(getAppConfig().getString(param));
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	/**
@@ -557,7 +630,15 @@ public abstract class PlaybooksApp extends App
 	 */
 	public final List<Item> readTCEnhancedEntityListContent(final String param) throws ContentException
 	{
-		return getContentService().readTCEnhancedEntityList(getAppConfig().getString(param));
+		final String key = getAppConfig().getString(param);
+		if (null != key)
+		{
+			return getContentService().readTCEnhancedEntityList(getAppConfig().getString(param));
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	/**
@@ -593,7 +674,15 @@ public abstract class PlaybooksApp extends App
 	 */
 	public final byte[] readCustomTypeContent(final String param) throws ContentException
 	{
-		return getContentService().readCustomType(getAppConfig().getString(param));
+		final String key = getAppConfig().getString(param);
+		if (null != key)
+		{
+			return getContentService().readCustomType(getAppConfig().getString(param));
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	/**

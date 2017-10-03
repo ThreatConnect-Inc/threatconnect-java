@@ -36,7 +36,7 @@ public class TypedContentAccumulator<T> extends ContentAccumulator<T>
 		if (!standardPlaybookType.toString().equalsIgnoreCase(actualType))
 		{
 			throw new IllegalArgumentException(
-				"key is of type " + actualType + ", expected " + standardPlaybookType.toString());
+				"key \"" + key + "\" is of type " + actualType + ", expected " + standardPlaybookType.toString());
 		}
 		
 		return actualType;

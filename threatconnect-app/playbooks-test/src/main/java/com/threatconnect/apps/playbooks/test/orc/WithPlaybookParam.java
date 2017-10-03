@@ -8,6 +8,7 @@ import com.threatconnect.app.playbooks.content.entity.KeyValue;
 import com.threatconnect.app.playbooks.content.entity.TCEntity;
 import com.threatconnect.app.playbooks.util.PlaybooksVariableUtil;
 import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
+import com.threatconnect.sdk.model.Item;
 import org.junit.Assert;
 
 import java.util.List;
@@ -45,7 +46,8 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
-			Assert.assertEquals(StandardPlaybookType.String.toString(), PlaybooksVariableUtil.extractVariableType(value));
+			Assert
+				.assertEquals(StandardPlaybookType.String.toString(), PlaybooksVariableUtil.extractVariableType(value));
 			getPlaybookParams().put(playbookParam, value);
 		}
 		else
@@ -73,7 +75,8 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
-			Assert.assertEquals(StandardPlaybookType.StringArray.toString(), PlaybooksVariableUtil.extractVariableType(value));
+			Assert.assertEquals(StandardPlaybookType.StringArray.toString(),
+				PlaybooksVariableUtil.extractVariableType(value));
 			getPlaybookParams().put(playbookParam, value);
 		}
 		else
@@ -99,7 +102,8 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
-			Assert.assertEquals(StandardPlaybookType.Binary.toString(), PlaybooksVariableUtil.extractVariableType(value));
+			Assert
+				.assertEquals(StandardPlaybookType.Binary.toString(), PlaybooksVariableUtil.extractVariableType(value));
 			getPlaybookParams().put(playbookParam, value);
 		}
 		else
@@ -126,7 +130,8 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
-			Assert.assertEquals(StandardPlaybookType.BinaryArray.toString(), PlaybooksVariableUtil.extractVariableType(value));
+			Assert.assertEquals(StandardPlaybookType.BinaryArray.toString(),
+				PlaybooksVariableUtil.extractVariableType(value));
 			getPlaybookParams().put(playbookParam, value);
 		}
 		else
@@ -169,7 +174,8 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 	{
 		//store this object in the local content service
 		final String variable =
-			getPlaybookConfig().createVariableForInputParam(playbookParam, StandardPlaybookType.KeyValueArray.toString());
+			getPlaybookConfig()
+				.createVariableForInputParam(playbookParam, StandardPlaybookType.KeyValueArray.toString());
 		getContentService().writeKeyValueArray(variable, value);
 		getPlaybookParams().put(playbookParam, variable);
 		
@@ -207,7 +213,8 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 	{
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
-			Assert.assertEquals(StandardPlaybookType.TCEntity.toString(), PlaybooksVariableUtil.extractVariableType(value));
+			Assert.assertEquals(StandardPlaybookType.TCEntity.toString(),
+				PlaybooksVariableUtil.extractVariableType(value));
 			getPlaybookParams().put(playbookParam, value);
 		}
 		else
@@ -223,7 +230,8 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 	{
 		//store this object in the local content service
 		final String variable =
-			getPlaybookConfig().createVariableForInputParam(playbookParam, StandardPlaybookType.TCEntityArray.toString());
+			getPlaybookConfig()
+				.createVariableForInputParam(playbookParam, StandardPlaybookType.TCEntityArray.toString());
 		getContentService().writeTCEntityList(variable, value);
 		getPlaybookParams().put(playbookParam, variable);
 		
@@ -236,13 +244,39 @@ public class WithPlaybookParam extends AbstractThen<PlaybooksOrchestration>
 		if (PlaybooksVariableUtil.isVariable(value))
 		{
 			Assert
-				.assertEquals(StandardPlaybookType.TCEntityArray.toString(), PlaybooksVariableUtil.extractVariableType(value));
+				.assertEquals(StandardPlaybookType.TCEntityArray.toString(),
+					PlaybooksVariableUtil.extractVariableType(value));
 			getPlaybookParams().put(playbookParam, value);
 		}
 		else
 		{
 			throw new IllegalArgumentException(value + " is not a valid Playbooks variable");
 		}
+		
+		return this;
+	}
+	
+	public WithPlaybookParam asTCEnhancedEntity(final String playbookParam, final Item value) throws ContentException
+	{
+		//store this object in the local content service
+		final String variable =
+			getPlaybookConfig()
+				.createVariableForInputParam(playbookParam, StandardPlaybookType.TCEnhancedEntity.toString());
+		getContentService().writeTCEnhancedEntity(variable, value);
+		getPlaybookParams().put(playbookParam, variable);
+		
+		return this;
+	}
+	
+	public WithPlaybookParam asTCEnhancedEntityList(final String playbookParam, final List<Item> value)
+		throws ContentException
+	{
+		//store this object in the local content service
+		final String variable =
+			getPlaybookConfig()
+				.createVariableForInputParam(playbookParam, StandardPlaybookType.TCEnhancedEntityArray.toString());
+		getContentService().writeTCEnhancedEntityList(variable, value);
+		getPlaybookParams().put(playbookParam, variable);
 		
 		return this;
 	}

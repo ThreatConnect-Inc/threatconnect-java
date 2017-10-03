@@ -276,7 +276,7 @@ public class PlaybookRunner implements Runnable
 		}
 		else if (StandardPlaybookType.TCEnhancedEntity.toString().equalsIgnoreCase(type))
 		{
-			if (null != source.readTCEntity(variable))
+			if (null != source.readTCEnhancedEntity(variable))
 			{
 				target.writeTCEnhancedEntity(variable, source.readTCEnhancedEntity(variable));
 			}
