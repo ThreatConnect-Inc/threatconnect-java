@@ -5,7 +5,6 @@
  */
 package com.threatconnect.sdk.client;
 
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.conn.Connection;
@@ -61,7 +60,6 @@ public abstract class AbstractClientAdapter {
         this.conn = conn;
         this.executor = conn.getExecutor();
         this.mapper = new ObjectMapper();
-        mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
     }
 
     /**
