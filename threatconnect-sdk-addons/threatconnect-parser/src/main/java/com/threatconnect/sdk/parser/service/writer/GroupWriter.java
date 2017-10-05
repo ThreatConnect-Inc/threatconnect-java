@@ -48,17 +48,13 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 	
 	/**
 	 * Saves the group with the associated owner
-	 * 
-	 * @param ownerName
-	 * the owner name of the group
+	 *
+	 * @param ownerName the owner name of the group
 	 * @return the saved group
-	 * @throws SaveItemFailedException
-	 * if there was an issue saving this item
-	 * @throws IOException
-	 * if there was an exception communicating with the server
+	 * @throws SaveItemFailedException if there was an issue saving this item
+	 * @throws IOException             if there was an exception communicating with the server
 	 */
-	public T saveGroup(final String ownerName)
-		throws SaveItemFailedException, IOException
+	public T saveGroup(final String ownerName) throws SaveItemFailedException, IOException
 	{
 		try
 		{
@@ -102,7 +98,7 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 						// map the attribute to a server entity
 						com.threatconnect.sdk.server.entity.Attribute attr =
 							mapper.map(attribute, com.threatconnect.sdk.server.entity.Attribute.class);
-							
+						
 						// save the attributes for this group
 						ApiEntitySingleResponse<?, ?> attrResponse = writer.addAttribute(getSavedGroupID(), attr);
 						
@@ -158,13 +154,10 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 	
 	/**
 	 * Associates an indicator with the saved group object of this writer class
-	 * 
-	 * @param indicator
-	 * the indicator to associate to this group
-	 * @throws AssociateFailedException
-	 * if there as an issue associating the indicator to this group
-	 * @throws IOException
-	 * if there was an exception communicating with the server
+	 *
+	 * @param indicator the indicator to associate to this group
+	 * @throws AssociateFailedException if there as an issue associating the indicator to this group
+	 * @throws IOException              if there was an exception communicating with the server
 	 */
 	public void associateIndicator(final Indicator indicator)
 		throws AssociateFailedException, IOException
@@ -278,11 +271,9 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 	
 	/**
 	 * Deletes the group from the server if it exists
-	 * 
-	 * @param ownerName
-	 * the owner name of the group
-	 * @throws DeleteItemFailedException
-	 * if there was any reason the group could not be deleted
+	 *
+	 * @param ownerName the owner name of the group
+	 * @throws DeleteItemFailedException if there was any reason the group could not be deleted
 	 */
 	public void deleteGroup(final String ownerName) throws DeleteItemFailedException
 	{
@@ -315,14 +306,11 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 	
 	/**
 	 * Looks up a group by the group name
-	 * 
-	 * @param groupName
-	 * the name of the group to look up
+	 *
+	 * @param groupName the name of the group to look up
 	 * @return the existing indicator
-	 * @throws FailedResponseException
-	 * if the server returned an invalid response
-	 * @throws IOException
-	 * if there was an exception communicating with the server
+	 * @throws FailedResponseException if the server returned an invalid response
+	 * @throws IOException             if there was an exception communicating with the server
 	 */
 	protected T lookupGroup(final String groupName, final String ownerName)
 	{
@@ -336,7 +324,7 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 				// lookup the group by the group name
 				IterableResponse<T> readGroups =
 					reader.getForFilters(ownerName, false, ApiFilterType.filterName().equal(groupName));
-					
+				
 				// check to see if the read groups is not null
 				if (null != readGroups)
 				{
@@ -362,7 +350,7 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 	
 	/**
 	 * Retrieves the id of the saved group
-	 * 
+	 *
 	 * @return the id of the saved group
 	 */
 	protected Integer getSavedGroupID()
@@ -380,7 +368,7 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 	
 	/**
 	 * Creates a reader adapter for this class
-	 * 
+	 *
 	 * @return the reader adapter for this indicator
 	 */
 	protected AbstractGroupReaderAdapter<T> createReaderAdapter()
@@ -390,7 +378,7 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 	
 	/**
 	 * A convenience method for creating a writer adapter for this class
-	 * 
+	 *
 	 * @return the group writer adapter
 	 */
 	protected AbstractGroupWriterAdapter<T> createWriterAdapter()

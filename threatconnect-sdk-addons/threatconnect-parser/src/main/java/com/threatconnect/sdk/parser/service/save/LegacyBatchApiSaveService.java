@@ -21,6 +21,7 @@ import com.threatconnect.sdk.parser.service.writer.AdversaryWriter;
 import com.threatconnect.sdk.parser.service.writer.CampaignWriter;
 import com.threatconnect.sdk.parser.service.writer.DocumentWriter;
 import com.threatconnect.sdk.parser.service.writer.EmailWriter;
+import com.threatconnect.sdk.parser.service.writer.FileWriter;
 import com.threatconnect.sdk.parser.service.writer.GroupWriter;
 import com.threatconnect.sdk.parser.service.writer.IncidentWriter;
 import com.threatconnect.sdk.parser.service.writer.LegacyBatchIndicatorWriter;
@@ -31,7 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -228,7 +228,7 @@ public class LegacyBatchApiSaveService implements SaveService
 			SaveResults batchSaveResults = batchIndicatorWriter.saveIndicators(ownerName, attributeWriteType);
 			
 			//TODO: the batch api does not handle saving file occurrences so we have to revert to the ApiSaveService to do so
-			saveFileOccurrences(indicators, batchSaveResults);
+			saveMissingFileFields(indicators, batchSaveResults);
 			
 			return batchSaveResults;
 		}
@@ -246,23 +246,23 @@ public class LegacyBatchApiSaveService implements SaveService
 	 *
 	 * @return
 	 */
-	private void saveFileOccurrences(final Collection<Indicator> indicators, final SaveResults saveResults)
+	private void saveMissingFileFields(final Collection<Indicator> indicators, final SaveResults saveResults)
 	{
 		//extract all of the file objects from the set of indicators
 		Set<File> files = IndicatorUtil.extractIndicatorSet(indicators, File.class);
-		ApiSaveService apiSaveService = new ApiSaveService(configuration, ownerName);
 		
 		//for each of the files
 		for (File file : files)
 		{
-			//check to see if this file has occurrences
-			if (!file.getFileOccurrences().isEmpty())
+			//check to see if this file has occurrences or a file size
+			if (null != file.getSize() || !file.getFileOccurrences().isEmpty())
 			{
 				try
 				{
-					saveResults.addFailedItems(apiSaveService.saveItems(Arrays.asList(file)));
+					FileWriter fileWriter = new FileWriter(new Connection(configuration), file);
+					fileWriter.saveIndicator(ownerName, true);
 				}
-				catch (IOException e)
+				catch (SaveItemFailedException | IOException e)
 				{
 					logger.warn(e.getMessage(), e);
 					saveResults.addFailedItems(file);

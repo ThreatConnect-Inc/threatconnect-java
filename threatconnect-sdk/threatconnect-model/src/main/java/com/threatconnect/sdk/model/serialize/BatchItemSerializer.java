@@ -206,6 +206,9 @@ public class BatchItemSerializer
 	
 	private void writeAdditionalData(final File file, final JsonObject indicatorJsonObject)
 	{
+		//filesize is stored as "intValue1"
+		indicatorJsonObject.addProperty("intValue1", file.getSize());
+		
 		//check to see if there are file occurrences
 		if (!file.getFileOccurrences().isEmpty())
 		{

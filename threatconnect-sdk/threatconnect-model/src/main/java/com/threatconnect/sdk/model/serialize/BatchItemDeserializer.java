@@ -223,6 +223,9 @@ public class BatchItemDeserializer
 	
 	private void loadAdditionalData(final File file, final JsonElement indicatorElement)
 	{
+		//filesize is stored as "intValue1"
+		file.setSize(JsonUtil.getAsInt(indicatorElement, "intValue1"));
+		
 		//check to see if there is a file action
 		JsonElement fileDataElement = JsonUtil.get(indicatorElement, "fileAction", "fileData");
 		if (null != fileDataElement)

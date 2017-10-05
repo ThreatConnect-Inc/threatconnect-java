@@ -38,8 +38,22 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 	 * @throws SaveItemFailedException
 	 * @throws IOException             if there was an exception communicating with the server
 	 */
-	public T saveIndicator(final String ownerName)
-		throws SaveItemFailedException, IOException
+	public T saveIndicator(final String ownerName) throws SaveItemFailedException, IOException
+	{
+		return saveIndicator(ownerName, false);
+	}
+	
+	/**
+	 * Saves the indicator with the associated owner
+	 *
+	 * @param ownerName
+	 * @param forceSave force the save even if the indicator exists on the server
+	 * @return
+	 * @throws SaveItemFailedException
+	 * @throws IOException             if there was an exception communicating with the server
+	 */
+	@SuppressWarnings("unchecked")
+	public T saveIndicator(final String ownerName, final boolean forceSave) throws SaveItemFailedException, IOException
 	{
 		try
 		{
@@ -47,17 +61,22 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 			AbstractIndicatorWriterAdapter<T> writer = createWriterAdapter();
 			
 			// map the object
-			T indicator = mapper.map(indicatorSource, tcModelClass);
+			final T indicator = mapper.map(indicatorSource, tcModelClass);
 			
 			// attempt to lookup the indicator by the id
-			T readIndicator = lookupIndicator(buildID(), ownerName);
+			final T readIndicator = lookupIndicator(buildID(), ownerName);
 			
 			// check to see if the indicator was found on the server
 			if (null != readIndicator)
 			{
 				// use this indicator as the saved indicator
 				savedIndicator = readIndicator;
-				return savedIndicator;
+				
+				//check to see if force saving is not enabled
+				if (!forceSave)
+				{
+					return savedIndicator;
+				}
 			}
 			
 			if (logger.isDebugEnabled())
@@ -66,8 +85,8 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 				logger.info("Saving indicator: {}", gson.toJson(indicator));
 			}
 			
-			// save the object
-			ApiEntitySingleResponse<T, ?> response = writer.create(indicator);
+			// save or update the object
+			ApiEntitySingleResponse<T, ?> response = (null == readIndicator) ? writer.create(indicator) : writer.update(indicator);
 			
 			// check to see if this call was successful
 			if (response.isSuccess())
