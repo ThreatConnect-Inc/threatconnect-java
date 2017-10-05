@@ -13,8 +13,8 @@ public class TagUtil
 	
 	public static void addTag(final String tag, final Item item)
 	{
-		// ensure that the tag is not null
-		if (null != tag)
+		// ensure that the tag is not null or empty
+		if (null != tag && !tag.isEmpty())
 		{
 			// check to see if the tag needs to be truncated
 			final String t = (tag.length() > TAG_LENGTH ? tag.substring(0, TAG_LENGTH) : tag);
