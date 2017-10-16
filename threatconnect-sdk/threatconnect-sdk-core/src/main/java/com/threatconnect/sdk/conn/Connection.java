@@ -94,7 +94,7 @@ public class Connection implements Closeable
 		this.config = config;
 	}
 	
-	CloseableHttpClient getApiClient()
+	public CloseableHttpClient getApiClient()
 	{
 		if (apiClient == null)
 		{
@@ -103,8 +103,8 @@ public class Connection implements Closeable
 		}
 		return apiClient;
 	}
-
-	CloseableHttpClient getExternalClient()
+	
+	public CloseableHttpClient getExternalClient()
 	{
 		if (externalClient == null)
 		{
