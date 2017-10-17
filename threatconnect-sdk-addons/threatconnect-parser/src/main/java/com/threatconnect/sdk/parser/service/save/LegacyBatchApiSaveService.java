@@ -260,7 +260,7 @@ public class LegacyBatchApiSaveService implements SaveService
 				try
 				{
 					FileWriter fileWriter = new FileWriter(new Connection(configuration), file);
-					fileWriter.saveIndicator(ownerName, true);
+					fileWriter.saveIndicator(ownerName, true, false, false);
 				}
 				catch (SaveItemFailedException | IOException e)
 				{

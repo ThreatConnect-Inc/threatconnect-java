@@ -40,20 +40,23 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 	 */
 	public T saveIndicator(final String ownerName) throws SaveItemFailedException, IOException
 	{
-		return saveIndicator(ownerName, false);
+		return saveIndicator(ownerName, false, true, true);
 	}
 	
 	/**
 	 * Saves the indicator with the associated owner
 	 *
 	 * @param ownerName
-	 * @param forceSave force the save even if the indicator exists on the server
+	 * @param forceSaveIndicator force the save even if the indicator exists on the server
+	 * @param saveAttributes     whether or not the attributes should be saved
+	 * @param saveTags           whether or not the tags should be saved
 	 * @return
 	 * @throws SaveItemFailedException
 	 * @throws IOException             if there was an exception communicating with the server
 	 */
 	@SuppressWarnings("unchecked")
-	public T saveIndicator(final String ownerName, final boolean forceSave) throws SaveItemFailedException, IOException
+	public T saveIndicator(final String ownerName, final boolean forceSaveIndicator, final boolean saveAttributes,
+		final boolean saveTags) throws SaveItemFailedException, IOException
 	{
 		try
 		{
@@ -73,7 +76,7 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 				savedIndicator = readIndicator;
 				
 				//check to see if force saving is not enabled
-				if (!forceSave)
+				if (!forceSaveIndicator)
 				{
 					return savedIndicator;
 				}
@@ -86,7 +89,8 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 			}
 			
 			// save or update the object
-			ApiEntitySingleResponse<T, ?> response = (null == readIndicator) ? writer.create(indicator) : writer.update(indicator);
+			ApiEntitySingleResponse<T, ?> response =
+				(null == readIndicator) ? writer.create(indicator) : writer.update(indicator);
 			
 			// check to see if this call was successful
 			if (response.isSuccess())
@@ -94,7 +98,7 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 				savedIndicator = response.getItem();
 				
 				// make sure the list of attributes is not empty
-				if (!indicatorSource.getAttributes().isEmpty())
+				if (saveAttributes && !indicatorSource.getAttributes().isEmpty())
 				{
 					// for each of the attributes of this group
 					for (Attribute attribute : indicatorSource.getAttributes())
@@ -117,7 +121,7 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 				}
 				
 				// make sure the list of tags is not empty
-				if (!indicatorSource.getTags().isEmpty())
+				if (saveTags && !indicatorSource.getTags().isEmpty())
 				{
 					// for each of the tags
 					for (String tag : indicatorSource.getTags())

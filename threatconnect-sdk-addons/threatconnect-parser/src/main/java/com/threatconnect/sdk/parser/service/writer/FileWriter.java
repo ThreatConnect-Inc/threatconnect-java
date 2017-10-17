@@ -23,13 +23,28 @@ public class FileWriter extends TypedIndicatorWriter<File, com.threatconnect.sdk
 		super(connection, file, com.threatconnect.sdk.server.entity.File.class, Type.File);
 	}
 	
+	public com.threatconnect.sdk.server.entity.File saveIndicator(final String ownerName,
+		final boolean forceSaveIndicator, final boolean saveAttributes, final boolean saveTags)
+		throws SaveItemFailedException, IOException
+	{
+		com.threatconnect.sdk.server.entity.File file =
+			super.saveIndicator(ownerName, forceSaveIndicator, saveAttributes, saveTags);
+		saveFileOccurrences(ownerName);
+		return file;
+	}
+	
 	@Override
 	public com.threatconnect.sdk.server.entity.File saveIndicator(String ownerName)
 		throws SaveItemFailedException, IOException
 	{
 		// first, call the super class' save method
 		com.threatconnect.sdk.server.entity.File file = super.saveIndicator(ownerName);
-		
+		saveFileOccurrences(ownerName);
+		return file;
+	}
+	
+	private void saveFileOccurrences(final String ownerName) throws IOException
+	{
 		// create a writer adapter
 		FileIndicatorWriterAdapter writer = createWriterAdapter();
 		
@@ -39,7 +54,7 @@ public class FileWriter extends TypedIndicatorWriter<File, com.threatconnect.sdk
 			// holds the map for file name to file occurrence object
 			Map<String, com.threatconnect.sdk.server.entity.FileOccurrence> existingFileOccurrences =
 				retrieveExistingFileOccurrences(buildID(), ownerName);
-				
+			
 			// for each of the file occurrences for this file
 			for (FileOccurrence fileOccurrence : indicatorSource.getFileOccurrences())
 			{
@@ -52,7 +67,7 @@ public class FileWriter extends TypedIndicatorWriter<File, com.threatconnect.sdk
 						// retrieve the existing file occurrence to see if it needs to be updated
 						com.threatconnect.sdk.server.entity.FileOccurrence existingFileOccurrence =
 							existingFileOccurrences.get(fileOccurrence.getFileName());
-							
+						
 						// check to see if the new date is before the existing date
 						if (fileOccurrence.getDate().before(existingFileOccurrence.getDate()))
 						{
@@ -77,14 +92,12 @@ public class FileWriter extends TypedIndicatorWriter<File, com.threatconnect.sdk
 					// map the file occurrence object
 					com.threatconnect.sdk.server.entity.FileOccurrence fo =
 						mapper.map(fileOccurrence, com.threatconnect.sdk.server.entity.FileOccurrence.class);
-						
+					
 					// write the file occurrence for this file
 					writer.createFileOccurrence(buildID(), fo);
 				}
 			}
 		}
-		
-		return file;
 	}
 	
 	@Override
@@ -125,9 +138,9 @@ public class FileWriter extends TypedIndicatorWriter<File, com.threatconnect.sdk
 	}
 	
 	/**
-	 * Retrieves the existing file occurrences if any exist and enters them into a hash map using
-	 * the file name as the key
-	 * 
+	 * Retrieves the existing file occurrences if any exist and enters them into a hash map using the file name as the
+	 * key
+	 *
 	 * @param hash
 	 * @param ownerName
 	 * @return
@@ -140,7 +153,7 @@ public class FileWriter extends TypedIndicatorWriter<File, com.threatconnect.sdk
 		// holds the map for file name to file occurrence object
 		Map<String, com.threatconnect.sdk.server.entity.FileOccurrence> existingFileOccurrences =
 			new HashMap<String, com.threatconnect.sdk.server.entity.FileOccurrence>();
-			
+		
 		try
 		{
 			// create a new reader adapter
@@ -149,7 +162,7 @@ public class FileWriter extends TypedIndicatorWriter<File, com.threatconnect.sdk
 			// check to see if there are any existing file occurrences for this file
 			IterableResponse<com.threatconnect.sdk.server.entity.FileOccurrence> fileOccurrenceResponse =
 				reader.getFileOccurrences(hash, ownerName);
-				
+			
 			// for each of the file occurrences
 			for (com.threatconnect.sdk.server.entity.FileOccurrence fileOccurrence : fileOccurrenceResponse)
 			{
