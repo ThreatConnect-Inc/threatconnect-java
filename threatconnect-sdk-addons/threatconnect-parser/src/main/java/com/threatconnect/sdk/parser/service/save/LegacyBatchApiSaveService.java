@@ -46,6 +46,8 @@ public class LegacyBatchApiSaveService implements SaveService
 	protected final Configuration configuration;
 	protected final String ownerName;
 	
+	protected final AttributeWriteType attributeWriteType;
+	
 	// holds the hashmap to resolve the set of associated group ids for a given indicator
 	protected final Map<Indicator, Set<Integer>> associatedIndicatorGroupsIDs;
 	protected final Map<Group, Set<GroupIdentifier>> associatedGroupGroupsIDs;
@@ -59,6 +61,15 @@ public class LegacyBatchApiSaveService implements SaveService
 	public LegacyBatchApiSaveService(final Configuration configuration, final String ownerName,
 		final Map<Indicator, Set<Integer>> associatedIndicatorGroupsIDs,
 		final Map<Group, Set<GroupIdentifier>> associatedGroupGroupsIDs)
+	{
+		this(configuration, ownerName, associatedIndicatorGroupsIDs, associatedGroupGroupsIDs,
+			AttributeWriteType.Replace);
+	}
+	
+	public LegacyBatchApiSaveService(final Configuration configuration, final String ownerName,
+		final Map<Indicator, Set<Integer>> associatedIndicatorGroupsIDs,
+		final Map<Group, Set<GroupIdentifier>> associatedGroupGroupsIDs,
+		final AttributeWriteType attributeWriteType)
 	{
 		if (null == configuration)
 		{
@@ -84,6 +95,7 @@ public class LegacyBatchApiSaveService implements SaveService
 		this.ownerName = ownerName;
 		this.associatedIndicatorGroupsIDs = associatedIndicatorGroupsIDs;
 		this.associatedGroupGroupsIDs = associatedGroupGroupsIDs;
+		this.attributeWriteType = attributeWriteType;
 	}
 	
 	/**
@@ -210,13 +222,6 @@ public class LegacyBatchApiSaveService implements SaveService
 	
 	protected SaveResults saveIndicators(final Collection<Indicator> indicators,
 		final Map<Indicator, Set<Integer>> associatedIndicatorGroupsIDs, final Connection connection) throws IOException
-	{
-		return saveIndicators(indicators, associatedIndicatorGroupsIDs, connection, AttributeWriteType.Replace);
-	}
-	
-	protected SaveResults saveIndicators(final Collection<Indicator> indicators,
-		final Map<Indicator, Set<Integer>> associatedIndicatorGroupsIDs, final Connection connection,
-		final AttributeWriteType attributeWriteType) throws IOException
 	{
 		try
 		{
