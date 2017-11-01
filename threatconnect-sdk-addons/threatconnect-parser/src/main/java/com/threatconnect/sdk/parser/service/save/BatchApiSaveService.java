@@ -27,10 +27,19 @@ public class BatchApiSaveService implements SaveService
 	protected final Configuration configuration;
 	protected final String ownerName;
 	
+	protected final AttributeWriteType attributeWriteType;
+	
 	public BatchApiSaveService(final Configuration configuration, final String ownerName)
+	{
+		this(configuration, ownerName, AttributeWriteType.Replace);
+	}
+	
+	public BatchApiSaveService(final Configuration configuration, final String ownerName,
+		final AttributeWriteType attributeWriteType)
 	{
 		this.configuration = configuration;
 		this.ownerName = ownerName;
+		this.attributeWriteType = attributeWriteType;
 	}
 	
 	/**
@@ -59,12 +68,6 @@ public class BatchApiSaveService implements SaveService
 	 */
 	protected SaveResults saveItems(final Collection<? extends Item> items, final Connection connection)
 		throws IOException
-	{
-		return saveItems(items, connection, AttributeWriteType.Replace);
-	}
-	
-	protected SaveResults saveItems(final Collection<? extends Item> items, final Connection connection,
-		final AttributeWriteType attributeWriteType) throws IOException
 	{
 		try
 		{
