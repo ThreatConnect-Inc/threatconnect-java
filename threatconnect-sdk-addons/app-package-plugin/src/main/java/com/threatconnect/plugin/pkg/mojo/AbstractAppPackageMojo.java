@@ -2,7 +2,7 @@ package com.threatconnect.plugin.pkg.mojo;
 
 import com.threatconnect.app.addons.util.config.InvalidCsvFileException;
 import com.threatconnect.app.addons.util.config.InvalidJsonFileException;
-import com.threatconnect.app.addons.util.config.attribute.AttributeReaderUtil;
+import com.threatconnect.app.addons.util.config.attribute.AttributeTypeReaderUtil;
 import com.threatconnect.app.addons.util.config.install.Feed;
 import com.threatconnect.app.addons.util.config.install.Install;
 import com.threatconnect.app.addons.util.config.install.InstallUtil;
@@ -183,7 +183,7 @@ public abstract class AbstractAppPackageMojo extends AbstractPackageMojo<Install
 				else
 				{
 					//load the attributes file and validate it
-					AttributeReaderUtil.read(file);
+					AttributeTypeReaderUtil.read(file);
 				}
 			}
 			

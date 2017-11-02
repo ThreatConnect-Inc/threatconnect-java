@@ -1,14 +1,14 @@
 package com.threatconnect.app.addons.util.config.validation;
 
-import com.threatconnect.app.addons.util.config.attribute.Attribute;
+import com.threatconnect.app.addons.util.config.attribute.AttributeType;
 
 /**
  * @author Greg Marut
  */
-public class AttributeValidator extends Validator<Attribute>
+public class AttributeValidator extends Validator<AttributeType>
 {
 	@Override
-	public void validate(final Attribute object) throws ValidationException
+	public void validate(final AttributeType object) throws ValidationException
 	{
 		//make sure the name is not empty
 		if (isNullOrEmpty(object.getName()))

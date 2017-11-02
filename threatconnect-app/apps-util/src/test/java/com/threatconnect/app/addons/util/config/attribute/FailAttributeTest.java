@@ -19,7 +19,7 @@ public class FailAttributeTest
 	{
 		try (FileInputStream fileInputStream = new FileInputStream(new File("src/test/resources/fail.attributes1.csv")))
 		{
-			AttributeReaderUtil.read(fileInputStream);
+			AttributeTypeReaderUtil.read(fileInputStream);
 		}
 		catch (ValidationException e)
 		{
@@ -32,7 +32,7 @@ public class FailAttributeTest
 	{
 		try (FileInputStream fileInputStream = new FileInputStream(new File("src/test/resources/fail.attributes2.csv")))
 		{
-			AttributeReaderUtil.read(fileInputStream);
+			AttributeTypeReaderUtil.read(fileInputStream);
 		}
 		catch (ValidationException e)
 		{

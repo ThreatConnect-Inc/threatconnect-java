@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * @author Greg Marut
  */
-public class Attribute
+public class AttributeType
 {
 	private final List<String> types;
 	
@@ -15,8 +15,9 @@ public class Attribute
 	private String errorMessage;
 	private int maxSize;
 	private boolean allowMarkdown;
+	private boolean system;
 	
-	public Attribute()
+	public AttributeType()
 	{
 		this.types = new ArrayList<String>();
 	}
@@ -74,5 +75,15 @@ public class Attribute
 	public void setAllowMarkdown(final boolean allowMarkdown)
 	{
 		this.allowMarkdown = allowMarkdown;
+	}
+	
+	public boolean isSystem()
+	{
+		return system;
+	}
+	
+	public void setSystem(final boolean system)
+	{
+		this.system = system;
 	}
 }
