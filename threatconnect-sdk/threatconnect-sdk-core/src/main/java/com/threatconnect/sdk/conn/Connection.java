@@ -114,7 +114,6 @@ public class Connection implements Closeable
 		return externalClient;
 	}
 
-
 	/**
 	 * @return the urlConfig
 	 */

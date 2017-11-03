@@ -80,34 +80,32 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 	{
 		logger.trace("Before call to api server");
 		long startMs = System.currentTimeMillis();
-		CloseableHttpResponse response = this.conn.getApiClient().execute(httpBase);
-
-		//update listeners based on api call whether it worked or not
-		notifyListeners(type, fullPath, (System.currentTimeMillis() - startMs));
-
-		String result = null;
-		try
+		
+		try(CloseableHttpClient httpClient = this.conn.getApiClient())
 		{
-			logger.trace(response.getStatusLine().toString());
-			HttpEntity entity = response.getEntity();
-			if (entity != null)
+			try(CloseableHttpResponse response = httpClient.execute(httpBase))
 			{
-				logger.trace("Response Headers: " + Arrays.toString(response.getAllHeaders()));
-				logger.trace("Content Encoding: " + entity.getContentEncoding());
-				result = EntityUtils.toString(entity, StandardCharsets.UTF_8);
-				logger.trace("Result:" + result);
-				EntityUtils.consume(entity);
+				//update listeners based on api call whether it worked or not
+				notifyListeners(type, fullPath, (System.currentTimeMillis() - startMs));
+				
+				String result = null;
+				logger.trace(response.getStatusLine().toString());
+				HttpEntity entity = response.getEntity();
+				if (entity != null)
+				{
+					logger.trace("Response Headers: " + Arrays.toString(response.getAllHeaders()));
+					logger.trace("Content Encoding: " + entity.getContentEncoding());
+					result = EntityUtils.toString(entity, StandardCharsets.UTF_8);
+					logger.trace("Result:" + result);
+					EntityUtils.consume(entity);
+				}
+				
+				return result;
 			}
 		}
-		finally
-		{
-			response.close();
-		}
-
-		return result;
 	}
 
-	private void getNewToken(HttpRequestBase httpBase) throws IOException, TokenRenewException
+	private void getNewToken() throws IOException, TokenRenewException
 	{
 		if (this.conn.getConfig().getTcToken() != null)
 		{
@@ -135,38 +133,41 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 
 					//Default TC SSL cert is not trusted so need to add the TC cert to local jvm cacerts if
 					//running app locally
-					CloseableHttpClient httpClient = this.conn.getApiClient();
-					HttpGet httpGet = new HttpGet(retryUrl);
-					CloseableHttpResponse retryTokenCloseableResponse = httpClient.execute(httpGet);
-					HttpEntity entity = retryTokenCloseableResponse.getEntity();
-					String retryTokenResponse = EntityUtils.toString(entity, StandardCharsets.UTF_8);
-
-					//parse line to see what happened
-					JsonParser jsonParser = new JsonParser();
-					JsonObject retryResponse = jsonParser.parse(retryTokenResponse).getAsJsonObject();
-					boolean retrySuccess = retryResponse.get(SUCCESS_IND).getAsBoolean();
-					if (!retrySuccess)
+					try(CloseableHttpClient httpClient = this.conn.getApiClient())
 					{
-						//need to translate the retry token error into the format
-						//expected in 'result' object
-						String errMsg = retryResponse.get(MSG).getAsString();
-						logger.trace("errmsg from servlet: " + errMsg);
-						throw new TokenRenewException(errMsg);
+						HttpGet httpGet = new HttpGet(retryUrl);
+						try (CloseableHttpResponse retryTokenCloseableResponse = httpClient.execute(httpGet))
+						{
+							HttpEntity entity = retryTokenCloseableResponse.getEntity();
+							String retryTokenResponse = EntityUtils.toString(entity, StandardCharsets.UTF_8);
+							
+							//parse line to see what happened
+							JsonParser jsonParser = new JsonParser();
+							JsonObject retryResponse = jsonParser.parse(retryTokenResponse).getAsJsonObject();
+							boolean retrySuccess = retryResponse.get(SUCCESS_IND).getAsBoolean();
+							if (!retrySuccess)
+							{
+								//need to translate the retry token error into the format
+								//expected in 'result' object
+								String errMsg = retryResponse.get(MSG).getAsString();
+								logger.trace("errmsg from servlet: " + errMsg);
+								throw new TokenRenewException(errMsg);
+							}
+							
+							//no error, got a new token..need to set it so the caller will use it
+							String newToken = retryResponse.get(NEW_TOKEN).getAsString();
+							String newTokenExpires = retryResponse.get(NEW_TOKEN_EXPIRES).getAsString();
+							logger.trace("New token returned from servlet: " + newToken);
+							
+							//update the config object being used for this api call
+							this.conn.getConfig().setTcToken(newToken);
+							this.conn.getConfig().setTcTokenExpires(newTokenExpires);
+							
+							//Then update the AppConfig singleton object too for future calls/future configs
+							SdkAppConfig.getInstance().set(AppConfig.TC_TOKEN, newToken);
+							SdkAppConfig.getInstance().set(AppConfig.TC_TOKEN_EXPIRES, newTokenExpires);
+						}
 					}
-
-					//no error, got a new token..need to set it so the caller will use it
-					String newToken = retryResponse.get(NEW_TOKEN).getAsString();
-					String newTokenExpires = retryResponse.get(NEW_TOKEN_EXPIRES).getAsString();
-					logger.trace("New token returned from servlet: " + newToken);
-
-					//update the config object being used for this api call
-					this.conn.getConfig().setTcToken(newToken);
-					this.conn.getConfig().setTcTokenExpires(newTokenExpires);
-
-					//Then update the AppConfig singleton object too for future calls/future configs
-					SdkAppConfig.getInstance().set(AppConfig.TC_TOKEN, newToken);
-					SdkAppConfig.getInstance().set(AppConfig.TC_TOKEN_EXPIRES, newTokenExpires);
-
 				}
 				catch (MalformedURLException ex)
 				{
@@ -204,12 +205,10 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 		String headerPath = httpBase.getURI().getRawPath() + "?" + httpBase.getURI().getRawQuery();
 		logger.trace("HeaderPath: " + headerPath);
 
-		CloseableHttpResponse response = null;
-
 		try
 		{
 			//Check for token to expire and get a new one if it is
-			getNewToken(httpBase);
+			getNewToken();
 
 			//this call adds in the auth token from the connection config if one exists
 			ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, type.toString(), headerPath);
@@ -223,37 +222,36 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 			}
 			logger.trace("Request: " + httpBase.getRequestLine());
 			long startMs = System.currentTimeMillis();
-			response = this.conn.getApiClient().execute(httpBase);
-			notifyListeners(type, fullPath, (System.currentTimeMillis() - startMs));
-
-			HttpResponse httpResponse = new HttpResponse();
-			httpResponse.setStatusCode(response.getStatusLine().getStatusCode());
-			httpResponse.setStatusLine(response.getStatusLine().toString());
-
-			logger.trace(httpResponse.getStatusLine());
-			HttpEntity entity = response.getEntity();
-			if (entity != null)
+			
+			try(CloseableHttpClient httpClient = this.conn.getApiClient())
 			{
-				logger.trace("Response Headers: " + Arrays.toString(response.getAllHeaders()));
-				logger.trace("Content Encoding: " + entity.getContentEncoding());
-
-				httpResponse.setEntity(IOUtils.toByteArray(entity.getContent()));
-				logger.trace("Result:" + httpResponse.getEntityAsString());
-				EntityUtils.consume(entity);
+				try(CloseableHttpResponse response = httpClient.execute(httpBase))
+				{
+					notifyListeners(type, fullPath, (System.currentTimeMillis() - startMs));
+					
+					HttpResponse httpResponse = new HttpResponse();
+					httpResponse.setStatusCode(response.getStatusLine().getStatusCode());
+					httpResponse.setStatusLine(response.getStatusLine().toString());
+					
+					logger.trace(httpResponse.getStatusLine());
+					HttpEntity entity = response.getEntity();
+					if (entity != null)
+					{
+						logger.trace("Response Headers: " + Arrays.toString(response.getAllHeaders()));
+						logger.trace("Content Encoding: " + entity.getContentEncoding());
+						
+						httpResponse.setEntity(IOUtils.toByteArray(entity.getContent()));
+						logger.trace("Result:" + httpResponse.getEntityAsString());
+						EntityUtils.consume(entity);
+					}
+					
+					return httpResponse;
+				}
 			}
-
-			return httpResponse;
 		}
 		catch (TokenRenewException e)
 		{
 			throw new HttpException(e);
-		}
-		finally
-		{
-			if(null != response)
-			{
-				response.close();
-			}
 		}
 	}
 
@@ -293,25 +291,30 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 			conn.getConfig().getContentType(), contentType.toString());
 		logger.trace("Request: " + httpBase.getRequestLine());
 		logger.trace("Headers: " + Arrays.toString(httpBase.getAllHeaders()));
-		CloseableHttpResponse response = this.conn.getApiClient().execute(httpBase);
-
-		logger.trace(response.getStatusLine().toString());
-
-		// check to see if there was an error executing this request
-		switch (response.getStatusLine().getStatusCode())
+		
+		try(CloseableHttpClient httpClient = this.conn.getApiClient())
 		{
-			case HttpStatus.SC_NOT_FOUND:
-				throw new HttpResourceNotFoundException("Server responded with a 404: " + fullPath);
+			try(CloseableHttpResponse response = httpClient.execute(httpBase))
+			{
+				logger.trace(response.getStatusLine().toString());
+				
+				// check to see if there was an error executing this request
+				switch (response.getStatusLine().getStatusCode())
+				{
+					case HttpStatus.SC_NOT_FOUND:
+						throw new HttpResourceNotFoundException("Server responded with a 404: " + fullPath);
+				}
+				
+				HttpEntity entity = response.getEntity();
+				if (entity != null)
+				{
+					stream = entity.getContent();
+					logger.trace(String.format("Result stream size: %d, encoding: %s",
+						entity.getContentLength(), entity.getContentEncoding()));
+				}
+				return stream;
+			}
 		}
-
-		HttpEntity entity = response.getEntity();
-		if (entity != null)
-		{
-			stream = entity.getContent();
-			logger.trace(String.format("Result stream size: %d, encoding: %s",
-				entity.getContentLength(), entity.getContentEncoding()));
-		}
-		return stream;
 	}
 	
 	@Override
@@ -357,27 +360,32 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 		ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), headerPath, contentType);
 
 		logger.trace("Request: " + httpBase.getRequestLine());
-
-		CloseableHttpResponse response = this.conn.getApiClient().execute(httpBase);
-		String result = null;
-
-		logger.trace(response.getStatusLine().toString());
-		HttpEntity responseEntity = response.getEntity();
-		if (responseEntity != null)
+		
+		try(CloseableHttpClient httpClient = this.conn.getApiClient())
 		{
-			try
+			try(CloseableHttpResponse response = httpClient.execute(httpBase))
 			{
-				result = EntityUtils.toString(responseEntity, "iso-8859-1");
-				logger.trace("Result:" + result);
-				EntityUtils.consume(responseEntity);
+				String result = null;
+				
+				logger.trace(response.getStatusLine().toString());
+				HttpEntity responseEntity = response.getEntity();
+				if (responseEntity != null)
+				{
+					try
+					{
+						result = EntityUtils.toString(responseEntity, "iso-8859-1");
+						logger.trace("Result:" + result);
+						EntityUtils.consume(responseEntity);
+					}
+					finally
+					{
+						response.close();
+					}
+					
+				}
+				
+				return result;
 			}
-			finally
-			{
-				response.close();
-			}
-
 		}
-
-		return result;
 	}
 }
