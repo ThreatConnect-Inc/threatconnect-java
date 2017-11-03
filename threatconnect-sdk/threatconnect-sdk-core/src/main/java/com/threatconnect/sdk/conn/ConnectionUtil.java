@@ -13,6 +13,7 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.BasicCredentialsProvider;
@@ -41,6 +42,8 @@ import java.util.Properties;
  */
 public class ConnectionUtil
 {
+	private static final int FIVE_MINUTES = 1000 * 60 * 5;
+	
 	private static final Logger logger = LoggerFactory.getLogger(ConnectionUtil.class.getSimpleName());
 	
 	public static Properties loadProperties(String fileName) throws IOException
@@ -276,6 +279,14 @@ public class ConnectionUtil
 	{
 		// create a new http client builder
 		HttpClientBuilder builder = HttpClients.custom();
+		
+		//set the default timeouts
+		RequestConfig.Builder requestConfig = RequestConfig.custom();
+		requestConfig.setConnectTimeout(FIVE_MINUTES);
+		requestConfig.setConnectionRequestTimeout(FIVE_MINUTES);
+		requestConfig.setSocketTimeout(FIVE_MINUTES);
+		
+		builder.setDefaultRequestConfig(requestConfig.build());
 		
 		// allow self signed certificates
 		if (trustSelfSignedCertificates)
