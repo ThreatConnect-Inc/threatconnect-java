@@ -1,8 +1,8 @@
-package com.threatconnect.app.addons.util.config.attribute;
+package com.threatconnect.app.addons.util.config.attribute.csv;
 
 import com.threatconnect.app.addons.util.config.InvalidCsvFileException;
 import com.threatconnect.app.addons.util.config.InvalidCsvLineException;
-import com.threatconnect.app.addons.util.config.validation.AttributeValidator;
+import com.threatconnect.app.addons.util.config.validation.csv.AttributeTypeValidator;
 import com.threatconnect.app.addons.util.config.validation.ValidationException;
 
 import java.io.File;
@@ -52,7 +52,7 @@ public class AttributeTypeReaderUtil
 		int rowNum = 1;
 		
 		//holds the attribute validator
-		AttributeValidator attributeValidator = new AttributeValidator();
+		AttributeTypeValidator attributeTypeValidator = new AttributeTypeValidator();
 		
 		//while there are more lines to parse
 		while (in.hasNextLine())
@@ -67,7 +67,7 @@ public class AttributeTypeReaderUtil
 				AttributeType attributeType = parseAttribute(line, rowNum);
 				
 				//validate this attribute
-				attributeValidator.validate(attributeType);
+				attributeTypeValidator.validate(attributeType);
 				
 				//add it to the list
 				attributeTypes.add(attributeType);

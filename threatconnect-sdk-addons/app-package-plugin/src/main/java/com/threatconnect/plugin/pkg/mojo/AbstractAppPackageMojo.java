@@ -2,7 +2,7 @@ package com.threatconnect.plugin.pkg.mojo;
 
 import com.threatconnect.app.addons.util.config.InvalidCsvFileException;
 import com.threatconnect.app.addons.util.config.InvalidJsonFileException;
-import com.threatconnect.app.addons.util.config.attribute.AttributeTypeReaderUtil;
+import com.threatconnect.app.addons.util.config.attribute.csv.AttributeTypeReaderUtil;
 import com.threatconnect.app.addons.util.config.install.Feed;
 import com.threatconnect.app.addons.util.config.install.Install;
 import com.threatconnect.app.addons.util.config.install.InstallUtil;

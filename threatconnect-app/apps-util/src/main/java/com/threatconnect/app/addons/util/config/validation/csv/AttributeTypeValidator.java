@@ -1,11 +1,13 @@
-package com.threatconnect.app.addons.util.config.validation;
+package com.threatconnect.app.addons.util.config.validation.csv;
 
-import com.threatconnect.app.addons.util.config.attribute.AttributeType;
+import com.threatconnect.app.addons.util.config.attribute.csv.AttributeType;
+import com.threatconnect.app.addons.util.config.validation.ValidationException;
+import com.threatconnect.app.addons.util.config.validation.Validator;
 
 /**
  * @author Greg Marut
  */
-public class AttributeValidator extends Validator<AttributeType>
+public class AttributeTypeValidator extends Validator<AttributeType>
 {
 	@Override
 	public void validate(final AttributeType object) throws ValidationException

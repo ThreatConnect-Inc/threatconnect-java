@@ -1,4 +1,4 @@
-package com.threatconnect.app.addons.util.config.attribute;
+package com.threatconnect.app.addons.util.config.attribute.csv;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,6 @@ public class AttributeType
 	private String errorMessage;
 	private int maxSize;
 	private boolean allowMarkdown;
-	private boolean system;
 	
 	public AttributeType()
 	{
@@ -75,15 +74,5 @@ public class AttributeType
 	public void setAllowMarkdown(final boolean allowMarkdown)
 	{
 		this.allowMarkdown = allowMarkdown;
-	}
-	
-	public boolean isSystem()
-	{
-		return system;
-	}
-	
-	public void setSystem(final boolean system)
-	{
-		this.system = system;
 	}
 }

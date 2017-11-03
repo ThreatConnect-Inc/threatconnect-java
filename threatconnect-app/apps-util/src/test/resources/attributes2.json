@@ -1,0 +1,21 @@
+{
+  "types": [
+    {
+      "name": "MD5",
+      "description": "MD5 Hash Code",
+      "errorMessage": "Please enter a valid MD5 Hash Code",
+      "maxLength": 32,
+      "allowMarkdown": false,
+      "system": true,
+      "indicators": [
+        "File"
+      ],
+      "validationRule": {
+        "name": "128-bit Hex String",
+        "type": "REGEX",
+        "description": "128-bit hexadecimal string.",
+        "data": "[a-f0-9]{32}"
+      }
+    }
+  ]
+}

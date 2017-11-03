@@ -1,6 +1,8 @@
-package com.threatconnect.app.addons.util.config.attribute;
+package com.threatconnect.app.addons.util.config.attribute.csv;
 
 import com.threatconnect.app.addons.util.config.InvalidCsvFileException;
+import com.threatconnect.app.addons.util.config.attribute.csv.AttributeType;
+import com.threatconnect.app.addons.util.config.attribute.csv.AttributeTypeReaderUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
