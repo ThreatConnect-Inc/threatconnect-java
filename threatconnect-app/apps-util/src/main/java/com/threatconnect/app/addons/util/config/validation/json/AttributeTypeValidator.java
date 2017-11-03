@@ -12,12 +12,15 @@ import java.util.Map;
  */
 public class AttributeTypeValidator extends Validator<AttributeType>
 {
+	private final Validator<AttributeValidationRule> attributeValidationRuleValidator;
+	
 	//holds the map of shared validation rules
 	private final Map<String, AttributeValidationRule> validationRuleMap;
 	
 	public AttributeTypeValidator(final Map<String, AttributeValidationRule> validationRuleMap)
 	{
 		this.validationRuleMap = validationRuleMap;
+		this.attributeValidationRuleValidator = new AttributeValidationRuleValidator();
 	}
 	
 	@Override
@@ -35,8 +38,12 @@ public class AttributeTypeValidator extends Validator<AttributeType>
 			//check to see if this validation rule exists in the shared list
 			if (validationRuleMap.containsKey(object.getValidationRule().getName()))
 			{
-			
+				//replace the validation rule on this object with the shared one
+				object.setValidationRule(validationRuleMap.get(object.getValidationRule().getName()));
 			}
+			
+			//validate the validation rule defined on this attribute
+			attributeValidationRuleValidator.validate(object.getValidationRule());
 		}
 		
 		//check to see if the indicators and groups is empty

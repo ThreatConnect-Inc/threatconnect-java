@@ -58,20 +58,6 @@ public class AttributeUtil
 			Map<String, AttributeValidationRule> validationRuleMap = attribute.getValidationRules().stream().collect(
 				Collectors.toMap(AttributeValidationRule::getName, a -> a));
 			
-			//for each of the attributes
-			for(AttributeType attributeType : attribute.getTypes())
-			{
-				//check to see if this attribute has a validation rule
-				if(null !=attributeType.getValidationRule())
-				{
-					//check to see if this validation rule exists in the shared list
-					if(validationRuleMap.containsKey(attributeType.getValidationRule().getName()))
-					{
-					
-					}
-				}
-			}
-			
 			attributeValidator.validate(attribute);
 		}
 		

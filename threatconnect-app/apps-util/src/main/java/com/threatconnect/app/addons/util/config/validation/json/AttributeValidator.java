@@ -6,7 +6,11 @@ import com.threatconnect.app.addons.util.config.attribute.json.AttributeValidati
 import com.threatconnect.app.addons.util.config.validation.ValidationException;
 import com.threatconnect.app.addons.util.config.validation.Validator;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -14,6 +18,13 @@ import java.util.stream.Collectors;
  */
 public class AttributeValidator extends Validator<Attribute>
 {
+	private final Validator<AttributeValidationRule> attributeValidationRuleValidator;
+	
+	public AttributeValidator()
+	{
+		this.attributeValidationRuleValidator = new AttributeValidationRuleValidator();
+	}
+	
 	@Override
 	public void validate(final Attribute object) throws ValidationException
 	{
@@ -21,6 +32,20 @@ public class AttributeValidator extends Validator<Attribute>
 		if (object.getTypes().isEmpty())
 		{
 			throw new ValidationException("Attribute types cannot be empty.");
+		}
+		
+		//for each of the validation rules
+		for (AttributeValidationRule rule : object.getValidationRules())
+		{
+			attributeValidationRuleValidator.validate(rule);
+		}
+		
+		//check to see if there are any duplicate rules defined
+		Set<AttributeValidationRule> duplicates = findDuplicates(object.getValidationRules());
+		if (!duplicates.isEmpty())
+		{
+			throw new ValidationException(
+				"Validation Rule \"" + duplicates.iterator().next().getName() + "\" cannot be defined multiple times.");
 		}
 		
 		//load the map of attribute validation rules by name
@@ -35,5 +60,21 @@ public class AttributeValidator extends Validator<Attribute>
 		{
 			attributeTypeValidator.validate(attributeType);
 		}
+	}
+	
+	private <T> Set<T> findDuplicates(Collection<T> list)
+	{
+		Set<T> duplicates = new LinkedHashSet<T>();
+		Set<T> uniques = new HashSet<T>();
+		
+		for (T t : list)
+		{
+			if (!uniques.add(t))
+			{
+				duplicates.add(t);
+			}
+		}
+		
+		return duplicates;
 	}
 }
