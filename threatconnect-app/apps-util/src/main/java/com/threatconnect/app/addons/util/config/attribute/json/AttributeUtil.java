@@ -20,6 +20,11 @@ public class AttributeUtil
 {
 	private static final boolean VALIDATE_BY_DEFAULT = true;
 	
+	public static Attribute load(final InputStream inputStream) throws IOException, ValidationException
+	{
+		return load(inputStream, VALIDATE_BY_DEFAULT, new AttributeValidator());
+	}
+	
 	public static Attribute load(final File file) throws IOException, ValidationException
 	{
 		return load(file, VALIDATE_BY_DEFAULT, new AttributeValidator());
