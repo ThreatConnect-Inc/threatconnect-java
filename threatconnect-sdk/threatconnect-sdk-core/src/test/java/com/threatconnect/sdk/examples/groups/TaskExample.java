@@ -51,9 +51,6 @@ public class TaskExample {
         } catch (IOException ioe) {
             System.err.println("Error: " + ioe);
             ioe.printStackTrace();
-        } finally {
-            if (conn != null)
-                conn.disconnect();
         }
     }
 

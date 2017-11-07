@@ -45,7 +45,6 @@ public class FileExample
 
         try
         {
-
         	  Configuration config = new Configuration("https://127.0.0.1:8443/api", "37821189919142416750", "J+xdst/-~$iC2vL{I]#tf<NxzYCZUL?Fn833QNsJxR)N{6J{Q}u@Q{Sn&RJsJ&W-",  "System");
               conn = new Connection(config);
               
@@ -84,12 +83,6 @@ public class FileExample
         } catch (IOException ex)
         {
             System.err.println("Error: " + ex);
-        } finally
-        {
-            if (conn != null)
-            {
-                conn.disconnect();
-            }
         }
     }
 

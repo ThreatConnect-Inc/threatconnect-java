@@ -65,12 +65,9 @@ public class AdversaryExample {
 
             doDissociateTag(conn);
 */
-        } catch (IOException ex ) {
+        } catch (IOException ex )
+        {
             System.err.println("Error: " + ex);
-        } finally {
-            if (conn != null) {
-                conn.disconnect();
-            }
         }
     }
 

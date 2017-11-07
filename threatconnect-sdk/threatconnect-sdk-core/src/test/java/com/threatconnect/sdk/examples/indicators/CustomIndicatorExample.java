@@ -75,10 +75,6 @@ public class CustomIndicatorExample {
         } catch (IOException ex ) {
             //System.err.println("Error: " + ex);
             ex.printStackTrace();
-        } finally {
-            if (conn != null) {
-                conn.disconnect();
-            }
         }
     }
 

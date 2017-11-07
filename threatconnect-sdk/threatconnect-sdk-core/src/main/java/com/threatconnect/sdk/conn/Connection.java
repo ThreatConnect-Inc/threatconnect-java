@@ -22,16 +22,13 @@ import java.util.Properties;
  */
 public class Connection implements Closeable
 {
-	
 	private final Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
 	
-	private CloseableHttpClient apiClient;
-	private CloseableHttpClient externalClient;
 	protected Configuration config;
 	private AbstractRequestExecutor executor;
 	
 	private final URLConfiguration urlConfig;
-
+	
 	public Connection() throws IOException
 	{
 		String fileName = System.getProperties().getProperty("threatconnect.api.config");
@@ -86,8 +83,7 @@ public class Connection implements Closeable
 	}
 	
 	/**
-	 * @param config
-	 * to set
+	 * @param config to set
 	 */
 	public void setConfig(Configuration config)
 	{
@@ -96,24 +92,16 @@ public class Connection implements Closeable
 	
 	public CloseableHttpClient getApiClient()
 	{
-		if (apiClient == null)
-		{
-			// :TODO: should we add an SDK param to trust self signed certs?
-			apiClient = AppUtil.createClient(SdkAppConfig.getInstance().isProxyTC(), true);
-		}
-		return apiClient;
+		// :TODO: should we add an SDK param to trust self signed certs?
+		return AppUtil.createClient(SdkAppConfig.getInstance().isProxyTC(), true);
 	}
 	
 	public CloseableHttpClient getExternalClient()
 	{
-		if (externalClient == null)
-		{
-			// :TODO: should we add an SDK param to trust self signed certs?
-			externalClient = AppUtil.createClient(SdkAppConfig.getInstance().isProxyExternal(), true);
-		}
-		return externalClient;
+		// :TODO: should we add an SDK param to trust self signed certs?
+		return AppUtil.createClient(SdkAppConfig.getInstance().isProxyExternal(), true);
 	}
-
+	
 	/**
 	 * @return the urlConfig
 	 */
@@ -122,34 +110,9 @@ public class Connection implements Closeable
 		return urlConfig;
 	}
 	
-	public void disconnect()
-	{
-		if (apiClient != null)
-		{
-			try
-			{
-				apiClient.close();
-			}
-			catch (IOException ex)
-			{
-				logger.error("Error disconnecting from httpClient", ex);
-			}
-			finally
-			{
-				apiClient = null;
-			}
-		}
-	}
-	
-	/**
-	 * Calls disconnect to close httpClient
-	 *
-	 * @throws IOException
-	 * if an I/O error occurs
-	 */
 	@Override
 	public void close() throws IOException
 	{
-		this.disconnect();
+	
 	}
 }

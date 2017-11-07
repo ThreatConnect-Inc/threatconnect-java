@@ -62,10 +62,6 @@ public class SignatureExample {
 
         } catch (IOException ex ) {
             System.err.println("Error: " + ex);
-        } finally {
-            if (conn != null) {
-                conn.disconnect();
-            }
         }
     }
 

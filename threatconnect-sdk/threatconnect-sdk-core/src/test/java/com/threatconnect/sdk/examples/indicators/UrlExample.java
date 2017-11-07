@@ -60,10 +60,6 @@ public class UrlExample {
 
         } catch (IOException ex ) {
             System.err.println("Error: " + ex);
-        } finally {
-            if (conn != null) {
-                conn.disconnect();
-            }
         }
     }
 
