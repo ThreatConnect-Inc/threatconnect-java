@@ -6,5 +6,5 @@
   "indicatorLimit": 200000,
   "documentStorageLimitMb": 3000,
   "jobFile": "tcintel.job.json",
-  "attributesFile": "attributes.csv"
+  "attributesFile": "attributes.json"
 }

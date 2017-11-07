@@ -1,0 +1,25 @@
+{
+  "types": [
+    {
+      "name": "Feed Deployment Test",
+      "description": "Feed Deployment Test",
+      "errorMessage": "Please enter a valid value for Feed Deployment Test",
+      "maxLength": 100,
+      "allowMarkdown": false,
+      "system": true,
+      "indicators": [
+        "Url",
+        "Address"
+      ],
+      "groups": [
+        "Threat"
+      ],
+      "validationRule": {
+        "name": "Feed Deployment Test Validation",
+        "type": "REGEX",
+        "description": "Some random validation.",
+        "data": "[a-fA-F0-9_]"
+      }
+    }
+  ]
+}
