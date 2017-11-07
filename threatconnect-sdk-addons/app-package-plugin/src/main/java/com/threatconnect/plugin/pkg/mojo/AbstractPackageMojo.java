@@ -1,6 +1,6 @@
 package com.threatconnect.plugin.pkg.mojo;
 
-import com.threatconnect.app.addons.util.config.InvalidCsvFileException;
+import com.threatconnect.app.addons.util.config.InvalidFileException;
 import com.threatconnect.app.addons.util.config.InvalidJsonFileException;
 import com.threatconnect.app.addons.util.config.validation.ValidationException;
 import com.threatconnect.plugin.pkg.PackageFileFilter;
@@ -74,7 +74,7 @@ public abstract class AbstractPackageMojo<T> extends AbstractMojo
 	 * @throws IOException
 	 */
 	protected File packageProfile(final Profile<T> profile)
-		throws IOException, ValidationException, InvalidCsvFileException
+		throws IOException, ValidationException, InvalidFileException
 	{
 		// determine what this app name will be
 		final String appName = determineAppName(profile);
@@ -193,7 +193,7 @@ public abstract class AbstractPackageMojo<T> extends AbstractMojo
 		throws ValidationException;
 	
 	protected abstract void validateReferencedFiles(File explodedDir, final Profile<T> profile)
-		throws ValidationException, InvalidCsvFileException;
+		throws ValidationException, InvalidFileException, IOException;
 	
 	protected String generateRequiredFileMissingMessage(final String fileName)
 	{
