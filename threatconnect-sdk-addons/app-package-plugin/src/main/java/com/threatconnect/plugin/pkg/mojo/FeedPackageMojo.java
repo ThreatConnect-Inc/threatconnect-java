@@ -1,8 +1,8 @@
 package com.threatconnect.plugin.pkg.mojo;
 
-import com.threatconnect.app.addons.util.config.InvalidCsvFileException;
-import com.threatconnect.app.addons.util.config.InvalidJsonFileException;
-import com.threatconnect.app.addons.util.config.attribute.AttributeReaderUtil;
+import com.threatconnect.app.addons.util.config.InvalidFileException;
+import com.threatconnect.app.addons.util.config.attribute.csv.AttributeTypeReaderUtil;
+import com.threatconnect.app.addons.util.config.attribute.json.AttributeUtil;
 import com.threatconnect.app.addons.util.config.install.Feed;
 import com.threatconnect.app.addons.util.config.install.FeedUtil;
 import com.threatconnect.app.addons.util.config.install.JobUtil;
@@ -10,6 +10,7 @@ import com.threatconnect.app.addons.util.config.validation.JobValidator;
 import com.threatconnect.app.addons.util.config.validation.ValidationException;
 import com.threatconnect.plugin.pkg.PackageFileFilter;
 import com.threatconnect.plugin.pkg.Profile;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -61,7 +62,7 @@ public class FeedPackageMojo extends AbstractPackageMojo<Feed>
 				throw new RuntimeException("No feeds were found");
 			}
 		}
-		catch (InvalidJsonFileException | ValidationException | IOException | InvalidCsvFileException e)
+		catch (InvalidFileException | ValidationException | IOException e)
 		{
 			throw new MojoFailureException(e.getMessage(), e);
 		}
@@ -81,7 +82,7 @@ public class FeedPackageMojo extends AbstractPackageMojo<Feed>
 	
 	@Override
 	protected void validateReferencedFiles(File explodedDir, final Profile<Feed> profile)
-		throws ValidationException, InvalidCsvFileException
+		throws ValidationException, InvalidFileException, IOException
 	{
 		Feed feed = profile.getSource();
 		
@@ -96,8 +97,21 @@ public class FeedPackageMojo extends AbstractPackageMojo<Feed>
 			}
 			else
 			{
-				//load the attributes file and validate it
-				AttributeReaderUtil.read(file);
+				//check to see if this is a json file
+				if (FilenameUtils.isExtension(file.getName(), "json"))
+				{
+					AttributeUtil.load(file);
+				}
+				else if (FilenameUtils.isExtension(file.getName(), "csv"))
+				{
+					//load the attributes file and validate it
+					AttributeTypeReaderUtil.read(file);
+				}
+				else
+				{
+					throw new InvalidFileException("Could not read attributes file \"" + feed.getAttributesFile()
+						+ "\". File must end in .csv or .json");
+				}
 			}
 		}
 		

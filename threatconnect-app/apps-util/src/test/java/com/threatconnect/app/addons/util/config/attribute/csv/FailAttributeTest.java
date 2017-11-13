@@ -1,6 +1,7 @@
-package com.threatconnect.app.addons.util.config.attribute;
+package com.threatconnect.app.addons.util.config.attribute.csv;
 
 import com.threatconnect.app.addons.util.config.InvalidCsvLineException;
+import com.threatconnect.app.addons.util.config.attribute.csv.AttributeTypeReaderUtil;
 import com.threatconnect.app.addons.util.config.validation.ValidationException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,7 +20,7 @@ public class FailAttributeTest
 	{
 		try (FileInputStream fileInputStream = new FileInputStream(new File("src/test/resources/fail.attributes1.csv")))
 		{
-			AttributeReaderUtil.read(fileInputStream);
+			AttributeTypeReaderUtil.read(fileInputStream);
 		}
 		catch (ValidationException e)
 		{
@@ -32,7 +33,7 @@ public class FailAttributeTest
 	{
 		try (FileInputStream fileInputStream = new FileInputStream(new File("src/test/resources/fail.attributes2.csv")))
 		{
-			AttributeReaderUtil.read(fileInputStream);
+			AttributeTypeReaderUtil.read(fileInputStream);
 		}
 		catch (ValidationException e)
 		{

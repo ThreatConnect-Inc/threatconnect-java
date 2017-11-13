@@ -5,7 +5,7 @@ import java.io.File;
 /**
  * @author Greg Marut
  */
-public class InvalidCsvFileException extends Exception
+public class InvalidCsvFileException extends InvalidFileException
 {
 	public InvalidCsvFileException(final String message)
 	{

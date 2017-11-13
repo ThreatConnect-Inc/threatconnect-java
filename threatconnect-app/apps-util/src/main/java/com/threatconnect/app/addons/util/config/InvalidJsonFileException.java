@@ -2,7 +2,7 @@ package com.threatconnect.app.addons.util.config;
 
 import java.io.File;
 
-public class InvalidJsonFileException extends Exception
+public class InvalidJsonFileException extends InvalidFileException
 {
 	public InvalidJsonFileException(final String message)
 	{

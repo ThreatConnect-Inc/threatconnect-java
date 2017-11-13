@@ -49,16 +49,6 @@ public class JavaPackageMojo extends AbstractAppPackageMojo
 		return getTargetFile(new File(getOutputDirectory()), getAppName(), getClassifier(), "jar");
 	}
 	
-	protected File getAttributesCsvFile()
-	{
-		return new File(getBaseDirectory() + File.separator + "attributes.csv");
-	}
-	
-	protected File getIncludeFolder()
-	{
-		return new File(getBaseDirectory() + File.separator + "include");
-	}
-	
 	protected String getFinalNameAndClassifier(String finalName, String classifier)
 	{
 		if (classifier == null)
