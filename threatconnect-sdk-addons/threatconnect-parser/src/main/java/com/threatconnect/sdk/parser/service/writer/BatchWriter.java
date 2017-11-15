@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.threatconnect.sdk.app.exception.TCMessageException;
 import com.threatconnect.sdk.client.reader.BatchReaderAdapter;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
 import com.threatconnect.sdk.client.writer.AbstractBatchWriterAdapter;
@@ -35,6 +36,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -45,6 +47,7 @@ public class BatchWriter extends Writer
 {
 	public static final int DEFAULT_BATCH_LIMIT = 25000;
 	
+	public static final int POLL_TIMEOUT_MINUTES = 120;
 	private static final long POLL_INITIAL_DELAY = 1000L;
 	private static final long POLL_MAX_DELAY = 30000L;
 	
@@ -227,6 +230,9 @@ public class BatchWriter extends Writer
 				// holds the response object
 				ApiEntitySingleResponse<BatchStatus, BatchStatusResponseData> batchStatusResponse = null;
 				
+				//determine when this polling will timeout
+				final LocalDateTime pollTimeout = LocalDateTime.now().plusMinutes(POLL_TIMEOUT_MINUTES);
+				
 				// continue while the batch job is still processing
 				while (processing)
 				{
@@ -259,6 +265,14 @@ public class BatchWriter extends Writer
 					if (delay > POLL_MAX_DELAY)
 					{
 						delay = POLL_MAX_DELAY;
+					}
+					
+					//check to see if the job timed out
+					if (processing && LocalDateTime.now().isAfter(pollTimeout))
+					{
+						throw new TCMessageException(
+							"Batch job \"" + batchID + "\" timed out with a status of \"" + status + "\" after "
+								+ POLL_TIMEOUT_MINUTES + " minutes.");
 					}
 				}
 				
