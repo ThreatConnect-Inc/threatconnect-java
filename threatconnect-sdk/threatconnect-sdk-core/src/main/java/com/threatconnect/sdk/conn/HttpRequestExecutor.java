@@ -292,29 +292,25 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 		logger.trace("Request: " + httpBase.getRequestLine());
 		logger.trace("Headers: " + Arrays.toString(httpBase.getAllHeaders()));
 		
-		try(CloseableHttpClient httpClient = this.conn.getApiClient())
+		CloseableHttpClient httpClient = this.conn.getApiClient();
+		CloseableHttpResponse response = httpClient.execute(httpBase);
+		logger.trace(response.getStatusLine().toString());
+		
+		// check to see if there was an error executing this request
+		switch (response.getStatusLine().getStatusCode())
 		{
-			try(CloseableHttpResponse response = httpClient.execute(httpBase))
-			{
-				logger.trace(response.getStatusLine().toString());
-				
-				// check to see if there was an error executing this request
-				switch (response.getStatusLine().getStatusCode())
-				{
-					case HttpStatus.SC_NOT_FOUND:
-						throw new HttpResourceNotFoundException("Server responded with a 404: " + fullPath);
-				}
-				
-				HttpEntity entity = response.getEntity();
-				if (entity != null)
-				{
-					stream = entity.getContent();
-					logger.trace(String.format("Result stream size: %d, encoding: %s",
-						entity.getContentLength(), entity.getContentEncoding()));
-				}
-				return stream;
-			}
+			case HttpStatus.SC_NOT_FOUND:
+				throw new HttpResourceNotFoundException("Server responded with a 404: " + fullPath);
 		}
+		
+		HttpEntity entity = response.getEntity();
+		if (entity != null)
+		{
+			stream = entity.getContent();
+			logger.trace(String.format("Result stream size: %d, encoding: %s",
+				entity.getContentLength(), entity.getContentEncoding()));
+		}
+		return stream;
 	}
 	
 	@Override
