@@ -36,6 +36,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Responsible for saving the model to the server using the threatconnect sdk
@@ -49,20 +52,52 @@ public class ApiSaveService implements SaveService
 	private final Configuration configuration;
 	private final String ownerName;
 	
+	// holds the hashmap to resolve the set of associated group ids for a given indicator
+	protected final Map<Indicator, Set<GroupIdentifier>> associatedIndicatorGroupsIDs;
+	protected final Map<Group, Set<GroupIdentifier>> associatedGroupGroupsIDs;
+	
 	public ApiSaveService(final Configuration configuration, final String ownerName)
 	{
+		this(configuration, ownerName, new HashMap<Indicator, Set<GroupIdentifier>>(),
+			new HashMap<Group, Set<GroupIdentifier>>());
+	}
+	
+	public ApiSaveService(final Configuration configuration, final String ownerName,
+		final Map<Indicator, Set<GroupIdentifier>> associatedIndicatorGroupsIDs,
+		final Map<Group, Set<GroupIdentifier>> associatedGroupGroupsIDs)
+	{
+		if (null == configuration)
+		{
+			throw new IllegalArgumentException("configuration cannot be null");
+		}
+		
+		if (null == ownerName)
+		{
+			throw new IllegalArgumentException("ownerName cannot be null");
+		}
+		
+		if (null == associatedIndicatorGroupsIDs)
+		{
+			throw new IllegalArgumentException("associatedIndicatorGroupsIDs cannot be null");
+		}
+		
+		if (null == associatedGroupGroupsIDs)
+		{
+			throw new IllegalArgumentException("associatedGroupGroupsIDs cannot be null");
+		}
+		
 		this.configuration = configuration;
 		this.ownerName = ownerName;
+		this.associatedIndicatorGroupsIDs = associatedIndicatorGroupsIDs;
+		this.associatedGroupGroupsIDs = associatedGroupGroupsIDs;
 	}
 	
 	/**
 	 * Saves all of the items to the server using the APIs
 	 *
 	 * @param items
-	 * @throws IOException
-	 * Signals that an I/O exception of some sort has occurred. This
-	 * class is the general class of exceptions produced by failed or
-	 * interrupted I/O operations.
+	 * @throws IOException Signals that an I/O exception of some sort has occurred. This class is the general class of
+	 *                     exceptions produced by failed or interrupted I/O operations.
 	 */
 	@Override
 	public SaveResults saveItems(final Collection<? extends Item> items) throws IOException
@@ -78,10 +113,8 @@ public class ApiSaveService implements SaveService
 	 *
 	 * @param items
 	 * @param connection
-	 * @throws IOException
-	 * Signals that an I/O exception of some sort has occurred. This
-	 * class is the general class of exceptions produced by failed or
-	 * interrupted I/O operations.
+	 * @throws IOException Signals that an I/O exception of some sort has occurred. This class is the general class of
+	 *                     exceptions produced by failed or interrupted I/O operations.
 	 */
 	protected SaveResults saveItems(final Collection<? extends Item> items, final Connection connection)
 		throws IOException
@@ -224,6 +257,23 @@ public class ApiSaveService implements SaveService
 		// save the group
 		com.threatconnect.sdk.server.entity.Group savedGroup = writer.saveGroup(ownerName);
 		
+		if (associatedGroupGroupsIDs.containsKey(group))
+		{
+			Set<GroupIdentifier> groupIdentifiersToAssociate = associatedGroupGroupsIDs.get(group);
+			for (GroupIdentifier groupIdentifier : groupIdentifiersToAssociate)
+			{
+				try
+				{
+					writer.associateGroup(groupIdentifier.getType(), groupIdentifier.getId());
+				}
+				catch (AssociateFailedException e)
+				{
+					logger.warn(e.getMessage(), e);
+					saveResults.addFailedItems(group);
+				}
+			}
+		}
+		
 		// save the associated indicators for this group
 		saveAssociatedItems(group, ownerName, connection, writer, saveResults);
 		
@@ -233,12 +283,29 @@ public class ApiSaveService implements SaveService
 	
 	protected com.threatconnect.sdk.server.entity.Indicator saveIndicator(final Indicator indicator,
 		final String ownerName, final Connection connection, final SaveResults saveResults)
-			throws IOException, SaveItemFailedException
+		throws IOException, SaveItemFailedException
 	{
 		IndicatorWriter<?, ?> writer = getIndicatorWriter(indicator, connection);
 		
 		// save the indicator
 		com.threatconnect.sdk.server.entity.Indicator savedIndicator = writer.saveIndicator(ownerName);
+		
+		if (associatedIndicatorGroupsIDs.containsKey(indicator))
+		{
+			Set<GroupIdentifier> groupIdentifiersToAssociate = associatedIndicatorGroupsIDs.get(indicator);
+			for (GroupIdentifier groupIdentifier : groupIdentifiersToAssociate)
+			{
+				try
+				{
+					writer.associateGroup(groupIdentifier.getType(), groupIdentifier.getId());
+				}
+				catch (AssociateFailedException e)
+				{
+					logger.warn(e.getMessage(), e);
+					saveResults.addFailedItems(indicator);
+				}
+			}
+		}
 		
 		// save the associated groups for this indicator
 		saveAssociatedGroups(indicator, ownerName, connection, writer, saveResults);
@@ -254,10 +321,8 @@ public class ApiSaveService implements SaveService
 	 * @param ownerName
 	 * @param connection
 	 * @param writer
-	 * @throws IOException
-	 * Signals that an I/O exception of some sort has occurred. This
-	 * class is the general class of exceptions produced by failed or
-	 * interrupted I/O operations.
+	 * @throws IOException             Signals that an I/O exception of some sort has occurred. This class is the
+	 *                                 general class of exceptions produced by failed or interrupted I/O operations.
 	 * @throws SaveItemFailedException
 	 */
 	protected void saveAssociatedGroups(final Indicator indicator, final String ownerName, final Connection connection,
@@ -299,10 +364,8 @@ public class ApiSaveService implements SaveService
 	 * @param connection
 	 * @param writer
 	 * @param saveResults
-	 * @throws IOException
-	 * Signals that an I/O exception of some sort has occurred. This
-	 * class is the general class of exceptions produced by failed or
-	 * interrupted I/O operations.
+	 * @throws IOException Signals that an I/O exception of some sort has occurred. This class is the general class of
+	 *                     exceptions produced by failed or interrupted I/O operations.
 	 */
 	protected void saveAssociatedItems(final Group group, final String ownerName, final Connection connection,
 		GroupWriter<?, ?> writer, final SaveResults saveResults) throws IOException

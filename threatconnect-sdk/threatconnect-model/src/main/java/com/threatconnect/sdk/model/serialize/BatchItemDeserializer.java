@@ -237,8 +237,13 @@ public class BatchItemDeserializer
 			try
 			{
 				String date = JsonUtil.getAsString(fileDataElement, "date");
-				Date d = new SimpleDateFormat(Constants.ISO_DATE_TIME_FORMAT).parse(date);
-				fileOccurrence.setDate(d);
+				
+				//make sure the date is not null
+				if(null != date)
+				{
+					Date d = new SimpleDateFormat(Constants.ISO_DATE_TIME_FORMAT).parse(date);
+					fileOccurrence.setDate(d);
+				}
 			}
 			catch (ParseException e)
 			{
