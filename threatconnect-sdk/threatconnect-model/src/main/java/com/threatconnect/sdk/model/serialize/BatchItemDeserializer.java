@@ -227,31 +227,48 @@ public class BatchItemDeserializer
 		file.setSize(JsonUtil.getAsInt(indicatorElement, "intValue1"));
 		
 		//check to see if there is a file action
+		//:DEPRECATED - the right way is to read the fileOccurrence array
 		JsonElement fileDataElement = JsonUtil.get(indicatorElement, "fileAction", "fileData");
 		if (null != fileDataElement)
 		{
-			FileOccurrence fileOccurrence = new FileOccurrence();
-			fileOccurrence.setFileName(JsonUtil.getAsString(fileDataElement, "fileName"));
-			fileOccurrence.setPath(JsonUtil.getAsString(fileDataElement, "path"));
-			
-			try
-			{
-				String date = JsonUtil.getAsString(fileDataElement, "date");
-				
-				//make sure the date is not null
-				if(null != date)
-				{
-					Date d = new SimpleDateFormat(Constants.ISO_DATE_TIME_FORMAT).parse(date);
-					fileOccurrence.setDate(d);
-				}
-			}
-			catch (ParseException e)
-			{
-				logger.warn(e.getMessage(), e);
-			}
-			
-			file.getFileOccurrences().add(fileOccurrence);
+			file.getFileOccurrences().add(loadFileOccurrence(fileDataElement));
 		}
+		
+		//check to see if there is a file occurrence array
+		JsonArray fileOccurrenceArray = JsonUtil.getAsJsonArray(indicatorElement, "fileAction", "fileOccurrence");
+		if (null != fileOccurrenceArray)
+		{
+			//for each of the file occurrences
+			for (JsonElement fileOccurrenceElement : fileOccurrenceArray)
+			{
+				file.getFileOccurrences().add(loadFileOccurrence(fileOccurrenceElement));
+			}
+		}
+	}
+	
+	private FileOccurrence loadFileOccurrence(final JsonElement jsonElement)
+	{
+		FileOccurrence fileOccurrence = new FileOccurrence();
+		fileOccurrence.setFileName(JsonUtil.getAsString(jsonElement, "fileName"));
+		fileOccurrence.setPath(JsonUtil.getAsString(jsonElement, "path"));
+		
+		try
+		{
+			String date = JsonUtil.getAsString(jsonElement, "date");
+			
+			//make sure the date is not null
+			if (null != date)
+			{
+				Date d = new SimpleDateFormat(Constants.ISO_DATE_TIME_FORMAT).parse(date);
+				fileOccurrence.setDate(d);
+			}
+		}
+		catch (ParseException e)
+		{
+			logger.warn(e.getMessage(), e);
+		}
+		
+		return fileOccurrence;
 	}
 	
 	private void copyTagsAndAttributes(JsonElement element, final Item item)
