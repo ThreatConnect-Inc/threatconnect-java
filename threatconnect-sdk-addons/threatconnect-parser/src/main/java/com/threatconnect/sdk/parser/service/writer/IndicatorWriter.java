@@ -80,6 +80,18 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 				{
 					return savedIndicator;
 				}
+				else
+				{
+					//do not destroy the existing rating and confidence unless it was updated
+					if(null == indicator.getRating())
+					{
+						indicator.setRating(savedIndicator.getRating());
+					}
+					if(null == indicator.getConfidence())
+					{
+						indicator.setConfidence(savedIndicator.getConfidence());
+					}
+				}
 			}
 			
 			if (logger.isDebugEnabled())

@@ -288,7 +288,7 @@ public class ApiSaveService implements SaveService
 		IndicatorWriter<?, ?> writer = getIndicatorWriter(indicator, connection);
 		
 		// save the indicator
-		com.threatconnect.sdk.server.entity.Indicator savedIndicator = writer.saveIndicator(ownerName);
+		com.threatconnect.sdk.server.entity.Indicator savedIndicator = writer.saveIndicator(ownerName, true, true, true);
 		
 		if (associatedIndicatorGroupsIDs.containsKey(indicator))
 		{
