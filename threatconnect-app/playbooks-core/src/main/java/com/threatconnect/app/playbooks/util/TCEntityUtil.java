@@ -12,7 +12,7 @@ public class TCEntityUtil
 	{
 		TCEntity tcEntity = new TCEntity();
 		tcEntity.setType(indicator.getIndicatorType());
-		tcEntity.setValue(indicator.getSummary());
+		tcEntity.setValue(indicator.getIdentifier());
 		
 		if (null != indicator.getRating())
 		{
