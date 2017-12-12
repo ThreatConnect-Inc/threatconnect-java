@@ -18,6 +18,7 @@
 	<modules>
 		<module>threatconnect-parser</module>
 		<module>app-package-plugin</module>
+		<module>opendxl</module>
 	</modules>
 
 	<licenses>
@@ -74,6 +75,13 @@
 	</properties>
 
 	<dependencies>
+		<!-- Logging -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
