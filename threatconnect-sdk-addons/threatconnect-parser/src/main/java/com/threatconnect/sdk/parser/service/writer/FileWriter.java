@@ -118,17 +118,17 @@ public class FileWriter extends TypedIndicatorWriter<File, com.threatconnect.sdk
 		// check to see if this file has an md5 hash
 		if (null != indicatorSource.getMd5())
 		{
-			return indicatorSource.getMd5();
+			return indicatorSource.getMd5().toUpperCase();
 		}
 		// check to see if this file has a sha1 hash
 		else if (null != indicatorSource.getSha1())
 		{
-			return indicatorSource.getSha1();
+			return indicatorSource.getSha1().toUpperCase();
 		}
 		// check to see if this file has a sha256 hash
 		else if (null != indicatorSource.getSha256())
 		{
-			return indicatorSource.getSha256();
+			return indicatorSource.getSha256().toUpperCase();
 		}
 		else
 		{
