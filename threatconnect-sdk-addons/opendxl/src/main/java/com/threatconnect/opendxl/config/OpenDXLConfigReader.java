@@ -11,14 +11,13 @@ import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 /**
  * @author Greg Marut
  */
-public class OpenDXLConfigReader
+public class OpenDXLConfigReader extends OpenDXLConfigIO
 {
 	private static final Logger logger = LoggerFactory.getLogger(OpenDXLConfigReader.class);
 	
@@ -27,12 +26,10 @@ public class OpenDXLConfigReader
 	public static OpenDXLConfig read(final String fileName, final byte[] zipContents)
 		throws OpenDXLReaderException, IOException
 	{
-		final String filePath =
-			System.getProperty("java.io.tmpdir") + File.separator + UUID.randomUUID().toString() + "_" + fileName;
-		File file = new File(filePath);
+		File file = createTempFile(fileName);
 		
 		//write the file contents to a temporary file on the file system
-		logger.debug("Creating a temporary file: " + filePath);
+		logger.debug("Creating a temporary file: " + file.getAbsolutePath());
 		try (FileOutputStream fileOutputStream = new FileOutputStream(file))
 		{
 			//write the contents of the file
@@ -44,7 +41,7 @@ public class OpenDXLConfigReader
 		finally
 		{
 			//delete the file after we are done
-			logger.debug("Deleting temporary file: " + filePath);
+			logger.debug("Deleting temporary file: " + file.getAbsolutePath());
 			file.delete();
 		}
 	}
@@ -76,6 +73,7 @@ public class OpenDXLConfigReader
 			openDXLConfig.setBrokerCertChain(getRequired(fileMap, clientConfig.getBrokerCertChain()));
 			openDXLConfig.setCertFile(getRequired(fileMap, clientConfig.getCertFile()));
 			openDXLConfig.setPrivateKey(getRequired(fileMap, clientConfig.getPrivateKey()));
+			openDXLConfig.setClientConfigContents(configFile);
 			
 			return openDXLConfig;
 		}

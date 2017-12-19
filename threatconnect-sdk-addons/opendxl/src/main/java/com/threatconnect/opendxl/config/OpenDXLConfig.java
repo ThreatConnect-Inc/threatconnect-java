@@ -9,6 +9,7 @@ public class OpenDXLConfig
 	private byte[] brokerCertChain;
 	private byte[] certFile;
 	private byte[] privateKey;
+	private byte[] clientConfigContents;
 	
 	public ClientConfig getClientConfig()
 	{
@@ -48,5 +49,15 @@ public class OpenDXLConfig
 	public void setPrivateKey(final byte[] privateKey)
 	{
 		this.privateKey = privateKey;
+	}
+	
+	public byte[] getClientConfigContents()
+	{
+		return clientConfigContents;
+	}
+	
+	public void setClientConfigContents(final byte[] clientConfigContents)
+	{
+		this.clientConfigContents = clientConfigContents;
 	}
 }
