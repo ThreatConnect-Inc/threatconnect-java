@@ -10,12 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.net.SocketFactory;
 import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
-import java.security.spec.InvalidKeySpecException;
+import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,9 +37,7 @@ public class DXLServiceClient extends DXLClient
 	private final Executor executor;
 	
 	public DXLServiceClient(final String sslHost, final byte[] caCert, final byte[] cert,
-		final byte[] privateKey)
-		throws MqttException, CertificateException, UnrecoverableKeyException, NoSuchAlgorithmException, IOException,
-		KeyManagementException, KeyStoreException, InvalidKeySpecException
+		final byte[] privateKey) throws MqttException, GeneralSecurityException, IOException
 	{
 		super(sslHost, caCert, cert, privateKey);
 		this.registeredServicesMap = new HashMap<String, String>();

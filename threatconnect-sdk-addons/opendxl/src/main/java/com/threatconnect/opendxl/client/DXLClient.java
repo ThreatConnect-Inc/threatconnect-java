@@ -22,12 +22,7 @@ import org.slf4j.LoggerFactory;
 import javax.net.SocketFactory;
 import java.io.Closeable;
 import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
-import java.security.spec.InvalidKeySpecException;
+import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -53,8 +48,7 @@ public class DXLClient implements MqttCallback, Closeable
 	protected final Gson gson;
 	
 	public DXLClient(final String sslHost, final byte[] caCert, final byte[] cert, final byte[] privateKey)
-		throws MqttException, CertificateException, UnrecoverableKeyException, NoSuchAlgorithmException, IOException,
-		KeyManagementException, KeyStoreException, InvalidKeySpecException
+		throws MqttException, GeneralSecurityException, IOException
 	{
 		this(sslHost, SslUtil.getSocketFactory(caCert, cert, privateKey));
 	}

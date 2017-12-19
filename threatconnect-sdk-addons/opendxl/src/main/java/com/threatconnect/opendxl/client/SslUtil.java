@@ -1,6 +1,6 @@
 package com.threatconnect.opendxl.client;
 
-import org.apache.commons.io.IOUtils;
+import org.bouncycastle.openssl.PEMReader;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -11,29 +11,27 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.KeyFactory;
-import java.security.KeyManagementException;
+import java.io.InputStreamReader;
+import java.security.GeneralSecurityException;
+import java.security.KeyPair;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
+import java.security.Security;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.util.Base64;
 
 public class SslUtil
 {
 	public static final String PP_ALGORITHM = "RSA";
 	public static final String DEFAULT_PASSWORD = "password";
 	
+	static
+	{
+		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+	}
+	
 	public static SSLSocketFactory getSocketFactory(final File caCrtFile, final File crtFile, final File keyFile)
-		throws CertificateException, IOException, NoSuchAlgorithmException, UnrecoverableKeyException,
-		KeyStoreException, KeyManagementException, InvalidKeySpecException
+		throws GeneralSecurityException, IOException
 	{
 		try (
 			InputStream caCrtInputStream = new FileInputStream(caCrtFile);
@@ -45,8 +43,7 @@ public class SslUtil
 	}
 	
 	public static SSLSocketFactory getSocketFactory(final byte[] caCrt, final byte[] crt, final byte[] key)
-		throws CertificateException, IOException, NoSuchAlgorithmException, UnrecoverableKeyException,
-		KeyStoreException, KeyManagementException, InvalidKeySpecException
+		throws GeneralSecurityException, IOException
 	{
 		try (
 			InputStream caCrtInputStream = new ByteArrayInputStream(caCrt);
@@ -59,8 +56,7 @@ public class SslUtil
 	
 	public static SSLSocketFactory getSocketFactory(final InputStream caCrtInputStream,
 		final InputStream crtInputStream, final InputStream keyInputStream)
-		throws CertificateException, IOException, NoSuchAlgorithmException, UnrecoverableKeyException,
-		KeyStoreException, KeyManagementException, InvalidKeySpecException
+		throws GeneralSecurityException, IOException
 	{
 		CertificateFactory factory = CertificateFactory.getInstance("X.509");
 		
@@ -84,7 +80,7 @@ public class SslUtil
 		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
 		ks.load(null, null);
 		ks.setCertificateEntry("certificate", cert);
-		ks.setKeyEntry("private-key", getPemPrivateKey(keyInputStream), DEFAULT_PASSWORD.toCharArray(),
+		ks.setKeyEntry("private-key", parsePrivateKey(keyInputStream), DEFAULT_PASSWORD.toCharArray(),
 			new java.security.cert.Certificate[] { cert });
 		KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
 		kmf.init(ks, DEFAULT_PASSWORD.toCharArray());
@@ -96,18 +92,24 @@ public class SslUtil
 		return context.getSocketFactory();
 	}
 	
-	private static PrivateKey getPemPrivateKey(final InputStream inputStream)
-		throws IOException, NoSuchAlgorithmException, InvalidKeySpecException
+	private static PrivateKey parsePrivateKey(final InputStream inputStream) throws
+		GeneralSecurityException, IOException
 	{
-		//need to convert the private key format to PKCS8
-		String privateKeyContent = IOUtils.toString(inputStream)
-			.replaceAll("\\n", "")
-			.replaceAll("\\r", "")
-			.replace("-----BEGIN PRIVATE KEY-----", "")
-			.replace("-----END PRIVATE KEY-----", "");
-		
-		KeyFactory keyFactory = KeyFactory.getInstance(PP_ALGORITHM);
-		KeySpec ks = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(privateKeyContent));
-		return keyFactory.generatePrivate(ks);
+		try (PEMReader parser = new PEMReader(new InputStreamReader(inputStream)))
+		{
+			//read the object from the pem reader
+			Object pemObject = parser.readObject();
+			
+			//check to see if this object is a keypair
+			if (pemObject instanceof KeyPair)
+			{
+				KeyPair caKeyPair = (KeyPair) pemObject;
+				return caKeyPair.getPrivate();
+			}
+			else
+			{
+				return (PrivateKey) pemObject;
+			}
+		}
 	}
 }
