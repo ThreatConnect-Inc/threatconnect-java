@@ -1,6 +1,7 @@
 package com.threatconnect.opendxl.client;
 
-import org.bouncycastle.openssl.PEMReader;
+import org.bouncycastle.util.io.pem.PemObject;
+import org.bouncycastle.util.io.pem.PemReader;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -13,12 +14,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
-import java.security.KeyPair;
+import java.security.KeyFactory;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.Security;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.security.spec.PKCS8EncodedKeySpec;
 
 public class SslUtil
 {
@@ -95,21 +97,14 @@ public class SslUtil
 	private static PrivateKey parsePrivateKey(final InputStream inputStream) throws
 		GeneralSecurityException, IOException
 	{
-		try (PEMReader parser = new PEMReader(new InputStreamReader(inputStream)))
+		try (PemReader parser = new PemReader(new InputStreamReader(inputStream)))
 		{
 			//read the object from the pem reader
-			Object pemObject = parser.readObject();
+			PemObject pemObject = parser.readPemObject();
 			
-			//check to see if this object is a keypair
-			if (pemObject instanceof KeyPair)
-			{
-				KeyPair caKeyPair = (KeyPair) pemObject;
-				return caKeyPair.getPrivate();
-			}
-			else
-			{
-				return (PrivateKey) pemObject;
-			}
+			PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(pemObject.getContent());
+			KeyFactory kf = KeyFactory.getInstance(PP_ALGORITHM);
+			return kf.generatePrivate(keySpec);
 		}
 	}
 }
