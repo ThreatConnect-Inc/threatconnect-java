@@ -139,17 +139,25 @@ public class LegacyBatchIndicatorWriter extends Writer
 		}
 	}
 	
-	private BatchUploadResponse uploadIndicators(final Collection<Indicator> indicators,
+	protected BatchUploadResponse uploadIndicators(final Collection<Indicator> indicators,
+		final String ownerName, final AttributeWriteType attributeWriteType, final Action action, int batchIndex,
+		int batchTotal) throws SaveItemFailedException, IOException
+	{
+		
+		// create a new bulk indicator converter
+		logger.trace("Marshalling indicator list to JSON {}/{}", batchIndex, batchTotal);
+		LegacyBulkIndicatorConverter converter = new LegacyBulkIndicatorConverter();
+		JsonElement json = converter.convertToJson(indicators, associatedIndicatorGroupsIDs);
+		
+		return uploadIndicators(json, ownerName, attributeWriteType, action, batchIndex, batchTotal);
+	}
+	
+	protected BatchUploadResponse uploadIndicators(final JsonElement json,
 		final String ownerName, final AttributeWriteType attributeWriteType, final Action action, int batchIndex,
 		int batchTotal) throws SaveItemFailedException, IOException
 	{
 		try
 		{
-			// create a new bulk indicator converter
-			logger.trace("Marshalling indicator list to JSON {}/{}", batchIndex, batchTotal);
-			LegacyBulkIndicatorConverter converter = new LegacyBulkIndicatorConverter();
-			JsonElement json = converter.convertToJson(indicators, associatedIndicatorGroupsIDs);
-			
 			if (logger.isTraceEnabled())
 			{
 				logger.trace("Uploading Json Document {}/{}:", batchIndex, batchTotal);
@@ -184,7 +192,7 @@ public class LegacyBatchIndicatorWriter extends Writer
 		}
 	}
 	
-	private SaveResults pollBatch(final BatchUploadResponse batchUploadResponse, final String ownerName,
+	protected SaveResults pollBatch(final BatchUploadResponse batchUploadResponse, final String ownerName,
 		final int batchIndex, final int batchTotal) throws IOException, SaveItemFailedException
 	{
 		// check to see if the response was successful
@@ -302,7 +310,7 @@ public class LegacyBatchIndicatorWriter extends Writer
 		this.indicatorLimitPerBatch = indicatorLimitPerBatch;
 	}
 	
-	private class BatchUploadResponse
+	protected class BatchUploadResponse
 	{
 		private final int batchID;
 		private final ApiEntitySingleResponse<?, ?> response;
