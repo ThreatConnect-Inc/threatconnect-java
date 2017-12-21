@@ -6,7 +6,8 @@ import org.bouncycastle.util.io.pem.PemReader;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,6 +19,7 @@ import java.security.KeyFactory;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.Security;
+import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -62,21 +64,35 @@ public class SslUtil
 	{
 		CertificateFactory factory = CertificateFactory.getInstance("X.509");
 		
-		X509Certificate caCert;
-		X509Certificate cert;
-		
 		//load CA certificate
-		caCert = (X509Certificate) factory.generateCertificate(caCrtInputStream);
+		final X509Certificate caCert = (X509Certificate) factory.generateCertificate(caCrtInputStream);
 		
 		//load client certificate
-		cert = (X509Certificate) factory.generateCertificate(crtInputStream);
+		final X509Certificate cert = (X509Certificate) factory.generateCertificate(crtInputStream);
 		
-		//CA certificate is used to authenticate server
-		KeyStore caKs = KeyStore.getInstance(KeyStore.getDefaultType());
-		caKs.load(null, null);
-		caKs.setCertificateEntry("ca-certificate", caCert);
-		TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-		tmf.init(caKs);
+		//build a trust manager that explicitly returns the ca cert
+		TrustManager trustManager = new X509TrustManager()
+		{
+			@Override
+			public void checkClientTrusted(final X509Certificate[] x509Certificates, final String s)
+				throws CertificateException
+			{
+			
+			}
+			
+			@Override
+			public void checkServerTrusted(final X509Certificate[] x509Certificates, final String s)
+				throws CertificateException
+			{
+			
+			}
+			
+			@Override
+			public X509Certificate[] getAcceptedIssuers()
+			{
+				return new X509Certificate[]{caCert};
+			}
+		};
 		
 		//client key and certificates are sent to server so it can authenticate us
 		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
@@ -89,7 +105,7 @@ public class SslUtil
 		
 		//create SSL socket factory
 		SSLContext context = SSLContext.getInstance("TLSv1.2");
-		context.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+		context.init(kmf.getKeyManagers(), new TrustManager[]{trustManager}, null);
 		
 		return context.getSocketFactory();
 	}
