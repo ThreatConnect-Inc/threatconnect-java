@@ -24,7 +24,7 @@ public class DXLServiceClient extends DXLClient
 {
 	private static final Logger logger = LoggerFactory.getLogger(DXLServiceClient.class);
 	
-	public static final int DEFAULT_SERVICE_TTL = 1;
+	public static final int DEFAULT_SERVICE_TTL = 60;
 	private static final int DEFAULT_THREADS = 5;
 	
 	public static final String DXL_SERVICE_REGISTER_REQUEST_CHANNEL = "/mcafee/service/dxl/svcregistry/register";
