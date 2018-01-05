@@ -35,7 +35,14 @@ public class HttpResponse
 	
 	public String getEntityAsString()
 	{
-		return new String(entity, Charset.forName("UTF-8"));
+		if(null != entity)
+		{
+			return new String(entity, Charset.forName("UTF-8"));
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	public void setEntity(final byte[] entity)
