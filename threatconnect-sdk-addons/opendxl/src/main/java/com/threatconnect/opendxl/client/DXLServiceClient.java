@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.threatconnect.opendxl.client.message.DXLMessage;
 import com.threatconnect.opendxl.client.message.ServiceRegistration;
 import com.threatconnect.opendxl.client.message.ServiceUnregistration;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +40,14 @@ public class DXLServiceClient extends DXLClient
 	public DXLServiceClient(final String sslHost, final byte[] caCert, final byte[] cert,
 		final byte[] privateKey) throws MqttException, GeneralSecurityException, IOException
 	{
-		super(sslHost, caCert, cert, privateKey);
+		this(sslHost, caCert, cert, privateKey, MqttConnectOptions.KEEP_ALIVE_INTERVAL_DEFAULT);
+	}
+	
+	public DXLServiceClient(final String sslHost, final byte[] caCert, final byte[] cert,
+		final byte[] privateKey, final int mqttKeepAliveIntervalSeconds)
+		throws MqttException, GeneralSecurityException, IOException
+	{
+		super(sslHost, caCert, cert, privateKey, mqttKeepAliveIntervalSeconds);
 		this.registeredServicesMap = new HashMap<String, String>();
 		this.gson = new Gson();
 		this.executor = Executors.newFixedThreadPool(DEFAULT_THREADS);
@@ -48,7 +56,14 @@ public class DXLServiceClient extends DXLClient
 	public DXLServiceClient(final String sslHost, final SocketFactory socketFactory)
 		throws MqttException
 	{
-		super(sslHost, socketFactory);
+		this(sslHost, socketFactory, MqttConnectOptions.KEEP_ALIVE_INTERVAL_DEFAULT);
+	}
+	
+	public DXLServiceClient(final String sslHost, final SocketFactory socketFactory,
+		final int mqttKeepAliveIntervalSeconds)
+		throws MqttException
+	{
+		super(sslHost, socketFactory, mqttKeepAliveIntervalSeconds);
 		this.registeredServicesMap = new HashMap<String, String>();
 		this.gson = new Gson();
 		this.executor = Executors.newFixedThreadPool(DEFAULT_THREADS);

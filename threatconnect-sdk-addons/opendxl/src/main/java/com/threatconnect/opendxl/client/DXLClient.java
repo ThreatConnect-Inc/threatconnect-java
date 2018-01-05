@@ -41,7 +41,6 @@ public class DXLClient implements MqttCallback, Closeable
 	public static final long DEFAULT_CLIENT_TIMEOUT = 5000L;
 	
 	private final MqttClient client;
-	private final MqttConnectOptions connectOptions;
 	private final Map<String, IMqttMessageListener> subscriptionMap;
 	
 	protected final String clientID;
@@ -50,10 +49,21 @@ public class DXLClient implements MqttCallback, Closeable
 	public DXLClient(final String sslHost, final byte[] caCert, final byte[] cert, final byte[] privateKey)
 		throws MqttException, GeneralSecurityException, IOException
 	{
-		this(sslHost, SslUtil.getSocketFactory(caCert, cert, privateKey));
+		this(sslHost, caCert, cert, privateKey, MqttConnectOptions.KEEP_ALIVE_INTERVAL_DEFAULT);
 	}
 	
-	public DXLClient(final String sslHost, final SocketFactory socketFactory)
+	public DXLClient(final String sslHost, final byte[] caCert, final byte[] cert, final byte[] privateKey,
+		final int mqttKeepAliveIntervalSeconds) throws MqttException, GeneralSecurityException, IOException
+	{
+		this(sslHost, SslUtil.getSocketFactory(caCert, cert, privateKey), mqttKeepAliveIntervalSeconds);
+	}
+	
+	public DXLClient(final String sslHost, final SocketFactory socketFactory) throws MqttException
+	{
+		this(sslHost, socketFactory, MqttConnectOptions.KEEP_ALIVE_INTERVAL_DEFAULT);
+	}
+	
+	public DXLClient(final String sslHost, final SocketFactory socketFactory, final int mqttKeepAliveIntervalSeconds)
 		throws MqttException
 	{
 		this.clientID = generateNewID();
@@ -61,10 +71,11 @@ public class DXLClient implements MqttCallback, Closeable
 		this.gson = new Gson();
 		
 		//create the connection options for mqtt
-		connectOptions = new MqttConnectOptions();
+		MqttConnectOptions connectOptions = new MqttConnectOptions();
 		connectOptions.setCleanSession(true);
 		connectOptions.setAutomaticReconnect(true);
 		connectOptions.setSocketFactory(socketFactory);
+		connectOptions.setKeepAliveInterval(mqttKeepAliveIntervalSeconds);
 		
 		//create a persistence for mqtt
 		MqttClientPersistence mqttClientPersistence = new MemoryPersistence();
