@@ -32,6 +32,18 @@ public class AttributeTypeValidator extends Validator<AttributeType>
 			throw new ValidationException("AttributeType name cannot be empty.");
 		}
 		
+		//make sure the description is not empty
+		if (isNullOrEmpty(object.getDescription()))
+		{
+			throw new ValidationException("AttributeType description cannot be empty.");
+		}
+		
+		//make sure the error messages is not empty
+		if (isNullOrEmpty(object.getErrorMessage()))
+		{
+			throw new ValidationException("AttributeType errorMessage cannot be empty.");
+		}
+		
 		//check to see if this attribute has a validation rule
 		if (null != object.getValidationRule())
 		{
