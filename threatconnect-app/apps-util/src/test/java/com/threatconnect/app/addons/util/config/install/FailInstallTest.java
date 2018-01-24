@@ -58,4 +58,20 @@ public class FailInstallTest
 				.contains("Invalid programVersion. Must be in <MAJOR>.<MINOR>.<PATCH> format (e.g. 1.0.0)"));
 		}
 	}
+	
+	@Test
+	public void fail5() throws IOException
+	{
+		try
+		{
+			File file = new File("src/test/resources/fail5.install.json");
+			InstallUtil.load(file);
+			Assert.fail();
+		}
+		catch (ValidationException e)
+		{
+			Assert.assertTrue(e.getMessage()
+				.contains("actionAtMinimum contains an invalid value. Valid values are:"));
+		}
+	}
 }
