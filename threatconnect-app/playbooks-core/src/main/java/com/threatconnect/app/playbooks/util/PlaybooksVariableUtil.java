@@ -255,6 +255,13 @@ public class PlaybooksVariableUtil
 		return StandardPlaybookType.TCEntityArray.toString().equalsIgnoreCase(extractVariableType(variable));
 	}
 	
+	/**
+	 * Removes the trailing exclamation point from the text. Used for variable types that may or may not have the
+	 * optional ! at the end
+	 *
+	 * @param text
+	 * @return
+	 */
 	private static String trimTrailingExclamation(final String text)
 	{
 		//check to see if there is a trailing exclamation point
