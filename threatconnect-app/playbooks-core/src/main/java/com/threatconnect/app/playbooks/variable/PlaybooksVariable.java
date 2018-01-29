@@ -2,6 +2,8 @@ package com.threatconnect.app.playbooks.variable;
 
 import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 
+import java.util.regex.Pattern;
+
 /**
  * Represents
  *
@@ -47,6 +49,11 @@ public class PlaybooksVariable
 	public String getPlaybookVariableType()
 	{
 		return playbookVariableType;
+	}
+	
+	public String toRegexReplaceString()
+	{
+		return Pattern.quote(toString()) + "!?";
 	}
 	
 	@Override

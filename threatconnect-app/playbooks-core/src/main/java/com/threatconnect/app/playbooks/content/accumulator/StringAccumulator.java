@@ -4,9 +4,11 @@ import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.app.playbooks.content.converter.StringConverter;
 import com.threatconnect.app.playbooks.db.DBService;
 import com.threatconnect.app.playbooks.util.PlaybooksVariableUtil;
+import com.threatconnect.app.playbooks.variable.PlaybooksVariable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -58,13 +60,13 @@ public class StringAccumulator extends TypedContentAccumulator<String>
 		{
 			//create a matcher that will check to see if there are any embedded string variables in here that need to be
 			//resolved
-			Matcher matcher = PlaybooksVariableUtil.getVariablePatternMatcher(value);
+			List<PlaybooksVariable> playbooksVariables = PlaybooksVariableUtil.extractPlaybooksVariables(value);
 			
 			//while there are more results
 			logger.trace("Looking for embedded variables.");
-			while (matcher.find())
+			for (PlaybooksVariable playbooksVariable : playbooksVariables)
 			{
-				final String variable = matcher.group();
+				final String variable = playbooksVariable.toString();
 				logger.trace("Variable found: {}", variable);
 				
 				//make sure that this stack does not already contain this variable to prevent an infinite loop
@@ -95,8 +97,8 @@ public class StringAccumulator extends TypedContentAccumulator<String>
 						//make sure the embedded result is not null
 						if (null != embeddedResult)
 						{
-							value =
-								value.replaceFirst(Pattern.quote(variable), Matcher.quoteReplacement(embeddedResult));
+							value = value.replaceFirst(playbooksVariable.toRegexReplaceString(),
+								Matcher.quoteReplacement(embeddedResult));
 						}
 						//the variable resolved to null so now check to see if the entire value string was the variable
 						else if (value.equals(variable))

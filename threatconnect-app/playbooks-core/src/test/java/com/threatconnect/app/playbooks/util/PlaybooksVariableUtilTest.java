@@ -42,6 +42,33 @@ public class PlaybooksVariableUtilTest
 	{
 		Assert.assertTrue(PlaybooksVariableUtil.isStringType(variableTestData));
 		Assert.assertFalse(PlaybooksVariableUtil.isStringArrayType(variableTestData));
-		Assert.assertEquals(StandardPlaybookType.String.toString(), PlaybooksVariableUtil.extractVariableType(variableTestData));
+		Assert.assertEquals(StandardPlaybookType.String.toString(),
+			PlaybooksVariableUtil.extractVariableType(variableTestData));
+	}
+	
+	@Test
+	public void embeddedVariableTest()
+	{
+		Assert.assertEquals("String",
+			PlaybooksVariableUtil.extractVariableType("#Global:0:gbl.test!String"));
+		Assert.assertEquals("StringArray",
+			PlaybooksVariableUtil.extractVariableType("#Global:0:gbl.test!StringArray"));
+		Assert.assertEquals("CustomVariable",
+			PlaybooksVariableUtil.extractVariableType("#Global:0:gbl.test!CustomVariable"));
+		Assert.assertEquals("Binary",
+			PlaybooksVariableUtil.extractVariableType("#Global:0:gbl.test!Binary"));
+		Assert.assertEquals("BinaryArray",
+			PlaybooksVariableUtil.extractVariableType("#Global:0:gbl.test!BinaryArray"));
+		
+		Assert.assertEquals("String",
+			PlaybooksVariableUtil.extractVariableType("#Global:0:gbl.test!String!"));
+		Assert.assertEquals("StringArray",
+			PlaybooksVariableUtil.extractVariableType("#Global:0:gbl.test!StringArray!"));
+		Assert.assertEquals("StringCustom",
+			PlaybooksVariableUtil.extractVariableType("#Global:0:gbl.test!StringCustom!"));
+		Assert.assertEquals("Binary",
+			PlaybooksVariableUtil.extractVariableType("#Global:0:gbl.test!Binary!"));
+		Assert.assertEquals("BinaryArray",
+			PlaybooksVariableUtil.extractVariableType("#Global:0:gbl.test!BinaryArray!"));
 	}
 }
