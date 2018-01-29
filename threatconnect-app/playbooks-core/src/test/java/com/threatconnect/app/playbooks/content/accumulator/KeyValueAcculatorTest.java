@@ -78,7 +78,7 @@ public class KeyValueAcculatorTest
 	public void embeddedVariableTest() throws ContentException
 	{
 		stringAccumulator.writeContent("#App:123:name!String", "Greg");
-		stringAccumulator.writeContent("#App:123:hello!String", "Hello #App:123:name!String!!");
+		stringAccumulator.writeContent("#App:123:hello!String", "Hello #App:123:name!String!");
 		
 		KeyValue kv = new KeyValue("somekey", "#App:123:hello!String");
 		

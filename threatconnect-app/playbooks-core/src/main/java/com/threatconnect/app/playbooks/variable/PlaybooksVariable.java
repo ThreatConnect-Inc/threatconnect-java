@@ -5,7 +5,7 @@ import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import java.util.regex.Pattern;
 
 /**
- * Represents
+ * Represents a playbooks variable
  *
  * @author Greg Marut
  */
@@ -51,9 +51,14 @@ public class PlaybooksVariable
 		return playbookVariableType;
 	}
 	
+	/**
+	 * Returns the regex value to use for replacement
+	 *
+	 * @return
+	 */
 	public String toRegexReplaceString()
 	{
-		return Pattern.quote(toString()) + "!?";
+		return Pattern.quote(toString());
 	}
 	
 	@Override

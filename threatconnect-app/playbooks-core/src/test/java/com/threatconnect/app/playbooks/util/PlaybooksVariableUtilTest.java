@@ -61,14 +61,16 @@ public class PlaybooksVariableUtilTest
 			PlaybooksVariableUtil.extractVariableType("#Global:0:gbl.test!BinaryArray"));
 		
 		Assert.assertEquals("String",
-			PlaybooksVariableUtil.extractVariableType("#Global:0:gbl.test!String!"));
+			PlaybooksVariableUtil.extractPlaybooksVariables("#Global:0:gbl.test!StringExtraText").get(0)
+				.getPlaybookVariableType());
 		Assert.assertEquals("StringArray",
-			PlaybooksVariableUtil.extractVariableType("#Global:0:gbl.test!StringArray!"));
-		Assert.assertEquals("StringCustom",
-			PlaybooksVariableUtil.extractVariableType("#Global:0:gbl.test!StringCustom!"));
+			PlaybooksVariableUtil.extractPlaybooksVariables("#Global:0:gbl.test!StringArrayExtraText").get(0)
+				.getPlaybookVariableType());
 		Assert.assertEquals("Binary",
-			PlaybooksVariableUtil.extractVariableType("#Global:0:gbl.test!Binary!"));
+			PlaybooksVariableUtil.extractPlaybooksVariables("#Global:0:gbl.test!BinaryExtraText").get(0)
+				.getPlaybookVariableType());
 		Assert.assertEquals("BinaryArray",
-			PlaybooksVariableUtil.extractVariableType("#Global:0:gbl.test!BinaryArray!"));
+			PlaybooksVariableUtil.extractPlaybooksVariables("#Global:0:gbl.test!BinaryArrayExtraText").get(0)
+				.getPlaybookVariableType());
 	}
 }

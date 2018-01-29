@@ -24,7 +24,7 @@ public class PlaybooksVariableUtil
 	 * Holds the regex pattern that identifies a variable anywhere in a string
 	 */
 	public static final String VARIABLE_REGEX =
-		"#([A-Za-z]+):([\\d]+):([A-Za-z0-9_.-]+)!([A-Za-z0-9_-]+!|StringArray|BinaryArray|KeyValueArray|TCEntityArray|TCEnhancedEntityArray|String|Binary|KeyValue|TCEntity|TCEnhancedEntity|(?:(?!String)(?!Binary)(?!KeyValue)(?!TCEntity)(?!TCEnhancedEntity)[A-Za-z0-9_-]+))";
+		"#([A-Za-z]+):([\\d]+):([A-Za-z0-9_.-]+)!(StringArray|BinaryArray|KeyValueArray|TCEntityArray|TCEnhancedEntityArray|String|Binary|KeyValue|TCEntity|TCEnhancedEntity|(?:(?!String)(?!Binary)(?!KeyValue)(?!TCEntity)(?!TCEnhancedEntity)[A-Za-z0-9_-]+))";
 	public static final Pattern VARIABLE_PATTERN = Pattern.compile(VARIABLE_REGEX);
 	
 	/**

@@ -31,7 +31,7 @@ public class StringAcculatorTest
 	public void embeddedStringVariables() throws ContentException
 	{
 		stringAccumulator.writeContent("#App:123:name!String", "Greg");
-		stringAccumulator.writeContent("#App:123:hello!String", "Hello #App:123:name!String!!");
+		stringAccumulator.writeContent("#App:123:hello!String", "Hello #App:123:name!String!");
 		
 		String result = stringAccumulator.readContent("#App:123:hello!String");
 		logger.info(result);
@@ -46,7 +46,7 @@ public class StringAcculatorTest
 		stringAccumulator.writeContent("#App:123:lastname!String", "Marut");
 		stringAccumulator
 			.writeContent("#App:123:fullname!String", "#App:123:firstname!String #App:123:lastname!String");
-		stringAccumulator.writeContent("#App:123:hello!String", "Hello #App:123:fullname!String!!");
+		stringAccumulator.writeContent("#App:123:hello!String", "Hello #App:123:fullname!String!");
 		
 		String result = stringAccumulator.readContent("#App:123:hello!String");
 		logger.info(result);
@@ -59,7 +59,7 @@ public class StringAcculatorTest
 	{
 		stringAccumulator.writeContent("#App:123:test!String", "Test");
 		stringAccumulator
-			.writeContent("#App:123:test1!String", "#App:123:test!String #App:123:test!String! #App:123:test!String");
+			.writeContent("#App:123:test1!String", "#App:123:test!String #App:123:test!String #App:123:test!String");
 		
 		String result = stringAccumulator.readContent("#App:123:test1!String");
 		logger.info(result);
