@@ -31,6 +31,16 @@ public class InstallTest
 		Assert.assertEquals(1, install.getFeeds().size());
 		Assert.assertTrue(install.getFeeds().get(0).isEnableBulkJson());
 		Assert.assertTrue(install.getFeeds().get(0).getDeprecation().get(0).isPercentage());
+		
+		Assert.assertEquals(ActionAtMinimumType.Delete.toString(),
+			install.getFeeds().get(0).getDeprecation().get(0).getActionAtMinimum());
+		Assert.assertEquals(ActionAtMinimumType.Delete.toString(),
+			install.getFeeds().get(0).getDeprecation().get(1).getActionAtMinimum());
+		Assert.assertEquals(ActionAtMinimumType.Inactive.toString(),
+			install.getFeeds().get(0).getDeprecation().get(2).getActionAtMinimum());
+		Assert.assertEquals(ActionAtMinimumType.None.toString(),
+			install.getFeeds().get(0).getDeprecation().get(3).getActionAtMinimum());
+		
 	}
 	
 	@Test

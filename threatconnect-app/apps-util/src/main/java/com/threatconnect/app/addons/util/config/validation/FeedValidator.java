@@ -1,5 +1,6 @@
 package com.threatconnect.app.addons.util.config.validation;
 
+import com.threatconnect.app.addons.util.config.install.Deprecation;
 import com.threatconnect.app.addons.util.config.install.Feed;
 
 /**
@@ -7,6 +8,13 @@ import com.threatconnect.app.addons.util.config.install.Feed;
  */
 public class FeedValidator extends Validator<Feed>
 {
+	private final Validator<Deprecation> deprecationValidator;
+	
+	public FeedValidator()
+	{
+		this.deprecationValidator = new DeprecationValidator();
+	}
+	
 	@Override
 	public void validate(final Feed object) throws ValidationException
 	{
@@ -38,6 +46,13 @@ public class FeedValidator extends Validator<Feed>
 		if (isNullOrEmpty(object.getJobFile()))
 		{
 			throwMissingFieldValidationException("jobFile", object);
+		}
+		
+		//for each of the deprecation objects
+		for (Deprecation deprecation : object.getDeprecation())
+		{
+			//validate this deprecation object
+			deprecationValidator.validate(deprecation);
 		}
 	}
 	

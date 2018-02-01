@@ -5,10 +5,11 @@ package com.threatconnect.app.addons.util.config.install;
  */
 public class Deprecation
 {
-	private  String indicatorType;
+	private String indicatorType;
 	private Integer intervalDays;
 	private Integer confidenceAmount;
 	private boolean deleteAtMinimum;
+	private String actionAtMinimum;
 	private boolean percentage;
 	
 	public String getIndicatorType()
@@ -41,14 +42,26 @@ public class Deprecation
 		this.confidenceAmount = confidenceAmount;
 	}
 	
+	@Deprecated
 	public boolean isDeleteAtMinimum()
 	{
 		return deleteAtMinimum;
 	}
 	
+	@Deprecated
 	public void setDeleteAtMinimum(final boolean deleteAtMinimum)
 	{
 		this.deleteAtMinimum = deleteAtMinimum;
+	}
+	
+	public String getActionAtMinimum()
+	{
+		return actionAtMinimum;
+	}
+	
+	public void setActionAtMinimum(final String actionAtMinimum)
+	{
+		this.actionAtMinimum = actionAtMinimum;
 	}
 	
 	public boolean isPercentage()
