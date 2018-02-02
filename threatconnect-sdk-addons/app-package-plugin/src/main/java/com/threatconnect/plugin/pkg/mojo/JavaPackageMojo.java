@@ -9,13 +9,10 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.regex.Pattern;
 
 @Mojo(name = "java-package", defaultPhase = LifecyclePhase.PACKAGE, threadSafe = true, requiresDependencyResolution = ResolutionScope.RUNTIME)
 public class JavaPackageMojo extends AbstractAppPackageMojo
 {
-	public static final Pattern PATTERN_INSTALL_JSON = Pattern.compile("^(?:(.*)\\.)?install\\.json$");
-	
 	/**
 	 * Classifier to add to the generated App. If given, the artifact will be an attachment instead.
 	 * The classifier will not be applied to the JAR file of the project - only to the WAR file.

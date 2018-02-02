@@ -66,9 +66,9 @@ public abstract class AbstractPackageMojo<T> extends AbstractMojo
 	private String[] exclude;
 	
 	/**
-	 * Packages a profile. A profile is determined by an install.json file. If multiple install.json
-	 * files are found, they are each built using their profile name. Otherwise, if only an
-	 * install.json file is found, the default settings are used.
+	 * Packages a profile. A profile is determined by an install.json file. If multiple install.json files are found,
+	 * they are each built using their profile name. Otherwise, if only an install.json file is found, the default
+	 * settings are used.
 	 *
 	 * @param profile
 	 * @throws IOException
@@ -84,10 +84,6 @@ public abstract class AbstractPackageMojo<T> extends AbstractMojo
 		File explodedDir = getExplodedDir(appName);
 		explodedDir.mkdirs();
 		
-		// copy the primary json file
-		File primaryJsonDestination = new File(explodedDir.getAbsolutePath() + File.separator + primaryJsonFileName);
-		FileUtils.copyFile(profile.getSourceFile(), primaryJsonDestination);
-		
 		// write the rest of the app contents out to the target folder
 		writeAppContentsToDirectory(explodedDir);
 		
@@ -97,14 +93,33 @@ public abstract class AbstractPackageMojo<T> extends AbstractMojo
 		//validate that all of the files referenced in the install.json file exist
 		validateReferencedFiles(explodedDir, profile);
 		
+		//write the primary json file
+		File primaryJsonDestination = new File(explodedDir.getAbsolutePath() + File.separator + primaryJsonFileName);
+		writePrimaryInstallJson(profile, primaryJsonDestination);
+		
 		// zip up the app and return the file of the packaged app
 		return ZipUtil.zipFolder(explodedDir, packageExtension);
 	}
 	
 	/**
-	 * Given a profile, the name of the app is determined here. First, if the install.json file has
-	 * an applicationName and programVersion attribute set, those are used. If not, the prefix of
-	 * the install.json file is used if it exists, otherwise the default app name is used.
+	 * packages the primary install json file
+	 *
+	 * @param profile
+	 * @param primaryJsonDestination
+	 * @throws IOException
+	 * @throws ValidationException
+	 * @throws InvalidFileException
+	 */
+	protected void writePrimaryInstallJson(final Profile<T> profile, final File primaryJsonDestination)
+		throws IOException, ValidationException, InvalidFileException
+	{
+		FileUtils.copyFile(profile.getSourceFile(), primaryJsonDestination);
+	}
+	
+	/**
+	 * Given a profile, the name of the app is determined here. First, if the install.json file has an applicationName
+	 * and programVersion attribute set, those are used. If not, the prefix of the install.json file is used if it
+	 * exists, otherwise the default app name is used.
 	 *
 	 * @param profile
 	 * @return

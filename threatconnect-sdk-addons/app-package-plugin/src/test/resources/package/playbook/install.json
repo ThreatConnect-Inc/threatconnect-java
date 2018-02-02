@@ -1,0 +1,7 @@
+{
+  "displayName": "Playbook App",
+  "programMain": "playbook.pbx",
+  "programVersion": "1.0.0",
+  "programLanguage": "PLAYBOOK",
+  "runtimeLevel": "Organization"
+}
