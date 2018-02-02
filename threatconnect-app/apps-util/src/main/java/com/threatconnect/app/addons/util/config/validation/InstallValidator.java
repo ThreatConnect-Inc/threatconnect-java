@@ -72,9 +72,10 @@ public class InstallValidator extends Validator<Install>
 		}
 		else
 		{
-			//check to see if the programming language is JAVA or PYTHON
-			if (ProgramLanguageType.JAVA.equals(object.getProgramLanguage()) || ProgramLanguageType.PYTHON
-				.equals(object.getProgramLanguage()))
+			//check to see if the programming language is JAVA, PLAYBOOK or PYTHON
+			if (ProgramLanguageType.JAVA.equals(object.getProgramLanguage()) ||
+				ProgramLanguageType.PLAYBOOK.equals(object.getProgramLanguage()) ||
+				ProgramLanguageType.PYTHON.equals(object.getProgramLanguage()))
 			{
 				//validate the program main
 				if (isNullOrEmpty(object.getProgramMain()))
