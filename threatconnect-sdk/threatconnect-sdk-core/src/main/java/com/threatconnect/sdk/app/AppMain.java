@@ -7,6 +7,7 @@ import com.threatconnect.app.apps.ExitStatus;
 import com.threatconnect.sdk.app.exception.AppInstantiationException;
 import com.threatconnect.sdk.app.exception.MultipleAppClassFoundException;
 import com.threatconnect.sdk.app.exception.NoAppClassFoundException;
+import com.threatconnect.sdk.app.exception.PartialFailureException;
 import com.threatconnect.sdk.app.exception.TCMessageException;
 import com.threatconnect.sdk.log.ServerLogger;
 import org.reflections.Reflections;
@@ -162,6 +163,13 @@ public class AppMain implements AppExecutor
 			{
 				// execute this app
 				return app.execute(appConfig);
+			}
+			catch (PartialFailureException e)
+			{
+				app.writeMessageTc(e.getMessage());
+				logger.error(e.getMessage(), e);
+				LoggerUtil.logErr(e, e.getMessage());
+				return ExitStatus.Partial_Failure;
 			}
 			catch (TCMessageException e)
 			{
