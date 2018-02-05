@@ -1,11 +1,11 @@
 package com.threatconnect.sdk.parser.service.save;
 
+import com.threatconnect.sdk.model.Item;
+import com.threatconnect.sdk.model.ItemType;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import com.threatconnect.sdk.model.Item;
-import com.threatconnect.sdk.model.ItemType;
 
 public class SaveResults
 {
@@ -61,7 +61,7 @@ public class SaveResults
 		}
 	}
 	
-	public boolean isSuccessfully()
+	public boolean isSuccessful()
 	{
 		for (ItemType itemType : ItemType.values())
 		{
@@ -78,9 +78,8 @@ public class SaveResults
 	
 	/**
 	 * Counts all of the items of a specific type.
-	 * 
-	 * @param itemType
-	 * the type of item to count
+	 *
+	 * @param itemType the type of item to count
 	 * @return the number of failed items
 	 */
 	public int countFailedItems(final ItemType itemType)

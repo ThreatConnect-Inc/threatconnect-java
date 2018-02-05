@@ -92,22 +92,7 @@ public abstract class ParserApp extends App
 					}
 				}
 				
-				// determine the exit status for this app
-				if (parserSaveResults.isEmpty())
-				{
-					// no parsers have failed
-					return ExitStatus.Failure;
-				}
-				else if (parserSaveResults.size() == parsers.size())
-				{
-					// add parsers have failed
-					return ExitStatus.Success;
-				}
-				else
-				{
-					// some of the parsers have failed
-					return ExitStatus.Partial_Failure;
-				}
+				return determineExitStatus(parserSaveResults, parsers);
 			}
 			else
 			{
@@ -121,6 +106,27 @@ public abstract class ParserApp extends App
 		{
 			writeParserResults(parserCountMap, parserSaveResults, totalIndicatorsFound, totalGroupsFound,
 				totalIndicatorsSaved, totalGroupsSaved);
+		}
+	}
+	
+	protected ExitStatus determineExitStatus(final Map<String, SaveResults> parserSaveResults,
+		final List<Parser<? extends Item>> parsers)
+	{
+		// determine the exit status for this app
+		if (parserSaveResults.isEmpty())
+		{
+			// no parsers have failed
+			return ExitStatus.Failure;
+		}
+		else if (parserSaveResults.size() == parsers.size())
+		{
+			// add parsers have failed
+			return ExitStatus.Success;
+		}
+		else
+		{
+			// some of the parsers have failed
+			return ExitStatus.Partial_Failure;
 		}
 	}
 	
@@ -197,7 +203,7 @@ public abstract class ParserApp extends App
 	
 	/**
 	 * Creates the configuration object
-	 * 
+	 *
 	 * @param appConfig
 	 * @return
 	 */
@@ -205,14 +211,15 @@ public abstract class ParserApp extends App
 	{
 		// create the configuration for the threatconnect server
 		Configuration configuration = new Configuration(appConfig.getTcApiPath(), appConfig.getTcApiAccessID(),
-			appConfig.getTcApiUserSecretKey(), appConfig.getApiDefaultOrg(), appConfig.getTcToken(), appConfig.getTcTokenExpires());
-                
+			appConfig.getTcApiUserSecretKey(), appConfig.getApiDefaultOrg(), appConfig.getTcToken(),
+			appConfig.getTcTokenExpires());
+		
 		return configuration;
 	}
 	
 	/**
 	 * Creates the save service that is used to save the data once parsing has completed
-	 * 
+	 *
 	 * @param appConfig
 	 * @return
 	 */
@@ -223,7 +230,7 @@ public abstract class ParserApp extends App
 	
 	/**
 	 * Creates the parsers for this app to use
-	 * 
+	 *
 	 * @param appConfig
 	 * @return
 	 */
@@ -231,7 +238,7 @@ public abstract class ParserApp extends App
 	
 	/**
 	 * Called once parsing has completed
-	 * 
+	 *
 	 * @param items
 	 */
 	protected void onParsingFinished(final List<? extends Item> items, final Parser<? extends Item> parser)
@@ -241,13 +248,10 @@ public abstract class ParserApp extends App
 	
 	/**
 	 * Counts all of the items of a specific type.
-	 * 
-	 * @param items
-	 * the list of all items
-	 * @param itemType
-	 * the type of item to count
-	 * @param recursive
-	 * whether or not the associated items should be counted as well
+	 *
+	 * @param items     the list of all items
+	 * @param itemType  the type of item to count
+	 * @param recursive whether or not the associated items should be counted as well
 	 * @return
 	 */
 	private int count(final Collection<? extends Item> items, final ItemType itemType, final boolean recursive)
