@@ -32,12 +32,15 @@ public class PlaybookPackageMojo extends AbstractAppPackageMojo
 {
 	private static final String ELEMENT_PLAYBOOK_TIGGER_LIST = "playbookTriggerList";
 	private static final String ELEMENT_TRIGGER_TYPE = "type";
-	private static final String ELEMENT_KEY = "key";
+	private static final String ELEMENT_NAME = "name";
+	private static final String ELEMENT_LABEL = "label";
 	private static final String ELEMENT_VALUE = "value";
-	
-	//:TODO: need a special trigger for this, testing with http link for now
-	private static final String ELEMENT_TRIGGER_PARAMS = "httpResponseHeader";
-	private static final String VALID_TRIGGER_TYPE = "HttpLink";
+	private static final String ELEMENT_VALID_VALUES_LIST = "validValuesList";
+	private static final String ELEMENT_DATA_TYPE = "dataType";
+	private static final String ELEMENT_ENCRYPTED = "encrypted";
+	private static final String ELEMENT_REQUIRED = "required";
+	private static final String ELEMENT_TRIGGER_PARAMS = "pipeInputParams";
+	private static final String VALID_TRIGGER_TYPE = "PipeConfig";
 	
 	private final Gson gson;
 	private final JsonParser jsonParser;
@@ -58,16 +61,26 @@ public class PlaybookPackageMojo extends AbstractAppPackageMojo
 		
 		//load the playbook file and read the parameters
 		JsonElement playbookRoot = readPlaybookFile(primaryJsonDestination.getParentFile(), profile);
-		Map<String, String> parameters = extractJobParameters(playbookRoot);
+		Map<String, JsonObject> parameters = extractJobParameters(playbookRoot);
 		
 		//look for all of the parameters
-		for (Map.Entry<String, String> entry : parameters.entrySet())
+		for (Map.Entry<String, JsonObject> entry : parameters.entrySet())
 		{
 			//retrieve the parameter by the key name
 			Param param = getOrAddParam(install, entry.getKey());
 			
-			//update the param default value
-			param.setDefaultValue(entry.getValue());
+			//update the fields
+			param.setDefaultValue(JsonUtil.getAsString(entry.getValue(), ELEMENT_VALUE));
+			param.setLabel(JsonUtil.getAsString(entry.getValue(), ELEMENT_LABEL));
+			param.setType(ParamDataType.valueOf(JsonUtil.getAsString(entry.getValue(), ELEMENT_DATA_TYPE)));
+			param.setRequired(JsonUtil.getAsBoolean(entry.getValue(), ELEMENT_REQUIRED));
+			param.setEncrypt(JsonUtil.getAsBoolean(entry.getValue(), ELEMENT_ENCRYPTED));
+			
+			JsonArray validValues = JsonUtil.getAsJsonArray(entry.getValue(), ELEMENT_VALID_VALUES_LIST);
+			if (null != validValues)
+			{
+				validValues.forEach(v -> param.getValidValues().add(v.getAsString()));
+			}
 		}
 		
 		try (OutputStream outputStream = new FileOutputStream(primaryJsonDestination))
@@ -84,10 +97,10 @@ public class PlaybookPackageMojo extends AbstractAppPackageMojo
 		getPlaybookFile(explodedDir, profile);
 	}
 	
-	private Map<String, String> extractJobParameters(final JsonElement playbookRoot) throws ValidationException
+	private Map<String, JsonObject> extractJobParameters(final JsonElement playbookRoot) throws ValidationException
 	{
 		//holds the map to return
-		Map<String, String> parameterMap = new HashMap<String, String>();
+		Map<String, JsonObject> parameterMap = new HashMap<String, JsonObject>();
 		
 		//retrieve the playbook trigger list
 		JsonArray playbookTriggerList = JsonUtil.getAsJsonArray(playbookRoot, ELEMENT_PLAYBOOK_TIGGER_LIST);
@@ -121,8 +134,7 @@ public class PlaybookPackageMojo extends AbstractAppPackageMojo
 			for (JsonElement parameter : parametersArray)
 			{
 				//parse the key/value from the array and add it to this map
-				parameterMap.put(JsonUtil.getAsString(parameter, ELEMENT_KEY),
-					JsonUtil.getAsString(parameter, ELEMENT_VALUE));
+				parameterMap.put(JsonUtil.getAsString(parameter, ELEMENT_NAME), parameter.getAsJsonObject());
 			}
 		}
 		
