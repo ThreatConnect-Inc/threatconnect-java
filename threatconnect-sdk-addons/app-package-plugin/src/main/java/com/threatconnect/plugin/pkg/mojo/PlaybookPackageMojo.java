@@ -12,7 +12,9 @@ import com.threatconnect.app.addons.util.config.install.Install;
 import com.threatconnect.app.addons.util.config.install.Param;
 import com.threatconnect.app.addons.util.config.install.ParamDataType;
 import com.threatconnect.app.addons.util.config.validation.ValidationException;
+import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.plugin.pkg.Profile;
+import org.apache.logging.log4j.Level;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
@@ -81,6 +83,24 @@ public class PlaybookPackageMojo extends AbstractAppPackageMojo
 			{
 				validValues.forEach(v -> param.getValidValues().add(v.getAsString()));
 			}
+		}
+		
+		//check to see if the log level param is missing
+		if (!parameters.containsKey(AppConfig.TC_LOG_LEVEL))
+		{
+			//add the log level param by default
+			Param param = getOrAddParam(install, AppConfig.TC_LOG_LEVEL);
+			
+			//update the fields
+			param.setDefaultValue(Level.INFO.toString());
+			param.setLabel("Logging level");
+			param.setType(ParamDataType.Choice);
+			param.getValidValues().add(Level.FATAL.toString());
+			param.getValidValues().add(Level.ERROR.toString());
+			param.getValidValues().add(Level.WARN.toString());
+			param.getValidValues().add(Level.INFO.toString());
+			param.getValidValues().add(Level.DEBUG.toString());
+			param.getValidValues().add(Level.TRACE.toString());
 		}
 		
 		try (OutputStream outputStream = new FileOutputStream(primaryJsonDestination))
