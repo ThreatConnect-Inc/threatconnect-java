@@ -21,6 +21,7 @@ public class Install
 	private boolean allowRunAsUser;
 	private boolean apiUserTokenParam;
 	private Integer tokenExpireOffsetMinutes;
+	private Integer timeoutMinutes;
 	private String note;
 	
 	private Playbook playbook;
@@ -180,6 +181,16 @@ public class Install
 	public void setTokenExpireOffsetMinutes(final Integer tokenExpireOffsetMinutes)
 	{
 		this.tokenExpireOffsetMinutes = tokenExpireOffsetMinutes;
+	}
+	
+	public Integer getTimeoutMinutes()
+	{
+		return timeoutMinutes;
+	}
+	
+	public void setTimeoutMinutes(final Integer timeoutMinutes)
+	{
+		this.timeoutMinutes = timeoutMinutes;
 	}
 	
 	public String getNote()
