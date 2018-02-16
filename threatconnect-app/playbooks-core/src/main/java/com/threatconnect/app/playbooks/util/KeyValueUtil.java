@@ -36,7 +36,7 @@ public class KeyValueUtil
 					
 					//to eliminate the double-quotation mark issue, we need to remove the extra quotes that were added
 					//because multiple strings were deserialized
-					if (value.startsWith("\"") && value.endsWith("\""))
+					if (null != value && value.startsWith("\"") && value.endsWith("\""))
 					{
 						//chop off the beginning and ending quotation marks
 						value = value.substring(1, value.length() - 2);
