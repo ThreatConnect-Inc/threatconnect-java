@@ -1,13 +1,13 @@
 {
   "definitionVersion" : "1.0.0",
-  "name" : "RunnablePlaybook",
+  "name" : "RuntimePlaybookExample",
   "type" : "Pipe",
   "panX" : 20.0,
   "panY" : 20.0,
   "logLevel" : "WARN",
   "description" : "",
   "jobList" : [ {
-    "id" : 230,
+    "id" : 285,
     "appCatalogItem" : {
       "programName" : "Logger",
       "displayName" : "Logger",
@@ -23,41 +23,41 @@
     "enableNotifications" : false,
     "jobParameterList" : [ {
       "appCatalogItemParameter" : {
-        "paramName" : "log_message"
-      },
-      "value" : "Username: #Trigger:88:username!String \nPassword: #Trigger:88:password!String"
-    }, {
-      "appCatalogItemParameter" : {
         "paramName" : "logging"
       },
       "value" : "INFO"
+    }, {
+      "appCatalogItemParameter" : {
+        "paramName" : "log_message"
+      },
+      "value" : "Username: #Trigger:121:username!String \nPassword: #Trigger:121:password!String"
     } ],
-    "locationLeft" : 620.0,
-    "locationTop" : 260.0,
+    "locationLeft" : 690.0,
+    "locationTop" : 240.0,
     "playbookRetryEnabled" : false
   } ],
   "playbookConnectionList" : [ {
     "type" : "Pass",
     "isCircularOnTarget" : false,
-    "targetJobId" : 230,
-    "sourceTriggerId" : 88
+    "targetJobId" : 285,
+    "sourceTriggerId" : 121
   } ],
   "playbookTriggerList" : [ {
-    "id" : 88,
+    "id" : 121,
     "name" : "Component Trigger",
     "type" : "PipeConfig",
     "eventType" : "Create",
-    "locationLeft" : 810.0,
-    "locationTop" : 250.0,
+    "locationLeft" : 420.0,
+    "locationTop" : 170.0,
     "httpBasicAuthEnable" : false,
     "anyOrg" : true,
     "orFilters" : false,
     "fireOnDuplicate" : false,
     "renderBodyAsTip" : false,
     "outputVariables" : "[{\"name\":\"username\",\"type\":\"String\"},{\"name\":\"password\",\"type\":\"String\"}]",
-    "pipeInputParams" : "[{\"label\":\"Username\",\"dataType\":\"String\",\"playbookDataType\":\"String\",\"required\":false,\"name\":\"username\",\"encrypted\":false,\"hidden\":false,\"hasDollarVariables\":false,\"playbookVariable\":false,\"validValuesList\":[\"${TEXT}\"]},{\"label\":\"Password\",\"dataType\":\"String\",\"playbookDataType\":\"String\",\"required\":false,\"name\":\"password\",\"encrypted\":true,\"hidden\":false,\"hasDollarVariables\":false,\"playbookVariable\":false,\"validValuesList\":[\"${KEYCHAIN}\"]}]",
+    "pipeInputParams" : "[{\"label\":\"Username\",\"dataType\":\"String\",\"playbookDataType\":\"String\",\"required\":true,\"name\":\"username\",\"encrypted\":false,\"hidden\":false,\"hasDollarVariables\":false,\"playbookVariable\":false,\"validValuesList\":[\"${TEXT}\"]},{\"label\":\"Password\",\"dataType\":\"String\",\"playbookDataType\":\"String\",\"required\":true,\"name\":\"password\",\"encrypted\":true,\"hidden\":false,\"hasDollarVariables\":false,\"playbookVariable\":false,\"validValuesList\":[\"${KEYCHAIN}\"]},{\"label\":\"KeyValueInput\",\"dataType\":\"String\",\"playbookDataType\":\"String,KeyValueArray\",\"required\":false,\"name\":\"kv\",\"encrypted\":false,\"hidden\":false,\"hasDollarVariables\":false,\"playbookVariable\":false,\"validValuesList\":[\"${TEXT}\"]}]",
     "pipeOutputParams" : "[]"
   } ],
   "exportablePipes" : [ ],
-  "dateExported" : "2/6/18 6:45 PM"
+  "dateExported" : "2/16/18 3:01 PM"
 }

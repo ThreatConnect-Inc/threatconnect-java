@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +34,7 @@ import java.util.Map;
 public class PlaybookPackageMojo extends AbstractAppPackageMojo
 {
 	private static final String ELEMENT_PLAYBOOK_TIGGER_LIST = "playbookTriggerList";
+	private static final String ELEMENT_PLAYBOOK_DATA_TYPE = "playbookDataType";
 	private static final String ELEMENT_TRIGGER_TYPE = "type";
 	private static final String ELEMENT_NAME = "name";
 	private static final String ELEMENT_LABEL = "label";
@@ -77,6 +79,16 @@ public class PlaybookPackageMojo extends AbstractAppPackageMojo
 			param.setType(ParamDataType.valueOf(JsonUtil.getAsString(entry.getValue(), ELEMENT_DATA_TYPE)));
 			param.setRequired(JsonUtil.getAsBoolean(entry.getValue(), ELEMENT_REQUIRED));
 			param.setEncrypt(JsonUtil.getAsBoolean(entry.getValue(), ELEMENT_ENCRYPTED));
+			
+			String playbookDataType = JsonUtil.getAsString(entry.getValue(), ELEMENT_PLAYBOOK_DATA_TYPE);
+			if (null != playbookDataType)
+			{
+				String[] playbookDataTypes = playbookDataType.split(",");
+				if (Arrays.stream(playbookDataTypes).anyMatch(s -> s.equals("KeyValueArray")))
+				{
+					param.setType(ParamDataType.KeyValueList);
+				}
+			}
 			
 			JsonArray validValues = JsonUtil.getAsJsonArray(entry.getValue(), ELEMENT_VALID_VALUES_LIST);
 			if (null != validValues)
