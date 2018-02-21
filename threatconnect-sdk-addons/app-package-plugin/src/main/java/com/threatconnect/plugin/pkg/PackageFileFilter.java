@@ -16,6 +16,7 @@ public class PackageFileFilter
 	public static final String DOT_STAR = ".*";
 	public static final String IML = "*.iml";
 	public static final String INSTALL_JSON = "*install.json";
+	public static final String README_MD = "*README.md";
 	public static final String INSTALL_CONF = "*install.conf";
 	
 	//holds the list of files to exclude
@@ -44,6 +45,7 @@ public class PackageFileFilter
 			getExclude().add(IML);
 			getExclude().add(INSTALL_JSON);
 			getExclude().add(INSTALL_CONF);
+			getExclude().add(README_MD);
 		}
 	}
 	

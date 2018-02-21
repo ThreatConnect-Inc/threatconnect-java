@@ -13,6 +13,7 @@ import com.threatconnect.plugin.pkg.ZipUtil;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.codehaus.plexus.util.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +28,7 @@ public abstract class AbstractAppPackageMojo extends AbstractPackageMojo<Install
 	private static final Logger logger = LoggerFactory.getLogger(AbstractAppPackageMojo.class);
 	
 	public static final Pattern PATTERN_INSTALL_JSON = Pattern.compile("^(?:(.*)\\.)?install\\.json$");
+	public static final String README_FILE_NAME = "README.md";
 	public static final String TC_APP_FILE_EXTENSION = "zip";
 	public static final String TC_BUNDLED_FILE_EXTENSION = "bundle.zip";
 	
@@ -65,8 +67,7 @@ public abstract class AbstractAppPackageMojo extends AbstractPackageMojo<Install
 			}
 			else
 			{
-				// package a legacy app (no install.json file)
-				packageLegacy();
+				throw new ValidationException("No profiles were found to package.");
 			}
 		}
 		catch (InvalidFileException | ValidationException | IOException e)
@@ -86,26 +87,6 @@ public abstract class AbstractAppPackageMojo extends AbstractPackageMojo<Install
 			new File(getOutputDirectory() + File.separator + getAppName() + "." + TC_BUNDLED_FILE_EXTENSION);
 		getLog().info("Packaging Bundle " + bundledFile.getName());
 		ZipUtil.zipFiles(packagedApps, bundledFile.getAbsolutePath());
-	}
-	
-	/**
-	 * Packages a legacy app which consists of an install.conf file.
-	 *
-	 * @throws IOException
-	 */
-	protected void packageLegacy() throws IOException
-	{
-		File explodedDir = getExplodedDir(determineAppName(null));
-		explodedDir.mkdirs();
-		
-		// copy the install conf file if it exists
-		copyFileToDirectoryIfExists(getInstallConfFile(), explodedDir);
-		
-		// write the rest of the app contents out to the target folder
-		writeAppContentsToDirectory(explodedDir);
-		
-		// zip up the app
-		ZipUtil.zipFolder(explodedDir, TC_APP_FILE_EXTENSION);
 	}
 	
 	/**
@@ -149,6 +130,21 @@ public abstract class AbstractAppPackageMojo extends AbstractPackageMojo<Install
 	}
 	
 	@Override
+	protected void writeAppContentsToDirectory(final File targetDirectory, final Profile<Install> profile)
+		throws IOException
+	{
+		super.writeAppContentsToDirectory(targetDirectory, profile);
+		
+		//write the readme file if it exists (validation step will ensure this file was written or it will fail)
+		File readmeFile = getReadmeFile(profile);
+		if (null != readmeFile)
+		{
+			FileUtils.copyFile(readmeFile, new File(
+				targetDirectory.getAbsolutePath() + File.separator + README_FILE_NAME));
+		}
+	}
+	
+	@Override
 	protected Install loadFile(final File file) throws IOException, ValidationException
 	{
 		return InstallUtil.load(file);
@@ -158,10 +154,10 @@ public abstract class AbstractAppPackageMojo extends AbstractPackageMojo<Install
 	protected void validateRequiredFiles(File explodedDir, final Profile<Install> profile)
 		throws ValidationException
 	{
-		File readmeFile = getReadmeFile();
-		if (!readmeFile.exists())
+		File readmeFile = getReadmeFile(profile);
+		if (null == readmeFile)
 		{
-			throw new ValidationException(generateRequiredFileMissingMessage(readmeFile.getName()));
+			throw new ValidationException(generateRequiredFileMissingMessage(README_FILE_NAME));
 		}
 	}
 	
@@ -214,14 +210,32 @@ public abstract class AbstractAppPackageMojo extends AbstractPackageMojo<Install
 		}
 	}
 	
-	protected File getInstallConfFile()
+	/**
+	 * Retrieve the readme file for this profile
+	 *
+	 * @param profile
+	 * @return the readme file that is associated with this profile, otherwise the general readme file (if it exists),
+	 * or null if none are found
+	 */
+	protected File getReadmeFile(final Profile<Install> profile)
 	{
-		return new File(getBaseDirectory() + File.separator + "install.conf");
-	}
-	
-	protected File getReadmeFile()
-	{
-		return new File(getBaseDirectory() + File.separator + "README.md");
+		File file;
+		
+		//first check to see if there is a special readme file for this profile
+		file = new File(getBaseDirectory() + File.separator + profile.getProfileName() + "." + README_FILE_NAME);
+		if (file.exists())
+		{
+			return file;
+		}
+		
+		//check to see if there is a general readme file
+		file = new File(getBaseDirectory() + File.separator + README_FILE_NAME);
+		if (file.exists())
+		{
+			return file;
+		}
+		
+		return null;
 	}
 	
 	protected PackageFileFilter createPackageFileFilter()

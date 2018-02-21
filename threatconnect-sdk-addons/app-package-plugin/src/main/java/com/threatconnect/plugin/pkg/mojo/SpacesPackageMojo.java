@@ -1,21 +1,25 @@
 package com.threatconnect.plugin.pkg.mojo;
 
-import java.io.File;
-import java.io.IOException;
+import com.threatconnect.app.addons.util.config.install.Install;
+import com.threatconnect.plugin.pkg.Profile;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
+
+import java.io.File;
+import java.io.IOException;
 
 @Mojo(name = "spaces-package", defaultPhase = LifecyclePhase.PACKAGE, threadSafe = true, requiresDependencyResolution = ResolutionScope.RUNTIME)
 public class SpacesPackageMojo extends AbstractAppPackageMojo
 {
 	@Override
-	protected void writeAppContentsToDirectory(File targetDirectory) throws IOException
+	protected void writeAppContentsToDirectory(final File targetDirectory, final Profile<Install> profile)
+		throws IOException
 	{
 		// retrieve the base directory folder
 		File baseDirectory = new File(getBaseDirectory());
 		File outputDirectory = new File(getOutputDirectory());
-
+		
 		// loop through each of the files
 		for (File child : baseDirectory.listFiles(createPackageFileFilter().createFilenameFilter()))
 		{
@@ -29,11 +33,7 @@ public class SpacesPackageMojo extends AbstractAppPackageMojo
 					File target = new File(targetDirectory.getAbsolutePath() + File.separator + child.getName());
 					copyFileToDirectoryIfExists(child, target);
 				}
-			} else if (child.getName().equalsIgnoreCase("README.md"))
-                        {
-                            //need to cpy README.md as its required by app catalog
-                            copyFileToDirectoryIfExists(child, targetDirectory);
-                        }
+			}
 		}
 	}
 }

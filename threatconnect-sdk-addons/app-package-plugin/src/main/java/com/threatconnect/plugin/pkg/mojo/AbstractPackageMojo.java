@@ -85,7 +85,7 @@ public abstract class AbstractPackageMojo<T> extends AbstractMojo
 		explodedDir.mkdirs();
 		
 		// write the rest of the app contents out to the target folder
-		writeAppContentsToDirectory(explodedDir);
+		writeAppContentsToDirectory(explodedDir, profile);
 		
 		//validate all of the required files are there
 		validateRequiredFiles(explodedDir, profile);
@@ -236,7 +236,7 @@ public abstract class AbstractPackageMojo<T> extends AbstractMojo
 		throws IOException
 	{
 		// check to see if the source file exists
-		if (source.exists())
+		if (null != source && source.exists())
 		{
 			// check to see if this is a directory
 			if (source.isDirectory())
@@ -328,7 +328,7 @@ public abstract class AbstractPackageMojo<T> extends AbstractMojo
 	 * @param targetDirectory
 	 * @throws IOException
 	 */
-	protected void writeAppContentsToDirectory(File targetDirectory) throws IOException
+	protected void writeAppContentsToDirectory(final File targetDirectory, final Profile<T> profile) throws IOException
 	{
 		// retrieve the base directory folder
 		File baseDirectory = new File(getBaseDirectory());
