@@ -1,0 +1,9 @@
+package com.threatconnect.app.addons.util.config;
+
+/**
+ * @author Greg Marut
+ */
+public class Feature
+{
+	public static final String SECURE_PARAMS = "secureParams";
+}

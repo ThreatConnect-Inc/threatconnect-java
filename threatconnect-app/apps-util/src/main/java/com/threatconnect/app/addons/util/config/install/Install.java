@@ -1,7 +1,9 @@
 package com.threatconnect.app.addons.util.config.install;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Install
 {
@@ -31,6 +33,7 @@ public class Install
 	private final List<String> repeatingMinutes;
 	private final List<String> publishOutFiles;
 	private final List<RuntimeContextType> runtimeContext;
+	private final Set<String> features;
 	
 	public Install()
 	{
@@ -40,6 +43,7 @@ public class Install
 		this.repeatingMinutes = new ArrayList<String>();
 		this.publishOutFiles = new ArrayList<String>();
 		this.runtimeContext = new ArrayList<RuntimeContextType>();
+		this.features = new HashSet<String>();
 		this.listDelimiter = DEFAULT_LIST_DELIMITER;
 	}
 	
@@ -241,6 +245,11 @@ public class Install
 	public List<RuntimeContextType> getRuntimeContext()
 	{
 		return runtimeContext;
+	}
+	
+	public Set<String> getFeatures()
+	{
+		return features;
 	}
 	
 	public List<Param> getPlaybookParams()
