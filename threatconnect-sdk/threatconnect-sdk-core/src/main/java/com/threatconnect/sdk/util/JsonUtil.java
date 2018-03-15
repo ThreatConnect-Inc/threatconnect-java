@@ -1,4 +1,4 @@
-package com.threatconnect.app.addons.util;
+package com.threatconnect.sdk.util;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -19,7 +19,7 @@ public class JsonUtil
 	
 	private JsonUtil()
 	{
-		
+	
 	}
 	
 	/**

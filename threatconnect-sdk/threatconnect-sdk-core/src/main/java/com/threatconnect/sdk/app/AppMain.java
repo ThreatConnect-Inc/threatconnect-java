@@ -33,6 +33,13 @@ public class AppMain implements AppExecutor
 			// create the app config object
 			AppConfig appConfig = SdkAppConfig.getInstance();
 			
+			//check to see if secure params are enabled
+			if(appConfig.isTcSecureParamsEnabled())
+			{
+				//replace the app config with a secure param app config instance
+				appConfig = SecureParamAppConfig.getInstance();
+			}
+			
 			// set whether or not api logging is enabled
 			ServerLogger.getInstance().setEnabled(appConfig.isTcLogToApi());
 			

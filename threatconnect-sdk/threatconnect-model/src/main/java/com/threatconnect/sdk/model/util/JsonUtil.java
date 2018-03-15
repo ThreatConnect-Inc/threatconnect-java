@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * :FIXME: this class is duplicated in multiple modules, consolidate these.
+ *
  * @author Greg Marut
  */
 public class JsonUtil
@@ -21,8 +23,7 @@ public class JsonUtil
 	}
 	
 	/**
-	 * Given a root node, traverses the json object and safely handles any null objects along the
-	 * way
+	 * Given a root node, traverses the json object and safely handles any null objects along the way
 	 *
 	 * @param root
 	 * @param paths
@@ -43,8 +44,7 @@ public class JsonUtil
 	}
 	
 	/**
-	 * Given a root node, traverses the json object and safely handles any null objects along the
-	 * way
+	 * Given a root node, traverses the json object and safely handles any null objects along the way
 	 *
 	 * @param root
 	 * @param paths
@@ -65,8 +65,7 @@ public class JsonUtil
 	}
 	
 	/**
-	 * Given a root node, traverses the json object and safely handles any null objects along the
-	 * way
+	 * Given a root node, traverses the json object and safely handles any null objects along the way
 	 *
 	 * @param root
 	 * @param paths
@@ -87,8 +86,7 @@ public class JsonUtil
 	}
 	
 	/**
-	 * Given a root node, traverses the json object and safely handles any null objects along the
-	 * way
+	 * Given a root node, traverses the json object and safely handles any null objects along the way
 	 *
 	 * @param root
 	 * @param paths
@@ -109,8 +107,7 @@ public class JsonUtil
 	}
 	
 	/**
-	 * Given a root node, traverses the json object and safely handles any null objects along the
-	 * way
+	 * Given a root node, traverses the json object and safely handles any null objects along the way
 	 *
 	 * @param root
 	 * @param paths

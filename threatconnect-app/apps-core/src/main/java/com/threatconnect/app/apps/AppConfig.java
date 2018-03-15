@@ -37,6 +37,7 @@ public abstract class AppConfig
 	public static final String TC_LOG_TO_API = "tc_log_to_api";
 	public static final String TC_PROXY_TC = "tc_proxy_tc";
 	public static final String TC_PROXY_EXTERNAL = "tc_proxy_external";
+	public static final String TC_SECURE_PARAMS = "tc_secure_params";
 	public static final String VERIFY_SSL_EXTERNAL = "verify_ssl_external";
 	
 	@Deprecated
@@ -52,12 +53,12 @@ public abstract class AppConfig
 	public static final String DEFAULT_LOG_LEVEL = "WARN";
 	
 	// holds the map of all of the configuration settings
-	private final Map<String, String> configuration;
+	protected final Map<String, String> configurationMap;
 	
 	public AppConfig()
 	{
 		// holds the map of configuration settings
-		configuration = new HashMap<String, String>();
+		configurationMap = new HashMap<String, String>();
 	}
 	
 	/**
@@ -69,7 +70,7 @@ public abstract class AppConfig
 	public AppConfig copyFrom(final AppConfig appConfig)
 	{
 		//copy all of the configurations from the other app config object
-		configuration.putAll(appConfig.configuration);
+		configurationMap.putAll(appConfig.configurationMap);
 		
 		return this;
 	}
@@ -222,6 +223,11 @@ public abstract class AppConfig
 		return getBoolean(TC_LOG_TO_API);
 	}
 	
+	public boolean isTcSecureParamsEnabled()
+	{
+		return getBoolean(TC_SECURE_PARAMS);
+	}
+	
 	/**
 	 * Returns a system property as a string
 	 *
@@ -231,15 +237,15 @@ public abstract class AppConfig
 	public String getString(final String key)
 	{
 		// check to see if this key exists
-		if (configuration.containsKey(key))
+		if (configurationMap.containsKey(key))
 		{
-			return configuration.get(key);
+			return configurationMap.get(key);
 		}
 		else
 		{
 			// load this setting and put it in the map
 			String value = loadSetting(key);
-			configuration.put(key, value);
+			configurationMap.put(key, value);
 			return value;
 		}
 	}
@@ -464,17 +470,17 @@ public abstract class AppConfig
 		// make sure the value is not null
 		if (null != value)
 		{
-			configuration.put(key, value.toString());
+			configurationMap.put(key, value.toString());
 		}
 		else
 		{
-			configuration.put(key, null);
+			configurationMap.put(key, null);
 		}
 	}
 	
 	public void setAll(final Map<String, String> map)
 	{
-		configuration.putAll(map);
+		configurationMap.putAll(map);
 	}
 	
 	/**

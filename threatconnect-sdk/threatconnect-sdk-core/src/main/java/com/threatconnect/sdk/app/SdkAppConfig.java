@@ -13,7 +13,7 @@ public class SdkAppConfig extends AppConfig
 	
 	private static SdkAppConfig instance;
 	
-	private SdkAppConfig()
+	protected SdkAppConfig()
 	{
 		
 	}
