@@ -23,6 +23,24 @@ public class AppMain implements AppExecutor
 {
 	private static final Logger logger = LoggerFactory.getLogger(AppMain.class);
 	
+	private final static AppConfig appConfig;
+	
+	static
+	{
+		AppConfig config = new SdkAppConfig();
+		
+		//check to see if secure params are enabled
+		if (config.isTcSecureParamsEnabled())
+		{
+			//replace the app config with a secure param app config instance
+			appConfig = new SecureParamAppConfig();
+		}
+		else
+		{
+			appConfig = config;
+		}
+	}
+	
 	protected void execute()
 	{
 		// holds the most recent exit status from the app
@@ -30,18 +48,8 @@ public class AppMain implements AppExecutor
 		
 		try
 		{
-			// create the app config object
-			AppConfig appConfig = SdkAppConfig.getInstance();
-			
-			//check to see if secure params are enabled
-			if(appConfig.isTcSecureParamsEnabled())
-			{
-				//replace the app config with a secure param app config instance
-				appConfig = SecureParamAppConfig.getInstance();
-			}
-			
 			// set whether or not api logging is enabled
-			ServerLogger.getInstance().setEnabled(appConfig.isTcLogToApi());
+			ServerLogger.getInstance(appConfig).setEnabled(appConfig.isTcLogToApi());
 			
 			//get the class to execute
 			Class<? extends App> appClass = getAppClassToExecute(appConfig);
@@ -65,7 +73,7 @@ public class AppMain implements AppExecutor
 			}
 			
 			// flush the logs to the server
-			ServerLogger.getInstance().flushToServer();
+			ServerLogger.getInstance(appConfig).flushToServer();
 		}
 		
 		// exit the app with this exit status
@@ -202,6 +210,11 @@ public class AppMain implements AppExecutor
 		// find the set of all classes that extend the App class
 		Reflections reflections = new Reflections(basePackage);
 		return reflections.getSubTypesOf(App.class);
+	}
+	
+	public static AppConfig getAppConfig()
+	{
+		return appConfig;
 	}
 	
 	public static void main(String[] args)

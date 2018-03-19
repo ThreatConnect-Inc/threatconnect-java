@@ -36,11 +36,11 @@ public class ServerLogMain
 		
 		Assert.assertTrue(logFile.length() > 0);
 		
-		ServerLogger.getInstance().flushToServer();
+		ServerLogger.getInstance(appConfig).flushToServer();
 		
 		logger.debug("Log Test 4");
 		logger.debug("Log Test 5");
 		
-		ServerLogger.getInstance().flushToServer();
+		ServerLogger.getInstance(appConfig).flushToServer();
 	}
 }

@@ -24,9 +24,7 @@ public class SecureParamAppConfig extends SdkAppConfig
 	private static final String API_PARAMETERS_ENDPOINT = "internal.jobexecution.params";
 	private static final String INPUTS = "inputs";
 	
-	private static SecureParamAppConfig instance;
-	
-	protected SecureParamAppConfig()
+	SecureParamAppConfig()
 	{
 		try
 		{
@@ -51,15 +49,16 @@ public class SecureParamAppConfig extends SdkAppConfig
 		HttpRequestExecutor httpRequestExecutor = new HttpRequestExecutor(connection);
 		
 		//retrieve the params from the server
-		final HttpResponse response =
-			httpRequestExecutor.execute(AbstractRequestExecutor.HttpMethod.GET, API_PARAMETERS_ENDPOINT);
+		String url = connection.getUrlConfig().getUrl(API_PARAMETERS_ENDPOINT);
+		final HttpResponse response = httpRequestExecutor.execute(AbstractRequestExecutor.HttpMethod.GET, url);
 		
 		//check to see if the response contains an entity
 		if (null != response.getEntity())
 		{
 			//parse the json response
 			JsonParser jsonParser = new JsonParser();
-			JsonElement root = jsonParser.parse(response.getEntityAsString());
+			final String responseEntity = response.getEntityAsString();
+			JsonElement root = jsonParser.parse(responseEntity);
 			
 			//retrieve the inputs object and make sure it is not null
 			JsonObject inputsObject = JsonUtil.getAsJsonObject(root, INPUTS);
@@ -87,21 +86,5 @@ public class SecureParamAppConfig extends SdkAppConfig
 		{
 			logger.warn("SecureParams returned no response.");
 		}
-	}
-	
-	/**
-	 * Retrieves the instance of this singleton
-	 *
-	 * @return Instance of singleton
-	 */
-	public static synchronized SecureParamAppConfig getInstance()
-	{
-		// check to see if the instance is null
-		if (null == instance)
-		{
-			instance = new SecureParamAppConfig();
-		}
-		
-		return instance;
 	}
 }

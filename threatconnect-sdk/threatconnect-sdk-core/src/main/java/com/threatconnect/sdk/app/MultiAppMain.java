@@ -1,7 +1,6 @@
 package com.threatconnect.sdk.app;
 
 import com.threatconnect.app.apps.App;
-import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.ExitStatus;
 import com.threatconnect.sdk.app.exception.NoAppClassFoundException;
 import com.threatconnect.sdk.log.ServerLogger;
@@ -24,11 +23,8 @@ public class MultiAppMain extends AppMain
 		
 		try
 		{
-			// create the app config object
-			AppConfig appConfig = SdkAppConfig.getInstance();
-			
 			// set whether or not api logging is enabled
-			ServerLogger.getInstance().setEnabled(appConfig.isTcLogToApi());
+			ServerLogger.getInstance(getAppConfig()).setEnabled(getAppConfig().isTcLogToApi());
 			
 			//get the list of classes to execute
 			List<Class<? extends App>> appClasses = getAppClassesToExecute();
@@ -37,7 +33,7 @@ public class MultiAppMain extends AppMain
 			for (Class<? extends App> appClass : appClasses)
 			{
 				// execute this app
-				exitStatus = configureAndExecuteApp(appClass, appConfig);
+				exitStatus = configureAndExecuteApp(appClass, getAppConfig());
 				
 				// check to see if this app was not successful
 				if (exitStatus != ExitStatus.Success)
@@ -62,7 +58,7 @@ public class MultiAppMain extends AppMain
 			}
 			
 			// flush the logs to the server
-			ServerLogger.getInstance().flushToServer();
+			ServerLogger.getInstance(getAppConfig()).flushToServer();
 		}
 		
 		// exit the app with this exit status
