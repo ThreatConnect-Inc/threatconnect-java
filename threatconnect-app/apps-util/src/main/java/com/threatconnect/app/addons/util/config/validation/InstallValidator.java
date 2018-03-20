@@ -1,5 +1,6 @@
 package com.threatconnect.app.addons.util.config.validation;
 
+import com.threatconnect.app.addons.util.config.Feature;
 import com.threatconnect.app.addons.util.config.install.Feed;
 import com.threatconnect.app.addons.util.config.install.Install;
 import com.threatconnect.app.addons.util.config.install.Param;
@@ -115,6 +116,18 @@ public class InstallValidator extends Validator<Install>
 			
 			//validate the playbook
 			playbookValidator.validate(object.getPlaybook());
+		}
+		
+		//check to see if this app supports the smtp settings feature
+		if (object.getFeatures().contains(Feature.SMTP_SETTINGS))
+		{
+			//any app that supports smtp settings must also support secure params
+			if (!object.getFeatures().contains(Feature.SECURE_PARAMS))
+			{
+				throw new ValidationException(
+					"Any app that supports the \"" + Feature.SMTP_SETTINGS + "\" feature must also specify the \""
+						+ Feature.SECURE_PARAMS + "\" feature.");
+			}
 		}
 		
 		//for each of the params

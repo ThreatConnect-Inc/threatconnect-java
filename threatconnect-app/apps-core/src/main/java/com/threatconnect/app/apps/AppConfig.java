@@ -40,6 +40,11 @@ public abstract class AppConfig
 	public static final String TC_SECURE_PARAMS = "tc_secure_params";
 	public static final String VERIFY_SSL_EXTERNAL = "verify_ssl_external";
 	
+	public static final String TC_SMTP_HOST = "tc_smtp_host";
+	public static final String TC_SMTP_PORT = "tc_smtp_port";
+	public static final String TC_SMTP_USERNAME = "tc_smtp_username";
+	public static final String TC_SMTP_PASSWORD = "tc_smtp_password";
+	
 	@Deprecated
 	public static final String APPLY_PROXY_EXTERNAL = "apply_proxy_external";
 	
@@ -168,6 +173,26 @@ public abstract class AppConfig
 	public int getApiMaxResults(int defaultMax)
 	{
 		return getInteger(TC_API_MAX_RESULT, defaultMax);
+	}
+	
+	public String getTcSmtpHost()
+	{
+		return getString(TC_SMTP_HOST);
+	}
+	
+	public Integer getTcSmtpPort()
+	{
+		return getInteger(TC_SMTP_PORT);
+	}
+	
+	public String getTcSmtpUsername()
+	{
+		return getString(TC_SMTP_USERNAME);
+	}
+	
+	public String getTcSmtpPassword()
+	{
+		return getString(TC_SMTP_PASSWORD);
 	}
 	
 	public boolean isProxyTC()
