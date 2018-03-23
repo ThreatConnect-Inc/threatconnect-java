@@ -19,6 +19,7 @@ public class Install
 	private String listDelimiter;
 	private String programIcon;
 	private String javaClasspath;
+	private RunLevelType runtimeLevel;
 	private boolean allowOnDemand;
 	private boolean allowRunAsUser;
 	private boolean apiUserTokenParam;
@@ -29,7 +30,6 @@ public class Install
 	private Playbook playbook;
 	private final List<Param> params;
 	private final List<Feed> feeds;
-	private final List<RunLevelType> runtimeLevel;
 	private final List<String> repeatingMinutes;
 	private final List<String> publishOutFiles;
 	private final List<RuntimeContextType> runtimeContext;
@@ -39,7 +39,6 @@ public class Install
 	{
 		this.params = new ArrayList<Param>();
 		this.feeds = new ArrayList<Feed>();
-		this.runtimeLevel = new ArrayList<RunLevelType>();
 		this.repeatingMinutes = new ArrayList<String>();
 		this.publishOutFiles = new ArrayList<String>();
 		this.runtimeContext = new ArrayList<RuntimeContextType>();
@@ -227,7 +226,7 @@ public class Install
 		return feeds;
 	}
 	
-	public List<RunLevelType> getRuntimeLevel()
+	public RunLevelType getRuntimeLevel()
 	{
 		return runtimeLevel;
 	}
@@ -272,6 +271,6 @@ public class Install
 	
 	public boolean isPlaybookApp()
 	{
-		return getRuntimeLevel().contains(RunLevelType.Playbook);
+		return getRuntimeLevel().equals(RunLevelType.Playbook);
 	}
 }
