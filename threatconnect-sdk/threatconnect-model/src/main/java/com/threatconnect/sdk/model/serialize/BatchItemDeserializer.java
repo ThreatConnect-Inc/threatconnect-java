@@ -12,6 +12,7 @@ import com.threatconnect.sdk.model.CustomIndicator;
 import com.threatconnect.sdk.model.Document;
 import com.threatconnect.sdk.model.Email;
 import com.threatconnect.sdk.model.EmailAddress;
+import com.threatconnect.sdk.model.Event;
 import com.threatconnect.sdk.model.File;
 import com.threatconnect.sdk.model.FileOccurrence;
 import com.threatconnect.sdk.model.Group;
@@ -21,7 +22,9 @@ import com.threatconnect.sdk.model.Incident;
 import com.threatconnect.sdk.model.Indicator;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.ItemType;
+import com.threatconnect.sdk.model.Report;
 import com.threatconnect.sdk.model.SecurityLabel;
+import com.threatconnect.sdk.model.Set;
 import com.threatconnect.sdk.model.Signature;
 import com.threatconnect.sdk.model.Threat;
 import com.threatconnect.sdk.model.Url;
@@ -316,12 +319,18 @@ public class BatchItemDeserializer
 				return GroupType.DOCUMENT;
 			case "Email":
 				return GroupType.EMAIL;
+			case "Event":
+				return GroupType.EVENT;
 			case "Incident":
 				return GroupType.INCIDENT;
+			case "Report":
+				return GroupType.REPORT;
 			case "Signature":
 				return GroupType.SIGNATURE;
 			case "Threat":
 				return GroupType.THREAT;
+			case "Set":
+				return GroupType.SET;
 			default:
 				throw new InvalidGroupException("Invalid group type: " + groupType);
 		}
@@ -339,12 +348,18 @@ public class BatchItemDeserializer
 				return new Document();
 			case EMAIL:
 				return new Email();
+			case EVENT:
+				return new Event();
 			case INCIDENT:
 				return new Incident();
+			case REPORT:
+				return new Report();
 			case SIGNATURE:
 				return new Signature();
 			case THREAT:
 				return new Threat();
+			case SET:
+				return new Set();
 			default:
 				throw new InvalidGroupException("Invalid group type: " + groupType.toString());
 		}

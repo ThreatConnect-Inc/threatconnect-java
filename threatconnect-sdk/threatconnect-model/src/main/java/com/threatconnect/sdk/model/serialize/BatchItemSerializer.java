@@ -296,12 +296,18 @@ public class BatchItemSerializer
 				return "Document";
 			case EMAIL:
 				return "Email";
+			case EVENT:
+				return "Event";
 			case INCIDENT:
 				return "Incident";
+			case REPORT:
+				return "Report";
 			case SIGNATURE:
 				return "Signature";
 			case THREAT:
 				return "Threat";
+			case SET:
+				return "Set";
 			default:
 				return null;
 		}

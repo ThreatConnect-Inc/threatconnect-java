@@ -6,7 +6,10 @@ public enum GroupType
 	CAMPAIGN,
 	DOCUMENT,
 	EMAIL,
+	EVENT,
 	INCIDENT,
+	REPORT,
+	SET,
 	SIGNATURE,
 	THREAT
 }
