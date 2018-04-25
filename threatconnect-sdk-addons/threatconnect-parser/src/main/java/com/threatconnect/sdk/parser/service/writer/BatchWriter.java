@@ -173,14 +173,21 @@ public class BatchWriter extends Writer
 		final String ownerName, final AttributeWriteType attributeWriteType, final Action action, int batchIndex,
 		int batchTotal, BatchConfig.Version version) throws SaveItemFailedException, IOException
 	{
+		if (logger.isTraceEnabled())
+		{
+			logger.trace("Uploading Json Document {}/{}:", batchIndex, batchTotal);
+			logger.trace(new GsonBuilder().setPrettyPrinting().create().toJson(json));
+		}
+		
+		return uploadIndicators(json, ownerName, attributeWriteType, action, version);
+	}
+	
+	protected BatchUploadResponse uploadIndicators(final JsonElement json,
+		final String ownerName, final AttributeWriteType attributeWriteType, final Action action,
+		BatchConfig.Version version) throws SaveItemFailedException, IOException
+	{
 		try
 		{
-			if (logger.isTraceEnabled())
-			{
-				logger.trace("Uploading Json Document {}/{}:", batchIndex, batchTotal);
-				logger.trace(new GsonBuilder().setPrettyPrinting().create().toJson(json));
-			}
-			
 			// create the reader/writer adapter
 			AbstractBatchWriterAdapter<com.threatconnect.sdk.server.entity.Indicator> batchWriterAdapter =
 				createWriterAdapter();
@@ -382,7 +389,7 @@ public class BatchWriter extends Writer
 		this.indicatorLimitPerBatch = indicatorLimitPerBatch;
 	}
 	
-	protected class BatchUploadResponse
+	public class BatchUploadResponse
 	{
 		private final Integer batchID;
 		private final ApiEntitySingleResponse<?, ?> response;
