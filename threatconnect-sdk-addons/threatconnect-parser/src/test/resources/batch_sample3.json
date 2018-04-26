@@ -1,0 +1,22 @@
+[
+  {
+    "summary": "AA9874AFA41E86E4E450301EC4F055096639ADEB : BB672694CF0DCA77CD7258773C7B0BAC4BB6E2AEC2F334E0F2A34AE9C152326F",
+    "rating": 2,
+    "confidence": "20",
+    "source": "batch tester",
+    "description": "multi hash file",
+    "type": "File",
+    "attribute": [
+      {
+        "type": "Additional Analysis and Context",
+        "source": "source",
+        "value": "SHA1 SHA256 file"
+      }
+    ],
+    "tag": [
+      {
+        "name": "SHA1 SHA256 file"
+      }
+    ]
+  }
+]

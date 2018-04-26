@@ -45,7 +45,7 @@ public class BatchWriterIT
 	@Test
 	public void sample1Test() throws Exception
 	{
-		File file = new File("src/test/resources/batch_sample2.json");
+		File file = new File("src/test/resources/batch_sample3.json");
 		Assert.assertTrue(file.exists());
 		
 		try (InputStream inputStream = new FileInputStream(file))
