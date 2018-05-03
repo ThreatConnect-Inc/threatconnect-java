@@ -44,6 +44,7 @@ public abstract class AppConfig
 	public static final String TC_SMTP_PORT = "tc_smtp_port";
 	public static final String TC_SMTP_USERNAME = "tc_smtp_username";
 	public static final String TC_SMTP_PASSWORD = "tc_smtp_password";
+	public static final String TC_SYSTEM_EMAIL = "tc_sys_email";
 	
 	@Deprecated
 	public static final String APPLY_PROXY_EXTERNAL = "apply_proxy_external";
@@ -193,6 +194,11 @@ public abstract class AppConfig
 	public String getTcSmtpPassword()
 	{
 		return getString(TC_SMTP_PASSWORD);
+	}
+	
+	public String getTcSystemEmail()
+	{
+		return getString(TC_SYSTEM_EMAIL);
 	}
 	
 	public boolean isProxyTC()
