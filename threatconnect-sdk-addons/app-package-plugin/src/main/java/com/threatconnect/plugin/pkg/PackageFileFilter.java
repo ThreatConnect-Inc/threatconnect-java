@@ -18,6 +18,7 @@ public class PackageFileFilter
 	public static final String INSTALL_JSON = "*install.json";
 	public static final String README_MD = "*README.md";
 	public static final String INSTALL_CONF = "*install.conf";
+	public static final String BITBUCKET_PIPELINES = "bitbucket-pipelines.yml";
 	
 	//holds the list of files to exclude
 	private final List<String> exclude;
@@ -46,6 +47,7 @@ public class PackageFileFilter
 			getExclude().add(INSTALL_JSON);
 			getExclude().add(INSTALL_CONF);
 			getExclude().add(README_MD);
+			getExclude().add(BITBUCKET_PIPELINES);
 		}
 	}
 	
