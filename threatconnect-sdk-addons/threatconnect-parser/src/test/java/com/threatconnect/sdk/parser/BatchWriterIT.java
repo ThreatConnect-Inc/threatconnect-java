@@ -43,9 +43,9 @@ public class BatchWriterIT
 	}
 	
 	@Test
-	public void sample1Test() throws Exception
+	public void sampleTest() throws Exception
 	{
-		File file = new File("src/test/resources/batch_sample3.json");
+		File file = new File("src/test/resources/batch_sample4.json");
 		Assert.assertTrue(file.exists());
 		
 		try (InputStream inputStream = new FileInputStream(file))
@@ -53,7 +53,7 @@ public class BatchWriterIT
 			JsonElement jsonElement = jsonParser.parse(new InputStreamReader(inputStream));
 			BatchWriter.BatchUploadResponse response =
 				uploadIndicators(jsonElement, "System", BatchConfig.AttributeWriteType.Replace,
-					BatchConfig.Action.Create, BatchConfig.Version.V1);
+					BatchConfig.Action.Create, BatchConfig.Version.V2);
 			SaveResults results = pollBatch(response, "System", 0, 1);
 			logger.info(new Gson().toJson(results));
 		}
