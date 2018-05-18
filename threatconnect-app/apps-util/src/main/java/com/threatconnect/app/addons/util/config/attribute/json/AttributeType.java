@@ -17,6 +17,7 @@ public class AttributeType
 	private int maxLength;
 	private boolean allowMarkdown;
 	private boolean system;
+	private int version;
 	private AttributeValidationRule validationRule;
 	
 	public AttributeType()
@@ -93,6 +94,16 @@ public class AttributeType
 	public void setSystem(final boolean system)
 	{
 		this.system = system;
+	}
+	
+	public int getVersion()
+	{
+		return version;
+	}
+	
+	public void setVersion(final int version)
+	{
+		this.version = version;
 	}
 	
 	public AttributeValidationRule getValidationRule()

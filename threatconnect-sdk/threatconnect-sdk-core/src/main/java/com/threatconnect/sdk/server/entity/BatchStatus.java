@@ -1,11 +1,11 @@
 package com.threatconnect.sdk.server.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Created by cblades on 6/10/2015.
@@ -29,6 +29,18 @@ public class BatchStatus
 	
 	@XmlElement(name = "unprocessCount", required = false)
 	private Integer unprocessCount;
+	
+	@XmlElement(name = "successIndicatorCount")
+	private Integer successIndicatorCount;
+	
+	@XmlElement(name = "errorIndicatorCount")
+	private Integer errorIndicatorCount;
+	
+	@XmlElement(name = "successGroupCount")
+	private Integer successGroupCount;
+	
+	@XmlElement(name = "errorGroupCount")
+	private Integer errorGroupCount;
 	
 	public enum Status
 	{
@@ -99,5 +111,45 @@ public class BatchStatus
 	public void setUnprocessCount(Integer unprocessCount)
 	{
 		this.unprocessCount = unprocessCount;
+	}
+	
+	public Integer getSuccessIndicatorCount()
+	{
+		return successIndicatorCount;
+	}
+	
+	public void setSuccessIndicatorCount(final Integer successIndicatorCount)
+	{
+		this.successIndicatorCount = successIndicatorCount;
+	}
+	
+	public Integer getErrorIndicatorCount()
+	{
+		return errorIndicatorCount;
+	}
+	
+	public void setErrorIndicatorCount(final Integer errorIndicatorCount)
+	{
+		this.errorIndicatorCount = errorIndicatorCount;
+	}
+	
+	public Integer getSuccessGroupCount()
+	{
+		return successGroupCount;
+	}
+	
+	public void setSuccessGroupCount(final Integer successGroupCount)
+	{
+		this.successGroupCount = successGroupCount;
+	}
+	
+	public Integer getErrorGroupCount()
+	{
+		return errorGroupCount;
+	}
+	
+	public void setErrorGroupCount(final Integer errorGroupCount)
+	{
+		this.errorGroupCount = errorGroupCount;
 	}
 }

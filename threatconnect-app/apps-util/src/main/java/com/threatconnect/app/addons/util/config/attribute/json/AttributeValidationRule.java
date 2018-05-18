@@ -11,6 +11,7 @@ public class AttributeValidationRule
 	private String name;
 	private String description;
 	private String data;
+	private int version;
 	
 	public AttributeValidationRuleType getType()
 	{
@@ -50,6 +51,16 @@ public class AttributeValidationRule
 	public void setData(final String data)
 	{
 		this.data = data;
+	}
+	
+	public int getVersion()
+	{
+		return version;
+	}
+	
+	public void setVersion(final int version)
+	{
+		this.version = version;
 	}
 	
 	@Override

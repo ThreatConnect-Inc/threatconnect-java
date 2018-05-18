@@ -7,6 +7,7 @@
       "maxLength": 32,
       "allowMarkdown": false,
       "system": true,
+      "version": 1,
       "indicators": [
         "File"
       ],
@@ -19,8 +20,9 @@
     {
       "name": "128-bit Hex String",
       "type": "REGEX",
-      "description": "128-bit hexadecimal string.",
-      "data": "[a-f0-9]{32}"
+      "description": "128-bit hexadecimal string",
+      "data": "[a-f0-9]{32}",
+      "version": 1
     }
   ]
 }

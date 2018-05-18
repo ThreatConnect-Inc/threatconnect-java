@@ -3,6 +3,7 @@ package com.threatconnect.app.addons.util.config.install.serialize;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public abstract class EnumListJsonSerializer<T extends Enum<T>> implements JsonD
 		}
 		else
 		{
-			throw new RuntimeException("Unexpected JSON type: " + json.getClass());
+			throw new JsonParseException("Unexpected JSON type: " + json.getClass());
 		}
 		
 		return values;
