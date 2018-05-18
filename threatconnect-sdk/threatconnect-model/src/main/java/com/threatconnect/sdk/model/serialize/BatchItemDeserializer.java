@@ -24,7 +24,7 @@ import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.ItemType;
 import com.threatconnect.sdk.model.Report;
 import com.threatconnect.sdk.model.SecurityLabel;
-import com.threatconnect.sdk.model.Set;
+import com.threatconnect.sdk.model.IntrusionSet;
 import com.threatconnect.sdk.model.Signature;
 import com.threatconnect.sdk.model.Threat;
 import com.threatconnect.sdk.model.Url;
@@ -330,7 +330,7 @@ public class BatchItemDeserializer
 			case "Threat":
 				return GroupType.THREAT;
 			case "Set":
-				return GroupType.SET;
+				return GroupType.INTRUSION_SET;
 			default:
 				throw new InvalidGroupException("Invalid group type: " + groupType);
 		}
@@ -358,8 +358,8 @@ public class BatchItemDeserializer
 				return new Signature();
 			case THREAT:
 				return new Threat();
-			case SET:
-				return new Set();
+			case INTRUSION_SET:
+				return new IntrusionSet();
 			default:
 				throw new InvalidGroupException("Invalid group type: " + groupType.toString());
 		}

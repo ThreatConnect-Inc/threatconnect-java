@@ -9,7 +9,7 @@ public enum GroupType
 	EVENT,
 	INCIDENT,
 	REPORT,
-	SET,
+	INTRUSION_SET,
 	SIGNATURE,
 	THREAT
 }
