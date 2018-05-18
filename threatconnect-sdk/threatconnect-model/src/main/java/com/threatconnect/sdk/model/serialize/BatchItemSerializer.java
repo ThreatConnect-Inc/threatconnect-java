@@ -306,8 +306,8 @@ public class BatchItemSerializer
 				return "Signature";
 			case THREAT:
 				return "Threat";
-			case SET:
-				return "Set";
+			case INTRUSION_SET:
+				return "Intrusion Set";
 			default:
 				return null;
 		}

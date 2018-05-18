@@ -329,7 +329,7 @@ public class BatchItemDeserializer
 				return GroupType.SIGNATURE;
 			case "Threat":
 				return GroupType.THREAT;
-			case "Set":
+			case "Intrusion Set":
 				return GroupType.INTRUSION_SET;
 			default:
 				throw new InvalidGroupException("Invalid group type: " + groupType);

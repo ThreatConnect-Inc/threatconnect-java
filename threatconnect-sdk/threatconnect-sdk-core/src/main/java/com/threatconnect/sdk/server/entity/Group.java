@@ -39,17 +39,10 @@ public class Group implements AttributeHolder
         this.dateAdded = dateAdded;
         this.webLink = webLink;
     }
-
-
-    public enum Type {
-          Adversary
-        , Campaign
-        , Document
-        , Email
-        , Incident
-        , Signature
-        , Task
-        , Threat
+    
+    public enum Type
+    {
+        Adversary, Campaign, Document, Email, Event, Incident, IntrusionSet, Report, Signature, Task, Threat
     }
     
     @XmlElement(name = "Id", required = true)

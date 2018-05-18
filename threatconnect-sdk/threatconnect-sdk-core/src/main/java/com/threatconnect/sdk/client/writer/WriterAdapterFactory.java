@@ -294,6 +294,8 @@ public class WriterAdapterFactory {
                 return createEmailGroupWriter(conn);
             case Incident:
                 return createIncidentGroupWriter(conn);
+			case Report:
+				return createReportWriter(conn);
             case Signature:
                 return createSignatureGroupWriter(conn);
             case Threat:
@@ -308,6 +310,10 @@ public class WriterAdapterFactory {
     public static DocumentWriterAdapter createDocumentWriter(Connection conn) {
         return new DocumentWriterAdapter(conn);
     }
+	
+	public static ReportWriterAdapter createReportWriter(Connection conn) {
+		return new ReportWriterAdapter(conn);
+	}
 
     public static AbstractBatchWriterAdapter<Indicator> createBatchIndicatorWriter(Connection conn) {
         return new AbstractBatchWriterAdapter<Indicator>(conn)
