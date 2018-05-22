@@ -23,10 +23,10 @@ public class AppMainStub extends AppExecutor
 	}
 	
 	@Override
-	public ExitStatus execute()
+	public int execute()
 	{
 		//do nothing
-		return ExitStatus.Success;
+		return ExitStatus.Success.getExitCode();
 	}
 	
 	public static void main(String[] args)
