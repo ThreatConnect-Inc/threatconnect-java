@@ -32,6 +32,7 @@ public class SdkAppConfig extends AppConfig
 	 *
 	 * @return Instance of singleton
 	 */
+	@Deprecated
 	public static synchronized SdkAppConfig getInstance()
 	{
 		// check to see if the instance is null

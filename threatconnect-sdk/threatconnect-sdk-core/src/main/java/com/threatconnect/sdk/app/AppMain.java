@@ -23,23 +23,7 @@ public class AppMain implements AppExecutor
 {
 	private static final Logger logger = LoggerFactory.getLogger(AppMain.class);
 	
-	private final static AppConfig appConfig;
-	
-	static
-	{
-		AppConfig config = new SdkAppConfig();
-		
-		//check to see if secure params are enabled
-		if (config.isTcSecureParamsEnabled())
-		{
-			//replace the app config with a secure param app config instance
-			appConfig = new SecureParamAppConfig();
-		}
-		else
-		{
-			appConfig = config;
-		}
-	}
+	private AppConfig appConfig;
 	
 	protected void execute()
 	{
@@ -49,13 +33,13 @@ public class AppMain implements AppExecutor
 		try
 		{
 			// set whether or not api logging is enabled
-			ServerLogger.getInstance(appConfig).setEnabled(appConfig.isTcLogToApi());
+			ServerLogger.getInstance(getAppConfig()).setEnabled(getAppConfig().isTcLogToApi());
 			
 			//get the class to execute
-			Class<? extends App> appClass = getAppClassToExecute(appConfig);
+			Class<? extends App> appClass = getAppClassToExecute(getAppConfig());
 			
 			// execute this app and save the status code
-			exitStatus = configureAndExecuteApp(appClass, appConfig);
+			exitStatus = configureAndExecuteApp(appClass, getAppConfig());
 		}
 		catch (Exception e)
 		{
@@ -73,7 +57,7 @@ public class AppMain implements AppExecutor
 			}
 			
 			// flush the logs to the server
-			ServerLogger.getInstance(appConfig).flushToServer();
+			ServerLogger.getInstance(getAppConfig()).flushToServer();
 		}
 		
 		// exit the app with this exit status
@@ -212,9 +196,27 @@ public class AppMain implements AppExecutor
 		return reflections.getSubTypesOf(App.class);
 	}
 	
-	public static AppConfig getAppConfig()
+	public synchronized AppConfig getAppConfig()
 	{
-		return appConfig;
+		//check to see if the app config is null
+		if (null == appConfig)
+		{
+			//create a new sdk app config to read the values
+			AppConfig config = new SdkAppConfig();
+			
+			//check to see if secure params are enabled
+			if (config.isTcSecureParamsEnabled())
+			{
+				//replace the app config with a secure param app config instance
+				this.appConfig = new SecureParamAppConfig();
+			}
+			else
+			{
+				this.appConfig = config;
+			}
+		}
+		
+		return this.appConfig;
 	}
 	
 	public static void main(String[] args)
