@@ -15,6 +15,7 @@ public class Install
 	private String minServerVersion;
 	private ProgramLanguageType programLanguage;
 	private String programMain;
+	private String mainAppClass;
 	private String languageVersion;
 	private String listDelimiter;
 	private String programIcon;
@@ -106,6 +107,16 @@ public class Install
 		this.programMain = programMain;
 	}
 	
+	public String getMainAppClass()
+	{
+		return mainAppClass;
+	}
+	
+	public void setMainAppClass(final String mainAppClass)
+	{
+		this.mainAppClass = mainAppClass;
+	}
+	
 	public String getLanguageVersion()
 	{
 		return languageVersion;
@@ -144,6 +155,16 @@ public class Install
 	public void setJavaClasspath(final String javaClasspath)
 	{
 		this.javaClasspath = javaClasspath;
+	}
+	
+	public RunLevelType getRuntimeLevel()
+	{
+		return runtimeLevel;
+	}
+	
+	public void setRuntimeLevel(final RunLevelType runtimeLevel)
+	{
+		this.runtimeLevel = runtimeLevel;
 	}
 	
 	public boolean isAllowOnDemand()
@@ -224,11 +245,6 @@ public class Install
 	public List<Feed> getFeeds()
 	{
 		return feeds;
-	}
-	
-	public RunLevelType getRuntimeLevel()
-	{
-		return runtimeLevel;
 	}
 	
 	public List<String> getRepeatingMinutes()

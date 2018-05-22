@@ -17,6 +17,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -133,7 +135,7 @@ public class PlaybooksTestConfiguration
 					file.getAbsolutePath());
 			}
 		}
-		catch (UnsupposedPlaybookMainClassException | IOException | InvalidJsonFileException | ValidationException | InvalidPlaybookAppException e)
+		catch (UnsupportedPlaybookMainClassException | IOException | InvalidJsonFileException | ValidationException | InvalidPlaybookAppException e)
 		{
 			throw new PlaybooksConfigurationException(e);
 		}
@@ -145,10 +147,10 @@ public class PlaybooksTestConfiguration
 	 * @param install
 	 * @throws InvalidJsonFileException
 	 * @throws ClassNotFoundException
-	 * @throws UnsupposedPlaybookMainClassException
+	 * @throws UnsupportedPlaybookMainClassException
 	 */
 	private PlaybookConfig buildPlaybookConfig(final Install install, final File file)
-		throws InvalidJsonFileException, UnsupposedPlaybookMainClassException, InvalidPlaybookAppException
+		throws InvalidJsonFileException, UnsupportedPlaybookMainClassException, InvalidPlaybookAppException
 	{
 		try
 		{
@@ -157,18 +159,23 @@ public class PlaybooksTestConfiguration
 			Class<? extends AppExecutor> programMainClass =
 				(Class<? extends AppExecutor>) Class.forName(install.getProgramMain());
 			
-			//instantiate this class
-			AppExecutor appExecutor = programMainClass.newInstance();
-			
 			//retrieve the classes that are executed from this main
 			AppConfig appConfig = new DefaultAppConfig().copyFrom(globalAppConfig);
-			Class<? extends App> appClass = appExecutor.getAppClassToExecute(appConfig);
+			appConfig.set(AppConfig.TC_MAIN_APP_CLASS, install.getMainAppClass());
+			
+			//retrieve the default constructor for this class and make sure it is accessible
+			Constructor<? extends AppExecutor> constructor = programMainClass.getConstructor(AppConfig.class);
+			constructor.setAccessible(true);
+			
+			//instantiate this class
+			AppExecutor appExecutor = constructor.newInstance(appConfig);
+			Class<? extends App> appClass = appExecutor.getAppClassToExecute();
 			
 			//ensure that this class has a declared static main method
 			Method method = appExecutor.getClass().getDeclaredMethod("main", String[].class);
 			if (!Modifier.isStatic(method.getModifiers()))
 			{
-				throw new UnsupposedPlaybookMainClassException(
+				throw new UnsupportedPlaybookMainClassException(
 					install.getProgramMain() + " must have static main method.");
 			}
 			
@@ -177,23 +184,22 @@ public class PlaybooksTestConfiguration
 		}
 		catch (ClassNotFoundException e)
 		{
-			throw new UnsupposedPlaybookMainClassException(
+			throw new UnsupportedPlaybookMainClassException(
 				install.getProgramMain() + " could not be found.");
 		}
-		catch (InstantiationException | IllegalAccessException e)
+		catch (InstantiationException | IllegalAccessException | InvocationTargetException e)
 		{
-			throw new UnsupposedPlaybookMainClassException(
-				install.getProgramMain() + " must have a public no-arg constructor.");
+			throw new UnsupportedPlaybookMainClassException("Unable to instantiate " + install.getProgramMain());
 		}
 		catch (ClassCastException e)
 		{
-			throw new UnsupposedPlaybookMainClassException(install.getProgramMain() +
+			throw new UnsupportedPlaybookMainClassException(install.getProgramMain() +
 				" is not supported. Only classes that implement " + AppExecutor.class.getName()
 				+ " are currently supported.");
 		}
 		catch (NoSuchMethodException e)
 		{
-			throw new UnsupposedPlaybookMainClassException(
+			throw new UnsupportedPlaybookMainClassException(
 				install.getProgramMain() + " must have static main method.");
 		}
 	}
@@ -271,7 +277,7 @@ public class PlaybooksTestConfiguration
 					+ "\" -- runtimeLevel indicates this config is not a playbooks app ");
 			}
 		}
-		catch (UnsupposedPlaybookMainClassException | IOException | InvalidJsonFileException | ValidationException | InvalidPlaybookAppException e)
+		catch (UnsupportedPlaybookMainClassException | IOException | InvalidJsonFileException | ValidationException | InvalidPlaybookAppException e)
 		{
 			throw new PlaybooksConfigurationException(e);
 		}

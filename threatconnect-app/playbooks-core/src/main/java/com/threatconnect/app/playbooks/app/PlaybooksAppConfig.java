@@ -13,10 +13,6 @@ public class PlaybooksAppConfig
 	public static final String PARAM_DB_PORT = "tc_playbook_db_port";
 	public static final String PARAM_OUT_VARS = "tc_playbook_out_variables";
 	
-	//holds the instance of the playbooks app config
-	private static PlaybooksAppConfig instance;
-	private static Object lock = new Object();
-	
 	private final AppConfig appConfig;
 	
 	public PlaybooksAppConfig(final AppConfig appConfig)

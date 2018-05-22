@@ -4,6 +4,7 @@ import com.threatconnect.app.apps.App;
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.AppExecutor;
 import com.threatconnect.app.apps.ExitStatus;
+import com.threatconnect.app.apps.SystemPropertiesAppConfig;
 import com.threatconnect.sdk.app.exception.AppInstantiationException;
 import com.threatconnect.sdk.app.exception.MultipleAppClassFoundException;
 import com.threatconnect.sdk.app.exception.NoAppClassFoundException;
@@ -19,13 +20,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class AppMain implements AppExecutor
+public final class AppMain extends AppExecutor
 {
 	private static final Logger logger = LoggerFactory.getLogger(AppMain.class);
 	
-	private AppConfig appConfig;
+	public AppMain()
+	{
+		super(findAppConfig());
+	}
 	
-	protected void execute()
+	public AppMain(final AppConfig appConfig)
+	{
+		super(appConfig);
+	}
+	
+	@Override
+	public int execute()
 	{
 		// holds the most recent exit status from the app
 		ExitStatus exitStatus = null;
@@ -36,7 +46,7 @@ public class AppMain implements AppExecutor
 			ServerLogger.getInstance(getAppConfig()).setEnabled(getAppConfig().isTcLogToApi());
 			
 			//get the class to execute
-			Class<? extends App> appClass = getAppClassToExecute(getAppConfig());
+			Class<? extends App> appClass = getAppClassToExecute();
 			
 			// execute this app and save the status code
 			exitStatus = configureAndExecuteApp(appClass, getAppConfig());
@@ -60,25 +70,24 @@ public class AppMain implements AppExecutor
 			ServerLogger.getInstance(getAppConfig()).flushToServer();
 		}
 		
-		// exit the app with this exit status
-		System.exit(exitStatus.getExitCode());
+		return exitStatus.getExitCode();
 	}
 	
 	/**
 	 * returns the list of app classes that will be instantiated and executed
 	 *
-	 * @param appConfig
 	 * @return
 	 * @throws ClassNotFoundException
 	 */
 	@Override
-	public Class<? extends App> getAppClassToExecute(final AppConfig appConfig) throws ClassNotFoundException
+	public Class<? extends App> getAppClassToExecute() throws ClassNotFoundException
 	{
 		// check to see if there is an app class specified
-		if (null != appConfig && null != appConfig.getTcMainAppClass() && !appConfig.getTcMainAppClass().isEmpty())
+		if (null != getAppConfig() && null != getAppConfig().getTcMainAppClass() && !getAppConfig().getTcMainAppClass()
+			.isEmpty())
 		{
 			// load the class by name
-			Class<?> clazz = Class.forName(appConfig.getTcMainAppClass());
+			Class<?> clazz = Class.forName(getAppConfig().getTcMainAppClass());
 			
 			try
 			{
@@ -144,7 +153,7 @@ public class AppMain implements AppExecutor
 	 * @return
 	 * @throws Exception
 	 */
-	protected ExitStatus configureAndExecuteApp(final Class<? extends App> appClass, final AppConfig appConfig)
+	private ExitStatus configureAndExecuteApp(final Class<? extends App> appClass, final AppConfig appConfig)
 		throws Exception
 	{
 		try
@@ -184,43 +193,39 @@ public class AppMain implements AppExecutor
 		}
 	}
 	
-	protected Set<Class<? extends App>> scanForAppClasses()
+	private Set<Class<? extends App>> scanForAppClasses()
 	{
 		return scanForAppClasses(null);
 	}
 	
-	protected Set<Class<? extends App>> scanForAppClasses(final String basePackage)
+	private Set<Class<? extends App>> scanForAppClasses(final String basePackage)
 	{
 		// find the set of all classes that extend the App class
 		Reflections reflections = new Reflections(basePackage);
 		return reflections.getSubTypesOf(App.class);
 	}
 	
-	public synchronized AppConfig getAppConfig()
+	private static AppConfig findAppConfig()
 	{
-		//check to see if the app config is null
-		if (null == appConfig)
+		//create a new sdk app config to read the values
+		AppConfig appConfig = new SystemPropertiesAppConfig();
+		
+		//check to see if secure params are enabled
+		if (appConfig.isTcSecureParamsEnabled())
 		{
-			//create a new sdk app config to read the values
-			AppConfig config = new SdkAppConfig();
-			
-			//check to see if secure params are enabled
-			if (config.isTcSecureParamsEnabled())
-			{
-				//replace the app config with a secure param app config instance
-				this.appConfig = new SecureParamAppConfig();
-			}
-			else
-			{
-				this.appConfig = config;
-			}
+			//replace the app config with a secure param app config instance
+			appConfig = new SecureParamAppConfig();
 		}
 		
-		return this.appConfig;
+		return appConfig;
 	}
 	
 	public static void main(String[] args)
 	{
-		new AppMain().execute();
+		//execute the app and return the exit status
+		int exitCode = new AppMain().execute();
+		
+		// exit the app with this exit status
+		System.exit(exitCode);
 	}
 }

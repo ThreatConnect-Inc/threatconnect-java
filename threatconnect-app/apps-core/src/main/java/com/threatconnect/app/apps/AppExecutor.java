@@ -3,7 +3,21 @@ package com.threatconnect.app.apps;
 /**
  * @author Greg Marut
  */
-public interface AppExecutor
+public abstract class AppExecutor
 {
-	Class<? extends App> getAppClassToExecute(final AppConfig appConfig) throws ClassNotFoundException;
+	private AppConfig appConfig;
+	
+	public AppExecutor(final AppConfig appConfig)
+	{
+		this.appConfig = appConfig;
+	}
+	
+	public AppConfig getAppConfig()
+	{
+		return appConfig;
+	}
+	
+	public abstract int execute();
+	
+	public abstract Class<? extends App> getAppClassToExecute() throws ClassNotFoundException;
 }
