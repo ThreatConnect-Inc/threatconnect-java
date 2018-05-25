@@ -37,6 +37,8 @@ public final class AppMain extends AppExecutor
 	@Override
 	public int execute()
 	{
+		logger.trace("AppMain execute()");
+		
 		// holds the most recent exit status from the app
 		ExitStatus exitStatus = null;
 		
@@ -46,6 +48,7 @@ public final class AppMain extends AppExecutor
 			ServerLogger.getInstance(getAppConfig()).setEnabled(getAppConfig().isTcLogToApi());
 			
 			//get the class to execute
+			logger.trace("Retrieving app class to execute");
 			Class<? extends App> appClass = getAppClassToExecute();
 			
 			// execute this app and save the status code
@@ -159,17 +162,20 @@ public final class AppMain extends AppExecutor
 		try
 		{
 			// instantiate a new app class
+			logger.trace("Instantiating app class: " + appClass.getName());
 			App app = appClass.newInstance();
 			
 			// initialize this app
 			app.init(appConfig);
 			
 			// reconfigure the log file for this app
+			logger.trace("Reconfiguring global logger for app");
 			LoggerUtil.reconfigureGlobalLogger(app.getAppLogFile(), appConfig);
 			
 			try
 			{
 				// execute this app
+				logger.trace("Executing app: " + appClass.getName());
 				return app.execute(appConfig);
 			}
 			catch (PartialFailureException e)
