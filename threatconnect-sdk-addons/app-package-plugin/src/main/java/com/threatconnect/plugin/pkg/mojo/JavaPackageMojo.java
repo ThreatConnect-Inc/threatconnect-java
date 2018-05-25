@@ -3,9 +3,7 @@ package com.threatconnect.plugin.pkg.mojo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.threatconnect.app.addons.util.config.Feature;
-import com.threatconnect.app.addons.util.config.InvalidFileException;
 import com.threatconnect.app.addons.util.config.install.Install;
-import com.threatconnect.app.addons.util.config.validation.ValidationException;
 import com.threatconnect.plugin.pkg.JavaPackageFileFilter;
 import com.threatconnect.plugin.pkg.PackageFileFilter;
 import com.threatconnect.plugin.pkg.Profile;
@@ -55,13 +53,16 @@ public class JavaPackageMojo extends AbstractAppPackageMojo
 	
 	@Override
 	protected void writePrimaryInstallJson(final Profile<Install> profile, final File primaryJsonDestination)
-		throws IOException, ValidationException, InvalidFileException
+		throws IOException
 	{
 		//retrieve the install profile
 		Install install = profile.getSource();
 		
 		//add the features that this sdk supports
 		install.getFeatures().add(Feature.SECURE_PARAMS);
+		
+		//set the sdk version
+		install.setSdkVersion(loadAppPackagerVersion());
 		
 		try (OutputStream outputStream = new FileOutputStream(primaryJsonDestination))
 		{

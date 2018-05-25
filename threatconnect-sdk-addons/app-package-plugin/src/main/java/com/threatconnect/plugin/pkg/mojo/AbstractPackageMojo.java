@@ -6,6 +6,7 @@ import com.threatconnect.app.addons.util.config.validation.ValidationException;
 import com.threatconnect.plugin.pkg.PackageFileFilter;
 import com.threatconnect.plugin.pkg.Profile;
 import com.threatconnect.plugin.pkg.ZipUtil;
+import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.plexus.util.FileUtils;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +27,8 @@ public abstract class AbstractPackageMojo<T> extends AbstractMojo
 	private static final Logger logger = LoggerFactory.getLogger(AbstractPackageMojo.class);
 	
 	public static Pattern REGEX_PACKAGE_VERSION_SUFFIX = Pattern.compile("_v[0-9]+\\.[0-9]+$");
+	
+	private static final String VERSION_FILE_NAME = "/version.txt";
 	
 	private final Pattern profilePattern;
 	private final String primaryJsonFileName;
@@ -355,6 +359,19 @@ public abstract class AbstractPackageMojo<T> extends AbstractMojo
 				
 				copyFileToDirectoryIfExists(child, target);
 			}
+		}
+	}
+	
+	protected String loadAppPackagerVersion()
+	{
+		try (InputStream inputStream = getClass().getResourceAsStream(VERSION_FILE_NAME))
+		{
+			return IOUtils.toString(inputStream);
+		}
+		catch (IOException e)
+		{
+			logger.warn("Unable to load version: {}", e.getMessage());
+			return null;
 		}
 	}
 }

@@ -27,6 +27,7 @@ public class Install
 	private Integer tokenExpireOffsetMinutes;
 	private Integer timeoutMinutes;
 	private String note;
+	private String sdkVersion;
 	
 	private Playbook playbook;
 	private final List<Param> params;
@@ -225,6 +226,16 @@ public class Install
 	public void setNote(final String note)
 	{
 		this.note = note;
+	}
+	
+	public String getSdkVersion()
+	{
+		return sdkVersion;
+	}
+	
+	public void setSdkVersion(final String sdkVersion)
+	{
+		this.sdkVersion = sdkVersion;
 	}
 	
 	public Playbook getPlaybook()
