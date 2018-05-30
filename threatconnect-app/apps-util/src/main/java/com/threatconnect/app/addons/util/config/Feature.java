@@ -8,4 +8,5 @@ public class Feature
 	public static final String SECURE_PARAMS = "secureParams";
 	public static final String SMTP_SETTINGS = "smtpSettings";
 	public static final String EMBEDDED_EXECUTION_ENABLED = "embeddedExecutionEnabled";
+	public static final String AOT_EXECUTION_ENABLED = "aotExecutionEnabled";
 }

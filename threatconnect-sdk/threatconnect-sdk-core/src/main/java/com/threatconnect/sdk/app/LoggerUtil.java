@@ -23,7 +23,6 @@ public class LoggerUtil
 	 *
 	 * @param logFile   the log file to write the output
 	 * @param appConfig the app configuration
-	 * @throws IOException On error
 	 */
 	public static void reconfigureGlobalLogger(final File logFile, final AppConfig appConfig) throws IOException
 	{
@@ -36,17 +35,14 @@ public class LoggerUtil
 	 * @param loggerPath the logger to reconfigure
 	 * @param logFile    the log file to write the output
 	 * @param appConfig  the app configuration
-	 * @throws IOException On error
 	 */
 	public static void reconfigureLogger(final String loggerPath, final File logFile, final AppConfig appConfig)
-		throws IOException
 	{
 		addFileAppender(loggerPath, logFile, appConfig);
 		addServerAppender(loggerPath, appConfig);
 	}
 	
 	public static void addFileAppender(final String loggerPath, final File logFile, final AppConfig appConfig)
-		throws IOException
 	{
 		// retrieve the logger context
 		LoggerContext loggerContext = (LoggerContext) LogManager.getContext(false);
@@ -72,7 +68,6 @@ public class LoggerUtil
 	}
 	
 	public static void addServerAppender(final String loggerPath, final AppConfig appConfig)
-		throws IOException
 	{
 		// retrieve the logger context
 		LoggerContext loggerContext = (LoggerContext) LogManager.getContext(false);

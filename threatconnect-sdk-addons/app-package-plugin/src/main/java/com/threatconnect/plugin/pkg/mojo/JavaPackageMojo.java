@@ -4,6 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.threatconnect.app.addons.util.config.Feature;
 import com.threatconnect.app.addons.util.config.install.Install;
+import com.threatconnect.app.addons.util.config.install.InstallUtil;
+import com.threatconnect.app.addons.util.config.validation.InstallValidator;
+import com.threatconnect.app.addons.util.config.validation.ValidationException;
 import com.threatconnect.plugin.pkg.JavaPackageFileFilter;
 import com.threatconnect.plugin.pkg.PackageFileFilter;
 import com.threatconnect.plugin.pkg.Profile;
@@ -20,6 +23,8 @@ import java.io.OutputStream;
 @Mojo(name = "java-package", defaultPhase = LifecyclePhase.PACKAGE, threadSafe = true, requiresDependencyResolution = ResolutionScope.RUNTIME)
 public class JavaPackageMojo extends AbstractAppPackageMojo
 {
+	public static final String APP_MAIN_CLASSNAME = "com.threatconnect.sdk.app.AppMain";
+	
 	private final Gson gson;
 	
 	/**
@@ -76,6 +81,30 @@ public class JavaPackageMojo extends AbstractAppPackageMojo
 	{
 		return super.generateReferencedFileMissingMessage(fileName)
 			+ " Additional files must be added to the \"include\" directory?";
+	}
+	
+	@Override
+	protected Install loadFile(final File file) throws IOException, ValidationException
+	{
+		return InstallUtil.load(file, new InstallValidator()
+			{
+				@Override
+				public void validate(final Install object) throws ValidationException
+				{
+					//check to see if the program main is null
+					if (null == object.getProgramMain())
+					{
+						object.setProgramMain(APP_MAIN_CLASSNAME);
+					}
+					else if (!APP_MAIN_CLASSNAME.equals(object.getProgramMain()))
+					{
+						throw new ValidationException("programMain must be null or \"" + APP_MAIN_CLASSNAME + "\"");
+					}
+					
+					super.validate(object);
+				}
+			}
+		);
 	}
 	
 	protected File getSourceJarFile()

@@ -75,6 +75,14 @@ public class InstallUtil
 		}
 	}
 	
+	public static Install load(final File file, final InstallValidator installValidator) throws IOException, ValidationException
+	{
+		try (InputStream inputStream = new FileInputStream(file))
+		{
+			return load(inputStream, installValidator);
+		}
+	}
+	
 	public static Install load(final InputStream inputStream) throws ValidationException
 	{
 		return load(inputStream, VALIDATE_BY_DEFAULT);
@@ -82,13 +90,18 @@ public class InstallUtil
 	
 	public static Install load(final InputStream inputStream, final boolean validate) throws ValidationException
 	{
+		return load(inputStream, (validate ? new InstallValidator() : null));
+	}
+	
+	public static Install load(final InputStream inputStream, final InstallValidator installValidator) throws ValidationException
+	{
 		try
 		{
 			Install install = createGson().fromJson(new InputStreamReader(inputStream), Install.class);
 			
-			if (validate)
+			if (null != installValidator)
 			{
-				new InstallValidator().validate(install);
+				installValidator.validate(install);
 			}
 			
 			return install;

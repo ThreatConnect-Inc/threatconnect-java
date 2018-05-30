@@ -66,6 +66,7 @@
 		<version.apache-http>4.4.1</version.apache-http>
 		<version.jackson>2.7.5</version.jackson>
 		<version.reflections>0.9.10</version.reflections>
+		<version.jedis>2.9.0</version.jedis>
 		<log4j.version>2.6.1</log4j.version>
 		<es.version>2.3.4</es.version>
 		<version.gson>2.6.2</version.gson>

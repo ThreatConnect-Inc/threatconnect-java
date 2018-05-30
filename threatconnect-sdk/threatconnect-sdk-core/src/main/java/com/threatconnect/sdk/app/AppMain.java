@@ -5,6 +5,8 @@ import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.AppExecutor;
 import com.threatconnect.app.apps.ExitStatus;
 import com.threatconnect.app.apps.SystemPropertiesAppConfig;
+import com.threatconnect.sdk.app.aot.AOTHandler;
+import com.threatconnect.sdk.app.aot.AOTListener;
 import com.threatconnect.sdk.app.exception.AppInstantiationException;
 import com.threatconnect.sdk.app.exception.MultipleAppClassFoundException;
 import com.threatconnect.sdk.app.exception.NoAppClassFoundException;
@@ -74,6 +76,37 @@ public final class AppMain extends AppExecutor
 		}
 		
 		return exitStatus.getExitCode();
+	}
+	
+	/**
+	 * Executes the AOT logic to wait for further instructions
+	 */
+	private void executeAOT()
+	{
+		//create a new AOT Handler
+		new AOTHandler(getAppConfig(), new AOTListener()
+		{
+			@Override
+			public void execute()
+			{
+				executeAndExit(AppMain.this);
+			}
+			
+			@Override
+			public void terminate(final boolean timeout)
+			{
+				if (timeout)
+				{
+					// exit the app with this exit status
+					logger.warn("AOT timeout. App terminating without execution.");
+					System.exit(1);
+				}
+				else
+				{
+					System.exit(0);
+				}
+			}
+		});
 	}
 	
 	/**
@@ -226,12 +259,39 @@ public final class AppMain extends AppExecutor
 		return appConfig;
 	}
 	
-	public static void main(String[] args)
+	private static void executeAndExit(final AppMain appMain)
 	{
 		//execute the app and return the exit status
-		int exitCode = new AppMain().execute();
+		int exitCode = appMain.execute();
 		
 		// exit the app with this exit status
 		System.exit(exitCode);
+	}
+	
+	public static void main(String[] args)
+	{
+		//retrieve the app config object
+		AppConfig appConfig = findAppConfig();
+		AppMain appMain = new AppMain(appConfig);
+		
+		//check to see if AOT is enabled and that the channel is set
+		if (appConfig.isAOTEnabled())
+		{
+			//make sure the action channel is set
+			if (null != appConfig.getActionChannel())
+			{
+				//run the aot logic
+				appMain.executeAOT();
+			}
+			else
+			{
+				//need to use system.err over logger since logger is not yet configured
+				System.err.println("Unable to launch app as AOT. Missing required parameter: " + AppConfig.TC_ACTION_CHANNEL);
+			}
+		}
+		else
+		{
+			executeAndExit(appMain);
+		}
 	}
 }
