@@ -3,6 +3,7 @@ package com.threatconnect.apps.playbooks.test.config;
 import com.threatconnect.app.addons.util.config.InvalidJsonFileException;
 import com.threatconnect.app.addons.util.config.install.Install;
 import com.threatconnect.app.addons.util.config.install.InstallUtil;
+import com.threatconnect.app.addons.util.config.validation.InstallValidator;
 import com.threatconnect.app.addons.util.config.validation.ValidationException;
 import com.threatconnect.app.apps.App;
 import com.threatconnect.app.apps.AppConfig;
@@ -33,9 +34,11 @@ import java.util.regex.Pattern;
  */
 public class PlaybooksTestConfiguration
 {
+	private static final Logger logger = LoggerFactory.getLogger(PlaybooksTestConfiguration.class);
+	
 	public static final Pattern PATTERN_INSTALL_JSON = Pattern.compile("^(?:(.*)\\.)?install\\.json$");
 	
-	private static final Logger logger = LoggerFactory.getLogger(PlaybooksTestConfiguration.class);
+	private static final String APP_MAIN_CLASSNAME = "com.threatconnect.sdk.app.AppMain";
 	
 	//holds the instance to this singleton
 	private static PlaybooksTestConfiguration instance;
@@ -120,7 +123,21 @@ public class PlaybooksTestConfiguration
 			logger.info("Loading {}", file.getAbsolutePath());
 			
 			//read the json file
-			Install install = InstallUtil.load(file);
+			Install install = InstallUtil.load(file, new InstallValidator()
+				{
+					@Override
+					public void validate(final Install object) throws ValidationException
+					{
+						//check to see if the program main is null
+						if (null == object.getProgramMain())
+						{
+							object.setProgramMain(APP_MAIN_CLASSNAME);
+						}
+						
+						super.validate(object);
+					}
+				}
+			);
 			
 			//check to see if this is a playbooks app
 			if (install.isPlaybookApp())
@@ -262,7 +279,21 @@ public class PlaybooksTestConfiguration
 			logger.info("Loading {}", file.getAbsolutePath());
 			
 			//read the json file
-			Install install = InstallUtil.load(file);
+			Install install = InstallUtil.load(file, new InstallValidator()
+				{
+					@Override
+					public void validate(final Install object) throws ValidationException
+					{
+						//check to see if the program main is null
+						if (null == object.getProgramMain())
+						{
+							object.setProgramMain(APP_MAIN_CLASSNAME);
+						}
+						
+						super.validate(object);
+					}
+				}
+			);
 			
 			//check to see if this is a playbooks app
 			if (install.isPlaybookApp())

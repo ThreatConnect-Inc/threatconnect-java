@@ -96,10 +96,6 @@ public class JavaPackageMojo extends AbstractAppPackageMojo
 					{
 						object.setProgramMain(APP_MAIN_CLASSNAME);
 					}
-					else if (!APP_MAIN_CLASSNAME.equals(object.getProgramMain()))
-					{
-						throw new ValidationException("programMain must be null or \"" + APP_MAIN_CLASSNAME + "\"");
-					}
 					
 					super.validate(object);
 				}
