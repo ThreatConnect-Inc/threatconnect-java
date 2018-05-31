@@ -6,10 +6,8 @@ import com.threatconnect.app.apps.AppConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPubSub;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.List;
 
 public class AOTHandler
 {
@@ -23,9 +21,13 @@ public class AOTHandler
 	
 	private static final int DEFAULT_AOT_TIMEOUT_SECONDS = 60;
 	
+	private final AOTListener aotListener;
+	private final Gson gson;
+	
 	public AOTHandler(final AppConfig appConfig, final AOTListener aotListener)
 	{
-		Gson gson = new Gson();
+		this.aotListener = aotListener;
+		this.gson = new Gson();
 		
 		//building the redis connection object
 		final String host = appConfig.getString(PARAM_DB_PATH);
@@ -35,54 +37,77 @@ public class AOTHandler
 		
 		//retrieve the timeout
 		final int timeoutSeconds = appConfig.getInteger(AppConfig.TC_TERMINATE_SECONDS, DEFAULT_AOT_TIMEOUT_SECONDS);
-		final long timeout = timeoutSeconds * 1000L;
 		
-		//initialize the timer to schedule a timeout termination of this app
-		final Timer shutdownTimer = new Timer();
-		shutdownTimer.schedule(new TimerTask()
-		{
-			@Override
-			public void run()
-			{
-				aotListener.terminate(true);
-			}
-		}, timeout);
+		//make a blocking call to wait for the result from redis
+		List<String> results = jedis.blpop(timeoutSeconds, appConfig.getActionChannel());
 		
-		//subscribe to the action channel
-		jedis.subscribe(new JedisPubSub()
+		//check to see if we got a valid response (no timeout)
+		if (null != results && results.size() == 2)
 		{
-			@Override
-			public void onMessage(final String channel, final String message)
+			final String key = results.get(0);
+			final String value = results.get(1);
+			
+			//handle the message and then terminate this app
+			handleMessage(value);
+			aotListener.terminate(false);
+		}
+		else
+		{
+			aotListener.terminate(true);
+		}
+	}
+	
+	/**
+	 * Handles the message and returns whether or not it was successful
+	 *
+	 * @param message
+	 * @return
+	 */
+	private boolean handleMessage(final String message)
+	{
+		try
+		{
+			//make sure the message is not null
+			if (null != message)
 			{
-				try
+				//deserialize the message
+				AOTMessage aotMessage = gson.fromJson(message, AOTMessage.class);
+				
+				//make sure the type is not null
+				if (null != aotMessage.getType())
 				{
-					//deserialize the message
-					AOTMessage aotMessage = gson.fromJson(message, AOTMessage.class);
-					
 					//determine what type of message this is
 					switch (aotMessage.getType())
 					{
 						case MESSAGE_TYPE_EXECUTE:
-							//cancel the timeout timer
-							shutdownTimer.cancel();
-							
 							//tell the listener that an execute instruction was received
 							aotListener.execute();
-							break;
+							return true;
 						case MESSAGE_TYPE_TERMINATE:
 							//tell the listener that a terminate instruction was received
 							aotListener.terminate(false);
-							break;
+							return true;
 						default:
 							logger.warn("Unknown message received: {}", message);
-							break;
+							return false;
 					}
 				}
-				catch (JsonSyntaxException e)
+				else
 				{
-					logger.warn("Unknown message received: {}", message);
+					logger.warn("Message was missing required field \"type\"");
+					return false;
 				}
 			}
-		}, appConfig.getActionChannel());
+			else
+			{
+				logger.warn("Null message received.");
+				return false;
+			}
+		}
+		catch (JsonSyntaxException e)
+		{
+			logger.warn("Unknown message received: {}", message);
+			return false;
+		}
 	}
 }
