@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<taxii_11:Poll_Response collection_name="system.Default" more="false" in_response_to="urn:uuid:df553147-17f2-458e-a02b-bf0d82e09857" message_id="35379" xmlns:taxii_11="http://taxii.mitre.org/messages/taxii_xml_binding-1.1" xmlns:xmldsig="http://www.w3.org/2000/09/xmldsig#">
+    <taxii_11:Inclusive_End_Timestamp>2016-01-06T01:00:00Z</taxii_11:Inclusive_End_Timestamp>
+    <taxii_11:Content_Block>
+        <taxii_11:Content_Binding binding_id="urn:stix.mitre.org:xml:1.1.1"/>
+        <taxii_11:Content>
+            <stix:STIX_Package id="edge:Package-3056e973-5ce6-4f5a-bc85-070b36ea568a" timestamp="2016-01-06T09:18:52.136699+00:00" version="1.1.1" xmlns:indicator="http://stix.mitre.org/Indicator-2" xmlns:tdq="http://taxii.mitre.org/query/taxii_default_query-1" xmlns:stix="http://stix.mitre.org/stix-1" xmlns:stixVocabs="http://stix.mitre.org/default_vocabularies-1" xmlns:foxit="http://www.fox-it.com/detact/ns/stix/1.0/" xmlns:cyboxCommon="http://cybox.mitre.org/common-2" xmlns:cyboxVocabs="http://cybox.mitre.org/default_vocabularies-2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stixCommon="http://stix.mitre.org/common-1" xmlns:edge="http://soltra.com/" xmlns:marking="http://data-marking.mitre.org/Marking-1" xmlns:tlpMarking="http://data-marking.mitre.org/extensions/MarkingStructure#TLP-1" xmlns:taxii="http://taxii.mitre.org/messages/taxii_xml_binding-1" xmlns:cybox="http://cybox.mitre.org/cybox-2">
+                <stix:STIX_Header>
+                    <stix:Handling>
+                        <marking:Marking>
+                            <marking:Controlled_Structure>../../../../descendant-or-self::node()</marking:Controlled_Structure>
+                            <marking:Marking_Structure color="GREEN" xsi:type="tlpMarking:TLPMarkingStructureType"/>
+            </marking:Marking>
+        </stix:Handling>
+    </stix:STIX_Header>
+                <stix:Indicators>
+                    <stix:Indicator id="foxit:indicator-0c21d1054bd85b271e9f9f9b648521ec" timestamp="2016-01-05T23:33:33.333780+00:00" xsi:type="indicator:IndicatorType">
+                        <indicator:Title>File hashes for Downloader.Upatre_a0e3fa326fd761e0f76b27078882937a.exe</indicator:Title>
+                        <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">File Hash Watchlist</indicator:Type>
+                        <indicator:Observable idref="foxit:Observable-dfb1f467-0972-4c2e-9679-dd973b66baa5">
+            </indicator:Observable>
+        </stix:Indicator>
+    </stix:Indicators>
+</stix:STIX_Package>
+        </taxii_11:Content>
+        <taxii_11:Timestamp_Label>2016-01-06T09:18:52.142481Z</taxii_11:Timestamp_Label>
+    </taxii_11:Content_Block>
+    <taxii_11:Content_Block>
+        <taxii_11:Content_Binding binding_id="urn:stix.mitre.org:xml:1.1.1"/>
+        <taxii_11:Content>
+            <stix:STIX_Package id="edge:Package-d3370d74-4303-4b90-847b-d1eec54f2944" timestamp="2016-01-06T09:18:52.168046+00:00" version="1.1.1" xmlns:tdq="http://taxii.mitre.org/query/taxii_default_query-1" xmlns:stix="http://stix.mitre.org/stix-1" xmlns:stixVocabs="http://stix.mitre.org/default_vocabularies-1" xmlns:foxit="http://www.fox-it.com/detact/ns/stix/1.0/" xmlns:cyboxCommon="http://cybox.mitre.org/common-2" xmlns:cyboxVocabs="http://cybox.mitre.org/default_vocabularies-2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stixCommon="http://stix.mitre.org/common-1" xmlns:edge="http://soltra.com/" xmlns:marking="http://data-marking.mitre.org/Marking-1" xmlns:tlpMarking="http://data-marking.mitre.org/extensions/MarkingStructure#TLP-1" xmlns:FileObj="http://cybox.mitre.org/objects#FileObject-2" xmlns:taxii="http://taxii.mitre.org/messages/taxii_xml_binding-1" xmlns:cybox="http://cybox.mitre.org/cybox-2">
+                <stix:STIX_Header>
+                    <stix:Handling>
+                        <marking:Marking>
+                            <marking:Controlled_Structure>../../../../descendant-or-self::node()</marking:Controlled_Structure>
+                            <marking:Marking_Structure color="GREEN" xsi:type="tlpMarking:TLPMarkingStructureType"/>
+            </marking:Marking>
+        </stix:Handling>
+    </stix:STIX_Header>
+                <stix:Observables cybox_major_version="2" cybox_minor_version="1" cybox_update_version="0">
+                    <cybox:Observable id="foxit:Observable-dfb1f467-0972-4c2e-9679-dd973b66baa5">
+                        <cybox:Title>File hashes for Downloader.Upatre_a0e3fa326fd761e0f76b27078882937a.exe</cybox:Title>
+                        <cybox:Object id="foxit:File-bf5690d0-842b-4297-b998-16fc22b411c3">
+                            <cybox:Properties xsi:type="FileObj:FileObjectType">
+                                <FileObj:File_Name>Downloader.Upatre_a0e3fa326fd761e0f76b27078882937a.exe</FileObj:File_Name>
+                                <FileObj:Size_In_Bytes>25548</FileObj:Size_In_Bytes>
+                                <FileObj:File_Format>exe</FileObj:File_Format>
+                                <FileObj:Hashes>
+                                    <cyboxCommon:Hash>
+                                        <cyboxCommon:Type condition="Equals" xsi:type="cyboxVocabs:HashNameVocab-1.0">SHA1</cyboxCommon:Type>
+                                        <cyboxCommon:Simple_Hash_Value condition="Equals">c865ce28a6640c9614f0344e5b7d69b7651a1586</cyboxCommon:Simple_Hash_Value>
+                        </cyboxCommon:Hash>
+                                    <cyboxCommon:Hash>
+                                        <cyboxCommon:Type condition="Equals" xsi:type="cyboxVocabs:HashNameVocab-1.0">SHA256</cyboxCommon:Type>
+                                        <cyboxCommon:Simple_Hash_Value condition="Equals">8989c590c8acc8fe65de858cb04c608d598161ea6c271d38b343ea6779ccc458</cyboxCommon:Simple_Hash_Value>
+                        </cyboxCommon:Hash>
+                                    <cyboxCommon:Hash>
+                                        <cyboxCommon:Type condition="Equals" xsi:type="cyboxVocabs:HashNameVocab-1.0">MD5</cyboxCommon:Type>
+                                        <cyboxCommon:Simple_Hash_Value condition="Equals">a0e3fa326fd761e0f76b27078882937a</cyboxCommon:Simple_Hash_Value>
+                        </cyboxCommon:Hash>
+                    </FileObj:Hashes>
+                </cybox:Properties>
+            </cybox:Object>
+        </cybox:Observable>
+    </stix:Observables>
+</stix:STIX_Package>
+        </taxii_11:Content>
+        <taxii_11:Timestamp_Label>2016-01-06T09:18:52.185385Z</taxii_11:Timestamp_Label>
+    </taxii_11:Content_Block>
+    <taxii_11:Content_Block>
+        <taxii_11:Content_Binding binding_id="urn:stix.mitre.org:xml:1.1.1"/>
+        <taxii_11:Content>
+            <stix:STIX_Package id="edge:Package-85e4543f-4f40-4084-9083-0ab34188c860" timestamp="2016-01-06T09:18:52.208764+00:00" version="1.1.1" xmlns:indicator="http://stix.mitre.org/Indicator-2" xmlns:tdq="http://taxii.mitre.org/query/taxii_default_query-1" xmlns:stix="http://stix.mitre.org/stix-1" xmlns:stixVocabs="http://stix.mitre.org/default_vocabularies-1" xmlns:foxit="http://www.fox-it.com/detact/ns/stix/1.0/" xmlns:cyboxCommon="http://cybox.mitre.org/common-2" xmlns:cyboxVocabs="http://cybox.mitre.org/default_vocabularies-2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stixCommon="http://stix.mitre.org/common-1" xmlns:edge="http://soltra.com/" xmlns:marking="http://data-marking.mitre.org/Marking-1" xmlns:tlpMarking="http://data-marking.mitre.org/extensions/MarkingStructure#TLP-1" xmlns:taxii="http://taxii.mitre.org/messages/taxii_xml_binding-1" xmlns:cybox="http://cybox.mitre.org/cybox-2">
+                <stix:STIX_Header>
+                    <stix:Handling>
+                        <marking:Marking>
+                            <marking:Controlled_Structure>../../../../descendant-or-self::node()</marking:Controlled_Structure>
+                            <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType"/>
+            </marking:Marking>
+        </stix:Handling>
+    </stix:STIX_Header>
+                <stix:Indicators>
+                    <stix:Indicator id="foxit:indicator-0a25012c25dd164a65de5edfeeeaa316" timestamp="2016-01-05T23:33:35.429478+00:00" xsi:type="indicator:IndicatorType">
+                        <indicator:Title>File hashes for 29cd0_dao360.dll.new</indicator:Title>
+                        <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">File Hash Watchlist</indicator:Type>
+                        <indicator:Observable idref="foxit:Observable-c8334b6c-e8a2-450c-9ccf-6a7e46a073f1">
+            </indicator:Observable>
+        </stix:Indicator>
+    </stix:Indicators>
+</stix:STIX_Package>
+        </taxii_11:Content>
+        <taxii_11:Timestamp_Label>2016-01-06T09:18:52.210839Z</taxii_11:Timestamp_Label>
+    </taxii_11:Content_Block>
+    <taxii_11:Content_Block>
+        <taxii_11:Content_Binding binding_id="urn:stix.mitre.org:xml:1.1.1"/>
+        <taxii_11:Content>
+            <stix:STIX_Package id="edge:Package-84173be6-b24e-4840-aec6-5208c96d57d1" timestamp="2016-01-06T09:18:52.230077+00:00" version="1.1.1" xmlns:tdq="http://taxii.mitre.org/query/taxii_default_query-1" xmlns:stix="http://stix.mitre.org/stix-1" xmlns:stixVocabs="http://stix.mitre.org/default_vocabularies-1" xmlns:foxit="http://www.fox-it.com/detact/ns/stix/1.0/" xmlns:cyboxCommon="http://cybox.mitre.org/common-2" xmlns:cyboxVocabs="http://cybox.mitre.org/default_vocabularies-2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stixCommon="http://stix.mitre.org/common-1" xmlns:edge="http://soltra.com/" xmlns:marking="http://data-marking.mitre.org/Marking-1" xmlns:tlpMarking="http://data-marking.mitre.org/extensions/MarkingStructure#TLP-1" xmlns:FileObj="http://cybox.mitre.org/objects#FileObject-2" xmlns:taxii="http://taxii.mitre.org/messages/taxii_xml_binding-1" xmlns:cybox="http://cybox.mitre.org/cybox-2">
+                <stix:STIX_Header>
+                    <stix:Handling>
+                        <marking:Marking>
+                            <marking:Controlled_Structure>../../../../descendant-or-self::node()</marking:Controlled_Structure>
+                            <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType"/>
+            </marking:Marking>
+        </stix:Handling>
+    </stix:STIX_Header>
+                <stix:Observables cybox_major_version="2" cybox_minor_version="1" cybox_update_version="0">
+                    <cybox:Observable id="foxit:Observable-c8334b6c-e8a2-450c-9ccf-6a7e46a073f1">
+                        <cybox:Title>File hashes for 29cd0_dao360.dll.new</cybox:Title>
+                        <cybox:Object id="foxit:File-8147d851-15b8-4ef1-8e9b-d576c109366b">
+                            <cybox:Properties xsi:type="FileObj:FileObjectType">
+                                <FileObj:File_Name>29cd0_dao360.dll.new</FileObj:File_Name>
+                                <FileObj:Size_In_Bytes>554008</FileObj:Size_In_Bytes>
+                                <FileObj:File_Format>exe</FileObj:File_Format>
+                                <FileObj:Hashes>
+                                    <cyboxCommon:Hash>
+                                        <cyboxCommon:Type condition="Equals" xsi:type="cyboxVocabs:HashNameVocab-1.0">SHA1</cyboxCommon:Type>
+                                        <cyboxCommon:Simple_Hash_Value condition="Equals">642ccb4e8d5963daa1f710200d997faad1ce5005</cyboxCommon:Simple_Hash_Value>
+                        </cyboxCommon:Hash>
+                                    <cyboxCommon:Hash>
+                                        <cyboxCommon:Type condition="Equals" xsi:type="cyboxVocabs:HashNameVocab-1.0">SHA256</cyboxCommon:Type>
+                                        <cyboxCommon:Simple_Hash_Value condition="Equals">adda2095d8c43424a50d8e6887babd21263dafcf7a7acf57a92a547ae210bb0d</cyboxCommon:Simple_Hash_Value>
+                        </cyboxCommon:Hash>
+                                    <cyboxCommon:Hash>
+                                        <cyboxCommon:Type condition="Equals" xsi:type="cyboxVocabs:HashNameVocab-1.0">MD5</cyboxCommon:Type>
+                                        <cyboxCommon:Simple_Hash_Value condition="Equals">54e10ad6ebbedcb221aded5d9f0c8f3f</cyboxCommon:Simple_Hash_Value>
+                        </cyboxCommon:Hash>
+                    </FileObj:Hashes>
+                </cybox:Properties>
+            </cybox:Object>
+        </cybox:Observable>
+    </stix:Observables>
+</stix:STIX_Package>
+        </taxii_11:Content>
+        <taxii_11:Timestamp_Label>2016-01-06T09:18:52.233569Z</taxii_11:Timestamp_Label>
+    </taxii_11:Content_Block>
+    <taxii_11:Content_Block>
+        <taxii_11:Content_Binding binding_id="urn:stix.mitre.org:xml:1.1.1"/>
+        <taxii_11:Content>
+            <stix:STIX_Package id="edge:Package-1039abe5-79f9-4843-851a-6dbc6212767e" timestamp="2016-01-06T09:18:52.236608+00:00" version="1.1.1" xmlns:indicator="http://stix.mitre.org/Indicator-2" xmlns:tdq="http://taxii.mitre.org/query/taxii_default_query-1" xmlns:stix="http://stix.mitre.org/stix-1" xmlns:stixVocabs="http://stix.mitre.org/default_vocabularies-1" xmlns:foxit="http://www.fox-it.com/detact/ns/stix/1.0/" xmlns:cyboxCommon="http://cybox.mitre.org/common-2" xmlns:cyboxVocabs="http://cybox.mitre.org/default_vocabularies-2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stixCommon="http://stix.mitre.org/common-1" xmlns:edge="http://soltra.com/" xmlns:marking="http://data-marking.mitre.org/Marking-1" xmlns:tlpMarking="http://data-marking.mitre.org/extensions/MarkingStructure#TLP-1" xmlns:taxii="http://taxii.mitre.org/messages/taxii_xml_binding-1" xmlns:cybox="http://cybox.mitre.org/cybox-2">
+                <stix:STIX_Header>
+                    <stix:Handling>
+                        <marking:Marking>
+                            <marking:Controlled_Structure>../../../../descendant-or-self::node()</marking:Controlled_Structure>
+                            <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType"/>
+            </marking:Marking>
+        </stix:Handling>
+    </stix:STIX_Header>
+                <stix:Indicators>
+                    <stix:Indicator id="foxit:indicator-9d1d3e7fca9642054c2280d52dee086a" timestamp="2016-01-05T23:33:35.417931+00:00" xsi:type="indicator:IndicatorType">
+                        <indicator:Title>File hashes for Worm.Ramnit_0976d77351c1cec418977083d9f0bc40.exe</indicator:Title>
+                        <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">File Hash Watchlist</indicator:Type>
+                        <indicator:Observable idref="foxit:Observable-ccbb0943-42a0-48d0-9b2e-8b406381643c">
+            </indicator:Observable>
+        </stix:Indicator>
+    </stix:Indicators>
+</stix:STIX_Package>
+        </taxii_11:Content>
+        <taxii_11:Timestamp_Label>2016-01-06T09:18:52.238079Z</taxii_11:Timestamp_Label>
+    </taxii_11:Content_Block>
+    <taxii_11:Content_Block>
+        <taxii_11:Content_Binding binding_id="urn:stix.mitre.org:xml:1.1.1"/>
+        <taxii_11:Content>
+            <stix:STIX_Package id="edge:Package-3f2a6943-6dd7-4aad-aea9-a545d9d5a9a3" timestamp="2016-01-06T09:18:52.249220+00:00" version="1.1.1" xmlns:tdq="http://taxii.mitre.org/query/taxii_default_query-1" xmlns:stix="http://stix.mitre.org/stix-1" xmlns:stixVocabs="http://stix.mitre.org/default_vocabularies-1" xmlns:foxit="http://www.fox-it.com/detact/ns/stix/1.0/" xmlns:cyboxCommon="http://cybox.mitre.org/common-2" xmlns:cyboxVocabs="http://cybox.mitre.org/default_vocabularies-2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stixCommon="http://stix.mitre.org/common-1" xmlns:edge="http://soltra.com/" xmlns:marking="http://data-marking.mitre.org/Marking-1" xmlns:tlpMarking="http://data-marking.mitre.org/extensions/MarkingStructure#TLP-1" xmlns:FileObj="http://cybox.mitre.org/objects#FileObject-2" xmlns:taxii="http://taxii.mitre.org/messages/taxii_xml_binding-1" xmlns:cybox="http://cybox.mitre.org/cybox-2">
+                <stix:STIX_Header>
+                    <stix:Handling>
+                        <marking:Marking>
+                            <marking:Controlled_Structure>../../../../descendant-or-self::node()</marking:Controlled_Structure>
+                            <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType"/>
+            </marking:Marking>
+        </stix:Handling>
+    </stix:STIX_Header>
+                <stix:Observables cybox_major_version="2" cybox_minor_version="1" cybox_update_version="0">
+                    <cybox:Observable id="foxit:Observable-ccbb0943-42a0-48d0-9b2e-8b406381643c">
+                        <cybox:Title>File hashes for Worm.Ramnit_0976d77351c1cec418977083d9f0bc40.exe</cybox:Title>
+                        <cybox:Object id="foxit:File-42ecc260-a484-48e4-9c5e-86f0bd24a415">
+                            <cybox:Properties xsi:type="FileObj:FileObjectType">
+                                <FileObj:File_Name>Worm.Ramnit_0976d77351c1cec418977083d9f0bc40.exe</FileObj:File_Name>
+                                <FileObj:Size_In_Bytes>1356269</FileObj:Size_In_Bytes>
+                                <FileObj:File_Format>exe</FileObj:File_Format>
+                                <FileObj:Hashes>
+                                    <cyboxCommon:Hash>
+                                        <cyboxCommon:Type condition="Equals" xsi:type="cyboxVocabs:HashNameVocab-1.0">SHA1</cyboxCommon:Type>
+                                        <cyboxCommon:Simple_Hash_Value condition="Equals">1c6e89531391095cd7a5fe6d14f126c9c20e2dba</cyboxCommon:Simple_Hash_Value>
+                        </cyboxCommon:Hash>
+                                    <cyboxCommon:Hash>
+                                        <cyboxCommon:Type condition="Equals" xsi:type="cyboxVocabs:HashNameVocab-1.0">SHA256</cyboxCommon:Type>
+                                        <cyboxCommon:Simple_Hash_Value condition="Equals">d7945cfcd19ffbdd23cd3be908b1216fd6b923b52e54aedd1f526a2ca6a2e46b</cyboxCommon:Simple_Hash_Value>
+                        </cyboxCommon:Hash>
+                                    <cyboxCommon:Hash>
+                                        <cyboxCommon:Type condition="Equals" xsi:type="cyboxVocabs:HashNameVocab-1.0">MD5</cyboxCommon:Type>
+                                        <cyboxCommon:Simple_Hash_Value condition="Equals">0976d77351c1cec418977083d9f0bc40</cyboxCommon:Simple_Hash_Value>
+                        </cyboxCommon:Hash>
+                    </FileObj:Hashes>
+                </cybox:Properties>
+            </cybox:Object>
+        </cybox:Observable>
+    </stix:Observables>
+</stix:STIX_Package>
+        </taxii_11:Content>
+        <taxii_11:Timestamp_Label>2016-01-06T09:18:52.252608Z</taxii_11:Timestamp_Label>
+    </taxii_11:Content_Block>
+</taxii_11:Poll_Response>
