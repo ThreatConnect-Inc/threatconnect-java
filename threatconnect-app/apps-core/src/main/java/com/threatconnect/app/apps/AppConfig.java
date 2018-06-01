@@ -268,7 +268,7 @@ public abstract class AppConfig
 		return getBoolean(TC_AOT_ENABLED);
 	}
 	
-	public String getActionChannel()
+	public String getTcActionChannel()
 	{
 		return getString(TC_ACTION_CHANNEL);
 	}
@@ -278,7 +278,7 @@ public abstract class AppConfig
 		return getInteger(TC_TERMINATE_SECONDS);
 	}
 	
-	public String getExitChannel()
+	public String getTcExitChannel()
 	{
 		return getString(TC_EXIT_CHANNEL);
 	}

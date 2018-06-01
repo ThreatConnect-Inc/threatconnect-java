@@ -21,6 +21,8 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public final class AppMain extends AppExecutor
 {
@@ -87,9 +89,9 @@ public final class AppMain extends AppExecutor
 		new AOTHandler(getAppConfig(), new AOTListener()
 		{
 			@Override
-			public void execute()
+			public void execute(final AOTHandler aotHandler)
 			{
-				executeAndExit(AppMain.this);
+				executeAndExit(AppMain.this, aotHandler::sendExitCode);
 			}
 			
 			@Override
@@ -261,8 +263,19 @@ public final class AppMain extends AppExecutor
 	
 	private static void executeAndExit(final AppMain appMain)
 	{
+		executeAndExit(appMain, null);
+	}
+	
+	private static void executeAndExit(final AppMain appMain, final Consumer<Integer> afterExecute)
+	{
 		//execute the app and return the exit status
 		int exitCode = appMain.execute();
+		
+		//make sure the after execute consumer is not null
+		if (null != afterExecute)
+		{
+			afterExecute.accept(exitCode);
+		}
 		
 		// exit the app with this exit status
 		System.exit(exitCode);
@@ -278,7 +291,7 @@ public final class AppMain extends AppExecutor
 		if (appConfig.isAOTEnabled())
 		{
 			//make sure the action channel is set
-			if (null != appConfig.getActionChannel())
+			if (null != appConfig.getTcActionChannel())
 			{
 				//run the aot logic
 				appMain.executeAOT();

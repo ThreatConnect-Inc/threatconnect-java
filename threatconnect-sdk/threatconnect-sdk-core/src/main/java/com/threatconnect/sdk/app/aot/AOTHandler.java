@@ -21,11 +21,14 @@ public class AOTHandler
 	
 	private static final int DEFAULT_AOT_TIMEOUT_SECONDS = 60;
 	
+	private final AppConfig appConfig;
 	private final AOTListener aotListener;
 	private final Gson gson;
+	private final Jedis jedis;
 	
 	public AOTHandler(final AppConfig appConfig, final AOTListener aotListener)
 	{
+		this.appConfig = appConfig;
 		this.aotListener = aotListener;
 		this.gson = new Gson();
 		
@@ -33,13 +36,13 @@ public class AOTHandler
 		final String host = appConfig.getString(PARAM_DB_PATH);
 		final int port = appConfig.getInteger(PARAM_DB_PORT);
 		logger.trace("Building RedisDBService on {}:{}", host, port);
-		Jedis jedis = new Jedis(host, port);
+		jedis = new Jedis(host, port);
 		
 		//retrieve the timeout
 		final int timeoutSeconds = appConfig.getInteger(AppConfig.TC_TERMINATE_SECONDS, DEFAULT_AOT_TIMEOUT_SECONDS);
 		
 		//make a blocking call to wait for the result from redis
-		List<String> results = jedis.blpop(timeoutSeconds, appConfig.getActionChannel());
+		List<String> results = jedis.blpop(timeoutSeconds, appConfig.getTcActionChannel());
 		
 		//check to see if we got a valid response (no timeout)
 		if (null != results && results.size() == 2)
@@ -55,6 +58,16 @@ public class AOTHandler
 		{
 			aotListener.terminate(true);
 		}
+	}
+	
+	/**
+	 * Pushes the exit code to the exit channel
+	 *
+	 * @param exitCode
+	 */
+	public void sendExitCode(final int exitCode)
+	{
+		jedis.rpush(appConfig.getTcExitChannel(), Integer.toString(exitCode));
 	}
 	
 	/**
@@ -81,7 +94,7 @@ public class AOTHandler
 					{
 						case MESSAGE_TYPE_EXECUTE:
 							//tell the listener that an execute instruction was received
-							aotListener.execute();
+							aotListener.execute(this);
 							return true;
 						case MESSAGE_TYPE_TERMINATE:
 							//tell the listener that a terminate instruction was received
