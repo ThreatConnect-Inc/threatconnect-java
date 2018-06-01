@@ -42,6 +42,7 @@ public abstract class AppConfig
 	public static final String TC_AOT_ENABLED = "tc_aot_enabled";
 	public static final String TC_ACTION_CHANNEL = "tc_action_channel";
 	public static final String TC_TERMINATE_SECONDS = "tc_terminate_seconds";
+	public static final String TC_EXIT_CHANNEL = "tc_exit_channel";
 	
 	public static final String TC_SMTP_HOST = "tc_smtp_host";
 	public static final String TC_SMTP_PORT = "tc_smtp_port";
@@ -271,9 +272,15 @@ public abstract class AppConfig
 	{
 		return getString(TC_ACTION_CHANNEL);
 	}
+	
 	public Integer getTerminateSeconds()
 	{
 		return getInteger(TC_TERMINATE_SECONDS);
+	}
+	
+	public String getExitChannel()
+	{
+		return getString(TC_EXIT_CHANNEL);
 	}
 	
 	/**
