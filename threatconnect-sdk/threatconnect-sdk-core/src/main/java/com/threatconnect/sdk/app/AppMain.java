@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public final class AppMain extends AppExecutor
 {
@@ -72,9 +71,6 @@ public final class AppMain extends AppExecutor
 				LoggerUtil.logErr("Exit status is null.");
 				exitStatus = ExitStatus.Failure;
 			}
-			
-			// flush the logs to the server
-			ServerLogger.getInstance(getAppConfig()).flushToServer();
 		}
 		
 		return exitStatus.getExitCode();
@@ -268,13 +264,24 @@ public final class AppMain extends AppExecutor
 	
 	private static void executeAndExit(final AppMain appMain, final Consumer<Integer> afterExecute)
 	{
-		//execute the app and return the exit status
-		int exitCode = appMain.execute();
+		//holds the exit code after execution
+		final int exitCode;
 		
-		//make sure the after execute consumer is not null
-		if (null != afterExecute)
+		try
 		{
-			afterExecute.accept(exitCode);
+			//execute the app and return the exit status
+			exitCode = appMain.execute();
+			
+			//make sure the after execute consumer is not null
+			if (null != afterExecute)
+			{
+				afterExecute.accept(exitCode);
+			}
+		}
+		finally
+		{
+			// flush the logs to the server
+			ServerLogger.getInstance(appMain.getAppConfig()).flushToServer();
 		}
 		
 		// exit the app with this exit status
