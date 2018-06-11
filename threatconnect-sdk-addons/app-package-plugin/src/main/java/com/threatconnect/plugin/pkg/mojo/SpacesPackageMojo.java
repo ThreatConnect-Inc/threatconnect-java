@@ -1,5 +1,7 @@
 package com.threatconnect.plugin.pkg.mojo;
 
+import com.threatconnect.app.addons.util.config.install.Install;
+import com.threatconnect.plugin.pkg.Profile;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
@@ -11,7 +13,8 @@ import java.io.IOException;
 public class SpacesPackageMojo extends AbstractAppPackageMojo
 {
 	@Override
-	protected void writeAppContentsToDirectory(File targetDirectory) throws IOException
+	protected void writeAppContentsToDirectory(final File targetDirectory, final Profile<Install> profile)
+		throws IOException
 	{
 		// retrieve the base directory folder
 		File baseDirectory = new File(getBaseDirectory());

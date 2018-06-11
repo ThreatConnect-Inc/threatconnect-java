@@ -41,16 +41,25 @@
           "indicatorType": "Address",
           "intervalDays": 3,
           "confidenceAmount": 5,
-          "percentage": true
+          "percentage": true,
+          "deleteAtMinimum": true
         },
         {
           "indicatorType": "Host",
           "intervalDays": 3,
           "confidenceAmount": 5,
-          "percentage": true
+          "percentage": true,
+          "actionAtMinimum": "Delete"
         },
         {
           "indicatorType": "ASN",
+          "intervalDays": 3,
+          "confidenceAmount": 5,
+          "percentage": true,
+          "actionAtMinimum": "Inactive"
+        },
+        {
+          "indicatorType": "Url",
           "intervalDays": 3,
           "confidenceAmount": 5,
           "percentage": true

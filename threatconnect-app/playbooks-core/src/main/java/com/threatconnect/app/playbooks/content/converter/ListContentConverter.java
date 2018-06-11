@@ -1,7 +1,7 @@
 package com.threatconnect.app.playbooks.content.converter;
 
-import org.codehaus.jackson.map.type.TypeFactory;
-import org.codehaus.jackson.type.JavaType;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import java.util.List;
 

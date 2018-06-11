@@ -77,6 +77,6 @@ public class File extends Indicator
 	
 	private String emptyIfNull(final String s)
 	{
-		return (null != s) ? s : "";
+		return (null != s) ? s.toUpperCase() : "";
 	}
 }

@@ -13,10 +13,12 @@ import com.threatconnect.sdk.server.entity.Campaign;
 import com.threatconnect.sdk.server.entity.CustomIndicator;
 import com.threatconnect.sdk.server.entity.Email;
 import com.threatconnect.sdk.server.entity.EmailAddress;
+import com.threatconnect.sdk.server.entity.Event;
 import com.threatconnect.sdk.server.entity.Group;
 import com.threatconnect.sdk.server.entity.Host;
 import com.threatconnect.sdk.server.entity.Incident;
 import com.threatconnect.sdk.server.entity.Indicator;
+import com.threatconnect.sdk.server.entity.IntrusionSet;
 import com.threatconnect.sdk.server.entity.Signature;
 import com.threatconnect.sdk.server.entity.Threat;
 import com.threatconnect.sdk.server.entity.Url;
@@ -27,8 +29,10 @@ import com.threatconnect.sdk.server.response.entity.CampaignResponse;
 import com.threatconnect.sdk.server.response.entity.CustomIndicatorResponse;
 import com.threatconnect.sdk.server.response.entity.EmailAddressResponse;
 import com.threatconnect.sdk.server.response.entity.EmailResponse;
+import com.threatconnect.sdk.server.response.entity.EventResponse;
 import com.threatconnect.sdk.server.response.entity.HostResponse;
 import com.threatconnect.sdk.server.response.entity.IncidentResponse;
+import com.threatconnect.sdk.server.response.entity.IntrusionSetResponse;
 import com.threatconnect.sdk.server.response.entity.SignatureResponse;
 import com.threatconnect.sdk.server.response.entity.ThreatResponse;
 import com.threatconnect.sdk.server.response.entity.UrlResponse;
@@ -86,7 +90,39 @@ public class WriterAdapterFactory {
 			}
         };
     }
-
+	
+	public static AbstractGroupWriterAdapter<Event> createEventGroupWriter(Connection conn) {
+		return new AbstractGroupWriterAdapter<Event>(conn, EventResponse.class) {
+			@Override
+			public String getUrlType() {
+				return "events";
+			}
+			
+			@Override
+			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Integer uniqueId, String targetId,
+				String assciateType, String targetType) throws IOException, FailedResponseException {
+				// TODO Auto-generated method stub
+				throw new RuntimeException("not implemented yet");
+			}
+		};
+	}
+	
+	public static AbstractGroupWriterAdapter<IntrusionSet> createIntrusionSetGroupWriter(Connection conn) {
+		return new AbstractGroupWriterAdapter<IntrusionSet>(conn, IntrusionSetResponse.class) {
+			@Override
+			public String getUrlType() {
+				return "intrusionSets";
+			}
+			
+			@Override
+			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Integer uniqueId, String targetId,
+				String assciateType, String targetType) throws IOException, FailedResponseException {
+				// TODO Auto-generated method stub
+				throw new RuntimeException("not implemented yet");
+			}
+		};
+	}
+	
     public static AbstractGroupWriterAdapter<Incident> createIncidentGroupWriter(Connection conn) {
         return new AbstractGroupWriterAdapter<Incident>(conn, IncidentResponse.class) {
             @Override
@@ -292,8 +328,14 @@ public class WriterAdapterFactory {
             	return createDocumentWriter(conn);
             case Email:
                 return createEmailGroupWriter(conn);
+			case Event:
+				return createEventGroupWriter(conn);
             case Incident:
                 return createIncidentGroupWriter(conn);
+			case IntrusionSet:
+				return createIntrusionSetGroupWriter(conn);
+			case Report:
+				return createReportWriter(conn);
             case Signature:
                 return createSignatureGroupWriter(conn);
             case Threat:
@@ -308,6 +350,10 @@ public class WriterAdapterFactory {
     public static DocumentWriterAdapter createDocumentWriter(Connection conn) {
         return new DocumentWriterAdapter(conn);
     }
+	
+	public static ReportWriterAdapter createReportWriter(Connection conn) {
+		return new ReportWriterAdapter(conn);
+	}
 
     public static AbstractBatchWriterAdapter<Indicator> createBatchIndicatorWriter(Connection conn) {
         return new AbstractBatchWriterAdapter<Indicator>(conn)

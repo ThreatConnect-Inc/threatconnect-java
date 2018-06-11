@@ -1,8 +1,8 @@
-package com.threatconnect.app.addons.util.config.attribute;
+package com.threatconnect.app.addons.util.config.attribute.csv;
 
 import com.threatconnect.app.addons.util.config.InvalidCsvFileException;
 import com.threatconnect.app.addons.util.config.InvalidCsvLineException;
-import com.threatconnect.app.addons.util.config.validation.AttributeValidator;
+import com.threatconnect.app.addons.util.config.validation.csv.AttributeTypeValidator;
 import com.threatconnect.app.addons.util.config.validation.ValidationException;
 
 import java.io.File;
@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 /**
  * @author Greg Marut
  */
-public class AttributeReaderUtil
+public class AttributeTypeReaderUtil
 {
 	private static final int INDEX_NAME = 0;
 	private static final int INDEX_DESCRIPTION = 1;
@@ -30,7 +30,7 @@ public class AttributeReaderUtil
 	private static final String SPLIT_REGEX = ",(?=([^\\\"]*\\\"[^\\\"]*\\\")*[^\\\"]*$)";
 	private static final String FIELD_DELIMITER = "|";
 	
-	public static List<Attribute> read(final File csv) throws InvalidCsvFileException
+	public static List<AttributeType> read(final File csv) throws InvalidCsvFileException
 	{
 		try (FileInputStream fileInputStream = new FileInputStream(csv))
 		{
@@ -42,17 +42,17 @@ public class AttributeReaderUtil
 		}
 	}
 	
-	public static List<Attribute> read(final InputStream csv) throws InvalidCsvLineException, ValidationException
+	public static List<AttributeType> read(final InputStream csv) throws InvalidCsvLineException, ValidationException
 	{
 		//holds the list of attributes to return
-		List<Attribute> attributes = new ArrayList<Attribute>();
+		List<AttributeType> attributeTypes = new ArrayList<AttributeType>();
 		
 		//create a new scanner object to scan the input
 		Scanner in = new Scanner(csv);
 		int rowNum = 1;
 		
 		//holds the attribute validator
-		AttributeValidator attributeValidator = new AttributeValidator();
+		AttributeTypeValidator attributeTypeValidator = new AttributeTypeValidator();
 		
 		//while there are more lines to parse
 		while (in.hasNextLine())
@@ -64,35 +64,35 @@ public class AttributeReaderUtil
 			if (!line.isEmpty())
 			{
 				//parse the attribute
-				Attribute attribute = parseAttribute(line, rowNum);
+				AttributeType attributeType = parseAttribute(line, rowNum);
 				
 				//validate this attribute
-				attributeValidator.validate(attribute);
+				attributeTypeValidator.validate(attributeType);
 				
 				//add it to the list
-				attributes.add(attribute);
+				attributeTypes.add(attributeType);
 			}
 			
 			//increment the row number
 			rowNum++;
 		}
 		
-		return attributes;
+		return attributeTypes;
 	}
 	
-	private static Attribute parseAttribute(final String csvLine, final int rowNum) throws InvalidCsvLineException
+	private static AttributeType parseAttribute(final String csvLine, final int rowNum) throws InvalidCsvLineException
 	{
 		//split the line into parts
 		String[] parts = csvLine.split(SPLIT_REGEX);
 		
 		//create the new attribute object to return
-		Attribute attribute = new Attribute();
+		AttributeType attributeType = new AttributeType();
 		
 		//read the name from the csv line
 		final String name = get(parts, INDEX_NAME);
 		if (null != name)
 		{
-			attribute.setName(name);
+			attributeType.setName(name);
 		}
 		else
 		{
@@ -103,7 +103,7 @@ public class AttributeReaderUtil
 		final String description = get(parts, INDEX_DESCRIPTION);
 		if (null != description)
 		{
-			attribute.setDescription(description);
+			attributeType.setDescription(description);
 		}
 		else
 		{
@@ -114,7 +114,7 @@ public class AttributeReaderUtil
 		final String errorMessage = get(parts, INDEX_ERROR_MESSAGE);
 		if (null != errorMessage)
 		{
-			attribute.setErrorMessage(errorMessage);
+			attributeType.setErrorMessage(errorMessage);
 		}
 		else
 		{
@@ -127,7 +127,7 @@ public class AttributeReaderUtil
 		{
 			try
 			{
-				attribute.setMaxSize(Integer.parseInt(maxSize));
+				attributeType.setMaxSize(Integer.parseInt(maxSize));
 			}
 			catch (NumberFormatException e)
 			{
@@ -146,7 +146,7 @@ public class AttributeReaderUtil
 		{
 			//split based on the field delimiter and add all of the types
 			String[] typesParts = types.split(Pattern.quote(FIELD_DELIMITER));
-			attribute.getTypes().addAll(Arrays.asList(typesParts));
+			attributeType.getTypes().addAll(Arrays.asList(typesParts));
 		}
 		else
 		{
@@ -161,7 +161,7 @@ public class AttributeReaderUtil
 			if (allowMarkdown.equalsIgnoreCase("true") || allowMarkdown.equalsIgnoreCase("false"))
 			{
 				//parse the boolean value and assign it to the field
-				attribute.setAllowMarkdown(Boolean.parseBoolean(allowMarkdown));
+				attributeType.setAllowMarkdown(Boolean.parseBoolean(allowMarkdown));
 			}
 			else
 			{
@@ -171,7 +171,7 @@ public class AttributeReaderUtil
 			}
 		}
 		
-		return attribute;
+		return attributeType;
 	}
 	
 	private static String get(final String[] parts, final int index)

@@ -12,6 +12,7 @@ import com.threatconnect.sdk.model.CustomIndicator;
 import com.threatconnect.sdk.model.Document;
 import com.threatconnect.sdk.model.Email;
 import com.threatconnect.sdk.model.EmailAddress;
+import com.threatconnect.sdk.model.Event;
 import com.threatconnect.sdk.model.File;
 import com.threatconnect.sdk.model.FileOccurrence;
 import com.threatconnect.sdk.model.Group;
@@ -21,7 +22,9 @@ import com.threatconnect.sdk.model.Incident;
 import com.threatconnect.sdk.model.Indicator;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.ItemType;
+import com.threatconnect.sdk.model.Report;
 import com.threatconnect.sdk.model.SecurityLabel;
+import com.threatconnect.sdk.model.IntrusionSet;
 import com.threatconnect.sdk.model.Signature;
 import com.threatconnect.sdk.model.Threat;
 import com.threatconnect.sdk.model.Url;
@@ -227,26 +230,48 @@ public class BatchItemDeserializer
 		file.setSize(JsonUtil.getAsInt(indicatorElement, "intValue1"));
 		
 		//check to see if there is a file action
+		//:DEPRECATED - the right way is to read the fileOccurrence array
 		JsonElement fileDataElement = JsonUtil.get(indicatorElement, "fileAction", "fileData");
 		if (null != fileDataElement)
 		{
-			FileOccurrence fileOccurrence = new FileOccurrence();
-			fileOccurrence.setFileName(JsonUtil.getAsString(fileDataElement, "fileName"));
-			fileOccurrence.setPath(JsonUtil.getAsString(fileDataElement, "path"));
-			
-			try
+			file.getFileOccurrences().add(loadFileOccurrence(fileDataElement));
+		}
+		
+		//check to see if there is a file occurrence array
+		JsonArray fileOccurrenceArray = JsonUtil.getAsJsonArray(indicatorElement, "fileAction", "fileOccurrence");
+		if (null != fileOccurrenceArray)
+		{
+			//for each of the file occurrences
+			for (JsonElement fileOccurrenceElement : fileOccurrenceArray)
 			{
-				String date = JsonUtil.getAsString(fileDataElement, "date");
+				file.getFileOccurrences().add(loadFileOccurrence(fileOccurrenceElement));
+			}
+		}
+	}
+	
+	private FileOccurrence loadFileOccurrence(final JsonElement jsonElement)
+	{
+		FileOccurrence fileOccurrence = new FileOccurrence();
+		fileOccurrence.setFileName(JsonUtil.getAsString(jsonElement, "fileName"));
+		fileOccurrence.setPath(JsonUtil.getAsString(jsonElement, "path"));
+		
+		try
+		{
+			String date = JsonUtil.getAsString(jsonElement, "date");
+			
+			//make sure the date is not null
+			if (null != date)
+			{
 				Date d = new SimpleDateFormat(Constants.ISO_DATE_TIME_FORMAT).parse(date);
 				fileOccurrence.setDate(d);
 			}
-			catch (ParseException e)
-			{
-				logger.warn(e.getMessage(), e);
-			}
-			
-			file.getFileOccurrences().add(fileOccurrence);
 		}
+		catch (ParseException e)
+		{
+			logger.warn(e.getMessage(), e);
+		}
+		
+		return fileOccurrence;
 	}
 	
 	private void copyTagsAndAttributes(JsonElement element, final Item item)
@@ -294,12 +319,18 @@ public class BatchItemDeserializer
 				return GroupType.DOCUMENT;
 			case "Email":
 				return GroupType.EMAIL;
+			case "Event":
+				return GroupType.EVENT;
 			case "Incident":
 				return GroupType.INCIDENT;
+			case "Report":
+				return GroupType.REPORT;
 			case "Signature":
 				return GroupType.SIGNATURE;
 			case "Threat":
 				return GroupType.THREAT;
+			case "Intrusion Set":
+				return GroupType.INTRUSION_SET;
 			default:
 				throw new InvalidGroupException("Invalid group type: " + groupType);
 		}
@@ -317,12 +348,18 @@ public class BatchItemDeserializer
 				return new Document();
 			case EMAIL:
 				return new Email();
+			case EVENT:
+				return new Event();
 			case INCIDENT:
 				return new Incident();
+			case REPORT:
+				return new Report();
 			case SIGNATURE:
 				return new Signature();
 			case THREAT:
 				return new Threat();
+			case INTRUSION_SET:
+				return new IntrusionSet();
 			default:
 				throw new InvalidGroupException("Invalid group type: " + groupType.toString());
 		}

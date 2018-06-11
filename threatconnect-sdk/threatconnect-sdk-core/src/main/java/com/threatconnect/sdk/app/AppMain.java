@@ -7,6 +7,7 @@ import com.threatconnect.app.apps.ExitStatus;
 import com.threatconnect.sdk.app.exception.AppInstantiationException;
 import com.threatconnect.sdk.app.exception.MultipleAppClassFoundException;
 import com.threatconnect.sdk.app.exception.NoAppClassFoundException;
+import com.threatconnect.sdk.app.exception.PartialFailureException;
 import com.threatconnect.sdk.app.exception.TCMessageException;
 import com.threatconnect.sdk.log.ServerLogger;
 import org.reflections.Reflections;
@@ -22,6 +23,24 @@ public class AppMain implements AppExecutor
 {
 	private static final Logger logger = LoggerFactory.getLogger(AppMain.class);
 	
+	private final static AppConfig appConfig;
+	
+	static
+	{
+		AppConfig config = new SdkAppConfig();
+		
+		//check to see if secure params are enabled
+		if (config.isTcSecureParamsEnabled())
+		{
+			//replace the app config with a secure param app config instance
+			appConfig = new SecureParamAppConfig();
+		}
+		else
+		{
+			appConfig = config;
+		}
+	}
+	
 	protected void execute()
 	{
 		// holds the most recent exit status from the app
@@ -29,11 +48,8 @@ public class AppMain implements AppExecutor
 		
 		try
 		{
-			// create the app config object
-			AppConfig appConfig = SdkAppConfig.getInstance();
-			
 			// set whether or not api logging is enabled
-			ServerLogger.getInstance().setEnabled(appConfig.isTcLogToApi());
+			ServerLogger.getInstance(appConfig).setEnabled(appConfig.isTcLogToApi());
 			
 			//get the class to execute
 			Class<? extends App> appClass = getAppClassToExecute(appConfig);
@@ -57,7 +73,7 @@ public class AppMain implements AppExecutor
 			}
 			
 			// flush the logs to the server
-			ServerLogger.getInstance().flushToServer();
+			ServerLogger.getInstance(appConfig).flushToServer();
 		}
 		
 		// exit the app with this exit status
@@ -163,6 +179,13 @@ public class AppMain implements AppExecutor
 				// execute this app
 				return app.execute(appConfig);
 			}
+			catch (PartialFailureException e)
+			{
+				app.writeMessageTc(e.getMessage());
+				logger.error(e.getMessage(), e);
+				LoggerUtil.logErr(e, e.getMessage());
+				return ExitStatus.Partial_Failure;
+			}
 			catch (TCMessageException e)
 			{
 				app.writeMessageTc(e.getMessage());
@@ -187,6 +210,11 @@ public class AppMain implements AppExecutor
 		// find the set of all classes that extend the App class
 		Reflections reflections = new Reflections(basePackage);
 		return reflections.getSubTypesOf(App.class);
+	}
+	
+	public static AppConfig getAppConfig()
+	{
+		return appConfig;
 	}
 	
 	public static void main(String[] args)

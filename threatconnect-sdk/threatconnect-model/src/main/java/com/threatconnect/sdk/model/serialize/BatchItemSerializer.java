@@ -212,22 +212,27 @@ public class BatchItemSerializer
 		//check to see if there are file occurrences
 		if (!file.getFileOccurrences().isEmpty())
 		{
-			//:FIXME: json only supports 1 occurrence at the moment
-			FileOccurrence fileOccurrence = file.getFileOccurrences().get(0);
-			
 			JsonObject fileActionObject = new JsonObject();
-			JsonObject fileDataObject = new JsonObject();
+			JsonArray fileOccurrenceArray = new JsonArray();
 			
-			fileDataObject.addProperty("fileName", fileOccurrence.getFileName());
-			fileDataObject.addProperty("path", fileOccurrence.getPath());
-			
-			if (null != fileOccurrence.getDate())
+			//for each of the file occurrences
+			for (FileOccurrence fileOccurrence : file.getFileOccurrences())
 			{
-				fileDataObject.addProperty("date",
-					new SimpleDateFormat(Constants.ISO_DATE_TIME_FORMAT).format(fileOccurrence.getDate()));
+				JsonObject fileOccurrenceObject = new JsonObject();
+				
+				fileOccurrenceObject.addProperty("fileName", fileOccurrence.getFileName());
+				fileOccurrenceObject.addProperty("path", fileOccurrence.getPath());
+				
+				if (null != fileOccurrence.getDate())
+				{
+					fileOccurrenceObject.addProperty("date",
+						new SimpleDateFormat(Constants.ISO_DATE_TIME_FORMAT).format(fileOccurrence.getDate()));
+				}
+				
+				fileOccurrenceArray.add(fileOccurrenceObject);
 			}
 			
-			fileActionObject.add("fileData", fileDataObject);
+			fileActionObject.add("fileOccurrence", fileOccurrenceArray);
 			indicatorJsonObject.add("fileAction", fileActionObject);
 		}
 	}
@@ -291,12 +296,18 @@ public class BatchItemSerializer
 				return "Document";
 			case EMAIL:
 				return "Email";
+			case EVENT:
+				return "Event";
 			case INCIDENT:
 				return "Incident";
+			case REPORT:
+				return "Report";
 			case SIGNATURE:
 				return "Signature";
 			case THREAT:
 				return "Threat";
+			case INTRUSION_SET:
+				return "Intrusion Set";
 			default:
 				return null;
 		}

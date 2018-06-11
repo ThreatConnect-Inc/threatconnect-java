@@ -1,11 +1,10 @@
 package com.threatconnect.app.playbooks.content.converter;
 
-import org.apache.commons.codec.binary.Base64;
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.type.TypeFactory;
-import org.codehaus.jackson.map.util.ISO8601DateFormat;
-import org.codehaus.jackson.type.JavaType;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -20,7 +19,7 @@ public abstract class ContentConverter<T>
 	{
 		mapper = new ObjectMapper();
 		mapper.setDateFormat(DEFAULT_DATE_FORMATTER);
-		mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	}
 	
 	/**

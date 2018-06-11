@@ -1,6 +1,5 @@
 package com.threatconnect.app.addons.util.config.install;
 
-import com.threatconnect.app.addons.util.config.install.serialize.InvalidEnumException;
 import com.threatconnect.app.addons.util.config.validation.ValidationException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -22,7 +21,7 @@ public class FailInstallTest
 			InstallUtil.load(file);
 			Assert.fail();
 		}
-		catch (InvalidEnumException e)
+		catch (ValidationException e)
 		{
 			Assert.assertTrue(e.getMessage().contains("NOT A VALID TYPE is not a valid value"));
 		}
@@ -37,7 +36,7 @@ public class FailInstallTest
 			InstallUtil.load(file);
 			Assert.fail();
 		}
-		catch (InvalidEnumException e)
+		catch (ValidationException e)
 		{
 			Assert.assertTrue(e.getMessage().contains("N/A is not a valid value"));
 		}
@@ -56,6 +55,22 @@ public class FailInstallTest
 		{
 			Assert.assertTrue(e.getMessage()
 				.contains("Invalid programVersion. Must be in <MAJOR>.<MINOR>.<PATCH> format (e.g. 1.0.0)"));
+		}
+	}
+	
+	@Test
+	public void fail5() throws IOException
+	{
+		try
+		{
+			File file = new File("src/test/resources/fail5.install.json");
+			InstallUtil.load(file);
+			Assert.fail();
+		}
+		catch (ValidationException e)
+		{
+			Assert.assertTrue(e.getMessage()
+				.contains("actionAtMinimum contains an invalid value. Valid values are:"));
 		}
 	}
 }

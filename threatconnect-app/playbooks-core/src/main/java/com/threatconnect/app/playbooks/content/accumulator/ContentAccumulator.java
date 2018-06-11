@@ -6,6 +6,7 @@ import com.threatconnect.app.playbooks.db.DBReadException;
 import com.threatconnect.app.playbooks.db.DBService;
 import com.threatconnect.app.playbooks.db.DBWriteException;
 import com.threatconnect.app.playbooks.util.PlaybooksVariableUtil;
+import com.threatconnect.app.playbooks.variable.PlaybooksVariable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,12 +47,10 @@ public abstract class ContentAccumulator<T>
 	 */
 	public void writeContent(final String key, final T content) throws ContentException
 	{
-		verifyKey(key);
-		
 		try
 		{
 			//convert the value to a byte array and write the raw byte value to the database
-			dbService.saveValue(key.trim(), contentConverter.toByteArray(content));
+			dbService.saveValue(verifyKey(key).toString().trim(), contentConverter.toByteArray(content));
 		}
 		catch (DBWriteException | ConversionException e)
 		{
@@ -94,12 +93,10 @@ public abstract class ContentAccumulator<T>
 	 */
 	public T readContent(final String key) throws ContentException
 	{
-		verifyKey(key);
-		
 		try
 		{
 			//read the value from the database service as a raw byte array and check to see if the content is not null
-			byte[] content = dbService.getValue(key.trim());
+			byte[] content = dbService.getValue(verifyKey(key).toString().trim());
 			if (content == null)
 			{
 				return null;
@@ -113,7 +110,7 @@ public abstract class ContentAccumulator<T>
 		}
 	}
 	
-	protected String verifyKey(final String key)
+	protected PlaybooksVariable verifyKey(final String key)
 	{
 		//make sure the key is not null or empty
 		if (null == key || key.isEmpty())
@@ -122,6 +119,6 @@ public abstract class ContentAccumulator<T>
 		}
 		
 		//extract the type from this key
-		return PlaybooksVariableUtil.extractVariableType(key);
+		return PlaybooksVariableUtil.extractPlaybooksVariable(key);
 	}
 }

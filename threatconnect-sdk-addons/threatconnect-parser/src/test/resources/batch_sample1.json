@@ -1,0 +1,13 @@
+[
+  {
+    "attribute": [
+      {
+        "source": "Source - Additional Analysis and Context",
+        "type": "Additional Analysis and Context",
+        "value": "Value - Additional Analysis and Context"
+      }
+    ],
+    "type": "Host",
+    "summary": "host-0.com"
+  }
+]

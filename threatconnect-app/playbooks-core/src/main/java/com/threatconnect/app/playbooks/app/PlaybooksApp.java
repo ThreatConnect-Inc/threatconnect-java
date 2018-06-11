@@ -12,6 +12,8 @@ import com.threatconnect.app.playbooks.db.DBService;
 import com.threatconnect.app.playbooks.db.DBServiceFactory;
 import com.threatconnect.app.playbooks.util.PlaybooksVariableUtil;
 import com.threatconnect.sdk.model.Item;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -24,6 +26,8 @@ import java.util.regex.Pattern;
  */
 public abstract class PlaybooksApp extends App
 {
+	private static final Logger logger = LoggerFactory.getLogger(PlaybooksApp.class);
+	
 	private static final String OUTPUT_PARAMS_DELIM = ",";
 	
 	//holds the content service object for reading and writing content
@@ -236,7 +240,7 @@ public abstract class PlaybooksApp extends App
 			final String variableType = PlaybooksVariableUtil.extractVariableType(outputVariable);
 			
 			//check to see if this output param was found in one of the variables
-			if (variableName.equals(outputParam) && variableType.equalsIgnoreCase(type))
+			if (variableName.equalsIgnoreCase(outputParam) && variableType.equalsIgnoreCase(type))
 			{
 				return outputVariable;
 			}
@@ -283,6 +287,8 @@ public abstract class PlaybooksApp extends App
 		}
 		else
 		{
+			logger.trace("Skipping write of {} param \"{}\". OutputParam not expected.",
+				StandardPlaybookType.String.toString(), param);
 			return false;
 		}
 	}
@@ -325,6 +331,8 @@ public abstract class PlaybooksApp extends App
 		}
 		else
 		{
+			logger.trace("Skipping write of {} param \"{}\". OutputParam not expected.",
+				StandardPlaybookType.StringArray.toString(), param);
 			return false;
 		}
 	}
@@ -366,6 +374,8 @@ public abstract class PlaybooksApp extends App
 		}
 		else
 		{
+			logger.trace("Skipping write of {} param \"{}\". OutputParam not expected.",
+				StandardPlaybookType.Binary.toString(), param);
 			return false;
 		}
 	}
@@ -408,6 +418,8 @@ public abstract class PlaybooksApp extends App
 		}
 		else
 		{
+			logger.trace("Skipping write of {} param \"{}\". OutputParam not expected.",
+				StandardPlaybookType.BinaryArray.toString(), param);
 			return false;
 		}
 	}
@@ -449,6 +461,8 @@ public abstract class PlaybooksApp extends App
 		}
 		else
 		{
+			logger.trace("Skipping write of {} param \"{}\". OutputParam not expected.",
+				StandardPlaybookType.KeyValue.toString(), param);
 			return false;
 		}
 	}
@@ -492,6 +506,8 @@ public abstract class PlaybooksApp extends App
 		}
 		else
 		{
+			logger.trace("Skipping write of {} param \"{}\". OutputParam not expected.",
+				StandardPlaybookType.KeyValueArray.toString(), param);
 			return false;
 		}
 	}
@@ -533,6 +549,8 @@ public abstract class PlaybooksApp extends App
 		}
 		else
 		{
+			logger.trace("Skipping write of {} param \"{}\". OutputParam not expected.",
+				StandardPlaybookType.TCEntity.toString(), param);
 			return false;
 		}
 	}
@@ -575,6 +593,8 @@ public abstract class PlaybooksApp extends App
 		}
 		else
 		{
+			logger.trace("Skipping write of {} param \"{}\". OutputParam not expected.",
+				StandardPlaybookType.TCEntityArray.toString(), param);
 			return false;
 		}
 	}
@@ -617,6 +637,8 @@ public abstract class PlaybooksApp extends App
 		}
 		else
 		{
+			logger.trace("Skipping write of {} param \"{}\". OutputParam not expected.",
+				StandardPlaybookType.TCEnhancedEntity.toString(), param);
 			return false;
 		}
 	}
@@ -661,6 +683,8 @@ public abstract class PlaybooksApp extends App
 		}
 		else
 		{
+			logger.trace("Skipping write of {} param \"{}\". OutputParam not expected.",
+				StandardPlaybookType.TCEnhancedEntityArray.toString(), param);
 			return false;
 		}
 	}

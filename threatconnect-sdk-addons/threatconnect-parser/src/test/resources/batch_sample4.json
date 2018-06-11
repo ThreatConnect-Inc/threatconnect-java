@@ -1,0 +1,26 @@
+{
+  "group": [
+    {
+      "name": "FileAdversary",
+      "type": "Adversary",
+      "tag": [
+        {
+          "name": "SafeToDelete"
+        }
+      ],
+      "dateAdded": "2017-11-01T13:47:46-05:00",
+      "xid": "e336e2dd-5dfb-48cd-a33a-bleeeeeh:81549",
+      "publishRootItem": true
+    },
+    {
+      "name": "intrusion_set-002",
+      "tag": [
+        {
+          "name": "SafeToDelete"
+        }
+      ],
+      "type": "Intrusion Set",
+      "xid": "is-002"
+    }
+  ]
+}

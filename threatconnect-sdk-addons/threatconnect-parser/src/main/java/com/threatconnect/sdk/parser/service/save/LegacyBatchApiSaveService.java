@@ -8,7 +8,6 @@ import com.threatconnect.sdk.model.Document;
 import com.threatconnect.sdk.model.Email;
 import com.threatconnect.sdk.model.File;
 import com.threatconnect.sdk.model.Group;
-import com.threatconnect.sdk.model.GroupType;
 import com.threatconnect.sdk.model.Incident;
 import com.threatconnect.sdk.model.Indicator;
 import com.threatconnect.sdk.model.Item;
@@ -442,31 +441,5 @@ public class LegacyBatchApiSaveService implements SaveService
 	private <T> Set<Integer> getOrCreateGroupIDSet(final T indicator, final Map<T, Set<Integer>> map)
 	{
 		return map.computeIfAbsent(indicator, k -> new HashSet<Integer>());
-	}
-	
-	public static class GroupIdentifier
-	{
-		private Integer id;
-		private GroupType type;
-		
-		public Integer getId()
-		{
-			return id;
-		}
-		
-		public void setId(final Integer id)
-		{
-			this.id = id;
-		}
-		
-		public GroupType getType()
-		{
-			return type;
-		}
-		
-		public void setType(final GroupType type)
-		{
-			this.type = type;
-		}
 	}
 }

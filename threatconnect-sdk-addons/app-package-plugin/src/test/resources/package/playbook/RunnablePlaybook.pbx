@@ -1,0 +1,63 @@
+{
+  "definitionVersion" : "1.0.0",
+  "name" : "RuntimePlaybookExample",
+  "type" : "Pipe",
+  "panX" : 20.0,
+  "panY" : 20.0,
+  "logLevel" : "WARN",
+  "description" : "",
+  "jobList" : [ {
+    "id" : 285,
+    "appCatalogItem" : {
+      "programName" : "Logger",
+      "displayName" : "Logger",
+      "programVersion" : "1.0.0",
+      "pipeRunLevel" : false
+    },
+    "name" : "Logger 1",
+    "scheduleType" : "Daily",
+    "notifyOnFailure" : true,
+    "notifyOnPartialFailure" : false,
+    "notifyOnComplete" : false,
+    "notifyIncludeLogFiles" : false,
+    "enableNotifications" : false,
+    "jobParameterList" : [ {
+      "appCatalogItemParameter" : {
+        "paramName" : "logging"
+      },
+      "value" : "INFO"
+    }, {
+      "appCatalogItemParameter" : {
+        "paramName" : "log_message"
+      },
+      "value" : "Username: #Trigger:121:username!String \nPassword: #Trigger:121:password!String"
+    } ],
+    "locationLeft" : 690.0,
+    "locationTop" : 240.0,
+    "playbookRetryEnabled" : false
+  } ],
+  "playbookConnectionList" : [ {
+    "type" : "Pass",
+    "isCircularOnTarget" : false,
+    "targetJobId" : 285,
+    "sourceTriggerId" : 121
+  } ],
+  "playbookTriggerList" : [ {
+    "id" : 121,
+    "name" : "Component Trigger",
+    "type" : "PipeConfig",
+    "eventType" : "Create",
+    "locationLeft" : 420.0,
+    "locationTop" : 170.0,
+    "httpBasicAuthEnable" : false,
+    "anyOrg" : true,
+    "orFilters" : false,
+    "fireOnDuplicate" : false,
+    "renderBodyAsTip" : false,
+    "outputVariables" : "[{\"name\":\"username\",\"type\":\"String\"},{\"name\":\"password\",\"type\":\"String\"}]",
+    "pipeInputParams" : "[{\"label\":\"Username\",\"dataType\":\"String\",\"playbookDataType\":\"String\",\"required\":true,\"name\":\"username\",\"encrypted\":false,\"hidden\":false,\"hasDollarVariables\":false,\"playbookVariable\":false,\"validValuesList\":[\"${TEXT}\"]},{\"label\":\"Password\",\"dataType\":\"String\",\"playbookDataType\":\"String\",\"required\":true,\"name\":\"password\",\"encrypted\":true,\"hidden\":false,\"hasDollarVariables\":false,\"playbookVariable\":false,\"validValuesList\":[\"${KEYCHAIN}\"]},{\"label\":\"KeyValueInput\",\"dataType\":\"String\",\"playbookDataType\":\"String,KeyValueArray\",\"required\":false,\"name\":\"kv\",\"encrypted\":false,\"hidden\":false,\"hasDollarVariables\":false,\"playbookVariable\":false,\"validValuesList\":[\"${TEXT}\"]}]",
+    "pipeOutputParams" : "[]"
+  } ],
+  "exportablePipes" : [ ],
+  "dateExported" : "2/16/18 3:01 PM"
+}

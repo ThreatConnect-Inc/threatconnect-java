@@ -22,8 +22,7 @@ public class InstallTest
 		Assert.assertEquals("1.0.0", install.getProgramVersion());
 		Assert.assertEquals("com.threatconnect.apps.example.ExampleMain", install.getProgramMain());
 		
-		Assert.assertEquals(1, install.getRuntimeLevel().size());
-		Assert.assertEquals(RunLevelType.System, install.getRuntimeLevel().get(0));
+		Assert.assertEquals(RunLevelType.System, install.getRuntimeLevel());
 		
 		Assert.assertEquals(2, install.getParams().size());
 		Assert.assertEquals("default", install.getParams().get(0).getDefaultValue());
@@ -31,6 +30,16 @@ public class InstallTest
 		Assert.assertEquals(1, install.getFeeds().size());
 		Assert.assertTrue(install.getFeeds().get(0).isEnableBulkJson());
 		Assert.assertTrue(install.getFeeds().get(0).getDeprecation().get(0).isPercentage());
+		
+		Assert.assertEquals(ActionAtMinimumType.Delete.toString(),
+			install.getFeeds().get(0).getDeprecation().get(0).getActionAtMinimum());
+		Assert.assertEquals(ActionAtMinimumType.Delete.toString(),
+			install.getFeeds().get(0).getDeprecation().get(1).getActionAtMinimum());
+		Assert.assertEquals(ActionAtMinimumType.Inactive.toString(),
+			install.getFeeds().get(0).getDeprecation().get(2).getActionAtMinimum());
+		Assert.assertEquals(ActionAtMinimumType.None.toString(),
+			install.getFeeds().get(0).getDeprecation().get(3).getActionAtMinimum());
+		
 	}
 	
 	@Test
@@ -44,8 +53,7 @@ public class InstallTest
 		Assert.assertEquals("com.threatconnect.apps.example.ExampleMain", install.getProgramMain());
 		Assert.assertEquals("|", install.getListDelimiter());
 		
-		Assert.assertEquals(1, install.getRuntimeLevel().size());
-		Assert.assertEquals(RunLevelType.System, install.getRuntimeLevel().get(0));
+		Assert.assertEquals(RunLevelType.System, install.getRuntimeLevel());
 		
 		Assert.assertEquals(2, install.getParams().size());
 		Assert.assertEquals("default", install.getParams().get(0).getDefaultValue());
@@ -65,8 +73,7 @@ public class InstallTest
 		Assert.assertEquals("1.0.0", install.getProgramVersion());
 		Assert.assertEquals("com.threatconnect.apps.playbooks.SamplePlaybookMain", install.getProgramMain());
 		
-		Assert.assertEquals(1, install.getRuntimeLevel().size());
-		Assert.assertEquals(RunLevelType.Playbook, install.getRuntimeLevel().get(0));
+		Assert.assertEquals(RunLevelType.Playbook, install.getRuntimeLevel());
 		
 		Assert.assertEquals(2, install.getParams().size());
 		
@@ -93,8 +100,7 @@ public class InstallTest
 		Assert.assertEquals("1.0.0", install.getProgramVersion());
 		Assert.assertEquals("com.threatconnect.apps.playbooks.SamplePlaybookMain", install.getProgramMain());
 		
-		Assert.assertEquals(1, install.getRuntimeLevel().size());
-		Assert.assertEquals(RunLevelType.Playbook, install.getRuntimeLevel().get(0));
+		Assert.assertEquals(RunLevelType.Playbook, install.getRuntimeLevel());
 		
 		Assert.assertEquals(2, install.getParams().size());
 		Assert.assertEquals(ParamDataType.String, install.getParams().get(0).getType());

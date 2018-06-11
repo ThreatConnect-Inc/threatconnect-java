@@ -6,7 +6,7 @@
 		</Console>
 	</Appenders>
 	<Loggers>
-		<Logger name="com.threatconnect.sdk.parser" level="debug" />
+		<Logger name="com.threatconnect.sdk" level="trace" />
 		<Root level="info">
 			<AppenderRef ref="STDOUT" />
 		</Root>

@@ -1,5 +1,6 @@
 package com.threatconnect.sdk.log;
 
+import com.threatconnect.app.apps.AppConfig;
 import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
@@ -7,12 +8,16 @@ import org.apache.logging.log4j.core.appender.AbstractAppender;
 public class ServerLoggerAppender extends AbstractAppender
 {
 	// holds the object that will transform a logevent to a logentry
-	private LogEntryTransformer logEntryTransformer;
+	private final LogEntryTransformer logEntryTransformer;
 	
-	protected ServerLoggerAppender(String name, Filter filter, LogEntryTransformer logEntryTransformer)
+	private final AppConfig appConfig;
+	
+	protected ServerLoggerAppender(final String name, final Filter filter,
+		final LogEntryTransformer logEntryTransformer, final AppConfig appConfig)
 	{
 		super(name, filter, null);
 		
+		this.appConfig = appConfig;
 		this.logEntryTransformer = logEntryTransformer;
 	}
 	
@@ -23,10 +28,10 @@ public class ServerLoggerAppender extends AbstractAppender
 		LogEntry logEntry = logEntryTransformer.transform(event);
 		
 		// add this to the server logger
-		ServerLogger.getInstance().addLogEntry(logEntry);
+		ServerLogger.getInstance(appConfig).addLogEntry(logEntry);
 	}
 	
-	public static ServerLoggerAppender createAppender(String name)
+	public static ServerLoggerAppender createAppender(final String name, final AppConfig appConfig)
 	{
 		if (name == null)
 		{
@@ -34,6 +39,7 @@ public class ServerLoggerAppender extends AbstractAppender
 			return null;
 		}
 		
-		return new ServerLoggerAppender(name, ThreadLogFilter.getInstance(), new DefaultLogEntryTransformer());
+		return new ServerLoggerAppender(name, ThreadLogFilter.getInstance(), new DefaultLogEntryTransformer(),
+			appConfig);
 	}
 }

@@ -2,7 +2,6 @@ package com.threatconnect.sdk.log;
 
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.sdk.app.LoggerUtil;
-import com.threatconnect.sdk.app.SdkAppConfig;
 import com.threatconnect.sdk.client.writer.LogWriterAdapter;
 import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.conn.Connection;
@@ -39,7 +38,9 @@ public class ServerLogger
 	// holds the queue of server log entries that are pending submit
 	private final AbstractQueue<LogEntry> logEntryQueue;
 	private final AbstractQueue<LogWriterTask> logWriterTasks;
-
+	
+	private final AppConfig appConfig;
+	
 	// determines whether or not server logging is enabled
 	private volatile boolean enabled;
 
@@ -49,9 +50,10 @@ public class ServerLogger
 	// holds the batch threshold for how many log entries are needed before they are flushed to the
 	// server
 	private int batchLogEntryThreshold;
-
-	private ServerLogger()
+	
+	private ServerLogger(final AppConfig appConfig)
 	{
+		this.appConfig = appConfig;
 		logEntryQueue = new ConcurrentLinkedQueue<LogEntry>();
 		logWriterTasks = new ConcurrentLinkedQueue<LogWriterTask>();
 		taskExecutorService = Executors.newSingleThreadExecutor();
@@ -193,7 +195,6 @@ public class ServerLogger
 	private Configuration createConfiguration()
 	{
 		// create the configuration for the threatconnect server
-		AppConfig appConfig = SdkAppConfig.getInstance();
 		Configuration configuration = new Configuration(appConfig.getTcApiPath(), appConfig.getTcApiAccessID(),
 			appConfig.getTcApiUserSecretKey(), appConfig.getApiDefaultOrg(), appConfig.getTcToken(),
 			appConfig.getTcTokenExpires());
@@ -211,7 +212,7 @@ public class ServerLogger
 		this.enabled = enabled;
 	}
 
-	public static ServerLogger getInstance()
+	public static ServerLogger getInstance(final AppConfig appConfig)
 	{
 		// check to see if the instance is null
 		if (null == instance)
@@ -223,7 +224,7 @@ public class ServerLogger
 				if (null == instance)
 				{
 					// create the new instance
-					instance = new ServerLogger();
+					instance = new ServerLogger(appConfig);
 				}
 			}
 		}

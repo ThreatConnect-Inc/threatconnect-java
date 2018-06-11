@@ -1,7 +1,9 @@
 package com.threatconnect.app.addons.util.config.install;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Install
 {
@@ -17,28 +19,30 @@ public class Install
 	private String listDelimiter;
 	private String programIcon;
 	private String javaClasspath;
+	private RunLevelType runtimeLevel;
 	private boolean allowOnDemand;
 	private boolean allowRunAsUser;
 	private boolean apiUserTokenParam;
 	private Integer tokenExpireOffsetMinutes;
+	private Integer timeoutMinutes;
 	private String note;
 	
 	private Playbook playbook;
 	private final List<Param> params;
 	private final List<Feed> feeds;
-	private final List<RunLevelType> runtimeLevel;
 	private final List<String> repeatingMinutes;
 	private final List<String> publishOutFiles;
 	private final List<RuntimeContextType> runtimeContext;
+	private final Set<String> features;
 	
 	public Install()
 	{
 		this.params = new ArrayList<Param>();
 		this.feeds = new ArrayList<Feed>();
-		this.runtimeLevel = new ArrayList<RunLevelType>();
 		this.repeatingMinutes = new ArrayList<String>();
 		this.publishOutFiles = new ArrayList<String>();
 		this.runtimeContext = new ArrayList<RuntimeContextType>();
+		this.features = new HashSet<String>();
 		this.listDelimiter = DEFAULT_LIST_DELIMITER;
 	}
 	
@@ -182,6 +186,16 @@ public class Install
 		this.tokenExpireOffsetMinutes = tokenExpireOffsetMinutes;
 	}
 	
+	public Integer getTimeoutMinutes()
+	{
+		return timeoutMinutes;
+	}
+	
+	public void setTimeoutMinutes(final Integer timeoutMinutes)
+	{
+		this.timeoutMinutes = timeoutMinutes;
+	}
+	
 	public String getNote()
 	{
 		return note;
@@ -212,7 +226,7 @@ public class Install
 		return feeds;
 	}
 	
-	public List<RunLevelType> getRuntimeLevel()
+	public RunLevelType getRuntimeLevel()
 	{
 		return runtimeLevel;
 	}
@@ -230,6 +244,11 @@ public class Install
 	public List<RuntimeContextType> getRuntimeContext()
 	{
 		return runtimeContext;
+	}
+	
+	public Set<String> getFeatures()
+	{
+		return features;
 	}
 	
 	public List<Param> getPlaybookParams()
@@ -252,6 +271,6 @@ public class Install
 	
 	public boolean isPlaybookApp()
 	{
-		return getRuntimeLevel().contains(RunLevelType.Playbook);
+		return getRuntimeLevel().equals(RunLevelType.Playbook);
 	}
 }

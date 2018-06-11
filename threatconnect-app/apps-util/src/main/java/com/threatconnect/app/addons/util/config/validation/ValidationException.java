@@ -9,4 +9,9 @@ public class ValidationException extends Exception
 	{
 		super(message);
 	}
+	
+	public ValidationException(final Throwable cause)
+	{
+		super(cause);
+	}
 }

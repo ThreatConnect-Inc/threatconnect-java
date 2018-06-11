@@ -1,4 +1,4 @@
-package com.threatconnect.app.addons.util.config.attribute;
+package com.threatconnect.app.addons.util.config.attribute.csv;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * @author Greg Marut
  */
-public class Attribute
+public class AttributeType
 {
 	private final List<String> types;
 	
@@ -16,7 +16,7 @@ public class Attribute
 	private int maxSize;
 	private boolean allowMarkdown;
 	
-	public Attribute()
+	public AttributeType()
 	{
 		this.types = new ArrayList<String>();
 	}

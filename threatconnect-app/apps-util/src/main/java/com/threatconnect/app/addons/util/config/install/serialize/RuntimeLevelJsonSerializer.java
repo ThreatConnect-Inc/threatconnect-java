@@ -4,12 +4,11 @@ import com.google.gson.reflect.TypeToken;
 import com.threatconnect.app.addons.util.config.install.RunLevelType;
 
 import java.lang.reflect.Type;
-import java.util.List;
 
 /**
  * @author Greg Marut
  */
-public class RuntimeLevelJsonSerializer extends EnumListJsonSerializer<RunLevelType>
+public class RuntimeLevelJsonSerializer extends EnumJsonSerializer<RunLevelType>
 {
 	public RuntimeLevelJsonSerializer()
 	{
@@ -19,6 +18,6 @@ public class RuntimeLevelJsonSerializer extends EnumListJsonSerializer<RunLevelT
 	@Override
 	public Type getType()
 	{
-		return new TypeToken<List<RunLevelType>>(){}.getType();
+		return new TypeToken<RunLevelType>(){}.getType();
 	}
 }

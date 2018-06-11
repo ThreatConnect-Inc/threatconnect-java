@@ -23,7 +23,8 @@ public class PlaybooksVariableUtil
 	/**
 	 * Holds the regex pattern that identifies a variable anywhere in a string
 	 */
-	public static final String VARIABLE_REGEX = "#([A-Za-z]+):([\\d]+):([A-Za-z0-9_.-]+)!([A-Za-z0-9_-]+)";
+	public static final String VARIABLE_REGEX =
+		"#([A-Za-z]+):([\\d]+):([A-Za-z0-9_.-]+)!(StringArray|BinaryArray|KeyValueArray|TCEntityArray|TCEnhancedEntityArray|String|Binary|KeyValue|TCEntity|TCEnhancedEntity|(?:(?!String)(?!Binary)(?!KeyValue)(?!TCEntity)(?!TCEnhancedEntity)[A-Za-z0-9_-]+))";
 	public static final Pattern VARIABLE_PATTERN = Pattern.compile(VARIABLE_REGEX);
 	
 	/**
@@ -37,7 +38,7 @@ public class PlaybooksVariableUtil
 	public static final int VARIABLE_GROUP_NAME = 3;
 	public static final int VARIABLE_GROUP_TYPE = 4;
 	
-	public static Matcher getVariablePatternMatcher(final String input)
+	private static Matcher getVariablePatternMatcher(final String input)
 	{
 		//make sure the input is not null
 		if (null == input)
@@ -48,7 +49,7 @@ public class PlaybooksVariableUtil
 		return VARIABLE_PATTERN.matcher(input.trim());
 	}
 	
-	public static Matcher getVariablePatternExactMatcher(final String input)
+	private static Matcher getVariablePatternExactMatcher(final String input)
 	{
 		//make sure the input is not null
 		if (null == input)
@@ -186,11 +187,11 @@ public class PlaybooksVariableUtil
 		
 		try
 		{
-			playbookVariableType = matcher.group(VARIABLE_GROUP_TYPE);
+			playbookVariableType = trimTrailingExclamation(matcher.group(VARIABLE_GROUP_TYPE));
 		}
 		catch (IllegalArgumentException e)
 		{
-			throw new InvalidVariableType(matcher.group(VARIABLE_GROUP_NAMESPACE));
+			throw new InvalidVariableType(trimTrailingExclamation(matcher.group(VARIABLE_GROUP_NAMESPACE)));
 		}
 		
 		int id = Integer.parseInt(matcher.group(VARIABLE_GROUP_ID));
@@ -210,7 +211,8 @@ public class PlaybooksVariableUtil
 		
 		Matcher matcher = getVariablePatternExactMatcher(variable);
 		matcher.find();
-		return matcher.group(VARIABLE_GROUP_TYPE);
+		//:TODO: this is a temporary solution to remove the extra ! that is caught by the regex
+		return trimTrailingExclamation(matcher.group(VARIABLE_GROUP_TYPE));
 	}
 	
 	public static boolean isStringType(final String variable)
@@ -251,5 +253,25 @@ public class PlaybooksVariableUtil
 	public static boolean isTCEntityArrayType(final String variable)
 	{
 		return StandardPlaybookType.TCEntityArray.toString().equalsIgnoreCase(extractVariableType(variable));
+	}
+	
+	/**
+	 * Removes the trailing exclamation point from the text. Used for variable types that may or may not have the
+	 * optional ! at the end
+	 *
+	 * @param text
+	 * @return
+	 */
+	private static String trimTrailingExclamation(final String text)
+	{
+		//check to see if there is a trailing exclamation point
+		if (null != text && text.endsWith("!"))
+		{
+			return text.substring(0, text.length() - 1);
+		}
+		else
+		{
+			return text;
+		}
 	}
 }

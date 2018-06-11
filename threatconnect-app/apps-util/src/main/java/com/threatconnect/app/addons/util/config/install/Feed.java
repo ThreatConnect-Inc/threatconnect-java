@@ -9,6 +9,7 @@ import java.util.List;
 public class Feed
 {
 	private String sourceName;
+	private String feedDisplayName;
 	private String sourceCategory;
 	private String sourceDescription;
 	private String attributesFile;
@@ -34,6 +35,16 @@ public class Feed
 	public void setSourceName(final String sourceName)
 	{
 		this.sourceName = sourceName;
+	}
+	
+	public String getFeedDisplayName()
+	{
+		return feedDisplayName;
+	}
+	
+	public void setFeedDisplayName(final String feedDisplayName)
+	{
+		this.feedDisplayName = feedDisplayName;
 	}
 	
 	public String getSourceCategory()

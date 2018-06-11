@@ -2,6 +2,8 @@ package com.threatconnect.app.addons.util.config.install;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
+import com.threatconnect.app.addons.util.config.install.serialize.InvalidEnumException;
 import com.threatconnect.app.addons.util.config.install.serialize.ParamDataTypeJsonSerializer;
 import com.threatconnect.app.addons.util.config.install.serialize.ProgramLanguageTypeJsonSerializer;
 import com.threatconnect.app.addons.util.config.install.serialize.RuntimeContextJsonSerializer;
@@ -30,14 +32,21 @@ public class InstallUtil
 	
 	public static Install load(final String json, final boolean validate) throws ValidationException
 	{
-		Install install = createGson().fromJson(json, Install.class);
-		
-		if (validate)
+		try
 		{
-			new InstallValidator().validate(install);
+			Install install = createGson().fromJson(json, Install.class);
+			
+			if (validate)
+			{
+				new InstallValidator().validate(install);
+			}
+			
+			return install;
 		}
-		
-		return install;
+		catch (JsonParseException | InvalidEnumException e)
+		{
+			throw new ValidationException(e);
+		}
 	}
 	
 	public static Install load(final byte[] bytes) throws IOException, ValidationException
@@ -73,14 +82,21 @@ public class InstallUtil
 	
 	public static Install load(final InputStream inputStream, final boolean validate) throws ValidationException
 	{
-		Install install = createGson().fromJson(new InputStreamReader(inputStream), Install.class);
-		
-		if (validate)
+		try
 		{
-			new InstallValidator().validate(install);
+			Install install = createGson().fromJson(new InputStreamReader(inputStream), Install.class);
+			
+			if (validate)
+			{
+				new InstallValidator().validate(install);
+			}
+			
+			return install;
 		}
-		
-		return install;
+		catch (JsonParseException | InvalidEnumException e)
+		{
+			throw new ValidationException(e);
+		}
 	}
 	
 	private static Gson createGson()
