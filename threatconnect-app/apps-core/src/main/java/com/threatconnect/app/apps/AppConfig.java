@@ -5,7 +5,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
+import org.apache.commons.io.IOUtils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -512,6 +518,31 @@ public abstract class AppConfig
 	{
 		Double value = getDouble(key);
 		return value == null ? defaultValue : value;
+	}
+	
+	/**
+	 * Returns a file from the specified key
+	 *
+	 * @param key Name of system property
+	 * @return the contents of the file
+	 */
+	public byte[] getFile(final String key) throws IOException
+	{
+		//get the value for this key (which is a filename)
+		String fileName = getString(key);
+		if (null != fileName)
+		{
+			//open the file for reading from the in directory
+			File file = new File(getTcInPath() + File.separator + fileName);
+			try (InputStream inputStream = new FileInputStream(file))
+			{
+				return IOUtils.toByteArray(inputStream);
+			}
+		}
+		else
+		{
+			throw new FileNotFoundException();
+		}
 	}
 	
 	/**
