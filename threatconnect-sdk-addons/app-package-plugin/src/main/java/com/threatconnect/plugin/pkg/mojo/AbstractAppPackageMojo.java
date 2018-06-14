@@ -1,5 +1,10 @@
 package com.threatconnect.plugin.pkg.mojo;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonSerializer;
 import com.threatconnect.app.addons.util.config.InvalidFileException;
 import com.threatconnect.app.addons.util.config.attribute.csv.AttributeTypeReaderUtil;
 import com.threatconnect.app.addons.util.config.attribute.json.AttributeUtil;
@@ -20,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -32,9 +38,36 @@ public abstract class AbstractAppPackageMojo extends AbstractPackageMojo<Install
 	public static final String TC_APP_FILE_EXTENSION = "zip";
 	public static final String TC_BUNDLED_FILE_EXTENSION = "bundle.zip";
 	
+	protected final Gson gson;
+	
 	public AbstractAppPackageMojo()
 	{
 		super(PATTERN_INSTALL_JSON, "install.json", TC_APP_FILE_EXTENSION);
+		
+		//create a new gson object to write the install file
+		this.gson = new GsonBuilder()
+			//enable pretty printing of the json
+			.setPrettyPrinting()
+			//omit null or empty collections
+			.registerTypeHierarchyAdapter(Collection.class, (JsonSerializer<Collection<?>>) (src, typeOfSrc, context) -> {
+				if (null != src && !src.isEmpty())
+				{
+					//write the array
+					JsonArray array = new JsonArray();
+					for (Object child : src)
+					{
+						JsonElement element = context.serialize(child);
+						array.add(element);
+					}
+					
+					return array;
+				}
+				else
+				{
+					//omit
+					return null;
+				}
+			}).create();
 	}
 	
 	@Override

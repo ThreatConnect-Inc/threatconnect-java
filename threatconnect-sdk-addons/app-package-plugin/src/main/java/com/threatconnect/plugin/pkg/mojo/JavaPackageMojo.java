@@ -2,6 +2,9 @@ package com.threatconnect.plugin.pkg.mojo;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonSerializer;
 import com.threatconnect.app.addons.util.config.Feature;
 import com.threatconnect.app.addons.util.config.install.Install;
 import com.threatconnect.app.addons.util.config.install.InstallUtil;
@@ -19,13 +22,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Collection;
 
 @Mojo(name = "java-package", defaultPhase = LifecyclePhase.PACKAGE, threadSafe = true, requiresDependencyResolution = ResolutionScope.RUNTIME)
 public class JavaPackageMojo extends AbstractAppPackageMojo
 {
 	public static final String APP_MAIN_CLASSNAME = "com.threatconnect.sdk.app.AppMain";
-	
-	private final Gson gson;
 	
 	/**
 	 * Classifier to add to the generated App. If given, the artifact will be an attachment instead. The classifier will
@@ -36,8 +38,7 @@ public class JavaPackageMojo extends AbstractAppPackageMojo
 	
 	public JavaPackageMojo()
 	{
-		//create a new gson object to write the install file
-		this.gson = new GsonBuilder().setPrettyPrinting().create();
+	
 	}
 	
 	@Override

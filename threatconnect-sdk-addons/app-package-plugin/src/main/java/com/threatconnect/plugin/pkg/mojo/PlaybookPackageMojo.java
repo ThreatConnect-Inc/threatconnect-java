@@ -1,7 +1,5 @@
 package com.threatconnect.plugin.pkg.mojo;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -46,13 +44,10 @@ public class PlaybookPackageMojo extends AbstractAppPackageMojo
 	private static final String ELEMENT_TRIGGER_PARAMS = "pipeInputParams";
 	private static final String VALID_TRIGGER_TYPE = "PipeConfig";
 	
-	private final Gson gson;
 	private final JsonParser jsonParser;
 	
 	public PlaybookPackageMojo()
 	{
-		//create a new gson object to write the install file
-		this.gson = new GsonBuilder().setPrettyPrinting().create();
 		this.jsonParser = new JsonParser();
 	}
 	
