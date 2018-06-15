@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.response.entity.ApiEntityListResponse;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -139,7 +138,6 @@ public class IterableResponse<V> implements Iterator<V>, Iterable<V>
         {
             String content = executor.execute(AbstractRequestExecutor.HttpMethod.GET, url).getEntityAsString();
             logger.log(Level.FINEST, "returning content=" + content);
-            System.out.println("returning content=" + content);
             ApiEntityListResponse result = (ApiEntityListResponse) mapper.readValue(content, this.responseType);
             if (!result.isSuccess()) {
                 throw new FailedResponseException(result.getMessage());
