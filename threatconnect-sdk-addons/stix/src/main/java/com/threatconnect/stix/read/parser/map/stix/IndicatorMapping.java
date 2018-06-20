@@ -1,11 +1,11 @@
 package com.threatconnect.stix.read.parser.map.stix;
 
-import com.threatconnect.stix.read.parser.Constants;
-import com.threatconnect.stix.read.parser.util.DebugUtil;
 import com.threatconnect.sdk.model.Indicator;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.ItemType;
 import com.threatconnect.sdk.parser.util.AttributeHelper;
+import com.threatconnect.stix.read.parser.Constants;
+import com.threatconnect.stix.read.parser.util.DebugUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public class IndicatorMapping
 	private static final Logger logger = LoggerFactory.getLogger(IndicatorMapping.class);
 	
 	private static final String ATTR_TITLE = "Title";
-	private static final String ATTR_TYPE = "Type";
+	private static final String ATTR_STIX_INDICATOR_TYPE = "STIX Indicator Type";
 	private static final String ATTR_PRODUCER = "Producer";
 	private static final String ATTR_ALTERNATIVE_ID = "Alternative ID";
 	private static final String ATTR_VALID_TIME_POSITION = "Valid Time Position";
@@ -46,6 +46,18 @@ public class IndicatorMapping
 			Constants.XPATH_UTIL.getString("Title", indicatorNode));
 		AttributeHelper.addAttributeIfExists(item, ATTR_PRODUCER,
 			Constants.XPATH_UTIL.getString("Producer/Identity/Name", indicatorNode));
+		
+		//retrieve the types
+		NodeList nodeList = Constants.XPATH_UTIL.getNodes("Type", indicatorNode);
+		if (null != nodeList)
+		{
+			// for each of the nodes in the list
+			for (int i = 0; i < nodeList.getLength(); i++)
+			{
+				Node node = nodeList.item(i);
+				AttributeHelper.addAttributeIfExists(item, ATTR_STIX_INDICATOR_TYPE, node.getTextContent());
+			}
+		}
 		
 		// retrieve the two description fields
 		final String description = Constants.XPATH_UTIL.getString("Description", indicatorNode);
