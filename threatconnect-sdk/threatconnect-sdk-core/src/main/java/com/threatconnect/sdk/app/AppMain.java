@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -85,8 +86,15 @@ public final class AppMain extends AppExecutor
 		new AOTHandler(getAppConfig(), new AOTListener()
 		{
 			@Override
-			public void execute(final AOTHandler aotHandler)
+			public void execute(final AOTHandler aotHandler, final Map<String, String> parameters)
 			{
+				//check to see if the parameters map is not null
+				if(null != parameters)
+				{
+					//set all of the parameters on this app config
+					getAppConfig().setAll(parameters);
+				}
+				
 				executeAndExit(AppMain.this, aotHandler::sendExitCode);
 			}
 			

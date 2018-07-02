@@ -94,7 +94,7 @@ public class AOTHandler
 					{
 						case MESSAGE_TYPE_EXECUTE:
 							//tell the listener that an execute instruction was received
-							aotListener.execute(this);
+							aotListener.execute(this, aotMessage.getParams());
 							return true;
 						case MESSAGE_TYPE_TERMINATE:
 							//tell the listener that a terminate instruction was received
