@@ -9,7 +9,7 @@ Add the following entries to your pom file (git clone not required):
 ```xml
 
    <properties>
-		<threatconnect-sdk.version>2.5.0</threatconnect-sdk.version>
+		<threatconnect-sdk.version>2.10.2-SNAPSHOT</threatconnect-sdk.version>
 	</properties>
 
 	<build>
@@ -40,7 +40,7 @@ Add the following entries to your pom file (git clone not required):
 					<execution>
 						<phase>package</phase>
 						<goals>
-							<goal>app-package</goal>
+							<goal>java-package</goal>
 						</goals>
 					</execution>
 				</executions>
