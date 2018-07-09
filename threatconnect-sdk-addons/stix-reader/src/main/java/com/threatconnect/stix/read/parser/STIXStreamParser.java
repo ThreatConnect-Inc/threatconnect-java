@@ -1,11 +1,15 @@
 package com.threatconnect.stix.read.parser;
 
+import com.threatconnect.sdk.model.Group;
 import com.threatconnect.sdk.model.Incident;
+import com.threatconnect.sdk.model.Indicator;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.SecurityLabel;
 import com.threatconnect.sdk.model.Threat;
+import com.threatconnect.sdk.model.util.ItemUtil;
 import com.threatconnect.sdk.parser.ParserException;
 import com.threatconnect.sdk.parser.source.DataSource;
+import com.threatconnect.sdk.parser.source.FileDataSource;
 import com.threatconnect.stix.read.parser.exception.InvalidObservableException;
 import com.threatconnect.stix.read.parser.exception.ObservableNotFoundException;
 import com.threatconnect.stix.read.parser.exception.UnsupportedObservableTypeException;
@@ -52,6 +56,10 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 	private final Map<String, List<? extends Item>> observableMap;
 	private final NodeResolver observableNodeResolver;
 	
+	private final java.io.File documentFile;
+	private final String documentName;
+	private final boolean associateItems;
+	
 	public STIXStreamParser(final DataSource dataSource)
 	{
 		this(dataSource, new MappingContainer());
@@ -64,6 +72,59 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 		this.observableMap = new HashMap<String, List<? extends Item>>();
 		this.observableNodeResolver = new ObservableNodeResolver();
 		this.mappingContainer = mappingContainer;
+		this.documentFile = null;
+		this.documentName = null;
+		this.associateItems = false;
+	}
+	
+	public STIXStreamParser(final java.io.File documentFile, final MappingContainer mappingContainer, final String documentName,
+		final boolean associateItemsWithDocument)
+	{
+		super(new FileDataSource(documentFile));
+		
+		this.observableMap = new HashMap<String, List<? extends Item>>();
+		this.observableNodeResolver = new ObservableNodeResolver();
+		this.mappingContainer = mappingContainer;
+		this.documentFile = documentFile;
+		this.documentName = documentName;
+		this.associateItems = associateItemsWithDocument;
+	}
+	
+	@Override
+	public List<Item> parseData() throws ParserException
+	{
+		// holds the list of items that were parsed
+		List<Item> items = super.parseData();
+		
+		// make sure that the document should be associated and that there were items found. If the
+		// document is empty or does not contain any usable data, we do not want to store it.
+		if (null != documentFile && null != documentName && !items.isEmpty())
+		{
+			// create a new document
+			com.threatconnect.sdk.model.Document document =
+				new com.threatconnect.sdk.model.Document();
+			document.setName(documentName);
+			document.setFileName(documentName + ".xml");
+			document.setFile(documentFile);
+			document.setFileSize(documentFile.length());
+			
+			//check to see if all of the items should be associated with this document
+			if (associateItems)
+			{
+				// break the list of items into sets of groups and indicators
+				Set<Group> groups = new HashSet<Group>();
+				Set<Indicator> indicators = new HashSet<Indicator>();
+				ItemUtil.separateGroupsAndIndicators(items, groups, indicators);
+				
+				// associate all of the indicators with this document
+				document.getAssociatedItems().addAll(indicators);
+			}
+			
+			// add this document to the list of items
+			items.add(document);
+		}
+		
+		return items;
 	}
 	
 	@Override
