@@ -19,6 +19,8 @@
 		<module>threatconnect-parser</module>
 		<module>app-package-plugin</module>
 		<module>opendxl</module>
+		<module>stix-reader</module>
+		<module>stix-writer</module>
 	</modules>
 
 	<licenses>
