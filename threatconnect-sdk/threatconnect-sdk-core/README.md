@@ -13,7 +13,7 @@ Add the following entries to your pom file (git clone not required):
 <dependency>
   <groupId>com.threatconnect.sdk.core</groupId>
   <artifactId>threatconnect-sdk</artifactId>
-  <version>2.10.2-SNAPSHOT</version>
+  <version>2.11.0-SNAPSHOT</version>
 </dependency>
 ```
 
