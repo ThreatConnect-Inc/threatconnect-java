@@ -4,7 +4,7 @@ import com.threatconnect.sdk.model.Email;
 import com.threatconnect.sdk.model.EmailAddress;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.SecurityLabel;
-import com.threatconnect.sdk.parser.util.AttributeHelper;
+import com.threatconnect.sdk.model.util.AttributeUtil;
 import com.threatconnect.stix.read.parser.Constants;
 import com.threatconnect.stix.read.parser.util.DebugUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -84,7 +84,7 @@ public class EmailMapping extends CyboxObjectMapping
 				String spoofedText = Constants.XPATH_UTIL.getString("@is_spoofed", fromNode);
 				if (StringUtils.isNotBlank(spoofedText))
 				{
-					AttributeHelper.addAttribute(emailAddress, ATTR_IS_SPOOFED, spoofedText);
+					AttributeUtil.addAttribute(emailAddress, ATTR_IS_SPOOFED, spoofedText);
 				}
 				
 				//add this indicator to the email group
@@ -104,7 +104,7 @@ public class EmailMapping extends CyboxObjectMapping
 		}
 		
 		// add all of the attributes for this object if they exist
-		AttributeHelper.addAttributeIfExists(email, ATTR_EMAIL_SERVER,
+		AttributeUtil.addAttributeIfExists(email, ATTR_EMAIL_SERVER,
 			Constants.XPATH_UTIL.getString("Email_Server", propertiesNode));
 		
 		// :FIXME: handle the unknown mappings

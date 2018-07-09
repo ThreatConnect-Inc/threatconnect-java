@@ -4,9 +4,8 @@ import com.threatconnect.sdk.model.File;
 import com.threatconnect.sdk.model.FileOccurrence;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.SecurityLabel;
-import com.threatconnect.sdk.parser.util.AttributeHelper;
+import com.threatconnect.sdk.model.util.AttributeUtil;
 import com.threatconnect.stix.read.parser.Constants;
-import com.threatconnect.stix.read.parser.exception.InvalidObservableException;
 import com.threatconnect.stix.read.parser.util.DebugUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -140,7 +139,7 @@ public class FileMapping extends CyboxObjectMapping
 			sb.append(Constants.XPATH_UTIL.getString("Signature_Description", digitalSignatureNode));
 			sb.append("\n");
 			
-			AttributeHelper.addAttributeIfExists(file, ATTR_DIGITAL_SIGNATURES, sb.toString());
+			AttributeUtil.addAttributeIfExists(file, ATTR_DIGITAL_SIGNATURES, sb.toString());
 		}
 		
 		// add the date field attributes
@@ -152,15 +151,15 @@ public class FileMapping extends CyboxObjectMapping
 		addDateAttribute(file, ATTR_DATE_CREATED, createdTime);
 		
 		// add all of the attributes for this object if they exist
-		AttributeHelper.addAttributeIfExists(file, ATTR_IS_PACKED,
+		AttributeUtil.addAttributeIfExists(file, ATTR_IS_PACKED,
 			Constants.XPATH_UTIL.getString("@is_packed", propertiesNode));
-		AttributeHelper.addAttributeIfExists(file, ATTR_IS_MASQUERADED,
+		AttributeUtil.addAttributeIfExists(file, ATTR_IS_MASQUERADED,
 			Constants.XPATH_UTIL.getString("@is_masqueraded", propertiesNode));
-		AttributeHelper.addAttributeIfExists(file, ATTR_FILE_EXTENSION,
+		AttributeUtil.addAttributeIfExists(file, ATTR_FILE_EXTENSION,
 			Constants.XPATH_UTIL.getString("File_Extension", propertiesNode));
-		AttributeHelper.addAttributeIfExists(file, ATTR_MAGIC_NUMBER,
+		AttributeUtil.addAttributeIfExists(file, ATTR_MAGIC_NUMBER,
 			Constants.XPATH_UTIL.getString("Magic_Number", propertiesNode));
-		AttributeHelper.addAttributeIfExists(file, ATTR_FILE_FORMAT,
+		AttributeUtil.addAttributeIfExists(file, ATTR_FILE_FORMAT,
 			Constants.XPATH_UTIL.getString("File_Format", propertiesNode));
 		
 		// :FIXME: handle the unknown mappings
@@ -177,8 +176,8 @@ public class FileMapping extends CyboxObjectMapping
 			try
 			{
 				Date date = Constants.DEFAULT_DATE_FORMATTER.parse(time);
-				SimpleDateFormat dateFormat = new SimpleDateFormat(AttributeHelper.SOURCE_DATE_TIME_FORMAT);
-				AttributeHelper.addAttribute(file, attributeName, dateFormat.format(date));
+				SimpleDateFormat dateFormat = new SimpleDateFormat(AttributeUtil.SOURCE_DATE_TIME_FORMAT);
+				AttributeUtil.addAttribute(file, attributeName, dateFormat.format(date));
 			}
 			catch (ParseException e)
 			{

@@ -1,8 +1,8 @@
 package com.threatconnect.sdk.log;
 
 import com.threatconnect.app.apps.AppConfig;
+import com.threatconnect.app.apps.SystemPropertiesAppConfig;
 import com.threatconnect.sdk.app.LoggerUtil;
-import com.threatconnect.sdk.app.SdkAppConfig;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -21,7 +21,7 @@ public class LoggingTest
 		File logFile = new File(LOG_FILE);
 		logFile.delete();
 		
-		AppConfig appConfig = SdkAppConfig.getInstance();
+		AppConfig appConfig = new SystemPropertiesAppConfig();
 		
 		LoggerUtil.reconfigureGlobalLogger(logFile, appConfig);
 		Logger logger = LoggerFactory.getLogger(getClass());

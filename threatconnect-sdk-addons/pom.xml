@@ -17,6 +17,7 @@
 
 	<modules>
 		<module>threatconnect-parser</module>
+		<module>threatconnect-parser-app</module>
 		<module>app-package-plugin</module>
 		<module>opendxl</module>
 		<module>stix-reader</module>

@@ -5,8 +5,9 @@
  */
 package com.threatconnect.sdk.conn;
 
+import com.threatconnect.app.apps.AppConfig;
+import com.threatconnect.app.apps.SystemPropertiesAppConfig;
 import com.threatconnect.sdk.app.AppUtil;
-import com.threatconnect.sdk.app.SdkAppConfig;
 import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.config.URLConfiguration;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -29,6 +30,8 @@ public class Connection implements Closeable
 	
 	private final URLConfiguration urlConfig;
 	
+	private final AppConfig appConfig;
+	
 	public Connection() throws IOException
 	{
 		String fileName = System.getProperties().getProperty("threatconnect.api.config");
@@ -36,12 +39,18 @@ public class Connection implements Closeable
 		this.config = Configuration.build(props);
 		
 		this.urlConfig = URLConfiguration.build();
+		
+		//:FIXME: this param should be passed and not created since the underlying implementation can change
+		this.appConfig = new SystemPropertiesAppConfig();
 	}
 	
 	public Connection(Configuration config) throws IOException
 	{
 		this.config = config;
 		this.urlConfig = URLConfiguration.build();
+		
+		//:FIXME: this param should be passed and not created since the underlying implementation can change
+		this.appConfig = new SystemPropertiesAppConfig();
 	}
 	
 	/*
@@ -67,7 +76,7 @@ public class Connection implements Closeable
 			}
 			else
 			{
-				executor = new HttpRequestExecutor(this);
+				executor = new HttpRequestExecutor(this, appConfig);
 			}
 		}
 		
@@ -90,16 +99,16 @@ public class Connection implements Closeable
 		this.config = config;
 	}
 	
-	public CloseableHttpClient getApiClient()
+	public CloseableHttpClient getApiClient(final AppConfig appConfig)
 	{
 		// :TODO: should we add an SDK param to trust self signed certs?
-		return AppUtil.createClient(SdkAppConfig.getInstance().isProxyTC(), true);
+		return AppUtil.createClient(appConfig.isProxyTC(), true, appConfig);
 	}
 	
-	public CloseableHttpClient getExternalClient()
+	public CloseableHttpClient getExternalClient(final AppConfig appConfig)
 	{
 		// :TODO: should we add an SDK param to trust self signed certs?
-		return AppUtil.createClient(SdkAppConfig.getInstance().isProxyExternal(), true);
+		return AppUtil.createClient(appConfig.isProxyExternal(), true, appConfig);
 	}
 	
 	/**

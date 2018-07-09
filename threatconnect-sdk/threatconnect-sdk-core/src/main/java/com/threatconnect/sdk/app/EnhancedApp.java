@@ -98,7 +98,7 @@ public abstract class EnhancedApp extends App
 
 	public EnhancedApp()
 	{
-		this(SdkAppConfig.getInstance());
+	
 	}
 
 	public EnhancedApp(AppConfig appConfig)
@@ -437,7 +437,7 @@ public abstract class EnhancedApp extends App
 		if (externalClient == null)
 		{
 			externalClient = createClientBuilder(getAppConfig().isProxyExternal(),
-				getAppConfig().isVerifySSL()).build();
+				getAppConfig().isVerifySSL(), getAppConfig()).build();
 		}
 		return externalClient;
 	}

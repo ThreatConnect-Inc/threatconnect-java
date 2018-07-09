@@ -5,7 +5,7 @@ import com.threatconnect.sdk.model.Host;
 import com.threatconnect.sdk.model.Indicator;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.SecurityLabel;
-import com.threatconnect.sdk.parser.util.AttributeHelper;
+import com.threatconnect.sdk.model.util.AttributeUtil;
 import com.threatconnect.sdk.parser.util.RegexUtil;
 import com.threatconnect.stix.read.parser.Constants;
 import com.threatconnect.stix.read.parser.exception.InvalidObservableException;
@@ -112,27 +112,27 @@ public class DNSRecordMapping extends CyboxObjectMapping
 		final String description = Constants.XPATH_UTIL.getString("Description", propertiesNode);
 		if (StringUtils.isNotBlank(description))
 		{
-			AttributeHelper.addDescriptionAttribute(indicator, description);
+			AttributeUtil.addDescriptionAttribute(indicator, description);
 		}
 		
 		// add all of the attributes for this object if they exist
-		AttributeHelper.addAttributeIfExists(indicator, ATTR_DNS_QUERIED_DATE,
+		AttributeUtil.addAttributeIfExists(indicator, ATTR_DNS_QUERIED_DATE,
 			Constants.XPATH_UTIL.getString("Queried_Date", propertiesNode));
-		AttributeHelper.addAttributeIfExists(indicator, ATTR_DNS_ADDRESS_CLASS,
+		AttributeUtil.addAttributeIfExists(indicator, ATTR_DNS_ADDRESS_CLASS,
 			Constants.XPATH_UTIL.getString("Address_Class", propertiesNode));
-		AttributeHelper.addAttributeIfExists(indicator, ATTR_DNS_RESOURCE_RECORD_TYPE,
+		AttributeUtil.addAttributeIfExists(indicator, ATTR_DNS_RESOURCE_RECORD_TYPE,
 			Constants.XPATH_UTIL.getString("Entry_Type", propertiesNode));
-		AttributeHelper.addAttributeIfExists(indicator, ATTR_DNS_RECORD_NAME,
+		AttributeUtil.addAttributeIfExists(indicator, ATTR_DNS_RECORD_NAME,
 			Constants.XPATH_UTIL.getString("Record_Name", propertiesNode));
-		AttributeHelper.addAttributeIfExists(indicator, ATTR_DNS_RECORD_TYPE,
+		AttributeUtil.addAttributeIfExists(indicator, ATTR_DNS_RECORD_TYPE,
 			Constants.XPATH_UTIL.getString("Record_Type", propertiesNode));
-		AttributeHelper.addAttributeIfExists(indicator, ATTR_DNS_RECORD_TTL,
+		AttributeUtil.addAttributeIfExists(indicator, ATTR_DNS_RECORD_TTL,
 			Constants.XPATH_UTIL.getString("TTL", propertiesNode));
-		AttributeHelper.addAttributeIfExists(indicator, ATTR_DNS_RECORD_FLAGS,
+		AttributeUtil.addAttributeIfExists(indicator, ATTR_DNS_RECORD_FLAGS,
 			Constants.XPATH_UTIL.getString("Flags", propertiesNode));
-		AttributeHelper.addAttributeIfExists(indicator, ATTR_DNS_RECORD_LENGTH,
+		AttributeUtil.addAttributeIfExists(indicator, ATTR_DNS_RECORD_LENGTH,
 			Constants.XPATH_UTIL.getString("Data_Length", propertiesNode));
-		AttributeHelper.addAttributeIfExists(indicator, ATTR_DNS_RECORD_DATA,
+		AttributeUtil.addAttributeIfExists(indicator, ATTR_DNS_RECORD_DATA,
 			Constants.XPATH_UTIL.getString("Record_Data", propertiesNode));
 	}
 }

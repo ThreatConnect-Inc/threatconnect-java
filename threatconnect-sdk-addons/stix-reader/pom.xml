@@ -12,13 +12,8 @@
 
 	<dependencies>
 		<dependency>
-			<artifactId>threatconnect-model</artifactId>
-			<groupId>com.threatconnect.sdk</groupId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.threatconnect.sdk.addons</groupId>
 			<artifactId>threatconnect-parser</artifactId>
+			<groupId>com.threatconnect.sdk.addons</groupId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

@@ -1,5 +1,6 @@
 package com.threatconnect.sdk.app;
 
+import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.sdk.conn.ConnectionUtil;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -21,14 +22,14 @@ public class AppUtil
 	 * @return a CloseableHttpClient
 	 */
 	public static HttpClientBuilder createClientBuilder(final boolean useProxyIfAvailable,
-		final boolean trustSelfSignedCertificates)
+		final boolean trustSelfSignedCertificates, final AppConfig appConfig)
 	{
 		if (useProxyIfAvailable)
 		{
-			String proxyHost = SdkAppConfig.getInstance().getTcProxyHost();
-			Integer proxyPort = SdkAppConfig.getInstance().getTcProxyPort();
-			String proxyUserName = SdkAppConfig.getInstance().getTcProxyUsername();
-			String proxyPassword = SdkAppConfig.getInstance().getTcProxyPassword();
+			String proxyHost = appConfig.getTcProxyHost();
+			Integer proxyPort = appConfig.getTcProxyPort();
+			String proxyUserName = appConfig.getTcProxyUsername();
+			String proxyPassword = appConfig.getTcProxyPassword();
 
 			logger.debug(String.format("creating http client with proxy setings http://%s:%s %s:%s",
 					proxyHost, proxyPort, proxyUserName, proxyPassword));
@@ -54,14 +55,14 @@ public class AppUtil
 	 * @return a CloseableHttpClient
 	 */
 	public static CloseableHttpClient createClient(final boolean useProxyIfAvailable,
-		final boolean trustSelfSignedCertificates)
+		final boolean trustSelfSignedCertificates, final AppConfig appConfig)
 	{
 		if (useProxyIfAvailable)
 		{
-			String proxyHost = SdkAppConfig.getInstance().getTcProxyHost();
-			Integer proxyPort = SdkAppConfig.getInstance().getTcProxyPort();
-			String proxyUserName = SdkAppConfig.getInstance().getTcProxyUsername();
-			String proxyPassword = SdkAppConfig.getInstance().getTcProxyPassword();
+			String proxyHost = appConfig.getTcProxyHost();
+			Integer proxyPort = appConfig.getTcProxyPort();
+			String proxyUserName = appConfig.getTcProxyUsername();
+			String proxyPassword = appConfig.getTcProxyPassword();
 			
 			return ConnectionUtil.createClient(proxyHost, proxyPort, proxyUserName, proxyPassword,
 				trustSelfSignedCertificates);

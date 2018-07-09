@@ -1,11 +1,11 @@
 package com.threatconnect.stix.read.parser.map.stix;
 
+import com.threatconnect.sdk.model.SecurityLabel;
+import com.threatconnect.sdk.model.Threat;
+import com.threatconnect.sdk.model.util.AttributeUtil;
 import com.threatconnect.stix.read.parser.Constants;
 import com.threatconnect.stix.read.parser.util.DebugUtil;
 import com.threatconnect.stix.read.parser.util.StixNodeUtil;
-import com.threatconnect.sdk.model.SecurityLabel;
-import com.threatconnect.sdk.model.Threat;
-import com.threatconnect.sdk.parser.util.AttributeHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -37,27 +37,27 @@ public class ThreatActorMapping
 		final String description = Constants.XPATH_UTIL.getString("Description", incidentNode);
 		if (StringUtils.isNotBlank(description))
 		{
-			AttributeHelper.addDescriptionAttribute(item, description);
+			AttributeUtil.addDescriptionAttribute(item, description);
 		}
 		
 		// add all of the attributes for this object if they exist
-		AttributeHelper.addAttributeIfExists(item, ATTR_IDENTITY,
+		AttributeUtil.addAttributeIfExists(item, ATTR_IDENTITY,
 			Constants.XPATH_UTIL.getString("Identity/Name", incidentNode));
-		AttributeHelper.addAttributeIfExists(item, ATTR_TYPE,
+		AttributeUtil.addAttributeIfExists(item, ATTR_TYPE,
 			Constants.XPATH_UTIL.getString("Type/Value", incidentNode));
-		AttributeHelper.addAttributeIfExists(item, ATTR_MOTIVATION,
+		AttributeUtil.addAttributeIfExists(item, ATTR_MOTIVATION,
 			Constants.XPATH_UTIL.getString("Motivation/Value", incidentNode));
-		AttributeHelper.addAttributeIfExists(item, ATTR_SOPHISTICATION,
+		AttributeUtil.addAttributeIfExists(item, ATTR_SOPHISTICATION,
 			Constants.XPATH_UTIL.getString("Sophistication/Value", incidentNode));
-		AttributeHelper.addAttributeIfExists(item, ATTR_INTENDED_EFFECT,
+		AttributeUtil.addAttributeIfExists(item, ATTR_INTENDED_EFFECT,
 			Constants.XPATH_UTIL.getString("Intended_Effect/Value", incidentNode));
-		AttributeHelper.addAttributeIfExists(item, ATTR_PLANNING_OP_SUPPORT,
+		AttributeUtil.addAttributeIfExists(item, ATTR_PLANNING_OP_SUPPORT,
 			Constants.XPATH_UTIL.getString("Planning_And_Operational_Support/Value", incidentNode));
 			
 		final String sourceValue = Constants.XPATH_UTIL.getString("Information_Source/Description", incidentNode);
 		if (null != sourceValue)
 		{
-			AttributeHelper.addSourceAttribute(item, sourceValue);
+			AttributeUtil.addSourceAttribute(item, sourceValue);
 		}
 		
 		// :FIXME: handle the unknown mappings

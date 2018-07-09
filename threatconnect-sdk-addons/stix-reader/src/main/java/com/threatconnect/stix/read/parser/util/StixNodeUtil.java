@@ -1,8 +1,8 @@
 package com.threatconnect.stix.read.parser.util;
 
-import com.threatconnect.stix.read.parser.Constants;
 import com.threatconnect.sdk.model.Item;
-import com.threatconnect.sdk.parser.util.AttributeHelper;
+import com.threatconnect.sdk.model.util.AttributeUtil;
+import com.threatconnect.stix.read.parser.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
@@ -36,7 +36,7 @@ public class StixNodeUtil
 		try
 		{
 			NamespaceUtil.addNamespacesToElement(element);
-			AttributeHelper.addAttributeIfExists(item, attributeType, toXMLString(element));
+			AttributeUtil.addAttributeIfExists(item, attributeType, toXMLString(element));
 		}
 		catch (TransformerException e)
 		{

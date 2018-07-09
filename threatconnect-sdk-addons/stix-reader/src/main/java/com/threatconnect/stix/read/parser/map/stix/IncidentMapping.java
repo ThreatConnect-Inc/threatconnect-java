@@ -1,11 +1,11 @@
 package com.threatconnect.stix.read.parser.map.stix;
 
+import com.threatconnect.sdk.model.Incident;
+import com.threatconnect.sdk.model.SecurityLabel;
+import com.threatconnect.sdk.model.util.AttributeUtil;
 import com.threatconnect.stix.read.parser.Constants;
 import com.threatconnect.stix.read.parser.util.DebugUtil;
 import com.threatconnect.stix.read.parser.util.StixNodeUtil;
-import com.threatconnect.sdk.model.Incident;
-import com.threatconnect.sdk.model.SecurityLabel;
-import com.threatconnect.sdk.parser.util.AttributeHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -54,31 +54,31 @@ public class IncidentMapping
 		}
 		
 		// add all of the attributes for this object if they exist
-		AttributeHelper.addAttributeIfExists(item, ATTR_TITLE, title);
-		AttributeHelper.addAttributeIfExists(item, ATTR_EXTERNAL_ID,
+		AttributeUtil.addAttributeIfExists(item, ATTR_TITLE, title);
+		AttributeUtil.addAttributeIfExists(item, ATTR_EXTERNAL_ID,
 			Constants.XPATH_UTIL.getString("External_ID", incidentNode));
-		AttributeHelper.addAttributeIfExists(item, ATTR_TIME,
+		AttributeUtil.addAttributeIfExists(item, ATTR_TIME,
 			Constants.XPATH_UTIL.getString("Time/Incident_Reported", incidentNode));
-		AttributeHelper.addAttributeIfExists(item, ATTR_REPORTER,
+		AttributeUtil.addAttributeIfExists(item, ATTR_REPORTER,
 			Constants.XPATH_UTIL.getString("Reporter/Identity/Name", incidentNode));
-		AttributeHelper.addAttributeIfExists(item, ATTR_RESPONDER,
+		AttributeUtil.addAttributeIfExists(item, ATTR_RESPONDER,
 			Constants.XPATH_UTIL.getString("Responder/Identity/Name", incidentNode));
-		AttributeHelper.addAttributeIfExists(item, ATTR_COORDINATOR,
+		AttributeUtil.addAttributeIfExists(item, ATTR_COORDINATOR,
 			Constants.XPATH_UTIL.getString("Coordinator/Identity/Name", incidentNode));
-		AttributeHelper.addAttributeIfExists(item, ATTR_CONTACT,
+		AttributeUtil.addAttributeIfExists(item, ATTR_CONTACT,
 			Constants.XPATH_UTIL.getString("Contact/Description", incidentNode));
 		
 		// retrieve the two description fields
 		final String description = Constants.XPATH_UTIL.getString("Description", incidentNode);
 		if (StringUtils.isNotBlank(description))
 		{
-			AttributeHelper.addDescriptionAttribute(item, description);
+			AttributeUtil.addDescriptionAttribute(item, description);
 		}
 		
 		final String sourceValue = Constants.XPATH_UTIL.getString("Information_Source/Description", incidentNode);
 		if (null != sourceValue)
 		{
-			AttributeHelper.addSourceAttribute(item, sourceValue);
+			AttributeUtil.addSourceAttribute(item, sourceValue);
 		}
 		
 		NodeList impactAssessmentEffects =
@@ -105,7 +105,7 @@ public class IncidentMapping
 				sb.append(Constants.XPATH_UTIL.getString("text()", effectNode));
 			}
 			
-			AttributeHelper.addAttributeIfExists(item, ATTR_IMPACT_ASSESSMENT, sb.toString());
+			AttributeUtil.addAttributeIfExists(item, ATTR_IMPACT_ASSESSMENT, sb.toString());
 		}
 		
 		// :FIXME: handle the unknown mappings

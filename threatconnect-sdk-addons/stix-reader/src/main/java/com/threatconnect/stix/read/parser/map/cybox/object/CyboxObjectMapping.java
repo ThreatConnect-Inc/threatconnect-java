@@ -3,7 +3,7 @@ package com.threatconnect.stix.read.parser.map.cybox.object;
 import com.threatconnect.sdk.model.Indicator;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.SecurityLabel;
-import com.threatconnect.sdk.parser.util.AttributeHelper;
+import com.threatconnect.sdk.model.util.AttributeUtil;
 import com.threatconnect.stix.read.parser.exception.InvalidObservableException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -36,6 +36,6 @@ public abstract class CyboxObjectMapping
 	
 	protected void addStixObservableIDAttribute(final Item item, final String observableNodeID)
 	{
-		AttributeHelper.addAttributeIfExists(item, ATTR_STIX_OBSERVABLE_ID, observableNodeID);
+		AttributeUtil.addAttributeIfExists(item, ATTR_STIX_OBSERVABLE_ID, observableNodeID);
 	}
 }

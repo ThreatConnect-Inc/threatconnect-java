@@ -1,8 +1,8 @@
 package com.threatconnect.sdk.log;
 
 import com.threatconnect.app.apps.AppConfig;
+import com.threatconnect.app.apps.SystemPropertiesAppConfig;
 import com.threatconnect.sdk.app.LoggerUtil;
-import com.threatconnect.sdk.app.SdkAppConfig;
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ public class ServerLogMain
 		File logFile = new File(LOG_FILE);
 		logFile.delete();
 		
-		AppConfig appConfig = SdkAppConfig.getInstance();
+		AppConfig appConfig = new SystemPropertiesAppConfig();
 		appConfig.set(AppConfig.TC_TOKEN,
 			"1:301:a2f6c6e7-2952-4c07-8249-4c75c477cb40:1468248049:Ok35Q:2vmDWmqJoSQKAFdwfzeLViYJBByD/0qBArJaspvLPgM=");
 			

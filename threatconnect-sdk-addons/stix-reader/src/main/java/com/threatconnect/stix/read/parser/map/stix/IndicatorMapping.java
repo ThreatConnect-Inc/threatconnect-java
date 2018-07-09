@@ -3,7 +3,7 @@ package com.threatconnect.stix.read.parser.map.stix;
 import com.threatconnect.sdk.model.Indicator;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.ItemType;
-import com.threatconnect.sdk.parser.util.AttributeHelper;
+import com.threatconnect.sdk.model.util.AttributeUtil;
 import com.threatconnect.stix.read.parser.Constants;
 import com.threatconnect.stix.read.parser.util.DebugUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -42,9 +42,9 @@ public class IndicatorMapping
 	public void map(final Node indicatorNode, final Document document, final Item item) throws XPathExpressionException
 	{
 		// add all of the attributes for this object if they exist
-		AttributeHelper.addAttributeIfExists(item, ATTR_TITLE,
+		AttributeUtil.addAttributeIfExists(item, ATTR_TITLE,
 			Constants.XPATH_UTIL.getString("Title", indicatorNode));
-		AttributeHelper.addAttributeIfExists(item, ATTR_PRODUCER,
+		AttributeUtil.addAttributeIfExists(item, ATTR_PRODUCER,
 			Constants.XPATH_UTIL.getString("Producer/Identity/Name", indicatorNode));
 		
 		//retrieve the types
@@ -55,7 +55,7 @@ public class IndicatorMapping
 			for (int i = 0; i < nodeList.getLength(); i++)
 			{
 				Node node = nodeList.item(i);
-				AttributeHelper.addAttributeIfExists(item, ATTR_STIX_INDICATOR_TYPE, node.getTextContent());
+				AttributeUtil.addAttributeIfExists(item, ATTR_STIX_INDICATOR_TYPE, node.getTextContent());
 			}
 		}
 		
@@ -79,7 +79,7 @@ public class IndicatorMapping
 		}
 		if (!descriptionBuilder.toString().isEmpty())
 		{
-			AttributeHelper.addDescriptionAttribute(item, descriptionBuilder.toString());
+			AttributeUtil.addDescriptionAttribute(item, descriptionBuilder.toString());
 		}
 		
 		//check to see if the item is an indicator
@@ -111,7 +111,7 @@ public class IndicatorMapping
 				// retrieve the current package node
 				Node killChainNode = killChainPhaseNodeList.item(i);
 				String name = Constants.XPATH_UTIL.getString("@name", killChainNode);
-				AttributeHelper.addAttributeIfExists(item, ATTR_PHASE_OF_INTRUSION, name);
+				AttributeUtil.addAttributeIfExists(item, ATTR_PHASE_OF_INTRUSION, name);
 			}
 		}
 		

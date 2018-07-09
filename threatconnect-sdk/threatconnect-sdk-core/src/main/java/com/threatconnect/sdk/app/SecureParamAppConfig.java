@@ -3,6 +3,7 @@ package com.threatconnect.sdk.app;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.threatconnect.app.apps.SystemPropertiesAppConfig;
 import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.conn.AbstractRequestExecutor;
 import com.threatconnect.sdk.conn.Connection;
@@ -17,7 +18,7 @@ import java.io.IOException;
 /**
  * @author Greg Marut
  */
-public class SecureParamAppConfig extends SdkAppConfig
+public class SecureParamAppConfig extends SystemPropertiesAppConfig
 {
 	private static final Logger logger = LoggerFactory.getLogger(SecureParamAppConfig.class);
 	
@@ -46,7 +47,7 @@ public class SecureParamAppConfig extends SdkAppConfig
 		Connection connection = new Connection(configuration);
 		
 		//create a new http request executor that will be able to communicate with the server
-		HttpRequestExecutor httpRequestExecutor = new HttpRequestExecutor(connection);
+		HttpRequestExecutor httpRequestExecutor = new HttpRequestExecutor(connection, this);
 		
 		//retrieve the params from the server
 		String url = connection.getUrlConfig().getUrl(API_PARAMETERS_ENDPOINT);

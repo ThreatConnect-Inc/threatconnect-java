@@ -3,7 +3,7 @@ package com.threatconnect.stix.read.parser.map.cybox.object;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.SecurityLabel;
 import com.threatconnect.sdk.model.Url;
-import com.threatconnect.sdk.parser.util.AttributeHelper;
+import com.threatconnect.sdk.model.util.AttributeUtil;
 import com.threatconnect.sdk.parser.util.IndicatorUtil;
 import com.threatconnect.sdk.parser.util.InvalidURLException;
 import com.threatconnect.stix.read.parser.Constants;
@@ -44,7 +44,7 @@ public class UrlMapping extends CyboxObjectMapping
 			String urlLabel = Constants.XPATH_UTIL.getString("URL_Label", propertiesNode).trim();
 			if (StringUtils.isNoneBlank(urlLabel))
 			{
-				AttributeHelper.addAttribute(url, ATTR_URI_LABEL, urlLabel);
+				AttributeUtil.addAttribute(url, ATTR_URI_LABEL, urlLabel);
 			}
 			
 			return Collections.singletonList(url);

@@ -15,18 +15,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.threatconnect.sdk.core</groupId>
-			<artifactId>threatconnect-sdk</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>com.threatconnect.sdk</groupId>
 			<artifactId>threatconnect-model</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.threatconnect.app</groupId>
-			<artifactId>apps-util</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.threatconnect.app.apps.AppConfig;
-import com.threatconnect.sdk.app.SdkAppConfig;
 import com.threatconnect.sdk.conn.exception.HttpException;
 import com.threatconnect.sdk.conn.exception.HttpResourceNotFoundException;
 import com.threatconnect.sdk.conn.exception.TokenRenewException;
@@ -46,9 +45,12 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 	private static final String NEW_TOKEN_EXPIRES = "apiTokenExpires";
 	private static final String SUCCESS_IND = "success";
 
-	public HttpRequestExecutor(Connection conn)
+	private final AppConfig appConfig;
+	
+	public HttpRequestExecutor(final Connection conn, final AppConfig appConfig)
 	{
 		super(conn);
+		this.appConfig = appConfig;
 	}
 
 	private HttpRequestBase getBase(String fullPath, HttpMethod type)
@@ -81,7 +83,7 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 		logger.trace("Before call to api server");
 		long startMs = System.currentTimeMillis();
 		
-		try(CloseableHttpClient httpClient = this.conn.getApiClient())
+		try(CloseableHttpClient httpClient = this.conn.getApiClient(appConfig))
 		{
 			try(CloseableHttpResponse response = httpClient.execute(httpBase))
 			{
@@ -125,7 +127,7 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 
                                         //We moved the retry servlet from the web module to the api
                                         //module so need to use the api path:
-                                        String apiPath = SdkAppConfig.getInstance().getTcApiPath();
+                                        String apiPath = appConfig.getTcApiPath();
                                         logger.trace("apiPath: " + apiPath);
 					String retryUrl = apiPath
 						+ APP_AUTH_URL_SERVLET_PART
@@ -133,7 +135,7 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 
 					//Default TC SSL cert is not trusted so need to add the TC cert to local jvm cacerts if
 					//running app locally
-					try(CloseableHttpClient httpClient = this.conn.getApiClient())
+					try(CloseableHttpClient httpClient = this.conn.getApiClient(appConfig))
 					{
 						HttpGet httpGet = new HttpGet(retryUrl);
 						try (CloseableHttpResponse retryTokenCloseableResponse = httpClient.execute(httpGet))
@@ -164,8 +166,8 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 							this.conn.getConfig().setTcTokenExpires(newTokenExpires);
 							
 							//Then update the AppConfig singleton object too for future calls/future configs
-							SdkAppConfig.getInstance().set(AppConfig.TC_TOKEN, newToken);
-							SdkAppConfig.getInstance().set(AppConfig.TC_TOKEN_EXPIRES, newTokenExpires);
+							appConfig.set(AppConfig.TC_TOKEN, newToken);
+							appConfig.set(AppConfig.TC_TOKEN_EXPIRES, newTokenExpires);
 						}
 					}
 				}
@@ -223,7 +225,7 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 			logger.trace("Request: " + httpBase.getRequestLine());
 			long startMs = System.currentTimeMillis();
 			
-			try(CloseableHttpClient httpClient = this.conn.getApiClient())
+			try(CloseableHttpClient httpClient = this.conn.getApiClient(appConfig))
 			{
 				try(CloseableHttpResponse response = httpClient.execute(httpBase))
 				{
@@ -292,7 +294,7 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 		logger.trace("Request: " + httpBase.getRequestLine());
 		logger.trace("Headers: " + Arrays.toString(httpBase.getAllHeaders()));
 		
-		CloseableHttpClient httpClient = this.conn.getApiClient();
+		CloseableHttpClient httpClient = this.conn.getApiClient(appConfig);
 		CloseableHttpResponse response = httpClient.execute(httpBase);
 		logger.trace(response.getStatusLine().toString());
 		
@@ -357,7 +359,7 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 
 		logger.trace("Request: " + httpBase.getRequestLine());
 		
-		try(CloseableHttpClient httpClient = this.conn.getApiClient())
+		try(CloseableHttpClient httpClient = this.conn.getApiClient(appConfig))
 		{
 			try(CloseableHttpResponse response = httpClient.execute(httpBase))
 			{

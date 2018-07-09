@@ -1,13 +1,12 @@
 package com.threatconnect.stix.read.parser.map.cybox.object;
 
-import com.threatconnect.app.apps.AppConfig;
-import com.threatconnect.stix.read.parser.Constants;
-import com.threatconnect.stix.read.parser.exception.InvalidObservableException;
-import com.threatconnect.stix.read.parser.util.StixNodeUtil;
 import com.threatconnect.sdk.model.Host;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.SecurityLabel;
 import com.threatconnect.sdk.parser.util.RegexUtil;
+import com.threatconnect.stix.read.parser.Constants;
+import com.threatconnect.stix.read.parser.exception.InvalidObservableException;
+import com.threatconnect.stix.read.parser.util.StixNodeUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 

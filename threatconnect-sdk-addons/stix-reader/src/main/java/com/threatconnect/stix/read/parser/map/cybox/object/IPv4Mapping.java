@@ -1,14 +1,13 @@
 package com.threatconnect.stix.read.parser.map.cybox.object;
 
-import com.threatconnect.app.apps.AppConfig;
-import com.threatconnect.stix.read.parser.Constants;
-import com.threatconnect.stix.read.parser.exception.InvalidObservableException;
-import com.threatconnect.stix.read.parser.util.StixNodeUtil;
 import com.threatconnect.sdk.model.Address;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.SecurityLabel;
-import com.threatconnect.sdk.parser.util.AttributeHelper;
+import com.threatconnect.sdk.model.util.AttributeUtil;
 import com.threatconnect.sdk.parser.util.RegexUtil;
+import com.threatconnect.stix.read.parser.Constants;
+import com.threatconnect.stix.read.parser.exception.InvalidObservableException;
+import com.threatconnect.stix.read.parser.util.StixNodeUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -51,15 +50,15 @@ public class IPv4Mapping extends CyboxObjectMapping
 			address.setIp(addressParts[0]);
 			
 			// add all of the attributes for this object if they exist
-			AttributeHelper.addAttributeIfExists(address, ATTR_IS_SOURCE,
+			AttributeUtil.addAttributeIfExists(address, ATTR_IS_SOURCE,
 				Constants.XPATH_UTIL.getString("@is_source", propertiesNode));
-			AttributeHelper.addAttributeIfExists(address, ATTR_IS_DESTINATION,
+			AttributeUtil.addAttributeIfExists(address, ATTR_IS_DESTINATION,
 				Constants.XPATH_UTIL.getString("@is_destination", propertiesNode));
-			AttributeHelper.addAttributeIfExists(address, ATTR_IS_SPOOFED,
+			AttributeUtil.addAttributeIfExists(address, ATTR_IS_SPOOFED,
 				Constants.XPATH_UTIL.getString("@is_spoofed", propertiesNode));
-			AttributeHelper.addAttributeIfExists(address, ATTR_IS_VLAN_NAME,
+			AttributeUtil.addAttributeIfExists(address, ATTR_IS_VLAN_NAME,
 				Constants.XPATH_UTIL.getString("VLAN_Name", propertiesNode));
-			AttributeHelper.addAttributeIfExists(address, ATTR_IS_VLAN_NUMBER,
+			AttributeUtil.addAttributeIfExists(address, ATTR_IS_VLAN_NUMBER,
 				Constants.XPATH_UTIL.getString("VLAN_Num", propertiesNode));
 			
 			return Collections.singletonList(address);
