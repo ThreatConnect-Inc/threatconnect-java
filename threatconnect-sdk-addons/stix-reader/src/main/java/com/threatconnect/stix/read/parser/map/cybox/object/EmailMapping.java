@@ -93,6 +93,21 @@ public class EmailMapping extends CyboxObjectMapping
 			}
 		}
 		
+		//get the address value object
+		String addressValue = Constants.XPATH_UTIL.getString("Address_Value", propertiesNode);
+		if(null != addressValue)
+		{
+			//create a new email address indicator
+			EmailAddress emailAddress = new EmailAddress();
+			setDefaultRatingConfidence(emailAddress);
+			addStixObservableIDAttribute(emailAddress, observableNodeID);
+			emailAddress.setAddress(addressValue);
+			
+			//add this indicator to the email group
+			email.getAssociatedItems().add(emailAddress);
+			items.add(emailAddress);
+		}
+		
 		// set the to recipients
 		email.setTo(buildRecipientList("Header/To/Recipient", propertiesNode));
 		
