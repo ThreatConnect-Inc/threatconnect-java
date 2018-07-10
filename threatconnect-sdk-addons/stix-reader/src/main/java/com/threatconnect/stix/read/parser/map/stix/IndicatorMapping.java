@@ -21,6 +21,7 @@ public class IndicatorMapping
 	private static final Logger logger = LoggerFactory.getLogger(IndicatorMapping.class);
 	
 	private static final String ATTR_TITLE = "Title";
+	private static final String ATTR_STIX_ID = "STIX ID";
 	private static final String ATTR_STIX_INDICATOR_TYPE = "STIX Indicator Type";
 	private static final String ATTR_PRODUCER = "Producer";
 	private static final String ATTR_ALTERNATIVE_ID = "Alternative ID";
@@ -42,6 +43,8 @@ public class IndicatorMapping
 	public void map(final Node indicatorNode, final Document document, final Item item) throws XPathExpressionException
 	{
 		// add all of the attributes for this object if they exist
+		AttributeHelper.addAttributeIfExists(item, ATTR_STIX_ID,
+			Constants.XPATH_UTIL.getString("@id", indicatorNode));
 		AttributeHelper.addAttributeIfExists(item, ATTR_TITLE,
 			Constants.XPATH_UTIL.getString("Title", indicatorNode));
 		AttributeHelper.addAttributeIfExists(item, ATTR_PRODUCER,
