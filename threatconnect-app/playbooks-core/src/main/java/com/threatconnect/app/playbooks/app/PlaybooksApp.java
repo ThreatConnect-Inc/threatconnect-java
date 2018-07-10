@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -310,6 +311,26 @@ public abstract class PlaybooksApp extends App
 		else
 		{
 			return null;
+		}
+	}
+	
+	/**
+	 * Serves as a shorthand method for reading a value that can be either a string or string list
+	 *
+	 * @param param the app parameter which represents a playbooks variable
+	 * @return the value of the parameter in the database
+	 * @throws ContentException if there was an issue reading/writing to the database.
+	 */
+	public final List<String> readStringOrStringListContent(final String param) throws ContentException
+	{
+		//check to see if this param is of type string
+		if (isInputParamOfPlaybookType(param, StandardPlaybookType.String))
+		{
+			return Collections.singletonList(readStringContent(param));
+		}
+		else
+		{
+			return readStringListContent(param);
 		}
 	}
 	
