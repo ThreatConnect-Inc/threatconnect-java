@@ -102,7 +102,7 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 			
 			// save or update the object
 			ApiEntitySingleResponse<T, ?> response =
-				(null == readIndicator) ? writer.create(indicator) : writer.update(indicator);
+				(null == readIndicator) ? writer.create(indicator, ownerName) : writer.update(indicator, ownerName);
 			
 			// check to see if this call was successful
 			if (response.isSuccess())

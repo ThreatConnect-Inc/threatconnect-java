@@ -82,7 +82,7 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 			}
 			
 			// save the object
-			ApiEntitySingleResponse<T, ?> response = writer.create(group);
+			ApiEntitySingleResponse<T, ?> response = writer.create(group, ownerName);
 			
 			// check to see if this call was successful
 			if (response.isSuccess())
