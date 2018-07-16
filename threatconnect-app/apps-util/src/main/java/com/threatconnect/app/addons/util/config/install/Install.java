@@ -9,6 +9,7 @@ public class Install
 {
 	private static final String DEFAULT_LIST_DELIMITER = "|";
 	
+	private String programName;
 	private String applicationName;
 	private String displayName;
 	private String programVersion;
@@ -46,6 +47,16 @@ public class Install
 		this.runtimeContext = new ArrayList<RuntimeContextType>();
 		this.features = new HashSet<String>();
 		this.listDelimiter = DEFAULT_LIST_DELIMITER;
+	}
+	
+	public String getProgramName()
+	{
+		return programName;
+	}
+	
+	public void setProgramName(final String programName)
+	{
+		this.programName = programName;
 	}
 	
 	public String getApplicationName()
