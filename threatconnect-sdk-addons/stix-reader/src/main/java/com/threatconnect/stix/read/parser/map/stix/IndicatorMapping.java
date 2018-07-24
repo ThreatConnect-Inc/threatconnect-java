@@ -1,5 +1,6 @@
 package com.threatconnect.stix.read.parser.map.stix;
 
+import com.threatconnect.sdk.model.Attribute;
 import com.threatconnect.sdk.model.Indicator;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.ItemType;
@@ -42,9 +43,10 @@ public class IndicatorMapping
 	
 	public void map(final Node indicatorNode, final Document document, final Item item) throws XPathExpressionException
 	{
+		final String stixID = Constants.XPATH_UTIL.getString("@id", indicatorNode);
+		
 		// add all of the attributes for this object if they exist
-		AttributeHelper.addAttributeIfExists(item, ATTR_STIX_ID,
-			Constants.XPATH_UTIL.getString("@id", indicatorNode));
+		AttributeHelper.addAttributeIfExists(item, ATTR_STIX_ID, stixID);
 		AttributeHelper.addAttributeIfExists(item, ATTR_TITLE,
 			Constants.XPATH_UTIL.getString("Title", indicatorNode));
 		AttributeHelper.addAttributeIfExists(item, ATTR_PRODUCER,
@@ -82,7 +84,14 @@ public class IndicatorMapping
 		}
 		if (!descriptionBuilder.toString().isEmpty())
 		{
-			AttributeHelper.addDescriptionAttribute(item, descriptionBuilder.toString());
+			Attribute attribute = AttributeHelper.addDescriptionAttribute(item, descriptionBuilder.toString());
+			
+			//make sure the stix id is not null
+			if(null != stixID)
+			{
+				//set the attribute source as the stix id
+				attribute.setSource("@id:" + stixID);
+			}
 		}
 		
 		//check to see if the item is an indicator
