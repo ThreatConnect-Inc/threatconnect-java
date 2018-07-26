@@ -4,8 +4,12 @@ import com.threatconnect.sdk.model.Group;
 import com.threatconnect.sdk.model.Indicator;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.ItemType;
+import com.threatconnect.sdk.model.util.merge.MergeStrategy;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class ItemUtil
@@ -13,6 +17,33 @@ public class ItemUtil
 	private ItemUtil()
 	{
 		
+	}
+	
+	public static void mergeIndicators(final Collection<? extends Item> items, final MergeStrategy mergeStrategy)
+	{
+		Set<Group> groups = new HashSet<Group>();
+		Set<Indicator> indicators = new HashSet<Indicator>();
+		ItemUtil.separateGroupsAndIndicators(items, groups, indicators);
+		
+		//build a map of indicators to their identifier
+		Map<String, Indicator> indicatorIdentifierMap = new HashMap<String, Indicator>();
+		
+		//for each of the indicators
+		for (Indicator indicator : indicators)
+		{
+			//check to see if this indicator already exists
+			Indicator existing = indicatorIdentifierMap.get(indicator.getIdentifier());
+			if (null != existing)
+			{
+				//merge these two indicators
+				mergeStrategy.merge(indicator, existing);
+			}
+			else
+			{
+				//add this indicator to the map
+				indicatorIdentifierMap.put(indicator.getIdentifier(), indicator);
+			}
+		}
 	}
 	
 	/**

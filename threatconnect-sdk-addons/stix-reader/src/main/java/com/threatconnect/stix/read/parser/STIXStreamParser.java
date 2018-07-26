@@ -7,6 +7,7 @@ import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.SecurityLabel;
 import com.threatconnect.sdk.model.Threat;
 import com.threatconnect.sdk.model.util.ItemUtil;
+import com.threatconnect.sdk.model.util.merge.MergeAttributeStrategy;
 import com.threatconnect.sdk.parser.ParserException;
 import com.threatconnect.sdk.parser.source.DataSource;
 import com.threatconnect.sdk.parser.source.FileDataSource;
@@ -95,6 +96,9 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 	{
 		// holds the list of items that were parsed
 		List<Item> items = super.parseData();
+		
+		//merge the indicators attributes
+		ItemUtil.mergeIndicators(items, new MergeAttributeStrategy());
 		
 		// make sure that the document should be associated and that there were items found. If the
 		// document is empty or does not contain any usable data, we do not want to store it.

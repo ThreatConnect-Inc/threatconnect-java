@@ -15,7 +15,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.xpath.XPathExpressionException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class IndicatorMapping
 {
@@ -45,12 +47,15 @@ public class IndicatorMapping
 	{
 		final String stixID = Constants.XPATH_UTIL.getString("@id", indicatorNode);
 		
+		//holds the list of attributes that were built
+		List<Attribute> attributes = new ArrayList<Attribute>();
+		
 		// add all of the attributes for this object if they exist
-		AttributeHelper.addAttributeIfExists(item, ATTR_STIX_ID, stixID);
-		AttributeHelper.addAttributeIfExists(item, ATTR_TITLE,
-			Constants.XPATH_UTIL.getString("Title", indicatorNode));
-		AttributeHelper.addAttributeIfExists(item, ATTR_PRODUCER,
-			Constants.XPATH_UTIL.getString("Producer/Identity/Name", indicatorNode));
+		attributes.add(AttributeHelper.addAttributeIfExists(item, ATTR_STIX_ID, stixID));
+		attributes.add(AttributeHelper.addAttributeIfExists(item, ATTR_TITLE,
+			Constants.XPATH_UTIL.getString("Title", indicatorNode)));
+		attributes.add(AttributeHelper.addAttributeIfExists(item, ATTR_PRODUCER,
+			Constants.XPATH_UTIL.getString("Producer/Identity/Name", indicatorNode)));
 		
 		//retrieve the types
 		NodeList nodeList = Constants.XPATH_UTIL.getNodes("Type", indicatorNode);
@@ -60,7 +65,7 @@ public class IndicatorMapping
 			for (int i = 0; i < nodeList.getLength(); i++)
 			{
 				Node node = nodeList.item(i);
-				AttributeHelper.addAttributeIfExists(item, ATTR_STIX_INDICATOR_TYPE, node.getTextContent());
+				attributes.add(AttributeHelper.addAttributeIfExists(item, ATTR_STIX_INDICATOR_TYPE, node.getTextContent()));
 			}
 		}
 		
@@ -84,14 +89,7 @@ public class IndicatorMapping
 		}
 		if (!descriptionBuilder.toString().isEmpty())
 		{
-			Attribute attribute = AttributeHelper.addDescriptionAttribute(item, descriptionBuilder.toString());
-			
-			//make sure the stix id is not null
-			if(null != stixID)
-			{
-				//set the attribute source as the stix id
-				attribute.setSource("@id:" + stixID);
-			}
+			attributes.add(AttributeHelper.addDescriptionAttribute(item, descriptionBuilder.toString()));
 		}
 		
 		//check to see if the item is an indicator
@@ -123,8 +121,21 @@ public class IndicatorMapping
 				// retrieve the current package node
 				Node killChainNode = killChainPhaseNodeList.item(i);
 				String name = Constants.XPATH_UTIL.getString("@name", killChainNode);
-				AttributeHelper.addAttributeIfExists(item, ATTR_PHASE_OF_INTRUSION, name);
+				attributes.add(AttributeHelper.addAttributeIfExists(item, ATTR_PHASE_OF_INTRUSION, name));
 			}
+		}
+		
+		//make sure the stix id is not null
+		if (null != stixID)
+		{
+			//set the attribute source as the stix id
+			attributes.stream()
+				//remove all null attributes
+				.filter(Objects::nonNull)
+				//remove the ATTR_STIX_ID attribute
+				.filter(a -> !a.getType().equals(ATTR_STIX_ID))
+				//add the stixid as the source for each of the remaining attributes
+				.forEach(attribute -> attribute.setSource("@id:" + stixID));
 		}
 		
 		// :FIXME: handle the unknown mappings
