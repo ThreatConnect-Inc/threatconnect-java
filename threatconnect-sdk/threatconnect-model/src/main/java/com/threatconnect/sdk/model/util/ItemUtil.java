@@ -7,8 +7,10 @@ import com.threatconnect.sdk.model.ItemType;
 import com.threatconnect.sdk.model.util.merge.MergeStrategy;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,8 +23,8 @@ public class ItemUtil
 	
 	public static void mergeIndicators(final Collection<? extends Item> items, final MergeStrategy mergeStrategy)
 	{
-		Set<Group> groups = new HashSet<Group>();
-		Set<Indicator> indicators = new HashSet<Indicator>();
+		Set<Group> groups = Collections.newSetFromMap(new IdentityHashMap<Group, Boolean>());
+		Set<Indicator> indicators = Collections.newSetFromMap(new IdentityHashMap<Indicator, Boolean>());
 		ItemUtil.separateGroupsAndIndicators(items, groups, indicators);
 		
 		//build a map of indicators to their identifier
