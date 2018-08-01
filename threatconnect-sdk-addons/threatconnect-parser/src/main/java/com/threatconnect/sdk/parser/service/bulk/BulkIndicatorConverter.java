@@ -143,6 +143,7 @@ public class BulkIndicatorConverter
 		Attribute attribute = new Attribute();
 		attribute.setType(jsonObject.get("type").getAsString());
 		attribute.setValue(jsonObject.get("value").getAsString());
+		attribute.setSource(jsonObject.get("source").getAsString());
 		
 		return attribute;
 	}
@@ -232,6 +233,7 @@ public class BulkIndicatorConverter
 		
 		attributeJsonObject.addProperty("type", attribute.getType());
 		attributeJsonObject.addProperty("value", attribute.getValue());
+		attributeJsonObject.addProperty("source", attribute.getSource());
 		// :TODO: displayed?
 		
 		return attributeJsonObject;

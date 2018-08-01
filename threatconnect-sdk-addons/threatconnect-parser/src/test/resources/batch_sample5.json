@@ -1,0 +1,15 @@
+{
+	"indicator": [
+		{
+			"summary": "17.1.1.6",
+			"privateFlag": "true",
+			"xid": "eccdc5f4-1997-4d2f-9189-68a874433741",
+			"activeLocked": "true",
+			"confidence": "40",
+			"rating": "4",
+			"active": "true",
+			"type": "Address",
+			"dateAdded": "2018-05-25T15:04:10Z"
+		}
+	]
+}
