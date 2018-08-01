@@ -12,10 +12,12 @@ public class Feature
 	
 	public static final String CREATES_INDICATOR = "CreatesIndicator";
 	public static final String CREATES_GROUP = "CreatesGroup";
+	public static final String CREATES_VICTIM = "CreatesVictim";
 	public static final String CREATES_TAG = "CreatesTag";
 	public static final String CREATES_SECURITY_LABEL = "CreatesSecurityLabel";
 	public static final String DELETES_INDICATOR = "DeletesIndicator";
 	public static final String DELETES_GROUP = "DeletesGroup";
+	public static final String DELETES_VICTIM = "DeletesVictim";
 	public static final String DELETES_TAG = "DeletesTag";
 	public static final String DELETES_SECURITY_LABEL = "DeletesSecurityLabel";
 }
