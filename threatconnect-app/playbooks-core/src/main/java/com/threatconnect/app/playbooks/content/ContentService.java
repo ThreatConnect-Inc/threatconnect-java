@@ -21,6 +21,8 @@ import com.threatconnect.app.playbooks.db.DBService;
 import com.threatconnect.app.playbooks.util.PlaybooksVariableUtil;
 import com.threatconnect.app.playbooks.variable.PlaybooksVariable;
 import com.threatconnect.sdk.model.Item;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,8 @@ import java.util.UUID;
  */
 public class ContentService
 {
+	private static final Logger logger = LoggerFactory.getLogger(ContentService.class);
+	
 	//holds the database service object
 	private final DBService dbService;
 	

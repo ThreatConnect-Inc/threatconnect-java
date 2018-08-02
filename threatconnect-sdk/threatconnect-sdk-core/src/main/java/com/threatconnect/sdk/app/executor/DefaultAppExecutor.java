@@ -22,7 +22,7 @@ public class DefaultAppExecutor extends AppExecutor
 	@Override
 	public int execute()
 	{
-		logger.error("DefaultAppExecutor execute()");
+		logger.trace("DefaultAppExecutor execute()");
 		
 		// holds the most recent exit status from the app
 		ExitStatus exitStatus = null;
@@ -85,5 +85,6 @@ public class DefaultAppExecutor extends AppExecutor
 		// initialize this app
 		logger.trace("Initializing App: " + getAppClass().getName());
 		app.init(getAppConfig());
+		logger.trace("Initialization Complete");
 	}
 }

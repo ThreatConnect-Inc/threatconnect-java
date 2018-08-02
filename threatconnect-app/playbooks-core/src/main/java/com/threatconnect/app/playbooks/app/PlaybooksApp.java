@@ -48,9 +48,14 @@ public abstract class PlaybooksApp extends App
 	
 	public void init(final AppConfig appConfig, final DBService customDBService)
 	{
+		init(appConfig, new ContentService(customDBService));
+	}
+	
+	public void init(final AppConfig appConfig, final ContentService contentService)
+	{
 		super.init(appConfig);
 		this.playbooksAppConfig = new PlaybooksAppConfig(appConfig);
-		this.contentService = new ContentService(customDBService);
+		this.contentService = contentService;
 	}
 	
 	@Override

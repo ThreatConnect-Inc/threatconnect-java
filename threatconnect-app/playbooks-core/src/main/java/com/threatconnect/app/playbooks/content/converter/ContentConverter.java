@@ -13,11 +13,10 @@ public abstract class ContentConverter<T>
 {
 	public static final DateFormat DEFAULT_DATE_FORMATTER = new ISO8601DateFormat();
 	
-	protected final ObjectMapper mapper;
+	private static final ObjectMapper mapper = new ObjectMapper();
 	
-	public ContentConverter()
+	static
 	{
-		mapper = new ObjectMapper();
 		mapper.setDateFormat(DEFAULT_DATE_FORMATTER);
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	}
