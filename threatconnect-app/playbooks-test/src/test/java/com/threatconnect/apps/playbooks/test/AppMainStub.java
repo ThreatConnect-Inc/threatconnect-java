@@ -2,13 +2,12 @@ package com.threatconnect.apps.playbooks.test;
 
 import com.threatconnect.app.apps.App;
 import com.threatconnect.app.apps.AppConfig;
-import com.threatconnect.app.apps.AppExecutor;
-import com.threatconnect.app.apps.ExitStatus;
+import com.threatconnect.app.apps.AppLauncher;
 
 /**
  * @author Greg Marut
  */
-public class AppMainStub extends AppExecutor
+public class AppMainStub extends AppLauncher
 {
 	public AppMainStub(final AppConfig appConfig)
 	{
@@ -23,10 +22,9 @@ public class AppMainStub extends AppExecutor
 	}
 	
 	@Override
-	public int execute()
+	public void launch()
 	{
 		//do nothing
-		return ExitStatus.Success.getExitCode();
 	}
 	
 	public static void main(String[] args)

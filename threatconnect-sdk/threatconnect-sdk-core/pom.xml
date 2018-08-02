@@ -26,6 +26,11 @@
 			<artifactId>apps-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.threatconnect.app</groupId>
+			<artifactId>playbooks-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>commons-codec</groupId>
@@ -72,6 +77,12 @@
 			<groupId>org.reflections</groupId>
 			<artifactId>reflections</artifactId>
 			<version>${version.reflections}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>${version.jedis}</version>
 		</dependency>
 
 		<!-- Log4j API and Core implementation required for binding -->

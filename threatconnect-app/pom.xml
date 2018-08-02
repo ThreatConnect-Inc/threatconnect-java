@@ -68,6 +68,7 @@
 		<log4j.version>2.6.1</log4j.version>
 		<version.apache-http>4.4.1</version.apache-http>
 		<version.apache-commons>3.6</version.apache-commons>
+		<version.jedis>2.9.0</version.jedis>
 
 		<!-- Test Dependency Versions -->
 		<version.junit>4.12</version.junit>

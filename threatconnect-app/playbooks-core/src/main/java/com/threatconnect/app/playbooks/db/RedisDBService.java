@@ -25,6 +25,12 @@ public class RedisDBService implements DBService
 		this.contextKey = playbooksAppConfig.getDBContext();
 	}
 	
+	public RedisDBService(final PlaybooksAppConfig playbooksAppConfig, final Jedis jedis)
+	{
+		this.redis = jedis;
+		this.contextKey = playbooksAppConfig.getDBContext();
+	}
+	
 	@Override
 	public void saveValue(String key, byte[] value)
 	{

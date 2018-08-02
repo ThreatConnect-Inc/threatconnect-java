@@ -2,35 +2,32 @@ package com.threatconnect.sdk.app;
 
 import com.threatconnect.app.apps.App;
 import com.threatconnect.app.apps.AppConfig;
-import com.threatconnect.app.apps.AppExecutor;
-import com.threatconnect.app.apps.ExitStatus;
+import com.threatconnect.app.apps.AppLauncher;
 import com.threatconnect.app.apps.SystemPropertiesAppConfig;
-import com.threatconnect.sdk.app.aot.AOTHandler;
-import com.threatconnect.sdk.app.aot.AOTListener;
-import com.threatconnect.sdk.app.exception.AppInstantiationException;
+import com.threatconnect.sdk.app.exception.AppInitializationException;
 import com.threatconnect.sdk.app.exception.MultipleAppClassFoundException;
 import com.threatconnect.sdk.app.exception.NoAppClassFoundException;
-import com.threatconnect.sdk.app.exception.PartialFailureException;
-import com.threatconnect.sdk.app.exception.TCMessageException;
+import com.threatconnect.sdk.app.executor.AppExecutor;
+import com.threatconnect.sdk.app.executor.AppExecutorFactory;
 import com.threatconnect.sdk.log.ServerLogger;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.function.Consumer;
 
-public final class AppMain extends AppExecutor
+public final class AppMain extends AppLauncher
 {
 	private static final Logger logger = LoggerFactory.getLogger(AppMain.class);
 	
 	public AppMain()
 	{
-		super(findAppConfig());
+		this(findAppConfig());
 	}
 	
 	public AppMain(final AppConfig appConfig)
@@ -39,80 +36,38 @@ public final class AppMain extends AppExecutor
 	}
 	
 	@Override
-	public int execute()
+	public void launch() throws ClassNotFoundException, IOException, AppInitializationException
 	{
-		logger.trace("AppMain execute()");
+		logger.info("Retrieving class to execute...");
+		final Class<? extends App> appClass = getAppClassToExecute();
 		
-		// holds the most recent exit status from the app
-		ExitStatus exitStatus = null;
+		// reconfigure the log file for this app
+		logger.info("Configuring App Logging...");
+		File logFile = new File(getAppConfig().getTcLogPath() + File.separator + appClass.getSimpleName() + ".log");
+		LoggerUtil.reconfigureGlobalLogger(logFile, getAppConfig());
+		
+		// set whether or not api logging is enabled
+		ServerLogger.getInstance(getAppConfig()).setEnabled(getAppConfig().isTcLogToApi());
+		
+		//holds the resulting exit code from the app execution
+		final int exitCode;
 		
 		try
 		{
-			// set whether or not api logging is enabled
-			ServerLogger.getInstance(getAppConfig()).setEnabled(getAppConfig().isTcLogToApi());
+			//retrieve the type of execution that this app should use
+			AppExecutor appExecutor = AppExecutorFactory.create(getAppConfig(), appClass);
 			
-			//get the class to execute
-			logger.trace("Retrieving app class to execute");
-			Class<? extends App> appClass = getAppClassToExecute();
-			
-			// execute this app and save the status code
-			exitStatus = configureAndExecuteApp(appClass, getAppConfig());
-		}
-		catch (Exception e)
-		{
-			logger.error(e.getMessage(), e);
-			LoggerUtil.logErr(e, e.getMessage());
-			exitStatus = ExitStatus.Failure;
+			//execute the app and retrieve the exit code
+			exitCode = appExecutor.execute();
 		}
 		finally
 		{
-			// ensure that the exit status is not null. This should not normally happen
-			if (null == exitStatus)
-			{
-				LoggerUtil.logErr("Exit status is null.");
-				exitStatus = ExitStatus.Failure;
-			}
+			// flush the logs to the server
+			ServerLogger.getInstance(getAppConfig()).flushToServer();
 		}
 		
-		return exitStatus.getExitCode();
-	}
-	
-	/**
-	 * Executes the AOT logic to wait for further instructions
-	 */
-	private void executeAOT()
-	{
-		//create a new AOT Handler
-		new AOTHandler(getAppConfig(), new AOTListener()
-		{
-			@Override
-			public void execute(final AOTHandler aotHandler, final Map<String, String> parameters)
-			{
-				//check to see if the parameters map is not null
-				if(null != parameters)
-				{
-					//set all of the parameters on this app config
-					getAppConfig().setAll(parameters);
-				}
-				
-				executeAndExit(AppMain.this, aotHandler::sendExitCode);
-			}
-			
-			@Override
-			public void terminate(final boolean timeout)
-			{
-				if (timeout)
-				{
-					// exit the app with this exit status
-					logger.warn("AOT timeout. App terminating without execution.");
-					System.exit(1);
-				}
-				else
-				{
-					System.exit(0);
-				}
-			}
-		});
+		// exit the app with this exit status
+		System.exit(exitCode);
 	}
 	
 	/**
@@ -125,8 +80,7 @@ public final class AppMain extends AppExecutor
 	public Class<? extends App> getAppClassToExecute() throws ClassNotFoundException
 	{
 		// check to see if there is an app class specified
-		if (null != getAppConfig() && null != getAppConfig().getTcMainAppClass() && !getAppConfig().getTcMainAppClass()
-			.isEmpty())
+		if (null != getAppConfig() && null != getAppConfig().getTcMainAppClass() && !getAppConfig().getTcMainAppClass().isEmpty())
 		{
 			// load the class by name
 			Class<?> clazz = Class.forName(getAppConfig().getTcMainAppClass());
@@ -188,65 +142,10 @@ public final class AppMain extends AppExecutor
 		}
 	}
 	
-	/**
-	 * Instantiates and executes the app given
-	 *
-	 * @param appClass
-	 * @return
-	 * @throws Exception
-	 */
-	private ExitStatus configureAndExecuteApp(final Class<? extends App> appClass, final AppConfig appConfig)
-		throws Exception
-	{
-		try
-		{
-			// instantiate a new app class
-			logger.trace("Instantiating app class: " + appClass.getName());
-			App app = appClass.newInstance();
-			
-			// initialize this app
-			app.init(appConfig);
-			
-			// reconfigure the log file for this app
-			logger.trace("Reconfiguring global logger for app");
-			LoggerUtil.reconfigureGlobalLogger(app.getAppLogFile(), appConfig);
-			
-			try
-			{
-				// execute this app
-				logger.trace("Executing app: " + appClass.getName());
-				return app.execute(appConfig);
-			}
-			catch (PartialFailureException e)
-			{
-				app.writeMessageTc(e.getMessage());
-				logger.error(e.getMessage(), e);
-				LoggerUtil.logErr(e, e.getMessage());
-				return ExitStatus.Partial_Failure;
-			}
-			catch (TCMessageException e)
-			{
-				app.writeMessageTc(e.getMessage());
-				logger.error(e.getMessage(), e);
-				LoggerUtil.logErr(e, e.getMessage());
-				return ExitStatus.Failure;
-			}
-		}
-		catch (IllegalAccessException | InstantiationException e)
-		{
-			throw new AppInstantiationException(e, appClass);
-		}
-	}
-	
 	private Set<Class<? extends App>> scanForAppClasses()
 	{
-		return scanForAppClasses(null);
-	}
-	
-	private Set<Class<? extends App>> scanForAppClasses(final String basePackage)
-	{
 		// find the set of all classes that extend the App class
-		Reflections reflections = new Reflections(basePackage);
+		Reflections reflections = new Reflections();
 		return reflections.getSubTypesOf(App.class);
 	}
 	
@@ -265,61 +164,8 @@ public final class AppMain extends AppExecutor
 		return appConfig;
 	}
 	
-	private static void executeAndExit(final AppMain appMain)
+	public static void main(String[] args) throws Exception
 	{
-		executeAndExit(appMain, null);
-	}
-	
-	private static void executeAndExit(final AppMain appMain, final Consumer<Integer> afterExecute)
-	{
-		//holds the exit code after execution
-		final int exitCode;
-		
-		try
-		{
-			//execute the app and return the exit status
-			exitCode = appMain.execute();
-			
-			//make sure the after execute consumer is not null
-			if (null != afterExecute)
-			{
-				afterExecute.accept(exitCode);
-			}
-		}
-		finally
-		{
-			// flush the logs to the server
-			ServerLogger.getInstance(appMain.getAppConfig()).flushToServer();
-		}
-		
-		// exit the app with this exit status
-		System.exit(exitCode);
-	}
-	
-	public static void main(String[] args)
-	{
-		//retrieve the app config object
-		AppConfig appConfig = findAppConfig();
-		AppMain appMain = new AppMain(appConfig);
-		
-		//check to see if AOT is enabled and that the channel is set
-		if (appConfig.isAOTEnabled())
-		{
-			//make sure the action channel is set
-			if (null != appConfig.getTcActionChannel())
-			{
-				//run the aot logic
-				appMain.executeAOT();
-			}
-			else
-			{
-				//need to use system.err over logger since logger is not yet configured
-				System.err.println("Unable to launch app as AOT. Missing required parameter: " + AppConfig.TC_ACTION_CHANNEL);
-			}
-		}
-		else
-		{
-			executeAndExit(appMain);
-		}
+		new AppMain().launch();
 	}
 }

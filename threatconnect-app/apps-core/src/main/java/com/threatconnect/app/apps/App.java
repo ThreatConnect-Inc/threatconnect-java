@@ -166,6 +166,7 @@ public abstract class App
 	 *
 	 * @return the log file for this app
 	 */
+	@Deprecated
 	public File getAppLogFile()
 	{
 		return new File(getAppConfig().getTcLogPath() + File.separator + getLogFilename());
