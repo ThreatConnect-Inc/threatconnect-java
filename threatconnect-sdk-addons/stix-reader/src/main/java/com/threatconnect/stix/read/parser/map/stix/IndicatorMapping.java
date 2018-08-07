@@ -87,6 +87,15 @@ public class IndicatorMapping
 			
 			descriptionBuilder.append(description.trim());
 		}
+		
+		if (descriptionBuilder.length() > 0)
+		{
+			descriptionBuilder.append("\n\n");
+		}
+		
+		descriptionBuilder.append("STIX ID: ");
+		descriptionBuilder.append(stixID);
+		
 		if (!descriptionBuilder.toString().isEmpty())
 		{
 			attributes.add(AttributeHelper.addDescriptionAttribute(item, descriptionBuilder.toString()));
