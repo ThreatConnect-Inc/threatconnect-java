@@ -20,7 +20,8 @@ import java.util.List;
 
 public class EmailMapping extends CyboxObjectMapping
 {
-	private static final Logger logger = LoggerFactory.getLogger(EmailMapping.class);
+	//:FIXME: the api requires some field to be something
+	private static final String EMPTY_VALUE = "Empty";
 	
 	private static final String ATTR_EMAIL_SERVER = "Email Server";
 	private static final String ATTR_IS_SPOOFED = "Is Spoofed";
@@ -51,17 +52,15 @@ public class EmailMapping extends CyboxObjectMapping
 		
 		// extract the raw body of the email
 		String rawBody = Constants.XPATH_UTIL.getString("Raw_Body", propertiesNode);
-		if (StringUtils.isNotBlank(rawBody))
-		{
-			email.setBody(rawBody);
-		}
+		email.setBody(StringUtils.isNotBlank(rawBody) ? rawBody : EMPTY_VALUE);
 		
 		// extract the raw header of the email
 		String rawHeader = Constants.XPATH_UTIL.getString("Raw_Header", propertiesNode);
-		if (StringUtils.isNotBlank(rawHeader))
-		{
-			email.setHeader(rawHeader);
-		}
+		email.setHeader(StringUtils.isNotBlank(rawHeader) ? rawHeader : EMPTY_VALUE);
+		
+		// extract the subject
+		String subject = Constants.XPATH_UTIL.getString("Header/Subject", propertiesNode);
+		email.setSubject(StringUtils.isNotBlank(subject) ? subject : EMPTY_VALUE);
 		
 		// extract the from address value for this email address
 		final Node fromNode = Constants.XPATH_UTIL.getNode("Header/From", propertiesNode);
@@ -95,7 +94,7 @@ public class EmailMapping extends CyboxObjectMapping
 		
 		//get the address value object
 		String addressValue = Constants.XPATH_UTIL.getString("Address_Value", propertiesNode);
-		if(null != addressValue)
+		if (null != addressValue)
 		{
 			//create a new email address indicator
 			EmailAddress emailAddress = new EmailAddress();
@@ -110,13 +109,6 @@ public class EmailMapping extends CyboxObjectMapping
 		
 		// set the to recipients
 		email.setTo(buildRecipientList("Header/To/Recipient", propertiesNode));
-		
-		// extract the subject
-		String subject = Constants.XPATH_UTIL.getString("Header/Subject", propertiesNode);
-		if (StringUtils.isNotBlank(subject))
-		{
-			email.setSubject(subject);
-		}
 		
 		// add all of the attributes for this object if they exist
 		AttributeHelper.addAttributeIfExists(email, ATTR_EMAIL_SERVER,

@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.threatconnect.sdk.model.Attribute;
+import com.threatconnect.sdk.model.Email;
 import com.threatconnect.sdk.model.File;
 import com.threatconnect.sdk.model.FileOccurrence;
 import com.threatconnect.sdk.model.Group;
@@ -141,6 +142,13 @@ public class BatchItemSerializer
 		
 		groupJsonObject.add("securityLabel", buildSecurityLabelArray(group.getSecurityLabels()));
 		
+		//check to see if this indicator is a file
+		if (group instanceof Email)
+		{
+			//write additional data for this file
+			writeAdditionalData((Email) group, groupJsonObject);
+		}
+		
 		//for each of the associations on this group
 		for (Item item : group.getAssociatedItems())
 		{
@@ -235,6 +243,16 @@ public class BatchItemSerializer
 			fileActionObject.add("fileOccurrence", fileOccurrenceArray);
 			indicatorJsonObject.add("fileAction", fileActionObject);
 		}
+	}
+	
+	private void writeAdditionalData(final Email email, final JsonObject groupJsonObject)
+	{
+		groupJsonObject.addProperty("body", email.getBody());
+		groupJsonObject.addProperty("from", email.getFrom());
+		groupJsonObject.addProperty("header", email.getHeader());
+		groupJsonObject.addProperty("score", email.getScore());
+		groupJsonObject.addProperty("subject", email.getSubject());
+		groupJsonObject.addProperty("to", email.getTo());
 	}
 	
 	private void addTagsAndAttributes(final JsonObject jsonObject, final Item item)

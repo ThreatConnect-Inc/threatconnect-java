@@ -6,9 +6,9 @@ import org.junit.Test;
 public class ParserTest extends AbstractParserTest
 {
 	@Test
-	public void ParseFOXIT1() throws ParserException
+	public void test() throws ParserException
 	{
 		// parse the list of items
-		parse("stix_test.xml");
+		parse("CISCP_Log@07-13-2018T00_30_46.xml");
 	}
 }

@@ -100,7 +100,7 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 							mapper.map(attribute, com.threatconnect.sdk.server.entity.Attribute.class);
 						
 						// save the attributes for this group
-						ApiEntitySingleResponse<?, ?> attrResponse = writer.addAttribute(getSavedGroupID(), attr);
+						ApiEntitySingleResponse<?, ?> attrResponse = writer.addAttribute(getSavedGroupID(), attr, ownerName);
 						
 						// check to see if this was not successful
 						if (!attrResponse.isSuccess())
@@ -143,6 +143,7 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 			}
 			else
 			{
+				logger.warn("Failed to save group \"{}\": {}", group.getName(), response.getMessage());
 				throw new SaveItemFailedException(groupSource, response.getMessage());
 			}
 		}

@@ -120,7 +120,7 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 							mapper.map(attribute, com.threatconnect.sdk.server.entity.Attribute.class);
 						
 						// save the attributes for this indicator
-						ApiEntitySingleResponse<?, ?> attrResponse = writer.addAttribute(buildID(), attr);
+						ApiEntitySingleResponse<?, ?> attrResponse = writer.addAttribute(buildID(), attr, ownerName);
 						
 						// check to see if this was not successful
 						if (!attrResponse.isSuccess())
@@ -162,6 +162,7 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 			}
 			else
 			{
+				logger.warn("Failed to save group \"{}\": {}", buildID(), response.getMessage());
 				throw new SaveItemFailedException(indicatorSource, response.getMessage());
 			}
 		}
