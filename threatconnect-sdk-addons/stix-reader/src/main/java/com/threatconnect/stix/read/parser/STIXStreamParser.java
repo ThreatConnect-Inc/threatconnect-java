@@ -55,7 +55,7 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 	
 	// holds the map of indicators that have been loaded from the xml document
 	private final Map<String, List<? extends Item>> observableMap;
-	private final NodeResolver observableNodeResolver;
+	private final NodeResolver nodeResolver;
 	
 	private final java.io.File documentFile;
 	private final String documentName;
@@ -71,7 +71,7 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 		super(dataSource);
 		
 		this.observableMap = new HashMap<String, List<? extends Item>>();
-		this.observableNodeResolver = new ObservableNodeResolver();
+		this.nodeResolver = new ObservableNodeResolver();
 		this.mappingContainer = mappingContainer;
 		this.documentFile = null;
 		this.documentName = null;
@@ -84,7 +84,7 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 		super(new FileDataSource(documentFile));
 		
 		this.observableMap = new HashMap<String, List<? extends Item>>();
-		this.observableNodeResolver = new ObservableNodeResolver();
+		this.nodeResolver = new ObservableNodeResolver();
 		this.mappingContainer = mappingContainer;
 		this.documentFile = documentFile;
 		this.documentName = documentName;
@@ -166,7 +166,7 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 		
 		//since we are using the observer pattern, we now need to notify all of the observers which observables have been found
 		logger.info("Flushing Observers");
-		observableNodeResolver.flushAll();
+		nodeResolver.flushAll();
 		
 		return new ArrayList<Item>(items);
 	}
@@ -290,7 +290,7 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 		throws XPathExpressionException
 	{
 		// just in case this is a pointer to another observable, we need to resolve it
-		observableNodeResolver.resolveNode(document, observableNode, resolvedObservableNode ->
+		nodeResolver.resolveNode(document, observableNode, resolvedObservableNode ->
 		{
 			try
 			{
@@ -340,7 +340,7 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 			
 			// parse the list of items from this observable
 			List<? extends Item> observableItems =
-				cyboxObjectMapping.map(objectNode, observableNodeID, document, securityLabels);
+				cyboxObjectMapping.map(objectNode, observableNodeID, document, securityLabels, nodeResolver);
 			
 			//parse the related objects from the resolved observable node
 			List<? extends Item> relatedObjects = parseRelatedObjects(document, resolvedObservableNode, securityLabels);
@@ -382,7 +382,7 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 				{
 					// retrieve the mapping object for parsing this observable
 					CyboxObjectMapping cyboxObjectMapping = determineCyboxMapping(relatedObjectNode);
-					items.addAll(cyboxObjectMapping.map(relatedObjectNode, observableNodeID, document, securityLabels));
+					items.addAll(cyboxObjectMapping.map(relatedObjectNode, observableNodeID, document, securityLabels, nodeResolver));
 				}
 				catch (InvalidObservableException | UnsupportedObservableTypeException e)
 				{

@@ -7,6 +7,7 @@ import com.threatconnect.sdk.model.SecurityLabel;
 import com.threatconnect.sdk.parser.util.AttributeHelper;
 import com.threatconnect.stix.read.parser.Constants;
 import com.threatconnect.stix.read.parser.exception.InvalidObservableException;
+import com.threatconnect.stix.read.parser.resolver.NodeResolver;
 import com.threatconnect.stix.read.parser.util.DebugUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -35,6 +36,7 @@ public class FileMapping extends CyboxObjectMapping
 	private static final String ATTR_DATE_LAST_MODIFIED = "Date Last Modified";
 	private static final String ATTR_DATE_LAST_ACCESSED = "Date Last Accessed";
 	private static final String ATTR_DATE_CREATED = "Date Created";
+	private static final String ATTR_SSDEEP = "SSDEEP";
 	private static final String ATTR_FILE_ATTRIBUTES = "File Attributes";
 	
 	public FileMapping(final Double defaultRating, final Double defaultConfidence)
@@ -43,8 +45,8 @@ public class FileMapping extends CyboxObjectMapping
 	}
 	
 	@Override
-	public List<? extends Item> map(Node objectNode, final String observableNodeID, final Document document, final List<SecurityLabel> securityLabels)
-		throws XPathExpressionException
+	public List<? extends Item> map(Node objectNode, final String observableNodeID, final Document document, final List<SecurityLabel> securityLabels,
+		final NodeResolver nodeResolver) throws XPathExpressionException
 	{
 		File file = new File();
 		file.getSecurityLabels().addAll(securityLabels);
@@ -107,6 +109,7 @@ public class FileMapping extends CyboxObjectMapping
 			Node hashNode = hashNodes.item(i);
 			final String type = Constants.XPATH_UTIL.getString("Type", hashNode);
 			final String hash = Constants.XPATH_UTIL.getString("Simple_Hash_Value", hashNode);
+			final String fuzzyHash = Constants.XPATH_UTIL.getString("Fuzzy_Hash_Value", hashNode);
 			
 			switch (type)
 			{
@@ -118,6 +121,9 @@ public class FileMapping extends CyboxObjectMapping
 					break;
 				case "SHA256":
 					file.setSha256(hash);
+					break;
+				case "SSDEEP":
+					AttributeHelper.addAttributeIfExists(file, ATTR_SSDEEP, fuzzyHash);
 					break;
 			}
 		}

@@ -3,6 +3,7 @@ package com.threatconnect.stix.read.parser.map.cybox.object;
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.stix.read.parser.Constants;
 import com.threatconnect.stix.read.parser.exception.InvalidObservableException;
+import com.threatconnect.stix.read.parser.resolver.NodeResolver;
 import com.threatconnect.stix.read.parser.util.StixNodeUtil;
 import com.threatconnect.sdk.model.Address;
 import com.threatconnect.sdk.model.Item;
@@ -32,7 +33,7 @@ public class IPv4Mapping extends CyboxObjectMapping
 	
 	@Override
 	public List<? extends Item> map(final Node objectNode, final String observableNodeID, final Document document,
-		final List<SecurityLabel> securityLabels) throws XPathExpressionException, InvalidObservableException
+		final List<SecurityLabel> securityLabels, final NodeResolver nodeResolver) throws XPathExpressionException, InvalidObservableException
 	{
 		// get the properties node for this observable
 		Node propertiesNode = Constants.XPATH_UTIL.getNode("Properties", objectNode);

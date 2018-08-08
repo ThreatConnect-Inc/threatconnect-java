@@ -8,6 +8,7 @@ import com.threatconnect.sdk.parser.util.IndicatorUtil;
 import com.threatconnect.sdk.parser.util.InvalidURLException;
 import com.threatconnect.stix.read.parser.Constants;
 import com.threatconnect.stix.read.parser.exception.InvalidObservableException;
+import com.threatconnect.stix.read.parser.resolver.NodeResolver;
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -27,7 +28,7 @@ public class UrlMapping extends CyboxObjectMapping
 	
 	@Override
 	public List<? extends Item> map(final Node objectNode, final String observableNodeID, final Document document,
-		final List<SecurityLabel> securityLabels)
+		final List<SecurityLabel> securityLabels, final NodeResolver nodeResolver)
 		throws XPathExpressionException, InvalidObservableException
 	{
 		// get the properties node for this observable

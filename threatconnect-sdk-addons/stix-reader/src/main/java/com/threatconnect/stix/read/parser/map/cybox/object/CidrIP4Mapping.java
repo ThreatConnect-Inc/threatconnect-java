@@ -4,6 +4,7 @@ import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.SecurityLabel;
 import com.threatconnect.stix.read.indicator.Cidr;
 import com.threatconnect.stix.read.parser.Constants;
+import com.threatconnect.stix.read.parser.resolver.NodeResolver;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -23,7 +24,7 @@ public class CidrIP4Mapping extends CyboxObjectMapping
 	
 	@Override
 	public List<? extends Item> map(final Node objectNode, final String observableNodeID, final Document document,
-		final List<SecurityLabel> securityLabels) throws XPathExpressionException
+		final List<SecurityLabel> securityLabels, final NodeResolver nodeResolver) throws XPathExpressionException
 	{
 		// get the properties node for this observable
 		Node propertiesNode = Constants.XPATH_UTIL.getNode("Properties", objectNode);

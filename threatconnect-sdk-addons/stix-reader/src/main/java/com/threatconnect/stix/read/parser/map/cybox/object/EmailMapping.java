@@ -6,6 +6,8 @@ import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.SecurityLabel;
 import com.threatconnect.sdk.parser.util.AttributeHelper;
 import com.threatconnect.stix.read.parser.Constants;
+import com.threatconnect.stix.read.parser.observer.ItemObserver;
+import com.threatconnect.stix.read.parser.resolver.NodeResolver;
 import com.threatconnect.stix.read.parser.util.DebugUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -33,7 +35,7 @@ public class EmailMapping extends CyboxObjectMapping
 	
 	@Override
 	public List<? extends Item> map(final Node objectNode, final String observableNodeID, final Document document,
-		final List<SecurityLabel> securityLabels) throws XPathExpressionException
+		final List<SecurityLabel> securityLabels, final NodeResolver nodeResolver) throws XPathExpressionException
 	{
 		List<Item> items = new ArrayList<Item>();
 		
@@ -94,7 +96,7 @@ public class EmailMapping extends CyboxObjectMapping
 		
 		//get the address value object
 		String addressValue = Constants.XPATH_UTIL.getString("Address_Value", propertiesNode);
-		if (null != addressValue)
+		if (StringUtils.isNotBlank(addressValue))
 		{
 			//create a new email address indicator
 			EmailAddress emailAddress = new EmailAddress();
@@ -114,8 +116,29 @@ public class EmailMapping extends CyboxObjectMapping
 		AttributeHelper.addAttributeIfExists(email, ATTR_EMAIL_SERVER,
 			Constants.XPATH_UTIL.getString("Email_Server", propertiesNode));
 		
+		//retrieve all of the file nodes
+		NodeList fileNodeList = Constants.XPATH_UTIL.getNodes("Attachments/File", propertiesNode);
+		if(null != fileNodeList)
+		{
+			// for each of the nodes in the list
+			for (int i = 0; i < fileNodeList.getLength(); i++)
+			{
+				// retrieve the current stix package node
+				Node fileNode = fileNodeList.item(i);
+				
+				//get the object reference and see if it is not null
+				final String fileReference = Constants.XPATH_UTIL.getString("@object_reference", fileNode);
+				if(StringUtils.isNotBlank(fileReference))
+				{
+					//create an item observer to add all of the items to this email
+					ItemObserver itemObserver = (foundItems) -> email.getAssociatedItems().addAll(items);
+					
+					//:FIXME: how do we resolve this file reference?
+				}
+			}
+		}
+		
 		// :FIXME: handle the unknown mappings
-		DebugUtil.logUnknownMapping("Attachments", propertiesNode);
 		DebugUtil.logUnknownMapping("Links", propertiesNode);
 		
 		return items;
