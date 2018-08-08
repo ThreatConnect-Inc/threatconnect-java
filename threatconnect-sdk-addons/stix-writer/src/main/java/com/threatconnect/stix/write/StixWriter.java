@@ -215,7 +215,7 @@ public class StixWriter
 		description.append(rating);
 		
 		//set the description for this indicator
-		stixIndicator.withDescriptions(new StructuredTextType().withValue(description.toString()));
+		stixIndicator.withDescription(new StructuredTextType().withValue(description.toString()));
 		
 		//set the confidence
 		stixIndicator.setConfidence(new ConfidenceType().withValue(
