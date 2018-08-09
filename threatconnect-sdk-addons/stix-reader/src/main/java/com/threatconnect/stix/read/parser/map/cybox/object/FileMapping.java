@@ -7,7 +7,9 @@ import com.threatconnect.sdk.model.SecurityLabel;
 import com.threatconnect.sdk.parser.util.AttributeHelper;
 import com.threatconnect.stix.read.parser.Constants;
 import com.threatconnect.stix.read.parser.exception.InvalidObservableException;
+import com.threatconnect.stix.read.parser.observer.ItemObserver;
 import com.threatconnect.stix.read.parser.resolver.NodeResolver;
+import com.threatconnect.stix.read.parser.resolver.Resolver;
 import com.threatconnect.stix.read.parser.util.DebugUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -46,7 +48,7 @@ public class FileMapping extends CyboxObjectMapping
 	
 	@Override
 	public List<? extends Item> map(Node objectNode, final String observableNodeID, final Document document, final List<SecurityLabel> securityLabels,
-		final NodeResolver nodeResolver) throws XPathExpressionException
+		final NodeResolver nodeResolver, final Resolver<List<? extends Item>, ItemObserver> cyboxObjectResolver) throws XPathExpressionException
 	{
 		File file = new File();
 		file.getSecurityLabels().addAll(securityLabels);

@@ -9,7 +9,9 @@ import com.threatconnect.sdk.parser.util.AttributeHelper;
 import com.threatconnect.sdk.parser.util.RegexUtil;
 import com.threatconnect.stix.read.parser.Constants;
 import com.threatconnect.stix.read.parser.exception.InvalidObservableException;
+import com.threatconnect.stix.read.parser.observer.ItemObserver;
 import com.threatconnect.stix.read.parser.resolver.NodeResolver;
+import com.threatconnect.stix.read.parser.resolver.Resolver;
 import com.threatconnect.stix.read.parser.util.StixNodeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
@@ -38,7 +40,8 @@ public class DNSRecordMapping extends CyboxObjectMapping
 	
 	@Override
 	public List<? extends Item> map(final Node objectNode, final String observableNodeID, final Document document,
-		final List<SecurityLabel> securityLabels, final NodeResolver nodeResolver)
+		final List<SecurityLabel> securityLabels, final NodeResolver nodeResolver,
+		final Resolver<List<? extends Item>, ItemObserver> cyboxObjectResolver)
 		throws XPathExpressionException, InvalidObservableException
 	{
 		// holds the list of items to return

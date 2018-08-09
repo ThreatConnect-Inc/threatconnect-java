@@ -8,10 +8,9 @@ import com.threatconnect.sdk.parser.util.AttributeHelper;
 import com.threatconnect.stix.read.parser.Constants;
 import com.threatconnect.stix.read.parser.observer.ItemObserver;
 import com.threatconnect.stix.read.parser.resolver.NodeResolver;
+import com.threatconnect.stix.read.parser.resolver.Resolver;
 import com.threatconnect.stix.read.parser.util.DebugUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -35,7 +34,8 @@ public class EmailMapping extends CyboxObjectMapping
 	
 	@Override
 	public List<? extends Item> map(final Node objectNode, final String observableNodeID, final Document document,
-		final List<SecurityLabel> securityLabels, final NodeResolver nodeResolver) throws XPathExpressionException
+		final List<SecurityLabel> securityLabels, final NodeResolver nodeResolver,
+		final Resolver<List<? extends Item>, ItemObserver> cyboxObjectResolver) throws XPathExpressionException
 	{
 		List<Item> items = new ArrayList<Item>();
 		
@@ -43,7 +43,7 @@ public class EmailMapping extends CyboxObjectMapping
 		Node propertiesNode = Constants.XPATH_UTIL.getNode("Properties", objectNode);
 		
 		// holds the email object to return
-		Email email = new Email();
+		final Email email = new Email();
 		items.add(email);
 		
 		email.getSecurityLabels().addAll(securityLabels);
@@ -118,7 +118,7 @@ public class EmailMapping extends CyboxObjectMapping
 		
 		//retrieve all of the file nodes
 		NodeList fileNodeList = Constants.XPATH_UTIL.getNodes("Attachments/File", propertiesNode);
-		if(null != fileNodeList)
+		if (null != fileNodeList)
 		{
 			// for each of the nodes in the list
 			for (int i = 0; i < fileNodeList.getLength(); i++)
@@ -127,13 +127,12 @@ public class EmailMapping extends CyboxObjectMapping
 				Node fileNode = fileNodeList.item(i);
 				
 				//get the object reference and see if it is not null
-				final String fileReference = Constants.XPATH_UTIL.getString("@object_reference", fileNode);
-				if(StringUtils.isNotBlank(fileReference))
+				final String fileReferenceID = Constants.XPATH_UTIL.getString("@object_reference", fileNode);
+				if (StringUtils.isNotBlank(fileReferenceID))
 				{
 					//create an item observer to add all of the items to this email
-					ItemObserver itemObserver = (foundItems) -> email.getAssociatedItems().addAll(items);
-					
-					//:FIXME: how do we resolve this file reference?
+					ItemObserver itemObserver = (foundItems) -> email.getAssociatedItems().addAll(foundItems);
+					cyboxObjectResolver.addObserver(fileReferenceID, itemObserver);
 				}
 			}
 		}

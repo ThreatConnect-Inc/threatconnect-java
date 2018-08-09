@@ -20,8 +20,10 @@ import com.threatconnect.stix.read.parser.map.stix.IncidentMapping;
 import com.threatconnect.stix.read.parser.map.stix.IndicatorMapping;
 import com.threatconnect.stix.read.parser.map.stix.ThreatActorMapping;
 import com.threatconnect.stix.read.parser.observer.ItemObserver;
+import com.threatconnect.stix.read.parser.observer.Observer;
 import com.threatconnect.stix.read.parser.resolver.NodeResolver;
 import com.threatconnect.stix.read.parser.resolver.ObservableNodeResolver;
+import com.threatconnect.stix.read.parser.resolver.Resolver;
 import com.threatconnect.stix.read.parser.util.NamespaceUtil;
 import com.threatconnect.stix.read.parser.util.StixNodeUtil;
 import org.w3c.dom.Document;
@@ -56,6 +58,7 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 	// holds the map of indicators that have been loaded from the xml document
 	private final Map<String, List<? extends Item>> observableMap;
 	private final NodeResolver nodeResolver;
+	private final Resolver<List<? extends Item>, ItemObserver> cyboxObjectResolver;
 	
 	private final java.io.File documentFile;
 	private final String documentName;
@@ -71,6 +74,7 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 		super(dataSource);
 		
 		this.observableMap = new HashMap<String, List<? extends Item>>();
+		this.cyboxObjectResolver = new Resolver<List<? extends Item>, ItemObserver>();
 		this.nodeResolver = new ObservableNodeResolver();
 		this.mappingContainer = mappingContainer;
 		this.documentFile = null;
@@ -84,6 +88,7 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 		super(new FileDataSource(documentFile));
 		
 		this.observableMap = new HashMap<String, List<? extends Item>>();
+		this.cyboxObjectResolver = new Resolver<List<? extends Item>, ItemObserver>();
 		this.nodeResolver = new ObservableNodeResolver();
 		this.mappingContainer = mappingContainer;
 		this.documentFile = documentFile;
@@ -167,6 +172,7 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 		//since we are using the observer pattern, we now need to notify all of the observers which observables have been found
 		logger.info("Flushing Observers");
 		nodeResolver.flushAll();
+		cyboxObjectResolver.flushAll();
 		
 		return new ArrayList<Item>(items);
 	}
@@ -301,7 +307,7 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 				items.addAll(observableItems);
 				itemObserver.found(items);
 			}
-			catch (XPathExpressionException | ObservableNotFoundException | UnsupportedObservableTypeException | InvalidObservableException e)
+			catch (XPathExpressionException | UnsupportedObservableTypeException | InvalidObservableException e)
 			{
 				logger.warn(e.getMessage(), e);
 			}
@@ -315,14 +321,12 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 	 * @param resolvedObservableNode the node that has already been resolved to a concrete object
 	 * @return the parent Signature object that contains the parsed data and child associated objects
 	 * @throws XPathExpressionException
-	 * @throws ObservableNotFoundException
 	 * @throws UnsupportedObservableTypeException
 	 * @throws InvalidObservableException
 	 */
 	protected List<? extends Item> parseResolvedObservable(final Document document, final Node resolvedObservableNode,
 		final List<SecurityLabel> securityLabels)
-		throws XPathExpressionException, ObservableNotFoundException, UnsupportedObservableTypeException,
-		InvalidObservableException
+		throws XPathExpressionException, UnsupportedObservableTypeException, InvalidObservableException
 	{
 		final String observableNodeID = StixNodeUtil.getID(resolvedObservableNode);
 		logger.trace("Parsing Observable {}", observableNodeID);
@@ -335,12 +339,13 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 		else
 		{
 			// retrieve the mapping object for parsing this observable
-			Node objectNode = Constants.XPATH_UTIL.getNode("Object", resolvedObservableNode);
+			final Node objectNode = Constants.XPATH_UTIL.getNode("Object", resolvedObservableNode);
+			final String objectNodeID = StixNodeUtil.getID(objectNode);
 			CyboxObjectMapping cyboxObjectMapping = determineCyboxMapping(objectNode);
 			
 			// parse the list of items from this observable
 			List<? extends Item> observableItems =
-				cyboxObjectMapping.map(objectNode, observableNodeID, document, securityLabels, nodeResolver);
+				cyboxObjectMapping.map(objectNode, observableNodeID, document, securityLabels, nodeResolver, cyboxObjectResolver);
 			
 			//parse the related objects from the resolved observable node
 			List<? extends Item> relatedObjects = parseRelatedObjects(document, resolvedObservableNode, securityLabels);
@@ -350,7 +355,9 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 			items.addAll(observableItems);
 			items.addAll(relatedObjects);
 			
+			//index the results in the maps
 			observableMap.put(observableNodeID, items);
+			cyboxObjectResolver.addResolvedObject(objectNodeID, items);
 			
 			return items;
 		}
@@ -382,7 +389,7 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 				{
 					// retrieve the mapping object for parsing this observable
 					CyboxObjectMapping cyboxObjectMapping = determineCyboxMapping(relatedObjectNode);
-					items.addAll(cyboxObjectMapping.map(relatedObjectNode, observableNodeID, document, securityLabels, nodeResolver));
+					items.addAll(cyboxObjectMapping.map(relatedObjectNode, observableNodeID, document, securityLabels, nodeResolver, cyboxObjectResolver));
 				}
 				catch (InvalidObservableException | UnsupportedObservableTypeException e)
 				{
