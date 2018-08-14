@@ -16,6 +16,7 @@ import com.threatconnect.sdk.model.Group;
 import com.threatconnect.sdk.model.GroupType;
 import com.threatconnect.sdk.model.Host;
 import com.threatconnect.sdk.model.Indicator;
+import com.threatconnect.sdk.model.SecurityLabel;
 import com.threatconnect.sdk.model.Url;
 import com.threatconnect.sdk.parser.service.save.AssociateFailedException;
 import com.threatconnect.sdk.parser.service.save.DeleteItemFailedException;
@@ -47,6 +48,19 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 	}
 	
 	/**
+	 * Saves the indicator with the associated owner
+	 *
+	 * @param ownerName
+	 * @return
+	 * @throws SaveItemFailedException
+	 * @throws IOException             if there was an exception communicating with the server
+	 */
+	public T saveGroup(final String ownerName) throws SaveItemFailedException, IOException
+	{
+		return saveGroup(ownerName, false, true, true);
+	}
+	
+	/**
 	 * Saves the group with the associated owner
 	 *
 	 * @param ownerName the owner name of the group
@@ -54,7 +68,8 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 	 * @throws SaveItemFailedException if there was an issue saving this item
 	 * @throws IOException             if there was an exception communicating with the server
 	 */
-	public T saveGroup(final String ownerName) throws SaveItemFailedException, IOException
+	public T saveGroup(final String ownerName, final boolean forceSaveGroup, final boolean saveAttributes,
+		final boolean saveTags) throws SaveItemFailedException, IOException
 	{
 		try
 		{
@@ -72,17 +87,23 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 			{
 				// use this group as the saved group
 				savedGroup = readGroup;
-				return savedGroup;
+				
+				//check to see if force saving is not enabled
+				if (!forceSaveGroup)
+				{
+					return savedGroup;
+				}
 			}
 			
 			if (logger.isDebugEnabled())
 			{
 				Gson gson = new Gson();
-				logger.info("Saving group: {}", gson.toJson(group));
+				logger.debug("Saving group: {}", gson.toJson(group));
 			}
 			
 			// save the object
-			ApiEntitySingleResponse<T, ?> response = writer.create(group, ownerName);
+			ApiEntitySingleResponse<T, ?> response =
+				(null == readGroup) ? writer.create(group, ownerName) : writer.update(group, ownerName);
 			
 			// check to see if this call was successful
 			if (response.isSuccess())
@@ -90,7 +111,7 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 				savedGroup = response.getItem();
 				
 				// make sure the list of attributes is not empty
-				if (!groupSource.getAttributes().isEmpty())
+				if (saveAttributes && !groupSource.getAttributes().isEmpty())
 				{
 					// for each of the attributes of this group
 					for (Attribute attribute : groupSource.getAttributes())
@@ -114,7 +135,7 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 				}
 				
 				// make sure the list of tags is not empty
-				if (!groupSource.getTags().isEmpty())
+				if (saveTags && !groupSource.getTags().isEmpty())
 				{
 					// for each of the tags
 					for (String tag : groupSource.getTags())
@@ -136,6 +157,16 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 						{
 							logger.warn("Skipping blank tag for: {}", getSavedGroupID());
 						}
+					}
+				}
+				
+				// make sure the list of security labels is not empty
+				if (!groupSource.getSecurityLabels().isEmpty())
+				{
+					//for each of the security labels
+					for (SecurityLabel securityLabel : groupSource.getSecurityLabels())
+					{
+						writer.associateSecurityLabel(getSavedGroupID(), securityLabel.getName(), ownerName);
 					}
 				}
 				

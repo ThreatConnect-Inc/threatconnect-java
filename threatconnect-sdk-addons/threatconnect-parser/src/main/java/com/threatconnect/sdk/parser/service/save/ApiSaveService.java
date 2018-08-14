@@ -255,7 +255,7 @@ public class ApiSaveService implements SaveService
 		GroupWriter<?, ?> writer = getGroupWriter(group, connection);
 		
 		// save the group
-		com.threatconnect.sdk.server.entity.Group savedGroup = writer.saveGroup(ownerName);
+		com.threatconnect.sdk.server.entity.Group savedGroup = writer.saveGroup(ownerName, false, true, true);
 		
 		if (associatedGroupGroupsIDs.containsKey(group))
 		{

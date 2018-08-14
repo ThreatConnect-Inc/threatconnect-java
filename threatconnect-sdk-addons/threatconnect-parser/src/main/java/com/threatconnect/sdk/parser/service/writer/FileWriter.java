@@ -34,16 +34,6 @@ public class FileWriter extends TypedIndicatorWriter<File, com.threatconnect.sdk
 		return file;
 	}
 	
-	@Override
-	public com.threatconnect.sdk.server.entity.File saveIndicator(String ownerName)
-		throws SaveItemFailedException, IOException
-	{
-		// first, call the super class' save method
-		com.threatconnect.sdk.server.entity.File file = super.saveIndicator(ownerName);
-		saveFileOccurrences(ownerName);
-		return file;
-	}
-	
 	private void saveFileOccurrences(final String ownerName) throws IOException
 	{
 		// create a writer adapter

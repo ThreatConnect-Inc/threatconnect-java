@@ -8,6 +8,7 @@ import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.model.Attribute;
 import com.threatconnect.sdk.model.GroupType;
 import com.threatconnect.sdk.model.Indicator;
+import com.threatconnect.sdk.model.SecurityLabel;
 import com.threatconnect.sdk.parser.service.save.AssociateFailedException;
 import com.threatconnect.sdk.parser.service.save.DeleteItemFailedException;
 import com.threatconnect.sdk.parser.service.save.SaveItemFailedException;
@@ -97,7 +98,7 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 			if (logger.isDebugEnabled())
 			{
 				Gson gson = new Gson();
-				logger.info("Saving indicator: {}", gson.toJson(indicator));
+				logger.debug("Saving indicator: {}", gson.toJson(indicator));
 			}
 			
 			// save or update the object
@@ -155,6 +156,16 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 						{
 							logger.warn("Skipping blank tag for: {}", buildID());
 						}
+					}
+				}
+				
+				// make sure the list of security labels is not empty
+				if (!indicatorSource.getSecurityLabels().isEmpty())
+				{
+					//for each of the security labels
+					for (SecurityLabel securityLabel : indicatorSource.getSecurityLabels())
+					{
+						writer.associateSecurityLabel(buildID(), securityLabel.getName(), ownerName);
 					}
 				}
 				
