@@ -38,7 +38,7 @@ public class FileMapping extends CyboxObjectMapping
 	private static final String ATTR_DATE_LAST_MODIFIED = "Date Last Modified";
 	private static final String ATTR_DATE_LAST_ACCESSED = "Date Last Accessed";
 	private static final String ATTR_DATE_CREATED = "Date Created";
-	private static final String ATTR_SSDEEP = "SSDEEP";
+	private static final String ATTR_SSDEEP = "ssdeep Hash";
 	private static final String ATTR_FILE_ATTRIBUTES = "File Attributes";
 	
 	public FileMapping(final Double defaultRating, final Double defaultConfidence)

@@ -25,7 +25,6 @@ public class EmailMapping extends CyboxObjectMapping
 	private static final String EMPTY_VALUE = "Empty";
 	
 	private static final String ATTR_EMAIL_SERVER = "Email Server";
-	private static final String ATTR_IS_SPOOFED = "Is Spoofed";
 	
 	public EmailMapping(final Double defaultRating, final Double defaultConfidence)
 	{
@@ -80,13 +79,6 @@ public class EmailMapping extends CyboxObjectMapping
 				setDefaultRatingConfidence(emailAddress);
 				addStixObservableIDAttribute(emailAddress, observableNodeID);
 				emailAddress.setAddress(fromAddress);
-				
-				//check to see if the spoofed text is set
-				String spoofedText = Constants.XPATH_UTIL.getString("@is_spoofed", fromNode);
-				if (StringUtils.isNotBlank(spoofedText))
-				{
-					AttributeHelper.addAttribute(emailAddress, ATTR_IS_SPOOFED, spoofedText);
-				}
 				
 				//add this indicator to the email group
 				email.getAssociatedItems().add(emailAddress);

@@ -33,6 +33,9 @@ public class IndicatorMapping
 	private static final String ATTR_LIKELY_IMPACT = "Likely Impact";
 	private static final String ATTR_SIGHTINGS = "Sightings";
 	
+	private static final String COMMAND_AND_CONTROL = "Command and Control";
+	private static final String C2 = "C2";
+	
 	public void map(final Node indicatorNode, final Document document, final List<? extends Item> items)
 		throws XPathExpressionException
 	{
@@ -130,6 +133,14 @@ public class IndicatorMapping
 				// retrieve the current package node
 				Node killChainNode = killChainPhaseNodeList.item(i);
 				String name = Constants.XPATH_UTIL.getString("@name", killChainNode);
+				
+				//check to see if this name is command and control
+				if(COMMAND_AND_CONTROL.equalsIgnoreCase(name))
+				{
+					//change the value to c2
+					name = C2;
+				}
+				
 				attributes.add(AttributeHelper.addAttributeIfExists(item, ATTR_PHASE_OF_INTRUSION, name));
 			}
 		}
