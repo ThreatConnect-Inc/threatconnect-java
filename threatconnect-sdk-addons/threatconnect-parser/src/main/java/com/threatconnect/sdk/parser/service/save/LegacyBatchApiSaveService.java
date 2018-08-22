@@ -196,7 +196,7 @@ public class LegacyBatchApiSaveService implements SaveService
 						Group associatedGroup = (Group) associatedItem;
 						Integer savedAssociatedGroupId =
 							saveGroup(associatedGroup, ownerName, savedGroupMap, connection, saveResults);
-						writer.associateGroup(associatedGroup.getGroupType(), savedAssociatedGroupId);
+						writer.associateGroup(associatedGroup.getGroupType(), savedAssociatedGroupId, ownerName);
 						break;
 					case INDICATOR:
 						// Ignore the indicators for now, this is done later in batch save
@@ -359,7 +359,7 @@ public class LegacyBatchApiSaveService implements SaveService
 				{
 					try
 					{
-						writer.associateGroup(groupIdentifier.getType(), groupIdentifier.getId());
+						writer.associateGroup(groupIdentifier.getType(), groupIdentifier.getId(), ownerName);
 					}
 					catch (AssociateFailedException e)
 					{

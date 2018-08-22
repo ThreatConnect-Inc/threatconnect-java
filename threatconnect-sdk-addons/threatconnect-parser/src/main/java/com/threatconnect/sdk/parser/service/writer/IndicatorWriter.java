@@ -143,7 +143,7 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 						if (null != tag && !tag.isEmpty())
 						{
 							// save the tag for this indicator
-							ApiEntitySingleResponse<?, ?> tagResponse = writer.associateTag(buildID(), tag);
+							ApiEntitySingleResponse<?, ?> tagResponse = writer.associateTag(buildID(), tag, ownerName);
 							
 							// check to see if this was not successful
 							if (!tagResponse.isSuccess())
@@ -183,7 +183,7 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 		}
 	}
 	
-	public void associateGroup(final GroupType groupType, final Integer savedID)
+	public void associateGroup(final GroupType groupType, final Integer savedID, final String ownerName)
 		throws AssociateFailedException, IOException
 	{
 		try
@@ -199,22 +199,22 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 			switch (groupType)
 			{
 				case ADVERSARY:
-					response = writer.associateGroupAdversary(uniqueID, savedID);
+					response = writer.associateGroupAdversary(uniqueID, savedID, ownerName);
 					break;
 				case DOCUMENT:
-					response = writer.associateGroupDocument(uniqueID, savedID);
+					response = writer.associateGroupDocument(uniqueID, savedID, ownerName);
 					break;
 				case EMAIL:
-					response = writer.associateGroupEmail(uniqueID, savedID);
+					response = writer.associateGroupEmail(uniqueID, savedID, ownerName);
 					break;
 				case INCIDENT:
-					response = writer.associateGroupIncident(uniqueID, savedID);
+					response = writer.associateGroupIncident(uniqueID, savedID, ownerName);
 					break;
 				case SIGNATURE:
-					response = writer.associateGroupSignature(uniqueID, savedID);
+					response = writer.associateGroupSignature(uniqueID, savedID, ownerName);
 					break;
 				case THREAT:
-					response = writer.associateGroupThreat(uniqueID, savedID);
+					response = writer.associateGroupThreat(uniqueID, savedID, ownerName);
 					break;
 				default:
 					response = null;
