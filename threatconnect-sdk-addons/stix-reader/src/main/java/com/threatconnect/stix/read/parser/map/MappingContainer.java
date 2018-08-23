@@ -6,6 +6,7 @@ import com.threatconnect.stix.read.parser.map.cybox.object.DomainNameMapping;
 import com.threatconnect.stix.read.parser.map.cybox.object.EmailMapping;
 import com.threatconnect.stix.read.parser.map.cybox.object.FileMapping;
 import com.threatconnect.stix.read.parser.map.cybox.object.IPv4Mapping;
+import com.threatconnect.stix.read.parser.map.cybox.object.MutexMapping;
 import com.threatconnect.stix.read.parser.map.cybox.object.UrlMapping;
 import com.threatconnect.stix.read.parser.map.stix.IncidentMapping;
 import com.threatconnect.stix.read.parser.map.stix.IndicatorMapping;
@@ -26,6 +27,7 @@ public class MappingContainer
 	private DNSRecordMapping dnsRecordMapping;
 	private FileMapping fileMapping;
 	private CidrIP4Mapping cidrIP4Mapping;
+	private MutexMapping mutexMapping;
 	
 	// stix mappings
 	private IndicatorMapping indicatorMapping;
@@ -46,6 +48,7 @@ public class MappingContainer
 		setDnsRecordMapping(new DNSRecordMapping(defaultRating, defaultConfidence));
 		setFileMapping(new FileMapping(defaultRating, defaultConfidence));
 		setCidrIP4Mapping(new CidrIP4Mapping(defaultRating, defaultConfidence));
+		setMutexMapping(new MutexMapping(defaultRating, defaultConfidence));
 		
 		setIndicatorMapping(new IndicatorMapping());
 		setIncidentMapping(new IncidentMapping());
@@ -140,6 +143,21 @@ public class MappingContainer
 		}
 		
 		this.cidrIP4Mapping = cidrIP4Mapping;
+	}
+	
+	public MutexMapping getMutexMapping()
+	{
+		return mutexMapping;
+	}
+	
+	public void setMutexMapping(final MutexMapping mutexMapping)
+	{
+		if (null == mutexMapping)
+		{
+			throw new IllegalArgumentException("mutexMapping cannot be null");
+		}
+		
+		this.mutexMapping = mutexMapping;
 	}
 	
 	public DNSRecordMapping getDnsRecordMapping()

@@ -25,6 +25,7 @@ import com.threatconnect.stix.read.parser.resolver.NodeResolver;
 import com.threatconnect.stix.read.parser.resolver.ObservableNodeResolver;
 import com.threatconnect.stix.read.parser.resolver.Resolver;
 import com.threatconnect.stix.read.parser.util.NamespaceUtil;
+import com.threatconnect.stix.read.parser.util.SecurityLabelUtil;
 import com.threatconnect.stix.read.parser.util.StixNodeUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -231,28 +232,9 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 	protected List<SecurityLabel> extractSecurityLabels(final Node parentNode)
 		throws XPathExpressionException
 	{
-		List<SecurityLabel> securityLabels = new ArrayList<SecurityLabel>();
-		
 		//find the marking structures in the package
 		NodeList markingStructureNodeList = findMarkingStructures(parentNode);
-		
-		// for each of the nodes in the list
-		for (int i = 0; i < markingStructureNodeList.getLength(); i++)
-		{
-			// retrieve the current node
-			Node markingStructureNode = markingStructureNodeList.item(i);
-			
-			final String color = Constants.XPATH_UTIL.getString("@color", markingStructureNode);
-			final String name = convertSecurityColorToName(color);
-			if (null != name)
-			{
-				SecurityLabel securityLabel = new SecurityLabel();
-				securityLabel.setName(name);
-				securityLabels.add(securityLabel);
-			}
-		}
-		
-		return securityLabels;
+		return SecurityLabelUtil.extractSecurityLabels(markingStructureNodeList);
 	}
 	
 	/**
@@ -389,7 +371,8 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 				{
 					// retrieve the mapping object for parsing this observable
 					CyboxObjectMapping cyboxObjectMapping = determineCyboxMapping(relatedObjectNode);
-					items.addAll(cyboxObjectMapping.map(relatedObjectNode, observableNodeID, document, securityLabels, nodeResolver, cyboxObjectResolver));
+					items.addAll(
+						cyboxObjectMapping.map(relatedObjectNode, observableNodeID, document, securityLabels, nodeResolver, cyboxObjectResolver));
 				}
 				catch (InvalidObservableException | UnsupportedObservableTypeException e)
 				{
@@ -466,7 +449,7 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 		if (null != observableNode)
 		{
 			//create a new item observer for the observable node
-			ItemObserver obserableObserver = object ->
+			ItemObserver observableObserver = object ->
 			{
 				try
 				{
@@ -485,7 +468,7 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 				}
 			};
 			
-			parseObservable(document, observableNode, obserableObserver, securityLabels);
+			parseObservable(document, observableNode, observableObserver, securityLabels);
 		}
 	}
 	
@@ -606,8 +589,7 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 		return threats;
 	}
 	
-	protected CyboxObjectMapping determineCyboxMapping(final Node objectNode)
-		throws XPathExpressionException, UnsupportedObservableTypeException
+	protected CyboxObjectMapping determineCyboxMapping(final Node objectNode) throws UnsupportedObservableTypeException
 	{
 		try
 		{
@@ -678,6 +660,10 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 				{
 					return getMappingContainer().getDnsRecordMapping();
 				}
+				else if (type.equals("MutexObj:MutexObjectType"))
+				{
+					return getMappingContainer().getMutexMapping();
+				}
 			}
 			
 			//the type could not be resolved
@@ -690,36 +676,6 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 			throw new UnsupportedObservableTypeException(
 				"Could not identify the observable/object type. There was an error evaluating the XPath expression on part of this XML.",
 				e);
-		}
-	}
-	
-	/**
-	 * Converts a security color to a name suitable for a security label
-	 *
-	 * @param color
-	 * @return
-	 */
-	private String convertSecurityColorToName(final String color)
-	{
-		if (null != color && !color.isEmpty())
-		{
-			switch (color.trim().toUpperCase())
-			{
-				case "RED":
-					return "TLP:Red";
-				case "AMBER":
-					return "TLP:Amber";
-				case "GREEN":
-					return "TLP:Green";
-				case "WHITE":
-					return "TLP:White";
-				default:
-					return null;
-			}
-		}
-		else
-		{
-			return null;
 		}
 	}
 	

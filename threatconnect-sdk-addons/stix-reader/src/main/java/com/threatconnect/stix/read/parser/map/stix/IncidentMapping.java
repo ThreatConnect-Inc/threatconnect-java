@@ -2,6 +2,7 @@ package com.threatconnect.stix.read.parser.map.stix;
 
 import com.threatconnect.stix.read.parser.Constants;
 import com.threatconnect.stix.read.parser.util.DebugUtil;
+import com.threatconnect.stix.read.parser.util.SecurityLabelUtil;
 import com.threatconnect.stix.read.parser.util.StixNodeUtil;
 import com.threatconnect.sdk.model.Incident;
 import com.threatconnect.sdk.model.SecurityLabel;
@@ -33,14 +34,19 @@ public class IncidentMapping
 	private static final String ATTR_CONTACT = "Contact";
 	private static final String ATTR_HISTORY = "History";
 	
-	public List<Incident> map(final Node incidentNode, final Document document,
-		final List<SecurityLabel> securityLabels) throws XPathExpressionException
+	public List<Incident> map(final Node incidentNode, final Document document, final List<SecurityLabel> securityLabels)
+		throws XPathExpressionException
 	{
 		List<Incident> incidents = new ArrayList<Incident>();
 		
 		Incident item = new Incident();
 		item.getSecurityLabels().addAll(securityLabels);
 		incidents.add(item);
+		
+		//add all of the security labels to this incident and then retain only the highest one
+		item.getSecurityLabels().addAll(securityLabels);
+		item.getSecurityLabels().addAll(extractSecurityLabels(incidentNode));
+		SecurityLabelUtil.keepHighestSecurityLabelOnly(item.getSecurityLabels());
 		
 		final String title = Constants.XPATH_UTIL.getString("Title", incidentNode);
 		if (null != title && !title.isEmpty())
@@ -123,5 +129,13 @@ public class IncidentMapping
 		DebugUtil.logUnknownMapping("History", incidentNode);
 		
 		return incidents;
+	}
+	
+	protected List<SecurityLabel> extractSecurityLabels(final Node parentNode)
+		throws XPathExpressionException
+	{
+		//find the marking structures in the package
+		NodeList markingStructureNodeList = Constants.XPATH_UTIL.getNodes("Handling/Marking/Marking_Structure", parentNode);
+		return SecurityLabelUtil.extractSecurityLabels(markingStructureNodeList);
 	}
 }

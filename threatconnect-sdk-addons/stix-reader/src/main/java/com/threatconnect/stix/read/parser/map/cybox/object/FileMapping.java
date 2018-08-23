@@ -100,7 +100,7 @@ public class FileMapping extends CyboxObjectMapping
 		final String fileSizeInBytes = Constants.XPATH_UTIL.getString("Size_In_Bytes", propertiesNode);
 		if (null != fileSizeInBytes && !fileSizeInBytes.isEmpty())
 		{
-			file.setSize(Integer.parseInt(fileSizeInBytes));
+			file.setSize(Integer.parseInt(fileSizeInBytes.trim()));
 		}
 		
 		// for each of the hash nodes

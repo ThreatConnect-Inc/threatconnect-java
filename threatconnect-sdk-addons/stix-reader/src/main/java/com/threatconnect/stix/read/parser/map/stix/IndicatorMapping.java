@@ -4,9 +4,11 @@ import com.threatconnect.sdk.model.Attribute;
 import com.threatconnect.sdk.model.Indicator;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.ItemType;
+import com.threatconnect.sdk.model.SecurityLabel;
 import com.threatconnect.sdk.parser.util.AttributeHelper;
 import com.threatconnect.stix.read.parser.Constants;
 import com.threatconnect.stix.read.parser.util.DebugUtil;
+import com.threatconnect.stix.read.parser.util.SecurityLabelUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +61,11 @@ public class IndicatorMapping
 			Constants.XPATH_UTIL.getString("Title", indicatorNode)));
 		attributes.add(AttributeHelper.addAttributeIfExists(item, ATTR_PRODUCER,
 			Constants.XPATH_UTIL.getString("Producer/Identity/Name", indicatorNode)));
+		
+		//extract the security labels from this indicator and then retain only the highest one
+		List<SecurityLabel> securityLabels = extractSecurityLabels(indicatorNode);
+		item.getSecurityLabels().addAll(securityLabels);
+		SecurityLabelUtil.keepHighestSecurityLabelOnly(item.getSecurityLabels());
 		
 		//retrieve the types
 		NodeList nodeList = Constants.XPATH_UTIL.getNodes("Type", indicatorNode);
@@ -167,5 +174,13 @@ public class IndicatorMapping
 		DebugUtil.logUnknownMapping("Test_Mechanisms", indicatorNode);
 		DebugUtil.logUnknownMapping("Handling", indicatorNode);
 		DebugUtil.logUnknownMapping("Sightings", indicatorNode);
+	}
+	
+	protected List<SecurityLabel> extractSecurityLabels(final Node parentNode)
+		throws XPathExpressionException
+	{
+		//find the marking structures in the package
+		NodeList markingStructureNodeList = Constants.XPATH_UTIL.getNodes("Handling/Marking/Marking_Structure", parentNode);
+		return SecurityLabelUtil.extractSecurityLabels(markingStructureNodeList);
 	}
 }
