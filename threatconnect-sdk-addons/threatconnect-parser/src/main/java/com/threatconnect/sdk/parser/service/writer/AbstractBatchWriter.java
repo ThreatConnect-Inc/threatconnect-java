@@ -1,5 +1,9 @@
 package com.threatconnect.sdk.parser.service.writer;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import com.threatconnect.sdk.app.exception.TCMessageException;
 import com.threatconnect.sdk.client.reader.BatchReaderAdapter;
 import com.threatconnect.sdk.conn.Connection;
@@ -12,9 +16,12 @@ import com.threatconnect.sdk.server.entity.BatchStatus;
 import com.threatconnect.sdk.server.entity.Indicator;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.server.response.entity.data.BatchStatusResponseData;
+import com.threatconnect.sdk.util.JsonUtil;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 
 public abstract class AbstractBatchWriter extends Writer
@@ -22,6 +29,11 @@ public abstract class AbstractBatchWriter extends Writer
 	public static final int POLL_TIMEOUT_MINUTES = 120;
 	private static final long POLL_INITIAL_DELAY = 1000L;
 	private static final long POLL_MAX_DELAY = 30000L;
+	
+	private static final String[] BATCH_FATAL_ERRORS = new String[] {
+		"Encountered an unexpected Exception while processing batch job",
+		"would exceed the number of allowed indicators"
+	};
 	
 	public AbstractBatchWriter(final Connection connection)
 	{
@@ -98,7 +110,8 @@ public abstract class AbstractBatchWriter extends Writer
 				if (null != batchStatusResponse)
 				{
 					//download the batch errors for this job
-					downloadBatchErrors(batchUploadResponse, batchStatusResponse, batchReaderAdapter, ownerName, true);
+					byte[] errorContent = downloadBatchErrors(batchUploadResponse, batchStatusResponse, batchReaderAdapter, ownerName, true);
+					processBatchErrors(errorContent);
 					
 					// create a new save result
 					SaveResults saveResults = new SaveResults();
@@ -172,6 +185,48 @@ public abstract class AbstractBatchWriter extends Writer
 		else
 		{
 			return null;
+		}
+	}
+	
+	protected void processBatchErrors(final byte[] errorContent)
+	{
+		//check to see if the errors content is not null
+		if (null != errorContent)
+		{
+			try
+			{
+				//parse the error content json
+				JsonElement jsonElement = new JsonParser().parse(new InputStreamReader(new ByteArrayInputStream(errorContent)));
+				
+				//this should be a json array
+				if (jsonElement.isJsonArray())
+				{
+					JsonArray errorsArray = jsonElement.getAsJsonArray();
+					for (JsonElement errorElement : errorsArray)
+					{
+						final String errorReason = JsonUtil.getAsString(errorElement, "errorReason");
+						final String errorSource = JsonUtil.getAsString(errorElement, "errorSource");
+						
+						//make sure the reason is not null
+						if (null != errorReason)
+						{
+							logger.warn(errorReason);
+							for (String fatalError : BATCH_FATAL_ERRORS)
+							{
+								//check to see if this fatal error matches
+								if (errorReason.contains(fatalError))
+								{
+									throw new TCMessageException("Batch Halted due to error: " + errorReason);
+								}
+							}
+						}
+					}
+				}
+			}
+			catch (JsonParseException e)
+			{
+				logger.error("Unable to process batch errors: " + e.getMessage(), e);
+			}
 		}
 	}
 	
