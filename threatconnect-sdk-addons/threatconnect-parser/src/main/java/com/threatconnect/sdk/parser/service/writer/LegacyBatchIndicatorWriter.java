@@ -38,7 +38,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Deprecated
-public class LegacyBatchIndicatorWriter extends Writer
+public class LegacyBatchIndicatorWriter extends AbstractBatchWriter
 {
 	public static final int DEFAULT_BATCH_LIMIT = 25000;
 	
@@ -192,93 +192,6 @@ public class LegacyBatchIndicatorWriter extends Writer
 		}
 	}
 	
-	protected SaveResults pollBatch(final BatchUploadResponse batchUploadResponse, final String ownerName,
-		final int batchIndex, final int batchTotal) throws IOException, SaveItemFailedException
-	{
-		// check to see if the response was successful
-		if (batchUploadResponse.getResponse().isSuccess())
-		{
-			boolean processing = true;
-			long delay = POLL_INITIAL_DELAY;
-			
-			// create the batch reader object
-			BatchReaderAdapter<com.threatconnect.sdk.server.entity.Indicator> batchReaderAdapter =
-				createReaderAdapter();
-			
-			// holds the response object
-			ApiEntitySingleResponse<BatchStatus, BatchStatusResponseData> batchStatusResponse = null;
-			
-			// continue while the batch job is still processing
-			while (processing)
-			{
-				try
-				{
-					logger.debug("Waiting {}ms for batch job {}/{}: {}", delay, batchIndex, batchTotal,
-						batchUploadResponse.getBatchID());
-					Thread.sleep(delay);
-				}
-				catch (InterruptedException e)
-				{
-					throw new IOException(e);
-				}
-				
-				// check the status of the batch job
-				batchStatusResponse = batchReaderAdapter.getStatus(batchUploadResponse.getBatchID(), ownerName);
-				Status status = batchStatusResponse.getItem().getStatus();
-				
-				// this job is still considered processing as long as the status is not
-				// completed
-				processing = (status != Status.Completed);
-				
-				// make sure the delay is less than the maximum
-				if (delay < POLL_MAX_DELAY)
-				{
-					// increment the delay
-					delay *= 2;
-				}
-				
-				// make sure that the delay does not exceed the maximum
-				if (delay > POLL_MAX_DELAY)
-				{
-					delay = POLL_MAX_DELAY;
-				}
-			}
-			
-			// make sure the response is not null
-			if (null != batchStatusResponse)
-			{
-				// check to see if there are errors
-				if (batchStatusResponse.getItem().getErrorCount() > 0)
-				{
-					try
-					{
-						ByteArrayOutputStream baos = new ByteArrayOutputStream();
-						batchReaderAdapter.downloadErrors(batchUploadResponse.getBatchID(), ownerName, baos);
-						logger.warn(new String(baos.toByteArray()));
-					}
-					catch (FailedResponseException e)
-					{
-						logger.warn(e.getMessage(), e);
-					}
-				}
-				
-				// create a new save result
-				SaveResults saveResults = new SaveResults();
-				saveResults.addFailedItems(ItemType.INDICATOR, batchStatusResponse.getItem().getErrorCount());
-				return saveResults;
-			}
-			else
-			{
-				// this should never happen
-				throw new IllegalStateException();
-			}
-		}
-		else
-		{
-			throw new SaveItemFailedException(batchUploadResponse.getResponse().getMessage());
-		}
-	}
-	
 	protected InputStream jsonToInputStream(final JsonElement json)
 	{
 		byte[] bytes = new Gson().toJson(json).getBytes();
@@ -295,6 +208,7 @@ public class LegacyBatchIndicatorWriter extends Writer
 		return WriterAdapterFactory.createBatchIndicatorWriter(connection);
 	}
 	
+	@Override
 	protected BatchReaderAdapter<com.threatconnect.sdk.server.entity.Indicator> createReaderAdapter()
 	{
 		return ReaderAdapterFactory.createIndicatorBatchReader(connection);
@@ -308,27 +222,5 @@ public class LegacyBatchIndicatorWriter extends Writer
 	public void setIndicatorLimitPerBatch(int indicatorLimitPerBatch)
 	{
 		this.indicatorLimitPerBatch = indicatorLimitPerBatch;
-	}
-	
-	protected class BatchUploadResponse
-	{
-		private final int batchID;
-		private final ApiEntitySingleResponse<?, ?> response;
-		
-		public BatchUploadResponse(final int batchID, final ApiEntitySingleResponse<?, ?> response)
-		{
-			this.batchID = batchID;
-			this.response = response;
-		}
-		
-		public int getBatchID()
-		{
-			return batchID;
-		}
-		
-		public ApiEntitySingleResponse<?, ?> getResponse()
-		{
-			return response;
-		}
 	}
 }

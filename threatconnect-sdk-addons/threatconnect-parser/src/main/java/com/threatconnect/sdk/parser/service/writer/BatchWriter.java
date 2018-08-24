@@ -43,7 +43,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class BatchWriter extends Writer
+public class BatchWriter extends AbstractBatchWriter
 {
 	public static final int DEFAULT_BATCH_LIMIT = 25000;
 	
@@ -216,148 +216,6 @@ public class BatchWriter extends Writer
 		}
 	}
 	
-	private SaveResults pollBatch(final BatchUploadResponse batchUploadResponse, final String ownerName,
-		final int batchIndex, final int batchTotal) throws IOException, SaveItemFailedException
-	{
-		// check to see if the response was successful
-		if (batchUploadResponse.getResponse().isSuccess())
-		{
-			Integer batchID = batchUploadResponse.getBatchID();
-			
-			//make sure the batch id is not null
-			if (null != batchID)
-			{
-				boolean processing = true;
-				long delay = POLL_INITIAL_DELAY;
-				
-				// create the batch reader object
-				BatchReaderAdapter<com.threatconnect.sdk.server.entity.Indicator> batchReaderAdapter =
-					createReaderAdapter();
-				
-				// holds the response object
-				ApiEntitySingleResponse<BatchStatus, BatchStatusResponseData> batchStatusResponse = null;
-				
-				//determine when this polling will timeout
-				final LocalDateTime pollTimeout = LocalDateTime.now().plusMinutes(POLL_TIMEOUT_MINUTES);
-				
-				// continue while the batch job is still processing
-				while (processing)
-				{
-					try
-					{
-						logger.debug("Waiting {}ms for batch job {}/{}: {}", delay, batchIndex, batchTotal, batchID);
-						Thread.sleep(delay);
-					}
-					catch (InterruptedException e)
-					{
-						throw new IOException(e);
-					}
-					
-					// check the status of the batch job
-					batchStatusResponse = batchReaderAdapter.getStatus(batchID, ownerName);
-					Status status = batchStatusResponse.getItem().getStatus();
-					
-					// this job is still considered processing as long as the status is not
-					// completed
-					processing = (status != Status.Completed);
-					
-					// make sure the delay is less than the maximum
-					if (delay < POLL_MAX_DELAY)
-					{
-						// increment the delay
-						delay *= 2;
-					}
-					
-					// make sure that the delay does not exceed the maximum
-					if (delay > POLL_MAX_DELAY)
-					{
-						delay = POLL_MAX_DELAY;
-					}
-					
-					//check to see if the job timed out
-					if (processing && LocalDateTime.now().isAfter(pollTimeout))
-					{
-						throw new TCMessageException(
-							"Batch job \"" + batchID + "\" timed out with a status of \"" + status + "\" after "
-								+ POLL_TIMEOUT_MINUTES + " minutes.");
-					}
-				}
-				
-				// make sure the response is not null
-				if (null != batchStatusResponse)
-				{
-					//download the batch errors for this job
-					downloadBatchErrors(batchUploadResponse, batchStatusResponse, batchReaderAdapter, ownerName, true);
-					
-					// create a new save result
-					SaveResults saveResults = new SaveResults();
-					saveResults.addFailedItems(ItemType.INDICATOR, batchStatusResponse.getItem().getErrorCount());
-					return saveResults;
-				}
-				else
-				{
-					// this should never happen
-					throw new IllegalStateException();
-				}
-			}
-			else
-			{
-				//:TODO: is this how we want to handle this situation?
-				return new SaveResults();
-			}
-		}
-		else
-		{
-			throw new SaveItemFailedException(batchUploadResponse.getResponse().getMessage());
-		}
-	}
-	
-	private void downloadBatchErrors(
-		final BatchUploadResponse batchUploadResponse,
-		final ApiEntitySingleResponse<BatchStatus, BatchStatusResponseData> batchStatusResponse,
-		final BatchReaderAdapter<com.threatconnect.sdk.server.entity.Indicator> batchReaderAdapter,
-		final String ownerName,
-		final boolean allowRetry)
-	{
-		// check to see if there are errors
-		if (batchStatusResponse.getItem().getErrorCount() > 0)
-		{
-			try
-			{
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				batchReaderAdapter.downloadErrors(batchUploadResponse.getBatchID(), ownerName, baos);
-				logger.warn(new String(baos.toByteArray()));
-			}
-			catch (HttpResourceNotFoundException e)
-			{
-				//check to see if a retry is allowed
-				if (allowRetry)
-				{
-					try
-					{
-						//sleep for 5 seconds before trying again
-						logger.info("Batch Errors not yet available. Waiting 5 seconds and trying again.");
-						Thread.sleep(5000);
-					}
-					catch (InterruptedException e1)
-					{
-						logger.warn(e1.getMessage(), e1);
-					}
-					
-					downloadBatchErrors(batchUploadResponse, batchStatusResponse, batchReaderAdapter, ownerName, false);
-				}
-				else
-				{
-					logger.warn(e.getMessage(), e);
-				}
-			}
-			catch (FailedResponseException e)
-			{
-				logger.warn(e.getMessage(), e);
-			}
-		}
-	}
-	
 	protected InputStream jsonToInputStream(final JsonElement json)
 	{
 		byte[] bytes = new Gson().toJson(json).getBytes();
@@ -387,27 +245,5 @@ public class BatchWriter extends Writer
 	public void setIndicatorLimitPerBatch(int indicatorLimitPerBatch)
 	{
 		this.indicatorLimitPerBatch = indicatorLimitPerBatch;
-	}
-	
-	public class BatchUploadResponse
-	{
-		private final Integer batchID;
-		private final ApiEntitySingleResponse<?, ?> response;
-		
-		public BatchUploadResponse(final Integer batchID, final ApiEntitySingleResponse<?, ?> response)
-		{
-			this.batchID = batchID;
-			this.response = response;
-		}
-		
-		public Integer getBatchID()
-		{
-			return batchID;
-		}
-		
-		public ApiEntitySingleResponse<?, ?> getResponse()
-		{
-			return response;
-		}
 	}
 }
