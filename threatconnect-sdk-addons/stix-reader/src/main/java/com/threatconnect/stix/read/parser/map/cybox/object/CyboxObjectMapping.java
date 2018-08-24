@@ -5,6 +5,9 @@ import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.SecurityLabel;
 import com.threatconnect.sdk.parser.util.AttributeHelper;
 import com.threatconnect.stix.read.parser.exception.InvalidObservableException;
+import com.threatconnect.stix.read.parser.observer.ItemObserver;
+import com.threatconnect.stix.read.parser.resolver.NodeResolver;
+import com.threatconnect.stix.read.parser.resolver.Resolver;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -25,7 +28,8 @@ public abstract class CyboxObjectMapping
 	}
 	
 	public abstract List<? extends Item> map(final Node objectNode, final String observableNodeID,
-		final Document document, final List<SecurityLabel> securityLabels)
+		final Document document, final List<SecurityLabel> securityLabels, final NodeResolver nodeResolver,
+		final Resolver<List<? extends Item>, ItemObserver> cyboxObjectResolver)
 		throws XPathExpressionException, InvalidObservableException;
 	
 	protected void setDefaultRatingConfidence(final Indicator indicator)

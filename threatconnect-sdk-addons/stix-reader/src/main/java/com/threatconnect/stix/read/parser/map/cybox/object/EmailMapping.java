@@ -6,10 +6,11 @@ import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.SecurityLabel;
 import com.threatconnect.sdk.parser.util.AttributeHelper;
 import com.threatconnect.stix.read.parser.Constants;
+import com.threatconnect.stix.read.parser.observer.ItemObserver;
+import com.threatconnect.stix.read.parser.resolver.NodeResolver;
+import com.threatconnect.stix.read.parser.resolver.Resolver;
 import com.threatconnect.stix.read.parser.util.DebugUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -20,10 +21,10 @@ import java.util.List;
 
 public class EmailMapping extends CyboxObjectMapping
 {
-	private static final Logger logger = LoggerFactory.getLogger(EmailMapping.class);
+	//:FIXME: the api requires some field to be something
+	private static final String EMPTY_VALUE = "Empty";
 	
 	private static final String ATTR_EMAIL_SERVER = "Email Server";
-	private static final String ATTR_IS_SPOOFED = "Is Spoofed";
 	
 	public EmailMapping(final Double defaultRating, final Double defaultConfidence)
 	{
@@ -32,7 +33,8 @@ public class EmailMapping extends CyboxObjectMapping
 	
 	@Override
 	public List<? extends Item> map(final Node objectNode, final String observableNodeID, final Document document,
-		final List<SecurityLabel> securityLabels) throws XPathExpressionException
+		final List<SecurityLabel> securityLabels, final NodeResolver nodeResolver,
+		final Resolver<List<? extends Item>, ItemObserver> cyboxObjectResolver) throws XPathExpressionException
 	{
 		List<Item> items = new ArrayList<Item>();
 		
@@ -40,7 +42,7 @@ public class EmailMapping extends CyboxObjectMapping
 		Node propertiesNode = Constants.XPATH_UTIL.getNode("Properties", objectNode);
 		
 		// holds the email object to return
-		Email email = new Email();
+		final Email email = new Email();
 		items.add(email);
 		
 		email.getSecurityLabels().addAll(securityLabels);
@@ -51,17 +53,15 @@ public class EmailMapping extends CyboxObjectMapping
 		
 		// extract the raw body of the email
 		String rawBody = Constants.XPATH_UTIL.getString("Raw_Body", propertiesNode);
-		if (StringUtils.isNotBlank(rawBody))
-		{
-			email.setBody(rawBody);
-		}
+		email.setBody(StringUtils.isNotBlank(rawBody) ? rawBody : EMPTY_VALUE);
 		
 		// extract the raw header of the email
 		String rawHeader = Constants.XPATH_UTIL.getString("Raw_Header", propertiesNode);
-		if (StringUtils.isNotBlank(rawHeader))
-		{
-			email.setHeader(rawHeader);
-		}
+		email.setHeader(StringUtils.isNotBlank(rawHeader) ? rawHeader : EMPTY_VALUE);
+		
+		// extract the subject
+		String subject = Constants.XPATH_UTIL.getString("Header/Subject", propertiesNode);
+		email.setSubject(StringUtils.isNotBlank(subject) ? subject : EMPTY_VALUE);
 		
 		// extract the from address value for this email address
 		final Node fromNode = Constants.XPATH_UTIL.getNode("Header/From", propertiesNode);
@@ -80,35 +80,56 @@ public class EmailMapping extends CyboxObjectMapping
 				addStixObservableIDAttribute(emailAddress, observableNodeID);
 				emailAddress.setAddress(fromAddress);
 				
-				//check to see if the spoofed text is set
-				String spoofedText = Constants.XPATH_UTIL.getString("@is_spoofed", fromNode);
-				if (StringUtils.isNotBlank(spoofedText))
-				{
-					AttributeHelper.addAttribute(emailAddress, ATTR_IS_SPOOFED, spoofedText);
-				}
-				
 				//add this indicator to the email group
 				email.getAssociatedItems().add(emailAddress);
 				items.add(emailAddress);
 			}
 		}
 		
+		//get the address value object
+		String addressValue = Constants.XPATH_UTIL.getString("Address_Value", propertiesNode);
+		if (StringUtils.isNotBlank(addressValue))
+		{
+			//create a new email address indicator
+			EmailAddress emailAddress = new EmailAddress();
+			setDefaultRatingConfidence(emailAddress);
+			addStixObservableIDAttribute(emailAddress, observableNodeID);
+			emailAddress.setAddress(addressValue);
+			
+			//add this indicator to the email group
+			email.getAssociatedItems().add(emailAddress);
+			items.add(emailAddress);
+		}
+		
 		// set the to recipients
 		email.setTo(buildRecipientList("Header/To/Recipient", propertiesNode));
-		
-		// extract the subject
-		String subject = Constants.XPATH_UTIL.getString("Header/Subject", propertiesNode);
-		if (StringUtils.isNotBlank(subject))
-		{
-			email.setSubject(subject);
-		}
 		
 		// add all of the attributes for this object if they exist
 		AttributeHelper.addAttributeIfExists(email, ATTR_EMAIL_SERVER,
 			Constants.XPATH_UTIL.getString("Email_Server", propertiesNode));
 		
+		//retrieve all of the file nodes
+		NodeList fileNodeList = Constants.XPATH_UTIL.getNodes("Attachments/File", propertiesNode);
+		if (null != fileNodeList)
+		{
+			// for each of the nodes in the list
+			for (int i = 0; i < fileNodeList.getLength(); i++)
+			{
+				// retrieve the current stix package node
+				Node fileNode = fileNodeList.item(i);
+				
+				//get the object reference and see if it is not null
+				final String fileReferenceID = Constants.XPATH_UTIL.getString("@object_reference", fileNode);
+				if (StringUtils.isNotBlank(fileReferenceID))
+				{
+					//create an item observer to add all of the items to this email
+					ItemObserver itemObserver = (foundItems) -> email.getAssociatedItems().addAll(foundItems);
+					cyboxObjectResolver.addObserver(fileReferenceID, itemObserver);
+				}
+			}
+		}
+		
 		// :FIXME: handle the unknown mappings
-		DebugUtil.logUnknownMapping("Attachments", propertiesNode);
 		DebugUtil.logUnknownMapping("Links", propertiesNode);
 		
 		return items;

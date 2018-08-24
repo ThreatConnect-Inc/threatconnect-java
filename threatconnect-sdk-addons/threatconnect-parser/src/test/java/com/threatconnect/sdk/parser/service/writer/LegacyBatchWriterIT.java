@@ -28,7 +28,7 @@ public class LegacyBatchWriterIT
 	@Test
 	public void upload() throws Exception
 	{
-		File file = new File("src/test/resources/batchJob_81253.json");
+		File file = new File("src/test/resources/batchJob_178988.json");
 		Assert.assertTrue(file.exists());
 		
 		final String ownerName = SdkAppConfig.getInstance().getApiDefaultOrg();

@@ -3,6 +3,7 @@ package com.threatconnect.stix.read.parser.map.cybox.object;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.SecurityLabel;
 import com.threatconnect.stix.read.indicator.Cidr;
+import com.threatconnect.stix.read.indicator.Mutex;
 import com.threatconnect.stix.read.parser.Constants;
 import com.threatconnect.stix.read.parser.observer.ItemObserver;
 import com.threatconnect.stix.read.parser.resolver.NodeResolver;
@@ -17,9 +18,9 @@ import java.util.List;
 /**
  * @author Greg Marut
  */
-public class CidrIP4Mapping extends CyboxObjectMapping
+public class MutexMapping extends CyboxObjectMapping
 {
-	public CidrIP4Mapping(final Double defaultRating, final Double defaultConfidence)
+	public MutexMapping(final Double defaultRating, final Double defaultConfidence)
 	{
 		super(defaultRating, defaultConfidence);
 	}
@@ -32,15 +33,15 @@ public class CidrIP4Mapping extends CyboxObjectMapping
 		// get the properties node for this observable
 		Node propertiesNode = Constants.XPATH_UTIL.getNode("Properties", objectNode);
 		
-		// extract the address value from the cybox object
-		String value = Constants.XPATH_UTIL.getString("Address_Value", propertiesNode).trim();
+		// extract the name value from the cybox object
+		String value = Constants.XPATH_UTIL.getString("Name", propertiesNode).trim();
 		
-		Cidr cidr = new Cidr();
-		cidr.getSecurityLabels().addAll(securityLabels);
-		setDefaultRatingConfidence(cidr);
-		addStixObservableIDAttribute(cidr, observableNodeID);
-		cidr.setValue(value);
+		Mutex mutex = new Mutex();
+		mutex.getSecurityLabels().addAll(securityLabels);
+		setDefaultRatingConfidence(mutex);
+		addStixObservableIDAttribute(mutex, observableNodeID);
+		mutex.setValue(value);
 		
-		return Collections.singletonList(cidr);
+		return Collections.singletonList(mutex);
 	}
 }

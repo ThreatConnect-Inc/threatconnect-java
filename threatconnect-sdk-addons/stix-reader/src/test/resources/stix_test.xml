@@ -1,0 +1,649 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taxii_11:Poll_Response xmlns:taxii_11="http://taxii.mitre.org/messages/taxii_xml_binding-1.1" xmlns:xmldsig="http://www.w3.org/2000/09/xmldsig#" collection_name="A_ISAC_C10203" more="false" result_part_number="1" in_response_to="urn:uuid:d0ce4b45-03c9-4b00-a9ea-cd22ccf1adf5" message_id="6280102206866302997">
+   <taxii_11:Exclusive_Begin_Timestamp>2018-07-13T14:51:24Z</taxii_11:Exclusive_Begin_Timestamp>
+   <taxii_11:Inclusive_End_Timestamp>2018-07-13T21:31:01.184000Z</taxii_11:Inclusive_End_Timestamp>
+   <taxii_11:Content_Block>
+      <taxii_11:Content_Binding binding_id="urn:stix.mitre.org:xml:1.1.1" />
+      <taxii_11:Content>
+         <stix:STIX_Package xmlns:stix="http://stix.mitre.org/stix-1" xmlns:AddressObj="http://cybox.mitre.org/objects#AddressObject-2" xmlns:DomainNameObj="http://cybox.mitre.org/objects#DomainNameObject-1" xmlns:FileObj="http://cybox.mitre.org/objects#FileObject-2" xmlns:URIObj="http://cybox.mitre.org/objects#URIObject-2" xmlns:cybox="http://cybox.mitre.org/cybox-2" xmlns:cyboxCommon="http://cybox.mitre.org/common-2" xmlns:cyboxVocabs="http://cybox.mitre.org/default_vocabularies-2" xmlns:indicator="http://stix.mitre.org/Indicator-2" xmlns:marking="http://data-marking.mitre.org/Marking-1" xmlns:stixCommon="http://stix.mitre.org/common-1" xmlns:stixVocabs="http://stix.mitre.org/default_vocabularies-1" xmlns:taxii="http://taxii.mitre.org/messages/taxii_xml_binding-1" xmlns:tdq="http://taxii.mitre.org/query/taxii_default_query-1" xmlns:threatstream="http://threatstream.com" xmlns:tlpMarking="http://data-marking.mitre.org/extensions/MarkingStructure#TLP-1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="threatstream:Package-f75e04b8-7014-4356-a7f1-2feadfb4834d" timestamp="2018-07-14T14:52:11.814035+00:00" version="1.1.1">
+            <stix:STIX_Header />
+            <stix:Indicators>
+               <stix:Indicator id="threatstream:indicator-XXXXXXXX-bc97-4052-ac3d-c94470c0906b" timestamp="2018-07-14T14:52:11.814164+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>mal_domain: asaparborcare.com</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">C2</indicator:Type>
+                  <indicator:Description>TS ID: XXXXXXXX; iType: mal_domain; Date First: 2018-07-13T19:54:49.913Z; State: active; Org: Unified Layer; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
+                  <indicator:Observable id="threatstream:Observable-b27777fe-82f4-4cbb-8c86-29c8451f917c">
+                     <cybox:Title>mal_domain: asaparborcare.com</cybox:Title>
+                     <cybox:Keywords>
+                        <cybox:Keyword>very-high</cybox:Keyword>
+                     </cybox:Keywords>
+                     <cybox:Object id="threatstream:DomainName-d090f969-1ed5-4a34-aa11-77994df9931c">
+                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
+                           <DomainNameObj:Value>asaparborcare.com</DomainNameObj:Value>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Handling>
+                     <marking:Marking>
+                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
+                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
+                     </marking:Marking>
+                  </indicator:Handling>
+                  <indicator:Confidence timestamp="2018-07-14T14:52:11.814696+00:00">
+                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">60</stixCommon:Value>
+                  </indicator:Confidence>
+                  <indicator:Producer>
+                     <stixCommon:Time>
+                        <cyboxCommon:Produced_Time>2018-07-13T19:54:49.913000+00:00</cyboxCommon:Produced_Time>
+                     </stixCommon:Time>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="threatstream:indicator-86e3fb1c-ca7d-4660-8e54-5d0f13b88a5a" timestamp="2018-07-14T14:52:11.816320+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>mal_email: cs@now.cn</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Malicious E-mail</indicator:Type>
+                  <indicator:Description>TS ID: 51018686829; iType: mal_email; Date First: 2018-07-13T19:54:50.090Z; State: active; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
+                  <indicator:Observable id="threatstream:Observable-cae465a0-e840-4f9f-bb85-b40278621a1f">
+                     <cybox:Title>mal_email: cs@now.cn</cybox:Title>
+                     <cybox:Keywords>
+                        <cybox:Keyword>low</cybox:Keyword>
+                     </cybox:Keywords>
+                     <cybox:Object id="threatstream:EmailAddress-82822eb2-2bca-4a8f-b0a2-48c9f1ba6613">
+                        <cybox:Properties category="e-mail" xsi:type="AddressObj:AddressObjectType">
+                           <AddressObj:Address_Value>cs@now.cn</AddressObj:Address_Value>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Handling>
+                     <marking:Marking>
+                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
+                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
+                     </marking:Marking>
+                  </indicator:Handling>
+                  <indicator:Confidence timestamp="2018-07-14T14:52:11.816676+00:00">
+                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">60</stixCommon:Value>
+                  </indicator:Confidence>
+                  <indicator:Producer>
+                     <stixCommon:Time>
+                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.090000+00:00</cyboxCommon:Produced_Time>
+                     </stixCommon:Time>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="threatstream:indicator-e5a96a5f-d0e5-4565-ac06-b95ba31cc3ba" timestamp="2018-07-14T14:52:11.819622+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>mal_domain: filerco.com</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">C2</indicator:Type>
+                  <indicator:Description>TS ID: 51011042611; iType: mal_domain; Date First: 2018-07-12T15:30:05.001Z; State: active; Org: OVH SAS; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
+                  <indicator:Observable id="threatstream:Observable-91a1d902-c9ba-440b-864a-e1069543e046">
+                     <cybox:Title>mal_domain: filerco.com</cybox:Title>
+                     <cybox:Keywords>
+                        <cybox:Keyword>very-high</cybox:Keyword>
+                     </cybox:Keywords>
+                     <cybox:Object id="threatstream:DomainName-f0a05789-cbfe-436d-8999-3b537265dbdc">
+                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
+                           <DomainNameObj:Value>filerco.com</DomainNameObj:Value>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Handling>
+                     <marking:Marking>
+                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
+                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
+                     </marking:Marking>
+                  </indicator:Handling>
+                  <indicator:Confidence timestamp="2018-07-14T14:52:11.819978+00:00">
+                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">90</stixCommon:Value>
+                  </indicator:Confidence>
+                  <indicator:Producer>
+                     <stixCommon:Time>
+                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
+                     </stixCommon:Time>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="threatstream:indicator-8231e3da-1c58-47e8-89ae-7ad9bf6785e5" timestamp="2018-07-14T14:52:11.821384+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>mal_url: https://filerco.com/drive.php</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">URL Watchlist</indicator:Type>
+                  <indicator:Description>TS ID: 51011042620; iType: mal_url; Date First: 2018-07-12T15:30:05.423Z; State: active; Org: OVH SAS; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
+                  <indicator:Observable id="threatstream:Observable-0c722e6f-af0f-49b5-a89f-ff6abe710433">
+                     <cybox:Title>mal_url: https://filerco.com/drive.php</cybox:Title>
+                     <cybox:Keywords>
+                        <cybox:Keyword>very-high</cybox:Keyword>
+                     </cybox:Keywords>
+                     <cybox:Object id="threatstream:URI-a60bbfea-945c-4279-ad03-a5932221cb10">
+                        <cybox:Properties type="URL" xsi:type="URIObj:URIObjectType">
+                           <URIObj:Value>https://filerco.com/drive.php</URIObj:Value>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Handling>
+                     <marking:Marking>
+                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
+                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
+                     </marking:Marking>
+                  </indicator:Handling>
+                  <indicator:Confidence timestamp="2018-07-14T14:52:11.821736+00:00">
+                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">90</stixCommon:Value>
+                  </indicator:Confidence>
+                  <indicator:Producer>
+                     <stixCommon:Time>
+                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
+                     </stixCommon:Time>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="threatstream:indicator-b3840290-746b-475e-8345-5b1c31cc1b2c" timestamp="2018-07-14T14:52:11.823435+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>mal_email: abuse@bluehost.com</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Malicious E-mail</indicator:Type>
+                  <indicator:Description>TS ID: 51011042623; iType: mal_email; Date First: 2018-07-12T15:30:05.469Z; State: active; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
+                  <indicator:Observable id="threatstream:Observable-a67e50aa-570a-4ee7-bb94-276d0d531e70">
+                     <cybox:Title>mal_email: abuse@bluehost.com</cybox:Title>
+                     <cybox:Keywords>
+                        <cybox:Keyword>low</cybox:Keyword>
+                     </cybox:Keywords>
+                     <cybox:Object id="threatstream:EmailAddress-4bd32c1e-6c3b-4c91-8dab-ccb9171dba7b">
+                        <cybox:Properties category="e-mail" xsi:type="AddressObj:AddressObjectType">
+                           <AddressObj:Address_Value>abuse@bluehost.com</AddressObj:Address_Value>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Handling>
+                     <marking:Marking>
+                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
+                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
+                     </marking:Marking>
+                  </indicator:Handling>
+                  <indicator:Confidence timestamp="2018-07-14T14:52:11.823798+00:00">
+                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">60</stixCommon:Value>
+                  </indicator:Confidence>
+                  <indicator:Producer>
+                     <stixCommon:Time>
+                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
+                     </stixCommon:Time>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="threatstream:indicator-1196c3e5-fa21-4e22-a106-9961e3846d13" timestamp="2018-07-14T14:52:11.825112+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>mal_email: danielle.chandler@asaparborcare.com</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Malicious E-mail</indicator:Type>
+                  <indicator:Description>TS ID: 51011042624; iType: mal_email; Date First: 2018-07-12T15:30:05.481Z; State: active; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
+                  <indicator:Observable id="threatstream:Observable-c84ad475-8cf8-4589-957d-31fd60c6f038">
+                     <cybox:Title>mal_email: danielle.chandler@asaparborcare.com</cybox:Title>
+                     <cybox:Keywords>
+                        <cybox:Keyword>low</cybox:Keyword>
+                     </cybox:Keywords>
+                     <cybox:Object id="threatstream:EmailAddress-a988fcb9-b129-4dea-95f1-d06ccea71d71">
+                        <cybox:Properties category="e-mail" xsi:type="AddressObj:AddressObjectType">
+                           <AddressObj:Address_Value>danielle.chandler@asaparborcare.com</AddressObj:Address_Value>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Handling>
+                     <marking:Marking>
+                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
+                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
+                     </marking:Marking>
+                  </indicator:Handling>
+                  <indicator:Confidence timestamp="2018-07-14T14:52:11.825466+00:00">
+                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">60</stixCommon:Value>
+                  </indicator:Confidence>
+                  <indicator:Producer>
+                     <stixCommon:Time>
+                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
+                     </stixCommon:Time>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="threatstream:indicator-ea4ba0c0-33c1-4ad7-9247-76a44d108cbf" timestamp="2018-07-14T14:52:11.826716+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>mal_md5: baff2d55e395f9d9b3fad76de080562324c9dd9b</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">File Hash Watchlist</indicator:Type>
+                  <indicator:Description>TS ID: 51011042625; iType: mal_md5; Date First: 2018-07-12T15:30:05.496Z; State: active; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
+                  <indicator:Observable id="threatstream:Observable-1d399503-a2bf-49a3-a6e6-84cb8ad6bc88">
+                     <cybox:Title>mal_md5: baff2d55e395f9d9b3fad76de080562324c9dd9b</cybox:Title>
+                     <cybox:Keywords>
+                        <cybox:Keyword>very-high</cybox:Keyword>
+                     </cybox:Keywords>
+                     <cybox:Object id="threatstream:File-ca327d9a-d78d-4da0-920c-4092b509a1f9">
+                        <cybox:Properties xsi:type="FileObj:FileObjectType">
+                           <FileObj:Hashes>
+                              <cyboxCommon:Hash>
+                                 <cyboxCommon:Type xsi:type="cyboxVocabs:HashNameVocab-1.0">SHA1</cyboxCommon:Type>
+                                 <cyboxCommon:Simple_Hash_Value>baff2d55e395f9d9b3fad76de080562324c9dd9b</cyboxCommon:Simple_Hash_Value>
+                              </cyboxCommon:Hash>
+                           </FileObj:Hashes>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Handling>
+                     <marking:Marking>
+                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
+                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
+                     </marking:Marking>
+                  </indicator:Handling>
+                  <indicator:Confidence timestamp="2018-07-14T14:52:11.827068+00:00">
+                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">60</stixCommon:Value>
+                  </indicator:Confidence>
+                  <indicator:Producer>
+                     <stixCommon:Time>
+                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
+                     </stixCommon:Time>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="threatstream:indicator-34230459-e649-4051-9992-aa542d597d2b" timestamp="2018-07-14T14:52:11.828438+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>mal_md5: 1a69af8cc240aaea0afb2c7d98afc61b</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">File Hash Watchlist</indicator:Type>
+                  <indicator:Description>TS ID: 51011042628; iType: mal_md5; Date First: 2018-07-12T15:30:05.531Z; State: active; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
+                  <indicator:Observable id="threatstream:Observable-d3aff139-17e3-4399-a38e-ff7aefeb5fa8">
+                     <cybox:Title>mal_md5: 1a69af8cc240aaea0afb2c7d98afc61b</cybox:Title>
+                     <cybox:Keywords>
+                        <cybox:Keyword>very-high</cybox:Keyword>
+                     </cybox:Keywords>
+                     <cybox:Object id="threatstream:File-bee34d34-4f7c-4fd0-a539-f1d31d6571b4">
+                        <cybox:Properties xsi:type="FileObj:FileObjectType">
+                           <FileObj:Hashes>
+                              <cyboxCommon:Hash>
+                                 <cyboxCommon:Type xsi:type="cyboxVocabs:HashNameVocab-1.0">MD5</cyboxCommon:Type>
+                                 <cyboxCommon:Simple_Hash_Value>1a69af8cc240aaea0afb2c7d98afc61b</cyboxCommon:Simple_Hash_Value>
+                              </cyboxCommon:Hash>
+                           </FileObj:Hashes>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Handling>
+                     <marking:Marking>
+                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
+                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
+                     </marking:Marking>
+                  </indicator:Handling>
+                  <indicator:Confidence timestamp="2018-07-14T14:52:11.828807+00:00">
+                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">60</stixCommon:Value>
+                  </indicator:Confidence>
+                  <indicator:Producer>
+                     <stixCommon:Time>
+                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
+                     </stixCommon:Time>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="threatstream:indicator-b685595c-cda8-48f5-b3d2-c62f5cfb7fc1" timestamp="2018-07-14T14:52:11.830182+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>mal_domain: xero-online.com</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">C2</indicator:Type>
+                  <indicator:Description>TS ID: 51011042612; iType: mal_domain; Date First: 2018-07-12T15:30:05.017Z; State: active; Org: OVH SAS; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
+                  <indicator:Observable id="threatstream:Observable-0fd4e6cc-2325-4d76-8597-fa064c8dbdb5">
+                     <cybox:Title>mal_domain: xero-online.com</cybox:Title>
+                     <cybox:Keywords>
+                        <cybox:Keyword>very-high</cybox:Keyword>
+                     </cybox:Keywords>
+                     <cybox:Object id="threatstream:DomainName-9c76610c-0192-4aac-9e5c-baaf0ea22526">
+                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
+                           <DomainNameObj:Value>xero-online.com</DomainNameObj:Value>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Handling>
+                     <marking:Marking>
+                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
+                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
+                     </marking:Marking>
+                  </indicator:Handling>
+                  <indicator:Confidence timestamp="2018-07-14T14:52:11.830538+00:00">
+                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">29</stixCommon:Value>
+                  </indicator:Confidence>
+                  <indicator:Producer>
+                     <stixCommon:Time>
+                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
+                     </stixCommon:Time>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="threatstream:indicator-d1809efd-b09c-4dd7-94b7-1b5d6b1cc00b" timestamp="2018-07-14T14:52:11.831937+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>mal_domain: FILERCO.COM</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">C2</indicator:Type>
+                  <indicator:Description>TS ID: 51011042616; iType: mal_domain; Date First: 2018-07-12T15:30:05.288Z; State: active; Org: OVH SAS; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
+                  <indicator:Observable id="threatstream:Observable-fdf6d316-6e4f-4683-94d8-b6ab0168dfe6">
+                     <cybox:Title>mal_domain: FILERCO.COM</cybox:Title>
+                     <cybox:Keywords>
+                        <cybox:Keyword>very-high</cybox:Keyword>
+                     </cybox:Keywords>
+                     <cybox:Object id="threatstream:DomainName-6d959b51-f043-4955-83f8-5599ef092c07">
+                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
+                           <DomainNameObj:Value>FILERCO.COM</DomainNameObj:Value>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Handling>
+                     <marking:Marking>
+                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
+                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
+                     </marking:Marking>
+                  </indicator:Handling>
+                  <indicator:Confidence timestamp="2018-07-14T14:52:11.832313+00:00">
+                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">90</stixCommon:Value>
+                  </indicator:Confidence>
+                  <indicator:Producer>
+                     <stixCommon:Time>
+                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
+                     </stixCommon:Time>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="threatstream:indicator-4d050478-ff1a-4939-8dbb-0a99fa81020a" timestamp="2018-07-14T14:52:11.835750+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>mal_url: https://zexswalloiw.ml/</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">URL Watchlist</indicator:Type>
+                  <indicator:Description>TS ID: 51011042619; iType: mal_url; Date First: 2018-07-12T15:30:05.407Z; State: active; Org: Google; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
+                  <indicator:Observable id="threatstream:Observable-481654d1-d709-4227-9427-ed167b1fc3be">
+                     <cybox:Title>mal_url: https://zexswalloiw.ml/</cybox:Title>
+                     <cybox:Keywords>
+                        <cybox:Keyword>very-high</cybox:Keyword>
+                     </cybox:Keywords>
+                     <cybox:Object id="threatstream:URI-2397f7f3-ed2f-488d-88e8-ec8ee968e4fb">
+                        <cybox:Properties type="URL" xsi:type="URIObj:URIObjectType">
+                           <URIObj:Value>https://zexswalloiw.ml/</URIObj:Value>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Handling>
+                     <marking:Marking>
+                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
+                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
+                     </marking:Marking>
+                  </indicator:Handling>
+                  <indicator:Confidence timestamp="2018-07-14T14:52:11.836174+00:00">
+                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">90</stixCommon:Value>
+                  </indicator:Confidence>
+                  <indicator:Producer>
+                     <stixCommon:Time>
+                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
+                     </stixCommon:Time>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="threatstream:indicator-1efc366d-385b-45f9-98ea-5a36c653eb98" timestamp="2018-07-14T14:52:11.837492+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>mal_url: https://xero-online.com/759d87528391c84b1b53d60787a6d5a032796c9b.html</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">URL Watchlist</indicator:Type>
+                  <indicator:Description>TS ID: 51011042622; iType: mal_url; Date First: 2018-07-12T15:30:05.457Z; State: active; Org: OVH SAS; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
+                  <indicator:Observable id="threatstream:Observable-b09e2187-d584-4f2a-b36e-da1d60762f63">
+                     <cybox:Title>mal_url: https://xero-online.com/759d87528391c84b1b53d60787a6d5a032796c9b.html</cybox:Title>
+                     <cybox:Keywords>
+                        <cybox:Keyword>very-high</cybox:Keyword>
+                     </cybox:Keywords>
+                     <cybox:Object id="threatstream:URI-57927b47-11a0-43d5-9cfb-2606f208ac3e">
+                        <cybox:Properties type="URL" xsi:type="URIObj:URIObjectType">
+                           <URIObj:Value>https://xero-online.com/759d87528391c84b1b53d60787a6d5a032796c9b.html</URIObj:Value>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Handling>
+                     <marking:Marking>
+                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
+                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
+                     </marking:Marking>
+                  </indicator:Handling>
+                  <indicator:Confidence timestamp="2018-07-14T14:52:11.837851+00:00">
+                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">29</stixCommon:Value>
+                  </indicator:Confidence>
+                  <indicator:Producer>
+                     <stixCommon:Time>
+                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
+                     </stixCommon:Time>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="threatstream:indicator-ffa03b6a-cce0-4993-86ca-bdca0d23591f" timestamp="2018-07-14T14:52:11.839108+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>mal_md5: aa4c7e6c0cb4131c5804ebfab8fa35d24c699fea01794e3f3334475186e2db12</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">File Hash Watchlist</indicator:Type>
+                  <indicator:Description>TS ID: 51011042626; iType: mal_md5; Date First: 2018-07-12T15:30:05.508Z; State: active; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
+                  <indicator:Observable id="threatstream:Observable-84e00674-f942-415d-8245-f1a3b1795c4b">
+                     <cybox:Title>mal_md5: aa4c7e6c0cb4131c5804ebfab8fa35d24c699fea01794e3f3334475186e2db12</cybox:Title>
+                     <cybox:Keywords>
+                        <cybox:Keyword>very-high</cybox:Keyword>
+                     </cybox:Keywords>
+                     <cybox:Object id="threatstream:File-d05b3909-3caa-4ef6-9cff-45b5ce4cd0a5">
+                        <cybox:Properties xsi:type="FileObj:FileObjectType">
+                           <FileObj:Hashes>
+                              <cyboxCommon:Hash>
+                                 <cyboxCommon:Type xsi:type="cyboxVocabs:HashNameVocab-1.0">SHA256</cyboxCommon:Type>
+                                 <cyboxCommon:Simple_Hash_Value>aa4c7e6c0cb4131c5804ebfab8fa35d24c699fea01794e3f3334475186e2db12</cyboxCommon:Simple_Hash_Value>
+                              </cyboxCommon:Hash>
+                           </FileObj:Hashes>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Handling>
+                     <marking:Marking>
+                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
+                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
+                     </marking:Marking>
+                  </indicator:Handling>
+                  <indicator:Confidence timestamp="2018-07-14T14:52:11.839461+00:00">
+                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">60</stixCommon:Value>
+                  </indicator:Confidence>
+                  <indicator:Producer>
+                     <stixCommon:Time>
+                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
+                     </stixCommon:Time>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="threatstream:indicator-f2fd96db-8617-4574-add1-8e636737c74b" timestamp="2018-07-14T14:52:11.840746+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>mal_md5: b2b64d8c3ff9f4980c765b37d42b4b7df440f42b</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">File Hash Watchlist</indicator:Type>
+                  <indicator:Description>TS ID: 51011042629; iType: mal_md5; Date First: 2018-07-12T15:30:05.544Z; State: active; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
+                  <indicator:Observable id="threatstream:Observable-71593c95-cfdc-41f3-ba1e-7e9c53e448c4">
+                     <cybox:Title>mal_md5: b2b64d8c3ff9f4980c765b37d42b4b7df440f42b</cybox:Title>
+                     <cybox:Keywords>
+                        <cybox:Keyword>very-high</cybox:Keyword>
+                     </cybox:Keywords>
+                     <cybox:Object id="threatstream:File-ca1242c4-92f4-4c84-b047-19bfcc164699">
+                        <cybox:Properties xsi:type="FileObj:FileObjectType">
+                           <FileObj:Hashes>
+                              <cyboxCommon:Hash>
+                                 <cyboxCommon:Type xsi:type="cyboxVocabs:HashNameVocab-1.0">SHA1</cyboxCommon:Type>
+                                 <cyboxCommon:Simple_Hash_Value>b2b64d8c3ff9f4980c765b37d42b4b7df440f42b</cyboxCommon:Simple_Hash_Value>
+                              </cyboxCommon:Hash>
+                           </FileObj:Hashes>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Handling>
+                     <marking:Marking>
+                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
+                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
+                     </marking:Marking>
+                  </indicator:Handling>
+                  <indicator:Confidence timestamp="2018-07-14T14:52:11.841103+00:00">
+                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">60</stixCommon:Value>
+                  </indicator:Confidence>
+                  <indicator:Producer>
+                     <stixCommon:Time>
+                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
+                     </stixCommon:Time>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="threatstream:indicator-4b8b4a1f-bea2-4f11-90f0-c1cbd8e8f22e" timestamp="2018-07-14T14:52:11.842419+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>mal_domain: zexswalloiw.ml</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">C2</indicator:Type>
+                  <indicator:Description>TS ID: 51011042615; iType: mal_domain; Date First: 2018-07-12T15:30:05.235Z; State: active; Org: Google; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
+                  <indicator:Observable id="threatstream:Observable-50296d1f-610d-4e86-af34-6393e3b701d2">
+                     <cybox:Title>mal_domain: zexswalloiw.ml</cybox:Title>
+                     <cybox:Keywords>
+                        <cybox:Keyword>very-high</cybox:Keyword>
+                     </cybox:Keywords>
+                     <cybox:Object id="threatstream:DomainName-f53f0578-c603-4484-8447-85729f6c077b">
+                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
+                           <DomainNameObj:Value>zexswalloiw.ml</DomainNameObj:Value>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Handling>
+                     <marking:Marking>
+                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
+                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
+                     </marking:Marking>
+                  </indicator:Handling>
+                  <indicator:Confidence timestamp="2018-07-14T14:52:11.842787+00:00">
+                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">90</stixCommon:Value>
+                  </indicator:Confidence>
+                  <indicator:Producer>
+                     <stixCommon:Time>
+                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
+                     </stixCommon:Time>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="threatstream:indicator-0416292f-f251-4a14-977f-17979699b43f" timestamp="2018-07-14T14:52:11.844076+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>mal_md5: b936e82ca7fd1ad7e0fbaaafa55f7680ae5c8768ae7145e2ae465ebb14a253ba</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">File Hash Watchlist</indicator:Type>
+                  <indicator:Description>TS ID: 51011042630; iType: mal_md5; Date First: 2018-07-12T15:30:05.557Z; State: active; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
+                  <indicator:Observable id="threatstream:Observable-0c4b252b-4ab5-4b06-818b-4b40f62be68f">
+                     <cybox:Title>mal_md5: b936e82ca7fd1ad7e0fbaaafa55f7680ae5c8768ae7145e2ae465ebb14a253ba</cybox:Title>
+                     <cybox:Keywords>
+                        <cybox:Keyword>very-high</cybox:Keyword>
+                     </cybox:Keywords>
+                     <cybox:Object id="threatstream:File-02928684-f0cb-4e07-96b9-acc89119ba43">
+                        <cybox:Properties xsi:type="FileObj:FileObjectType">
+                           <FileObj:Hashes>
+                              <cyboxCommon:Hash>
+                                 <cyboxCommon:Type xsi:type="cyboxVocabs:HashNameVocab-1.0">SHA256</cyboxCommon:Type>
+                                 <cyboxCommon:Simple_Hash_Value>b936e82ca7fd1ad7e0fbaaafa55f7680ae5c8768ae7145e2ae465ebb14a253ba</cyboxCommon:Simple_Hash_Value>
+                              </cyboxCommon:Hash>
+                           </FileObj:Hashes>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Handling>
+                     <marking:Marking>
+                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
+                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
+                     </marking:Marking>
+                  </indicator:Handling>
+                  <indicator:Confidence timestamp="2018-07-14T14:52:11.844457+00:00">
+                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">60</stixCommon:Value>
+                  </indicator:Confidence>
+                  <indicator:Producer>
+                     <stixCommon:Time>
+                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
+                     </stixCommon:Time>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="threatstream:indicator-413ad84b-b972-4591-a753-9d1f0e6c4f73" timestamp="2018-07-14T14:52:11.846194+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>mal_domain: ZEXSWALLOIW.ML</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">C2</indicator:Type>
+                  <indicator:Description>TS ID: 51011042613; iType: mal_domain; Date First: 2018-07-12T15:30:05.153Z; State: active; Org: Google; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
+                  <indicator:Observable id="threatstream:Observable-6628579a-0a0d-44b6-b297-ecdccb738c1e">
+                     <cybox:Title>mal_domain: ZEXSWALLOIW.ML</cybox:Title>
+                     <cybox:Keywords>
+                        <cybox:Keyword>very-high</cybox:Keyword>
+                     </cybox:Keywords>
+                     <cybox:Object id="threatstream:DomainName-b37f6bc6-71c0-4274-a87e-b51853bd725d">
+                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
+                           <DomainNameObj:Value>ZEXSWALLOIW.ML</DomainNameObj:Value>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Handling>
+                     <marking:Marking>
+                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
+                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
+                     </marking:Marking>
+                  </indicator:Handling>
+                  <indicator:Confidence timestamp="2018-07-14T14:52:11.846548+00:00">
+                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">90</stixCommon:Value>
+                  </indicator:Confidence>
+                  <indicator:Producer>
+                     <stixCommon:Time>
+                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
+                     </stixCommon:Time>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="threatstream:indicator-e8638c16-3610-49db-95ba-a68303e67904" timestamp="2018-07-14T14:52:11.847794+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>mal_domain: XERO-ONLINE.COM</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">C2</indicator:Type>
+                  <indicator:Description>TS ID: 51011042614; iType: mal_domain; Date First: 2018-07-12T15:30:05.220Z; State: active; Org: OVH SAS; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
+                  <indicator:Observable id="threatstream:Observable-f5f2697e-2613-4793-a64d-417664b0c0ff">
+                     <cybox:Title>mal_domain: XERO-ONLINE.COM</cybox:Title>
+                     <cybox:Keywords>
+                        <cybox:Keyword>very-high</cybox:Keyword>
+                     </cybox:Keywords>
+                     <cybox:Object id="threatstream:DomainName-8b8941d3-33c4-427a-824b-5907c60422d6">
+                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
+                           <DomainNameObj:Value>XERO-ONLINE.COM</DomainNameObj:Value>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Handling>
+                     <marking:Marking>
+                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
+                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
+                     </marking:Marking>
+                  </indicator:Handling>
+                  <indicator:Confidence timestamp="2018-07-14T14:52:11.848188+00:00">
+                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">29</stixCommon:Value>
+                  </indicator:Confidence>
+                  <indicator:Producer>
+                     <stixCommon:Time>
+                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
+                     </stixCommon:Time>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="threatstream:indicator-a252c5ee-8dd2-47f1-8733-9606a80ffcd2" timestamp="2018-07-14T14:52:11.849528+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>mal_domain: INV-03056.zip</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">C2</indicator:Type>
+                  <indicator:Description>TS ID: 51011042617; iType: mal_domain; Date First: 2018-07-12T15:30:05.339Z; State: active; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
+                  <indicator:Observable id="threatstream:Observable-a1709f91-d6fe-42fa-9d1d-7a2cb0907681">
+                     <cybox:Title>mal_domain: INV-03056.zip</cybox:Title>
+                     <cybox:Keywords>
+                        <cybox:Keyword>very-high</cybox:Keyword>
+                     </cybox:Keywords>
+                     <cybox:Object id="threatstream:DomainName-bf2d57c5-6e88-4f56-8da4-14d70e60e62a">
+                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
+                           <DomainNameObj:Value>INV-03056.zip</DomainNameObj:Value>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Handling>
+                     <marking:Marking>
+                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
+                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
+                     </marking:Marking>
+                  </indicator:Handling>
+                  <indicator:Confidence timestamp="2018-07-14T14:52:11.849879+00:00">
+                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">78</stixCommon:Value>
+                  </indicator:Confidence>
+                  <indicator:Producer>
+                     <stixCommon:Time>
+                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
+                     </stixCommon:Time>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="threatstream:indicator-YYYYYY-6ea0-4fa6-a027-a1efd52aa029" timestamp="2018-07-14T14:52:11.851193+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>mal_domain: ASAPARBORCARE.COM</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">C2</indicator:Type>
+                  <indicator:Description>TS ID: YYYYYY; iType: mal_domain; Date First: 2018-07-12T15:30:05.395Z; State: active; Org: Unified Layer; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
+                  <indicator:Observable id="threatstream:Observable-11b8857c-36f8-4f96-b27e-9b9749acf818">
+                     <cybox:Title>mal_domain: ASAPARBORCARE.COM</cybox:Title>
+                     <cybox:Keywords>
+                        <cybox:Keyword>very-high</cybox:Keyword>
+                     </cybox:Keywords>
+                     <cybox:Object id="threatstream:DomainName-4e02720f-4768-4389-9e46-4220fdce8fd6">
+                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
+                           <DomainNameObj:Value>ASAPARBORCARE.COM</DomainNameObj:Value>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Handling>
+                     <marking:Marking>
+                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
+                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
+                     </marking:Marking>
+                  </indicator:Handling>
+                  <indicator:Confidence timestamp="2018-07-14T14:52:11.851552+00:00">
+                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">27</stixCommon:Value>
+                  </indicator:Confidence>
+                  <indicator:Producer>
+                     <stixCommon:Time>
+                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
+                     </stixCommon:Time>
+                  </indicator:Producer>
+               </stix:Indicator>
+            </stix:Indicators>
+         </stix:STIX_Package>
+      </taxii_11:Content>
+   </taxii_11:Content_Block>
+</taxii_11:Poll_Response>

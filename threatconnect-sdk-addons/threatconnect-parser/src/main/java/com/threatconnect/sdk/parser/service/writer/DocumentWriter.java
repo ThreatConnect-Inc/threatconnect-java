@@ -22,11 +22,11 @@ public class DocumentWriter extends GroupWriter<Document, com.threatconnect.sdk.
 	}
 	
 	@Override
-	public com.threatconnect.sdk.server.entity.Document saveGroup(String ownerName)
-		throws SaveItemFailedException, IOException
+	public com.threatconnect.sdk.server.entity.Document saveGroup(final String ownerName, final boolean forceSaveGroup, final boolean saveAttributes,
+		final boolean saveTags) throws SaveItemFailedException, IOException
 	{
 		// first, call the super class' save method
-		com.threatconnect.sdk.server.entity.Document document = super.saveGroup(ownerName);
+		com.threatconnect.sdk.server.entity.Document document = super.saveGroup(ownerName, forceSaveGroup, saveAttributes, saveTags);
 		
 		// check to see if there is a file
 		if (null != groupSource.getFile() && groupSource.getFile().exists())

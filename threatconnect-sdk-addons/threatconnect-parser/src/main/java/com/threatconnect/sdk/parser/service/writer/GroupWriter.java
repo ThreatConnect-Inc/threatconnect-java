@@ -16,6 +16,7 @@ import com.threatconnect.sdk.model.Group;
 import com.threatconnect.sdk.model.GroupType;
 import com.threatconnect.sdk.model.Host;
 import com.threatconnect.sdk.model.Indicator;
+import com.threatconnect.sdk.model.SecurityLabel;
 import com.threatconnect.sdk.model.Url;
 import com.threatconnect.sdk.parser.service.save.AssociateFailedException;
 import com.threatconnect.sdk.parser.service.save.DeleteItemFailedException;
@@ -47,6 +48,19 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 	}
 	
 	/**
+	 * Saves the indicator with the associated owner
+	 *
+	 * @param ownerName
+	 * @return
+	 * @throws SaveItemFailedException
+	 * @throws IOException             if there was an exception communicating with the server
+	 */
+	public T saveGroup(final String ownerName) throws SaveItemFailedException, IOException
+	{
+		return saveGroup(ownerName, false, true, true);
+	}
+	
+	/**
 	 * Saves the group with the associated owner
 	 *
 	 * @param ownerName the owner name of the group
@@ -54,7 +68,8 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 	 * @throws SaveItemFailedException if there was an issue saving this item
 	 * @throws IOException             if there was an exception communicating with the server
 	 */
-	public T saveGroup(final String ownerName) throws SaveItemFailedException, IOException
+	public T saveGroup(final String ownerName, final boolean forceSaveGroup, final boolean saveAttributes,
+		final boolean saveTags) throws SaveItemFailedException, IOException
 	{
 		try
 		{
@@ -72,17 +87,23 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 			{
 				// use this group as the saved group
 				savedGroup = readGroup;
-				return savedGroup;
+				
+				//check to see if force saving is not enabled
+				if (!forceSaveGroup)
+				{
+					return savedGroup;
+				}
 			}
 			
 			if (logger.isDebugEnabled())
 			{
 				Gson gson = new Gson();
-				logger.info("Saving group: {}", gson.toJson(group));
+				logger.debug("Saving group: {}", gson.toJson(group));
 			}
 			
 			// save the object
-			ApiEntitySingleResponse<T, ?> response = writer.create(group);
+			ApiEntitySingleResponse<T, ?> response =
+				(null == readGroup) ? writer.create(group, ownerName) : writer.update(group, ownerName);
 			
 			// check to see if this call was successful
 			if (response.isSuccess())
@@ -90,7 +111,7 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 				savedGroup = response.getItem();
 				
 				// make sure the list of attributes is not empty
-				if (!groupSource.getAttributes().isEmpty())
+				if (saveAttributes && !groupSource.getAttributes().isEmpty())
 				{
 					// for each of the attributes of this group
 					for (Attribute attribute : groupSource.getAttributes())
@@ -100,7 +121,7 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 							mapper.map(attribute, com.threatconnect.sdk.server.entity.Attribute.class);
 						
 						// save the attributes for this group
-						ApiEntitySingleResponse<?, ?> attrResponse = writer.addAttribute(getSavedGroupID(), attr);
+						ApiEntitySingleResponse<?, ?> attrResponse = writer.addAttribute(getSavedGroupID(), attr, ownerName);
 						
 						// check to see if this was not successful
 						if (!attrResponse.isSuccess())
@@ -114,7 +135,7 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 				}
 				
 				// make sure the list of tags is not empty
-				if (!groupSource.getTags().isEmpty())
+				if (saveTags && !groupSource.getTags().isEmpty())
 				{
 					// for each of the tags
 					for (String tag : groupSource.getTags())
@@ -123,7 +144,7 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 						if (null != tag && !tag.isEmpty())
 						{
 							// save the tag for this group
-							ApiEntitySingleResponse<?, ?> tagResponse = writer.associateTag(getSavedGroupID(), tag);
+							ApiEntitySingleResponse<?, ?> tagResponse = writer.associateTag(getSavedGroupID(), tag, ownerName);
 							
 							// check to see if this was not successful
 							if (!tagResponse.isSuccess())
@@ -139,10 +160,21 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 					}
 				}
 				
+				// make sure the list of security labels is not empty
+				if (!groupSource.getSecurityLabels().isEmpty())
+				{
+					//for each of the security labels
+					for (SecurityLabel securityLabel : groupSource.getSecurityLabels())
+					{
+						writer.associateSecurityLabel(getSavedGroupID(), securityLabel.getName(), ownerName);
+					}
+				}
+				
 				return getSavedGroup();
 			}
 			else
 			{
+				logger.warn("Failed to save group \"{}\": {}", group.getName(), response.getMessage());
 				throw new SaveItemFailedException(groupSource, response.getMessage());
 			}
 		}
@@ -159,8 +191,7 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 	 * @throws AssociateFailedException if there as an issue associating the indicator to this group
 	 * @throws IOException              if there was an exception communicating with the server
 	 */
-	public void associateIndicator(final Indicator indicator)
-		throws AssociateFailedException, IOException
+	public void associateIndicator(final Indicator indicator, final String ownerName) throws AssociateFailedException, IOException
 	{
 		try
 		{
@@ -173,10 +204,10 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 			switch (indicator.getIndicatorType())
 			{
 				case Address.INDICATOR_TYPE:
-					response = writer.associateIndicatorAddress(getSavedGroupID(), indicatorID);
+					response = writer.associateIndicatorAddress(getSavedGroupID(), indicatorID, ownerName);
 					break;
 				case EmailAddress.INDICATOR_TYPE:
-					response = writer.associateIndicatorEmailAddress(getSavedGroupID(), indicatorID);
+					response = writer.associateIndicatorEmailAddress(getSavedGroupID(), indicatorID, ownerName);
 					break;
 				case File.INDICATOR_TYPE:
 					File file = (File) indicator;
@@ -191,15 +222,15 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 						if (null != hash && !hash.isEmpty())
 						{
 							indicatorID = hash;
-							response = writer.associateIndicatorFile(getSavedGroupID(), indicatorID);
+							response = writer.associateIndicatorFile(getSavedGroupID(), indicatorID, ownerName);
 						}
 					}
 					break;
 				case Host.INDICATOR_TYPE:
-					response = writer.associateIndicatorHost(getSavedGroupID(), indicatorID);
+					response = writer.associateIndicatorHost(getSavedGroupID(), indicatorID, ownerName);
 					break;
 				case Url.INDICATOR_TYPE:
-					response = writer.associateIndicatorUrl(getSavedGroupID(), indicatorID);
+					response = writer.associateIndicatorUrl(getSavedGroupID(), indicatorID, ownerName);
 					break;
 				default:
 					response = null;
@@ -221,7 +252,7 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 		}
 	}
 	
-	public void associateGroup(final GroupType groupType, final Integer savedID)
+	public void associateGroup(final GroupType groupType, final Integer savedID, final String ownerName)
 		throws AssociateFailedException, IOException
 	{
 		try
@@ -234,22 +265,22 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 			switch (groupType)
 			{
 				case ADVERSARY:
-					response = writer.associateGroupAdversary(getSavedGroupID(), savedID);
+					response = writer.associateGroupAdversary(getSavedGroupID(), savedID, ownerName);
 					break;
 				case DOCUMENT:
-					response = writer.associateGroupDocument(getSavedGroupID(), savedID);
+					response = writer.associateGroupDocument(getSavedGroupID(), savedID, ownerName);
 					break;
 				case EMAIL:
-					response = writer.associateGroupEmail(getSavedGroupID(), savedID);
+					response = writer.associateGroupEmail(getSavedGroupID(), savedID, ownerName);
 					break;
 				case INCIDENT:
-					response = writer.associateGroupIncident(getSavedGroupID(), savedID);
+					response = writer.associateGroupIncident(getSavedGroupID(), savedID, ownerName);
 					break;
 				case SIGNATURE:
-					response = writer.associateGroupSignature(getSavedGroupID(), savedID);
+					response = writer.associateGroupSignature(getSavedGroupID(), savedID, ownerName);
 					break;
 				case THREAT:
-					response = writer.associateGroupThreat(getSavedGroupID(), savedID);
+					response = writer.associateGroupThreat(getSavedGroupID(), savedID, ownerName);
 					break;
 				default:
 					response = null;

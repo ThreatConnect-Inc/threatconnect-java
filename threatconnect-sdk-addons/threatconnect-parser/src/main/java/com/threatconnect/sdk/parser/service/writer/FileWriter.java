@@ -23,22 +23,13 @@ public class FileWriter extends TypedIndicatorWriter<File, com.threatconnect.sdk
 		super(connection, file, com.threatconnect.sdk.server.entity.File.class, Type.File);
 	}
 	
+	@Override
 	public com.threatconnect.sdk.server.entity.File saveIndicator(final String ownerName,
 		final boolean forceSaveIndicator, final boolean saveAttributes, final boolean saveTags)
 		throws SaveItemFailedException, IOException
 	{
 		com.threatconnect.sdk.server.entity.File file =
 			super.saveIndicator(ownerName, forceSaveIndicator, saveAttributes, saveTags);
-		saveFileOccurrences(ownerName);
-		return file;
-	}
-	
-	@Override
-	public com.threatconnect.sdk.server.entity.File saveIndicator(String ownerName)
-		throws SaveItemFailedException, IOException
-	{
-		// first, call the super class' save method
-		com.threatconnect.sdk.server.entity.File file = super.saveIndicator(ownerName);
 		saveFileOccurrences(ownerName);
 		return file;
 	}

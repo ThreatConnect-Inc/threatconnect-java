@@ -1,11 +1,14 @@
 package com.threatconnect.stix.read.parser.map.stix;
 
+import com.threatconnect.sdk.model.Attribute;
 import com.threatconnect.sdk.model.Indicator;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.ItemType;
+import com.threatconnect.sdk.model.SecurityLabel;
 import com.threatconnect.sdk.parser.util.AttributeHelper;
 import com.threatconnect.stix.read.parser.Constants;
 import com.threatconnect.stix.read.parser.util.DebugUtil;
+import com.threatconnect.stix.read.parser.util.SecurityLabelUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,13 +17,16 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.xpath.XPathExpressionException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class IndicatorMapping
 {
 	private static final Logger logger = LoggerFactory.getLogger(IndicatorMapping.class);
 	
 	private static final String ATTR_TITLE = "Title";
+	private static final String ATTR_STIX_ID = "STIX ID";
 	private static final String ATTR_STIX_INDICATOR_TYPE = "STIX Indicator Type";
 	private static final String ATTR_PRODUCER = "Producer";
 	private static final String ATTR_ALTERNATIVE_ID = "Alternative ID";
@@ -28,6 +34,9 @@ public class IndicatorMapping
 	private static final String ATTR_PHASE_OF_INTRUSION = "Phase of Intrusion";
 	private static final String ATTR_LIKELY_IMPACT = "Likely Impact";
 	private static final String ATTR_SIGHTINGS = "Sightings";
+	
+	private static final String COMMAND_AND_CONTROL = "Command and Control";
+	private static final String C2 = "C2";
 	
 	public void map(final Node indicatorNode, final Document document, final List<? extends Item> items)
 		throws XPathExpressionException
@@ -41,11 +50,22 @@ public class IndicatorMapping
 	
 	public void map(final Node indicatorNode, final Document document, final Item item) throws XPathExpressionException
 	{
+		final String stixID = Constants.XPATH_UTIL.getString("@id", indicatorNode);
+		
+		//holds the list of attributes that were built
+		List<Attribute> attributes = new ArrayList<Attribute>();
+		
 		// add all of the attributes for this object if they exist
-		AttributeHelper.addAttributeIfExists(item, ATTR_TITLE,
-			Constants.XPATH_UTIL.getString("Title", indicatorNode));
-		AttributeHelper.addAttributeIfExists(item, ATTR_PRODUCER,
-			Constants.XPATH_UTIL.getString("Producer/Identity/Name", indicatorNode));
+		attributes.add(AttributeHelper.addAttributeIfExists(item, ATTR_STIX_ID, stixID));
+		attributes.add(AttributeHelper.addAttributeIfExists(item, ATTR_TITLE,
+			Constants.XPATH_UTIL.getString("Title", indicatorNode)));
+		attributes.add(AttributeHelper.addAttributeIfExists(item, ATTR_PRODUCER,
+			Constants.XPATH_UTIL.getString("Producer/Identity/Name", indicatorNode)));
+		
+		//extract the security labels from this indicator and then retain only the highest one
+		List<SecurityLabel> securityLabels = extractSecurityLabels(indicatorNode);
+		item.getSecurityLabels().addAll(securityLabels);
+		SecurityLabelUtil.keepHighestSecurityLabelOnly(item.getSecurityLabels());
 		
 		//retrieve the types
 		NodeList nodeList = Constants.XPATH_UTIL.getNodes("Type", indicatorNode);
@@ -55,7 +75,7 @@ public class IndicatorMapping
 			for (int i = 0; i < nodeList.getLength(); i++)
 			{
 				Node node = nodeList.item(i);
-				AttributeHelper.addAttributeIfExists(item, ATTR_STIX_INDICATOR_TYPE, node.getTextContent());
+				attributes.add(AttributeHelper.addAttributeIfExists(item, ATTR_STIX_INDICATOR_TYPE, node.getTextContent()));
 			}
 		}
 		
@@ -77,9 +97,18 @@ public class IndicatorMapping
 			
 			descriptionBuilder.append(description.trim());
 		}
+		
+		if (descriptionBuilder.length() > 0)
+		{
+			descriptionBuilder.append("\n\n");
+		}
+		
+		descriptionBuilder.append("STIX ID: ");
+		descriptionBuilder.append(stixID);
+		
 		if (!descriptionBuilder.toString().isEmpty())
 		{
-			AttributeHelper.addDescriptionAttribute(item, descriptionBuilder.toString());
+			attributes.add(AttributeHelper.addDescriptionAttribute(item, descriptionBuilder.toString()));
 		}
 		
 		//check to see if the item is an indicator
@@ -111,8 +140,29 @@ public class IndicatorMapping
 				// retrieve the current package node
 				Node killChainNode = killChainPhaseNodeList.item(i);
 				String name = Constants.XPATH_UTIL.getString("@name", killChainNode);
-				AttributeHelper.addAttributeIfExists(item, ATTR_PHASE_OF_INTRUSION, name);
+				
+				//check to see if this name is command and control
+				if(COMMAND_AND_CONTROL.equalsIgnoreCase(name))
+				{
+					//change the value to c2
+					name = C2;
+				}
+				
+				attributes.add(AttributeHelper.addAttributeIfExists(item, ATTR_PHASE_OF_INTRUSION, name));
 			}
+		}
+		
+		//make sure the stix id is not null
+		if (null != stixID)
+		{
+			//set the attribute source as the stix id
+			attributes.stream()
+				//remove all null attributes
+				.filter(Objects::nonNull)
+				//remove the ATTR_STIX_ID attribute
+				.filter(a -> !a.getType().equals(ATTR_STIX_ID))
+				//add the stixid as the source for each of the remaining attributes
+				.forEach(attribute -> attribute.setSource("@id:" + stixID));
 		}
 		
 		// :FIXME: handle the unknown mappings
@@ -124,5 +174,13 @@ public class IndicatorMapping
 		DebugUtil.logUnknownMapping("Test_Mechanisms", indicatorNode);
 		DebugUtil.logUnknownMapping("Handling", indicatorNode);
 		DebugUtil.logUnknownMapping("Sightings", indicatorNode);
+	}
+	
+	protected List<SecurityLabel> extractSecurityLabels(final Node parentNode)
+		throws XPathExpressionException
+	{
+		//find the marking structures in the package
+		NodeList markingStructureNodeList = Constants.XPATH_UTIL.getNodes("Handling/Marking/Marking_Structure", parentNode);
+		return SecurityLabelUtil.extractSecurityLabels(markingStructureNodeList);
 	}
 }

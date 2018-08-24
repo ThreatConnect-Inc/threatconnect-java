@@ -42,8 +42,8 @@ public class ObservableNodeResolver extends NodeResolver
 				final String id = StixNodeUtil.getID(node);
 				
 				//find the list of all observers that were waiting on the parent's id to be found
-				addNodeObserver(id, observer);
-				List<NodeObserver> observers = nodeObserverMap.get(id);
+				addObserver(id, observer);
+				List<NodeObserver> observers = observerMap.get(id);
 				
 				// for every observable object in the list
 				for (int i = 0; i < observableNodeList.getLength(); i++)

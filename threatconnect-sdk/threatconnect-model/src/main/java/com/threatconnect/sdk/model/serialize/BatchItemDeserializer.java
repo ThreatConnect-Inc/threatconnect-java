@@ -20,11 +20,11 @@ import com.threatconnect.sdk.model.GroupType;
 import com.threatconnect.sdk.model.Host;
 import com.threatconnect.sdk.model.Incident;
 import com.threatconnect.sdk.model.Indicator;
+import com.threatconnect.sdk.model.IntrusionSet;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.ItemType;
 import com.threatconnect.sdk.model.Report;
 import com.threatconnect.sdk.model.SecurityLabel;
-import com.threatconnect.sdk.model.IntrusionSet;
 import com.threatconnect.sdk.model.Signature;
 import com.threatconnect.sdk.model.Threat;
 import com.threatconnect.sdk.model.Url;
@@ -87,6 +87,11 @@ public class BatchItemDeserializer
 					group.setXid(xid);
 					
 					group.setName(JsonUtil.getAsString(groupElement, "name"));
+					
+					if (group instanceof Email)
+					{
+						loadAdditionalData((Email) group, groupElement);
+					}
 					
 					//copy the security labels for the group
 					copySecurityLabels(JsonUtil.getAsJsonArray(groupElement, "securityLabel"), group);
@@ -247,6 +252,16 @@ public class BatchItemDeserializer
 				file.getFileOccurrences().add(loadFileOccurrence(fileOccurrenceElement));
 			}
 		}
+	}
+	
+	private void loadAdditionalData(final Email email, final JsonElement groupElement)
+	{
+		email.setBody(JsonUtil.getAsString(groupElement, "body"));
+		email.setFrom(JsonUtil.getAsString(groupElement, "from"));
+		email.setHeader(JsonUtil.getAsString(groupElement, "header"));
+		email.setSubject(JsonUtil.getAsString(groupElement, "subject"));
+		email.setScore(JsonUtil.getAsInt(groupElement, "score"));
+		email.setTo(JsonUtil.getAsString(groupElement, "to"));
 	}
 	
 	private FileOccurrence loadFileOccurrence(final JsonElement jsonElement)

@@ -255,7 +255,7 @@ public class ApiSaveService implements SaveService
 		GroupWriter<?, ?> writer = getGroupWriter(group, connection);
 		
 		// save the group
-		com.threatconnect.sdk.server.entity.Group savedGroup = writer.saveGroup(ownerName);
+		com.threatconnect.sdk.server.entity.Group savedGroup = writer.saveGroup(ownerName, false, true, true);
 		
 		if (associatedGroupGroupsIDs.containsKey(group))
 		{
@@ -264,7 +264,7 @@ public class ApiSaveService implements SaveService
 			{
 				try
 				{
-					writer.associateGroup(groupIdentifier.getType(), groupIdentifier.getId());
+					writer.associateGroup(groupIdentifier.getType(), groupIdentifier.getId(), ownerName);
 				}
 				catch (AssociateFailedException e)
 				{
@@ -297,7 +297,7 @@ public class ApiSaveService implements SaveService
 			{
 				try
 				{
-					writer.associateGroup(groupIdentifier.getType(), groupIdentifier.getId());
+					writer.associateGroup(groupIdentifier.getType(), groupIdentifier.getId(), ownerName);
 				}
 				catch (AssociateFailedException e)
 				{
@@ -335,7 +335,7 @@ public class ApiSaveService implements SaveService
 			{
 				com.threatconnect.sdk.server.entity.Group savedAssociatedGroup =
 					saveGroup(associatedGroup, ownerName, connection, saveResults);
-				writer.associateGroup(associatedGroup.getGroupType(), savedAssociatedGroup.getId());
+				writer.associateGroup(associatedGroup.getGroupType(), savedAssociatedGroup.getId(), ownerName);
 			}
 			catch (SaveItemFailedException e)
 			{
@@ -382,12 +382,12 @@ public class ApiSaveService implements SaveService
 						Group associatedGroup = (Group) associatedItem;
 						com.threatconnect.sdk.server.entity.Group savedAssociatedGroup =
 							saveGroup(associatedGroup, ownerName, connection, saveResults);
-						writer.associateGroup(associatedGroup.getGroupType(), savedAssociatedGroup.getId());
+						writer.associateGroup(associatedGroup.getGroupType(), savedAssociatedGroup.getId(), ownerName);
 						break;
 					case INDICATOR:
 						Indicator associatedIndicator = (Indicator) associatedItem;
 						saveIndicator(associatedIndicator, ownerName, connection, saveResults);
-						writer.associateIndicator(associatedIndicator);
+						writer.associateIndicator(associatedIndicator, ownerName);
 						break;
 					default:
 						break;

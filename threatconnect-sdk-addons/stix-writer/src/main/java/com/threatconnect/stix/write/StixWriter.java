@@ -47,6 +47,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
@@ -98,6 +99,19 @@ public class StixWriter
 	 * @return
 	 */
 	public String writeStix(final boolean includeWeblink, final boolean formatXml, final Item... items)
+	{
+		return writeStix(includeWeblink, formatXml, Arrays.asList(items));
+	}
+	
+	/**
+	 * Takes a list of items and writes out stix xml
+	 *
+	 * @param includeWeblink whether or not indicators should include the weblink in the xml
+	 * @param formatXml      whether or not to format the xml
+	 * @param items          the list of items to write
+	 * @return
+	 */
+	public String writeStix(final boolean includeWeblink, final boolean formatXml, final List<Item> items)
 	{
 		STIXPackage stixPackage = new STIXPackage();
 		IndicatorsType stixIndicators = new IndicatorsType();
@@ -201,7 +215,7 @@ public class StixWriter
 		description.append(rating);
 		
 		//set the description for this indicator
-		stixIndicator.withDescriptions(new StructuredTextType().withValue(description.toString()));
+		stixIndicator.withDescription(new StructuredTextType().withValue(description.toString()));
 		
 		//set the confidence
 		stixIndicator.setConfidence(new ConfidenceType().withValue(
