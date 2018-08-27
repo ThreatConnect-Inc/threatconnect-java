@@ -173,7 +173,7 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 			}
 			else
 			{
-				logger.warn("Failed to save group \"{}\": {}", buildID(), response.getMessage());
+				logger.warn("Failed to save indicator \"{}\": {}", buildID(), response.getMessage());
 				throw new SaveItemFailedException(indicatorSource, response.getMessage());
 			}
 		}
