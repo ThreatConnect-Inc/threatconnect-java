@@ -2,6 +2,7 @@ package com.threatconnect.sdk.parser;
 
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.sdk.config.Configuration;
+import com.threatconnect.sdk.model.CustomIndicator;
 import com.threatconnect.sdk.model.File;
 import com.threatconnect.sdk.model.Host;
 import com.threatconnect.sdk.model.Item;

@@ -24,12 +24,23 @@ public class CustomIndicatorWriter
 	@Override
 	protected AbstractIndicatorReaderAdapter<com.threatconnect.sdk.server.entity.CustomIndicator> createReaderAdapter()
 	{
-		return ReaderAdapterFactory.createCustomIndicatorReader(connection, indicatorSource.getIndicatorType());
+		return ReaderAdapterFactory.createCustomIndicatorReader(connection, getApiBranch());
 	}
 	
 	@Override
 	protected AbstractIndicatorWriterAdapter<com.threatconnect.sdk.server.entity.CustomIndicator> createWriterAdapter()
 	{
-		return WriterAdapterFactory.createCustomIndicatorWriter(connection, indicatorSource.getIndicatorType());
+		return WriterAdapterFactory.createCustomIndicatorWriter(connection, getApiBranch());
+	}
+	
+	private String getApiBranch()
+	{
+		switch (indicatorSource.getIndicatorType())
+		{
+			case "Mutex":
+				return "mutexes";
+			default:
+				return indicatorSource.getIndicatorType();
+		}
 	}
 }

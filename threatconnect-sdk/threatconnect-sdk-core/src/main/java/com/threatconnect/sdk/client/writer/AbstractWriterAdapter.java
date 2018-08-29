@@ -386,13 +386,7 @@ public abstract class AbstractWriterAdapter extends AbstractClientAdapter
 		String url = getUrl(propName, ownerName);
 		
 		//overwrite if customIndicator
-		if (saveObject instanceof CustomIndicator)
-		{
-			CustomIndicator cIn = (CustomIndicator) saveObject;
-			if (cIn.getIndicatorType() != null)
-				url = url.replace("{type}", cIn.getIndicatorType());
-		}
-		else if (this instanceof UrlTypeable)
+		if (this instanceof UrlTypeable)
 		{
 			url = url.replace("{type}", ((UrlTypeable) this).getUrlType());
 		}
