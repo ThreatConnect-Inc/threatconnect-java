@@ -158,6 +158,7 @@ public final class AppMain extends AppLauncher
 		if (appConfig.isTcSecureParamsEnabled())
 		{
 			//replace the app config with a secure param app config instance
+			System.out.println("Initializing SecureParams");
 			appConfig = new SecureParamAppConfig();
 		}
 		
