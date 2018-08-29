@@ -66,18 +66,26 @@ public class SecureParamAppConfig extends SdkAppConfig
 			{
 				inputsObject.entrySet().forEach(e ->
 				{
-					//make sure the value is not null
-					if (null != e.getValue() && !e.getValue().isJsonNull())
+					//make sure this key does not already exist in the map (do not override cli args)
+					if (null == getString(e.getKey()))
 					{
-						//parse the value
-						final String value =
-							(e.getValue().isJsonPrimitive() ? e.getValue().getAsString() : e.getValue().toString());
-						super.configurationMap.put(e.getKey(), value);
+						//make sure the value is not null
+						if (null != e.getValue() && !e.getValue().isJsonNull())
+						{
+							//parse the value
+							final String value =
+								(e.getValue().isJsonPrimitive() ? e.getValue().getAsString() : e.getValue().toString());
+							super.configurationMap.put(e.getKey(), value);
+						}
+						else
+						{
+							//the value is null
+							super.configurationMap.put(e.getKey(), null);
+						}
 					}
 					else
 					{
-						//the value is null
-						super.configurationMap.put(e.getKey(), null);
+						logger.trace("Skipping secure param \"{}\" -- Param already exists.", e.getKey());
 					}
 				});
 			}

@@ -33,10 +33,12 @@ public class AppMain implements AppExecutor
 		if (config.isTcSecureParamsEnabled())
 		{
 			//replace the app config with a secure param app config instance
+			System.out.println("Using SecureParamAppConfig");
 			appConfig = new SecureParamAppConfig();
 		}
 		else
 		{
+			System.out.println("Using SdkAppConfig");
 			appConfig = config;
 		}
 	}
