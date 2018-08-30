@@ -15,6 +15,7 @@ import com.threatconnect.sdk.parser.service.save.SaveItemFailedException;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 
 import java.io.IOException;
+import java.util.List;
 
 public abstract class IndicatorWriter<E extends Indicator, T extends com.threatconnect.sdk.server.entity.Indicator>
 	extends Writer
@@ -84,11 +85,11 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 				else
 				{
 					//do not destroy the existing rating and confidence unless it was updated
-					if(null == indicator.getRating())
+					if (null == indicator.getRating())
 					{
 						indicator.setRating(savedIndicator.getRating());
 					}
-					if(null == indicator.getConfidence())
+					if (null == indicator.getConfidence())
 					{
 						indicator.setConfidence(savedIndicator.getConfidence());
 					}
@@ -160,14 +161,7 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 				}
 				
 				// make sure the list of security labels is not empty
-				if (!indicatorSource.getSecurityLabels().isEmpty())
-				{
-					//for each of the security labels
-					for (SecurityLabel securityLabel : indicatorSource.getSecurityLabels())
-					{
-						writer.associateSecurityLabel(buildID(), securityLabel.getName(), ownerName);
-					}
-				}
+				associateSecurityLabels(indicatorSource.getSecurityLabels(), ownerName);
 				
 				return getSavedIndicator();
 			}
@@ -180,6 +174,19 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 		catch (FailedResponseException e)
 		{
 			throw new SaveItemFailedException(indicatorSource, e);
+		}
+	}
+	
+	public void associateSecurityLabels(final List<SecurityLabel> securityLabels, final String ownerName) throws IOException
+	{
+		// make sure the list of security labels is not empty
+		if (!securityLabels.isEmpty())
+		{
+			//for each of the security labels
+			for (SecurityLabel securityLabel : securityLabels)
+			{
+				createWriterAdapter().associateSecurityLabel(buildID(), securityLabel.getName(), ownerName);
+			}
 		}
 	}
 	

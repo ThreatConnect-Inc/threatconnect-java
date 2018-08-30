@@ -2,30 +2,41 @@ package com.threatconnect.sdk.parser.service.save;
 
 import com.threatconnect.sdk.config.Configuration;
 import com.threatconnect.sdk.conn.Connection;
+import com.threatconnect.sdk.model.Address;
 import com.threatconnect.sdk.model.Adversary;
 import com.threatconnect.sdk.model.Campaign;
+import com.threatconnect.sdk.model.CustomIndicator;
 import com.threatconnect.sdk.model.Document;
 import com.threatconnect.sdk.model.Email;
+import com.threatconnect.sdk.model.EmailAddress;
 import com.threatconnect.sdk.model.File;
 import com.threatconnect.sdk.model.Group;
+import com.threatconnect.sdk.model.Host;
 import com.threatconnect.sdk.model.Incident;
 import com.threatconnect.sdk.model.Indicator;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.ItemType;
 import com.threatconnect.sdk.model.Signature;
 import com.threatconnect.sdk.model.Threat;
+import com.threatconnect.sdk.model.Url;
 import com.threatconnect.sdk.model.util.IndicatorUtil;
 import com.threatconnect.sdk.model.util.ItemUtil;
+import com.threatconnect.sdk.parser.service.writer.AddressWriter;
 import com.threatconnect.sdk.parser.service.writer.AdversaryWriter;
 import com.threatconnect.sdk.parser.service.writer.CampaignWriter;
+import com.threatconnect.sdk.parser.service.writer.CustomIndicatorWriter;
 import com.threatconnect.sdk.parser.service.writer.DocumentWriter;
+import com.threatconnect.sdk.parser.service.writer.EmailAddressWriter;
 import com.threatconnect.sdk.parser.service.writer.EmailWriter;
 import com.threatconnect.sdk.parser.service.writer.FileWriter;
 import com.threatconnect.sdk.parser.service.writer.GroupWriter;
+import com.threatconnect.sdk.parser.service.writer.HostWriter;
 import com.threatconnect.sdk.parser.service.writer.IncidentWriter;
+import com.threatconnect.sdk.parser.service.writer.IndicatorWriter;
 import com.threatconnect.sdk.parser.service.writer.LegacyBatchIndicatorWriter;
 import com.threatconnect.sdk.parser.service.writer.SignatureWriter;
 import com.threatconnect.sdk.parser.service.writer.ThreatWriter;
+import com.threatconnect.sdk.parser.service.writer.UrlWriter;
 import com.threatconnect.sdk.server.entity.BatchConfig.AttributeWriteType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -169,56 +180,6 @@ public class LegacyBatchApiSaveService implements SaveService
 		return saveResults;
 	}
 	
-	/**
-	 * Saves the associated items for a given group
-	 *
-	 * @param group
-	 * @param ownerName
-	 * @param connection
-	 * @param writer
-	 * @param saveResults
-	 * @throws IOException Signals that an I/O exception of some sort has occurred. This class is the general class of
-	 *                     exceptions produced by failed or interrupted I/O operations.
-	 */
-	protected void saveAssociatedItems(final Group group, final String ownerName,
-		final Map<Group, Integer> savedGroupMap, final Connection connection,
-		GroupWriter<?, ?> writer, final SaveResults saveResults) throws IOException
-	{
-		// for each of the associated items of this group
-		for (Item associatedItem : group.getAssociatedItems())
-		{
-			try
-			{
-				// switch based on the item type
-				switch (associatedItem.getItemType())
-				{
-					case GROUP:
-						Group associatedGroup = (Group) associatedItem;
-						Integer savedAssociatedGroupId =
-							saveGroup(associatedGroup, ownerName, savedGroupMap, connection, saveResults);
-						writer.associateGroup(associatedGroup.getGroupType(), savedAssociatedGroupId, ownerName);
-						break;
-					case INDICATOR:
-						// Ignore the indicators for now, this is done later in batch save
-						break;
-					default:
-						break;
-				}
-			}
-			catch (SaveItemFailedException e)
-			{
-				logger.warn(e.getMessage(), e);
-				
-				// add to the list of failed items
-				saveResults.addFailedItems(associatedItem);
-			}
-			catch (AssociateFailedException e)
-			{
-				logger.warn(e.getMessage(), e);
-			}
-		}
-	}
-	
 	protected SaveResults saveIndicators(final Collection<Indicator> indicators,
 		final Map<Indicator, Set<Integer>> associatedIndicatorGroupsIDs, final Connection connection) throws IOException
 	{
@@ -252,6 +213,20 @@ public class LegacyBatchApiSaveService implements SaveService
 	 */
 	private void saveMissingFileFields(final Collection<Indicator> indicators, final SaveResults saveResults)
 	{
+		//for each of the indicators
+		for (Indicator indicator : indicators)
+		{
+			try
+			{
+				IndicatorWriter<?, ?> indicatorWriter = getIndicatorWriter(indicator, new Connection(configuration));
+				indicatorWriter.associateSecurityLabels(indicator.getSecurityLabels(), ownerName);
+			}
+			catch (IOException e)
+			{
+				logger.warn(e.getMessage(), e);
+			}
+		}
+		
 		//extract all of the file objects from the set of indicators
 		Set<File> files = IndicatorUtil.extractIndicatorSet(indicators, File.class);
 		
@@ -272,26 +247,6 @@ public class LegacyBatchApiSaveService implements SaveService
 					saveResults.addFailedItems(file);
 				}
 			}
-		}
-	}
-	
-	protected SaveResults deleteIndicators(final Collection<Indicator> indicators, final Connection connection)
-		throws IOException
-	{
-		try
-		{
-			// create a new batch indicator writer
-			LegacyBatchIndicatorWriter batchIndicatorWriter = new LegacyBatchIndicatorWriter(connection, indicators);
-			
-			// delete the indicators
-			return batchIndicatorWriter.deleteIndicators(ownerName);
-		}
-		catch (SaveItemFailedException e)
-		{
-			logger.warn(e.getMessage(), e);
-			SaveResults saveResults = new SaveResults();
-			saveResults.addFailedItems(ItemType.INDICATOR, indicators.size());
-			return saveResults;
 		}
 	}
 	
@@ -337,6 +292,43 @@ public class LegacyBatchApiSaveService implements SaveService
 		return writer;
 	}
 	
+	/**
+	 * Retrieves the specific writer implementation for this indicator
+	 *
+	 * @param indicator
+	 * @param connection
+	 * @return
+	 */
+	protected IndicatorWriter<?, ?> getIndicatorWriter(final Indicator indicator, final Connection connection)
+	{
+		IndicatorWriter<?, ?> writer = null;
+		
+		// switch based on the indicator type
+		switch (indicator.getIndicatorType())
+		{
+			case Address.INDICATOR_TYPE:
+				writer = new AddressWriter(connection, (Address) indicator);
+				break;
+			case EmailAddress.INDICATOR_TYPE:
+				writer = new EmailAddressWriter(connection, (EmailAddress) indicator);
+				break;
+			case File.INDICATOR_TYPE:
+				writer = new FileWriter(connection, (File) indicator);
+				break;
+			case Host.INDICATOR_TYPE:
+				writer = new HostWriter(connection, (Host) indicator);
+				break;
+			case Url.INDICATOR_TYPE:
+				writer = new UrlWriter(connection, (Url) indicator);
+				break;
+			default:
+				//this must be a custom indicator type
+				writer = new CustomIndicatorWriter(connection, (CustomIndicator) indicator);
+		}
+		
+		return writer;
+	}
+	
 	protected Integer saveGroup(final Group group, final String ownerName,
 		final Map<Group, Integer> savedGroupMap, final Connection connection, final SaveResults saveResults)
 		throws IOException, SaveItemFailedException
@@ -347,7 +339,7 @@ public class LegacyBatchApiSaveService implements SaveService
 		if (!savedGroupMap.containsKey(group))
 		{
 			// save the group
-			com.threatconnect.sdk.server.entity.Group savedGroup = writer.saveGroup(ownerName);
+			com.threatconnect.sdk.server.entity.Group savedGroup = writer.saveGroup(ownerName, true, true, true);
 			
 			// store the id in the map
 			savedGroupMap.put(group, savedGroup.getId());
