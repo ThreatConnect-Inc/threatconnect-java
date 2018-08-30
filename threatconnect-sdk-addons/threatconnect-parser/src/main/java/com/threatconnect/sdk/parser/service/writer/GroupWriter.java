@@ -87,6 +87,7 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 			{
 				// use this group as the saved group
 				savedGroup = readGroup;
+				group.setId(readGroup.getId());
 				
 				//check to see if force saving is not enabled
 				if (!forceSaveGroup)
