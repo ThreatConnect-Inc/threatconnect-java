@@ -221,7 +221,7 @@ public class LegacyBatchApiSaveService implements SaveService
 				IndicatorWriter<?, ?> indicatorWriter = getIndicatorWriter(indicator, new Connection(configuration));
 				indicatorWriter.associateSecurityLabels(indicator.getSecurityLabels(), ownerName);
 			}
-			catch (IOException e)
+			catch (Exception e)
 			{
 				logger.warn(e.getMessage(), e);
 			}
