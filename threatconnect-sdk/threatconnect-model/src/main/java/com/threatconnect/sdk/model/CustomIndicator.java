@@ -6,7 +6,6 @@ package com.threatconnect.sdk.model;
 public class CustomIndicator extends Indicator
 {
 	private String value;
-	private String apiBranch;
 	
 	public CustomIndicator(final String indicatorType)
 	{

@@ -39,6 +39,8 @@ public class CustomIndicatorWriter
 		{
 			case "Mutex":
 				return "mutexes";
+			case "Cidr":
+				return "cidrBlocks";
 			default:
 				return indicatorSource.getIndicatorType();
 		}

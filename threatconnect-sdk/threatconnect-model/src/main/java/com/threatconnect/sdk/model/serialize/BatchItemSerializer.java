@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.threatconnect.sdk.model.Attribute;
+import com.threatconnect.sdk.model.CustomIndicator;
 import com.threatconnect.sdk.model.Email;
 import com.threatconnect.sdk.model.File;
 import com.threatconnect.sdk.model.FileOccurrence;
@@ -187,6 +188,10 @@ public class BatchItemSerializer
 			//write additional data for this file
 			writeAdditionalData((File) indicator, indicatorJsonObject);
 		}
+		else if (indicator instanceof CustomIndicator)
+		{
+			writeAdditionalData((CustomIndicator) indicator, indicatorJsonObject);
+		}
 		
 		//for each of the associations on this group
 		for (Group group : indicator.getAssociatedItems())
@@ -243,6 +248,11 @@ public class BatchItemSerializer
 			fileActionObject.add("fileOccurrence", fileOccurrenceArray);
 			indicatorJsonObject.add("fileAction", fileActionObject);
 		}
+	}
+	
+	private void writeAdditionalData(final CustomIndicator customIndicator, final JsonObject indicatorJsonObject)
+	{
+		indicatorJsonObject.addProperty("value", customIndicator.getValue());
 	}
 	
 	private void writeAdditionalData(final Email email, final JsonObject groupJsonObject)
