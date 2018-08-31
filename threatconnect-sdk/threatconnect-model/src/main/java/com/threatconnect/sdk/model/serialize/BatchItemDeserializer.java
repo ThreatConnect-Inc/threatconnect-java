@@ -416,6 +416,7 @@ public class BatchItemDeserializer
 			default:
 				CustomIndicator customIndicator = new CustomIndicator(indicatorType);
 				customIndicator.setSummary(summary);
+				customIndicator.setValue(JsonUtil.getAsString(indicatorElement, "value"));
 				return customIndicator;
 		}
 	}
