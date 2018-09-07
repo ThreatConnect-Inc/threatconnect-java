@@ -58,8 +58,9 @@ import static com.threatconnect.sdk.util.IndicatorUtil.getUniqueId;
 import static com.threatconnect.sdk.util.IndicatorUtil.setUniqueId;
 
 /**
- * Created by dtineo on 5/15/15.
+ * Use of this class is deprecated and unsupported. Functionality is not guaranteed
  */
+@Deprecated
 public abstract class EnhancedApp extends App
 {
 	private static final Logger logger = LoggerFactory.getLogger(EnhancedApp.class);
@@ -437,7 +438,7 @@ public abstract class EnhancedApp extends App
 		if (externalClient == null)
 		{
 			externalClient = createClientBuilder(getAppConfig().isProxyExternal(),
-				getAppConfig().isVerifySSL()).build();
+				getAppConfig().isVerifySSL(), getAppConfig()).build();
 		}
 		return externalClient;
 	}

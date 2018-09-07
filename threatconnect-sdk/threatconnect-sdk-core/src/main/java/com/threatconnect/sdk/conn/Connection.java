@@ -94,13 +94,13 @@ public class Connection implements Closeable
 	public CloseableHttpClient getApiClient()
 	{
 		// :TODO: should we add an SDK param to trust self signed certs?
-		return AppUtil.createClient(config.getAppConfig().isProxyTC(), true);
+		return AppUtil.createClient(config.getAppConfig().isProxyTC(), true, config.getAppConfig());
 	}
 	
 	public CloseableHttpClient getExternalClient()
 	{
 		// :TODO: should we add an SDK param to trust self signed certs?
-		return AppUtil.createClient(config.getAppConfig().isProxyExternal(), true);
+		return AppUtil.createClient(config.getAppConfig().isProxyExternal(), true, config.getAppConfig());
 	}
 	
 	/**
