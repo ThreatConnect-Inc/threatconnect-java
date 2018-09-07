@@ -1,5 +1,6 @@
 package com.threatconnect.sdk.examples.indicators;
 
+import com.threatconnect.sdk.app.SdkAppConfig;
 import com.threatconnect.sdk.client.reader.AbstractIndicatorReaderAdapter;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
 import com.threatconnect.sdk.conn.Connection;
@@ -20,7 +21,7 @@ public class BulkIndicatorExample
 {
     public static void main(String[] args) {
         System.getProperties().setProperty("threatconnect.api.config", "/config.properties");
-        try (Connection conn = new Connection()){
+        try (Connection conn = new Connection(SdkAppConfig.getInstance())){
             doGetStatus(conn);
             doDownloadJson(conn);
         } catch (IOException ex ) {

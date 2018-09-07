@@ -1,5 +1,6 @@
 package com.threatconnect.sdk.examples.groups;
 
+import com.threatconnect.sdk.app.SdkAppConfig;
 import com.threatconnect.sdk.client.fluent.AttributeBuilder;
 import com.threatconnect.sdk.client.reader.DocumentReaderAdapter;
 import com.threatconnect.sdk.client.response.IterableResponse;
@@ -39,7 +40,7 @@ public class DocumentExample
 {
     public static void main(String[] args) {
         System.getProperties().setProperty("threatconnect.api.config", "/config.properties");
-        try (Connection conn = new Connection()){
+        try (Connection conn = new Connection(SdkAppConfig.getInstance())){
             doDownload(conn);
 
             doUpload(conn);

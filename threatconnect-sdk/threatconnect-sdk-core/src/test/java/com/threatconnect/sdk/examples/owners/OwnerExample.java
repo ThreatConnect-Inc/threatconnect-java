@@ -5,6 +5,7 @@
  */
 package com.threatconnect.sdk.examples.owners;
 
+import com.threatconnect.sdk.app.SdkAppConfig;
 import com.threatconnect.sdk.client.response.IterableResponse;
 import com.threatconnect.sdk.client.reader.OwnerReaderAdapter;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
@@ -27,7 +28,7 @@ public class OwnerExample {
         
         try {
             Properties props = ConnectionUtil.loadProperties("/config.properties");
-            Configuration config = Configuration.build( props );
+            Configuration config = Configuration.build( props, SdkAppConfig.getInstance());
             Connection conn = new Connection(config);
             OwnerReaderAdapter reader = ReaderAdapterFactory.createOwnerReader(conn);
 

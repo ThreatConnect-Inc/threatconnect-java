@@ -5,6 +5,7 @@
  */
 package com.threatconnect.sdk.conn;
 
+import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.sdk.app.AppUtil;
 import com.threatconnect.sdk.app.SdkAppConfig;
 import com.threatconnect.sdk.config.Configuration;
@@ -29,11 +30,11 @@ public class Connection implements Closeable
 	
 	private final URLConfiguration urlConfig;
 	
-	public Connection() throws IOException
+	public Connection(final AppConfig appConfig) throws IOException
 	{
 		String fileName = System.getProperties().getProperty("threatconnect.api.config");
 		Properties props = ConnectionUtil.loadProperties(fileName);
-		this.config = Configuration.build(props);
+		this.config = Configuration.build(props, appConfig);
 		
 		this.urlConfig = URLConfiguration.build();
 	}
@@ -93,13 +94,13 @@ public class Connection implements Closeable
 	public CloseableHttpClient getApiClient()
 	{
 		// :TODO: should we add an SDK param to trust self signed certs?
-		return AppUtil.createClient(SdkAppConfig.getInstance().isProxyTC(), true);
+		return AppUtil.createClient(config.getAppConfig().isProxyTC(), true);
 	}
 	
 	public CloseableHttpClient getExternalClient()
 	{
 		// :TODO: should we add an SDK param to trust self signed certs?
-		return AppUtil.createClient(SdkAppConfig.getInstance().isProxyExternal(), true);
+		return AppUtil.createClient(config.getAppConfig().isProxyExternal(), true);
 	}
 	
 	/**

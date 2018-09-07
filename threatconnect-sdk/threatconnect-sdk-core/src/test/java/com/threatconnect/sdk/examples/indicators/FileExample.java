@@ -1,5 +1,6 @@
 package com.threatconnect.sdk.examples.indicators;
 
+import com.threatconnect.sdk.app.SdkAppConfig;
 import com.threatconnect.sdk.client.fluent.AttributeBuilder;
 import com.threatconnect.sdk.client.reader.AbstractIndicatorReaderAdapter;
 import com.threatconnect.sdk.client.reader.FileIndicatorReaderAdapter;
@@ -45,7 +46,7 @@ public class FileExample
 
         try
         {
-        	  Configuration config = new Configuration("https://127.0.0.1:8443/api", "37821189919142416750", "J+xdst/-~$iC2vL{I]#tf<NxzYCZUL?Fn833QNsJxR)N{6J{Q}u@Q{Sn&RJsJ&W-",  "System");
+        	  Configuration config = new Configuration(SdkAppConfig.getInstance(),"https://127.0.0.1:8443/api", "37821189919142416750", "J+xdst/-~$iC2vL{I]#tf<NxzYCZUL?Fn833QNsJxR)N{6J{Q}u@Q{Sn&RJsJ&W-",  "System");
               conn = new Connection(config);
               
       		System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");

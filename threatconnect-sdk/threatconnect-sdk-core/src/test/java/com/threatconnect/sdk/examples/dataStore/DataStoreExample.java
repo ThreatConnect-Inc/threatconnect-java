@@ -1,5 +1,6 @@
 package com.threatconnect.sdk.examples.dataStore;
 
+import com.threatconnect.sdk.app.SdkAppConfig;
 import com.threatconnect.sdk.client.reader.DataStoreReaderAdapter;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
 import com.threatconnect.sdk.client.writer.DataStoreWriterAdapter;
@@ -31,7 +32,7 @@ public class DataStoreExample
         try {
 
             System.getProperties().setProperty("threatconnect.api.config", "/config.properties");
-            conn = new Connection();
+            conn = new Connection(SdkAppConfig.getInstance());
 
             create(conn);
             update(conn);
