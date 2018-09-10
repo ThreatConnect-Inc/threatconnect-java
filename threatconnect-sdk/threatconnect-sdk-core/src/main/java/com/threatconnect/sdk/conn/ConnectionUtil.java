@@ -157,6 +157,7 @@ public class ConnectionUtil
 		else
 		{
 			// add the proxy information to the builder
+			logger.debug(String.format("creating http client with proxy settings http://%s:%s", proxyHost, proxyPort));
 			builder.setProxy(new HttpHost(proxyHost, proxyPort));
 			
 			// authentication required
