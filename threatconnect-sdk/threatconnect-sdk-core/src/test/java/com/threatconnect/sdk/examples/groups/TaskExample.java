@@ -1,6 +1,7 @@
 package com.threatconnect.sdk.examples.groups;
 
 import com.google.common.collect.Lists;
+import com.threatconnect.sdk.app.SdkAppConfig;
 import com.threatconnect.sdk.client.fluent.TaskBuilder;
 import com.threatconnect.sdk.client.fluent.UserBuilder;
 import com.threatconnect.sdk.client.reader.ReaderAdapterFactory;
@@ -32,7 +33,7 @@ public class TaskExample {
 
         try {
             System.getProperties().setProperty("threatconnect.api.config", "/config.properties");
-            conn = new Connection();
+            conn = new Connection(SdkAppConfig.getInstance());
 
             testCreateTask(conn);
 

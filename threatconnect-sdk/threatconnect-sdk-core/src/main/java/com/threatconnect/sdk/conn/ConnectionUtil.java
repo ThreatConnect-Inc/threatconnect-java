@@ -157,6 +157,7 @@ public class ConnectionUtil
 		else
 		{
 			// add the proxy information to the builder
+			logger.debug(String.format("creating http client with proxy settings http://%s:%s", proxyHost, proxyPort));
 			builder.setProxy(new HttpHost(proxyHost, proxyPort));
 			
 			// authentication required
@@ -335,7 +336,7 @@ public class ConnectionUtil
 	public static Configuration createConfiguration(final AppConfig appConfig)
 	{
 		// create the configuration for the threatconnect server
-		Configuration configuration = new Configuration(appConfig.getTcApiPath(), appConfig.getTcApiAccessID(),
+		Configuration configuration = new Configuration(appConfig, appConfig.getTcApiPath(), appConfig.getTcApiAccessID(),
 			appConfig.getTcApiUserSecretKey(), appConfig.getApiDefaultOrg(), appConfig.getTcToken(), appConfig.getTcTokenExpires());
 		
 		return configuration;

@@ -164,8 +164,8 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 							this.conn.getConfig().setTcTokenExpires(newTokenExpires);
 							
 							//Then update the AppConfig singleton object too for future calls/future configs
-							SdkAppConfig.getInstance().set(AppConfig.TC_TOKEN, newToken);
-							SdkAppConfig.getInstance().set(AppConfig.TC_TOKEN_EXPIRES, newTokenExpires);
+							conn.getConfig().getAppConfig().set(AppConfig.TC_TOKEN, newToken);
+							conn.getConfig().getAppConfig().set(AppConfig.TC_TOKEN_EXPIRES, newTokenExpires);
 						}
 					}
 				}

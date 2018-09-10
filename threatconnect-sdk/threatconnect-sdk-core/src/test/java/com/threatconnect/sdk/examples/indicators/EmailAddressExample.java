@@ -1,5 +1,6 @@
 package com.threatconnect.sdk.examples.indicators;
 
+import com.threatconnect.sdk.app.SdkAppConfig;
 import com.threatconnect.sdk.client.fluent.AttributeBuilder;
 import com.threatconnect.sdk.client.reader.AbstractIndicatorReaderAdapter;
 import com.threatconnect.sdk.client.response.IterableResponse;
@@ -39,7 +40,7 @@ public class EmailAddressExample {
         try {
 
             //System.getProperties().setProperty("threatconnect.api.config", "/config.properties");
-            Configuration config = new Configuration("https://127.0.0.1:8443/api", "53597229568569709386", "DL6okSIkRFovChG0js9gAC^l6l36G^q6ulZ7wmIlPRlT9FP%IISbrU1uBnJg%uFu",  "System");
+            Configuration config = new Configuration(SdkAppConfig.getInstance(),"https://127.0.0.1:8443/api", "53597229568569709386", "DL6okSIkRFovChG0js9gAC^l6l36G^q6ulZ7wmIlPRlT9FP%IISbrU1uBnJg%uFu",  "System");
             config.setResultLimit(1);
             conn = new Connection(config);
             /*

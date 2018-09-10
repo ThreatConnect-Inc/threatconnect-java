@@ -1,5 +1,6 @@
 package com.threatconnect.sdk.examples.groups;
 
+import com.threatconnect.sdk.app.SdkAppConfig;
 import com.threatconnect.sdk.client.fluent.AttributeBuilder;
 import com.threatconnect.sdk.client.reader.AbstractGroupReaderAdapter;
 import com.threatconnect.sdk.client.response.IterableResponse;
@@ -38,7 +39,7 @@ public class IncidentExample {
         try {
 
             System.getProperties().setProperty("threatconnect.api.config", "/config.properties");
-            conn = new Connection();
+            conn = new Connection(SdkAppConfig.getInstance());
 
             doGet(conn);
 

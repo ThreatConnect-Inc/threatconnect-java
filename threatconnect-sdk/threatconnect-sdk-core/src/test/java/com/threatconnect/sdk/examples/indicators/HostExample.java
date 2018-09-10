@@ -1,5 +1,6 @@
 package com.threatconnect.sdk.examples.indicators;
 
+import com.threatconnect.sdk.app.SdkAppConfig;
 import com.threatconnect.sdk.client.fluent.AddressBuilder;
 import com.threatconnect.sdk.client.fluent.AttributeBuilder;
 import com.threatconnect.sdk.client.reader.AbstractIndicatorReaderAdapter;
@@ -37,7 +38,7 @@ public class HostExample {
         try {
 
             System.getProperties().setProperty("threatconnect.api.config", "/config.properties");
-            conn = new Connection();
+            conn = new Connection(SdkAppConfig.getInstance());
 
             doGet(conn);
 

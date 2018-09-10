@@ -52,7 +52,7 @@ public class LegacyBatchWriterIT
 	protected Configuration getConfiguration(final AppConfig appConfig)
 	{
 		// create the configuration for the threatconnect server
-		Configuration configuration = new Configuration(appConfig.getTcApiPath(), appConfig.getTcApiAccessID(),
+		Configuration configuration = new Configuration(appConfig, appConfig.getTcApiPath(), appConfig.getTcApiAccessID(),
 			appConfig.getTcApiUserSecretKey(), appConfig.getApiDefaultOrg(), appConfig.getTcToken(),
 			appConfig.getTcTokenExpires());
 		

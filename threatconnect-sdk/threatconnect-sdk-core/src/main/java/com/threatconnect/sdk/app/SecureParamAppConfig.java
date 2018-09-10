@@ -39,7 +39,7 @@ public class SecureParamAppConfig extends SdkAppConfig
 	private void retrieveParams() throws IOException
 	{
 		//create the configuration for the threatconnect server
-		Configuration configuration = new Configuration(getTcApiPath(), getTcApiAccessID(),
+		Configuration configuration = new Configuration(this, getTcApiPath(), getTcApiAccessID(),
 			getTcApiUserSecretKey(), getApiDefaultOrg(), getTcToken(), getTcTokenExpires());
 		
 		//create a new connection object
