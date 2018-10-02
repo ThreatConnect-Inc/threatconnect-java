@@ -62,7 +62,7 @@ public class EmailMapping extends CyboxObjectMapping
 		
 		// extract the subject
 		final String subject = Constants.XPATH_UTIL.getString("Header/Subject", propertiesNode);
-		if (!StringUtils.isNotBlank(subject))
+		if (StringUtils.isNotBlank(subject))
 		{
 			email.setSubject(subject);
 			
