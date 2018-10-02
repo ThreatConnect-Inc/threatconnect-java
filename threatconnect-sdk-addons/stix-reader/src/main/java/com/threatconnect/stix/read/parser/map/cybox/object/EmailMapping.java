@@ -5,6 +5,7 @@ import com.threatconnect.sdk.model.EmailAddress;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.SecurityLabel;
 import com.threatconnect.sdk.parser.util.AttributeHelper;
+import com.threatconnect.stix.read.indicator.EmailSubject;
 import com.threatconnect.stix.read.parser.Constants;
 import com.threatconnect.stix.read.parser.observer.ItemObserver;
 import com.threatconnect.stix.read.parser.resolver.NodeResolver;
@@ -48,20 +49,34 @@ public class EmailMapping extends CyboxObjectMapping
 		email.getSecurityLabels().addAll(securityLabels);
 		
 		// use the object ID for the email name
-		String id = Constants.XPATH_UTIL.getString("@id", objectNode);
+		final String id = Constants.XPATH_UTIL.getString("@id", objectNode);
 		email.setName(id);
 		
 		// extract the raw body of the email
-		String rawBody = Constants.XPATH_UTIL.getString("Raw_Body", propertiesNode);
+		final String rawBody = Constants.XPATH_UTIL.getString("Raw_Body", propertiesNode);
 		email.setBody(StringUtils.isNotBlank(rawBody) ? rawBody : EMPTY_VALUE);
 		
 		// extract the raw header of the email
-		String rawHeader = Constants.XPATH_UTIL.getString("Raw_Header", propertiesNode);
+		final String rawHeader = Constants.XPATH_UTIL.getString("Raw_Header", propertiesNode);
 		email.setHeader(StringUtils.isNotBlank(rawHeader) ? rawHeader : EMPTY_VALUE);
 		
 		// extract the subject
-		String subject = Constants.XPATH_UTIL.getString("Header/Subject", propertiesNode);
-		email.setSubject(StringUtils.isNotBlank(subject) ? subject : EMPTY_VALUE);
+		final String subject = Constants.XPATH_UTIL.getString("Header/Subject", propertiesNode);
+		if (StringUtils.isNotBlank(subject))
+		{
+			email.setSubject(subject);
+			
+			//create a new email subject object
+			EmailSubject emailSubject = new EmailSubject();
+			emailSubject.getSecurityLabels().addAll(securityLabels);
+			setDefaultRatingConfidence(emailSubject);
+			addStixObservableIDAttribute(emailSubject, observableNodeID);
+			emailSubject.setValue(subject);
+			
+			//add this indicator to the email group
+			email.getAssociatedItems().add(emailSubject);
+			items.add(emailSubject);
+		}
 		
 		// extract the from address value for this email address
 		final Node fromNode = Constants.XPATH_UTIL.getNode("Header/From", propertiesNode);

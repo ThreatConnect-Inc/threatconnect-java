@@ -9,6 +9,6 @@ public class ParserTest extends AbstractParserTest
 	public void test() throws ParserException
 	{
 		// parse the list of items
-		parse("CISCP_Log@07-13-2018T00_30_46.xml");
+		parse("MIFR-10128830_TLP_WHITE_stix.xml");
 	}
 }

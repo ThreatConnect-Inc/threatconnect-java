@@ -41,6 +41,8 @@ public class CustomIndicatorWriter
 				return "mutexes";
 			case "Cidr":
 				return "cidrBlocks";
+			case "Email Subject":
+				return "emailSubject";
 			default:
 				return indicatorSource.getIndicatorType();
 		}
