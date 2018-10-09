@@ -163,10 +163,6 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 								String newTokenExpires = retryResponse.get(NEW_TOKEN_EXPIRES).getAsString();
 								logger.trace("New token returned from servlet: " + newToken);
 								
-								//update the config object being used for this api call
-								this.conn.getConfig().setTcToken(newToken);
-								this.conn.getConfig().setTcTokenExpires(newTokenExpires);
-								
 								//Then update the AppConfig singleton object too for future calls/future configs
 								conn.getConfig().getAppConfig().set(AppConfig.TC_TOKEN, newToken);
 								conn.getConfig().getAppConfig().set(AppConfig.TC_TOKEN_EXPIRES, newTokenExpires);

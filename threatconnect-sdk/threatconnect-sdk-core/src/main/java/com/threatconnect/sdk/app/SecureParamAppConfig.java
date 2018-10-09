@@ -40,7 +40,7 @@ public class SecureParamAppConfig extends SdkAppConfig
 	{
 		//create the configuration for the threatconnect server
 		Configuration configuration = new Configuration(this, getTcApiPath(), getTcApiAccessID(),
-			getTcApiUserSecretKey(), getApiDefaultOrg(), getTcToken(), getTcTokenExpires());
+			getTcApiUserSecretKey(), getApiDefaultOrg());
 		
 		//create a new connection object
 		Connection connection = new Connection(configuration);

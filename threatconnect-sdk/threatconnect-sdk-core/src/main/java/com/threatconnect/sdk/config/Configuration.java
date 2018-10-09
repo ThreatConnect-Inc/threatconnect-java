@@ -21,8 +21,6 @@ public class Configuration
 	private String tcApiAccessID;
 	private String tcApiUserSecretKey;
 	
-	private String tcToken;
-	private String tcTokenExpires;
 	private Integer resultLimit;
 	private String defaultOwner;
 	
@@ -33,25 +31,13 @@ public class Configuration
 	
 	private String contentType;
 	
-	public Configuration(final AppConfig appConfig, String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner,
-		String tcToken, String tcTokenExpires)
-	{
-		this(appConfig, tcApiUrl, tcApiAccessID, tcApiUserSecretKey, defaultOwner, 500, tcToken, tcTokenExpires);
-	}
-	
 	public Configuration(final AppConfig appConfig, String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner)
 	{
-		this(appConfig, tcApiUrl, tcApiAccessID, tcApiUserSecretKey, defaultOwner, 500, null, null);
+		this(appConfig, tcApiUrl, tcApiAccessID, tcApiUserSecretKey, defaultOwner, 500);
 	}
 	
 	public Configuration(final AppConfig appConfig, String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner,
 		Integer resultLimit)
-	{
-		this(appConfig, tcApiUrl, tcApiAccessID, tcApiUserSecretKey, defaultOwner, resultLimit, null, null);
-	}
-	
-	public Configuration(final AppConfig appConfig, String tcApiUrl, String tcApiAccessID, String tcApiUserSecretKey, String defaultOwner,
-		Integer resultLimit, String tcToken, String tcTokenExpires)
 	{
 		this.appConfig = appConfig;
 		this.tcApiUrl = tcApiUrl;
@@ -59,16 +45,13 @@ public class Configuration
 		this.tcApiUserSecretKey = tcApiUserSecretKey;
 		this.defaultOwner = defaultOwner;
 		this.resultLimit = resultLimit;
-		this.tcToken = tcToken;
-		this.tcTokenExpires = tcTokenExpires;
 		this.contentType = ContentType.APPLICATION_JSON.getMimeType();
 	}
 	
-	public Configuration(final AppConfig appConfig, String tcApiUrl, String tcToken, String defaultOwner, Integer resultLimit)
+	public Configuration(final AppConfig appConfig, String tcApiUrl, String defaultOwner, Integer resultLimit)
 	{
 		this.appConfig = appConfig;
 		this.tcApiUrl = tcApiUrl;
-		this.tcToken = tcToken;
 		this.defaultOwner = defaultOwner;
 		this.resultLimit = resultLimit;
 		this.contentType = ContentType.APPLICATION_JSON.getMimeType();
@@ -87,7 +70,6 @@ public class Configuration
 		String tcApiAccessID = props.getProperty("connection.tcApiAccessID");
 		String tcApiUserSecretKey = props.getProperty("connection.tcApiUserSecretKey");
 		String tcDefaultOwner = props.getProperty("connection.tcDefaultOwner");
-		String tcToken = props.getProperty("connection.tcToken");
 		Integer tcResultLimit = Integer.valueOf(props.getProperty("connection.tcResultLimit"));
 		Configuration conf = new Configuration(appConfig, tcApiUrl, tcApiAccessID, tcApiUserSecretKey, tcDefaultOwner, tcResultLimit);
 		
@@ -202,24 +184,16 @@ public class Configuration
 		return proxyPort;
 	}
 	
+	@Deprecated
 	public String getTcToken()
 	{
-		return tcToken;
+		return appConfig.getTcToken();
 	}
 	
-	public void setTcToken(String tcToken)
-	{
-		this.tcToken = tcToken;
-	}
-	
+	@Deprecated
 	public String getTcTokenExpires()
 	{
-		return this.tcTokenExpires;
-	}
-	
-	public void setTcTokenExpires(String tcTokenExpires)
-	{
-		this.tcTokenExpires = tcTokenExpires;
+		return appConfig.getTcTokenExpires();
 	}
 	
 	public boolean isActivityLogEnabled()
