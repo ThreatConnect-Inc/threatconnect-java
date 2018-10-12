@@ -106,21 +106,9 @@ public abstract class EnhancedApp extends App
 	{
 	    init(appConfig);
 
-		Configuration config;
-		if (appConfig.getTcToken() != null)
-		{
-			info("Connecting using API Token");
-			config = new Configuration(appConfig, appConfig.getTcApiPath(), appConfig.getTcApiAccessID(),
-				appConfig.getTcApiUserSecretKey(), appConfig.getApiDefaultOrg(),
-				appConfig.getApiMaxResults(getResultLimit()), appConfig.getTcToken(), appConfig.getTcTokenExpires());
-		}
-		else
-		{
-			info("Connecting using API Key");
-			config = new Configuration(appConfig, appConfig.getTcApiPath(), appConfig.getTcApiAccessID(),
+		Configuration config = new Configuration(appConfig, appConfig.getTcApiPath(), appConfig.getTcApiAccessID(),
 				appConfig.getTcApiUserSecretKey(), appConfig.getApiDefaultOrg(),
 				appConfig.getApiMaxResults(getResultLimit()));
-		}
 
 		this.owner = appConfig.getApiDefaultOrg();
 

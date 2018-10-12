@@ -45,6 +45,8 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 	private static final String NEW_TOKEN = "apiToken";
 	private static final String NEW_TOKEN_EXPIRES = "apiTokenExpires";
 	private static final String SUCCESS_IND = "success";
+	
+	private static final Object TOKEN_LOCK = new Object();
 
 	public HttpRequestExecutor(Connection conn)
 	{
@@ -107,71 +109,70 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 
 	private void getNewToken() throws IOException, TokenRenewException
 	{
-		if (this.conn.getConfig().getTcToken() != null)
+		synchronized (TOKEN_LOCK)
 		{
-			//get the expire time
-			long expireTime = Long.valueOf(this.conn.getConfig().getTcTokenExpires());
-
-			//compare to now + 15
-			long timeNow = System.currentTimeMillis() / 1000L;
-			if (expireTime < (timeNow + 15l))
+			if (this.conn.getConfig().getTcToken() != null)
 			{
-				//its expired...lets get a new one
-				try
+				//get the expire time
+				long expireTime = Long.valueOf(this.conn.getConfig().getTcTokenExpires());
+				
+				//compare to now + 15
+				long timeNow = System.currentTimeMillis() / 1000L;
+				if (expireTime < (timeNow + 15l))
 				{
-					//in this case, we want to get a new token if the token being used has not been reused before.
-					String retryToken = this.conn.getConfig().getTcToken();
-					logger.trace("Secure Token to be looked at: " + retryToken);
-
-                                        //We moved the retry servlet from the web module to the api
-                                        //module so need to use the api path:
-                                        String apiPath = SdkAppConfig.getInstance().getTcApiPath();
-                                        logger.trace("apiPath: " + apiPath);
-					String retryUrl = apiPath
-						+ APP_AUTH_URL_SERVLET_PART
-						+ URLEncoder.encode(retryToken, "UTF-8");
-
-					//Default TC SSL cert is not trusted so need to add the TC cert to local jvm cacerts if
-					//running app locally
-					try(CloseableHttpClient httpClient = this.conn.getApiClient())
+					//its expired...lets get a new one
+					try
 					{
-						HttpGet httpGet = new HttpGet(retryUrl);
-						try (CloseableHttpResponse retryTokenCloseableResponse = httpClient.execute(httpGet))
+						//in this case, we want to get a new token if the token being used has not been reused before.
+						String retryToken = this.conn.getConfig().getTcToken();
+						logger.trace("Secure Token to be looked at: " + retryToken);
+						
+						//We moved the retry servlet from the web module to the api
+						//module so need to use the api path:
+						String apiPath = SdkAppConfig.getInstance().getTcApiPath();
+						logger.trace("apiPath: " + apiPath);
+						String retryUrl = apiPath
+							+ APP_AUTH_URL_SERVLET_PART
+							+ URLEncoder.encode(retryToken, "UTF-8");
+						
+						//Default TC SSL cert is not trusted so need to add the TC cert to local jvm cacerts if
+						//running app locally
+						try (CloseableHttpClient httpClient = this.conn.getApiClient())
 						{
-							HttpEntity entity = retryTokenCloseableResponse.getEntity();
-							String retryTokenResponse = EntityUtils.toString(entity, StandardCharsets.UTF_8);
-							
-							//parse line to see what happened
-							JsonParser jsonParser = new JsonParser();
-							JsonObject retryResponse = jsonParser.parse(retryTokenResponse).getAsJsonObject();
-							boolean retrySuccess = retryResponse.get(SUCCESS_IND).getAsBoolean();
-							if (!retrySuccess)
+							HttpGet httpGet = new HttpGet(retryUrl);
+							try (CloseableHttpResponse retryTokenCloseableResponse = httpClient.execute(httpGet))
 							{
-								//need to translate the retry token error into the format
-								//expected in 'result' object
-								String errMsg = retryResponse.get(MSG).getAsString();
-								logger.trace("errmsg from servlet: " + errMsg);
-								throw new TokenRenewException(errMsg);
+								HttpEntity entity = retryTokenCloseableResponse.getEntity();
+								String retryTokenResponse = EntityUtils.toString(entity, StandardCharsets.UTF_8);
+								
+								//parse line to see what happened
+								JsonParser jsonParser = new JsonParser();
+								JsonObject retryResponse = jsonParser.parse(retryTokenResponse).getAsJsonObject();
+								boolean retrySuccess = retryResponse.get(SUCCESS_IND).getAsBoolean();
+								if (!retrySuccess)
+								{
+									//need to translate the retry token error into the format
+									//expected in 'result' object
+									String errMsg = retryResponse.get(MSG).getAsString();
+									logger.trace("errmsg from servlet: " + errMsg);
+									throw new TokenRenewException(errMsg);
+								}
+								
+								//no error, got a new token..need to set it so the caller will use it
+								String newToken = retryResponse.get(NEW_TOKEN).getAsString();
+								String newTokenExpires = retryResponse.get(NEW_TOKEN_EXPIRES).getAsString();
+								logger.trace("New token returned from servlet: " + newToken);
+								
+								//Then update the AppConfig singleton object too for future calls/future configs
+								conn.getConfig().getAppConfig().set(AppConfig.TC_TOKEN, newToken);
+								conn.getConfig().getAppConfig().set(AppConfig.TC_TOKEN_EXPIRES, newTokenExpires);
 							}
-							
-							//no error, got a new token..need to set it so the caller will use it
-							String newToken = retryResponse.get(NEW_TOKEN).getAsString();
-							String newTokenExpires = retryResponse.get(NEW_TOKEN_EXPIRES).getAsString();
-							logger.trace("New token returned from servlet: " + newToken);
-							
-							//update the config object being used for this api call
-							this.conn.getConfig().setTcToken(newToken);
-							this.conn.getConfig().setTcTokenExpires(newTokenExpires);
-							
-							//Then update the AppConfig singleton object too for future calls/future configs
-							conn.getConfig().getAppConfig().set(AppConfig.TC_TOKEN, newToken);
-							conn.getConfig().getAppConfig().set(AppConfig.TC_TOKEN_EXPIRES, newTokenExpires);
 						}
 					}
-				}
-				catch (MalformedURLException ex)
-				{
-					throw new TokenRenewException(ex);
+					catch (MalformedURLException ex)
+					{
+						throw new TokenRenewException(ex);
+					}
 				}
 			}
 		}
