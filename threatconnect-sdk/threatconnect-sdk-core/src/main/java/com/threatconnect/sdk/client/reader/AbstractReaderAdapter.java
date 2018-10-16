@@ -125,10 +125,8 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
 
 
         logger.trace("Calling url={}", url);
-        System.out.println("Calling url={}"+url);
         String content = executor.execute(AbstractRequestExecutor.HttpMethod.GET, url).getEntityAsString();
         logger.trace("returning content={}", content);
-        System.out.println("returning content={}"+content);
 
         T result = mapper.readValue(content, type);
         if (!result.isSuccess()) {
@@ -159,7 +157,6 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
         }
 
         logger.trace("Calling url={}", url);
-        System.out.println("Calling url={}"+url);
         if (paramMap != null) {
             logger.trace("paramMap={}", paramMap);
             for(Entry<String,Object> entry : paramMap.entrySet()) {
