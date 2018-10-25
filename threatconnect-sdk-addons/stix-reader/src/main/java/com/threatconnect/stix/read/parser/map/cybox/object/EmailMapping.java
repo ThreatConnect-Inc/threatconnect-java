@@ -19,6 +19,8 @@ import org.w3c.dom.NodeList;
 import javax.xml.xpath.XPathExpressionException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class EmailMapping extends CyboxObjectMapping
 {
@@ -26,6 +28,11 @@ public class EmailMapping extends CyboxObjectMapping
 	private static final String EMPTY_VALUE = "Empty";
 	
 	private static final String ATTR_EMAIL_SERVER = "Email Server";
+	
+	private static final String REGEX_EMAIL_BRACKETS1 = "\\[(.+)\\]";
+	private static final String REGEX_EMAIL_BRACKETS2 = "\\<(.+)\\>";
+	private static final Pattern PATTERN_EMAIL_BRAKCETS1 = Pattern.compile(REGEX_EMAIL_BRACKETS1);
+	private static final Pattern PATTERN_EMAIL_BRAKCETS2 = Pattern.compile(REGEX_EMAIL_BRACKETS2);
 	
 	public EmailMapping(final Double defaultRating, final Double defaultConfidence)
 	{
@@ -84,7 +91,7 @@ public class EmailMapping extends CyboxObjectMapping
 		//make sure the from node is not null
 		if (null != fromNode)
 		{
-			String fromAddress = Constants.XPATH_UTIL.getString("Address_Value", fromNode);
+			String fromAddress = parseEmailAddress(Constants.XPATH_UTIL.getString("Address_Value", fromNode));
 			if (StringUtils.isNotBlank(fromAddress))
 			{
 				email.setFrom(fromAddress);
@@ -102,7 +109,7 @@ public class EmailMapping extends CyboxObjectMapping
 		}
 		
 		//get the address value object
-		String addressValue = Constants.XPATH_UTIL.getString("Address_Value", propertiesNode);
+		String addressValue = parseEmailAddress(Constants.XPATH_UTIL.getString("Address_Value", propertiesNode));
 		if (StringUtils.isNotBlank(addressValue))
 		{
 			//create a new email address indicator
@@ -164,7 +171,7 @@ public class EmailMapping extends CyboxObjectMapping
 				Node recipientNode = recipientNodeList.item(i);
 				recipientNode.getParentNode().removeChild(recipientNode);
 				
-				String address = Constants.XPATH_UTIL.getString("Address_Value", recipientNode);
+				String address = parseEmailAddress(Constants.XPATH_UTIL.getString("Address_Value", recipientNode));
 				if (StringUtils.isNotBlank(address))
 				{
 					if (recipients.length() > 0)
@@ -181,6 +188,39 @@ public class EmailMapping extends CyboxObjectMapping
 		else
 		{
 			return null;
+		}
+	}
+	
+	/**
+	 * In some cases, email addresses are wrapped in [] or <>. This will look for these characters and parse the email in between, otherwise return
+	 * the value as is.
+	 *
+	 * @param text
+	 * @return
+	 */
+	private String parseEmailAddress(final String text)
+	{
+		if (StringUtils.isNotBlank(text))
+		{
+			final Matcher matcher1 = PATTERN_EMAIL_BRAKCETS1.matcher(text);
+			final Matcher matcher2 = PATTERN_EMAIL_BRAKCETS2.matcher(text);
+			
+			if (matcher1.find())
+			{
+				return matcher1.group(1);
+			}
+			else if (matcher2.find())
+			{
+				return matcher2.group(1);
+			}
+			else
+			{
+				return text;
+			}
+		}
+		else
+		{
+			return text;
 		}
 	}
 }
