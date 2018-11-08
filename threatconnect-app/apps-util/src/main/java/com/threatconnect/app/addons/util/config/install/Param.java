@@ -20,6 +20,7 @@ public class Param
 	private boolean required;
 	private boolean hidden;
 	private boolean setup;
+	private boolean feedDeployer;
 	private Integer viewRows;
 	private String note;
 	private String viewType;
@@ -126,6 +127,16 @@ public class Param
 	public void setSetup(final boolean setup)
 	{
 		this.setup = setup;
+	}
+	
+	public boolean isFeedDeployer()
+	{
+		return feedDeployer;
+	}
+	
+	public void setFeedDeployer(final boolean feedDeployer)
+	{
+		this.feedDeployer = feedDeployer;
 	}
 	
 	public Integer getViewRows()
