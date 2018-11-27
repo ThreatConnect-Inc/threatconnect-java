@@ -8,6 +8,8 @@
   "listDelimiter": "|",
   "runtimeLevel": "System",
   "runtimeContext": ["Host", "Url"],
+  "features": ["secureParams"],
+  "labels": ["label1", "label2"],
   "params": [
     {
       "name": "username",

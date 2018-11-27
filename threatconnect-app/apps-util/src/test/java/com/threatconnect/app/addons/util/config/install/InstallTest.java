@@ -1,5 +1,6 @@
 package com.threatconnect.app.addons.util.config.install;
 
+import com.threatconnect.app.addons.util.config.Feature;
 import com.threatconnect.app.addons.util.config.validation.ValidationException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -40,6 +41,8 @@ public class InstallTest
 		Assert.assertEquals(ActionAtMinimumType.None.toString(),
 			install.getFeeds().get(0).getDeprecation().get(3).getActionAtMinimum());
 		
+		Assert.assertTrue(install.getFeatures().contains(Feature.SECURE_PARAMS));
+		Assert.assertEquals(2, install.getLabels().size());
 	}
 	
 	@Test

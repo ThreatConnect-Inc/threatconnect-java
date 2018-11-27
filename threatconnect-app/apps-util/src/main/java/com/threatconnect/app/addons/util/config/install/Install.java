@@ -34,6 +34,7 @@ public class Install
 	private final List<String> publishOutFiles;
 	private final List<RuntimeContextType> runtimeContext;
 	private final Set<String> features;
+	private final Set<String> labels;
 	
 	public Install()
 	{
@@ -43,6 +44,7 @@ public class Install
 		this.publishOutFiles = new ArrayList<String>();
 		this.runtimeContext = new ArrayList<RuntimeContextType>();
 		this.features = new HashSet<String>();
+		this.labels = new HashSet<String>();
 		this.listDelimiter = DEFAULT_LIST_DELIMITER;
 	}
 	
@@ -249,6 +251,11 @@ public class Install
 	public Set<String> getFeatures()
 	{
 		return features;
+	}
+	
+	public Set<String> getLabels()
+	{
+		return labels;
 	}
 	
 	public List<Param> getPlaybookParams()
