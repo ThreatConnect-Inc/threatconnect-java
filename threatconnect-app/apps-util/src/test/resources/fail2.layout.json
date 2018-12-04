@@ -1,0 +1,21 @@
+{
+	"groups": [
+		{
+			"sequence": 1,
+			"parameters": [
+				{
+					"name": "username"
+				}
+			]
+		},
+		{
+			"title": "Step 2",
+			"sequence": 2,
+			"parameters": [
+				{
+					"name": "password"
+				}
+			]
+		}
+	]
+}
