@@ -107,11 +107,13 @@ public class ConnectionUtil
 	{
 		if (config.getTcToken() != null)
 		{
+			logger.trace("Authorization: Token");
 			message.addHeader("authorization", "TC-Token " + config.getTcToken());
 		}
 		else
 		{
-			Long ts = System.currentTimeMillis() / 1000L;
+			logger.trace("Authorization: API Secret");
+			long ts = System.currentTimeMillis() / 1000L;
 			String sig = getSignature(ts, httpMethod, urlPath, null);
 			String hmacSig = getHmacSha256Signature(sig, config.getTcApiUserSecretKey());
 			String auth = getAuthorizationText(config, hmacSig);
