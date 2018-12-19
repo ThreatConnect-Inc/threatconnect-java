@@ -5,15 +5,15 @@ import java.util.List;
 
 public class Layout
 {
-	private final List<LayoutGroup> groups;
+	private final List<LayoutInput> inputs;
 	
 	public Layout()
 	{
-		this.groups = new ArrayList<LayoutGroup>();
+		this.inputs = new ArrayList<LayoutInput>();
 	}
 	
-	public List<LayoutGroup> getGroups()
+	public List<LayoutInput> getInputs()
 	{
-		return groups;
+		return inputs;
 	}
 }

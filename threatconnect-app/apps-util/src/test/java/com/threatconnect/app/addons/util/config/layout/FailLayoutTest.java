@@ -12,7 +12,7 @@ import java.io.IOException;
 public class FailLayoutTest
 {
 	@Test
-	public void fail1() throws IOException, ValidationException
+	public void fail1() throws IOException
 	{
 		try
 		{
@@ -29,7 +29,7 @@ public class FailLayoutTest
 	}
 	
 	@Test
-	public void fail2() throws IOException, ValidationException
+	public void fail2() throws IOException
 	{
 		try
 		{

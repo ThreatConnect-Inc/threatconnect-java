@@ -22,10 +22,10 @@ public class LayoutTest
 		Install install = InstallUtil.load(installFile);
 		Layout layout = LayoutUtil.load(layoutFile, install);
 		
-		Assert.assertEquals(1, layout.getGroups().get(0).getParameters().size());
-		Assert.assertEquals("Step 1", layout.getGroups().get(0).getTitle());
-		Assert.assertEquals("Step 2", layout.getGroups().get(1).getTitle());
-		Assert.assertEquals("username", layout.getGroups().get(0).getParameters().get(0).getName());
-		Assert.assertEquals("password", layout.getGroups().get(1).getParameters().get(0).getName());
+		Assert.assertEquals(1, layout.getInputs().get(0).getParameters().size());
+		Assert.assertEquals("Step 1", layout.getInputs().get(0).getTitle());
+		Assert.assertEquals("Step 2", layout.getInputs().get(1).getTitle());
+		Assert.assertEquals("username", layout.getInputs().get(0).getParameters().get(0).getName());
+		Assert.assertEquals("password", layout.getInputs().get(1).getParameters().get(0).getName());
 	}
 }

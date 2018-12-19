@@ -3,14 +3,14 @@ package com.threatconnect.app.addons.util.config.layout;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LayoutGroup
+public class LayoutInput
 {
 	private final List<Parameter> parameters;
 	
 	private String title;
 	private int sequence;
 	
-	public LayoutGroup()
+	public LayoutInput()
 	{
 		this.parameters = new ArrayList<Parameter>();
 	}

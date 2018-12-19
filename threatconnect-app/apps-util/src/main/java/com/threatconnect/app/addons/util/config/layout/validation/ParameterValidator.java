@@ -1,7 +1,6 @@
 package com.threatconnect.app.addons.util.config.layout.validation;
 
 import com.threatconnect.app.addons.util.config.install.Install;
-import com.threatconnect.app.addons.util.config.layout.LayoutGroup;
 import com.threatconnect.app.addons.util.config.layout.Parameter;
 import com.threatconnect.app.addons.util.config.validation.ValidationException;
 import com.threatconnect.app.addons.util.config.validation.Validator;
