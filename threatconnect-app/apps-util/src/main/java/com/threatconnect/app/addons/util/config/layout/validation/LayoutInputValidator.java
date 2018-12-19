@@ -1,22 +1,22 @@
 package com.threatconnect.app.addons.util.config.layout.validation;
 
 import com.threatconnect.app.addons.util.config.install.Install;
-import com.threatconnect.app.addons.util.config.layout.LayoutGroup;
+import com.threatconnect.app.addons.util.config.layout.LayoutInput;
 import com.threatconnect.app.addons.util.config.layout.Parameter;
 import com.threatconnect.app.addons.util.config.validation.ValidationException;
 import com.threatconnect.app.addons.util.config.validation.Validator;
 
-public class LayoutGroupValidator extends Validator<LayoutGroup>
+public class LayoutInputValidator extends Validator<LayoutInput>
 {
 	private final Install install;
 	
-	public LayoutGroupValidator(final Install install)
+	public LayoutInputValidator(final Install install)
 	{
 		this.install = install;
 	}
 	
 	@Override
-	public void validate(final LayoutGroup object) throws ValidationException
+	public void validate(final LayoutInput object) throws ValidationException
 	{
 		//make sure the title is defined
 		if (isNullOrEmpty(object.getTitle()))
