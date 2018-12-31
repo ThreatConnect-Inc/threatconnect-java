@@ -9,6 +9,8 @@ import com.threatconnect.app.addons.util.config.install.ProgramLanguageType;
 import com.threatconnect.app.addons.util.config.install.ProgramVersion;
 import com.threatconnect.app.addons.util.config.install.RunLevelType;
 import com.threatconnect.app.addons.util.config.install.ServerVersion;
+import com.threatconnect.app.addons.util.config.layout.Layout;
+import com.threatconnect.app.addons.util.config.layout.validation.LayoutValidator;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -143,6 +145,13 @@ public class InstallValidator extends Validator<Install>
 				throw new ValidationException("Multiple feeds with sourceName \"" + feed.getSourceName()
 					+ "\" were found. Please make sure sourceName is unique.");
 			}
+		}
+		
+		//check to see if a layout is specified
+		if (null != object.getLayout())
+		{
+			Validator<Layout> layoutValidator = new LayoutValidator(object);
+			layoutValidator.validate(object.getLayout());
 		}
 	}
 }

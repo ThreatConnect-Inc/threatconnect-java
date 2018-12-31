@@ -44,4 +44,19 @@ public class FailLayoutTest
 			Assert.assertTrue(e.getMessage().contains("title is not defined."));
 		}
 	}
+	
+	@Test
+	public void fail3() throws IOException
+	{
+		try
+		{
+			File installFile = new File("src/test/resources/fail.install_with_layout.json");
+			InstallUtil.load(installFile);
+			Assert.fail();
+		}
+		catch (ValidationException e)
+		{
+			Assert.assertTrue(e.getMessage().contains("parameter name \"notavalidparamname\" is not valid."));
+		}
+	}
 }

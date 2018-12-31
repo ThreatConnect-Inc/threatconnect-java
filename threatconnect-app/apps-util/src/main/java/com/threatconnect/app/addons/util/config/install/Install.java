@@ -1,5 +1,7 @@
 package com.threatconnect.app.addons.util.config.install;
 
+import com.threatconnect.app.addons.util.config.layout.Layout;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -31,6 +33,7 @@ public class Install
 	private String sdkVersion;
 	
 	private Playbook playbook;
+	private Layout layout;
 	private final List<Param> params;
 	private final List<Feed> feeds;
 	private final List<String> repeatingMinutes;
@@ -294,6 +297,16 @@ public class Install
 	public Set<String> getLabels()
 	{
 		return labels;
+	}
+	
+	public Layout getLayout()
+	{
+		return layout;
+	}
+	
+	public void setLayout(final Layout layout)
+	{
+		this.layout = layout;
 	}
 	
 	public List<Param> getPlaybookParams()

@@ -1,0 +1,118 @@
+{
+	"displayName": "Sample App",
+	"programVersion": "1.0.0",
+	"programLanguage": "Java",
+	"programMain": "com.threatconnect.apps.example.ExampleMain",
+	"languageVersion": "7",
+	"minServerVersion": "5.2.0",
+	"listDelimiter": "|",
+	"runtimeLevel": "System",
+	"runtimeContext": [
+		"Host",
+		"Url"
+	],
+	"features": [
+		"secureParams"
+	],
+	"labels": [
+		"label1",
+		"label2"
+	],
+	"playbook": {
+		"outputVariables": [
+			{
+				"name": "output1"
+			}
+		]
+	},
+	"params": [
+		{
+			"name": "username",
+			"label": "Username",
+			"sequence": 1,
+			"required": true,
+			"default": "default",
+			"type": "String",
+			"validValues": [
+				"${TEXT}"
+			]
+		},
+		{
+			"name": "password",
+			"label": "Password",
+			"sequence": 2,
+			"required": true,
+			"encrypt": true,
+			"type": "String"
+		}
+	],
+	"feeds": [
+		{
+			"sourceName": "Example Source Feed",
+			"sourceCategory": "Open Source",
+			"sourceDescription": "Testing",
+			"attributesFile": "test.attributes.csv",
+			"enableBulkJson": true,
+			"deprecation": [
+				{
+					"indicatorType": "Address",
+					"intervalDays": 3,
+					"confidenceAmount": 5,
+					"percentage": true,
+					"deleteAtMinimum": true
+				},
+				{
+					"indicatorType": "Host",
+					"intervalDays": 3,
+					"confidenceAmount": 5,
+					"percentage": true,
+					"actionAtMinimum": "Delete"
+				},
+				{
+					"indicatorType": "ASN",
+					"intervalDays": 3,
+					"confidenceAmount": 5,
+					"percentage": true,
+					"actionAtMinimum": "Inactive"
+				},
+				{
+					"indicatorType": "Url",
+					"intervalDays": 3,
+					"confidenceAmount": 5,
+					"percentage": true
+				}
+			],
+			"indicatorLimit": 400000,
+			"documentStorageLimitMb": 1000,
+			"jobFile": "text.job.json"
+		}
+	],
+	"layout": {
+		"inputs": [
+			{
+				"title": "Step 1",
+				"sequence": 1,
+				"parameters": [
+					{
+						"name": "username"
+					}
+				]
+			},
+			{
+				"title": "Step 2",
+				"sequence": 2,
+				"parameters": [
+					{
+						"name": "password"
+					}
+				]
+			}
+		],
+		"outputs": [
+			{
+				"name": "output1",
+				"display": "tc_action in ('Block IP')"
+			}
+		]
+	}
+}
