@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class TCEntity
 {
-	private Long id;
+	private Integer id;
 	private String type;
 	private String value;
 	private String ownerName;
@@ -37,7 +37,7 @@ public class TCEntity
 		ownerName = owner;
 	}
 
-	public TCEntity(Long id, String type, String value, String ownerName)
+	public TCEntity(Integer id, String type, String value, String ownerName)
 	{
 		this.id = id;
 		this.type = type;
@@ -45,12 +45,12 @@ public class TCEntity
 		this.ownerName = ownerName;
 	}
 
-	public Long getId()
+	public Integer getId()
 	{
 		return id;
 	}
 
-	public void setId(final Long id)
+	public void setId(final Integer id)
 	{
 		this.id = id;
 	}

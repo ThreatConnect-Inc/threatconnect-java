@@ -121,9 +121,9 @@ public abstract class AppConfig
 		return getString(TC_API_PATH);
 	}
 	
-	public Long getTcUserId()
+	public Integer getTcUserId()
 	{
-		return getLong(TC_USER_ID);
+		return getInteger(TC_USER_ID);
 	}
 	
 	public Integer getTcSpaceElementId()
