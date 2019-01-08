@@ -12,17 +12,17 @@ import java.util.regex.Pattern;
 public class PlaybooksVariable
 {
 	private final PlaybooksVariableNamespace namespace;
-	private final long id;
+	private final int id;
 	private final String name;
 	private final String playbookVariableType;
 	
-	public PlaybooksVariable(final PlaybooksVariableNamespace namespace, final long id, final String name,
+	public PlaybooksVariable(final PlaybooksVariableNamespace namespace, final int id, final String name,
 		final StandardPlaybookType playbookVariableType)
 	{
 		this(namespace, id, name, playbookVariableType.toString());
 	}
 	
-	public PlaybooksVariable(final PlaybooksVariableNamespace namespace, final long id, final String name,
+	public PlaybooksVariable(final PlaybooksVariableNamespace namespace, final int id, final String name,
 		final String playbookVariableType)
 	{
 		this.namespace = namespace;
@@ -36,7 +36,7 @@ public class PlaybooksVariable
 		return namespace;
 	}
 	
-	public long getId()
+	public int getId()
 	{
 		return id;
 	}
