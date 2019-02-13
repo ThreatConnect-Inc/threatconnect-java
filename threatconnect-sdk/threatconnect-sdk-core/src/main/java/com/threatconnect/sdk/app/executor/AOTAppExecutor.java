@@ -58,11 +58,12 @@ public class AOTAppExecutor extends DefaultAppExecutor
 		//make a blocking call to wait for the result from redis
 		logger.trace("Waiting for message on channel: " + getAppConfig().getTcActionChannel());
 		List<String> results = jedis.blpop(timeoutSeconds, getAppConfig().getTcActionChannel());
-		logger.trace("Message received on channel: " + getAppConfig().getTcActionChannel());
 		
 		//check to see if we got a valid response (no timeout)
 		if (null != results && results.size() == 2)
 		{
+			logger.trace("Message received on channel: " + getAppConfig().getTcActionChannel());
+			
 			final String key = results.get(0);
 			final String value = results.get(1);
 			
