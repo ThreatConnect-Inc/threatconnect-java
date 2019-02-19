@@ -59,17 +59,17 @@ public class LegacyBatchApiSaveService implements SaveService
 	protected final AttributeWriteType attributeWriteType;
 	
 	// holds the hashmap to resolve the set of associated group ids for a given indicator
-	protected final Map<Indicator, Set<Integer>> associatedIndicatorGroupsIDs;
+	protected final Map<Indicator, Set<Long>> associatedIndicatorGroupsIDs;
 	protected final Map<Group, Set<GroupIdentifier>> associatedGroupGroupsIDs;
 	
 	public LegacyBatchApiSaveService(final Configuration configuration, final String ownerName)
 	{
-		this(configuration, ownerName, new HashMap<Indicator, Set<Integer>>(),
+		this(configuration, ownerName, new HashMap<Indicator, Set<Long>>(),
 			new HashMap<Group, Set<GroupIdentifier>>());
 	}
 	
 	public LegacyBatchApiSaveService(final Configuration configuration, final String ownerName,
-		final Map<Indicator, Set<Integer>> associatedIndicatorGroupsIDs,
+		final Map<Indicator, Set<Long>> associatedIndicatorGroupsIDs,
 		final Map<Group, Set<GroupIdentifier>> associatedGroupGroupsIDs)
 	{
 		this(configuration, ownerName, associatedIndicatorGroupsIDs, associatedGroupGroupsIDs,
@@ -77,7 +77,7 @@ public class LegacyBatchApiSaveService implements SaveService
 	}
 	
 	public LegacyBatchApiSaveService(final Configuration configuration, final String ownerName,
-		final Map<Indicator, Set<Integer>> associatedIndicatorGroupsIDs,
+		final Map<Indicator, Set<Long>> associatedIndicatorGroupsIDs,
 		final Map<Group, Set<GroupIdentifier>> associatedGroupGroupsIDs,
 		final AttributeWriteType attributeWriteType)
 	{
@@ -142,7 +142,7 @@ public class LegacyBatchApiSaveService implements SaveService
 		ItemUtil.separateGroupsAndIndicators(items, groups, indicators);
 		
 		// save all of the groups
-		Map<Group, Integer> savedGroupMap = new HashMap<Group, Integer>();
+		Map<Group, Long> savedGroupMap = new HashMap<Group, Long>();
 		saveResults.addFailedItems(saveGroups(groups, savedGroupMap, connection));
 		
 		// now that the groups have been saved, we need to create a map to allow quick lookups of
@@ -155,7 +155,7 @@ public class LegacyBatchApiSaveService implements SaveService
 		return saveResults;
 	}
 	
-	protected SaveResults saveGroups(final Collection<Group> groups, final Map<Group, Integer> savedGroupMap,
+	protected SaveResults saveGroups(final Collection<Group> groups, final Map<Group, Long> savedGroupMap,
 		final Connection connection) throws IOException
 	{
 		// create a new save result to return
@@ -181,7 +181,7 @@ public class LegacyBatchApiSaveService implements SaveService
 	}
 	
 	protected SaveResults saveIndicators(final Collection<Indicator> indicators,
-		final Map<Indicator, Set<Integer>> associatedIndicatorGroupsIDs, final Connection connection) throws IOException
+		final Map<Indicator, Set<Long>> associatedIndicatorGroupsIDs, final Connection connection) throws IOException
 	{
 		try
 		{
@@ -329,8 +329,8 @@ public class LegacyBatchApiSaveService implements SaveService
 		return writer;
 	}
 	
-	protected Integer saveGroup(final Group group, final String ownerName,
-		final Map<Group, Integer> savedGroupMap, final Connection connection, final SaveResults saveResults)
+	protected Long saveGroup(final Group group, final String ownerName,
+		final Map<Group, Long> savedGroupMap, final Connection connection, final SaveResults saveResults)
 		throws IOException, SaveItemFailedException
 	{
 		GroupWriter<?, ?> writer = getGroupWriter(group, connection);
@@ -378,13 +378,13 @@ public class LegacyBatchApiSaveService implements SaveService
 	 * @param savedGroupMap
 	 */
 	private void buildAssociatedIndicatorGroupIDs(final Set<Group> groups,
-		final Set<Indicator> indicators, final Map<Group, Integer> savedGroupMap)
+		final Set<Indicator> indicators, final Map<Group, Long> savedGroupMap)
 	{
 		// for each of the groups
 		for (Group group : groups)
 		{
 			// look up the group id for this group
-			Integer groupID = savedGroupMap.get(group);
+			Long groupID = savedGroupMap.get(group);
 			
 			// make sure this group id is not null
 			if (null != groupID)
@@ -414,7 +414,7 @@ public class LegacyBatchApiSaveService implements SaveService
 			for (Group group : indicator.getAssociatedItems())
 			{
 				// look up the group id for this group
-				Integer groupID = savedGroupMap.get(group);
+				Long groupID = savedGroupMap.get(group);
 				
 				// make sure this group id is not null
 				if (null != groupID)
@@ -430,8 +430,8 @@ public class LegacyBatchApiSaveService implements SaveService
 		}
 	}
 	
-	private <T> Set<Integer> getOrCreateGroupIDSet(final T indicator, final Map<T, Set<Integer>> map)
+	private <T> Set<Long> getOrCreateGroupIDSet(final T indicator, final Map<T, Set<Long>> map)
 	{
-		return map.computeIfAbsent(indicator, k -> new HashSet<Integer>());
+		return map.computeIfAbsent(indicator, k -> new HashSet<Long>());
 	}
 }

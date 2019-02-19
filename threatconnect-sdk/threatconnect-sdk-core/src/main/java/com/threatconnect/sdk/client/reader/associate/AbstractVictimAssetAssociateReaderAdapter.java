@@ -64,12 +64,12 @@ public abstract class AbstractVictimAssetAssociateReaderAdapter<P> extends Abstr
     }
 
     @Override
-    public VictimEmailAddress getAssociatedVictimAssetEmailAddress(P uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public VictimEmailAddress getAssociatedVictimAssetEmailAddress(P uniqueId, Long assetId) throws IOException, FailedResponseException {
         return getAssociatedVictimAssetEmailAddress(uniqueId, assetId, null);
     }
 
     @Override
-    public VictimEmailAddress getAssociatedVictimAssetEmailAddress(P uniqueId, Integer assetId, String ownerName)
+    public VictimEmailAddress getAssociatedVictimAssetEmailAddress(P uniqueId, Long assetId, String ownerName)
         throws IOException, FailedResponseException {
 
         Map<String, Object> map = createParamMap("id", uniqueId, "assetId", assetId, "type", getUrlType());
@@ -92,12 +92,12 @@ public abstract class AbstractVictimAssetAssociateReaderAdapter<P> extends Abstr
     }
 
     @Override
-    public VictimNetworkAccount getAssociatedVictimAssetNetworkAccount(P uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public VictimNetworkAccount getAssociatedVictimAssetNetworkAccount(P uniqueId, Long assetId) throws IOException, FailedResponseException {
         return getAssociatedVictimAssetNetworkAccount(uniqueId, assetId, null);
     }
 
     @Override
-    public VictimNetworkAccount getAssociatedVictimAssetNetworkAccount(P uniqueId, Integer assetId, String ownerName)
+    public VictimNetworkAccount getAssociatedVictimAssetNetworkAccount(P uniqueId, Long assetId, String ownerName)
         throws IOException, FailedResponseException {
 
         Map<String, Object> map = createParamMap("id", uniqueId, "assetId", assetId, "type", getUrlType());
@@ -120,12 +120,12 @@ public abstract class AbstractVictimAssetAssociateReaderAdapter<P> extends Abstr
     }
 
     @Override
-    public VictimPhone getAssociatedVictimAssetPhoneNumber(P uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public VictimPhone getAssociatedVictimAssetPhoneNumber(P uniqueId, Long assetId) throws IOException, FailedResponseException {
         return getAssociatedVictimAssetPhoneNumber(uniqueId, assetId, null);
     }
 
     @Override
-    public VictimPhone getAssociatedVictimAssetPhoneNumber(P uniqueId, Integer assetId, String ownerName)
+    public VictimPhone getAssociatedVictimAssetPhoneNumber(P uniqueId, Long assetId, String ownerName)
         throws IOException, FailedResponseException {
 
         Map<String, Object> map = createParamMap("id", uniqueId, "assetId", assetId, "type", getUrlType());
@@ -148,12 +148,12 @@ public abstract class AbstractVictimAssetAssociateReaderAdapter<P> extends Abstr
     }
 
     @Override
-    public VictimSocialNetwork getAssociatedVictimAssetSocialNetwork(P uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public VictimSocialNetwork getAssociatedVictimAssetSocialNetwork(P uniqueId, Long assetId) throws IOException, FailedResponseException {
         return getAssociatedVictimAssetSocialNetwork(uniqueId, assetId, null);
     }
 
     @Override
-    public VictimSocialNetwork getAssociatedVictimAssetSocialNetwork(P uniqueId, Integer assetId, String ownerName)
+    public VictimSocialNetwork getAssociatedVictimAssetSocialNetwork(P uniqueId, Long assetId, String ownerName)
         throws IOException, FailedResponseException {
 
         Map<String, Object> map = createParamMap("id", uniqueId, "assetId", assetId, "type", getUrlType());
@@ -176,12 +176,12 @@ public abstract class AbstractVictimAssetAssociateReaderAdapter<P> extends Abstr
     }
 
     @Override
-    public VictimWebSite getAssociatedVictimAssetWebsite(P uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public VictimWebSite getAssociatedVictimAssetWebsite(P uniqueId, Long assetId) throws IOException, FailedResponseException {
         return getAssociatedVictimAssetWebsite(uniqueId, assetId, null);
     }
 
     @Override
-    public VictimWebSite getAssociatedVictimAssetWebsite(P uniqueId, Integer assetId, String ownerName)
+    public VictimWebSite getAssociatedVictimAssetWebsite(P uniqueId, Long assetId, String ownerName)
         throws IOException, FailedResponseException {
 
         Map<String, Object> map = createParamMap("id", uniqueId, "assetId", assetId, "type", getUrlType());

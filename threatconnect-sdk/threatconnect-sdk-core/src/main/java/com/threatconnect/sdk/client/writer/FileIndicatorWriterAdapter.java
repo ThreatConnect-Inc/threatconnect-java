@@ -64,7 +64,7 @@ public class FileIndicatorWriterAdapter extends AbstractIndicatorWriterAdapter<F
         throws IOException {
 
         Map<String, Object> map = createParamMap("id", fileHash);
-        List<Integer> idList = new ArrayList<>();
+        List<Long> idList = new ArrayList<>();
         for(FileOccurrence it : fileOccurrences)    idList.add( it.getId() );
         WriteListResponse<FileOccurrence> data = updateListWithParam(getUrlBasePrefix() + ".byId.fileOccurrences.byFileOccurrenceId", FileOccurrenceListResponse.class, ownerName, map, "fileOccurrenceId", idList, fileOccurrences);
 

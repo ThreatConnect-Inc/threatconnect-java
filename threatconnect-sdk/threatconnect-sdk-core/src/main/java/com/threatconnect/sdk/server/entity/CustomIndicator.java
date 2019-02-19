@@ -68,7 +68,7 @@ public class CustomIndicator extends Indicator
     
 
     
-    public CustomIndicator(Integer id, Owner owner, String ownerName, String type, Date dateAdded, Date lastModified, Double rating, Double confidence, Double threatAssessRating, Double threatAssessConfidence, String webLink, String source, String description, String summary, Map<String,String> keyValuePairs)
+    public CustomIndicator(Long id, Owner owner, String ownerName, String type, Date dateAdded, Date lastModified, Double rating, Double confidence, Double threatAssessRating, Double threatAssessConfidence, String webLink, String source, String description, String summary, Map<String,String> keyValuePairs)
     {
         super(id, owner, ownerName, type, dateAdded, lastModified, rating, confidence, threatAssessRating, threatAssessConfidence, webLink, source, description, summary);
         map = keyValuePairs;

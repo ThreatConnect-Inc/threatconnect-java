@@ -153,7 +153,7 @@ public class LegacyBulkIndicatorConverter
 	}
 	
 	public JsonObject convertToJson(final Collection<? extends Indicator> indicators,
-		final Map<Indicator, Set<Integer>> associatedIndicatorGroupsIDs)
+		final Map<Indicator, Set<Long>> associatedIndicatorGroupsIDs)
 	{
 		// create the root indicator json object
 		JsonObject indicatorJsonObject = new JsonObject();
@@ -165,7 +165,7 @@ public class LegacyBulkIndicatorConverter
 		// for each indicator in the collection
 		for (Indicator indicator : indicators)
 		{
-			Set<Integer> ids = associatedIndicatorGroupsIDs.get(indicator);
+			Set<Long> ids = associatedIndicatorGroupsIDs.get(indicator);
 			
 			try
 			{
@@ -181,7 +181,7 @@ public class LegacyBulkIndicatorConverter
 		return indicatorJsonObject;
 	}
 	
-	public JsonObject convertToJson(final Indicator indicator, final Set<Integer> associatedGroupIDs)
+	public JsonObject convertToJson(final Indicator indicator, final Set<Long> associatedGroupIDs)
 		throws InvalidIndicatorException
 	{
 		// holds the json object that will represent this indicator
@@ -201,7 +201,7 @@ public class LegacyBulkIndicatorConverter
 			JsonArray associatedGroups = new JsonArray();
 			
 			// for each of the ids
-			for (Integer id : associatedGroupIDs)
+			for (Long id : associatedGroupIDs)
 			{
 				associatedGroups.add(new JsonPrimitive(id));
 			}

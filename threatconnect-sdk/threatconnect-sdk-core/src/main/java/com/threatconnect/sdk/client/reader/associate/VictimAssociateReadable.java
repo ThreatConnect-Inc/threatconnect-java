@@ -22,9 +22,9 @@ public interface VictimAssociateReadable<P> {
    public IterableResponse<Victim> getAssociatedVictims(P uniqueId, String ownerName)
             throws IOException, FailedResponseException;
 
-   public Victim getAssociatedVictim(P uniqueId, Integer victimId) throws IOException, FailedResponseException;
+   public Victim getAssociatedVictim(P uniqueId, Long victimId) throws IOException, FailedResponseException;
 
-   public Victim getAssociatedVictim(P uniqueId, Integer victimId, String ownerName) 
+   public Victim getAssociatedVictim(P uniqueId, Long victimId, String ownerName) 
             throws IOException, FailedResponseException;
     
 }

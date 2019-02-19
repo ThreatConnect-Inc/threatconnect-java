@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class IndicatorBuilder
 {
-    private Integer id;
+    private Long id;
     private Owner owner;
     private String ownerName;
     private String type;
@@ -22,7 +22,7 @@ public class IndicatorBuilder
     private String description;
     private String summary;
 
-    public IndicatorBuilder withId(Integer id)
+    public IndicatorBuilder withId(Long id)
     {
         this.id = id;
         return this;

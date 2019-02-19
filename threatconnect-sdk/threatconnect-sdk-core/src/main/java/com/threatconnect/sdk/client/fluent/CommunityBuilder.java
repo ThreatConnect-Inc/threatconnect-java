@@ -4,11 +4,11 @@ import com.threatconnect.sdk.server.entity.Community;
 
 public class CommunityBuilder
 {
-    private Integer id;
+    private Long id;
     private String name;
     private String type;
 
-    public CommunityBuilder withId(Integer id)
+    public CommunityBuilder withId(Long id)
     {
         this.id = id;
         return this;

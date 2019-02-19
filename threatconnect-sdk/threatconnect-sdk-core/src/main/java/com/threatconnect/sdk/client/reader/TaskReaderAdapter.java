@@ -23,21 +23,21 @@ public class TaskReaderAdapter extends AbstractGroupReaderAdapter<Task> {
 
     public TaskReaderAdapter(Connection conn) { super(conn, TaskResponse.class, Task.class, TaskListResponse.class); }
 
-    public IterableResponse<User> getAssignees(final Integer uniqueId) throws IOException{
+    public IterableResponse<User> getAssignees(final Long uniqueId) throws IOException{
         Map<String, Object> paramMap = new HashMap<String, Object>() {
             {   put("id", uniqueId);  }
         };
         return getItems(getUrlBasePrefix() + ".assignees", UserListResponse.class, User.class, null, paramMap);
     }
 
-    public IterableResponse<User> getEscalatees(final Integer uniqueId) throws IOException {
+    public IterableResponse<User> getEscalatees(final Long uniqueId) throws IOException {
         Map<String, Object> paramMap = new HashMap<String, Object>() {
             {   put("id", uniqueId);  }
         };
         return getItems(getUrlBasePrefix() + ".escalatees", UserListResponse.class, User.class, null, paramMap);
     }
 
-    public UserResponse getAssignee(final Integer uniqueId, final String userName) throws IOException {
+    public UserResponse getAssignee(final Long uniqueId, final String userName) throws IOException {
         Map<String, Object> paramMap = new HashMap<String, Object>() {
             {
                 put("id", uniqueId);
@@ -47,7 +47,7 @@ public class TaskReaderAdapter extends AbstractGroupReaderAdapter<Task> {
         return getItem(getUrlBasePrefix() + ".assignees.byUserName", UserResponse.class, null, paramMap);
     }
 
-    public UserResponse getEscalatee(final Integer uniqueId, final String userName) throws IOException {
+    public UserResponse getEscalatee(final Long uniqueId, final String userName) throws IOException {
         Map<String, Object> paramMap = new HashMap<String, Object>() {
             {
                 put("id", uniqueId);
@@ -64,13 +64,13 @@ public class TaskReaderAdapter extends AbstractGroupReaderAdapter<Task> {
     public String getUrlType() { return "tasks";}
 
 	@Override
-	public IterableResponse<? extends Indicator> getAssociatedIndicatorsForCustomIndicators(Integer uniqueId,
+	public IterableResponse<? extends Indicator> getAssociatedIndicatorsForCustomIndicators(Long uniqueId,
 			String associationType) throws IOException, FailedResponseException {
 		throw new RuntimeException("not implemented yet");
 	}
 
 	@Override
-	public IterableResponse<? extends Indicator> getAssociatedIndicatorsForCustomIndicators(Integer uniqueId,
+	public IterableResponse<? extends Indicator> getAssociatedIndicatorsForCustomIndicators(Long uniqueId,
 			String associationType, String targetType) throws IOException, FailedResponseException {
 		throw new RuntimeException("not implemented yet");
 	}

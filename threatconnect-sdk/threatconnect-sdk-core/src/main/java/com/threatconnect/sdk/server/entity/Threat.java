@@ -25,7 +25,7 @@ public class Threat extends Group
         super();
     }
 
-    public Threat(Integer id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink)
+    public Threat(Long id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink)
     {
         super(id, name, type, owner, ownerName, dateAdded, webLink);
     }

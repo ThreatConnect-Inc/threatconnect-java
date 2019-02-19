@@ -12,7 +12,7 @@ import java.util.List;
  * Created by moweis-ad on 3/21/16.
  */
 public class TaskBuilder {
-    private Integer id;
+    private Long id;
     private String name;
     private String type;
     private Owner owner;
@@ -29,7 +29,7 @@ public class TaskBuilder {
     private List<User> assignee = new ArrayList<User>();
     private List<User> escalatee = new ArrayList<User>();
 
-    public TaskBuilder withId(Integer id)
+    public TaskBuilder withId(Long id)
     {
         this.id = id;
         return this;

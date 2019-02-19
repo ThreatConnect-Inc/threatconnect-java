@@ -29,7 +29,7 @@ public class VictimEmailAddress extends VictimAsset
     {
     }
 
-    public VictimEmailAddress(Integer id, String name, String type, String webLink, String address, String addressType)
+    public VictimEmailAddress(Long id, String name, String type, String webLink, String address, String addressType)
     {
         super(id, name, type, webLink);
         this.address = address;

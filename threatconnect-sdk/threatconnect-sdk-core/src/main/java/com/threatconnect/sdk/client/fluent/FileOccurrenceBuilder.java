@@ -6,12 +6,12 @@ import java.util.Date;
 
 public class FileOccurrenceBuilder
 {
-    private Integer id;
+    private Long id;
     private String fileName;
     private String path;
     private Date date;
 
-    public FileOccurrenceBuilder withId(Integer id)
+    public FileOccurrenceBuilder withId(Long id)
     {
         this.id = id;
         return this;

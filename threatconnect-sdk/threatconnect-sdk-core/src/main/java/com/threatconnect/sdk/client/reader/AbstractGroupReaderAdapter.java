@@ -60,18 +60,18 @@ import java.util.Map;
  * @param <T> Parameter
  */
 public abstract class AbstractGroupReaderAdapter<T extends Group>
-    extends AbstractBaseReaderAdapter<T,Integer>
-    implements UrlTypeable, GroupAssociateReadable<Integer>, IndicatorAssociateReadable<Integer>
-             , AttributeAssociateReadable<Integer>, VictimAssetAssociateReadable<Integer>, TagAssociateReadable<Integer>
-             , SecurityLabelAssociateReadable<Integer>  {
+    extends AbstractBaseReaderAdapter<T,Long>
+    implements UrlTypeable, GroupAssociateReadable<Long>, IndicatorAssociateReadable<Long>
+             , AttributeAssociateReadable<Long>, VictimAssetAssociateReadable<Long>, TagAssociateReadable<Long>
+             , SecurityLabelAssociateReadable<Long>  {
 
     // composite pattern
-    private AbstractAttributeAssociateReaderAdapter<Integer> attribReader;
-    private AbstractGroupAssociateReaderAdapter<Integer> groupAssocReader;
-    private AbstractIndicatorAssociateReaderAdapter<Integer> indAssocReader;
-    private AbstractSecurityLabelAssociateReaderAdapter<Integer> secLabelAssocReader;
-    private AbstractTagAssociateReaderAdapter<Integer> tagAssocReader;
-    private AbstractVictimAssetAssociateReaderAdapter<Integer> victimAssetAssocReader;
+    private AbstractAttributeAssociateReaderAdapter<Long> attribReader;
+    private AbstractGroupAssociateReaderAdapter<Long> groupAssocReader;
+    private AbstractIndicatorAssociateReaderAdapter<Long> indAssocReader;
+    private AbstractSecurityLabelAssociateReaderAdapter<Long> secLabelAssocReader;
+    private AbstractTagAssociateReaderAdapter<Long> tagAssocReader;
+    private AbstractVictimAssetAssociateReaderAdapter<Long> victimAssetAssocReader;
 
     /**
      * Package level constructor. Use the {@link ReaderAdapterFactory} to access this object.
@@ -90,7 +90,7 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     }
 
     private void initComposite() {
-        attribReader = new AbstractAttributeAssociateReaderAdapter<Integer>(
+        attribReader = new AbstractAttributeAssociateReaderAdapter<Long>(
                             AbstractGroupReaderAdapter.this.getConn()
                           , AbstractGroupReaderAdapter.this.singleType
                             , AbstractGroupReaderAdapter.this.singleItemType
@@ -107,7 +107,7 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
             }
         };
 
-        groupAssocReader = new AbstractGroupAssociateReaderAdapter<Integer>(
+        groupAssocReader = new AbstractGroupAssociateReaderAdapter<Long>(
                             AbstractGroupReaderAdapter.this.getConn()
                           , AbstractGroupReaderAdapter.this.singleType
                           , AbstractGroupReaderAdapter.this.singleItemType
@@ -122,7 +122,7 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
             }
         };
 
-        indAssocReader = new AbstractIndicatorAssociateReaderAdapter<Integer>(
+        indAssocReader = new AbstractIndicatorAssociateReaderAdapter<Long>(
                             AbstractGroupReaderAdapter.this.getConn()
                           , AbstractGroupReaderAdapter.this.singleType
                           , AbstractGroupReaderAdapter.this.singleItemType
@@ -139,7 +139,7 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
             }
         };
 
-        secLabelAssocReader = new AbstractSecurityLabelAssociateReaderAdapter<Integer>(
+        secLabelAssocReader = new AbstractSecurityLabelAssociateReaderAdapter<Long>(
                             AbstractGroupReaderAdapter.this.getConn()
                           , AbstractGroupReaderAdapter.this.singleType
                           , AbstractGroupReaderAdapter.this.singleItemType
@@ -150,7 +150,7 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
             }
         };
 
-        tagAssocReader = new AbstractTagAssociateReaderAdapter<Integer>(
+        tagAssocReader = new AbstractTagAssociateReaderAdapter<Long>(
                             AbstractGroupReaderAdapter.this.getConn()
                           , AbstractGroupReaderAdapter.this.singleType
                           , AbstractGroupReaderAdapter.this.singleItemType
@@ -165,7 +165,7 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
             }
         };
 
-        victimAssetAssocReader = new AbstractVictimAssetAssociateReaderAdapter<Integer>(
+        victimAssetAssocReader = new AbstractVictimAssetAssociateReaderAdapter<Long>(
                             AbstractGroupReaderAdapter.this.getConn()
                           , AbstractGroupReaderAdapter.this.singleType
                           , AbstractGroupReaderAdapter.this.singleItemType
@@ -200,462 +200,462 @@ public abstract class AbstractGroupReaderAdapter<T extends Group>
     }
 
     @Override
-    public IterableResponse<Group> getAssociatedGroups(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Group> getAssociatedGroups(Long uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroups(uniqueId);
     }
 
     @Override
-    public IterableResponse<Group> getAssociatedGroups(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Group> getAssociatedGroups(Long uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroups(uniqueId,ownerName);
     }
 
     @Override
-    public IterableResponse<Adversary> getAssociatedGroupAdversaries(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Adversary> getAssociatedGroupAdversaries(Long uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupAdversaries(uniqueId);
     }
 
     @Override
-    public IterableResponse<Adversary> getAssociatedGroupAdversaries(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Adversary> getAssociatedGroupAdversaries(Long uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupAdversaries(uniqueId,ownerName);
     }
 
     @Override
-    public Adversary getAssociatedGroupAdversary(Integer uniqueId, Integer adversaryId) throws IOException, FailedResponseException {
+    public Adversary getAssociatedGroupAdversary(Long uniqueId, Long adversaryId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupAdversary(uniqueId,adversaryId);
     }
 
     @Override
-    public Adversary getAssociatedGroupAdversary(Integer uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
+    public Adversary getAssociatedGroupAdversary(Long uniqueId, Long adversaryId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupAdversary(uniqueId,adversaryId,ownerName);
     }
 
     @Override
-    public IterableResponse<Email> getAssociatedGroupEmails(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Email> getAssociatedGroupEmails(Long uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupEmails(uniqueId);
     }
 
     @Override
-    public IterableResponse<Email> getAssociatedGroupEmails(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Email> getAssociatedGroupEmails(Long uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupEmails(uniqueId,ownerName);
     }
 
     @Override
-    public Email getAssociatedGroupEmail(Integer uniqueId, Integer emailId) throws IOException, FailedResponseException {
+    public Email getAssociatedGroupEmail(Long uniqueId, Long emailId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupEmail(uniqueId,emailId);
     }
 
     @Override
-    public Email getAssociatedGroupEmail(Integer uniqueId, Integer emailId, String ownerName) throws IOException, FailedResponseException {
+    public Email getAssociatedGroupEmail(Long uniqueId, Long emailId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupEmail(uniqueId, emailId, ownerName);
     }
 
     @Override
-    public IterableResponse<Incident> getAssociatedGroupIncidents(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Incident> getAssociatedGroupIncidents(Long uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupIncidents(uniqueId);
     }
 
     @Override
-    public IterableResponse<Incident> getAssociatedGroupIncidents(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Incident> getAssociatedGroupIncidents(Long uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupIncidents(uniqueId, ownerName);
     }
 
     @Override
-    public IterableResponse<Document> getAssociatedGroupDocuments(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Document> getAssociatedGroupDocuments(Long uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupDocuments(uniqueId);
     }
 
     @Override
-    public IterableResponse<Document> getAssociatedGroupDocuments(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Document> getAssociatedGroupDocuments(Long uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupDocuments(uniqueId, ownerName);
     }
 
     @Override
-    public Document getAssociatedGroupDocument(Integer uniqueId, Integer incidentId) throws IOException, FailedResponseException {
+    public Document getAssociatedGroupDocument(Long uniqueId, Long incidentId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupDocument(uniqueId, incidentId);
     }
 
     @Override
-    public Document getAssociatedGroupDocument(Integer uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
+    public Document getAssociatedGroupDocument(Long uniqueId, Long incidentId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupDocument(uniqueId, incidentId, ownerName);
     }
 
     @Override
-    public Incident getAssociatedGroupIncident(Integer uniqueId, Integer incidentId) throws IOException, FailedResponseException {
+    public Incident getAssociatedGroupIncident(Long uniqueId, Long incidentId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupIncident(uniqueId, incidentId);
     }
 
     @Override
-    public Incident getAssociatedGroupIncident(Integer uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
+    public Incident getAssociatedGroupIncident(Long uniqueId, Long incidentId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupIncident(uniqueId, incidentId, ownerName);
     }
 
     @Override
-    public IterableResponse<Signature> getAssociatedGroupSignatures(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Signature> getAssociatedGroupSignatures(Long uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupSignatures(uniqueId);
     }
 
     @Override
-    public IterableResponse<Signature> getAssociatedGroupSignatures(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Signature> getAssociatedGroupSignatures(Long uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupSignatures(uniqueId, ownerName);
     }
 
     @Override
-    public Signature getAssociatedGroupSignature(Integer uniqueId, Integer signatureId) throws IOException, FailedResponseException {
+    public Signature getAssociatedGroupSignature(Long uniqueId, Long signatureId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupSignature(uniqueId, signatureId);
     }
 
     @Override
-    public Signature getAssociatedGroupSignature(Integer uniqueId, Integer signatureId, String ownerName) throws IOException, FailedResponseException {
+    public Signature getAssociatedGroupSignature(Long uniqueId, Long signatureId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupSignature(uniqueId, signatureId, ownerName);
     }
     
     @Override
-    public IterableResponse<Campaign> getAssociatedGroupCampaigns(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Campaign> getAssociatedGroupCampaigns(Long uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupCampaigns(uniqueId);
     }
     
     @Override
-    public IterableResponse<Campaign> getAssociatedGroupCampaigns(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Campaign> getAssociatedGroupCampaigns(Long uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupCampaigns(uniqueId, ownerName);
     }
     
     @Override
-    public Campaign getAssociatedGroupCampaign(Integer uniqueId, Integer campaignId) throws IOException, FailedResponseException {
+    public Campaign getAssociatedGroupCampaign(Long uniqueId, Long campaignId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupCampaign(uniqueId, campaignId);
     }
     
     @Override
-    public Campaign getAssociatedGroupCampaign(Integer uniqueId, Integer campaignId, String ownerName) throws IOException, FailedResponseException {
+    public Campaign getAssociatedGroupCampaign(Long uniqueId, Long campaignId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupCampaign(uniqueId, campaignId, ownerName);
     }
     
     @Override
-    public IterableResponse<Threat> getAssociatedGroupThreats(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Threat> getAssociatedGroupThreats(Long uniqueId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupThreats(uniqueId);
     }
 
     @Override
-    public IterableResponse<Threat> getAssociatedGroupThreats(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Threat> getAssociatedGroupThreats(Long uniqueId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupThreats(uniqueId, ownerName);
     }
 
     @Override
-    public Threat getAssociatedGroupThreat(Integer uniqueId, Integer threatId) throws IOException, FailedResponseException {
+    public Threat getAssociatedGroupThreat(Long uniqueId, Long threatId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupThreat(uniqueId, threatId);
     }
 
     @Override
-    public Threat getAssociatedGroupThreat(Integer uniqueId, Integer threatId, String ownerName) throws IOException, FailedResponseException {
+    public Threat getAssociatedGroupThreat(Long uniqueId, Long threatId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupThreat(uniqueId, threatId, ownerName);
     }
 
     @Override
-    public IterableResponse<Indicator> getAssociatedIndicators(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Indicator> getAssociatedIndicators(Long uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicators(uniqueId);
     }
 
     @Override
-    public IterableResponse<Indicator> getAssociatedIndicators(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Indicator> getAssociatedIndicators(Long uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicators(uniqueId, ownerName);
     }
 
     @Override
-    public IterableResponse<Address> getAssociatedIndicatorAddresses(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Address> getAssociatedIndicatorAddresses(Long uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorAddresses(uniqueId);
     }
 
     @Override
-    public IterableResponse<Address> getAssociatedIndicatorAddresses(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Address> getAssociatedIndicatorAddresses(Long uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorAddresses(uniqueId, ownerName);
     }
 
     @Override
-    public Address getAssociatedIndicatorAddress(Integer uniqueId, String ipAddress) throws IOException, FailedResponseException {
+    public Address getAssociatedIndicatorAddress(Long uniqueId, String ipAddress) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorAddress(uniqueId, ipAddress);
     }
 
     @Override
-    public Address getAssociatedIndicatorAddress(Integer uniqueId, String ipAddress, String ownerName) throws IOException, FailedResponseException {
+    public Address getAssociatedIndicatorAddress(Long uniqueId, String ipAddress, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorAddress(uniqueId, ipAddress, ownerName);
     }
 
     @Override
-    public IterableResponse<EmailAddress> getAssociatedIndicatorEmailAddresses(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<EmailAddress> getAssociatedIndicatorEmailAddresses(Long uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorEmailAddresses(uniqueId);
     }
 
     @Override
-    public IterableResponse<EmailAddress> getAssociatedIndicatorEmailAddresses(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<EmailAddress> getAssociatedIndicatorEmailAddresses(Long uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorEmailAddresses(uniqueId, ownerName);
     }
 
     @Override
-    public EmailAddress getAssociatedIndicatorEmailAddress(Integer uniqueId, String emailAddress) throws IOException, FailedResponseException {
+    public EmailAddress getAssociatedIndicatorEmailAddress(Long uniqueId, String emailAddress) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorEmailAddress(uniqueId, emailAddress);
     }
 
     @Override
-    public EmailAddress getAssociatedIndicatorEmailAddress(Integer uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
+    public EmailAddress getAssociatedIndicatorEmailAddress(Long uniqueId, String emailAddress, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorEmailAddress(uniqueId, emailAddress, ownerName);
     }
 
     @Override
-    public IterableResponse<File> getAssociatedIndicatorFiles(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<File> getAssociatedIndicatorFiles(Long uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorFiles(uniqueId);
     }
 
     @Override
-    public IterableResponse<File> getAssociatedIndicatorFiles(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<File> getAssociatedIndicatorFiles(Long uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorFiles(uniqueId, ownerName);
     }
 
     @Override
-    public File getAssociatedIndicatorFile(Integer uniqueId, String fileHash) throws IOException, FailedResponseException {
+    public File getAssociatedIndicatorFile(Long uniqueId, String fileHash) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorFile(uniqueId, fileHash);
     }
 
     @Override
-    public File getAssociatedIndicatorFile(Integer uniqueId, String fileHash, String ownerName) throws IOException, FailedResponseException {
+    public File getAssociatedIndicatorFile(Long uniqueId, String fileHash, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorFile(uniqueId, fileHash, ownerName);
     }
 
     @Override
-    public IterableResponse<Host> getAssociatedIndicatorHosts(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Host> getAssociatedIndicatorHosts(Long uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorHosts(uniqueId);
     }
 
     @Override
-    public IterableResponse<Host> getAssociatedIndicatorHosts(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Host> getAssociatedIndicatorHosts(Long uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorHosts(uniqueId, ownerName);
     }
 
     @Override
-    public Host getAssociatedIndicatorHost(Integer uniqueId, String hostName) throws IOException, FailedResponseException {
+    public Host getAssociatedIndicatorHost(Long uniqueId, String hostName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorHost(uniqueId, hostName);
     }
 
     @Override
-    public Host getAssociatedIndicatorHost(Integer uniqueId, String hostName, String ownerName) throws IOException, FailedResponseException {
+    public Host getAssociatedIndicatorHost(Long uniqueId, String hostName, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorHost(uniqueId, hostName, ownerName);
     }
 
     @Override
-    public IterableResponse<Url> getAssociatedIndicatorUrls(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Url> getAssociatedIndicatorUrls(Long uniqueId) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorUrls(uniqueId);
     }
 
     @Override
-    public IterableResponse<Url> getAssociatedIndicatorUrls(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Url> getAssociatedIndicatorUrls(Long uniqueId, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorUrls(uniqueId, ownerName);
     }
 
     @Override
-    public Url getAssociatedIndicatorUrl(Integer uniqueId, String urlText) throws IOException, FailedResponseException {
+    public Url getAssociatedIndicatorUrl(Long uniqueId, String urlText) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorUrl(uniqueId, urlText);
     }
 
     @Override
-    public Url getAssociatedIndicatorUrl(Integer uniqueId, String urlText, String ownerName) throws IOException, FailedResponseException {
+    public Url getAssociatedIndicatorUrl(Long uniqueId, String urlText, String ownerName) throws IOException, FailedResponseException {
         return indAssocReader.getAssociatedIndicatorUrl(uniqueId, urlText, ownerName);
     }
 
     @Override
-    public IterableResponse<Attribute> getAttributes(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Attribute> getAttributes(Long uniqueId) throws IOException, FailedResponseException {
         return attribReader.getAttributes(uniqueId);
     }
 
     @Override
-    public IterableResponse<Attribute> getAttributes(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Attribute> getAttributes(Long uniqueId, String ownerName) throws IOException, FailedResponseException {
         return attribReader.getAttributes(uniqueId, ownerName);
     }
 
     @Override
-    public Attribute getAttribute(Integer uniqueId, Integer attributeId) throws IOException, FailedResponseException {
+    public Attribute getAttribute(Long uniqueId, Long attributeId) throws IOException, FailedResponseException {
         return attribReader.getAttribute(uniqueId, attributeId);
     }
 
     @Override
-    public Attribute getAttribute(Integer uniqueId, Integer attributeId, String ownerName) throws IOException, FailedResponseException {
+    public Attribute getAttribute(Long uniqueId, Long attributeId, String ownerName) throws IOException, FailedResponseException {
         return attribReader.getAttribute(uniqueId, attributeId, ownerName);
     }
 
     @Override
-    public IterableResponse<SecurityLabel> getAttributeSecurityLabels(Integer uniqueId, Integer attributeId) throws IOException, FailedResponseException {
+    public IterableResponse<SecurityLabel> getAttributeSecurityLabels(Long uniqueId, Long attributeId) throws IOException, FailedResponseException {
         return attribReader.getAttributeSecurityLabels(uniqueId, attributeId);
     }
 
     @Override
-    public IterableResponse<SecurityLabel> getAttributeSecurityLabels(Integer uniqueId, Integer attributeId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<SecurityLabel> getAttributeSecurityLabels(Long uniqueId, Long attributeId, String ownerName) throws IOException, FailedResponseException {
         return attribReader.getAttributeSecurityLabels(uniqueId, attributeId, ownerName);
     }
 
     @Override
-    public SecurityLabel getAttributeSecurityLabel(Integer uniqueId, Integer attributeId, String securityLabel) throws IOException, FailedResponseException {
+    public SecurityLabel getAttributeSecurityLabel(Long uniqueId, Long attributeId, String securityLabel) throws IOException, FailedResponseException {
         return attribReader.getAttributeSecurityLabel(uniqueId, attributeId, securityLabel);
     }
 
     @Override
-    public SecurityLabel getAttributeSecurityLabel(Integer uniqueId, Integer attributeId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
+    public SecurityLabel getAttributeSecurityLabel(Long uniqueId, Long attributeId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
         return attribReader.getAttributeSecurityLabel(uniqueId, attributeId, securityLabel, ownerName);
     }
 
     @Override
-    public IterableResponse<VictimAsset> getAssociatedVictimAssets(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<VictimAsset> getAssociatedVictimAssets(Long uniqueId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssets(uniqueId, ownerName);
     }
 
     @Override
-    public IterableResponse<VictimEmailAddress> getAssociatedVictimAssetEmailAddresses(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<VictimEmailAddress> getAssociatedVictimAssetEmailAddresses(Long uniqueId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetEmailAddresses(uniqueId);
     }
 
     @Override
-    public IterableResponse<VictimEmailAddress> getAssociatedVictimAssetEmailAddresses(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<VictimEmailAddress> getAssociatedVictimAssetEmailAddresses(Long uniqueId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetEmailAddresses(uniqueId, ownerName);
     }
 
     @Override
-    public VictimEmailAddress getAssociatedVictimAssetEmailAddress(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public VictimEmailAddress getAssociatedVictimAssetEmailAddress(Long uniqueId, Long assetId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetEmailAddress(uniqueId, assetId);
     }
 
     @Override
-    public VictimEmailAddress getAssociatedVictimAssetEmailAddress(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public VictimEmailAddress getAssociatedVictimAssetEmailAddress(Long uniqueId, Long assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetEmailAddress(uniqueId, assetId, ownerName);
     }
 
     @Override
-    public IterableResponse<VictimNetworkAccount> getAssociatedVictimAssetNetworkAccounts(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<VictimNetworkAccount> getAssociatedVictimAssetNetworkAccounts(Long uniqueId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetNetworkAccounts(uniqueId);
     }
 
     @Override
-    public IterableResponse<VictimNetworkAccount> getAssociatedVictimAssetNetworkAccounts(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<VictimNetworkAccount> getAssociatedVictimAssetNetworkAccounts(Long uniqueId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetNetworkAccounts(uniqueId, ownerName);
     }
 
     @Override
-    public VictimNetworkAccount getAssociatedVictimAssetNetworkAccount(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public VictimNetworkAccount getAssociatedVictimAssetNetworkAccount(Long uniqueId, Long assetId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetNetworkAccount(uniqueId, assetId);
     }
 
     @Override
-    public VictimNetworkAccount getAssociatedVictimAssetNetworkAccount(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public VictimNetworkAccount getAssociatedVictimAssetNetworkAccount(Long uniqueId, Long assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetNetworkAccount(uniqueId, assetId, ownerName);
     }
 
     @Override
-    public IterableResponse<VictimPhone> getAssociatedVictimAssetPhoneNumbers(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<VictimPhone> getAssociatedVictimAssetPhoneNumbers(Long uniqueId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetPhoneNumbers(uniqueId);
     }
 
     @Override
-    public IterableResponse<VictimPhone> getAssociatedVictimAssetPhoneNumbers(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<VictimPhone> getAssociatedVictimAssetPhoneNumbers(Long uniqueId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetPhoneNumbers(uniqueId, ownerName);
     }
 
     @Override
-    public VictimPhone getAssociatedVictimAssetPhoneNumber(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public VictimPhone getAssociatedVictimAssetPhoneNumber(Long uniqueId, Long assetId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetPhoneNumber(uniqueId, assetId);
     }
 
     @Override
-    public VictimPhone getAssociatedVictimAssetPhoneNumber(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public VictimPhone getAssociatedVictimAssetPhoneNumber(Long uniqueId, Long assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetPhoneNumber(uniqueId, assetId, ownerName);
     }
 
     @Override
-    public IterableResponse<VictimSocialNetwork> getAssociatedVictimAssetSocialNetworks(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<VictimSocialNetwork> getAssociatedVictimAssetSocialNetworks(Long uniqueId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetSocialNetworks(uniqueId);
     }
 
     @Override
-    public IterableResponse<VictimSocialNetwork> getAssociatedVictimAssetSocialNetworks(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<VictimSocialNetwork> getAssociatedVictimAssetSocialNetworks(Long uniqueId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetSocialNetworks(uniqueId, ownerName);
     }
 
     @Override
-    public VictimSocialNetwork getAssociatedVictimAssetSocialNetwork(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public VictimSocialNetwork getAssociatedVictimAssetSocialNetwork(Long uniqueId, Long assetId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetSocialNetwork(uniqueId, assetId);
     }
 
     @Override
-    public VictimSocialNetwork getAssociatedVictimAssetSocialNetwork(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public VictimSocialNetwork getAssociatedVictimAssetSocialNetwork(Long uniqueId, Long assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetSocialNetwork(uniqueId, assetId, ownerName);
     }
 
     @Override
-    public IterableResponse<VictimWebSite> getAssociatedVictimAssetWebsites(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<VictimWebSite> getAssociatedVictimAssetWebsites(Long uniqueId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetWebsites(uniqueId);
     }
 
     @Override
-    public IterableResponse<VictimWebSite> getAssociatedVictimAssetWebsites(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<VictimWebSite> getAssociatedVictimAssetWebsites(Long uniqueId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetWebsites(uniqueId, ownerName);
     }
 
     @Override
-    public VictimWebSite getAssociatedVictimAssetWebsite(Integer uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public VictimWebSite getAssociatedVictimAssetWebsite(Long uniqueId, Long assetId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetWebsite(uniqueId, assetId);
     }
 
     @Override
-    public VictimWebSite getAssociatedVictimAssetWebsite(Integer uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public VictimWebSite getAssociatedVictimAssetWebsite(Long uniqueId, Long assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetWebsite(uniqueId, assetId, ownerName);
     }
 
     @Override
-    public IterableResponse<Tag> getAssociatedTags(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<Tag> getAssociatedTags(Long uniqueId) throws IOException, FailedResponseException {
         return tagAssocReader.getAssociatedTags(uniqueId);
     }
 
     @Override
-    public IterableResponse<Tag> getAssociatedTags(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<Tag> getAssociatedTags(Long uniqueId, String ownerName) throws IOException, FailedResponseException {
         return tagAssocReader.getAssociatedTags(uniqueId, ownerName);
     }
 
     @Override
-    public Tag getAssociatedTag(Integer uniqueId, String tagName) throws IOException, FailedResponseException {
+    public Tag getAssociatedTag(Long uniqueId, String tagName) throws IOException, FailedResponseException {
         return tagAssocReader.getAssociatedTag(uniqueId, tagName);
     }
 
     @Override
-    public Tag getAssociatedTag(Integer uniqueId, String tagName, String ownerName) throws IOException, FailedResponseException {
+    public Tag getAssociatedTag(Long uniqueId, String tagName, String ownerName) throws IOException, FailedResponseException {
         return tagAssocReader.getAssociatedTag(uniqueId, tagName, ownerName);
     }
 
     @Override
-    public IterableResponse<SecurityLabel> getAssociatedSecurityLabels(Integer uniqueId) throws IOException, FailedResponseException {
+    public IterableResponse<SecurityLabel> getAssociatedSecurityLabels(Long uniqueId) throws IOException, FailedResponseException {
         return secLabelAssocReader.getAssociatedSecurityLabels(uniqueId);
     }
 
     @Override
-    public IterableResponse<SecurityLabel> getAssociatedSecurityLabels(Integer uniqueId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<SecurityLabel> getAssociatedSecurityLabels(Long uniqueId, String ownerName) throws IOException, FailedResponseException {
         return secLabelAssocReader.getAssociatedSecurityLabels(uniqueId, ownerName);
     }
 
     @Override
-    public SecurityLabel getAssociatedSecurityLabel(Integer uniqueId, String securityLabel) throws IOException, FailedResponseException {
+    public SecurityLabel getAssociatedSecurityLabel(Long uniqueId, String securityLabel) throws IOException, FailedResponseException {
         return secLabelAssocReader.getAssociatedSecurityLabel(uniqueId, securityLabel);
     }
 
     @Override
-    public SecurityLabel getAssociatedSecurityLabel(Integer uniqueId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
+    public SecurityLabel getAssociatedSecurityLabel(Long uniqueId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
         return secLabelAssocReader.getAssociatedSecurityLabel(uniqueId, securityLabel, ownerName);
     }
 	@Override
-	public IterableResponse<? extends Indicator> getAssociatedIndicatorsForCustomIndicators(Integer uniqueId,
+	public IterableResponse<? extends Indicator> getAssociatedIndicatorsForCustomIndicators(Long uniqueId,
 			String associationType) throws IOException, FailedResponseException {
 		throw new RuntimeException("not implemented yet");
 	}
 
 	@Override
-	public IterableResponse<? extends Indicator> getAssociatedIndicatorsForCustomIndicators(Integer uniqueId,
+	public IterableResponse<? extends Indicator> getAssociatedIndicatorsForCustomIndicators(Long uniqueId,
 			String associationType, String targetType) throws IOException, FailedResponseException {
 		throw new RuntimeException("not implemented yet");
 	}
 
-	public InputStream downloadSignatureFile(Integer uniqueId, String ownerName) throws IOException {
+	public InputStream downloadSignatureFile(Long uniqueId, String ownerName) throws IOException {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("id", uniqueId);
         return getFile("v2.signatures.download", ownerName, paramMap, ContentType.TEXT_PLAIN);

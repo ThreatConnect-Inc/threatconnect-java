@@ -50,7 +50,7 @@ public class OwnerReaderAdapter extends AbstractReaderAdapter {
         return getItems("v2.owners.metrics", OwnerMetricListResponse.class, OwnerMetric.class);
     }
 
-    public IterableResponse<OwnerMetric> getOwnerMetrics(Integer id) throws IOException, FailedResponseException
+    public IterableResponse<OwnerMetric> getOwnerMetrics(Long id) throws IOException, FailedResponseException
     {
         Map<String, Object> map = AbstractClientAdapter.createParamMap("id", id);
 

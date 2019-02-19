@@ -41,12 +41,12 @@ public abstract class AbstractVictimAssociateReaderAdapter<P>
     }
 
     @Override
-    public Victim getAssociatedVictim(P uniqueId, Integer victimId) throws IOException, FailedResponseException {
+    public Victim getAssociatedVictim(P uniqueId, Long victimId) throws IOException, FailedResponseException {
         return getAssociatedVictim(uniqueId, victimId, null);
     }
 
     @Override
-    public Victim getAssociatedVictim(P uniqueId, Integer victimId, String ownerName) throws IOException, FailedResponseException {
+    public Victim getAssociatedVictim(P uniqueId, Long victimId, String ownerName) throws IOException, FailedResponseException {
         Map<String,Object> map = createParamMap("id", uniqueId, "victimId", victimId, "type", getUrlType());
         VictimResponse data = getItem(getUrlBasePrefix() + ".byId.victims.byVictimId", VictimResponse.class, ownerName, map);
 

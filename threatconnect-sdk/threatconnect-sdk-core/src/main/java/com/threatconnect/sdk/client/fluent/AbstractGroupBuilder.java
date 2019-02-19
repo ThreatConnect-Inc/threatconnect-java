@@ -6,7 +6,7 @@ import java.util.Date;
 
 public abstract class AbstractGroupBuilder<T extends AbstractGroupBuilder<T>>
 {
-	protected Integer id;
+	protected Long id;
 	protected String name;
 	protected String type;
 	protected Owner owner;
@@ -14,7 +14,7 @@ public abstract class AbstractGroupBuilder<T extends AbstractGroupBuilder<T>>
 	protected Date dateAdded;
 	protected String webLink;
 	
-	public T withId(Integer id)
+	public T withId(Long id)
 	{
 		this.id = id;
 		return getThis();

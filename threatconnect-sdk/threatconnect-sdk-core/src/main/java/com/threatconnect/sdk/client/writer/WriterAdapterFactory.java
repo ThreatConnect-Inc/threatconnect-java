@@ -53,7 +53,7 @@ public class WriterAdapterFactory {
             }
 
 			@Override
-			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Integer uniqueId, String targetId,
+			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Long uniqueId, String targetId,
 					String assciateType, String targetType) throws IOException, FailedResponseException {
 				throw new RuntimeException("not implemented yet");
 			}
@@ -67,7 +67,7 @@ public class WriterAdapterFactory {
 				return "campaigns";
 			}
 			@Override
-			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Integer uniqueId, String targetId,
+			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Long uniqueId, String targetId,
 				String assciateType, String targetType) throws IOException, FailedResponseException {
 				// TODO Auto-generated method stub
 				throw new RuntimeException("not implemented yet");
@@ -83,7 +83,7 @@ public class WriterAdapterFactory {
             }
 
 			@Override
-			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Integer uniqueId, String targetId,
+			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Long uniqueId, String targetId,
 					String assciateType, String targetType) throws IOException, FailedResponseException {
 				// TODO Auto-generated method stub
 				throw new RuntimeException("not implemented yet");
@@ -99,7 +99,7 @@ public class WriterAdapterFactory {
 			}
 			
 			@Override
-			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Integer uniqueId, String targetId,
+			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Long uniqueId, String targetId,
 				String assciateType, String targetType) throws IOException, FailedResponseException {
 				// TODO Auto-generated method stub
 				throw new RuntimeException("not implemented yet");
@@ -115,7 +115,7 @@ public class WriterAdapterFactory {
 			}
 			
 			@Override
-			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Integer uniqueId, String targetId,
+			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Long uniqueId, String targetId,
 				String assciateType, String targetType) throws IOException, FailedResponseException {
 				// TODO Auto-generated method stub
 				throw new RuntimeException("not implemented yet");
@@ -131,7 +131,7 @@ public class WriterAdapterFactory {
             }
 
 			@Override
-			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Integer uniqueId, String targetId,
+			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Long uniqueId, String targetId,
 					String assciateType, String targetType) throws IOException, FailedResponseException {
 				// TODO Auto-generated method stub
 				throw new RuntimeException("not implemented yet");
@@ -147,7 +147,7 @@ public class WriterAdapterFactory {
             }
 
 			@Override
-			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Integer uniqueId, String targetId,
+			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Long uniqueId, String targetId,
 					String assciateType, String targetType) throws IOException, FailedResponseException {
 				// TODO Auto-generated method stub
 				throw new RuntimeException("not implemented yet");
@@ -162,7 +162,7 @@ public class WriterAdapterFactory {
                 return "threats";
             }
 			@Override
-			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Integer uniqueId, String targetId,
+			public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Long uniqueId, String targetId,
 					String assciateType, String targetType) throws IOException, FailedResponseException {
 				// TODO Auto-generated method stub
 				throw new RuntimeException("not implemented yet");
