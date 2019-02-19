@@ -32,13 +32,13 @@ public class BatchReaderAdapter<T> extends AbstractReaderAdapter
 		super(conn);
 	}
 	
-	public ApiEntitySingleResponse<BatchStatus, BatchStatusResponseData> getStatus(int batchId)
+	public ApiEntitySingleResponse<BatchStatus, BatchStatusResponseData> getStatus(long batchId)
 		throws IOException, FailedResponseException
 	{
 		return getStatus(batchId, null);
 	}
 	
-	public ApiEntitySingleResponse<BatchStatus, BatchStatusResponseData> getStatus(int batchId, String ownerName)
+	public ApiEntitySingleResponse<BatchStatus, BatchStatusResponseData> getStatus(long batchId, String ownerName)
 		throws IOException, FailedResponseException
 	{
 		Map<String, Object> paramMap = new HashMap<>();
