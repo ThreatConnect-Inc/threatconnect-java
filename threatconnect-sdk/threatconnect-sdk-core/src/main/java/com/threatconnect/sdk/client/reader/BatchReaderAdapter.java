@@ -49,17 +49,17 @@ public class BatchReaderAdapter<T> extends AbstractReaderAdapter
 		return data;
 	}
 	
-	public void downloadErrors(int batchId, Path outputPath) throws FailedResponseException, FileNotFoundException
+	public void downloadErrors(long batchId, Path outputPath) throws FailedResponseException, FileNotFoundException
 	{
 		downloadErrors(batchId, null, outputPath);
 	}
 	
-	public void downloadErrors(int batchId, String ownerName, Path outputPath) throws FailedResponseException, FileNotFoundException
+	public void downloadErrors(long batchId, String ownerName, Path outputPath) throws FailedResponseException, FileNotFoundException
 	{
 		downloadErrors(batchId, ownerName, new FileOutputStream(outputPath.toFile()));
 	}
 	
-	public void downloadErrors(int batchId, String ownerName, OutputStream output) throws FailedResponseException
+	public void downloadErrors(long batchId, String ownerName, OutputStream output) throws FailedResponseException
 	{
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("id", batchId);
