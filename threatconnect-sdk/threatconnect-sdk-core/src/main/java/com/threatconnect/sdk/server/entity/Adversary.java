@@ -25,7 +25,7 @@ public class Adversary extends Group
         super();
     }
 
-    public Adversary(Integer id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink)
+    public Adversary(Long id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink)
     {
         super(id, name, type, owner, ownerName, dateAdded, webLink);
     }

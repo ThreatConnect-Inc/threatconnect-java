@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class AbstractIndicatorBuilder<T extends AbstractIndicatorBuilder<T>>
 {
-    protected Integer id;
+    protected Long id;
     protected Owner owner;
     protected String ownerName;
     protected String type;
@@ -21,7 +21,7 @@ public class AbstractIndicatorBuilder<T extends AbstractIndicatorBuilder<T>>
     protected String description;
     protected String summary;
 
-    public T withId(Integer id)
+    public T withId(Long id)
     {
         this.id = id;
         return getThis();

@@ -253,7 +253,7 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 		}
 	}
 	
-	public void associateGroup(final GroupType groupType, final Integer savedID, final String ownerName)
+	public void associateGroup(final GroupType groupType, final Long savedID, final String ownerName)
 		throws AssociateFailedException, IOException
 	{
 		try
@@ -385,7 +385,7 @@ public abstract class GroupWriter<E extends Group, T extends com.threatconnect.s
 	 *
 	 * @return the id of the saved group
 	 */
-	protected Integer getSavedGroupID()
+	protected Long getSavedGroupID()
 	{
 		com.threatconnect.sdk.server.entity.Group savedGroup = getSavedGroup();
 		

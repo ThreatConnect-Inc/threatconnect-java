@@ -4,14 +4,14 @@ import com.threatconnect.sdk.server.entity.VictimEmailAddress;
 
 public class VictimEmailAddressBuilder
 {
-    private Integer id;
+    private Long id;
     private String name;
     private String type;
     private String webLink;
     private String address;
     private String addressType;
 
-    public VictimEmailAddressBuilder withId(Integer id)
+    public VictimEmailAddressBuilder withId(Long id)
     {
         this.id = id;
         return this;

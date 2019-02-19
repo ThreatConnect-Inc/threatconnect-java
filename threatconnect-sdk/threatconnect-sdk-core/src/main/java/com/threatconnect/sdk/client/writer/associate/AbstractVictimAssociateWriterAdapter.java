@@ -32,27 +32,27 @@ public abstract class AbstractVictimAssociateWriterAdapter<T,P> extends Abstract
     }
 
     @Override
-    public WriteListResponse<Integer> associateVictims(P uniqueId, List<Integer> victimIds) throws IOException {
+    public WriteListResponse<Long> associateVictims(P uniqueId, List<Long> victimIds) throws IOException {
         return associateVictims(uniqueId,victimIds, null);
     }
 
     @Override
-    public WriteListResponse<Integer> associateVictims(P uniqueId, List<Integer> victimIds, String ownerName) throws IOException {
+    public WriteListResponse<Long> associateVictims(P uniqueId, List<Long> victimIds, String ownerName) throws IOException {
 
         Map<String,Object> map = AbstractClientAdapter.createParamMap("id", uniqueId);
-        WriteListResponse<Integer> data = createListWithParam(getUrlBasePrefix() + ".byId.victims.byVictimId", VictimListResponse.class, ownerName, map, "victimId", victimIds);
+        WriteListResponse<Long> data = createListWithParam(getUrlBasePrefix() + ".byId.victims.byVictimId", VictimListResponse.class, ownerName, map, "victimId", victimIds);
 
         return data;
     }
 
     @Override
-    public ApiEntitySingleResponse associateVictim(P uniqueId, Integer victimId) throws IOException, FailedResponseException
+    public ApiEntitySingleResponse associateVictim(P uniqueId, Long victimId) throws IOException, FailedResponseException
     {
         return associateVictim(uniqueId, victimId, null);
     }
 
     @Override
-    public ApiEntitySingleResponse associateVictim(P uniqueId, Integer victimId, String ownerName) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse associateVictim(P uniqueId, Long victimId, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = AbstractClientAdapter.createParamMap("id", uniqueId, "victimId", victimId);
         VictimResponse data = createItemWithGet( getUrlBasePrefix() + ".byId.victims.byVictimId", VictimResponse.class, ownerName, map, null);
 
@@ -60,27 +60,27 @@ public abstract class AbstractVictimAssociateWriterAdapter<T,P> extends Abstract
     }
 
     @Override
-    public WriteListResponse<Integer> dissociateVictims(P uniqueId, List<Integer> victimIds) throws IOException {
+    public WriteListResponse<Long> dissociateVictims(P uniqueId, List<Long> victimIds) throws IOException {
         return dissociateVictims(uniqueId, victimIds, null);
     }
 
     @Override
-    public WriteListResponse<Integer> dissociateVictims(P uniqueId, List<Integer> victimIds, String ownerName) throws IOException {
+    public WriteListResponse<Long> dissociateVictims(P uniqueId, List<Long> victimIds, String ownerName) throws IOException {
       Map<String, Object> map = AbstractClientAdapter.createParamMap("id", uniqueId);
-        WriteListResponse<Integer> data = deleteList(getUrlBasePrefix() + ".byId.victims.byVictimId", VictimResponse.class, ownerName, map, "victimId", victimIds);
+        WriteListResponse<Long> data = deleteList(getUrlBasePrefix() + ".byId.victims.byVictimId", VictimResponse.class, ownerName, map, "victimId", victimIds);
 
         return data;
 
     }
 
     @Override
-    public ApiEntitySingleResponse dissociateVictim(P uniqueId, Integer victimId) throws IOException, FailedResponseException {
+    public ApiEntitySingleResponse dissociateVictim(P uniqueId, Long victimId) throws IOException, FailedResponseException {
         return dissociateVictim(uniqueId, victimId, null);
     }
 
 
     @Override
-   public ApiEntitySingleResponse dissociateVictim(P uniqueId, Integer victimId, String ownerName) throws IOException, FailedResponseException {
+   public ApiEntitySingleResponse dissociateVictim(P uniqueId, Long victimId, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = AbstractClientAdapter.createParamMap("id", uniqueId, "victimId", victimId);
         VictimResponse item = deleteItem(getUrlBasePrefix() + ".byId.victim..byVictimId", VictimResponse.class, ownerName, map);
 

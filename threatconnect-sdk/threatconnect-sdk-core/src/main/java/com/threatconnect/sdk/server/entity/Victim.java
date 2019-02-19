@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Victim
 {
     @XmlElement(name = "Id", required = true)
-    private Integer id;
+    private Long id;
     @XmlElement(name = "Name", required = true)
     private String name;
     @XmlElement(name = "Description", required = false)
@@ -41,7 +41,7 @@ public class Victim
     {
     }
 
-    public Victim(Integer id, String name, String description, String org, String suborg, String workLocation, String nationality, String webLink)
+    public Victim(Long id, String name, String description, String org, String suborg, String workLocation, String nationality, String webLink)
     {
         this.id = id;
         this.name = name;
@@ -53,12 +53,12 @@ public class Victim
         this.webLink = webLink;
     }
 
-    public Integer getId()
+    public Long getId()
     {
         return id;
     }
 
-    public void setId(Integer id)
+    public void setId(Long id)
     {
         this.id = id;
     }

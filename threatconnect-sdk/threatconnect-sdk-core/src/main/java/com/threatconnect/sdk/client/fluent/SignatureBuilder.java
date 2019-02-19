@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class SignatureBuilder
 {
-    private Integer id;
+    private Long id;
     private String name;
     private String type;
     private Owner owner;
@@ -18,7 +18,7 @@ public class SignatureBuilder
     private String fileName;
     private String fileText;
 
-    public SignatureBuilder withId(Integer id)
+    public SignatureBuilder withId(Long id)
     {
         this.id = id;
         return this;

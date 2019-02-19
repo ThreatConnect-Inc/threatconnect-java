@@ -25,7 +25,7 @@ public class IntrusionSet extends Group
         super();
     }
 
-    public IntrusionSet(Integer id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink)
+    public IntrusionSet(Long id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink)
     {
         super(id, name, type, owner, ownerName, dateAdded, webLink);
     }

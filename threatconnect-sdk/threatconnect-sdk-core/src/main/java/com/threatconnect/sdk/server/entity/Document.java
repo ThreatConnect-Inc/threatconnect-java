@@ -28,7 +28,7 @@ public class Document extends Group
     public Document() {
     }
 
-    public Document(Integer id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink, String fileName, Long fileSize, String status, Boolean malware, String password)
+    public Document(Long id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink, String fileName, Long fileSize, String status, Boolean malware, String password)
     {
         super(id, name, type, owner, ownerName, dateAdded, webLink);
         this.fileName = fileName;

@@ -4,7 +4,7 @@ import com.threatconnect.sdk.server.entity.Victim;
 
 public class VictimBuilder
 {
-    private Integer id;
+    private Long id;
     private String name;
     private String description;
     private String org;
@@ -13,7 +13,7 @@ public class VictimBuilder
     private String nationality;
     private String webLink;
 
-    public VictimBuilder withId(Integer id)
+    public VictimBuilder withId(Long id)
     {
         this.id = id;
         return this;

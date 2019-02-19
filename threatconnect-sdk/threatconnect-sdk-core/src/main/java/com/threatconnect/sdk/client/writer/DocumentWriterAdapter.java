@@ -35,16 +35,16 @@ public class DocumentWriterAdapter extends AbstractGroupWriterAdapter<Document>
 		return uploadFile(uniqueId, file, null, uploadMethodType, null);
 	}
 	
-	public ApiEntitySingleResponse uploadFile(int uniqueId, File file, UploadMethodType uploadMethodType)
+	public ApiEntitySingleResponse uploadFile(long uniqueId, File file, UploadMethodType uploadMethodType)
 		throws IOException, FailedResponseException
 	{
 		return uploadFile(uniqueId, file, null, uploadMethodType);
 	}
 	
-	public ApiEntitySingleResponse uploadFile(int uniqueId, File file, String ownerName,
+	public ApiEntitySingleResponse uploadFile(long uniqueId, File file, String ownerName,
 		UploadMethodType uploadMethodType) throws IOException, FailedResponseException
 	{
-		return uploadFile(Integer.toString(uniqueId), file, ownerName, uploadMethodType, null);
+		return uploadFile(Long.toString(uniqueId), file, ownerName, uploadMethodType, null);
 	}
 	
 	public ApiEntitySingleResponse uploadFile(String uniqueId, File file, String ownerName,
@@ -58,7 +58,7 @@ public class DocumentWriterAdapter extends AbstractGroupWriterAdapter<Document>
 	}
 	
 	@Override
-	public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Integer uniqueId, String targetId,
+	public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Long uniqueId, String targetId,
 		String assciateType, String targetType) throws IOException, FailedResponseException
 	{
 		throw new RuntimeException("not implemented yet");

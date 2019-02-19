@@ -106,7 +106,7 @@ public class TaskExample {
             }
             Task updatableTask = createResponse.getItem();
             System.out.println("Created task: " + updatableTask + "\nwith Id: " + updatableTask.getId());
-            Integer id = updatableTask.getId();
+            Long id = updatableTask.getId();
 
             // Update task
             updatableTask.setName("Power lifting");
@@ -160,7 +160,7 @@ public class TaskExample {
             }
             Task updatableTask = createResponse.getItem();
             System.out.println("Created task: " + updatableTask + "\nwith Id: " + updatableTask.getId());
-            Integer id = updatableTask.getId();
+            Long id = updatableTask.getId();
 
             // Add assignee
             UserResponse userResp = writer.createAssignee(id, assignee);
@@ -253,7 +253,7 @@ public class TaskExample {
             }
 
             // Create assignee
-            Integer id = ((Task)taskResp.getData().getData()).getId();
+            Long id = ((Task)taskResp.getData().getData()).getId();
             UserResponse userResp = writer.createAssignee(id, assignee);
             if (userResp.isSuccess()) {
                 System.out.println("Created Assignee: " + assignee);
@@ -308,7 +308,7 @@ public class TaskExample {
             }
 
             // Create escalatee
-            Integer id = ((Task)taskResp.getData().getData()).getId();
+            Long id = ((Task)taskResp.getData().getData()).getId();
             ApiEntitySingleResponse<User, UserResponseData> userResp = writer.createEscalatee(id, escalatee);
             if (userResp.isSuccess()) {
                 System.out.println("Created Escalatee: " + escalatee);

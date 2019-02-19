@@ -48,7 +48,7 @@ public class LegacyBatchIndicatorWriter extends AbstractBatchWriter
 	private static final Logger logger = LoggerFactory.getLogger(LegacyBatchIndicatorWriter.class);
 	
 	private final Collection<Indicator> source;
-	private final Map<Indicator, Set<Integer>> associatedIndicatorGroupsIDs;
+	private final Map<Indicator, Set<Long>> associatedIndicatorGroupsIDs;
 	
 	// determines the max number of indicators per batch file. If there are more indicators than
 	// this limit, multiple batch files are created
@@ -56,11 +56,11 @@ public class LegacyBatchIndicatorWriter extends AbstractBatchWriter
 	
 	public LegacyBatchIndicatorWriter(final Connection connection, final Collection<Indicator> source)
 	{
-		this(connection, source, new HashMap<Indicator, Set<Integer>>());
+		this(connection, source, new HashMap<Indicator, Set<Long>>());
 	}
 	
 	public LegacyBatchIndicatorWriter(final Connection connection, final Collection<Indicator> source,
-		Map<Indicator, Set<Integer>> associatedIndicatorGroupsIDs)
+		Map<Indicator, Set<Long>> associatedIndicatorGroupsIDs)
 	{
 		super(connection);
 		this.source = source;

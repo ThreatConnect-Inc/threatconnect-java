@@ -21,22 +21,22 @@ import java.util.List;
  */
 public interface VictimAssociateWritable<P> {
 
-   public WriteListResponse<Integer> associateVictims(P uniqueId, List<Integer> victimIds) throws IOException;
+   public WriteListResponse<Long> associateVictims(P uniqueId, List<Long> victimIds) throws IOException;
 
-   public WriteListResponse<Integer> associateVictims(P uniqueId, List<Integer> victimIds, String ownerName) 
+   public WriteListResponse<Long> associateVictims(P uniqueId, List<Long> victimIds, String ownerName) 
             throws IOException;
 
-   public ApiEntitySingleResponse associateVictim(P uniqueId, Integer victimId) throws IOException, FailedResponseException;
+   public ApiEntitySingleResponse associateVictim(P uniqueId, Long victimId) throws IOException, FailedResponseException;
 
-   public ApiEntitySingleResponse associateVictim(P uniqueId, Integer victimId, String ownerName) 
+   public ApiEntitySingleResponse associateVictim(P uniqueId, Long victimId, String ownerName) 
             throws IOException, FailedResponseException;
     
-   public WriteListResponse<Integer> dissociateVictims(P uniqueId, List<Integer> victimIds) throws IOException;
+   public WriteListResponse<Long> dissociateVictims(P uniqueId, List<Long> victimIds) throws IOException;
 
-   public WriteListResponse<Integer> dissociateVictims(P uniqueId, List<Integer> victimIds, String ownerName)
+   public WriteListResponse<Long> dissociateVictims(P uniqueId, List<Long> victimIds, String ownerName)
             throws IOException;
 
-   public ApiEntitySingleResponse dissociateVictim(P uniqueId, Integer victimId) throws IOException, FailedResponseException;
+   public ApiEntitySingleResponse dissociateVictim(P uniqueId, Long victimId) throws IOException, FailedResponseException;
 
-   public ApiEntitySingleResponse dissociateVictim(P uniqueId, Integer victimId, String ownerName) throws IOException, FailedResponseException;
+   public ApiEntitySingleResponse dissociateVictim(P uniqueId, Long victimId, String ownerName) throws IOException, FailedResponseException;
 }

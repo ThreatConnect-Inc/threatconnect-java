@@ -29,7 +29,7 @@ public class VictimNetworkAccount extends VictimAsset
     {
     }
 
-    public VictimNetworkAccount(Integer id, String name, String type, String webLink, String account, String network)
+    public VictimNetworkAccount(Long id, String name, String type, String webLink, String account, String network)
     {
         super(id, name, type, webLink);
         this.account = account;

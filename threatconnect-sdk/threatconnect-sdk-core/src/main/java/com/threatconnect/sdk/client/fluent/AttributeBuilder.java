@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class AttributeBuilder
 {
-    private Integer id;
+    private Long id;
     private String type;
     private String value;
     private String source;
@@ -14,7 +14,7 @@ public class AttributeBuilder
     private Date lastModified;
     private Boolean displayed;
 
-    public AttributeBuilder withId(Integer id)
+    public AttributeBuilder withId(Long id)
     {
         this.id = id;
         return this;

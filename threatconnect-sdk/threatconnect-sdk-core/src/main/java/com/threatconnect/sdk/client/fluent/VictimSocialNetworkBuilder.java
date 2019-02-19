@@ -4,14 +4,14 @@ import com.threatconnect.sdk.server.entity.VictimSocialNetwork;
 
 public class VictimSocialNetworkBuilder
 {
-    private Integer id;
+    private Long id;
     private String name;
     private String type;
     private String webLink;
     private String account;
     private String network;
 
-    public VictimSocialNetworkBuilder withId(Integer id)
+    public VictimSocialNetworkBuilder withId(Long id)
     {
         this.id = id;
         return this;

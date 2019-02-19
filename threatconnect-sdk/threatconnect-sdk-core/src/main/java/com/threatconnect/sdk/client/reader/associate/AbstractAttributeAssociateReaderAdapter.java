@@ -46,12 +46,12 @@ public abstract class AbstractAttributeAssociateReaderAdapter<P> extends Abstrac
     }
 
     @Override
-    public Attribute getAttribute(P uniqueId, Integer attributeId) throws IOException, FailedResponseException {
+    public Attribute getAttribute(P uniqueId, Long attributeId) throws IOException, FailedResponseException {
         return getAttribute(uniqueId, attributeId, null);
     }
 
     @Override
-    public Attribute getAttribute(P uniqueId, Integer attributeId, String ownerName)
+    public Attribute getAttribute(P uniqueId, Long attributeId, String ownerName)
         throws IOException, FailedResponseException {
 
         Map<String, Object> map = createParamMap("id", uniqueId, "attributeId", attributeId);
@@ -61,12 +61,12 @@ public abstract class AbstractAttributeAssociateReaderAdapter<P> extends Abstrac
     }
 
     @Override
-    public IterableResponse<SecurityLabel> getAttributeSecurityLabels(P uniqueId, Integer attributeId) throws IOException, FailedResponseException {
+    public IterableResponse<SecurityLabel> getAttributeSecurityLabels(P uniqueId, Long attributeId) throws IOException, FailedResponseException {
         return getAttributeSecurityLabels(uniqueId, attributeId, null);
     }
 
     @Override
-    public IterableResponse<SecurityLabel> getAttributeSecurityLabels(P uniqueId, Integer attributeId, String ownerName)
+    public IterableResponse<SecurityLabel> getAttributeSecurityLabels(P uniqueId, Long attributeId, String ownerName)
         throws IOException, FailedResponseException {
 
         Map<String, Object> map = createParamMap("id", uniqueId, "attributeId", attributeId);
@@ -74,12 +74,12 @@ public abstract class AbstractAttributeAssociateReaderAdapter<P> extends Abstrac
     }
 
     @Override
-    public SecurityLabel getAttributeSecurityLabel(P uniqueId, Integer attributeId, String securityLabel) throws IOException, FailedResponseException {
+    public SecurityLabel getAttributeSecurityLabel(P uniqueId, Long attributeId, String securityLabel) throws IOException, FailedResponseException {
         return getAttributeSecurityLabel(uniqueId, attributeId, securityLabel, null);
     }
 
     @Override
-    public SecurityLabel getAttributeSecurityLabel(P uniqueId, Integer attributeId, String securityLabel, String ownerName)
+    public SecurityLabel getAttributeSecurityLabel(P uniqueId, Long attributeId, String securityLabel, String ownerName)
         throws IOException, FailedResponseException {
 
         Map<String, Object> map = createParamMap("id", uniqueId, "attributeId", attributeId, "securityLabel", securityLabel);

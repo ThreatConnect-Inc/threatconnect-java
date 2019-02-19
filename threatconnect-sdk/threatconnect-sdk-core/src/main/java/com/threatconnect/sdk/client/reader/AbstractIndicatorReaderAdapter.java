@@ -314,12 +314,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public Adversary getAssociatedGroupAdversary(String uniqueId, Integer adversaryId) throws IOException, FailedResponseException {
+    public Adversary getAssociatedGroupAdversary(String uniqueId, Long adversaryId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupAdversary(uniqueId,adversaryId);
     }
 
     @Override
-    public Adversary getAssociatedGroupAdversary(String uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
+    public Adversary getAssociatedGroupAdversary(String uniqueId, Long adversaryId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupAdversary(uniqueId,adversaryId,ownerName);
     }
 
@@ -334,12 +334,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public Email getAssociatedGroupEmail(String uniqueId, Integer emailId) throws IOException, FailedResponseException {
+    public Email getAssociatedGroupEmail(String uniqueId, Long emailId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupEmail(uniqueId,emailId);
     }
 
     @Override
-    public Email getAssociatedGroupEmail(String uniqueId, Integer emailId, String ownerName) throws IOException, FailedResponseException {
+    public Email getAssociatedGroupEmail(String uniqueId, Long emailId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupEmail(uniqueId, emailId, ownerName);
     }
 
@@ -354,12 +354,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public Incident getAssociatedGroupIncident(String uniqueId, Integer incidentId) throws IOException, FailedResponseException {
+    public Incident getAssociatedGroupIncident(String uniqueId, Long incidentId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupIncident(uniqueId, incidentId);
     }
 
     @Override
-    public Incident getAssociatedGroupIncident(String uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
+    public Incident getAssociatedGroupIncident(String uniqueId, Long incidentId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupIncident(uniqueId, incidentId, ownerName);
     }
 
@@ -375,12 +375,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public Document getAssociatedGroupDocument(String uniqueId, Integer incidentId) throws IOException, FailedResponseException {
+    public Document getAssociatedGroupDocument(String uniqueId, Long incidentId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupDocument(uniqueId, incidentId);
     }
 
     @Override
-    public Document getAssociatedGroupDocument(String uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
+    public Document getAssociatedGroupDocument(String uniqueId, Long incidentId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupDocument(uniqueId, incidentId, ownerName);
     }
 
@@ -395,12 +395,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public Signature getAssociatedGroupSignature(String uniqueId, Integer signatureId) throws IOException, FailedResponseException {
+    public Signature getAssociatedGroupSignature(String uniqueId, Long signatureId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupSignature(uniqueId, signatureId);
     }
 
     @Override
-    public Signature getAssociatedGroupSignature(String uniqueId, Integer signatureId, String ownerName) throws IOException, FailedResponseException {
+    public Signature getAssociatedGroupSignature(String uniqueId, Long signatureId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupSignature(uniqueId, signatureId, ownerName);
     }
     
@@ -415,12 +415,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
     
     @Override
-    public Campaign getAssociatedGroupCampaign(String uniqueId, Integer campaignId) throws IOException, FailedResponseException {
+    public Campaign getAssociatedGroupCampaign(String uniqueId, Long campaignId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupCampaign(uniqueId, campaignId);
     }
     
     @Override
-    public Campaign getAssociatedGroupCampaign(String uniqueId, Integer campaignId, String ownerName) throws IOException, FailedResponseException {
+    public Campaign getAssociatedGroupCampaign(String uniqueId, Long campaignId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupCampaign(uniqueId, campaignId, ownerName);
     }
     
@@ -435,12 +435,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public Threat getAssociatedGroupThreat(String uniqueId, Integer threatId) throws IOException, FailedResponseException {
+    public Threat getAssociatedGroupThreat(String uniqueId, Long threatId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupThreat(uniqueId, threatId);
     }
 
     @Override
-    public Threat getAssociatedGroupThreat(String uniqueId, Integer threatId, String ownerName) throws IOException, FailedResponseException {
+    public Threat getAssociatedGroupThreat(String uniqueId, Long threatId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupThreat(uniqueId, threatId, ownerName);
     }
 
@@ -565,32 +565,32 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public Attribute getAttribute(String uniqueId, Integer attributeId) throws IOException, FailedResponseException {
+    public Attribute getAttribute(String uniqueId, Long attributeId) throws IOException, FailedResponseException {
         return attribReader.getAttribute(uniqueId, attributeId);
     }
 
     @Override
-    public Attribute getAttribute(String uniqueId, Integer attributeId, String ownerName) throws IOException, FailedResponseException {
+    public Attribute getAttribute(String uniqueId, Long attributeId, String ownerName) throws IOException, FailedResponseException {
         return attribReader.getAttribute(uniqueId, attributeId, ownerName);
     }
 
     @Override
-    public IterableResponse<SecurityLabel> getAttributeSecurityLabels(String uniqueId, Integer attributeId) throws IOException, FailedResponseException {
+    public IterableResponse<SecurityLabel> getAttributeSecurityLabels(String uniqueId, Long attributeId) throws IOException, FailedResponseException {
         return attribReader.getAttributeSecurityLabels(uniqueId, attributeId);
     }
 
     @Override
-    public IterableResponse<SecurityLabel> getAttributeSecurityLabels(String uniqueId, Integer attributeId, String ownerName) throws IOException, FailedResponseException {
+    public IterableResponse<SecurityLabel> getAttributeSecurityLabels(String uniqueId, Long attributeId, String ownerName) throws IOException, FailedResponseException {
         return attribReader.getAttributeSecurityLabels(uniqueId, attributeId, ownerName);
     }
 
     @Override
-    public SecurityLabel getAttributeSecurityLabel(String uniqueId, Integer attributeId, String securityLabel) throws IOException, FailedResponseException {
+    public SecurityLabel getAttributeSecurityLabel(String uniqueId, Long attributeId, String securityLabel) throws IOException, FailedResponseException {
         return attribReader.getAttributeSecurityLabel(uniqueId, attributeId, securityLabel);
     }
 
     @Override
-    public SecurityLabel getAttributeSecurityLabel(String uniqueId, Integer attributeId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
+    public SecurityLabel getAttributeSecurityLabel(String uniqueId, Long attributeId, String securityLabel, String ownerName) throws IOException, FailedResponseException {
         return attribReader.getAttributeSecurityLabel(uniqueId, attributeId, securityLabel, ownerName);
     }
 
@@ -610,12 +610,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public VictimEmailAddress getAssociatedVictimAssetEmailAddress(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public VictimEmailAddress getAssociatedVictimAssetEmailAddress(String uniqueId, Long assetId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetEmailAddress(uniqueId, assetId);
     }
 
     @Override
-    public VictimEmailAddress getAssociatedVictimAssetEmailAddress(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public VictimEmailAddress getAssociatedVictimAssetEmailAddress(String uniqueId, Long assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetEmailAddress(uniqueId, assetId, ownerName);
     }
 
@@ -630,12 +630,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public VictimNetworkAccount getAssociatedVictimAssetNetworkAccount(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public VictimNetworkAccount getAssociatedVictimAssetNetworkAccount(String uniqueId, Long assetId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetNetworkAccount(uniqueId, assetId);
     }
 
     @Override
-    public VictimNetworkAccount getAssociatedVictimAssetNetworkAccount(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public VictimNetworkAccount getAssociatedVictimAssetNetworkAccount(String uniqueId, Long assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetNetworkAccount(uniqueId, assetId, ownerName);
     }
 
@@ -650,12 +650,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public VictimPhone getAssociatedVictimAssetPhoneNumber(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public VictimPhone getAssociatedVictimAssetPhoneNumber(String uniqueId, Long assetId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetPhoneNumber(uniqueId, assetId);
     }
 
     @Override
-    public VictimPhone getAssociatedVictimAssetPhoneNumber(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public VictimPhone getAssociatedVictimAssetPhoneNumber(String uniqueId, Long assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetPhoneNumber(uniqueId, assetId, ownerName);
     }
 
@@ -670,12 +670,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public VictimSocialNetwork getAssociatedVictimAssetSocialNetwork(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public VictimSocialNetwork getAssociatedVictimAssetSocialNetwork(String uniqueId, Long assetId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetSocialNetwork(uniqueId, assetId);
     }
 
     @Override
-    public VictimSocialNetwork getAssociatedVictimAssetSocialNetwork(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public VictimSocialNetwork getAssociatedVictimAssetSocialNetwork(String uniqueId, Long assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetSocialNetwork(uniqueId, assetId, ownerName);
     }
 
@@ -690,12 +690,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public VictimWebSite getAssociatedVictimAssetWebsite(String uniqueId, Integer assetId) throws IOException, FailedResponseException {
+    public VictimWebSite getAssociatedVictimAssetWebsite(String uniqueId, Long assetId) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetWebsite(uniqueId, assetId);
     }
 
     @Override
-    public VictimWebSite getAssociatedVictimAssetWebsite(String uniqueId, Integer assetId, String ownerName) throws IOException, FailedResponseException {
+    public VictimWebSite getAssociatedVictimAssetWebsite(String uniqueId, Long assetId, String ownerName) throws IOException, FailedResponseException {
         return victimAssetAssocReader.getAssociatedVictimAssetWebsite(uniqueId, assetId, ownerName);
     }
 
@@ -760,12 +760,12 @@ public abstract class AbstractIndicatorReaderAdapter<T extends Indicator>
     }
 
     @Override
-    public Victim getAssociatedVictim(String uniqueId, Integer victimId) throws IOException, FailedResponseException {
+    public Victim getAssociatedVictim(String uniqueId, Long victimId) throws IOException, FailedResponseException {
         return victimAssocReader.getAssociatedVictim(uniqueId, victimId);
     }
 
     @Override
-    public Victim getAssociatedVictim(String uniqueId, Integer victimId, String ownerName) throws IOException, FailedResponseException {
+    public Victim getAssociatedVictim(String uniqueId, Long victimId, String ownerName) throws IOException, FailedResponseException {
         return victimAssocReader.getAssociatedVictim(uniqueId, victimId, ownerName);
     }
 

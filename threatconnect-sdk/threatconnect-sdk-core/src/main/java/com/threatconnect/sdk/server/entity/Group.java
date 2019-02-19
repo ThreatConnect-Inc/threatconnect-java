@@ -29,7 +29,7 @@ import java.util.TreeMap;
 public class Group implements AttributeHolder
 {
 
-    public Group(Integer id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink)
+    public Group(Long id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink)
     {
         this.id = id;
         this.name = name;
@@ -46,7 +46,7 @@ public class Group implements AttributeHolder
     }
     
     @XmlElement(name = "Id", required = true)
-    private Integer id;
+    private Long id;
     @XmlElement(name = "Name", required = true)
     private String name;
     @XmlElement(name = "Type", required = false)
@@ -67,12 +67,12 @@ public class Group implements AttributeHolder
     {
     }
     
-    public Integer getId()
+    public Long getId()
     {
         return id;
     }
 
-    public void setId(Integer id)
+    public void setId(Long id)
     {
         this.id = id;
     }

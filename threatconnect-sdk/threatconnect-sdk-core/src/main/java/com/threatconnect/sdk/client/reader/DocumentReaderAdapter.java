@@ -37,7 +37,7 @@ public class DocumentReaderAdapter extends AbstractGroupReaderAdapter<Document> 
         return "documents";
     }
 
-    public void downloadFile(int uniqueId, String ownerName, Path outputPath) throws FailedResponseException
+    public void downloadFile(long uniqueId, String ownerName, Path outputPath) throws FailedResponseException
     {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("id", uniqueId);
@@ -51,13 +51,13 @@ public class DocumentReaderAdapter extends AbstractGroupReaderAdapter<Document> 
     }
 
 	@Override
-	public IterableResponse<? extends Indicator> getAssociatedIndicatorsForCustomIndicators(Integer uniqueId,
+	public IterableResponse<? extends Indicator> getAssociatedIndicatorsForCustomIndicators(Long uniqueId,
 			String associationType) throws IOException, FailedResponseException {
 		throw new RuntimeException("Not implemented yet");
 	}
 
 	@Override
-	public IterableResponse<? extends Indicator> getAssociatedIndicatorsForCustomIndicators(Integer uniqueId,
+	public IterableResponse<? extends Indicator> getAssociatedIndicatorsForCustomIndicators(Long uniqueId,
 			String associationType, String targetType) throws IOException, FailedResponseException {
 		throw new RuntimeException("Not implemented yet");
 	}

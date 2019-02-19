@@ -7,15 +7,15 @@ import com.threatconnect.sdk.model.GroupType;
  */
 public class GroupIdentifier
 {
-	private Integer id;
+	private Long id;
 	private GroupType type;
 	
-	public Integer getId()
+	public Long getId()
 	{
 		return id;
 	}
 	
-	public void setId(final Integer id)
+	public void setId(final Long id)
 	{
 		this.id = id;
 	}

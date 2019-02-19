@@ -54,12 +54,12 @@ public abstract class AbstractGroupAssociateReaderAdapter<P> extends AbstractBas
     }
 
     @Override
-    public Adversary getAssociatedGroupAdversary(P uniqueId, Integer adversaryId) throws IOException, FailedResponseException {
+    public Adversary getAssociatedGroupAdversary(P uniqueId, Long adversaryId) throws IOException, FailedResponseException {
         return getAssociatedGroupAdversary(uniqueId, adversaryId, null); 
     }
 
     @Override
-    public Adversary getAssociatedGroupAdversary(P uniqueId, Integer adversaryId, String ownerName) 
+    public Adversary getAssociatedGroupAdversary(P uniqueId, Long adversaryId, String ownerName) 
             throws IOException, FailedResponseException {
 
         Map<String,Object> map = createParamMap("id", uniqueId, "groupId", adversaryId);
@@ -82,12 +82,12 @@ public abstract class AbstractGroupAssociateReaderAdapter<P> extends AbstractBas
     }
 
     @Override
-     public Incident getAssociatedGroupIncident(P uniqueId, Integer incidentId) throws IOException, FailedResponseException {
+     public Incident getAssociatedGroupIncident(P uniqueId, Long incidentId) throws IOException, FailedResponseException {
         return getAssociatedGroupIncident(uniqueId, incidentId, null);
     }
 
     @Override
-    public Incident getAssociatedGroupIncident(P uniqueId, Integer incidentId, String ownerName)
+    public Incident getAssociatedGroupIncident(P uniqueId, Long incidentId, String ownerName)
             throws IOException, FailedResponseException {
 
         Map<String,Object> map = createParamMap("id", uniqueId, "groupId", incidentId);
@@ -97,12 +97,12 @@ public abstract class AbstractGroupAssociateReaderAdapter<P> extends AbstractBas
     }
 
     @Override
-    public Document getAssociatedGroupDocument(P uniqueId, Integer incidentId) throws IOException, FailedResponseException {
+    public Document getAssociatedGroupDocument(P uniqueId, Long incidentId) throws IOException, FailedResponseException {
         return getAssociatedGroupDocument(uniqueId, incidentId, null);
     }
 
     @Override
-    public Document getAssociatedGroupDocument(P uniqueId, Integer documentId, String ownerName)
+    public Document getAssociatedGroupDocument(P uniqueId, Long documentId, String ownerName)
             throws IOException, FailedResponseException {
 
         Map<String,Object> map = createParamMap("id", uniqueId, "groupId", documentId);
@@ -137,12 +137,12 @@ public abstract class AbstractGroupAssociateReaderAdapter<P> extends AbstractBas
     }
 
     @Override
-     public Signature getAssociatedGroupSignature(P uniqueId, Integer signatureId) throws IOException, FailedResponseException {
+     public Signature getAssociatedGroupSignature(P uniqueId, Long signatureId) throws IOException, FailedResponseException {
         return getAssociatedGroupSignature(uniqueId, signatureId, null);
     }
 
     @Override
-    public Signature getAssociatedGroupSignature(P uniqueId, Integer signatureId, String ownerName)
+    public Signature getAssociatedGroupSignature(P uniqueId, Long signatureId, String ownerName)
             throws IOException, FailedResponseException {
 
         Map<String,Object> map = createParamMap("id", uniqueId, "groupId", signatureId);
@@ -165,12 +165,12 @@ public abstract class AbstractGroupAssociateReaderAdapter<P> extends AbstractBas
     }
     
     @Override
-    public Campaign getAssociatedGroupCampaign(P uniqueId, Integer campaignId) throws IOException, FailedResponseException {
+    public Campaign getAssociatedGroupCampaign(P uniqueId, Long campaignId) throws IOException, FailedResponseException {
         return getAssociatedGroupCampaign(uniqueId, campaignId, null);
     }
     
     @Override
-    public Campaign getAssociatedGroupCampaign(P uniqueId, Integer campaignId, String ownerName)
+    public Campaign getAssociatedGroupCampaign(P uniqueId, Long campaignId, String ownerName)
         throws IOException, FailedResponseException {
         
         Map<String,Object> map = createParamMap("id", uniqueId, "groupId", campaignId);
@@ -193,12 +193,12 @@ public abstract class AbstractGroupAssociateReaderAdapter<P> extends AbstractBas
     }
 
     @Override
-     public Threat getAssociatedGroupThreat(P uniqueId, Integer threatId) throws IOException, FailedResponseException {
+     public Threat getAssociatedGroupThreat(P uniqueId, Long threatId) throws IOException, FailedResponseException {
         return getAssociatedGroupThreat(uniqueId, threatId, null); 
     }
 
     @Override
-    public Threat getAssociatedGroupThreat(P uniqueId, Integer threatId, String ownerName) 
+    public Threat getAssociatedGroupThreat(P uniqueId, Long threatId, String ownerName) 
             throws IOException, FailedResponseException {
 
         Map<String,Object> map = createParamMap("id", uniqueId, "groupId", threatId);
@@ -219,12 +219,12 @@ public abstract class AbstractGroupAssociateReaderAdapter<P> extends AbstractBas
     }
 
     @Override
-    public Email getAssociatedGroupEmail(P uniqueId, Integer emailId) throws IOException, FailedResponseException {
+    public Email getAssociatedGroupEmail(P uniqueId, Long emailId) throws IOException, FailedResponseException {
         return getAssociatedGroupEmail(uniqueId, emailId, null);
     }
 
     @Override
-    public Email getAssociatedGroupEmail(P uniqueId, Integer emailId, String ownerName) throws IOException, FailedResponseException {
+    public Email getAssociatedGroupEmail(P uniqueId, Long emailId, String ownerName) throws IOException, FailedResponseException {
         Map<String,Object> map = createParamMap("id", uniqueId, "groupId", emailId);
         EmailResponse data = getItem(getUrlBasePrefix() + ".byId.groups.emails.byGroupId", EmailResponse.class, ownerName, map);
 

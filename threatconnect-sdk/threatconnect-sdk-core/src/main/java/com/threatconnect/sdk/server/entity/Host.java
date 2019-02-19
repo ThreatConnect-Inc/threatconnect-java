@@ -33,7 +33,7 @@ public class Host extends Indicator
         super();
     }
 
-    public Host(Integer id, Owner owner, String ownerName, String type, Date dateAdded, Date lastModified, Double rating, Double confidence, Double threatAssessRating, Double threatAssessConfidence, String webLink, String source, String description, String summary, String hostName, String dnsActive, String whoisActive)
+    public Host(Long id, Owner owner, String ownerName, String type, Date dateAdded, Date lastModified, Double rating, Double confidence, Double threatAssessRating, Double threatAssessConfidence, String webLink, String source, String description, String summary, String hostName, String dnsActive, String whoisActive)
     {
         super(id, owner, ownerName, type, dateAdded, lastModified, rating, confidence, threatAssessRating, threatAssessConfidence, webLink, source, description, summary);
         this.hostName = hostName;

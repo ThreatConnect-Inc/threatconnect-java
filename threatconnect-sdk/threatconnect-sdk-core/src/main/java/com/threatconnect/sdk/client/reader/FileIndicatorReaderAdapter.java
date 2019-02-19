@@ -34,11 +34,11 @@ public class FileIndicatorReaderAdapter extends AbstractIndicatorReaderAdapter<F
         return "files";
     }
 
-    public FileOccurrence getFileOccurrence(String uniqueId, Integer fileOccurrencId) throws IOException, FailedResponseException {
+    public FileOccurrence getFileOccurrence(String uniqueId, Long fileOccurrencId) throws IOException, FailedResponseException {
         return getFileOccurrence(uniqueId, fileOccurrencId, null);
     }
 
-    public FileOccurrence getFileOccurrence(String uniqueId, Integer fileOccurrencId, String ownerName) throws IOException, FailedResponseException {
+    public FileOccurrence getFileOccurrence(String uniqueId, Long fileOccurrencId, String ownerName) throws IOException, FailedResponseException {
         Map<String, Object> map = createParamMap("id", uniqueId, "fileOccurrenceId", fileOccurrencId);
         FileOccurrenceResponse data = getItem(getUrlBasePrefix() + ".byId.fileOccurrences.byFileOccurrenceId", FileOccurrenceResponse.class, ownerName, map);
 

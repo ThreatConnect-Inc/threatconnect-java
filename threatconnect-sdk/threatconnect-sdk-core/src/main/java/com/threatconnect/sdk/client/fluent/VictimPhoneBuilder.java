@@ -4,13 +4,13 @@ import com.threatconnect.sdk.server.entity.VictimPhone;
 
 public class VictimPhoneBuilder
 {
-    private Integer id;
+    private Long id;
     private String name;
     private String type;
     private String webLink;
     private String phoneType;
 
-    public VictimPhoneBuilder withId(Integer id)
+    public VictimPhoneBuilder withId(Long id)
     {
         this.id = id;
         return this;

@@ -31,7 +31,7 @@ public class Campaign extends Group
         super();
     }
 
-    public Campaign(Integer id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink, Date firstSeen)
+    public Campaign(Long id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink, Date firstSeen)
     {
         super(id, name, type, owner, ownerName, dateAdded, webLink);
         this.firstSeen = firstSeen;

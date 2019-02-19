@@ -107,12 +107,12 @@ public class SecurityLabelReaderAdapter
     }
 
     @Override
-    public Adversary getAssociatedGroupAdversary(String uniqueId, Integer adversaryId) throws IOException, FailedResponseException {
+    public Adversary getAssociatedGroupAdversary(String uniqueId, Long adversaryId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupAdversary(uniqueId,adversaryId);
     }
 
     @Override
-    public Adversary getAssociatedGroupAdversary(String uniqueId, Integer adversaryId, String ownerName) throws IOException, FailedResponseException {
+    public Adversary getAssociatedGroupAdversary(String uniqueId, Long adversaryId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupAdversary(uniqueId,adversaryId,ownerName);
     }
 
@@ -127,12 +127,12 @@ public class SecurityLabelReaderAdapter
     }
 
     @Override
-    public Email getAssociatedGroupEmail(String uniqueId, Integer emailId) throws IOException, FailedResponseException {
+    public Email getAssociatedGroupEmail(String uniqueId, Long emailId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupEmail(uniqueId,emailId);
     }
 
     @Override
-    public Email getAssociatedGroupEmail(String uniqueId, Integer emailId, String ownerName) throws IOException, FailedResponseException {
+    public Email getAssociatedGroupEmail(String uniqueId, Long emailId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupEmail(uniqueId, emailId, ownerName);
     }
 
@@ -147,12 +147,12 @@ public class SecurityLabelReaderAdapter
     }
 
     @Override
-    public Incident getAssociatedGroupIncident(String uniqueId, Integer incidentId) throws IOException, FailedResponseException {
+    public Incident getAssociatedGroupIncident(String uniqueId, Long incidentId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupIncident(uniqueId, incidentId);
     }
 
     @Override
-    public Incident getAssociatedGroupIncident(String uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException {
+    public Incident getAssociatedGroupIncident(String uniqueId, Long incidentId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupIncident(uniqueId, incidentId, ownerName);
     }
 
@@ -169,13 +169,13 @@ public class SecurityLabelReaderAdapter
     }
 
     @Override
-    public Document getAssociatedGroupDocument(String uniqueId, Integer incidentId) throws IOException, FailedResponseException
+    public Document getAssociatedGroupDocument(String uniqueId, Long incidentId) throws IOException, FailedResponseException
     {
         return groupAssocReader.getAssociatedGroupDocument(uniqueId, incidentId);
     }
 
     @Override
-    public Document getAssociatedGroupDocument(String uniqueId, Integer incidentId, String ownerName) throws IOException, FailedResponseException
+    public Document getAssociatedGroupDocument(String uniqueId, Long incidentId, String ownerName) throws IOException, FailedResponseException
     {
         return groupAssocReader.getAssociatedGroupDocument(uniqueId, incidentId, ownerName);
     }
@@ -191,12 +191,12 @@ public class SecurityLabelReaderAdapter
     }
 
     @Override
-    public Signature getAssociatedGroupSignature(String uniqueId, Integer signatureId) throws IOException, FailedResponseException {
+    public Signature getAssociatedGroupSignature(String uniqueId, Long signatureId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupSignature(uniqueId, signatureId);
     }
 
     @Override
-    public Signature getAssociatedGroupSignature(String uniqueId, Integer signatureId, String ownerName) throws IOException, FailedResponseException {
+    public Signature getAssociatedGroupSignature(String uniqueId, Long signatureId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupSignature(uniqueId, signatureId, ownerName);
     }
     
@@ -211,12 +211,12 @@ public class SecurityLabelReaderAdapter
     }
     
     @Override
-    public Campaign getAssociatedGroupCampaign(String uniqueId, Integer campaignId) throws IOException, FailedResponseException {
+    public Campaign getAssociatedGroupCampaign(String uniqueId, Long campaignId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupCampaign(uniqueId, campaignId);
     }
     
     @Override
-    public Campaign getAssociatedGroupCampaign(String uniqueId, Integer campaignId, String ownerName) throws IOException, FailedResponseException {
+    public Campaign getAssociatedGroupCampaign(String uniqueId, Long campaignId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupCampaign(uniqueId, campaignId, ownerName);
     }
     
@@ -231,12 +231,12 @@ public class SecurityLabelReaderAdapter
     }
 
     @Override
-    public Threat getAssociatedGroupThreat(String uniqueId, Integer threatId) throws IOException, FailedResponseException {
+    public Threat getAssociatedGroupThreat(String uniqueId, Long threatId) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupThreat(uniqueId, threatId);
     }
 
     @Override
-    public Threat getAssociatedGroupThreat(String uniqueId, Integer threatId, String ownerName) throws IOException, FailedResponseException {
+    public Threat getAssociatedGroupThreat(String uniqueId, Long threatId, String ownerName) throws IOException, FailedResponseException {
         return groupAssocReader.getAssociatedGroupThreat(uniqueId, threatId, ownerName);
     }
 

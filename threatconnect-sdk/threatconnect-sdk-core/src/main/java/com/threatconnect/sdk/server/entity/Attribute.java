@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Attribute
 {
     @XmlElement(name = "Id", required = true)
-    private Integer id;
+    private Long id;
     @XmlElement(name = "Type", required = true)
     private String type;
     @XmlElement(name = "Value", required = true)
@@ -41,7 +41,7 @@ public class Attribute
     public Attribute() {
     }
 
-    public Attribute(Integer id, String type, String value, String source, Date dateAdded, Date lastModified, Boolean displayed)
+    public Attribute(Long id, String type, String value, String source, Date dateAdded, Date lastModified, Boolean displayed)
     {
         this.id = id;
         this.type = type;
@@ -52,12 +52,12 @@ public class Attribute
         this.displayed = displayed;
     }
 
-    public Integer getId()
+    public Long getId()
     {
         return id;
     }
 
-    public void setId(Integer id)
+    public void setId(Long id)
     {
         this.id = id;
     }

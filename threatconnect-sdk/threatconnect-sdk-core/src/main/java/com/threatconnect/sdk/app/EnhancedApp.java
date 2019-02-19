@@ -584,7 +584,7 @@ public abstract class EnhancedApp extends App
 	{
 		try
 		{
-			Integer uniqueId = group.getId();
+			Long uniqueId = group.getId();
 			if (uniqueId != null)
 			{
 				return (Attribute) writer.updateAttribute(uniqueId, currentAttribute).getItem();
@@ -612,8 +612,8 @@ public abstract class EnhancedApp extends App
 
 		try
 		{
-
-			Integer uniqueId = group.getId();
+			
+			Long uniqueId = group.getId();
 			if (uniqueId != null)
 			{
 				return (Attribute) writer.addAttribute(uniqueId, attribute, getOwner()).getItem();
@@ -685,7 +685,7 @@ public abstract class EnhancedApp extends App
 		return ind;
 	}
 
-	public void addTags(AbstractGroupWriterAdapter<Group> writer, Integer groupId, List<String> tagLabels)
+	public void addTags(AbstractGroupWriterAdapter<Group> writer, Long groupId, List<String> tagLabels)
 	{
 		List<Tag> tags = new ArrayList<>();
 		for (String label : tagLabels)
@@ -698,7 +698,7 @@ public abstract class EnhancedApp extends App
 		addFullTags(writer, groupId, tags);
 	}
 
-	public void addFullTags(AbstractGroupWriterAdapter<Group> writer, Integer groupId, List<Tag> tags)
+	public void addFullTags(AbstractGroupWriterAdapter<Group> writer, Long groupId, List<Tag> tags)
 	{
 
 		if (tagMap == null)
@@ -954,7 +954,7 @@ public abstract class EnhancedApp extends App
 	}
 
 	protected void associateThreat(AbstractGroupReaderAdapter<Group> reader, AbstractGroupWriterAdapter<Group> writer,
-		Integer groupId, List<String> actors)
+		Long groupId, List<String> actors)
 	{
 		if (threatMap == null)
 		{
@@ -1045,7 +1045,7 @@ public abstract class EnhancedApp extends App
 	}
 
 	protected void associateAdversary(AbstractGroupReaderAdapter<Group> reader,
-		AbstractGroupWriterAdapter<Group> writer, Integer groupId, List<String> actors)
+		AbstractGroupWriterAdapter<Group> writer, Long groupId, List<String> actors)
 	{
 		if (adversaryMap == null)
 		{

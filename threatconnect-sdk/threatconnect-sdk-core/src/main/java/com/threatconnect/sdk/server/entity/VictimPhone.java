@@ -27,7 +27,7 @@ public class VictimPhone extends VictimAsset
     {
     }
 
-    public VictimPhone(Integer id, String name, String type, String webLink, String phoneType)
+    public VictimPhone(Long id, String name, String type, String webLink, String phoneType)
     {
         super(id, name, type, webLink);
         this.phoneType = phoneType;

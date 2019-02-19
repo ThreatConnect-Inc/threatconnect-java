@@ -19,7 +19,7 @@ public class TaskWriterAdapter extends AbstractGroupWriterAdapter<Task>{
 
     protected TaskWriterAdapter(Connection conn) { super(conn, TaskResponse.class); }
 
-    public UserResponse createAssignee(final Integer uniqueId, final User assignee) throws IOException{
+    public UserResponse createAssignee(final Long uniqueId, final User assignee) throws IOException{
         Map<String, Object> paramMap = new HashMap<String, Object>() {
             {
                 put("id", uniqueId);
@@ -29,7 +29,7 @@ public class TaskWriterAdapter extends AbstractGroupWriterAdapter<Task>{
         return createItem(getUrlBasePrefix() + ".assignees.byUserName", UserResponse.class, null, paramMap, assignee);
     }
 
-    public UserResponse createEscalatee(final Integer uniqueId, final User escalatee) throws IOException{
+    public UserResponse createEscalatee(final Long uniqueId, final User escalatee) throws IOException{
         Map<String, Object> paramMap = new HashMap<String, Object>() {
             {
                 put("id", uniqueId);
@@ -39,7 +39,7 @@ public class TaskWriterAdapter extends AbstractGroupWriterAdapter<Task>{
         return createItem(getUrlBasePrefix() + ".escalatees.byUserName", UserResponse.class, null, paramMap, escalatee);
     }
 
-    public UserResponse deleteAssignee(final Integer uniqueId, final String userName) throws IOException{
+    public UserResponse deleteAssignee(final Long uniqueId, final String userName) throws IOException{
         Map<String, Object> paramMap = new HashMap<String, Object>() {
             {
                 put("id", uniqueId);
@@ -49,7 +49,7 @@ public class TaskWriterAdapter extends AbstractGroupWriterAdapter<Task>{
         return deleteItem(getUrlBasePrefix() + ".assignees.byUserName", UserResponse.class, null, paramMap);
     }
 
-    public UserResponse deleteEscalatee(final Integer uniqueId, final String userName) throws IOException{
+    public UserResponse deleteEscalatee(final Long uniqueId, final String userName) throws IOException{
         Map<String, Object> paramMap = new HashMap<String, Object>() {
             {
                 put("id", uniqueId);
@@ -68,7 +68,7 @@ public class TaskWriterAdapter extends AbstractGroupWriterAdapter<Task>{
     public String getUrlBasePrefix() { return "v2.tasks"; }
 
 	@Override
-	public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Integer uniqueId, String targetId,
+	public ApiEntitySingleResponse associateCustomIndicatorToIndicator(Long uniqueId, String targetId,
 			String assciateType, String targetType) throws IOException, FailedResponseException {
 		// TODO Auto-generated method stub
 		throw new RuntimeException("not implemented yet");

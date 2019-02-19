@@ -33,7 +33,7 @@ public class Signature extends Group
         super();
     }
 
-    public Signature(Integer id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink, String fileType, String fileName, String fileText)
+    public Signature(Long id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink, String fileType, String fileName, String fileText)
     {
         super(id, name, type, owner, ownerName, dateAdded, webLink);
         this.fileType = fileType;
