@@ -19,14 +19,14 @@ public class Batch
 {
     @JsonSerialize(include= JsonSerialize.Inclusion.NON_NULL)
     @JsonProperty("batchId")
-    private int batchId;
+    private long batchId;
 
-    public int getBatchId()
+    public long getBatchId()
     {
         return batchId;
     }
 
-    public void setBatchId(int batchId)
+    public void setBatchId(long batchId)
     {
         this.batchId = batchId;
     }

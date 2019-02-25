@@ -176,7 +176,7 @@ public class LegacyBatchIndicatorWriter extends AbstractBatchWriter
 			if (batchConfigResponse.isSuccess())
 			{
 				// retrieve the batch id and upload the file
-				int batchID = batchConfigResponse.getItem();
+				long batchID = batchConfigResponse.getItem();
 				ApiEntitySingleResponse<?, ?> batchUploadResponse =
 					batchWriterAdapter.uploadFile(batchID, jsonToInputStream(json), UploadMethodType.POST);
 				return new BatchUploadResponse(batchID, batchUploadResponse);
