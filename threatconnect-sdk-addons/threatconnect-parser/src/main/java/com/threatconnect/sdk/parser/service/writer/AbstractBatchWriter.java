@@ -46,7 +46,7 @@ public abstract class AbstractBatchWriter extends Writer
 		// check to see if the response was successful
 		if (batchUploadResponse.getResponse().isSuccess())
 		{
-			Integer batchID = batchUploadResponse.getBatchID();
+			Long batchID = batchUploadResponse.getBatchID();
 			
 			//make sure the batch id is not null
 			if (null != batchID)
@@ -234,16 +234,16 @@ public abstract class AbstractBatchWriter extends Writer
 	
 	public class BatchUploadResponse
 	{
-		private final Integer batchID;
+		private final Long batchID;
 		private final ApiEntitySingleResponse<?, ?> response;
 		
-		public BatchUploadResponse(final Integer batchID, final ApiEntitySingleResponse<?, ?> response)
+		public BatchUploadResponse(final Long batchID, final ApiEntitySingleResponse<?, ?> response)
 		{
 			this.batchID = batchID;
 			this.response = response;
 		}
 		
-		public Integer getBatchID()
+		public Long getBatchID()
 		{
 			return batchID;
 		}

@@ -13,8 +13,8 @@ import javax.xml.bind.annotation.XmlSeeAlso;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "batchResponse")
-@XmlSeeAlso(Integer.class)
-public class BatchResponse extends ApiEntitySingleResponse<Integer, BatchResponseData>
+@XmlSeeAlso(Long.class)
+public class BatchResponse extends ApiEntitySingleResponse<Long, BatchResponseData>
 {
     public void setData(BatchResponseData data) {
         super.setData(data);

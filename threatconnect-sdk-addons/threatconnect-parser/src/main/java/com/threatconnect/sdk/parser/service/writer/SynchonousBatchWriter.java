@@ -48,14 +48,14 @@ public class SynchonousBatchWriter extends BatchWriter
 					createWriterAdapter();
 				
 				@SuppressWarnings("unchecked")
-				ApiEntitySingleResponse<Integer, ?> batchConfigResponse =
+				ApiEntitySingleResponse<Long, ?> batchConfigResponse =
 					batchWriterAdapter.create(new BatchConfig(false, attributeWriteType, action, ownerName, version));
 				
 				// check to see if the response was successful
 				if (batchConfigResponse.isSuccess())
 				{
 					// retrieve the batch id and upload the file
-					Integer batchID = batchConfigResponse.getItem();
+					Long batchID = batchConfigResponse.getItem();
 					ApiEntitySingleResponse<?, ?> batchUploadResponse =
 						batchWriterAdapter.uploadFile(batchID, jsonToInputStream(json), UploadMethodType.POST);
 					return new BatchUploadResponse(batchID, batchUploadResponse);

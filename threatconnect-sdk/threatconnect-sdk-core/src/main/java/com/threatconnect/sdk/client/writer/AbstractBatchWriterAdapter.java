@@ -47,13 +47,13 @@ public abstract class AbstractBatchWriterAdapter<T> extends AbstractWriterAdapte
 		return data;
 	}
 	
-	public ApiEntitySingleResponse<BatchStatus, BatchStatusResponseData> uploadFile(int batchId, File file,
+	public ApiEntitySingleResponse<BatchStatus, BatchStatusResponseData> uploadFile(long batchId, File file,
 		UploadMethodType uploadMethodType) throws IOException, FailedResponseException
 	{
 		return uploadFile(batchId, new FileInputStream(file), uploadMethodType);
 	}
 	
-	public ApiEntitySingleResponse<BatchStatus, BatchStatusResponseData> uploadFile(int batchId,
+	public ApiEntitySingleResponse<BatchStatus, BatchStatusResponseData> uploadFile(long batchId,
 		InputStream inputStream, UploadMethodType uploadMethodType) throws IOException, FailedResponseException
 	{
 		Map<String, Object> paramMap = new HashMap<>();
