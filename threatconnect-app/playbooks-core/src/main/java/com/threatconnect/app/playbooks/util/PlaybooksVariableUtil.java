@@ -194,7 +194,7 @@ public class PlaybooksVariableUtil
 			throw new InvalidVariableType(trimTrailingExclamation(matcher.group(VARIABLE_GROUP_NAMESPACE)));
 		}
 		
-		int id = Integer.parseInt(matcher.group(VARIABLE_GROUP_ID));
+		long id = Long.parseLong(matcher.group(VARIABLE_GROUP_ID));
 		String name = matcher.group(VARIABLE_GROUP_NAME);
 		
 		//create a new playbooks variable
