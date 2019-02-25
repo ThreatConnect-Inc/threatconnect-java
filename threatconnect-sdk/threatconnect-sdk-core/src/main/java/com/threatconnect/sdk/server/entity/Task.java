@@ -44,7 +44,7 @@ public class Task extends Group {
         super();
     }
 
-    public Task(Integer id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink,
+    public Task(Long id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink,
                 String status, boolean escalated, boolean reminded, boolean overdue, Date dueDate, Date reminderDate, Date escalationDate,
                 List<User> assignee, List<User> escalatee) {
         super(id, name, type, owner, ownerName, dateAdded, webLink);

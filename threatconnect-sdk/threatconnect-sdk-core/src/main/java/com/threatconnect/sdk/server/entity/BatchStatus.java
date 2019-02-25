@@ -19,7 +19,7 @@ public class BatchStatus
 	private Status status;
 	
 	@XmlElement(name = "id", required = false)
-	private Integer id;
+	private Long id;
 	
 	@XmlElement(name = "errorCount", required = false)
 	private Integer errorCount;
@@ -54,7 +54,7 @@ public class BatchStatus
 	{
 	}
 	
-	public BatchStatus(Status status, Integer id, Integer errorCount, Integer successCount, Integer unprocessCount)
+	public BatchStatus(Status status, Long id, Integer errorCount, Integer successCount, Integer unprocessCount)
 	{
 		this.status = status;
 		this.id = id;
@@ -73,12 +73,12 @@ public class BatchStatus
 		this.status = status;
 	}
 	
-	public Integer getId()
+	public Long getId()
 	{
 		return id;
 	}
 	
-	public void setId(Integer id)
+	public void setId(Long id)
 	{
 		this.id = id;
 	}

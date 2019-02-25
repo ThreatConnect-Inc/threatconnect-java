@@ -25,7 +25,7 @@ public class Event extends Group
         super();
     }
 
-    public Event(Integer id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink)
+    public Event(Long id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink)
     {
         super(id, name, type, owner, ownerName, dateAdded, webLink);
     }

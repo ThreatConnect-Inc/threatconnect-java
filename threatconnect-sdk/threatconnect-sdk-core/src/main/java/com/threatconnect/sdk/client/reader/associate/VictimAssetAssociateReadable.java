@@ -28,10 +28,10 @@ public interface VictimAssetAssociateReadable<P> {
     public IterableResponse<VictimEmailAddress> getAssociatedVictimAssetEmailAddresses(P uniqueId, String ownerName)
         throws IOException, FailedResponseException;
         
-    public VictimEmailAddress getAssociatedVictimAssetEmailAddress(P uniqueId, Integer assetId) 
+    public VictimEmailAddress getAssociatedVictimAssetEmailAddress(P uniqueId, Long assetId) 
         throws IOException, FailedResponseException;
             
-    public VictimEmailAddress getAssociatedVictimAssetEmailAddress(P uniqueId, Integer assetId, String ownerName) 
+    public VictimEmailAddress getAssociatedVictimAssetEmailAddress(P uniqueId, Long assetId, String ownerName) 
         throws IOException, FailedResponseException;
 
     public IterableResponse<VictimNetworkAccount> getAssociatedVictimAssetNetworkAccounts(P uniqueId) throws IOException, FailedResponseException;
@@ -39,9 +39,9 @@ public interface VictimAssetAssociateReadable<P> {
     public IterableResponse<VictimNetworkAccount> getAssociatedVictimAssetNetworkAccounts(P uniqueId, String ownerName)
         throws IOException, FailedResponseException;
         
-    public VictimNetworkAccount getAssociatedVictimAssetNetworkAccount(P uniqueId, Integer assetId) throws IOException, FailedResponseException;
+    public VictimNetworkAccount getAssociatedVictimAssetNetworkAccount(P uniqueId, Long assetId) throws IOException, FailedResponseException;
             
-    public VictimNetworkAccount getAssociatedVictimAssetNetworkAccount(P uniqueId, Integer assetId, String ownerName) 
+    public VictimNetworkAccount getAssociatedVictimAssetNetworkAccount(P uniqueId, Long assetId, String ownerName) 
         throws IOException, FailedResponseException;
         
     public IterableResponse<VictimPhone> getAssociatedVictimAssetPhoneNumbers(P uniqueId) throws IOException, FailedResponseException;
@@ -49,9 +49,9 @@ public interface VictimAssetAssociateReadable<P> {
     public IterableResponse<VictimPhone> getAssociatedVictimAssetPhoneNumbers(P uniqueId, String ownerName)
         throws IOException, FailedResponseException;
         
-    public VictimPhone getAssociatedVictimAssetPhoneNumber(P uniqueId, Integer assetId) throws IOException, FailedResponseException;
+    public VictimPhone getAssociatedVictimAssetPhoneNumber(P uniqueId, Long assetId) throws IOException, FailedResponseException;
             
-    public VictimPhone getAssociatedVictimAssetPhoneNumber(P uniqueId, Integer assetId, String ownerName)
+    public VictimPhone getAssociatedVictimAssetPhoneNumber(P uniqueId, Long assetId, String ownerName)
             throws IOException, FailedResponseException;
         
     public IterableResponse<VictimSocialNetwork> getAssociatedVictimAssetSocialNetworks(P uniqueId) throws IOException, FailedResponseException;
@@ -59,9 +59,9 @@ public interface VictimAssetAssociateReadable<P> {
     public IterableResponse<VictimSocialNetwork> getAssociatedVictimAssetSocialNetworks(P uniqueId, String ownerName)
             throws IOException, FailedResponseException;
         
-    public VictimSocialNetwork getAssociatedVictimAssetSocialNetwork(P uniqueId, Integer assetId) throws IOException, FailedResponseException;
+    public VictimSocialNetwork getAssociatedVictimAssetSocialNetwork(P uniqueId, Long assetId) throws IOException, FailedResponseException;
             
-    public VictimSocialNetwork getAssociatedVictimAssetSocialNetwork(P uniqueId, Integer assetId, String ownerName) 
+    public VictimSocialNetwork getAssociatedVictimAssetSocialNetwork(P uniqueId, Long assetId, String ownerName) 
             throws IOException, FailedResponseException;
         
     public IterableResponse<VictimWebSite> getAssociatedVictimAssetWebsites(P uniqueId) throws IOException, FailedResponseException;
@@ -69,9 +69,9 @@ public interface VictimAssetAssociateReadable<P> {
     public IterableResponse<VictimWebSite> getAssociatedVictimAssetWebsites(P uniqueId, String ownerName)
             throws IOException, FailedResponseException;
         
-    public VictimWebSite getAssociatedVictimAssetWebsite(P uniqueId, Integer assetId) throws IOException, FailedResponseException;
+    public VictimWebSite getAssociatedVictimAssetWebsite(P uniqueId, Long assetId) throws IOException, FailedResponseException;
             
-    public VictimWebSite getAssociatedVictimAssetWebsite(P uniqueId, Integer assetId, String ownerName) 
+    public VictimWebSite getAssociatedVictimAssetWebsite(P uniqueId, Long assetId, String ownerName) 
             throws IOException, FailedResponseException;
     
 }

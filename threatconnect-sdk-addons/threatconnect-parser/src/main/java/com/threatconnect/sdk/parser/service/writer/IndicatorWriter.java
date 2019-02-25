@@ -190,7 +190,7 @@ public abstract class IndicatorWriter<E extends Indicator, T extends com.threatc
 		}
 	}
 	
-	public void associateGroup(final GroupType groupType, final Integer savedID, final String ownerName)
+	public void associateGroup(final GroupType groupType, final Long savedID, final String ownerName)
 		throws AssociateFailedException, IOException
 	{
 		try

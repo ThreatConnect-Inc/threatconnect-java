@@ -22,7 +22,7 @@ public class Community extends Owner
         super.setType("Community");
     }
 
-    public Community(Integer id, String name, String type)
+    public Community(Long id, String name, String type)
     {
         super(id, name, type);
     }

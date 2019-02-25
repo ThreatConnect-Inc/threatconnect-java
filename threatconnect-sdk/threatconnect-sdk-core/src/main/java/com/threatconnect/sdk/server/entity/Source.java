@@ -22,7 +22,7 @@ public class Source extends Owner
         super.setType("Source");
     }
 
-    public Source(Integer id, String name, String type)
+    public Source(Long id, String name, String type)
     {
         super(id, name, type);
     }

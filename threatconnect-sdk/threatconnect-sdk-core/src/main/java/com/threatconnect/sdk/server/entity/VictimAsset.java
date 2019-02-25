@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 public class VictimAsset
 {
     @XmlElement(name = "Id", required = true)
-    private Integer id;
+    private Long id;
     @XmlElement(name = "Name", required = false)
     private String name;
     @XmlElement(name = "Type", required = true)
@@ -38,7 +38,7 @@ public class VictimAsset
     {
     }
 
-    public VictimAsset(Integer id, String name, String type, String webLink)
+    public VictimAsset(Long id, String name, String type, String webLink)
     {
         this.id = id;
         this.name = name;
@@ -46,12 +46,12 @@ public class VictimAsset
         this.webLink = webLink;
     }
 
-    public Integer getId()
+    public Long getId()
     {
         return id;
     }
 
-    public void setId(Integer id)
+    public void setId(Long id)
     {
         this.id = id;
     }

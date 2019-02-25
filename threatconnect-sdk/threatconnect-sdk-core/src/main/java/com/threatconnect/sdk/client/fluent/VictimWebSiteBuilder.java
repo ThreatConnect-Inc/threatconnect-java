@@ -4,13 +4,13 @@ import com.threatconnect.sdk.server.entity.VictimWebSite;
 
 public class VictimWebSiteBuilder
 {
-    private Integer id;
+    private Long id;
     private String name;
     private String type;
     private String webLink;
     private String webSite;
 
-    public VictimWebSiteBuilder withId(Integer id)
+    public VictimWebSiteBuilder withId(Long id)
     {
         this.id = id;
         return this;

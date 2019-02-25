@@ -4,11 +4,11 @@ import com.threatconnect.sdk.server.entity.Individual;
 
 public class IndividualBuilder
 {
-    private Integer id;
+    private Long id;
     private String name;
     private String type;
 
-    public IndividualBuilder withId(Integer id)
+    public IndividualBuilder withId(Long id)
     {
         this.id = id;
         return this;

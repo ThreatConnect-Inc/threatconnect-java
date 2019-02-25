@@ -27,6 +27,9 @@ public abstract class AbstractXMLStreamParser<I extends Item> extends AbstractPa
 		//create a new XML input factory
 		XMLInputFactory factory = XMLInputFactory.newInstance();
 		
+		factory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+		factory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+		
 		try
 		{
 			//read the xml into the stream reader

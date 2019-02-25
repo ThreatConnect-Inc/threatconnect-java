@@ -23,7 +23,7 @@ import java.util.Date;
 public class FileOccurrence
 {
     @XmlElement(name = "Id", required = true)
-    private Integer id;
+    private Long id;
     @XmlElement(name = "FileName", required = true)
     private String fileName;
     @XmlElement(name = "Path", required = true)
@@ -36,7 +36,7 @@ public class FileOccurrence
     {
     }
 
-    public FileOccurrence(Integer id, String fileName, String path, Date date)
+    public FileOccurrence(Long id, String fileName, String path, Date date)
     {
         this.id = id;
         this.fileName = fileName;
@@ -44,12 +44,12 @@ public class FileOccurrence
         this.date = date;
     }
 
-    public Integer getId()
+    public Long getId()
     {
         return id;
     }
 
-    public void setId(Integer id)
+    public void setId(Long id)
     {
         this.id = id;
     }

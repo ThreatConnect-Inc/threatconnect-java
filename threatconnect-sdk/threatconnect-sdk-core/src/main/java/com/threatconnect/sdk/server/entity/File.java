@@ -33,7 +33,7 @@ public class File extends Indicator
         super();
     }
 
-    public File(Integer id, Owner owner, String ownerName, String type, Date dateAdded, Date lastModified, Double rating, Double confidence, Double threatAssessRating, Double threatAssessConfidence, String webLink, String source, String description, String summary, String md5, String sha1, String sha256, Integer size)
+    public File(Long id, Owner owner, String ownerName, String type, Date dateAdded, Date lastModified, Double rating, Double confidence, Double threatAssessRating, Double threatAssessConfidence, String webLink, String source, String description, String summary, String md5, String sha1, String sha256, Integer size)
     {
         super(id, owner, ownerName, type, dateAdded, lastModified, rating, confidence, threatAssessRating, threatAssessConfidence, webLink, source, description, summary);
         this.md5 = md5;

@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 public class Indicator implements AttributeHolder
 {
 
-    public Indicator(Integer id, Owner owner, String ownerName, String type, Date dateAdded, Date lastModified, Double rating, Double confidence, Double threatAssessRating, Double threatAssessConfidence, String webLink, String source, String description, String summary)
+    public Indicator(Long id, Owner owner, String ownerName, String type, Date dateAdded, Date lastModified, Double rating, Double confidence, Double threatAssessRating, Double threatAssessConfidence, String webLink, String source, String description, String summary)
     {
         this.id = id;
         this.owner = owner;
@@ -61,7 +61,7 @@ public class Indicator implements AttributeHolder
     }
 
     @XmlElement(name = "Id", required = false)
-    private Integer id;
+    private Long id;
     @XmlElement(name = "Owner", required = false)
     private Owner owner;
     @XmlElement(name = "OwnerName", required = false)
@@ -114,12 +114,12 @@ public class Indicator implements AttributeHolder
     {
     }
 
-    public Integer getId()
+    public Long getId()
     {
         return id;
     }
 
-    public void setId(Integer id)
+    public void setId(Long id)
     {
         this.id = id;
     }

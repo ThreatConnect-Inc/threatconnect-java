@@ -4,12 +4,12 @@ import com.threatconnect.sdk.server.entity.VictimAsset;
 
 public class VictimAssetBuilder
 {
-    private Integer id;
+    private Long id;
     private String name;
     private String type;
     private String webLink;
 
-    public VictimAssetBuilder withId(Integer id)
+    public VictimAssetBuilder withId(Long id)
     {
         this.id = id;
         return this;

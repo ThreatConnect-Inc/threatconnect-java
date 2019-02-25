@@ -4,11 +4,11 @@ import com.threatconnect.sdk.server.entity.Source;
 
 public class SourceBuilder
 {
-    private Integer id;
+    private Long id;
     private String name;
     private String type;
 
-    public SourceBuilder withId(Integer id)
+    public SourceBuilder withId(Long id)
     {
         this.id = id;
         return this;

@@ -34,7 +34,7 @@ public class Email extends Group
     @XmlElement(name = "Body", required = true)
     private String body;
 
-    public Email(Integer id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink, String to, String from, String subject, Integer score, String header, String body)
+    public Email(Long id, String name, String type, Owner owner, String ownerName, Date dateAdded, String webLink, String to, String from, String subject, Integer score, String header, String body)
     {
         super(id, name, type, owner, ownerName, dateAdded, webLink);
         this.to = to;

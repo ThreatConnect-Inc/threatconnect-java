@@ -17,130 +17,130 @@ import java.util.List;
  */
 public interface GroupAssociateWritable<P> {
     
-    public WriteListResponse<Integer> associateGroupAdversaries(P uniqueId, List<Integer> adversaryIds) 
+    public WriteListResponse<Long> associateGroupAdversaries(P uniqueId, List<Long> adversaryIds) 
         throws IOException;
 
-    public WriteListResponse<Integer> associateGroupAdversaries(P uniqueId, List<Integer> adversaryIds, String ownerName) 
+    public WriteListResponse<Long> associateGroupAdversaries(P uniqueId, List<Long> adversaryIds, String ownerName) 
         throws IOException;
 
-    public ApiEntitySingleResponse associateGroupAdversary(P uniqueId, Integer adversaryId) 
+    public ApiEntitySingleResponse associateGroupAdversary(P uniqueId, Long adversaryId) 
         throws IOException, FailedResponseException;
     
-    public ApiEntitySingleResponse associateGroupAdversary(P uniqueId, Integer adversaryId, String ownerName) 
+    public ApiEntitySingleResponse associateGroupAdversary(P uniqueId, Long adversaryId, String ownerName) 
             throws IOException, FailedResponseException;
     
-    public ApiEntitySingleResponse associateGroupDocument(P uniqueId, Integer documentId) 
+    public ApiEntitySingleResponse associateGroupDocument(P uniqueId, Long documentId) 
         throws IOException, FailedResponseException;
     
-    public ApiEntitySingleResponse associateGroupDocument(P uniqueId, Integer documentId, String ownerName) 
+    public ApiEntitySingleResponse associateGroupDocument(P uniqueId, Long documentId, String ownerName) 
         throws IOException, FailedResponseException;
 
-    public WriteListResponse<Integer> associateGroupEmails(P uniqueId, List<Integer> emailIds) 
+    public WriteListResponse<Long> associateGroupEmails(P uniqueId, List<Long> emailIds) 
         throws IOException;
 
-    public WriteListResponse<Integer> associateGroupEmails(P uniqueId, List<Integer> emailIds, String ownerName) 
+    public WriteListResponse<Long> associateGroupEmails(P uniqueId, List<Long> emailIds, String ownerName) 
             throws IOException;
 
-    public ApiEntitySingleResponse associateGroupEmail(P uniqueId, Integer emailId) 
+    public ApiEntitySingleResponse associateGroupEmail(P uniqueId, Long emailId) 
         throws IOException, FailedResponseException;
     
-    public ApiEntitySingleResponse associateGroupEmail(P uniqueId, Integer emailId, String ownerName) 
+    public ApiEntitySingleResponse associateGroupEmail(P uniqueId, Long emailId, String ownerName) 
             throws IOException, FailedResponseException;
 
-    public WriteListResponse<Integer> associateGroupIncidents(P uniqueId, List<Integer> incidentIds) 
+    public WriteListResponse<Long> associateGroupIncidents(P uniqueId, List<Long> incidentIds) 
         throws IOException;
 
-    public WriteListResponse<Integer> associateGroupIncidents(P uniqueId, List<Integer> incidentIds, String ownerName) 
+    public WriteListResponse<Long> associateGroupIncidents(P uniqueId, List<Long> incidentIds, String ownerName) 
             throws IOException;
 
-    public ApiEntitySingleResponse associateGroupIncident(P uniqueId, Integer incidentId) 
+    public ApiEntitySingleResponse associateGroupIncident(P uniqueId, Long incidentId) 
         throws IOException, FailedResponseException;
     
-    public ApiEntitySingleResponse associateGroupIncident(P uniqueId, Integer incidentId, String ownerName) 
+    public ApiEntitySingleResponse associateGroupIncident(P uniqueId, Long incidentId, String ownerName) 
             throws IOException, FailedResponseException;
 
-    public WriteListResponse<Integer> associateGroupSignatures(P uniqueId, List<Integer> signatureIds) 
+    public WriteListResponse<Long> associateGroupSignatures(P uniqueId, List<Long> signatureIds) 
         throws IOException;
 
-    public WriteListResponse<Integer> associateGroupSignatures(P uniqueId, List<Integer> signatureIds, String ownerName) 
+    public WriteListResponse<Long> associateGroupSignatures(P uniqueId, List<Long> signatureIds, String ownerName) 
             throws IOException;
 
-    public ApiEntitySingleResponse associateGroupSignature(P uniqueId, Integer signatureId) 
+    public ApiEntitySingleResponse associateGroupSignature(P uniqueId, Long signatureId) 
         throws IOException, FailedResponseException;
     
-    public ApiEntitySingleResponse associateGroupSignature(P uniqueId, Integer signatureId, String ownerName) 
+    public ApiEntitySingleResponse associateGroupSignature(P uniqueId, Long signatureId, String ownerName) 
             throws IOException, FailedResponseException;
 
-    public WriteListResponse<Integer> associateGroupThreats(P uniqueId, List<Integer> threatIds) 
+    public WriteListResponse<Long> associateGroupThreats(P uniqueId, List<Long> threatIds) 
         throws IOException;
 
-    public WriteListResponse<Integer> associateGroupThreats(P uniqueId, List<Integer> threatIds, String ownerName) 
+    public WriteListResponse<Long> associateGroupThreats(P uniqueId, List<Long> threatIds, String ownerName) 
             throws IOException;
 
-    public ApiEntitySingleResponse associateGroupThreat(P uniqueId, Integer threatId) 
+    public ApiEntitySingleResponse associateGroupThreat(P uniqueId, Long threatId) 
         throws IOException, FailedResponseException;
     
-    public ApiEntitySingleResponse associateGroupThreat(P uniqueId, Integer threatId, String ownerName) 
+    public ApiEntitySingleResponse associateGroupThreat(P uniqueId, Long threatId, String ownerName) 
             throws IOException, FailedResponseException;
 
-    public WriteListResponse<Integer> dissociateGroupAdversaries(P uniqueId, List<Integer> adversaryIds)
+    public WriteListResponse<Long> dissociateGroupAdversaries(P uniqueId, List<Long> adversaryIds)
         throws IOException;
 
-    public WriteListResponse<Integer> dissociateGroupAdversaries(P uniqueId, List<Integer> adversaryIds, String ownerName)
+    public WriteListResponse<Long> dissociateGroupAdversaries(P uniqueId, List<Long> adversaryIds, String ownerName)
         throws IOException;
 
-    public ApiEntitySingleResponse dissociateGroupAdversary(P uniqueId, Integer adversaryId)
+    public ApiEntitySingleResponse dissociateGroupAdversary(P uniqueId, Long adversaryId)
         throws IOException, FailedResponseException;
     
-    public ApiEntitySingleResponse dissociateGroupAdversary(P uniqueId, Integer adversaryId, String ownerName)
+    public ApiEntitySingleResponse dissociateGroupAdversary(P uniqueId, Long adversaryId, String ownerName)
             throws IOException, FailedResponseException;
 
-    public WriteListResponse<Integer> dissociateGroupEmails(P uniqueId, List<Integer> emailIds)
+    public WriteListResponse<Long> dissociateGroupEmails(P uniqueId, List<Long> emailIds)
         throws IOException;
 
-    public WriteListResponse<Integer> dissociateGroupEmails(P uniqueId, List<Integer> emailIds, String ownerName)
+    public WriteListResponse<Long> dissociateGroupEmails(P uniqueId, List<Long> emailIds, String ownerName)
             throws IOException;
 
-    public ApiEntitySingleResponse dissociateGroupEmail(P uniqueId, Integer emailId)
+    public ApiEntitySingleResponse dissociateGroupEmail(P uniqueId, Long emailId)
         throws IOException, FailedResponseException;
     
-    public ApiEntitySingleResponse dissociateGroupEmail(P uniqueId, Integer emailId, String ownerName)
+    public ApiEntitySingleResponse dissociateGroupEmail(P uniqueId, Long emailId, String ownerName)
             throws IOException, FailedResponseException;
 
-    public WriteListResponse<Integer> dissociateGroupIncidents(P uniqueId, List<Integer> incidentIds)
+    public WriteListResponse<Long> dissociateGroupIncidents(P uniqueId, List<Long> incidentIds)
         throws IOException;
 
-    public WriteListResponse<Integer> dissociateGroupIncidents(P uniqueId, List<Integer> incidentIds, String ownerName)
+    public WriteListResponse<Long> dissociateGroupIncidents(P uniqueId, List<Long> incidentIds, String ownerName)
             throws IOException;
 
-    public ApiEntitySingleResponse dissociateGroupIncident(P uniqueId, Integer incidentId)
+    public ApiEntitySingleResponse dissociateGroupIncident(P uniqueId, Long incidentId)
         throws IOException, FailedResponseException;
     
-    public ApiEntitySingleResponse dissociateGroupIncident(P uniqueId, Integer incidentId, String ownerName)
+    public ApiEntitySingleResponse dissociateGroupIncident(P uniqueId, Long incidentId, String ownerName)
             throws IOException, FailedResponseException;
 
-    public WriteListResponse<Integer> dissociateGroupSignatures(P uniqueId, List<Integer> signatureIds)
+    public WriteListResponse<Long> dissociateGroupSignatures(P uniqueId, List<Long> signatureIds)
         throws IOException;
 
-    public WriteListResponse<Integer> dissociateGroupSignatures(P uniqueId, List<Integer> signatureIds, String ownerName)
+    public WriteListResponse<Long> dissociateGroupSignatures(P uniqueId, List<Long> signatureIds, String ownerName)
             throws IOException;
 
-    public ApiEntitySingleResponse dissociateGroupSignature(P uniqueId, Integer signatureId)
+    public ApiEntitySingleResponse dissociateGroupSignature(P uniqueId, Long signatureId)
         throws IOException, FailedResponseException;
     
-    public ApiEntitySingleResponse dissociateGroupSignature(P uniqueId, Integer signatureId, String ownerName)
+    public ApiEntitySingleResponse dissociateGroupSignature(P uniqueId, Long signatureId, String ownerName)
             throws IOException, FailedResponseException;
 
-    public WriteListResponse<Integer> dissociateGroupThreats(P uniqueId, List<Integer> threatIds)
+    public WriteListResponse<Long> dissociateGroupThreats(P uniqueId, List<Long> threatIds)
         throws IOException;
 
-    public WriteListResponse<Integer> dissociateGroupThreats(P uniqueId, List<Integer> threatIds, String ownerName)
+    public WriteListResponse<Long> dissociateGroupThreats(P uniqueId, List<Long> threatIds, String ownerName)
             throws IOException;
 
-    public ApiEntitySingleResponse dissociateGroupThreat(P uniqueId, Integer threatId)
+    public ApiEntitySingleResponse dissociateGroupThreat(P uniqueId, Long threatId)
         throws IOException, FailedResponseException;
     
-    public ApiEntitySingleResponse dissociateGroupThreat(P uniqueId, Integer threatId, String ownerName)
+    public ApiEntitySingleResponse dissociateGroupThreat(P uniqueId, Long threatId, String ownerName)
             throws IOException, FailedResponseException;
 
 }
