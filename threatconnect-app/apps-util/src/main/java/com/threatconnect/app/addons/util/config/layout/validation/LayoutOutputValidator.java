@@ -24,6 +24,12 @@ public class LayoutOutputValidator extends Validator<LayoutOutput>
 			throw new ValidationException("name is not defined for this parameter.");
 		}
 		
+		//make sure the param name is not empty
+		if (isNullOrEmpty(object.getDisplay()))
+		{
+			throw new ValidationException("display is not defined for this parameter.");
+		}
+		
 		boolean outputFound = null != install.getPlaybook() &&
 			install.getPlaybook().getOutputVariables().stream().anyMatch(p -> p.getName().equals(object.getName()));
 		if (!outputFound)
