@@ -59,14 +59,14 @@ public class LayoutUtil
 	{
 		try
 		{
-			Layout Layout = createGson().fromJson(new InputStreamReader(inputStream), Layout.class);
+			Layout layout = createGson().fromJson(new InputStreamReader(inputStream), Layout.class);
 			
 			if (null != install)
 			{
-				new LayoutValidator(install).validate(Layout);
+				new LayoutValidator(install).validate(layout);
 			}
 			
-			return Layout;
+			return layout;
 		}
 		catch (JsonParseException | InvalidEnumException e)
 		{
