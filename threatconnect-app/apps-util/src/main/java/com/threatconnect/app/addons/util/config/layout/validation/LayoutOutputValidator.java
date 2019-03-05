@@ -21,13 +21,13 @@ public class LayoutOutputValidator extends Validator<LayoutOutput>
 		//make sure the param name is not empty
 		if (isNullOrEmpty(object.getName()))
 		{
-			throw new ValidationException("name is not defined for this parameter.");
+			throw new ValidationException("\"name\" field is not defined for output parameter.");
 		}
 		
 		//make sure the param name is not empty
 		if (isNullOrEmpty(object.getDisplay()))
 		{
-			throw new ValidationException("display is not defined for this parameter.");
+			throw new ValidationException("\"display\" field is not defined for output parameter: " + object.getName());
 		}
 		
 		boolean outputFound = null != install.getPlaybook() &&
