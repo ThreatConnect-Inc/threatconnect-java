@@ -169,7 +169,7 @@ public class LegacyBatchIndicatorWriter extends AbstractBatchWriter
 				createWriterAdapter();
 			
 			@SuppressWarnings("unchecked")
-			ApiEntitySingleResponse<Integer, ?> batchConfigResponse =
+			ApiEntitySingleResponse<Long, ?> batchConfigResponse =
 				batchWriterAdapter.create(new BatchConfig(false, attributeWriteType, action, ownerName));
 			
 			// check to see if the response was successful

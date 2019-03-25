@@ -67,7 +67,7 @@ public abstract class ApiEntitySingleResponse<T, S extends ApiEntitySingleRespon
 
     public T getItem()
     {
-        return data == null ? null : (T)data.getData();
+        return data == null ? null : data.getData();
     }
 
     public void setData(ApiEntitySingleResponseData<T> data) {
