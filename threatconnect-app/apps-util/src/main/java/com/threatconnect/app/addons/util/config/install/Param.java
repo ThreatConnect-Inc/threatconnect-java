@@ -29,11 +29,13 @@ public class Param
 	
 	private final List<String> validValues;
 	private final List<String> playbookDataType;
+	private final List<String> intelType;
 	
 	public Param()
 	{
 		this.validValues = new ArrayList<String>();
 		this.playbookDataType = new ArrayList<String>();
+		this.intelType = new ArrayList<String>();
 		
 		//set the default data type for this param
 		this.type = ParamDataType.String;
@@ -197,6 +199,11 @@ public class Param
 	public List<String> getPlaybookDataType()
 	{
 		return playbookDataType;
+	}
+	
+	public List<String> getIntelType()
+	{
+		return intelType;
 	}
 	
 	public boolean isPlaybookParam()
