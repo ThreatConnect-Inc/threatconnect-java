@@ -78,35 +78,6 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 		((HttpEntityEnclosingRequestBase) httpBase).setEntity(new StringEntity(jsonData, ContentType.APPLICATION_JSON));
 	}
 
-	private String makeApiCall(HttpMethod type, String fullPath, HttpRequestBase httpBase) throws IOException
-	{
-		logger.trace("Before call to api server");
-		long startMs = System.currentTimeMillis();
-		
-		try(CloseableHttpClient httpClient = this.conn.getApiClient())
-		{
-			try(CloseableHttpResponse response = httpClient.execute(httpBase))
-			{
-				//update listeners based on api call whether it worked or not
-				notifyListeners(type, fullPath, (System.currentTimeMillis() - startMs));
-				
-				String result = null;
-				logger.trace(response.getStatusLine().toString());
-				HttpEntity entity = response.getEntity();
-				if (entity != null)
-				{
-					logger.trace("Response Headers: " + Arrays.toString(response.getAllHeaders()));
-					logger.trace("Content Encoding: " + entity.getContentEncoding());
-					result = EntityUtils.toString(entity, StandardCharsets.UTF_8);
-					logger.trace("Result:" + result);
-					EntityUtils.consume(entity);
-				}
-				
-				return result;
-			}
-		}
-	}
-
 	private void getNewToken() throws IOException, TokenRenewException
 	{
 		synchronized (TOKEN_LOCK)
@@ -279,39 +250,49 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 		{
 			throw new IllegalStateException("Can't execute HTTP request when configuration is undefined.");
 		}
-
-		InputStream stream = null;
-
-		String fullPath = this.conn.getConfig().getTcApiUrl() + path.replace("/api/", "/");
-
-		logger.trace("Calling GET: " + fullPath);
-		HttpRequestBase httpBase = getBase(fullPath, HttpMethod.GET);
-
-		String headerPath = httpBase.getURI().getRawPath() + "?" + httpBase.getURI().getRawQuery();
-		ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), headerPath,
-			conn.getConfig().getContentType(), contentType.toString());
-		logger.trace("Request: " + httpBase.getRequestLine());
-		logger.trace("Headers: " + Arrays.toString(httpBase.getAllHeaders()));
 		
-		CloseableHttpClient httpClient = this.conn.getApiClient();
-		CloseableHttpResponse response = httpClient.execute(httpBase);
-		logger.trace(response.getStatusLine().toString());
-		
-		// check to see if there was an error executing this request
-		switch (response.getStatusLine().getStatusCode())
+		try
 		{
-			case HttpStatus.SC_NOT_FOUND:
-				throw new HttpResourceNotFoundException("Server responded with a 404: " + fullPath);
+			//Check for token to expire and get a new one if it is
+			getNewToken();
+			
+			InputStream stream = null;
+			
+			String fullPath = this.conn.getConfig().getTcApiUrl() + path.replace("/api/", "/");
+			
+			logger.trace("Calling GET: " + fullPath);
+			HttpRequestBase httpBase = getBase(fullPath, HttpMethod.GET);
+			
+			String headerPath = httpBase.getURI().getRawPath() + "?" + httpBase.getURI().getRawQuery();
+			ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), headerPath,
+				conn.getConfig().getContentType(), contentType.toString());
+			logger.trace("Request: " + httpBase.getRequestLine());
+			logger.trace("Headers: " + Arrays.toString(httpBase.getAllHeaders()));
+			
+			CloseableHttpClient httpClient = this.conn.getApiClient();
+			CloseableHttpResponse response = httpClient.execute(httpBase);
+			logger.trace(response.getStatusLine().toString());
+			
+			// check to see if there was an error executing this request
+			switch (response.getStatusLine().getStatusCode())
+			{
+				case HttpStatus.SC_NOT_FOUND:
+					throw new HttpResourceNotFoundException("Server responded with a 404: " + fullPath);
+			}
+			
+			HttpEntity entity = response.getEntity();
+			if (entity != null)
+			{
+				stream = entity.getContent();
+				logger.trace(String.format("Result stream size: %d, encoding: %s",
+					entity.getContentLength(), entity.getContentEncoding()));
+			}
+			return stream;
 		}
-		
-		HttpEntity entity = response.getEntity();
-		if (entity != null)
+		catch (TokenRenewException e)
 		{
-			stream = entity.getContent();
-			logger.trace(String.format("Result stream size: %d, encoding: %s",
-				entity.getContentLength(), entity.getContentEncoding()));
+			throw new HttpException(e);
 		}
-		return stream;
 	}
 	
 	@Override
@@ -336,53 +317,63 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 		{
 			throw new IllegalStateException("Can't execute HTTP request when configuration is undefined.");
 		}
-
-		String fullPath = this.conn.getConfig().getTcApiUrl() + path.replace("/api/", "/");
-
-		final HttpEntityEnclosingRequestBase httpBase;
-
-		if (uploadMethodType.equals(UploadMethodType.POST))
-		{
-			logger.trace("Calling POST: " + fullPath);
-			httpBase = new HttpPost(fullPath);
-		}
-		else
-		{
-			logger.trace("Calling PUT: " + fullPath);
-			httpBase = new HttpPut(fullPath);
-		}
-
-		httpBase.setEntity(requestEntity);
-		String headerPath = httpBase.getURI().getRawPath() + "?" + httpBase.getURI().getRawQuery();
-		ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), headerPath, contentType);
-
-		logger.trace("Request: " + httpBase.getRequestLine());
 		
-		try(CloseableHttpClient httpClient = this.conn.getApiClient())
+		try
 		{
-			try(CloseableHttpResponse response = httpClient.execute(httpBase))
+			//Check for token to expire and get a new one if it is
+			getNewToken();
+			
+			String fullPath = this.conn.getConfig().getTcApiUrl() + path.replace("/api/", "/");
+			
+			final HttpEntityEnclosingRequestBase httpBase;
+			
+			if (uploadMethodType.equals(UploadMethodType.POST))
 			{
-				String result = null;
-				
-				logger.trace(response.getStatusLine().toString());
-				HttpEntity responseEntity = response.getEntity();
-				if (responseEntity != null)
+				logger.trace("Calling POST: " + fullPath);
+				httpBase = new HttpPost(fullPath);
+			}
+			else
+			{
+				logger.trace("Calling PUT: " + fullPath);
+				httpBase = new HttpPut(fullPath);
+			}
+			
+			httpBase.setEntity(requestEntity);
+			String headerPath = httpBase.getURI().getRawPath() + "?" + httpBase.getURI().getRawQuery();
+			ConnectionUtil.applyHeaders(this.conn.getConfig(), httpBase, httpBase.getMethod(), headerPath, contentType);
+			
+			logger.trace("Request: " + httpBase.getRequestLine());
+			
+			try (CloseableHttpClient httpClient = this.conn.getApiClient())
+			{
+				try (CloseableHttpResponse response = httpClient.execute(httpBase))
 				{
-					try
+					String result = null;
+					
+					logger.trace(response.getStatusLine().toString());
+					HttpEntity responseEntity = response.getEntity();
+					if (responseEntity != null)
 					{
-						result = EntityUtils.toString(responseEntity, "iso-8859-1");
-						logger.trace("Result:" + result);
-						EntityUtils.consume(responseEntity);
-					}
-					finally
-					{
-						response.close();
+						try
+						{
+							result = EntityUtils.toString(responseEntity, "iso-8859-1");
+							logger.trace("Result:" + result);
+							EntityUtils.consume(responseEntity);
+						}
+						finally
+						{
+							response.close();
+						}
+						
 					}
 					
+					return result;
 				}
-				
-				return result;
 			}
+		}
+		catch (TokenRenewException e)
+		{
+			throw new HttpException(e);
 		}
 	}
 }
