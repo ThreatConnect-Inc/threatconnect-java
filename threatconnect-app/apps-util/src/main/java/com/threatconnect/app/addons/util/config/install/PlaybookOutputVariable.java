@@ -1,5 +1,8 @@
 package com.threatconnect.app.addons.util.config.install;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Greg Marut
  */
@@ -7,6 +10,12 @@ public class PlaybookOutputVariable
 {
 	private String name;
 	private String type;
+	private final List<String> intelType;
+	
+	public PlaybookOutputVariable()
+	{
+		this.intelType = new ArrayList<String>();
+	}
 	
 	public String getName()
 	{
@@ -26,5 +35,10 @@ public class PlaybookOutputVariable
 	public void setType(final String type)
 	{
 		this.type = type;
+	}
+	
+	public List<String> getIntelType()
+	{
+		return intelType;
 	}
 }
