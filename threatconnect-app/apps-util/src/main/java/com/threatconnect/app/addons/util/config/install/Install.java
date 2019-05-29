@@ -31,6 +31,7 @@ public class Install
 	private Integer timeoutMinutes;
 	private String note;
 	private String sdkVersion;
+	private Docker docker;
 	
 	private Playbook playbook;
 	private Layout layout;
@@ -252,6 +253,16 @@ public class Install
 	public void setSdkVersion(final String sdkVersion)
 	{
 		this.sdkVersion = sdkVersion;
+	}
+	
+	public Docker getDocker()
+	{
+		return docker;
+	}
+	
+	public void setDocker(final Docker docker)
+	{
+		this.docker = docker;
 	}
 	
 	public Playbook getPlaybook()
