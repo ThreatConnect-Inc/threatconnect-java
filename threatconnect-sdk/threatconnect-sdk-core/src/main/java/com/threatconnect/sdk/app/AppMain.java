@@ -2,8 +2,11 @@ package com.threatconnect.sdk.app;
 
 import com.threatconnect.app.apps.App;
 import com.threatconnect.app.apps.AppConfig;
+import com.threatconnect.app.apps.AppConfigInitializationException;
 import com.threatconnect.app.apps.AppLauncher;
+import com.threatconnect.app.apps.ParamFileAppConfig;
 import com.threatconnect.app.apps.SystemPropertiesAppConfig;
+import com.threatconnect.app.apps.UnsupportedAppConfigException;
 import com.threatconnect.sdk.app.exception.AppInitializationException;
 import com.threatconnect.sdk.app.exception.MultipleAppClassFoundException;
 import com.threatconnect.sdk.app.exception.NoAppClassFoundException;
@@ -17,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -152,14 +156,29 @@ public final class AppMain extends AppLauncher
 	private static AppConfig findAppConfig()
 	{
 		//create a new sdk app config to read the values
-		AppConfig appConfig = new SystemPropertiesAppConfig();
+		AppConfig appConfig;
 		
-		//check to see if secure params are enabled
-		if (appConfig.isTcSecureParamsEnabled())
+		try
 		{
-			//replace the app config with a secure param app config instance
-			System.out.println("Initializing SecureParams");
-			appConfig = new SecureParamAppConfig();
+			appConfig = ParamFileAppConfig.attemptInitialization();
+		}
+		catch (UnsupportedAppConfigException e)
+		{
+			//fallback to reading the app config from the cli arguments
+			appConfig = new SystemPropertiesAppConfig();
+			
+			//check to see if secure params are enabled
+			if (appConfig.isTcSecureParamsEnabled())
+			{
+				//replace the app config with a secure param app config instance
+				System.out.println("Initializing SecureParams");
+				appConfig = new SecureParamAppConfig();
+			}
+		}
+		catch (IOException | GeneralSecurityException e)
+		{
+			System.err.println("ERROR: Unable to initialize AppConfig.");
+			throw new AppConfigInitializationException(e);
 		}
 		
 		return appConfig;
