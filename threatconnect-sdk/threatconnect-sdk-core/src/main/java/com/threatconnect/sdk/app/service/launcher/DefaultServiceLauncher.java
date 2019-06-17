@@ -5,6 +5,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.service.Service;
+import com.threatconnect.app.apps.service.ServiceConfiguration;
+import com.threatconnect.app.apps.service.message.CommandMessage;
+import com.threatconnect.app.apps.service.message.CreateCommandConfig;
+import com.threatconnect.app.apps.service.message.DeleteCommandConfig;
+import com.threatconnect.app.apps.service.message.NameValuePair;
+import com.threatconnect.app.apps.service.message.UpdateCommandConfig;
 import com.threatconnect.app.playbooks.app.PlaybooksAppConfig;
 import com.threatconnect.app.playbooks.content.ContentService;
 import com.threatconnect.app.playbooks.db.RedisDBService;
@@ -16,6 +22,10 @@ import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class DefaultServiceLauncher extends ServiceLauncher
 {
 	private static final Logger logger = LoggerFactory.getLogger(DefaultServiceLauncher.class);
@@ -23,10 +33,7 @@ public class DefaultServiceLauncher extends ServiceLauncher
 	public static final String PARAM_DB_PATH = "tc_playbook_db_path";
 	public static final String PARAM_DB_PORT = "tc_playbook_db_port";
 	
-	private static final String FIELD_CONFIG_ID = "configId";
 	private static final String FIELD_COMMAND = "command";
-	private static final String COMMAND_CREATE_CONFIG = "CreateConfig";
-	private static final String COMMAND_SHUTDOWN = "Shutdown";
 	
 	private final Gson gson;
 	private final JsonParser jsonParser;
@@ -36,12 +43,15 @@ public class DefaultServiceLauncher extends ServiceLauncher
 	private final String clientChannel;
 	private final ContentService contentService;
 	
+	private final Map<Long, ServiceConfiguration> serviceConfigurations;
+	
 	public DefaultServiceLauncher(final AppConfig appConfig, final Class<? extends Service> serviceClass) throws AppInitializationException
 	{
 		super(appConfig, serviceClass);
 		
 		this.gson = new Gson();
 		this.jsonParser = new JsonParser();
+		this.serviceConfigurations = new HashMap<Long, ServiceConfiguration>();
 		
 		//building the redis connection object
 		final String host = appConfig.getString(PARAM_DB_PATH);
@@ -83,6 +93,43 @@ public class DefaultServiceLauncher extends ServiceLauncher
 		jedis.subscribe(new JedisHandler(), serverChannel);
 	}
 	
+	private void handleCreateCommand(final CreateCommandConfig createCommandConfig)
+	{
+		ServiceConfiguration serviceConfiguration = updateServiceConfiguration(createCommandConfig.getConfigId(), createCommandConfig.getConfig());
+		getService().onConfigurationCreated(serviceConfiguration);
+	}
+	
+	private void handleUpdateCommand(final UpdateCommandConfig updateCommandConfig)
+	{
+		ServiceConfiguration serviceConfiguration = updateServiceConfiguration(updateCommandConfig.getConfigId(), updateCommandConfig.getConfig());
+		getService().onConfigurationUpdated(serviceConfiguration);
+	}
+	
+	private void handleDeleteCommand(final DeleteCommandConfig deleteCommandConfig)
+	{
+		ServiceConfiguration serviceConfiguration = serviceConfigurations.remove(deleteCommandConfig.getConfigId());
+		if (null != serviceConfiguration)
+		{
+			getService().onConfigurationDeleted(serviceConfiguration);
+		}
+	}
+	
+	private ServiceConfiguration updateServiceConfiguration(final long configId, final List<NameValuePair<String, String>> params)
+	{
+		//retrieve the service configuration for the config id. If it does not exists, create it
+		ServiceConfiguration serviceConfiguration = serviceConfigurations.computeIfAbsent(configId, id -> {
+			ServiceConfiguration sc = new ServiceConfiguration();
+			sc.setConfigId(id);
+			return sc;
+		});
+		
+		//update the params
+		serviceConfiguration.getParams().clear();
+		serviceConfiguration.getParams().addAll(params);
+		
+		return serviceConfiguration;
+	}
+	
 	private class JedisHandler extends JedisPubSub
 	{
 		@Override
@@ -93,23 +140,36 @@ public class DefaultServiceLauncher extends ServiceLauncher
 			JsonElement jsonMessage = jsonParser.parse(message);
 			
 			//read and handle the command
-			final String command = JsonUtil.getAsString(jsonMessage, FIELD_COMMAND);
-			if (null != command)
+			final String commandValue = JsonUtil.getAsString(jsonMessage, FIELD_COMMAND);
+			if (null != commandValue)
 			{
-				switch (command)
+				try
 				{
-					case COMMAND_CREATE_CONFIG:
-						
-						break;
-					case COMMAND_SHUTDOWN:
-						//notify the service that we are shutting down
-						getService().onShutdown();
-						
-						// flush the logs to the server
-						ServerLogger.getInstance(getAppConfig()).flushToServer();
-						
-						System.exit(0);
-						break;
+					switch (CommandMessage.Command.valueOf(commandValue))
+					{
+						case CreateConfig:
+							handleCreateCommand(gson.fromJson(message, CreateCommandConfig.class));
+							break;
+						case UpdateConfig:
+							handleUpdateCommand(gson.fromJson(message, UpdateCommandConfig.class));
+							break;
+						case DeleteConfig:
+							handleDeleteCommand(gson.fromJson(message, DeleteCommandConfig.class));
+							break;
+						case Shutdown:
+							//notify the service that we are shutting down
+							getService().onShutdown();
+							
+							// flush the logs to the server
+							ServerLogger.getInstance(getAppConfig()).flushToServer();
+							
+							System.exit(0);
+							break;
+					}
+				}
+				catch (IllegalArgumentException e)
+				{
+					logger.warn("Unrecognized command: " + commandValue);
 				}
 			}
 			else
