@@ -9,6 +9,7 @@ import com.threatconnect.app.apps.service.ServiceConfiguration;
 import com.threatconnect.app.apps.service.message.CommandMessage;
 import com.threatconnect.app.apps.service.message.CreateCommandConfig;
 import com.threatconnect.app.apps.service.message.DeleteCommandConfig;
+import com.threatconnect.app.apps.service.message.Heartbeat;
 import com.threatconnect.app.apps.service.message.NameValuePair;
 import com.threatconnect.app.apps.service.message.UpdateCommandConfig;
 import com.threatconnect.app.playbooks.app.PlaybooksAppConfig;
@@ -25,6 +26,9 @@ import redis.clients.jedis.JedisPubSub;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 public class DefaultServiceLauncher extends ServiceLauncher
 {
@@ -44,6 +48,8 @@ public class DefaultServiceLauncher extends ServiceLauncher
 	private final ContentService contentService;
 	
 	private final Map<Long, ServiceConfiguration> serviceConfigurations;
+	
+	private Timer heartbeatTimer;
 	
 	public DefaultServiceLauncher(final AppConfig appConfig, final Class<? extends Service> serviceClass) throws AppInitializationException
 	{
@@ -91,6 +97,31 @@ public class DefaultServiceLauncher extends ServiceLauncher
 		//make a blocking call to wait for the result from redis
 		logger.trace("Subscribing to channel: " + serverChannel);
 		jedis.subscribe(new JedisHandler(), serverChannel);
+		
+		if (null != heartbeatTimer)
+		{
+			heartbeatTimer.cancel();
+		}
+		
+		//calculate the number of milliseconds to send the heartbeat
+		final long millis = TimeUnit.SECONDS.toMillis(heartbeatSeconds);
+		
+		//create the new timer
+		heartbeatTimer = new Timer();
+		heartbeatTimer.schedule(new TimerTask()
+		{
+			@Override
+			public void run()
+			{
+				sendHeartbeatMessage();
+			}
+		}, millis);
+	}
+	
+	private void sendHeartbeatMessage()
+	{
+		Heartbeat heartbeat = new Heartbeat();
+		sendMessage(heartbeat);
 	}
 	
 	private void handleCreateCommand(final CreateCommandConfig createCommandConfig)
@@ -130,6 +161,14 @@ public class DefaultServiceLauncher extends ServiceLauncher
 		return serviceConfiguration;
 	}
 	
+	private void sendMessage(final CommandMessage message)
+	{
+		jedis.publish(clientChannel, gson.toJson(message));
+	}
+	
+	/**
+	 * Handles the incoming messages from the server
+	 */
 	private class JedisHandler extends JedisPubSub
 	{
 		@Override
