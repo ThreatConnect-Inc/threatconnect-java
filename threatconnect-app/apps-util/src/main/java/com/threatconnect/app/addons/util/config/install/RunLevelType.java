@@ -5,5 +5,6 @@ package com.threatconnect.app.addons.util.config.install;
  */
 public enum RunLevelType
 {
-	System, Organization, SpaceOrganization, SpaceSystem, Internal, StixParser, Playbook, ThirdParty, PlaybookOperator
+	System, Organization, SpaceOrganization, SpaceSystem, Internal, StixParser, Playbook, ThirdParty, PlaybookOperator,
+	TriggerService, ApiService, WebHookTriggerService
 }

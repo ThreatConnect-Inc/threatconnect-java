@@ -1,6 +1,6 @@
 package com.threatconnect.app.apps;
 
-public abstract class AppLauncher
+public abstract class AppLauncher<A>
 {
 	private final AppConfig appConfig;
 	
@@ -15,7 +15,7 @@ public abstract class AppLauncher
 	 * @return
 	 * @throws ClassNotFoundException
 	 */
-	public abstract Class<? extends App> getAppClassToExecute() throws ClassNotFoundException;
+	public abstract Class<? extends A> getAppClassToExecute() throws ClassNotFoundException;
 	
 	/**
 	 * Launch the application
