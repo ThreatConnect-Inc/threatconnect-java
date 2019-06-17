@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.threatconnect.app.apps.AppConfig;
+import com.threatconnect.app.apps.service.FireEventListener;
 import com.threatconnect.app.apps.service.Service;
 import com.threatconnect.app.apps.service.ServiceConfiguration;
 import com.threatconnect.app.apps.service.message.CommandMessage;
@@ -23,9 +24,7 @@ import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -47,8 +46,6 @@ public class DefaultServiceLauncher extends ServiceLauncher
 	private final String clientChannel;
 	private final ContentService contentService;
 	
-	private final Map<Long, ServiceConfiguration> serviceConfigurations;
-	
 	private Timer heartbeatTimer;
 	
 	public DefaultServiceLauncher(final AppConfig appConfig, final Class<? extends Service> serviceClass) throws AppInitializationException
@@ -57,7 +54,6 @@ public class DefaultServiceLauncher extends ServiceLauncher
 		
 		this.gson = new Gson();
 		this.jsonParser = new JsonParser();
-		this.serviceConfigurations = new HashMap<Long, ServiceConfiguration>();
 		
 		//building the redis connection object
 		final String host = appConfig.getString(PARAM_DB_PATH);
@@ -118,6 +114,14 @@ public class DefaultServiceLauncher extends ServiceLauncher
 		}, millis);
 	}
 	
+	@Override
+	protected FireEventListener createFireEventListener()
+	{
+		return serviceConfiguration -> {
+			//:TODO: notify the server that an event needs to be fired
+		};
+	}
+	
 	private void sendHeartbeatMessage()
 	{
 		Heartbeat heartbeat = new Heartbeat();
@@ -126,33 +130,26 @@ public class DefaultServiceLauncher extends ServiceLauncher
 	
 	private void handleCreateCommand(final CreateCommandConfig createCommandConfig)
 	{
-		ServiceConfiguration serviceConfiguration = updateServiceConfiguration(createCommandConfig.getConfigId(), createCommandConfig.getConfig());
-		getService().onConfigurationCreated(serviceConfiguration);
+		ServiceConfiguration serviceConfiguration = getServiceConfiguration(createCommandConfig.getConfigId(), createCommandConfig.getConfig());
+		getService().createServiceConfiguration(serviceConfiguration);
 	}
 	
 	private void handleUpdateCommand(final UpdateCommandConfig updateCommandConfig)
 	{
-		ServiceConfiguration serviceConfiguration = updateServiceConfiguration(updateCommandConfig.getConfigId(), updateCommandConfig.getConfig());
-		getService().onConfigurationUpdated(serviceConfiguration);
+		ServiceConfiguration serviceConfiguration = getServiceConfiguration(updateCommandConfig.getConfigId(), updateCommandConfig.getConfig());
+		getService().updateServiceConfiguration(serviceConfiguration);
 	}
 	
 	private void handleDeleteCommand(final DeleteCommandConfig deleteCommandConfig)
 	{
-		ServiceConfiguration serviceConfiguration = serviceConfigurations.remove(deleteCommandConfig.getConfigId());
-		if (null != serviceConfiguration)
-		{
-			getService().onConfigurationDeleted(serviceConfiguration);
-		}
+		getService().deleteServiceConfiguration(deleteCommandConfig.getConfigId());
 	}
 	
-	private ServiceConfiguration updateServiceConfiguration(final long configId, final List<NameValuePair<String, String>> params)
+	private ServiceConfiguration getServiceConfiguration(final long configId, final List<NameValuePair<String, String>> params)
 	{
 		//retrieve the service configuration for the config id. If it does not exists, create it
-		ServiceConfiguration serviceConfiguration = serviceConfigurations.computeIfAbsent(configId, id -> {
-			ServiceConfiguration sc = new ServiceConfiguration();
-			sc.setConfigId(id);
-			return sc;
-		});
+		ServiceConfiguration serviceConfiguration = getService().getServiceConfigurations().getOrDefault(configId, new ServiceConfiguration());
+		serviceConfiguration.setConfigId(configId);
 		
 		//update the params
 		serviceConfiguration.getParams().clear();

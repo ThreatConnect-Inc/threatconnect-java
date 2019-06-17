@@ -1,6 +1,7 @@
 package com.threatconnect.sdk.app.service.launcher;
 
 import com.threatconnect.app.apps.AppConfig;
+import com.threatconnect.app.apps.service.FireEventListener;
 import com.threatconnect.app.apps.service.Service;
 import com.threatconnect.sdk.app.exception.AppInitializationException;
 import org.slf4j.Logger;
@@ -36,6 +37,7 @@ public abstract class ServiceLauncher
 			// instantiate a new service class
 			logger.trace("Instantiating service class: " + serviceClass.getName());
 			this.service = serviceClass.newInstance();
+			this.service.setFireEventListener(createFireEventListener());
 		}
 		catch (InstantiationException | IllegalAccessException e)
 		{
@@ -54,4 +56,6 @@ public abstract class ServiceLauncher
 	}
 	
 	public abstract void start();
+	
+	protected abstract FireEventListener createFireEventListener();
 }
