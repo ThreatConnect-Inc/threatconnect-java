@@ -1,7 +1,6 @@
 package com.threatconnect.app.apps.service.api.mapping;
 
 import com.threatconnect.app.apps.service.message.RunService;
-import com.threatconnect.app.apps.service.message.WebHookEvent;
 import com.threatconnect.app.apps.service.api.ApiService;
 
 import java.lang.reflect.InvocationTargetException;
@@ -21,7 +20,7 @@ public class ApiRouter extends ApiMapper
 		throws ApiNotFoundException, InvocationTargetException, IllegalAccessException
 	{
 		final String key = buildKey(runService.getMethod(), runService.getPath());
-		Method method = getWebhookMap().get(key);
+		Method method = getApiMap().get(key);
 		if (null != method)
 		{
 			Class<?>[] paramTypes = method.getParameterTypes();

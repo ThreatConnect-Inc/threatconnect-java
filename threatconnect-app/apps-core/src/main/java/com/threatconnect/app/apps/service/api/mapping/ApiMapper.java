@@ -13,16 +13,16 @@ import java.util.Map;
 
 public class ApiMapper
 {
-	private final Map<String, Method> webhookMap;
+	private final Map<String, Method> apiMap;
 	private final List<ServiceItem> serviceItems;
 	
-	public ApiMapper(final Class<? extends ApiService> webhookClass)
+	public ApiMapper(final Class<? extends ApiService> apiServiceClass)
 	{
-		HashMap<String, Method> webhookMap = new HashMap<String, Method>();
+		HashMap<String, Method> apiMap = new HashMap<String, Method>();
 		HashMap<String, ServiceItem> serviceItems = new HashMap<String, ServiceItem>();
 		
 		//for each of the methods
-		for (Method method : webhookClass.getDeclaredMethods())
+		for (Method method : apiServiceClass.getDeclaredMethods())
 		{
 			//check to see if there is an annotation
 			ApiMapping apiMapping = method.getAnnotation(ApiMapping.class);
@@ -33,10 +33,10 @@ public class ApiMapper
 				{
 					//make sure this key does not yet exist (prevent duplicate implementations)
 					final String key = buildKey(apiMapping);
-					if (!webhookMap.containsKey(key))
+					if (!apiMap.containsKey(key))
 					{
 						//add this method to the apiMapping map
-						webhookMap.put(key, method);
+						apiMap.put(key, method);
 						
 						ServiceItem serviceItem = serviceItems.computeIfAbsent(apiMapping.uri(), uri -> {
 							ServiceItem item = new ServiceItem();
@@ -51,7 +51,7 @@ public class ApiMapper
 					}
 					else
 					{
-						throw new RuntimeException("ApiMapping was already defined to another method: " + webhookMap.get(key).getName());
+						throw new RuntimeException("ApiMapping was already defined to another method: " + apiMap.get(key).getName());
 					}
 				}
 				else
@@ -61,13 +61,13 @@ public class ApiMapper
 			}
 		}
 		
-		this.webhookMap = Collections.unmodifiableMap(webhookMap);
+		this.apiMap = Collections.unmodifiableMap(apiMap);
 		this.serviceItems = Collections.unmodifiableList(new ArrayList<ServiceItem>(serviceItems.values()));
 	}
 	
-	public Map<String, Method> getWebhookMap()
+	public Map<String, Method> getApiMap()
 	{
-		return webhookMap;
+		return apiMap;
 	}
 	
 	public List<ServiceItem> getServiceItems()
