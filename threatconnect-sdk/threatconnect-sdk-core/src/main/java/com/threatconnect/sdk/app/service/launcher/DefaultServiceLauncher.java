@@ -29,7 +29,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-public class DefaultServiceLauncher extends ServiceLauncher
+public class DefaultServiceLauncher<S extends Service> extends ServiceLauncher<S>
 {
 	private static final Logger logger = LoggerFactory.getLogger(DefaultServiceLauncher.class);
 	
@@ -38,7 +38,7 @@ public class DefaultServiceLauncher extends ServiceLauncher
 	
 	private static final String FIELD_COMMAND = "command";
 	
-	private final Gson gson;
+	protected  final Gson gson;
 	private final JsonParser jsonParser;
 	private final Jedis jedis;
 	private final int heartbeatSeconds;
@@ -48,9 +48,9 @@ public class DefaultServiceLauncher extends ServiceLauncher
 	
 	private Timer heartbeatTimer;
 	
-	public DefaultServiceLauncher(final AppConfig appConfig, final Class<? extends Service> serviceClass) throws AppInitializationException
+	public DefaultServiceLauncher(final AppConfig appConfig, final S service) throws AppInitializationException
 	{
-		super(appConfig, serviceClass);
+		super(appConfig, service);
 		
 		this.gson = new Gson();
 		this.jsonParser = new JsonParser();
@@ -158,9 +158,34 @@ public class DefaultServiceLauncher extends ServiceLauncher
 		return serviceConfiguration;
 	}
 	
-	private void sendMessage(final CommandMessage message)
+	protected void sendMessage(final CommandMessage message)
 	{
 		jedis.publish(clientChannel, gson.toJson(message));
+	}
+	
+	protected void onMessageReceived(final CommandMessage.Command command, final String message)
+	{
+		switch (command)
+		{
+			case CreateConfig:
+				handleCreateCommand(gson.fromJson(message, CreateCommandConfig.class));
+				break;
+			case UpdateConfig:
+				handleUpdateCommand(gson.fromJson(message, UpdateCommandConfig.class));
+				break;
+			case DeleteConfig:
+				handleDeleteCommand(gson.fromJson(message, DeleteCommandConfig.class));
+				break;
+			case Shutdown:
+				//notify the service that we are shutting down
+				getService().onShutdown();
+				
+				// flush the logs to the server
+				ServerLogger.getInstance(getAppConfig()).flushToServer();
+				
+				System.exit(0);
+				break;
+		}
 	}
 	
 	/**
@@ -181,27 +206,8 @@ public class DefaultServiceLauncher extends ServiceLauncher
 			{
 				try
 				{
-					switch (CommandMessage.Command.valueOf(commandValue))
-					{
-						case CreateConfig:
-							handleCreateCommand(gson.fromJson(message, CreateCommandConfig.class));
-							break;
-						case UpdateConfig:
-							handleUpdateCommand(gson.fromJson(message, UpdateCommandConfig.class));
-							break;
-						case DeleteConfig:
-							handleDeleteCommand(gson.fromJson(message, DeleteCommandConfig.class));
-							break;
-						case Shutdown:
-							//notify the service that we are shutting down
-							getService().onShutdown();
-							
-							// flush the logs to the server
-							ServerLogger.getInstance(getAppConfig()).flushToServer();
-							
-							System.exit(0);
-							break;
-					}
+					CommandMessage.Command command = CommandMessage.Command.valueOf(commandValue);
+					onMessageReceived(command, message);
 				}
 				catch (IllegalArgumentException e)
 				{

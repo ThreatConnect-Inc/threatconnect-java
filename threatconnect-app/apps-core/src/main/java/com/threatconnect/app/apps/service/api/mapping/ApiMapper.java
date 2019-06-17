@@ -1,7 +1,7 @@
-package com.threatconnect.app.apps.service.webhook.mapping;
+package com.threatconnect.app.apps.service.api.mapping;
 
 import com.threatconnect.app.apps.service.message.ServiceItem;
-import com.threatconnect.app.apps.service.webhook.WebhookService;
+import com.threatconnect.app.apps.service.api.ApiService;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -11,12 +11,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class WebhookMapper
+public class ApiMapper
 {
 	private final Map<String, Method> webhookMap;
 	private final List<ServiceItem> serviceItems;
 	
-	public WebhookMapper(final Class<? extends WebhookService> webhookClass)
+	public ApiMapper(final Class<? extends ApiService> webhookClass)
 	{
 		HashMap<String, Method> webhookMap = new HashMap<String, Method>();
 		HashMap<String, ServiceItem> serviceItems = new HashMap<String, ServiceItem>();
@@ -25,38 +25,38 @@ public class WebhookMapper
 		for (Method method : webhookClass.getDeclaredMethods())
 		{
 			//check to see if there is an annotation
-			Webhook webhook = method.getAnnotation(Webhook.class);
-			if (null != webhook)
+			ApiMapping apiMapping = method.getAnnotation(ApiMapping.class);
+			if (null != apiMapping)
 			{
 				//make sure the method is public
 				if (Modifier.isPublic(method.getModifiers()))
 				{
 					//make sure this key does not yet exist (prevent duplicate implementations)
-					final String key = buildKey(webhook);
+					final String key = buildKey(apiMapping);
 					if (!webhookMap.containsKey(key))
 					{
-						//add this method to the webhook map
+						//add this method to the apiMapping map
 						webhookMap.put(key, method);
 						
-						ServiceItem serviceItem = serviceItems.computeIfAbsent(webhook.uri(), uri -> {
+						ServiceItem serviceItem = serviceItems.computeIfAbsent(apiMapping.uri(), uri -> {
 							ServiceItem item = new ServiceItem();
 							item.setMethods(new ArrayList<String>());
 							item.setPath(uri);
-							item.setName(webhook.name());
-							item.setDescription(webhook.description());
+							item.setName(apiMapping.name());
+							item.setDescription(apiMapping.description());
 							return item;
 						});
 						
-						serviceItem.getMethods().add(webhook.method().toString());
+						serviceItem.getMethods().add(apiMapping.method().toString());
 					}
 					else
 					{
-						throw new RuntimeException("Webhook was already defined to another method: " + webhookMap.get(key).getName());
+						throw new RuntimeException("ApiMapping was already defined to another method: " + webhookMap.get(key).getName());
 					}
 				}
 				else
 				{
-					throw new RuntimeException("Webhook method is not public: " + method.getName());
+					throw new RuntimeException("ApiMapping method is not public: " + method.getName());
 				}
 			}
 		}
@@ -75,9 +75,9 @@ public class WebhookMapper
 		return serviceItems;
 	}
 	
-	protected String buildKey(final Webhook webhook)
+	protected String buildKey(final ApiMapping apiMapping)
 	{
-		return buildKey(webhook.method().toString(), webhook.uri());
+		return buildKey(apiMapping.method().toString(), apiMapping.uri());
 	}
 	
 	protected String buildKey(final String method, final String uri)

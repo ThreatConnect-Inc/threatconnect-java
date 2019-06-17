@@ -1,4 +1,4 @@
-package com.threatconnect.app.apps.service.webhook.mapping;
+package com.threatconnect.app.apps.service.api.mapping;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,10 +7,10 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Webhook
+public @interface ApiMapping
 {
 	/**
-	 * The URI of the webhook
+	 * The URI of the api request
 	 *
 	 * @return
 	 */

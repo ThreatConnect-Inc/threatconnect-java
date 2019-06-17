@@ -2,14 +2,17 @@ package com.threatconnect.sdk.app.service;
 
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.service.Service;
+import com.threatconnect.app.apps.service.api.ApiService;
 import com.threatconnect.sdk.app.SDKAppLauncher;
+import com.threatconnect.sdk.app.exception.AppInitializationException;
 import com.threatconnect.sdk.app.service.launcher.DefaultServiceLauncher;
 import com.threatconnect.sdk.app.service.launcher.ServiceLauncher;
+import com.threatconnect.sdk.app.service.launcher.WebhookServiceLauncher;
 import com.threatconnect.sdk.log.ServerLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ServiceMain extends SDKAppLauncher<Service>
+public final class ServiceMain extends SDKAppLauncher<Service>
 {
 	private static final Logger logger = LoggerFactory.getLogger(ServiceMain.class);
 	
@@ -26,14 +29,35 @@ public class ServiceMain extends SDKAppLauncher<Service>
 	@Override
 	public void launch() throws Exception
 	{
-		logger.info("Retrieving class to execute...");
-		final Class<? extends Service> serviceClass = getAppClassToExecute();
-		
 		// set whether or not api logging is enabled
 		ServerLogger.getInstance(getAppConfig()).setEnabled(getAppConfig().isTcLogToApi());
 		
+		logger.info("Retrieving class to execute...");
+		final Class<? extends Service> serviceClass = getAppClassToExecute();
+		final Service service;
+		try
+		{
+			// instantiate a new service class
+			logger.trace("Instantiating service class: " + serviceClass.getName());
+			service = serviceClass.newInstance();
+		}
+		catch (InstantiationException | IllegalAccessException e)
+		{
+			throw new AppInitializationException(e);
+		}
+		
 		//create a new service executor and start the service
-		ServiceLauncher serviceLauncher = new DefaultServiceLauncher(getAppConfig(), serviceClass);
+		ServiceLauncher<?> serviceLauncher;
+		
+		if (ApiService.class.isAssignableFrom(serviceClass))
+		{
+			serviceLauncher = new WebhookServiceLauncher(getAppConfig(), (ApiService) service);
+		}
+		else
+		{
+			serviceLauncher = new DefaultServiceLauncher<Service>(getAppConfig(), service);
+		}
+		
 		serviceLauncher.start();
 	}
 	

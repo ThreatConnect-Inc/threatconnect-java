@@ -1,13 +1,14 @@
 package com.threatconnect.app.apps.service;
 
-import com.threatconnect.app.apps.service.webhook.WebhookService;
-import com.threatconnect.app.apps.service.webhook.mapping.Method;
-import com.threatconnect.app.apps.service.webhook.mapping.Webhook;
+import com.threatconnect.app.apps.service.api.ApiService;
+import com.threatconnect.app.apps.service.api.mapping.ApiMapping;
+import com.threatconnect.app.apps.service.api.mapping.Method;
+import com.threatconnect.app.apps.service.message.RunService;
 
-public class SimpleWebhookService extends WebhookService
+public class SimpleApiService extends ApiService
 {
-	@Webhook(uri = "/say/hi", method = Method.GET)
-	public String sayHi()
+	@ApiMapping(uri = "/say/hi", method = Method.GET)
+	public String sayHi(RunService runService)
 	{
 		return "Hi";
 	}

@@ -3,46 +3,30 @@ package com.threatconnect.sdk.app.service.launcher;
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.service.FireEventListener;
 import com.threatconnect.app.apps.service.Service;
-import com.threatconnect.sdk.app.exception.AppInitializationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Greg Marut
  */
-public abstract class ServiceLauncher
+public abstract class ServiceLauncher<S extends Service>
 {
-	private static final Logger logger = LoggerFactory.getLogger(ServiceLauncher.class);
-	
 	private final AppConfig appConfig;
-	private final Service service;
+	private final S service;
 	
-	public ServiceLauncher(final AppConfig appConfig, final Class<? extends Service> serviceClass)
-		throws AppInitializationException
+	public ServiceLauncher(final AppConfig appConfig, final S service)
 	{
 		if (null == appConfig)
 		{
 			throw new IllegalArgumentException("appConfig cannot be null.");
 		}
 		
-		if (null == serviceClass)
+		if (null == service)
 		{
-			throw new IllegalArgumentException("serviceClass cannot be null.");
+			throw new IllegalArgumentException("service cannot be null.");
 		}
 		
 		this.appConfig = appConfig;
-		
-		try
-		{
-			// instantiate a new service class
-			logger.trace("Instantiating service class: " + serviceClass.getName());
-			this.service = serviceClass.newInstance();
-			this.service.setFireEventListener(createFireEventListener());
-		}
-		catch (InstantiationException | IllegalAccessException e)
-		{
-			throw new AppInitializationException(e);
-		}
+		this.service = service;
+		this.service.setFireEventListener(createFireEventListener());
 	}
 	
 	public AppConfig getAppConfig()
@@ -50,7 +34,7 @@ public abstract class ServiceLauncher
 		return appConfig;
 	}
 	
-	public Service getService()
+	public S getService()
 	{
 		return service;
 	}
