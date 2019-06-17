@@ -1,5 +1,11 @@
 package com.threatconnect.app.apps.service.webhook;
 
-public class WebhookService
+import com.threatconnect.app.apps.service.Service;
+
+public abstract class WebhookService extends Service
 {
+	public WebhookService()
+	{
+	
+	}
 }
