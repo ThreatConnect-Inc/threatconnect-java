@@ -3,11 +3,15 @@ package com.threatconnect.sdk.app.service;
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.service.Service;
 import com.threatconnect.app.apps.service.api.ApiService;
+import com.threatconnect.app.playbooks.app.service.PlaybookService;
+import com.threatconnect.app.playbooks.app.service.webhook.WebhookService;
 import com.threatconnect.sdk.app.SDKAppLauncher;
 import com.threatconnect.sdk.app.exception.AppInitializationException;
-import com.threatconnect.sdk.app.service.launcher.DefaultServiceLauncher;
-import com.threatconnect.sdk.app.service.launcher.ServiceLauncher;
 import com.threatconnect.sdk.app.service.launcher.ApiServiceLauncher;
+import com.threatconnect.sdk.app.service.launcher.PlaybookServiceLauncher;
+import com.threatconnect.sdk.app.service.launcher.ServiceLauncher;
+import com.threatconnect.sdk.app.service.launcher.WebhookServiceLauncher;
+
 import com.threatconnect.sdk.log.ServerLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +39,7 @@ public final class ServiceMain extends SDKAppLauncher<Service>
 		logger.info("Retrieving class to execute...");
 		final Class<? extends Service> serviceClass = getAppClassToExecute();
 		final Service service;
+		
 		try
 		{
 			// instantiate a new service class
@@ -53,9 +58,17 @@ public final class ServiceMain extends SDKAppLauncher<Service>
 		{
 			serviceLauncher = new ApiServiceLauncher(getAppConfig(), (ApiService) service);
 		}
+		else if (WebhookService.class.isAssignableFrom(serviceClass))
+		{
+			serviceLauncher = new WebhookServiceLauncher(getAppConfig(), (WebhookService) service);
+		}
+		else if (PlaybookService.class.isAssignableFrom(serviceClass))
+		{
+			serviceLauncher = new PlaybookServiceLauncher<PlaybookService>(getAppConfig(), (PlaybookService) service);
+		}
 		else
 		{
-			serviceLauncher = new DefaultServiceLauncher<Service>(getAppConfig(), service);
+			throw new AppInitializationException("Unsupported service: " + serviceClass.getName());
 		}
 		
 		serviceLauncher.start();

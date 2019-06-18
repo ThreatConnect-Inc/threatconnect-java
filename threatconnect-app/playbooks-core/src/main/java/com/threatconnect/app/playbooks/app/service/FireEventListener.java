@@ -1,4 +1,4 @@
-package com.threatconnect.app.apps.service;
+package com.threatconnect.app.playbooks.app.service;
 
 public interface FireEventListener
 {

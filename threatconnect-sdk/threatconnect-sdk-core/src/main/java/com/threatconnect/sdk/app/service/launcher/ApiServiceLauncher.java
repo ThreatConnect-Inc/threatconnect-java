@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Base64;
 
-public class ApiServiceLauncher extends DefaultServiceLauncher<ApiService>
+public class ApiServiceLauncher extends ServiceLauncher<ApiService>
 {
 	private static final Logger logger = LoggerFactory.getLogger(ApiServiceLauncher.class);
 	
@@ -39,10 +39,6 @@ public class ApiServiceLauncher extends DefaultServiceLauncher<ApiService>
 				break;
 			case RunService:
 				handleRunServiceEvent(gson.fromJson(message, RunService.class));
-				break;
-			default:
-				//forward the message up the chain
-				super.onMessageReceived(command, message);
 				break;
 		}
 	}

@@ -12,28 +12,4 @@ public class SimpleApiService extends ApiService
 	{
 		return "Hi";
 	}
-	
-	@Override
-	public void onServiceConfigurationCreated(final ServiceConfiguration serviceConfiguration)
-	{
-	
-	}
-	
-	@Override
-	public void onServiceConfigurationUpdated(final ServiceConfiguration serviceConfiguration)
-	{
-	
-	}
-	
-	@Override
-	public void onServiceConfigurationDeleted(final ServiceConfiguration serviceConfiguration)
-	{
-	
-	}
-	
-	@Override
-	public void onShutdown()
-	{
-	
-	}
 }
