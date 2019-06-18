@@ -13,8 +13,8 @@ public class ApiRouterTest
 	@Test
 	public void simpleTest() throws IllegalAccessException, InvocationTargetException, ApiNotFoundException
 	{
-		SimpleApiService simpleWebhookService = new SimpleApiService();
-		ApiRouter apiRouter = new ApiRouter(simpleWebhookService);
+		SimpleApiService simpleApiService = new SimpleApiService();
+		ApiRouter apiRouter = new ApiRouter(simpleApiService);
 		
 		RunService runService = new RunService();
 		runService.setMethod("GET");

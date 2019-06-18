@@ -7,7 +7,7 @@ import com.threatconnect.sdk.app.SDKAppLauncher;
 import com.threatconnect.sdk.app.exception.AppInitializationException;
 import com.threatconnect.sdk.app.service.launcher.DefaultServiceLauncher;
 import com.threatconnect.sdk.app.service.launcher.ServiceLauncher;
-import com.threatconnect.sdk.app.service.launcher.WebhookServiceLauncher;
+import com.threatconnect.sdk.app.service.launcher.ApiServiceLauncher;
 import com.threatconnect.sdk.log.ServerLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +51,7 @@ public final class ServiceMain extends SDKAppLauncher<Service>
 		
 		if (ApiService.class.isAssignableFrom(serviceClass))
 		{
-			serviceLauncher = new WebhookServiceLauncher(getAppConfig(), (ApiService) service);
+			serviceLauncher = new ApiServiceLauncher(getAppConfig(), (ApiService) service);
 		}
 		else
 		{
