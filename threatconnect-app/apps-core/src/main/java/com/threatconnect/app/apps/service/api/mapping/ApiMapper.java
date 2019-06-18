@@ -1,7 +1,7 @@
 package com.threatconnect.app.apps.service.api.mapping;
 
-import com.threatconnect.app.apps.service.message.ServiceItem;
 import com.threatconnect.app.apps.service.api.ApiService;
+import com.threatconnect.app.apps.service.message.ServiceItem;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -13,12 +13,12 @@ import java.util.Map;
 
 public class ApiMapper
 {
-	private final Map<String, Method> apiMap;
+	private final Map<ApiMethodPath, Method> apiMap;
 	private final List<ServiceItem> serviceItems;
 	
 	public ApiMapper(final Class<? extends ApiService> apiServiceClass)
 	{
-		HashMap<String, Method> apiMap = new HashMap<String, Method>();
+		HashMap<ApiMethodPath, Method> apiMap = new HashMap<ApiMethodPath, Method>();
 		HashMap<String, ServiceItem> serviceItems = new HashMap<String, ServiceItem>();
 		
 		//for each of the methods
@@ -32,16 +32,16 @@ public class ApiMapper
 				if (Modifier.isPublic(method.getModifiers()))
 				{
 					//make sure this key does not yet exist (prevent duplicate implementations)
-					final String key = buildKey(apiMapping);
-					if (!apiMap.containsKey(key))
+					final ApiMethodPath apiMethodPath = new ApiMethodPath(apiMapping.method(), apiMapping.path());
+					if (!apiMap.containsKey(apiMethodPath))
 					{
 						//add this method to the apiMapping map
-						apiMap.put(key, method);
+						apiMap.put(apiMethodPath, method);
 						
-						ServiceItem serviceItem = serviceItems.computeIfAbsent(apiMapping.uri(), uri -> {
+						ServiceItem serviceItem = serviceItems.computeIfAbsent(apiMapping.path(), path -> {
 							ServiceItem item = new ServiceItem();
 							item.setMethods(new ArrayList<String>());
-							item.setPath(uri);
+							item.setPath(path);
 							item.setName(apiMapping.name());
 							item.setDescription(apiMapping.description());
 							return item;
@@ -51,7 +51,7 @@ public class ApiMapper
 					}
 					else
 					{
-						throw new RuntimeException("ApiMapping was already defined to another method: " + apiMap.get(key).getName());
+						throw new RuntimeException("ApiMapping was already defined to another method: " + apiMap.get(apiMethodPath).getName());
 					}
 				}
 				else
@@ -65,7 +65,7 @@ public class ApiMapper
 		this.serviceItems = Collections.unmodifiableList(new ArrayList<ServiceItem>(serviceItems.values()));
 	}
 	
-	public Map<String, Method> getApiMap()
+	public Map<ApiMethodPath, Method> getApiMap()
 	{
 		return apiMap;
 	}
@@ -73,15 +73,5 @@ public class ApiMapper
 	public List<ServiceItem> getServiceItems()
 	{
 		return serviceItems;
-	}
-	
-	protected String buildKey(final ApiMapping apiMapping)
-	{
-		return buildKey(apiMapping.method().toString(), apiMapping.uri());
-	}
-	
-	protected String buildKey(final String method, final String uri)
-	{
-		return method.toUpperCase() + " " + uri.toLowerCase();
 	}
 }

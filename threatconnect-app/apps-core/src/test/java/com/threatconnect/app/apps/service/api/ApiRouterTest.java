@@ -1,4 +1,4 @@
-package com.threatconnect.app.apps.service;
+package com.threatconnect.app.apps.service.api;
 
 import com.threatconnect.app.apps.service.api.mapping.ApiNotFoundException;
 import com.threatconnect.app.apps.service.api.mapping.ApiRouter;
