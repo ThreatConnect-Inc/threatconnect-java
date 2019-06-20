@@ -54,12 +54,17 @@ public class ApiPath
 		}
 		
 		//the variable was not found
-		return null;
+		throw new RuntimeException("Unable to resolve unknown variable \"" + variable + "\" in path: " + this.path);
 	}
 	
 	public boolean containsVariables()
 	{
 		return !variableGroupMap.isEmpty();
+	}
+	
+	public boolean containsVariable(final String variable)
+	{
+		return variableGroupMap.containsKey(variable);
 	}
 	
 	public ApiMethodPath toApiMethodPath(final Method method)

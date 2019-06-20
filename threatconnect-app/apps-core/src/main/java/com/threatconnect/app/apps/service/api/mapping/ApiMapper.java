@@ -2,9 +2,8 @@ package com.threatconnect.app.apps.service.api.mapping;
 
 import com.threatconnect.app.apps.service.api.ApiService;
 import com.threatconnect.app.apps.service.message.ServiceItem;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -17,8 +16,6 @@ import java.util.regex.Pattern;
 
 public class ApiMapper
 {
-	private static final Logger logger = LoggerFactory.getLogger(ApiMapper.class);
-	
 	private final Map<ApiMethodPath, Method> apiMap;
 	private final List<ServiceItem> serviceItems;
 	
@@ -41,6 +38,8 @@ public class ApiMapper
 					final ApiMethodPath apiMethodPath = new ApiMethodPath(apiMapping.method(), apiMapping.path());
 					if (!apiMap.containsKey(apiMethodPath))
 					{
+						validatePathVariables(apiMethodPath.getApiPath(), method);
+						
 						//add this method to the apiMapping map
 						apiMap.put(apiMethodPath, method);
 						
@@ -136,5 +135,44 @@ public class ApiMapper
 			//add this entry back to the temp map
 			tempMap.put(entry.getKey(), entry.getValue());
 		}
+	}
+	
+	private void validatePathVariables(final ApiPath apiPath, final Method method)
+	{
+		Annotation[][] parameterAnnotations = method.getParameterAnnotations();
+		
+		//for each of the param types
+		for (Annotation[] annotations : parameterAnnotations)
+		{
+			//get the annotations for this parameter
+			PathVariable pathVariable = findAnnotation(annotations, PathVariable.class);
+			if (null != pathVariable)
+			{
+				//check to see if this path does not contain a variable by this name
+				if (!apiPath.containsVariable(pathVariable.value()))
+				{
+					throw new RuntimeException("Unable to resolve unknown variable \"" + pathVariable.value() + "\" in path: " + apiPath.getPath());
+				}
+			}
+		}
+	}
+	
+	protected <A extends Annotation> A findAnnotation(final Annotation[] annotations, final Class<A> clazz)
+	{
+		//make sure the array is not nul
+		if (null != annotations)
+		{
+			//for each of the annotations
+			for (Annotation annotation : annotations)
+			{
+				if (annotation.annotationType().equals(clazz))
+				{
+					return (A) annotation;
+				}
+			}
+		}
+		
+		//no annotation was found
+		return null;
 	}
 }

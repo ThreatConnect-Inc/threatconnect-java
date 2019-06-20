@@ -51,18 +51,4 @@ public class ApiRouterTest
 		Object result = apiRouter.routeApiEvent(runService);
 		Assert.assertEquals(result, "Hello John Doe");
 	}
-	
-	@Test
-	public void ambiguousMappingTest()
-	{
-		try
-		{
-			new ApiRouter(new AmbiguousApiService());
-			Assert.fail("Expected runtime exception");
-		}
-		catch (RuntimeException e)
-		{
-			Assert.assertTrue(e.getMessage().startsWith("Ambiguous api mapping detected."));
-		}
-	}
 }

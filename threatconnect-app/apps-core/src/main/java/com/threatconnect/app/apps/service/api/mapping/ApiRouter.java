@@ -38,17 +38,17 @@ public class ApiRouter extends ApiMapper
 				final Class<?> type = paramTypes[i];
 				
 				//get the annotations for this parameter
-				PathParam pathParam = findAnnotation(parameterAnnotations[i], PathParam.class);
+				PathVariable pathVariable = findAnnotation(parameterAnnotations[i], PathVariable.class);
 				
 				//check to see if this type is a webhook event type
 				if (RunService.class.isAssignableFrom(type))
 				{
 					args[i] = runService;
 				}
-				else if (null != pathParam)
+				else if (null != pathVariable)
 				{
 					ApiPath apiPath = apiMethodPath.getApiPath();
-					args[i] = apiPath.resolveVariable(runService.getPath(), pathParam.value());
+					args[i] = apiPath.resolveVariable(runService.getPath(), pathVariable.value());
 				}
 				else
 				{
@@ -62,24 +62,5 @@ public class ApiRouter extends ApiMapper
 		{
 			throw new ApiNotFoundException();
 		}
-	}
-	
-	private <A extends Annotation> A findAnnotation(final Annotation[] annotations, final Class<A> clazz)
-	{
-		//make sure the array is not nul
-		if (null != annotations)
-		{
-			//for each of the annotations
-			for (Annotation annotation : annotations)
-			{
-				if (annotation.annotationType().equals(clazz))
-				{
-					return (A) annotation;
-				}
-			}
-		}
-		
-		//no annotation was found
-		return null;
 	}
 }
