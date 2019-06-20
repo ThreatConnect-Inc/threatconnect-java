@@ -106,12 +106,6 @@ public class InstallValidator extends Validator<Install>
 			//validate the playbook
 			playbookValidator.validate(object.getPlaybook());
 		}
-		//check to see if this is an api service
-		else if (object.getRuntimeLevel().equals(RunLevelType.ApiService))
-		{
-			ApiServiceValidator validator = new ApiServiceValidator();
-			validator.validate(object);
-		}
 		
 		//check to see if this app supports the smtp settings feature
 		if (object.getFeatures().contains(Feature.SMTP_SETTINGS))
