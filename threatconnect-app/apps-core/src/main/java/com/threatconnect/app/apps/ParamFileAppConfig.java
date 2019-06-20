@@ -45,9 +45,6 @@ public class ParamFileAppConfig extends AppConfig
 		final String appParamFile = System.getenv(ENV_APP_PARAM_FILE);
 		final String appParamKey = System.getenv(ENV_APP_PARAM_KEY);
 		
-		System.out.println("File: " + appParamFile);
-		System.out.println("Key: " + appParamFile);
-		
 		//check to see if both values are set
 		if (null != appParamFile && null != appParamKey)
 		{
