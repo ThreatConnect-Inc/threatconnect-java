@@ -32,6 +32,7 @@ import java.util.List;
 public class JavaPackageMojo extends AbstractAppPackageMojo
 {
 	public static final String APP_MAIN_CLASSNAME = "com.threatconnect.sdk.app.AppMain";
+	public static final String SERVICE_MAIN_CLASSNAME = "com.threatconnect.sdk.app.service.ServiceMain";
 	
 	/**
 	 * Classifier to add to the generated App. If given, the artifact will be an attachment instead. The classifier will
@@ -103,7 +104,19 @@ public class JavaPackageMojo extends AbstractAppPackageMojo
 					//check to see if the program main is null
 					if (null == object.getProgramMain())
 					{
-						object.setProgramMain(APP_MAIN_CLASSNAME);
+						//check to see if this is a service app
+						if (RunLevelType.ApiService == object.getRuntimeLevel() ||
+							RunLevelType.TriggerService == object.getRuntimeLevel() ||
+							RunLevelType.WebHookTriggerService == object.getRuntimeLevel())
+						{
+							//use the service main launch this service
+							object.setProgramMain(SERVICE_MAIN_CLASSNAME);
+						}
+						else
+						{
+							//use the default app main to launch this app
+							object.setProgramMain(APP_MAIN_CLASSNAME);
+						}
 					}
 					
 					super.validate(object);
