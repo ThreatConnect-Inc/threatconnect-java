@@ -6,6 +6,7 @@ import com.threatconnect.app.apps.service.message.RunService;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Map;
 
 public class ApiRouter extends ApiMapper
 {
@@ -20,10 +21,13 @@ public class ApiRouter extends ApiMapper
 	public Object routeApiEvent(final RunService runService)
 		throws ApiNotFoundException, InvocationTargetException, IllegalAccessException
 	{
-		final ApiMethodPath apiMethodPath = new ApiMethodPath(runService.getMethod(), runService.getPath());
-		Method method = getApiMap().get(apiMethodPath);
-		if (null != method)
+		//look up the method and path to find a matching api endpoint
+		final Map.Entry<ApiMethodPath, Method> entry =
+			find(com.threatconnect.app.apps.service.api.mapping.Method.valueOf(runService.getMethod()), runService.getPath());
+		if (null != entry)
 		{
+			final ApiMethodPath apiMethodPath = entry.getKey();
+			final Method method = entry.getValue();
 			Class<?>[] paramTypes = method.getParameterTypes();
 			Object[] args = new Object[paramTypes.length];
 			Annotation[][] parameterAnnotations = method.getParameterAnnotations();
@@ -44,8 +48,7 @@ public class ApiRouter extends ApiMapper
 				else if (null != pathParam)
 				{
 					ApiPath apiPath = apiMethodPath.getApiPath();
-					
-					//:TODO: map the api path variable
+					args[i] = apiPath.resolveVariable(runService.getPath(), pathParam.value());
 				}
 				else
 				{
@@ -69,7 +72,7 @@ public class ApiRouter extends ApiMapper
 			//for each of the annotations
 			for (Annotation annotation : annotations)
 			{
-				if (annotation.getClass().equals(clazz))
+				if (annotation.annotationType().equals(clazz))
 				{
 					return (A) annotation;
 				}

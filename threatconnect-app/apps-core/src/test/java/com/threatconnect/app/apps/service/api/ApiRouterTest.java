@@ -23,4 +23,46 @@ public class ApiRouterTest
 		Object result = apiRouter.routeApiEvent(runService);
 		Assert.assertEquals(result, "Hi");
 	}
+	
+	@Test
+	public void variableTest1() throws IllegalAccessException, InvocationTargetException, ApiNotFoundException
+	{
+		SimpleApiService simpleApiService = new SimpleApiService();
+		ApiRouter apiRouter = new ApiRouter(simpleApiService);
+		
+		RunService runService = new RunService();
+		runService.setMethod("GET");
+		runService.setPath("/say/hi/Greg");
+		
+		Object result = apiRouter.routeApiEvent(runService);
+		Assert.assertEquals(result, "Hi Greg");
+	}
+	
+	@Test
+	public void variableTest2() throws IllegalAccessException, InvocationTargetException, ApiNotFoundException
+	{
+		SimpleApiService simpleApiService = new SimpleApiService();
+		ApiRouter apiRouter = new ApiRouter(simpleApiService);
+		
+		RunService runService = new RunService();
+		runService.setMethod("GET");
+		runService.setPath("/say/Hello/John/Doe");
+		
+		Object result = apiRouter.routeApiEvent(runService);
+		Assert.assertEquals(result, "Hello John Doe");
+	}
+	
+	@Test
+	public void ambiguousMappingTest()
+	{
+		try
+		{
+			new ApiRouter(new AmbiguousApiService());
+			Assert.fail("Expected runtime exception");
+		}
+		catch (RuntimeException e)
+		{
+			Assert.assertTrue(e.getMessage().startsWith("Ambiguous api mapping detected."));
+		}
+	}
 }
