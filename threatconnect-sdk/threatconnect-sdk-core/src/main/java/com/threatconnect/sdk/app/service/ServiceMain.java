@@ -5,6 +5,7 @@ import com.threatconnect.app.apps.service.Service;
 import com.threatconnect.app.apps.service.api.ApiService;
 import com.threatconnect.app.playbooks.app.service.PlaybookService;
 import com.threatconnect.app.playbooks.app.service.webhook.WebhookService;
+import com.threatconnect.sdk.app.LoggerUtil;
 import com.threatconnect.sdk.app.SDKAppLauncher;
 import com.threatconnect.sdk.app.exception.AppInitializationException;
 import com.threatconnect.sdk.app.service.launcher.ApiServiceLauncher;
@@ -15,6 +16,8 @@ import com.threatconnect.sdk.app.service.launcher.WebhookServiceLauncher;
 import com.threatconnect.sdk.log.ServerLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
 
 public final class ServiceMain extends SDKAppLauncher<Service>
 {
@@ -39,6 +42,11 @@ public final class ServiceMain extends SDKAppLauncher<Service>
 		logger.info("Retrieving class to execute...");
 		final Class<? extends Service> serviceClass = getAppClassToExecute();
 		final Service service;
+		
+		// reconfigure the log file for this app
+		logger.info("Configuring App Logging...");
+		File logFile = new File(getAppConfig().getTcLogPath() + File.separator + serviceClass.getSimpleName() + ".log");
+		LoggerUtil.reconfigureGlobalLogger(logFile, getAppConfig());
 		
 		try
 		{

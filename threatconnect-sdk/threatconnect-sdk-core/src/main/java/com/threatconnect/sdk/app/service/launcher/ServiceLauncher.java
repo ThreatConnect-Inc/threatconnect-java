@@ -102,6 +102,8 @@ public abstract class ServiceLauncher<S>
 	
 	public void start()
 	{
+		logger.trace("Starting service: " + getClass().getName());
+		
 		//make a blocking call to wait for the result from redis
 		logger.trace("Subscribing to channel: " + serverChannel);
 		jedis.subscribe(new JedisHandler(), serverChannel);
@@ -134,6 +136,7 @@ public abstract class ServiceLauncher<S>
 	
 	protected void sendMessage(final CommandMessage message)
 	{
+		logger.trace("Sending Message: " + message.getCommand());
 		jedis.publish(clientChannel, gson.toJson(message));
 	}
 	

@@ -72,9 +72,15 @@ public class JavaPackageMojo extends AbstractAppPackageMojo
 		//retrieve the install profile
 		Install install = profile.getSource();
 		
-		//add the features that this sdk supports
-		install.getFeatures().add(Feature.SECURE_PARAMS);
-		install.getFeatures().add(Feature.FILE_PARAMS);
+		//check to see if this is a not service app (service apps do not support secure or file params at this time)
+		if (RunLevelType.ApiService != install.getRuntimeLevel() &&
+			RunLevelType.TriggerService != install.getRuntimeLevel() &&
+			RunLevelType.WebHookTriggerService != install.getRuntimeLevel())
+		{
+			//add the features that this sdk supports
+			install.getFeatures().add(Feature.SECURE_PARAMS);
+			install.getFeatures().add(Feature.FILE_PARAMS);
+		}
 		
 		//set the sdk version
 		install.setSdkVersion(loadAppPackagerVersion());
