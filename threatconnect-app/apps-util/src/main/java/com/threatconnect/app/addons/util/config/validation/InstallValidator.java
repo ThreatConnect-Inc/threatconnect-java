@@ -11,6 +11,7 @@ import com.threatconnect.app.addons.util.config.install.RunLevelType;
 import com.threatconnect.app.addons.util.config.install.ServerVersion;
 import com.threatconnect.app.addons.util.config.layout.Layout;
 import com.threatconnect.app.addons.util.config.layout.validation.LayoutValidator;
+import com.threatconnect.app.apps.service.Service;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -152,6 +153,14 @@ public class InstallValidator extends Validator<Install>
 		{
 			Validator<Layout> layoutValidator = new LayoutValidator(object);
 			layoutValidator.validate(object.getLayout());
+		}
+		
+		//check to see if this is a service
+		if (object.isService())
+		{
+			//run the service validations
+			Validator<Install> serviceValidator = new ServiceValidator();
+			serviceValidator.validate(object);
 		}
 	}
 }

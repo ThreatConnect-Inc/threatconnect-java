@@ -73,9 +73,7 @@ public class JavaPackageMojo extends AbstractAppPackageMojo
 		Install install = profile.getSource();
 		
 		//check to see if this is a not service app (service apps do not support secure or file params at this time)
-		if (RunLevelType.ApiService != install.getRuntimeLevel() &&
-			RunLevelType.TriggerService != install.getRuntimeLevel() &&
-			RunLevelType.WebHookTriggerService != install.getRuntimeLevel())
+		if (!install.isService())
 		{
 			//add the features that this sdk supports
 			install.getFeatures().add(Feature.SECURE_PARAMS);
@@ -111,9 +109,7 @@ public class JavaPackageMojo extends AbstractAppPackageMojo
 					if (null == object.getProgramMain())
 					{
 						//check to see if this is a service app
-						if (RunLevelType.ApiService == object.getRuntimeLevel() ||
-							RunLevelType.TriggerService == object.getRuntimeLevel() ||
-							RunLevelType.WebHookTriggerService == object.getRuntimeLevel())
+						if (object.isService())
 						{
 							//use the service main launch this service
 							object.setProgramMain(SERVICE_MAIN_CLASSNAME);

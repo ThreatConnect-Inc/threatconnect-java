@@ -30,7 +30,8 @@ public abstract class ServiceLauncher<S>
 	private static final String FIELD_COMMAND = "command";
 	
 	protected final Gson gson;
-	protected final Jedis jedis;
+	protected final Jedis subscriber;
+	protected final Jedis publisher;
 	
 	private final AppConfig appConfig;
 	private final S service;
@@ -63,7 +64,8 @@ public abstract class ServiceLauncher<S>
 		final String host = appConfig.getString(PARAM_DB_PATH);
 		final int port = appConfig.getInteger(PARAM_DB_PORT);
 		logger.trace("Building Redis connection on {}:{}", host, port);
-		jedis = new Jedis(host, port);
+		subscriber = new Jedis(host, port);
+		publisher = new Jedis(host, port);
 		
 		//retrieve the config for
 		Integer heartbeatSeconds = appConfig.getTcHeartbeatSeconds();
@@ -106,7 +108,7 @@ public abstract class ServiceLauncher<S>
 		
 		//make a blocking call to wait for the result from redis
 		logger.trace("Subscribing to channel: " + serverChannel);
-		jedis.subscribe(new JedisHandler(), serverChannel);
+		startDaemon(() -> subscriber.subscribe(new JedisHandler(), serverChannel), serverChannel + ".Subscriber");
 		
 		if (null != heartbeatTimer)
 		{
@@ -117,6 +119,7 @@ public abstract class ServiceLauncher<S>
 		final long millis = TimeUnit.SECONDS.toMillis(heartbeatSeconds);
 		
 		//create the new timer
+		logger.trace("Scheduling heartbeat with a period of " + millis + " mills");
 		heartbeatTimer = new Timer();
 		heartbeatTimer.schedule(new TimerTask()
 		{
@@ -125,7 +128,15 @@ public abstract class ServiceLauncher<S>
 			{
 				sendHeartbeatMessage();
 			}
-		}, millis);
+		}, 0, millis);
+	}
+	
+	private void startDaemon(Runnable callable, String name)
+	{
+		Thread t = new Thread(callable);
+		t.setName(name);
+		t.setDaemon(true);
+		t.start();
 	}
 	
 	private void sendHeartbeatMessage()
@@ -137,7 +148,7 @@ public abstract class ServiceLauncher<S>
 	protected void sendMessage(final CommandMessage message)
 	{
 		logger.trace("Sending Message: " + message.getCommand());
-		jedis.publish(clientChannel, gson.toJson(message));
+		publisher.publish(clientChannel, gson.toJson(message));
 	}
 	
 	protected abstract void onMessageReceived(final CommandMessage.Command command, final String message);

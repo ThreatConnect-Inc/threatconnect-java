@@ -28,7 +28,7 @@ public class PlaybookServiceLauncher<S extends PlaybookService> extends ServiceL
 		super(appConfig, service);
 		
 		service.setFireEventListener(createFireEventListener());
-		contentService = new ContentService(new RedisDBService(new PlaybooksAppConfig(getAppConfig()), jedis));
+		contentService = new ContentService(new RedisDBService(new PlaybooksAppConfig(getAppConfig()), subscriber));
 	}
 	
 	protected FireEventListener createFireEventListener()
