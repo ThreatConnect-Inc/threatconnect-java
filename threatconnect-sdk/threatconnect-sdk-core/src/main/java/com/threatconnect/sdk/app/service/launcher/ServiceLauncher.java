@@ -155,17 +155,24 @@ public abstract class ServiceLauncher<S extends Service>
 	
 	protected void onMessageReceived(final CommandMessage.Command command, final String message)
 	{
-		switch (command)
+		if (command == CommandMessage.Command.Shutdown)
 		{
-			case Shutdown:
+			try
+			{
 				//notify the service that we are shutting down
 				getService().onShutdown();
 				
 				// flush the logs to the server
 				ServerLogger.getInstance(getAppConfig()).flushToServer();
-				
+			}
+			catch (Exception e)
+			{
+				System.exit(1);
+			}
+			finally
+			{
 				System.exit(0);
-				break;
+			}
 		}
 	}
 	
