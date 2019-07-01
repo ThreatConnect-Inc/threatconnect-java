@@ -147,7 +147,7 @@ public abstract class ServiceLauncher<S>
 	
 	protected void sendMessage(final CommandMessage message)
 	{
-		logger.trace("Sending Message: " + message.getCommand());
+		logger.trace("Sending Message: \"" + message.getCommand() + "\", Channel: \"" + clientChannel + "\"");
 		publisher.publish(clientChannel, gson.toJson(message));
 	}
 	

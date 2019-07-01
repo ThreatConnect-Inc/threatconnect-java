@@ -19,13 +19,19 @@ public class Param
 	private boolean encrypt;
 	private boolean required;
 	private boolean hidden;
-	private boolean setup;
 	private boolean feedDeployer;
 	private Integer viewRows;
 	private String note;
 	private String viewType;
 	private Integer sequence;
 	private String exposePlaybookKeyAs;
+	private boolean config;
+	
+	/**
+	 * Deprecated: use "config"
+	 */
+	@Deprecated
+	private boolean setup;
 	
 	private final List<String> validValues;
 	private final List<String> playbookDataType;
@@ -119,6 +125,16 @@ public class Param
 	public void setHidden(final boolean hidden)
 	{
 		this.hidden = hidden;
+	}
+	
+	public boolean isConfig()
+	{
+		return config;
+	}
+	
+	public void setConfig(final boolean config)
+	{
+		this.config = config;
 	}
 	
 	public boolean isSetup()
