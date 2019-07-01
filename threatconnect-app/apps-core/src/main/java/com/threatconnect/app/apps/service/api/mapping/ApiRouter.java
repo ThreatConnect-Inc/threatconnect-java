@@ -1,12 +1,17 @@
 package com.threatconnect.app.apps.service.api.mapping;
 
 import com.threatconnect.app.apps.service.api.ApiService;
+import com.threatconnect.app.apps.service.message.NameValuePair;
 import com.threatconnect.app.apps.service.message.RunService;
+import com.threatconnect.app.apps.service.message.RunServiceAcknowledgeMessage;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ApiRouter extends ApiMapper
 {
@@ -18,7 +23,7 @@ public class ApiRouter extends ApiMapper
 		this.apiService = apiService;
 	}
 	
-	public Object routeApiEvent(final RunService runService)
+	public Object routeApiEvent(final RunService runService, final RunServiceAcknowledgeMessage response)
 		throws ApiNotFoundException, InvocationTargetException, IllegalAccessException
 	{
 		//look up the method and path to find a matching api endpoint
@@ -31,6 +36,18 @@ public class ApiRouter extends ApiMapper
 			Class<?>[] paramTypes = method.getParameterTypes();
 			Object[] args = new Object[paramTypes.length];
 			Annotation[][] parameterAnnotations = method.getParameterAnnotations();
+			
+			//extract the api mapping annotation
+			ApiMapping apiMapping = method.getAnnotation(ApiMapping.class);
+			
+			//convert the headers to a list of name/value pairs
+			List<NameValuePair<String, String>> headers = Arrays.stream(apiMapping.headers()).map(h -> {
+				NameValuePair<String, String> nvp = new NameValuePair<String, String>();
+				nvp.setName(h.key());
+				nvp.setValue(h.value());
+				return nvp;
+			}).collect(Collectors.toList());
+			response.setHeaders(headers);
 			
 			//for each of the param types
 			for (int i = 0; i < paramTypes.length; i++)

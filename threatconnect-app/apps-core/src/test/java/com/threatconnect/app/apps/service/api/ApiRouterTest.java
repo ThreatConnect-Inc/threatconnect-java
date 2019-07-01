@@ -3,6 +3,7 @@ package com.threatconnect.app.apps.service.api;
 import com.threatconnect.app.apps.service.api.mapping.ApiNotFoundException;
 import com.threatconnect.app.apps.service.api.mapping.ApiRouter;
 import com.threatconnect.app.apps.service.message.RunService;
+import com.threatconnect.app.apps.service.message.RunServiceAcknowledgeMessage;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -20,7 +21,7 @@ public class ApiRouterTest
 		runService.setMethod("GET");
 		runService.setPath("/say/hi");
 		
-		Object result = apiRouter.routeApiEvent(runService);
+		Object result = apiRouter.routeApiEvent(runService, new RunServiceAcknowledgeMessage());
 		Assert.assertEquals(result, "Hi");
 	}
 	
@@ -34,7 +35,7 @@ public class ApiRouterTest
 		runService.setMethod("GET");
 		runService.setPath("/say/hi/Greg");
 		
-		Object result = apiRouter.routeApiEvent(runService);
+		Object result = apiRouter.routeApiEvent(runService, new RunServiceAcknowledgeMessage());
 		Assert.assertEquals(result, "Hi Greg");
 	}
 	
@@ -48,7 +49,7 @@ public class ApiRouterTest
 		runService.setMethod("GET");
 		runService.setPath("/say/Hello/John/Doe");
 		
-		Object result = apiRouter.routeApiEvent(runService);
+		Object result = apiRouter.routeApiEvent(runService, new RunServiceAcknowledgeMessage());
 		Assert.assertEquals(result, "Hello John Doe");
 	}
 }

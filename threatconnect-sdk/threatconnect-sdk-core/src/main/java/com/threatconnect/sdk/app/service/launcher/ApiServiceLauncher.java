@@ -60,7 +60,7 @@ public class ApiServiceLauncher extends ServiceLauncher<ApiService>
 		try
 		{
 			//route this webhook event to the correct method
-			Object result = apiRouter.routeApiEvent(runService);
+			Object result = apiRouter.routeApiEvent(runService, response);
 			
 			response.setStatus("OK");
 			response.setStatusCode(200);

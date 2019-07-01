@@ -7,20 +7,9 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ApiMapping
+public @interface Header
 {
-	/**
-	 * The path of the api request
-	 *
-	 * @return
-	 */
-	String path();
+	String key();
 	
-	Method method();
-	
-	String name() default "";
-	
-	String description() default "";
-	
-	Header[] headers() default {};
+	String value();
 }
