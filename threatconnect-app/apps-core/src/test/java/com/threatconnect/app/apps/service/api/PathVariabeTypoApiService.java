@@ -12,4 +12,10 @@ public class PathVariabeTypoApiService extends ApiService
 	{
 		return "Hi " + name;
 	}
+	
+	@Override
+	public void onShutdown()
+	{
+	
+	}
 }

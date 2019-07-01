@@ -40,6 +40,8 @@ public class ApiServiceLauncher extends ServiceLauncher<ApiService>
 			case RunService:
 				handleRunServiceEvent(gson.fromJson(message, RunService.class));
 				break;
+			default:
+				super.onMessageReceived(command, message);
 		}
 	}
 	

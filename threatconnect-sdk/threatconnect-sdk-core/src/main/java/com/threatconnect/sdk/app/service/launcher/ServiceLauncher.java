@@ -4,9 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.threatconnect.app.apps.AppConfig;
+import com.threatconnect.app.apps.service.Service;
 import com.threatconnect.app.apps.service.message.CommandMessage;
 import com.threatconnect.app.apps.service.message.Heartbeat;
 import com.threatconnect.sdk.app.exception.AppInitializationException;
+import com.threatconnect.sdk.log.ServerLogger;
 import com.threatconnect.sdk.util.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author Greg Marut
  */
-public abstract class ServiceLauncher<S>
+public abstract class ServiceLauncher<S extends Service>
 {
 	private static final Logger logger = LoggerFactory.getLogger(ServiceLauncher.class);
 	
@@ -151,7 +153,21 @@ public abstract class ServiceLauncher<S>
 		publisher.publish(clientChannel, gson.toJson(message));
 	}
 	
-	protected abstract void onMessageReceived(final CommandMessage.Command command, final String message);
+	protected void onMessageReceived(final CommandMessage.Command command, final String message)
+	{
+		switch (command)
+		{
+			case Shutdown:
+				//notify the service that we are shutting down
+				getService().onShutdown();
+				
+				// flush the logs to the server
+				ServerLogger.getInstance(getAppConfig()).flushToServer();
+				
+				System.exit(0);
+				break;
+		}
+	}
 	
 	/**
 	 * Handles the incoming messages from the server

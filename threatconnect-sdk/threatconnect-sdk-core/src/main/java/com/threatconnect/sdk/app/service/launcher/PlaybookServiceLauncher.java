@@ -85,15 +85,8 @@ public class PlaybookServiceLauncher<S extends PlaybookService> extends ServiceL
 			case DeleteConfig:
 				handleDeleteCommand(gson.fromJson(message, DeleteCommandConfig.class));
 				break;
-			case Shutdown:
-				//notify the service that we are shutting down
-				getService().onShutdown();
-				
-				// flush the logs to the server
-				ServerLogger.getInstance(getAppConfig()).flushToServer();
-				
-				System.exit(0);
-				break;
+			default:
+				super.onMessageReceived(command, message);
 		}
 	}
 }

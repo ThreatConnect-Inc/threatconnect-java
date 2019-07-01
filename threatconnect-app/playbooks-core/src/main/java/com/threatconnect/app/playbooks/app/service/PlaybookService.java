@@ -66,6 +66,4 @@ public abstract class PlaybookService extends Service
 	public abstract void onServiceConfigurationUpdated(ServiceConfiguration serviceConfiguration);
 	
 	public abstract void onServiceConfigurationDeleted(ServiceConfiguration serviceConfiguration);
-	
-	public abstract void onShutdown();
 }

@@ -17,4 +17,10 @@ public class AmbiguousApiService extends ApiService
 	{
 		return action + " " + name;
 	}
+	
+	@Override
+	public void onShutdown()
+	{
+	
+	}
 }

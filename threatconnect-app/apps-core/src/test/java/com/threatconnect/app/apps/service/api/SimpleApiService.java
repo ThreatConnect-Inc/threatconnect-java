@@ -25,4 +25,10 @@ public class SimpleApiService extends ApiService
 	{
 		return action + " " + firstName + " " + lastName;
 	}
+	
+	@Override
+	public void onShutdown()
+	{
+	
+	}
 }
