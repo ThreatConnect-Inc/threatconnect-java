@@ -1,10 +1,5 @@
 package com.threatconnect.plugin.pkg.mojo;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonSerializer;
 import com.threatconnect.app.addons.util.config.Feature;
 import com.threatconnect.app.addons.util.config.install.Install;
 import com.threatconnect.app.addons.util.config.install.InstallUtil;
@@ -22,7 +17,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Collection;
 
 @Mojo(name = "java-package", defaultPhase = LifecyclePhase.PACKAGE, threadSafe = true, requiresDependencyResolution = ResolutionScope.RUNTIME)
 public class JavaPackageMojo extends AbstractAppPackageMojo
@@ -66,7 +60,6 @@ public class JavaPackageMojo extends AbstractAppPackageMojo
 		
 		//add the features that this sdk supports
 		install.getFeatures().add(Feature.SECURE_PARAMS);
-		install.getFeatures().add(Feature.FILE_PARAMS);
 		
 		//set the sdk version
 		install.setSdkVersion(loadAppPackagerVersion());
