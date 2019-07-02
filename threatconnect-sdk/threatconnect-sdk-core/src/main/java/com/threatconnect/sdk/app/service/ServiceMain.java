@@ -59,6 +59,9 @@ public final class ServiceMain extends SDKAppLauncher<Service>
 			throw new AppInitializationException(e);
 		}
 		
+		//initialize the service
+		service.init(getAppConfig());
+		
 		//create a new service executor and start the service
 		ServiceLauncher<?> serviceLauncher;
 		

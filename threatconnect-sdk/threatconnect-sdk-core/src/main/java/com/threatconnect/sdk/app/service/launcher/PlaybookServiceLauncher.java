@@ -14,7 +14,6 @@ import com.threatconnect.app.playbooks.app.service.ServiceConfiguration;
 import com.threatconnect.app.playbooks.content.ContentService;
 import com.threatconnect.app.playbooks.db.RedisDBService;
 import com.threatconnect.sdk.app.exception.AppInitializationException;
-import com.threatconnect.sdk.log.ServerLogger;
 
 import java.util.List;
 import java.util.UUID;
@@ -61,12 +60,12 @@ public class PlaybookServiceLauncher<S extends PlaybookService> extends ServiceL
 	private ServiceConfiguration getServiceConfiguration(final long configId, final List<NameValuePair<String, String>> params)
 	{
 		//retrieve the service configuration for the config id. If it does not exists, create it
-		ServiceConfiguration serviceConfiguration = getService().getServiceConfigurations().getOrDefault(configId, new ServiceConfiguration());
-		serviceConfiguration.setConfigId(configId);
+		ServiceConfiguration serviceConfiguration = getService().getServiceConfigurations().getOrDefault(
+			configId, new ServiceConfiguration(configId));
 		
 		//update the params
-		serviceConfiguration.getParams().clear();
-		serviceConfiguration.getParams().addAll(params);
+		serviceConfiguration.getConfig().clear();
+		serviceConfiguration.getConfig().addAll(params);
 		
 		return serviceConfiguration;
 	}

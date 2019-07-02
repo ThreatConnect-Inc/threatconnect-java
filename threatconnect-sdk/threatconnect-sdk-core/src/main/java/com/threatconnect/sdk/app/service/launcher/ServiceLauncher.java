@@ -186,6 +186,7 @@ public abstract class ServiceLauncher<S extends Service>
 		{
 			//parse the message as a json object
 			logger.debug("Message received on channel: " + channel);
+			logger.trace(message);
 			JsonElement jsonMessage = jsonParser.parse(message);
 			
 			//read and handle the command
