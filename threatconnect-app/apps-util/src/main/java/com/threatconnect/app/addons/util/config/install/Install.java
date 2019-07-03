@@ -33,6 +33,8 @@ public class Install
 	private String sdkVersion;
 	private Docker docker;
 	
+	private String displayPath;
+	
 	private Playbook playbook;
 	private Layout layout;
 	private final List<Param> params;
@@ -320,6 +322,16 @@ public class Install
 		this.layout = layout;
 	}
 	
+	public String getDisplayPath()
+	{
+		return displayPath;
+	}
+	
+	public void setDisplayPath(final String displayPath)
+	{
+		this.displayPath = displayPath;
+	}
+	
 	public List<Param> getPlaybookParams()
 	{
 		//holds the list of playbook params
@@ -341,5 +353,12 @@ public class Install
 	public boolean isPlaybookApp()
 	{
 		return getRuntimeLevel().equals(RunLevelType.Playbook);
+	}
+	
+	public boolean isService()
+	{
+		return RunLevelType.ApiService == getRuntimeLevel() ||
+			RunLevelType.TriggerService == getRuntimeLevel() ||
+			RunLevelType.WebHookTriggerService == getRuntimeLevel();
 	}
 }

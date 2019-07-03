@@ -11,6 +11,7 @@ import com.threatconnect.app.addons.util.config.install.RunLevelType;
 import com.threatconnect.app.addons.util.config.install.ServerVersion;
 import com.threatconnect.app.addons.util.config.layout.Layout;
 import com.threatconnect.app.addons.util.config.layout.validation.LayoutValidator;
+import com.threatconnect.app.apps.service.Service;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -58,24 +59,6 @@ public class InstallValidator extends Validator<Install>
 			ServerVersion.validate(object.getMinServerVersion());
 		}
 		
-		//validate the runtime levels
-		if (null == object.getRuntimeLevel())
-		{
-			throw new ValidationException("runtimeLevel is not defined.");
-		}
-		//check to see if this is a playbook app
-		else if (object.getRuntimeLevel().equals(RunLevelType.Playbook))
-		{
-			//check to see if the playbook object is missing
-			if (null == object.getPlaybook())
-			{
-				throw new ValidationException("'playbook' config must be defined for a playbook app.");
-			}
-			
-			//validate the playbook
-			playbookValidator.validate(object.getPlaybook());
-		}
-		
 		//check to see if this is a third party app
 		if (object.getRuntimeLevel().equals(RunLevelType.ThirdParty))
 		{
@@ -104,6 +87,24 @@ public class InstallValidator extends Validator<Install>
 					throw new ValidationException("programMain is not defined.");
 				}
 			}
+		}
+		
+		//validate the runtime levels
+		if (null == object.getRuntimeLevel())
+		{
+			throw new ValidationException("runtimeLevel is not defined.");
+		}
+		//check to see if this is a playbook app
+		else if (object.getRuntimeLevel().equals(RunLevelType.Playbook))
+		{
+			//check to see if the playbook object is missing
+			if (null == object.getPlaybook())
+			{
+				throw new ValidationException("'playbook' config must be defined for a playbook app.");
+			}
+			
+			//validate the playbook
+			playbookValidator.validate(object.getPlaybook());
 		}
 		
 		//check to see if this app supports the smtp settings feature
@@ -152,6 +153,14 @@ public class InstallValidator extends Validator<Install>
 		{
 			Validator<Layout> layoutValidator = new LayoutValidator(object);
 			layoutValidator.validate(object.getLayout());
+		}
+		
+		//check to see if this is a service
+		if (object.isService())
+		{
+			//run the service validations
+			Validator<Install> serviceValidator = new ServiceValidator();
+			serviceValidator.validate(object);
 		}
 	}
 }

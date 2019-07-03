@@ -6,4 +6,9 @@ public class AppInitializationException extends Exception
 	{
 		super(message);
 	}
+	
+	public AppInitializationException(final Throwable cause)
+	{
+		super(cause);
+	}
 }

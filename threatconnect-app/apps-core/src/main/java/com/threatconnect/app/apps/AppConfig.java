@@ -56,6 +56,10 @@ public abstract class AppConfig
 	public static final String TC_SMTP_PASSWORD = "tc_smtp_password";
 	public static final String TC_SYSTEM_EMAIL = "tc_sys_email";
 	
+	public static final String TC_HEARTBEAT_SECONDS = "tc_heartbeat_seconds";
+	public static final String TC_SERVER_CHANNEL = "tc_server_channel";
+	public static final String TC_CLIENT_CHANNEL = "tc_client_channel";
+	
 	@Deprecated
 	public static final String APPLY_PROXY_EXTERNAL = "apply_proxy_external";
 	
@@ -287,6 +291,21 @@ public abstract class AppConfig
 	public String getTcExitChannel()
 	{
 		return getString(TC_EXIT_CHANNEL);
+	}
+	
+	public Integer getTcHeartbeatSeconds()
+	{
+		return getInteger(TC_HEARTBEAT_SECONDS);
+	}
+	
+	public String getTcServerChannel()
+	{
+		return getString(TC_SERVER_CHANNEL);
+	}
+	
+	public String getTcClientChannel()
+	{
+		return getString(TC_CLIENT_CHANNEL);
 	}
 	
 	/**
