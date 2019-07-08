@@ -25,10 +25,10 @@ public class Param
 	private String viewType;
 	private Integer sequence;
 	private String exposePlaybookKeyAs;
-	private boolean config;
+	private boolean serviceConfig;
 	
 	/**
-	 * Deprecated: use "config"
+	 * Deprecated: use "serviceConfig"
 	 */
 	@Deprecated
 	private boolean setup;
@@ -127,14 +127,14 @@ public class Param
 		this.hidden = hidden;
 	}
 	
-	public boolean isConfig()
+	public boolean isServiceConfig()
 	{
-		return config;
+		return serviceConfig;
 	}
 	
-	public void setConfig(final boolean config)
+	public void setServiceConfig(final boolean serviceConfig)
 	{
-		this.config = config;
+		this.serviceConfig = serviceConfig;
 	}
 	
 	public boolean isSetup()
