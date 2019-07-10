@@ -1,34 +1,20 @@
 package com.threatconnect.app.apps.service.message;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CreateCommandConfig extends AbstractCommandConfig
 {
-	private List<NameValuePair<String, String>> config;
-	private List<String> outputVariables;
+	private final Map<String, Object> config;
 	
 	public CreateCommandConfig()
 	{
 		super(Command.CreateConfig);
+		this.config = new HashMap<String, Object>();
 	}
 	
-	public List<NameValuePair<String, String>> getConfig()
+	public Map<String, Object> getConfig()
 	{
 		return config;
-	}
-	
-	public void setConfig(List<NameValuePair<String, String>> config)
-	{
-		this.config = config;
-	}
-	
-	public List<String> getOutputVariables()
-	{
-		return outputVariables;
-	}
-	
-	public void setOutputVariables(List<String> outputVariables)
-	{
-		this.outputVariables = outputVariables;
 	}
 }

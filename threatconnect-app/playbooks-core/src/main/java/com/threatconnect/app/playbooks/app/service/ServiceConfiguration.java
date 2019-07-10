@@ -1,24 +1,22 @@
 package com.threatconnect.app.playbooks.app.service;
 
-import com.threatconnect.app.apps.service.message.NameValuePair;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
 public class ServiceConfiguration
 {
 	private final long configId;
-	private final List<NameValuePair<String, String>> config;
+	private final Map<String, Object> config;
 	
 	public ServiceConfiguration(final long configId)
 	{
 		this.configId = configId;
-		this.config = new ArrayList<NameValuePair<String, String>>();
+		this.config = new HashMap<String, Object>();
 	}
 	
-	public List<NameValuePair<String, String>> getConfig()
+	public Map<String, Object> getConfig()
 	{
 		return config;
 	}
@@ -28,12 +26,12 @@ public class ServiceConfiguration
 		return configId;
 	}
 	
-	public Optional<NameValuePair<String, String>> findConfig(final String name)
+	public Optional<Map.Entry<String, Object>> findConfig(final String name)
 	{
 		//for each of the name/value pairs
-		for (NameValuePair<String, String> param : getConfig())
+		for (Map.Entry<String, Object> param : getConfig().entrySet())
 		{
-			if (param.getName().equals(name))
+			if (param.getKey().equals(name))
 			{
 				return Optional.of(param);
 			}

@@ -2,27 +2,21 @@ package com.threatconnect.app.apps.service.message;
 
 public class AcknowledgeMessage extends AbstractCommandConfig
 {
-	private static final String STATUS_ACKNOWLEDGE = "Acknowledge";
-	private String status;
+	private Command type;
 	
-	public AcknowledgeMessage(final Command command)
+	public AcknowledgeMessage(final Command type)
 	{
-		this(command, STATUS_ACKNOWLEDGE);
+		super(Command.Acknowledge);
+		this.type = type;
 	}
 	
-	public AcknowledgeMessage(final Command command, final String status)
+	public Command getType()
 	{
-		super(command);
-		this.status = status;
+		return type;
 	}
 	
-	public String getStatus()
+	public void setType(final Command type)
 	{
-		return status;
-	}
-	
-	public void setStatus(String status)
-	{
-		this.status = status;
+		this.type = type;
 	}
 }

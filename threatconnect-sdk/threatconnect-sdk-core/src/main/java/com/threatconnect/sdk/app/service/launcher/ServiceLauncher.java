@@ -29,8 +29,6 @@ public abstract class ServiceLauncher<S extends Service>
 	public static final String PARAM_DB_PATH = "tc_playbook_db_path";
 	public static final String PARAM_DB_PORT = "tc_playbook_db_port";
 	
-	private static final String FIELD_COMMAND = "command";
-	
 	protected final Gson gson;
 	protected final Jedis subscriber;
 	protected final Jedis publisher;
@@ -187,21 +185,12 @@ public abstract class ServiceLauncher<S extends Service>
 			//parse the message as a json object
 			logger.debug("Message received on channel: " + channel);
 			logger.trace(message);
-			JsonElement jsonMessage = jsonParser.parse(message);
 			
 			//read and handle the command
-			final String commandValue = JsonUtil.getAsString(jsonMessage, FIELD_COMMAND);
-			if (null != commandValue)
+			final CommandMessage.Command command = CommandMessage.getCommandFromMessage(message);
+			if (null != command)
 			{
-				try
-				{
-					CommandMessage.Command command = CommandMessage.Command.valueOf(commandValue);
-					onMessageReceived(command, message);
-				}
-				catch (IllegalArgumentException e)
-				{
-					logger.warn("Unrecognized command: " + commandValue);
-				}
+				onMessageReceived(command, message);
 			}
 			else
 			{

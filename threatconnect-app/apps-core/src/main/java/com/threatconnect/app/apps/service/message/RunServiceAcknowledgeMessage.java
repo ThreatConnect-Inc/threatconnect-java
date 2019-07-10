@@ -4,17 +4,16 @@ import java.util.List;
 
 public class RunServiceAcknowledgeMessage extends AcknowledgeMessage
 {
-	private static final String STATUS_OK = "OK";
-	
 	private Integer statusCode;
 	private boolean isBinary;
 	private String body;
 	private String bodyBinarySessionId;
 	private List<NameValuePair<String, String>> headers;
+	private String status;
 	
 	public RunServiceAcknowledgeMessage()
 	{
-		super(CommandMessage.Command.RunService, STATUS_OK);
+		super(CommandMessage.Command.RunService);
 	}
 	
 	public Integer getStatusCode()
@@ -67,4 +66,13 @@ public class RunServiceAcknowledgeMessage extends AcknowledgeMessage
 		isBinary = binary;
 	}
 	
+	public String getStatus()
+	{
+		return status;
+	}
+	
+	public void setStatus(final String status)
+	{
+		this.status = status;
+	}
 }

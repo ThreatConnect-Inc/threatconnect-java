@@ -1,24 +1,21 @@
 package com.threatconnect.app.apps.service.message;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class UpdateCommandConfig extends AbstractCommandConfig
 {
-	private List<NameValuePair<String, String>> config;
+	private final Map<String, Object> config;
 	
 	public UpdateCommandConfig()
 	{
 		super(Command.UpdateConfig);
+		this.config = new HashMap<String, Object>();
 	}
 	
-	public List<NameValuePair<String, String>> getConfig()
+	public Map<String, Object> getConfig()
 	{
 		return config;
-	}
-	
-	public void setConfig(List<NameValuePair<String, String>> config)
-	{
-		this.config = config;
 	}
 }
 
