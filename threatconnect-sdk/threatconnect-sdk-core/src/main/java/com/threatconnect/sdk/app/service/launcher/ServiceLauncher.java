@@ -87,15 +87,10 @@ public abstract class ServiceLauncher<S extends Service>
 		
 		//make a blocking call to wait for the result from redis
 		logger.trace("Subscribing to channel: " + serverChannel);
-		startDaemon(() -> subscriber.subscribe(new JedisHandler(), serverChannel), serverChannel + ".Subscriber");
-	}
-	
-	private void startDaemon(Runnable callable, String name)
-	{
-		Thread t = new Thread(callable);
-		t.setName(name);
-		t.setDaemon(true);
-		t.start();
+		Thread thread = new Thread(() -> subscriber.subscribe(new JedisHandler(), serverChannel));
+		thread.setName(serverChannel + ".Subscriber");
+		thread.setDaemon(false);
+		thread.start();
 	}
 	
 	protected void sendMessage(final CommandMessage message)
