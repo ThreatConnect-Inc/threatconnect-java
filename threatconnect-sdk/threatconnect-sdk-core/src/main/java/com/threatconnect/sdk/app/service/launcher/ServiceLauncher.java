@@ -1,7 +1,6 @@
 package com.threatconnect.sdk.app.service.launcher;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.service.Service;
@@ -9,15 +8,10 @@ import com.threatconnect.app.apps.service.message.CommandMessage;
 import com.threatconnect.app.apps.service.message.Heartbeat;
 import com.threatconnect.sdk.app.exception.AppInitializationException;
 import com.threatconnect.sdk.log.ServerLogger;
-import com.threatconnect.sdk.util.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
-
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Greg Marut
@@ -39,8 +33,6 @@ public abstract class ServiceLauncher<S extends Service>
 	private final int heartbeatSeconds;
 	private final String serverChannel;
 	private final String clientChannel;
-	
-	private Timer heartbeatTimer;
 	
 	public ServiceLauncher(final AppConfig appConfig, final S service) throws AppInitializationException
 	{
@@ -109,26 +101,6 @@ public abstract class ServiceLauncher<S extends Service>
 		//make a blocking call to wait for the result from redis
 		logger.trace("Subscribing to channel: " + serverChannel);
 		startDaemon(() -> subscriber.subscribe(new JedisHandler(), serverChannel), serverChannel + ".Subscriber");
-		
-		if (null != heartbeatTimer)
-		{
-			heartbeatTimer.cancel();
-		}
-		
-		//calculate the number of milliseconds to send the heartbeat
-		final long millis = TimeUnit.SECONDS.toMillis(heartbeatSeconds);
-		
-		//create the new timer
-		logger.trace("Scheduling heartbeat with a period of " + millis + " mills");
-		heartbeatTimer = new Timer();
-		heartbeatTimer.schedule(new TimerTask()
-		{
-			@Override
-			public void run()
-			{
-				sendHeartbeatMessage();
-			}
-		}, 0, millis);
 	}
 	
 	private void startDaemon(Runnable callable, String name)
@@ -139,12 +111,6 @@ public abstract class ServiceLauncher<S extends Service>
 		t.start();
 	}
 	
-	private void sendHeartbeatMessage()
-	{
-		Heartbeat heartbeat = new Heartbeat();
-		sendMessage(heartbeat);
-	}
-	
 	protected void sendMessage(final CommandMessage message)
 	{
 		logger.trace("Sending Message: \"" + message.getCommand() + "\", Channel: \"" + clientChannel + "\"");
@@ -153,25 +119,49 @@ public abstract class ServiceLauncher<S extends Service>
 	
 	protected void onMessageReceived(final CommandMessage.Command command, final String message)
 	{
-		if (command == CommandMessage.Command.Shutdown)
+		switch (command)
 		{
-			try
-			{
-				//notify the service that we are shutting down
-				getService().onShutdown();
-				
-				// flush the logs to the server
-				ServerLogger.getInstance(getAppConfig()).flushToServer();
-			}
-			catch (Exception e)
-			{
-				System.exit(1);
-			}
-			finally
-			{
-				System.exit(0);
-			}
+			case Shutdown:
+				handleShutdownCommand();
+				break;
+			case Heartbeat:
+				handleHeartbeatCommand();
+				break;
 		}
+	}
+	
+	private void handleHeartbeatCommand()
+	{
+		//:TODO: set a timer to detect if core stops sending heartbeat messages
+		
+		//send a heartbeat message in response to the server's heartbeat
+		sendHeartbeatMessage();
+	}
+	
+	private void handleShutdownCommand()
+	{
+		try
+		{
+			//notify the service that we are shutting down
+			getService().onShutdown();
+			
+			// flush the logs to the server
+			ServerLogger.getInstance(getAppConfig()).flushToServer();
+		}
+		catch (Exception e)
+		{
+			System.exit(1);
+		}
+		finally
+		{
+			System.exit(0);
+		}
+	}
+	
+	private void sendHeartbeatMessage()
+	{
+		Heartbeat heartbeat = new Heartbeat();
+		sendMessage(heartbeat);
 	}
 	
 	/**

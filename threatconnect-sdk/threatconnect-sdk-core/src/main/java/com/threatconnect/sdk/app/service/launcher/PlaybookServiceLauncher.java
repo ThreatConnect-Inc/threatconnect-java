@@ -5,7 +5,6 @@ import com.threatconnect.app.apps.service.message.CommandMessage;
 import com.threatconnect.app.apps.service.message.CreateCommandConfig;
 import com.threatconnect.app.apps.service.message.DeleteCommandConfig;
 import com.threatconnect.app.apps.service.message.FireEvent;
-import com.threatconnect.app.apps.service.message.NameValuePair;
 import com.threatconnect.app.apps.service.message.UpdateCommandConfig;
 import com.threatconnect.app.playbooks.app.PlaybooksAppConfig;
 import com.threatconnect.app.playbooks.app.service.FireEventListener;
@@ -15,7 +14,6 @@ import com.threatconnect.app.playbooks.content.ContentService;
 import com.threatconnect.app.playbooks.db.RedisDBService;
 import com.threatconnect.sdk.app.exception.AppInitializationException;
 
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
