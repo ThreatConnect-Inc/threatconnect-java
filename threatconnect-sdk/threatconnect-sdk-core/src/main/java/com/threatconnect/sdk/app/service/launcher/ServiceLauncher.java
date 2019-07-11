@@ -6,6 +6,7 @@ import com.threatconnect.app.apps.service.Service;
 import com.threatconnect.app.apps.service.message.CommandMessage;
 import com.threatconnect.app.apps.service.message.CommandType;
 import com.threatconnect.app.apps.service.message.Heartbeat;
+import com.threatconnect.app.apps.service.message.Ready;
 import com.threatconnect.sdk.app.exception.AppInitializationException;
 import com.threatconnect.sdk.log.ServerLogger;
 import org.slf4j.Logger;
@@ -91,6 +92,10 @@ public abstract class ServiceLauncher<S extends Service>
 		thread.setName(serverChannel + ".Subscriber");
 		thread.setDaemon(false);
 		thread.start();
+		
+		//send a ready message to the server to notify that this service has started
+		Ready ready = new Ready();
+		sendMessage(ready);
 	}
 	
 	protected void sendMessage(final CommandMessage message)
