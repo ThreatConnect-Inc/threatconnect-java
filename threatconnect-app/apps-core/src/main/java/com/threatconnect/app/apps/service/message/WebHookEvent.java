@@ -4,7 +4,7 @@ public class WebHookEvent extends RunService
 {
     public WebHookEvent()
     {
-        super(Command.WebHookEvent);
+        super(CommandType.WebHookEvent);
     }
 }
 

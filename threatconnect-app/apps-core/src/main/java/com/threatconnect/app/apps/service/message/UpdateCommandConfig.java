@@ -9,7 +9,7 @@ public abstract class UpdateCommandConfig extends AbstractCommandConfig
 	
 	public UpdateCommandConfig()
 	{
-		super(Command.UpdateConfig);
+		super(CommandType.UpdateConfig);
 		this.config = new HashMap<String, Object>();
 	}
 	

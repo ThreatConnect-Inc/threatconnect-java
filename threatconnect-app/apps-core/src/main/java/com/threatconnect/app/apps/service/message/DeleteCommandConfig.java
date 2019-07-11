@@ -4,7 +4,7 @@ public class DeleteCommandConfig extends AbstractCommandConfig
 {
 	public DeleteCommandConfig()
 	{
-		super(Command.DeleteConfig);
+		super(CommandType.DeleteConfig);
 	}
 }
 

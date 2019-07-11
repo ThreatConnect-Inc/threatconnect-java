@@ -4,7 +4,7 @@ public class ListServices extends AbstractCommandConfig
 {
 	public ListServices()
 	{
-		super(Command.ListServices);
+		super(CommandType.ListServices);
 	}
 }
 

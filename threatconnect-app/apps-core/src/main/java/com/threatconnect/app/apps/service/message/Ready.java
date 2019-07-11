@@ -4,6 +4,6 @@ public class Ready extends AbstractCommandConfig
 {
 	public Ready()
 	{
-		super(Command.Ready);
+		super(CommandType.Ready);
 	}
 }

@@ -6,7 +6,7 @@ public class Shutdown extends AbstractCommandConfig
 
     public Shutdown()
     {
-        super(Command.Shutdown);
+        super(CommandType.Shutdown);
     }
 
     public String getSessionId()

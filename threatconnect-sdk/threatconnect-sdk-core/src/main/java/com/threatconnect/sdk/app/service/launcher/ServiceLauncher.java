@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.service.Service;
 import com.threatconnect.app.apps.service.message.CommandMessage;
+import com.threatconnect.app.apps.service.message.CommandType;
 import com.threatconnect.app.apps.service.message.Heartbeat;
 import com.threatconnect.sdk.app.exception.AppInitializationException;
 import com.threatconnect.sdk.log.ServerLogger;
@@ -103,7 +104,7 @@ public abstract class ServiceLauncher<S extends Service>
 		publisher.publish(clientChannel, gson.toJson(message));
 	}
 	
-	protected void onMessageReceived(final CommandMessage.Command command, final String message)
+	protected void onMessageReceived(final CommandType command, final String message)
 	{
 		switch (command)
 		{
@@ -163,7 +164,7 @@ public abstract class ServiceLauncher<S extends Service>
 			logger.trace(message);
 			
 			//read and handle the command
-			final CommandMessage.Command command = CommandMessage.getCommandFromMessage(message);
+			final CommandType command = CommandMessage.getCommandFromMessage(message);
 			if (null != command)
 			{
 				onMessageReceived(command, message);

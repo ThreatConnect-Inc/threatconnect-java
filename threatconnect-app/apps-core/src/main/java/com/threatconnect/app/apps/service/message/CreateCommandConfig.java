@@ -9,7 +9,7 @@ public class CreateCommandConfig extends AbstractCommandConfig
 	
 	public CreateCommandConfig()
 	{
-		super(Command.CreateConfig);
+		super(CommandType.CreateConfig);
 		this.config = new HashMap<String, Object>();
 	}
 	

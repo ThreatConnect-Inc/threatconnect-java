@@ -15,7 +15,7 @@ public class MailEvent extends AbstractCommandConfig
 	
 	public MailEvent()
 	{
-		super(Command.MailEvent);
+		super(CommandType.MailEvent);
 	}
 	
 	public String getTo()

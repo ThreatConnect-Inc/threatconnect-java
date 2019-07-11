@@ -16,10 +16,10 @@ public class RunService extends AbstractCommandConfig
 	
 	public RunService()
 	{
-		super(Command.RunService);
+		super(CommandType.RunService);
 	}
 	
-	public RunService(Command command)
+	public RunService(CommandType command)
 	{
 		super(command);
 	}

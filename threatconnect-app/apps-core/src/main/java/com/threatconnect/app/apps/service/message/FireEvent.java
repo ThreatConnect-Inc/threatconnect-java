@@ -6,7 +6,7 @@ public class FireEvent extends AbstractCommandConfig
 
     public FireEvent()
     {
-        super(Command.FireEvent);
+        super(CommandType.FireEvent);
     }
 
     public String getSessionId()

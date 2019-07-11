@@ -7,7 +7,7 @@ public class StartSessionAcknowledgeMessage extends AcknowledgeMessage
 	
 	public StartSessionAcknowledgeMessage()
 	{
-		super(CommandMessage.Command.StartSession);
+		super(CommandType.StartSession);
 	}
 	
 	public String getSessionId()

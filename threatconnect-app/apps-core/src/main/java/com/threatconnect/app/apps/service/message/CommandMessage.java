@@ -11,47 +11,40 @@ public class CommandMessage
 	
 	private static final String FIELD_COMMAND = "command";
 	
-	public enum Command
-	{
-		CreateConfig,
-		DeleteConfig,
-		UpdateConfig,
-		Shutdown,
-		ListServices,
-		RunService,
-		Heartbeat,
-		Launch,
-		StartSession,
-		FireEvent,
-		WebHookEvent,
-		MailEvent,
-		Acknowledge,
-		Ready
-	}
-	
-	private Command command;
+	private Long appId;
+	private CommandType command;
 	
 	public CommandMessage()
 	{
 	
 	}
 	
-	public CommandMessage(Command command)
+	public CommandMessage(CommandType command)
 	{
 		this.command = command;
 	}
 	
-	public Command getCommand()
+	public Long getAppId()
+	{
+		return appId;
+	}
+	
+	public void setAppId(final Long appId)
+	{
+		this.appId = appId;
+	}
+	
+	public CommandType getCommand()
 	{
 		return command;
 	}
 	
-	public void setCommand(Command command)
+	public void setCommand(CommandType command)
 	{
 		this.command = command;
 	}
 	
-	public static Command getCommandFromMessage(final String message)
+	public static CommandType getCommandFromMessage(final String message)
 	{
 		//parse the message as a json object
 		logger.trace(message);
@@ -64,7 +57,7 @@ public class CommandMessage
 			
 			try
 			{
-				return Command.valueOf(commandValue);
+				return CommandType.valueOf(commandValue);
 			}
 			catch (IllegalArgumentException e)
 			{

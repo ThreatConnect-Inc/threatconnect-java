@@ -5,6 +5,7 @@ import com.threatconnect.app.apps.service.api.ApiService;
 import com.threatconnect.app.apps.service.api.mapping.ApiNotFoundException;
 import com.threatconnect.app.apps.service.api.mapping.ApiRouter;
 import com.threatconnect.app.apps.service.message.CommandMessage;
+import com.threatconnect.app.apps.service.message.CommandType;
 import com.threatconnect.app.apps.service.message.ListServiceAcknowledgeMessage;
 import com.threatconnect.app.apps.service.message.ListServices;
 import com.threatconnect.app.apps.service.message.RunService;
@@ -30,7 +31,7 @@ public class ApiServiceLauncher extends ServiceLauncher<ApiService>
 	}
 	
 	@Override
-	protected void onMessageReceived(final CommandMessage.Command command, final String message)
+	protected void onMessageReceived(final CommandType command, final String message)
 	{
 		switch (command)
 		{

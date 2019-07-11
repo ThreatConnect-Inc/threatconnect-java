@@ -13,7 +13,7 @@ public class RunServiceAcknowledgeMessage extends AcknowledgeMessage
 	
 	public RunServiceAcknowledgeMessage()
 	{
-		super(CommandMessage.Command.RunService);
+		super(CommandType.RunService);
 	}
 	
 	public Integer getStatusCode()

@@ -16,7 +16,7 @@ public class Heartbeat extends CommandMessage
 	
 	public Heartbeat()
 	{
-		super(Command.Heartbeat);
+		super(CommandType.Heartbeat);
 		
 		metric = new HashMap<String, String>();
 	}

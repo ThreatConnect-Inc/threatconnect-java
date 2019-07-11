@@ -2,6 +2,7 @@ package com.threatconnect.sdk.app.service.launcher;
 
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.service.message.CommandMessage;
+import com.threatconnect.app.apps.service.message.CommandType;
 import com.threatconnect.app.apps.service.message.WebHookEvent;
 import com.threatconnect.app.playbooks.app.service.ServiceConfiguration;
 import com.threatconnect.app.playbooks.app.service.webhook.WebhookService;
@@ -21,7 +22,7 @@ public class WebhookServiceLauncher extends PlaybookServiceLauncher<WebhookServi
 	}
 	
 	@Override
-	protected void onMessageReceived(final CommandMessage.Command command, final String message)
+	protected void onMessageReceived(final CommandType command, final String message)
 	{
 		switch (command)
 		{

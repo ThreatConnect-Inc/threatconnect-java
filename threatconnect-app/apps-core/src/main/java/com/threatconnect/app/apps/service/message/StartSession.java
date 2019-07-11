@@ -4,6 +4,6 @@ public class StartSession extends AbstractCommandConfig
 {
     public StartSession()
     {
-        super(Command.StartSession);
+        super(CommandType.StartSession);
     }
 }

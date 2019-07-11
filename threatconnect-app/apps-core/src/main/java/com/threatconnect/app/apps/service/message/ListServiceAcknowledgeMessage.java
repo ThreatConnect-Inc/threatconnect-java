@@ -8,7 +8,7 @@ public class ListServiceAcknowledgeMessage extends AcknowledgeMessage
 	
 	public ListServiceAcknowledgeMessage()
 	{
-		super(CommandMessage.Command.ListServices);
+		super(CommandType.ListServices);
 	}
 	
 	public List<ServiceItem> getData()

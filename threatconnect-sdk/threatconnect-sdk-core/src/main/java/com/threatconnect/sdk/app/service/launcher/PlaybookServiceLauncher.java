@@ -2,6 +2,7 @@ package com.threatconnect.sdk.app.service.launcher;
 
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.service.message.CommandMessage;
+import com.threatconnect.app.apps.service.message.CommandType;
 import com.threatconnect.app.apps.service.message.CreateCommandConfig;
 import com.threatconnect.app.apps.service.message.DeleteCommandConfig;
 import com.threatconnect.app.apps.service.message.FireEvent;
@@ -70,7 +71,7 @@ public class PlaybookServiceLauncher<S extends PlaybookService> extends ServiceL
 	}
 	
 	@Override
-	protected void onMessageReceived(final CommandMessage.Command command, final String message)
+	protected void onMessageReceived(final CommandType command, final String message)
 	{
 		switch (command)
 		{
