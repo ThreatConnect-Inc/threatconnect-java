@@ -2,7 +2,7 @@ package com.threatconnect.app.apps.service.message;
 
 public abstract class AbstractCommandConfig extends CommandMessage
 {
-	private long configId;
+	private long triggerId;
 	private String requestKey;
 	
 	public AbstractCommandConfig(final Command command)
@@ -10,14 +10,14 @@ public abstract class AbstractCommandConfig extends CommandMessage
 		super(command);
 	}
 	
-	public long getConfigId()
+	public long getTriggerId()
 	{
-		return configId;
+		return triggerId;
 	}
 	
-	public void setConfigId(final long configId)
+	public void setTriggerId(final long triggerId)
 	{
-		this.configId = configId;
+		this.triggerId = triggerId;
 	}
 	
 	public String getRequestKey()

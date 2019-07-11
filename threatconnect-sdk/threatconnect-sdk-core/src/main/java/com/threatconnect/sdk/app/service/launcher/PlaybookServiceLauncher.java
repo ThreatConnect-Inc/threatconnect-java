@@ -34,26 +34,26 @@ public class PlaybookServiceLauncher<S extends PlaybookService> extends ServiceL
 		return serviceConfiguration -> {
 			FireEvent fireEvent = new FireEvent();
 			fireEvent.setSessionId(UUID.randomUUID().toString());
-			fireEvent.setConfigId(serviceConfiguration.getConfigId());
+			fireEvent.setTriggerId(serviceConfiguration.getConfigId());
 			sendMessage(fireEvent);
 		};
 	}
 	
 	private void handleCreateCommand(final CreateCommandConfig createCommandConfig)
 	{
-		ServiceConfiguration serviceConfiguration = getServiceConfiguration(createCommandConfig.getConfigId(), createCommandConfig.getConfig());
+		ServiceConfiguration serviceConfiguration = getServiceConfiguration(createCommandConfig.getTriggerId(), createCommandConfig.getConfig());
 		getService().createServiceConfiguration(serviceConfiguration);
 	}
 	
 	private void handleUpdateCommand(final UpdateCommandConfig updateCommandConfig)
 	{
-		ServiceConfiguration serviceConfiguration = getServiceConfiguration(updateCommandConfig.getConfigId(), updateCommandConfig.getConfig());
+		ServiceConfiguration serviceConfiguration = getServiceConfiguration(updateCommandConfig.getTriggerId(), updateCommandConfig.getConfig());
 		getService().updateServiceConfiguration(serviceConfiguration);
 	}
 	
 	private void handleDeleteCommand(final DeleteCommandConfig deleteCommandConfig)
 	{
-		getService().deleteServiceConfiguration(deleteCommandConfig.getConfigId());
+		getService().deleteServiceConfiguration(deleteCommandConfig.getTriggerId());
 	}
 	
 	private ServiceConfiguration getServiceConfiguration(final long configId, final Map<String, Object> config)
