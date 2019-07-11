@@ -1,7 +1,6 @@
 package com.threatconnect.sdk.app.service.launcher;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonParser;
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.service.Service;
 import com.threatconnect.app.apps.service.message.CommandMessage;
@@ -29,8 +28,6 @@ public abstract class ServiceLauncher<S extends Service>
 	
 	private final AppConfig appConfig;
 	private final S service;
-	private final JsonParser jsonParser;
-	private final int heartbeatSeconds;
 	private final String serverChannel;
 	private final String clientChannel;
 	
@@ -50,7 +47,6 @@ public abstract class ServiceLauncher<S extends Service>
 		this.service = service;
 		
 		this.gson = new Gson();
-		this.jsonParser = new JsonParser();
 		
 		//building the redis connection object
 		final String host = appConfig.getString(PARAM_DB_PATH);
@@ -60,18 +56,8 @@ public abstract class ServiceLauncher<S extends Service>
 		publisher = new Jedis(host, port);
 		
 		//retrieve the config for
-		Integer heartbeatSeconds = appConfig.getTcHeartbeatSeconds();
 		this.serverChannel = appConfig.getTcServerChannel();
 		this.clientChannel = appConfig.getTcClientChannel();
-		
-		if (null != heartbeatSeconds)
-		{
-			this.heartbeatSeconds = heartbeatSeconds;
-		}
-		else
-		{
-			throw new AppInitializationException("Unable to initialize service: " + AppConfig.TC_HEARTBEAT_SECONDS + " parameter is missing.");
-		}
 		
 		if (null == serverChannel)
 		{

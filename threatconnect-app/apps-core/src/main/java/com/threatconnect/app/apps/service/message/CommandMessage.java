@@ -25,7 +25,8 @@ public class CommandMessage
 		FireEvent,
 		WebHookEvent,
 		MailEvent,
-		Acknowledge
+		Acknowledge,
+		Ready
 	}
 	
 	private Command command;
