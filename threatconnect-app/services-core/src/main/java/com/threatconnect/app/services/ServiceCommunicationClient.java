@@ -71,7 +71,7 @@ public abstract class ServiceCommunicationClient
 	 *
 	 * @param message
 	 */
-	protected void sendMessage(final CommandMessage message)
+	public void sendMessage(final CommandMessage message)
 	{
 		//make sure the client is not null
 		if (null != this.mqttClient)
