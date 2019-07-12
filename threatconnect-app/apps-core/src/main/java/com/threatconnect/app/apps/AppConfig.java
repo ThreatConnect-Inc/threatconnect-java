@@ -56,9 +56,11 @@ public abstract class AppConfig
 	public static final String TC_SMTP_PASSWORD = "tc_smtp_password";
 	public static final String TC_SYSTEM_EMAIL = "tc_sys_email";
 	
-	public static final String TC_HEARTBEAT_SECONDS = "tc_heartbeat_seconds";
-	public static final String TC_SERVER_CHANNEL = "tc_server_channel";
-	public static final String TC_CLIENT_CHANNEL = "tc_client_channel";
+	//service specific items
+	public static final String TC_SVC_URI = "tc_svc_uri";
+	public static final String TC_SVC_SERVER_TOPIC = "tc_svc_server_topic";
+	public static final String TC_SVC_CLIENT_TOPIC = "tc_svc_client_topic";
+	public static final String TC_SVC_HEARTBEAT_TIMEOUT_SECONDS = "tc_svc_hb_timeout_seconds";
 	
 	@Deprecated
 	public static final String APPLY_PROXY_EXTERNAL = "apply_proxy_external";
@@ -293,19 +295,24 @@ public abstract class AppConfig
 		return getString(TC_EXIT_CHANNEL);
 	}
 	
-	public Integer getTcHeartbeatSeconds()
+	public String getTcServiceUri()
 	{
-		return getInteger(TC_HEARTBEAT_SECONDS);
+		return getString(TC_SVC_URI);
 	}
 	
-	public String getTcServerChannel()
+	public String getTcServiceServerTopic()
 	{
-		return getString(TC_SERVER_CHANNEL);
+		return getString(TC_SVC_SERVER_TOPIC);
 	}
 	
-	public String getTcClientChannel()
+	public String getTcServiceClientTopic()
 	{
-		return getString(TC_CLIENT_CHANNEL);
+		return getString(TC_SVC_CLIENT_TOPIC);
+	}
+	
+	public Integer getTcServiceHeartbeatTimeoutSeconds()
+	{
+		return getInteger(TC_SVC_HEARTBEAT_TIMEOUT_SECONDS);
 	}
 	
 	/**

@@ -1,9 +1,6 @@
 package com.threatconnect.sdk.app.service.launcher;
 
 import com.threatconnect.app.apps.AppConfig;
-import com.threatconnect.app.playbooks.app.PlaybooksAppConfig;
-import com.threatconnect.app.playbooks.content.ContentService;
-import com.threatconnect.app.playbooks.db.RedisDBService;
 import com.threatconnect.app.services.message.CommandType;
 import com.threatconnect.app.services.message.CreateCommandConfig;
 import com.threatconnect.app.services.message.DeleteCommandConfig;
@@ -19,14 +16,11 @@ import java.util.UUID;
 
 public class PlaybookServiceLauncher<S extends PlaybookService> extends ServiceLauncher<S>
 {
-	private final ContentService contentService;
-	
 	public PlaybookServiceLauncher(final AppConfig appConfig, final S service) throws AppInitializationException
 	{
 		super(appConfig, service);
 		
 		service.setFireEventListener(createFireEventListener());
-		contentService = new ContentService(new RedisDBService(new PlaybooksAppConfig(getAppConfig()), subscriber));
 	}
 	
 	protected FireEventListener createFireEventListener()
