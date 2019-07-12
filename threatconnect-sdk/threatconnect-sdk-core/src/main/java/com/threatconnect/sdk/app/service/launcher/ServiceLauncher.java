@@ -1,6 +1,5 @@
 package com.threatconnect.sdk.app.service.launcher;
 
-import com.google.gson.Gson;
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.services.Service;
 import com.threatconnect.app.services.ServiceCommunicationClient;
@@ -21,8 +20,6 @@ import java.util.TimerTask;
 public abstract class ServiceLauncher<S extends Service> extends ServiceCommunicationClient
 {
 	private static final Logger logger = LoggerFactory.getLogger(ServiceLauncher.class);
-	
-	protected final Gson gson;
 	
 	private final AppConfig appConfig;
 	private final S service;
@@ -57,7 +54,6 @@ public abstract class ServiceLauncher<S extends Service> extends ServiceCommunic
 		
 		this.appConfig = appConfig;
 		this.service = service;
-		this.gson = new Gson();
 	}
 	
 	public AppConfig getAppConfig()
@@ -91,13 +87,13 @@ public abstract class ServiceLauncher<S extends Service> extends ServiceCommunic
 	@Override
 	protected final String getSubscribeTopic()
 	{
-		return appConfig.getTcServiceClientTopic();
+		return appConfig.getTcServiceServerTopic();
 	}
 	
 	@Override
 	protected final String getPublishTopic()
 	{
-		return appConfig.getTcServiceServerTopic();
+		return appConfig.getTcServiceClientTopic();
 	}
 	
 	@Override

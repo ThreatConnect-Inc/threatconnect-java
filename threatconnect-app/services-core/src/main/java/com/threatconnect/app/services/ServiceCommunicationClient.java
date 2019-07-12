@@ -20,7 +20,7 @@ public abstract class ServiceCommunicationClient
 	
 	private final String uri;
 	private final MqttClientPersistence persistence;
-	private final Gson gson;
+	protected final Gson gson;
 	
 	private MqttClient mqttClient;
 	
@@ -81,13 +81,16 @@ public abstract class ServiceCommunicationClient
 		}
 	}
 	
+	protected void onConnected(final boolean reconnect)
+	{
+	
+	}
+	
 	protected abstract void onMessageReceived(final CommandType command, final String message);
 	
 	protected abstract String getPublishTopic();
 	
 	protected abstract String getSubscribeTopic();
-	
-	protected abstract void onConnected(final boolean reconnect);
 	
 	/**
 	 * Runs an MQTT operation quietly and catches an MqttException. Any exception is logged at the warn level
