@@ -15,5 +15,6 @@ public enum CommandType
 	WebHookEvent,
 	MailEvent,
 	Acknowledge,
-	Ready
+	Ready,
+	AppUpdated
 }
