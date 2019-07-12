@@ -1,15 +1,15 @@
 package com.threatconnect.sdk.app.service.launcher;
 
 import com.threatconnect.app.apps.AppConfig;
-import com.threatconnect.app.apps.service.api.ApiService;
-import com.threatconnect.app.apps.service.api.mapping.ApiNotFoundException;
-import com.threatconnect.app.apps.service.api.mapping.ApiRouter;
-import com.threatconnect.app.apps.service.message.CommandMessage;
-import com.threatconnect.app.apps.service.message.CommandType;
-import com.threatconnect.app.apps.service.message.ListServiceAcknowledgeMessage;
-import com.threatconnect.app.apps.service.message.ListServices;
-import com.threatconnect.app.apps.service.message.RunService;
-import com.threatconnect.app.apps.service.message.RunServiceAcknowledgeMessage;
+import com.threatconnect.app.services.api.ApiService;
+import com.threatconnect.app.services.api.mapping.ApiNotFoundException;
+import com.threatconnect.app.services.api.mapping.ApiRouter;
+import com.threatconnect.app.services.message.CommandMessage;
+import com.threatconnect.app.services.message.CommandType;
+import com.threatconnect.app.services.message.ListServiceAcknowledgeMessage;
+import com.threatconnect.app.services.message.ListServices;
+import com.threatconnect.app.services.message.RunService;
+import com.threatconnect.app.services.message.RunServiceAcknowledgeMessage;
 import com.threatconnect.sdk.app.exception.AppInitializationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

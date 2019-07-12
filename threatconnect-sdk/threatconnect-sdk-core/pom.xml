@@ -28,7 +28,17 @@
 		</dependency>
 		<dependency>
 			<groupId>com.threatconnect.app</groupId>
+			<artifactId>services-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.threatconnect.app</groupId>
 			<artifactId>playbooks-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.threatconnect.app</groupId>
+			<artifactId>playbooks-services</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

@@ -1,18 +1,17 @@
 package com.threatconnect.sdk.app.service.launcher;
 
 import com.threatconnect.app.apps.AppConfig;
-import com.threatconnect.app.apps.service.message.CommandMessage;
-import com.threatconnect.app.apps.service.message.CommandType;
-import com.threatconnect.app.apps.service.message.CreateCommandConfig;
-import com.threatconnect.app.apps.service.message.DeleteCommandConfig;
-import com.threatconnect.app.apps.service.message.FireEvent;
-import com.threatconnect.app.apps.service.message.UpdateCommandConfig;
 import com.threatconnect.app.playbooks.app.PlaybooksAppConfig;
-import com.threatconnect.app.playbooks.app.service.FireEventListener;
-import com.threatconnect.app.playbooks.app.service.PlaybookService;
-import com.threatconnect.app.playbooks.app.service.ServiceConfiguration;
 import com.threatconnect.app.playbooks.content.ContentService;
 import com.threatconnect.app.playbooks.db.RedisDBService;
+import com.threatconnect.app.services.message.CommandType;
+import com.threatconnect.app.services.message.CreateCommandConfig;
+import com.threatconnect.app.services.message.DeleteCommandConfig;
+import com.threatconnect.app.services.message.FireEvent;
+import com.threatconnect.app.services.message.UpdateCommandConfig;
+import com.threatconnect.playbooks.service.FireEventListener;
+import com.threatconnect.playbooks.service.PlaybookService;
+import com.threatconnect.playbooks.service.ServiceConfiguration;
 import com.threatconnect.sdk.app.exception.AppInitializationException;
 
 import java.util.Map;

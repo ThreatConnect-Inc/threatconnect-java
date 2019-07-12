@@ -17,7 +17,9 @@
 
 	<modules>
 		<module>apps-core</module>
+		<module>services-core</module>
 		<module>playbooks-core</module>
+		<module>playbooks-services</module>
 		<module>playbooks-test</module>
 		<module>apps-util</module>
 	</modules>

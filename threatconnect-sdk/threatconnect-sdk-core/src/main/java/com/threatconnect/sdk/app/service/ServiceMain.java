@@ -1,10 +1,10 @@
 package com.threatconnect.sdk.app.service;
 
 import com.threatconnect.app.apps.AppConfig;
-import com.threatconnect.app.apps.service.Service;
-import com.threatconnect.app.apps.service.api.ApiService;
-import com.threatconnect.app.playbooks.app.service.PlaybookService;
-import com.threatconnect.app.playbooks.app.service.webhook.WebhookService;
+import com.threatconnect.app.services.Service;
+import com.threatconnect.app.services.api.ApiService;
+import com.threatconnect.playbooks.service.PlaybookService;
+import com.threatconnect.playbooks.service.webhook.WebhookService;
 import com.threatconnect.sdk.app.LoggerUtil;
 import com.threatconnect.sdk.app.SDKAppLauncher;
 import com.threatconnect.sdk.app.exception.AppInitializationException;

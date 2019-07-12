@@ -1,11 +1,11 @@
 package com.threatconnect.sdk.app.service.launcher;
 
 import com.threatconnect.app.apps.AppConfig;
-import com.threatconnect.app.apps.service.message.CommandMessage;
-import com.threatconnect.app.apps.service.message.CommandType;
-import com.threatconnect.app.apps.service.message.WebHookEvent;
-import com.threatconnect.app.playbooks.app.service.ServiceConfiguration;
-import com.threatconnect.app.playbooks.app.service.webhook.WebhookService;
+import com.threatconnect.app.services.message.CommandMessage;
+import com.threatconnect.app.services.message.CommandType;
+import com.threatconnect.app.services.message.WebHookEvent;
+import com.threatconnect.playbooks.service.ServiceConfiguration;
+import com.threatconnect.playbooks.service.webhook.WebhookService;
 import com.threatconnect.sdk.app.exception.AppInitializationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

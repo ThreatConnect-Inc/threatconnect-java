@@ -2,11 +2,11 @@ package com.threatconnect.sdk.app.service.launcher;
 
 import com.google.gson.Gson;
 import com.threatconnect.app.apps.AppConfig;
-import com.threatconnect.app.apps.service.Service;
-import com.threatconnect.app.apps.service.message.CommandMessage;
-import com.threatconnect.app.apps.service.message.CommandType;
-import com.threatconnect.app.apps.service.message.Heartbeat;
-import com.threatconnect.app.apps.service.message.Ready;
+import com.threatconnect.app.services.Service;
+import com.threatconnect.app.services.message.CommandMessage;
+import com.threatconnect.app.services.message.CommandType;
+import com.threatconnect.app.services.message.Heartbeat;
+import com.threatconnect.app.services.message.Ready;
 import com.threatconnect.sdk.app.exception.AppInitializationException;
 import com.threatconnect.sdk.log.ServerLogger;
 import org.slf4j.Logger;

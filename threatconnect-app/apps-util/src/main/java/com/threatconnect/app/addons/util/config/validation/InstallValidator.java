@@ -11,7 +11,6 @@ import com.threatconnect.app.addons.util.config.install.RunLevelType;
 import com.threatconnect.app.addons.util.config.install.ServerVersion;
 import com.threatconnect.app.addons.util.config.layout.Layout;
 import com.threatconnect.app.addons.util.config.layout.validation.LayoutValidator;
-import com.threatconnect.app.apps.service.Service;
 
 import java.util.HashSet;
 import java.util.Set;
