@@ -1,23 +1,28 @@
 package com.threatconnect.sdk.app.service.launcher;
 
 import com.threatconnect.app.apps.AppConfig;
+import com.threatconnect.app.services.MQTTServiceCommunicationClient;
 import com.threatconnect.app.services.Service;
-import com.threatconnect.app.services.ServiceCommunicationClient;
 import com.threatconnect.app.services.message.CommandType;
 import com.threatconnect.app.services.message.Heartbeat;
 import com.threatconnect.app.services.message.Ready;
 import com.threatconnect.sdk.app.exception.AppInitializationException;
 import com.threatconnect.sdk.log.ServerLogger;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.SSLContext;
+import java.io.File;
+import java.security.NoSuchAlgorithmException;
 import java.util.Timer;
 import java.util.TimerTask;
 
 /**
  * @author Greg Marut
  */
-public abstract class ServiceLauncher<S extends Service> extends ServiceCommunicationClient
+public abstract class ServiceLauncher<S extends Service> extends MQTTServiceCommunicationClient
 {
 	private static final Logger logger = LoggerFactory.getLogger(ServiceLauncher.class);
 	
@@ -29,7 +34,7 @@ public abstract class ServiceLauncher<S extends Service> extends ServiceCommunic
 	
 	public ServiceLauncher(final AppConfig appConfig, final S service) throws AppInitializationException
 	{
-		super(appConfig.getTcServiceUri());
+		super("ssl://" + appConfig.getTcSvcBrokerHost() + ":" + appConfig.getTcSvcBrokerPort(), createMqttConnectOptions(appConfig));
 		
 		if (null == service)
 		{
@@ -165,5 +170,20 @@ public abstract class ServiceLauncher<S extends Service> extends ServiceCommunic
 	{
 		Heartbeat heartbeat = new Heartbeat();
 		sendMessage(heartbeat);
+	}
+	
+	private static MqttConnectOptions createMqttConnectOptions(final AppConfig appConfig)
+	{
+		//set the trust store for the connection
+		System.setProperty("javax.net.ssl.trustStore", appConfig.getTcSvcBrokerCrtFile());
+		System.setProperty("javax.net.ssl.trustStorePassword", appConfig.getTcSvcBrokerCrtPassword());
+		
+		//build the mqtt connection options
+		MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
+		mqttConnectOptions.setSSLHostnameVerifier(new NoopHostnameVerifier());
+		mqttConnectOptions.setHttpsHostnameVerificationEnabled(false);
+		mqttConnectOptions.setUserName(appConfig.getTcSvcBrokerUsername());
+		mqttConnectOptions.setPassword(appConfig.getTcSvcBrokerPassword().toCharArray());
+		return mqttConnectOptions;
 	}
 }

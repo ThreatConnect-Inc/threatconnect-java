@@ -57,7 +57,12 @@ public abstract class AppConfig
 	public static final String TC_SYSTEM_EMAIL = "tc_sys_email";
 	
 	//service specific items
-	public static final String TC_SVC_URI = "tc_svc_uri";
+	public static final String TC_SVC_BROKER_CRT_FILE = "tc_svc_broker_cert_file";
+	public static final String TC_SVC_BROKER_CRT_PASSWORD = "tc_svc_broker_cert_pwd";
+	public static final String TC_SVC_BROKER_USERNAME = "tc_svc_broker_username";
+	public static final String TC_SVC_BROKER_PASSWORD = "tc_svc_broker_password";
+	public static final String TC_SVC_BROKER_HOST = "tc_svc_broker_host";
+	public static final String TC_SVC_BROKER_PORT = "tc_svc_broker_port";
 	public static final String TC_SVC_SERVER_TOPIC = "tc_svc_server_topic";
 	public static final String TC_SVC_CLIENT_TOPIC = "tc_svc_client_topic";
 	public static final String TC_SVC_HEARTBEAT_TIMEOUT_SECONDS = "tc_svc_hb_timeout_seconds";
@@ -295,9 +300,34 @@ public abstract class AppConfig
 		return getString(TC_EXIT_CHANNEL);
 	}
 	
-	public String getTcServiceUri()
+	public String getTcSvcBrokerCrtFile()
 	{
-		return getString(TC_SVC_URI);
+		return getString(TC_SVC_BROKER_CRT_FILE);
+	}
+	
+	public String getTcSvcBrokerCrtPassword()
+	{
+		return getString(TC_SVC_BROKER_CRT_PASSWORD);
+	}
+	
+	public String getTcSvcBrokerUsername()
+	{
+		return getString(TC_SVC_BROKER_USERNAME);
+	}
+	
+	public String getTcSvcBrokerPassword()
+	{
+		return getString(TC_SVC_BROKER_PASSWORD);
+	}
+	
+	public String getTcSvcBrokerHost()
+	{
+		return getString(TC_SVC_BROKER_HOST);
+	}
+	
+	public Integer getTcSvcBrokerPort()
+	{
+		return getInteger(TC_SVC_BROKER_PORT);
 	}
 	
 	public String getTcServiceServerTopic()
