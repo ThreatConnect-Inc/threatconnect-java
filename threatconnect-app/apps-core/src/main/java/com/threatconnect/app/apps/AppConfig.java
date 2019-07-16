@@ -58,9 +58,9 @@ public abstract class AppConfig
 	
 	//service specific items
 	public static final String TC_SVC_BROKER_CRT_FILE = "tc_svc_broker_cert_file";
-	public static final String TC_SVC_BROKER_CRT_PASSWORD = "tc_svc_broker_cert_pwd";
-	public static final String TC_SVC_BROKER_USERNAME = "tc_svc_broker_username";
-	public static final String TC_SVC_BROKER_PASSWORD = "tc_svc_broker_password";
+	public static final String TC_SVC_BROKER_JKS_FILE = "tc_svc_broker_jks_file";
+	public static final String TC_SVC_BROKER_JKS_PASSWORD = "tc_svc_broker_jks_pwd";
+	public static final String TC_SVC_BROKER_TOKEN = "tc_svc_broker_token";
 	public static final String TC_SVC_BROKER_HOST = "tc_svc_broker_host";
 	public static final String TC_SVC_BROKER_PORT = "tc_svc_broker_port";
 	public static final String TC_SVC_SERVER_TOPIC = "tc_svc_server_topic";
@@ -305,19 +305,19 @@ public abstract class AppConfig
 		return getString(TC_SVC_BROKER_CRT_FILE);
 	}
 	
-	public String getTcSvcBrokerCrtPassword()
+	public String getTcSvcBrokerJksFile()
 	{
-		return getString(TC_SVC_BROKER_CRT_PASSWORD);
+		return getString(TC_SVC_BROKER_JKS_FILE);
 	}
 	
-	public String getTcSvcBrokerUsername()
+	public String getTcSvcBrokerJksPassword()
 	{
-		return getString(TC_SVC_BROKER_USERNAME);
+		return getString(TC_SVC_BROKER_JKS_PASSWORD);
 	}
 	
-	public String getTcSvcBrokerPassword()
+	public String getTcSvcBrokerToken()
 	{
-		return getString(TC_SVC_BROKER_PASSWORD);
+		return getString(TC_SVC_BROKER_TOKEN);
 	}
 	
 	public String getTcSvcBrokerHost()

@@ -175,15 +175,15 @@ public abstract class ServiceLauncher<S extends Service> extends MQTTServiceComm
 	private static MqttConnectOptions createMqttConnectOptions(final AppConfig appConfig)
 	{
 		//set the trust store for the connection
-		System.setProperty("javax.net.ssl.trustStore", appConfig.getTcSvcBrokerCrtFile());
-		System.setProperty("javax.net.ssl.trustStorePassword", appConfig.getTcSvcBrokerCrtPassword());
+		System.setProperty("javax.net.ssl.trustStore", appConfig.getTcSvcBrokerJksFile());
+		System.setProperty("javax.net.ssl.trustStorePassword", appConfig.getTcSvcBrokerJksPassword());
 		
 		//build the mqtt connection options
 		MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
 		mqttConnectOptions.setSSLHostnameVerifier(new NoopHostnameVerifier());
 		mqttConnectOptions.setHttpsHostnameVerificationEnabled(false);
-		mqttConnectOptions.setUserName(appConfig.getTcSvcBrokerUsername());
-		mqttConnectOptions.setPassword(appConfig.getTcSvcBrokerPassword().toCharArray());
+		mqttConnectOptions.setUserName("");
+		mqttConnectOptions.setPassword(appConfig.getTcSvcBrokerToken().toCharArray());
 		return mqttConnectOptions;
 	}
 }
