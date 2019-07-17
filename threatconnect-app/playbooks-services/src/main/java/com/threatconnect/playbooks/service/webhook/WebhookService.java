@@ -1,6 +1,6 @@
 package com.threatconnect.playbooks.service.webhook;
 
-import com.threatconnect.app.services.message.WebHookEvent;
+import com.threatconnect.app.services.message.WebhookEvent;
 import com.threatconnect.playbooks.service.FireEventListener;
 import com.threatconnect.playbooks.service.PlaybookService;
 import com.threatconnect.playbooks.service.ServiceConfiguration;
@@ -16,7 +16,7 @@ public abstract class WebhookService extends PlaybookService
 	 * @param webHookEvent
 	 * @param serviceConfigurations
 	 */
-	public abstract void onWebhookEvent(WebHookEvent webHookEvent, Collection<ServiceConfiguration> serviceConfigurations,
+	public abstract void onWebhookEvent(WebhookEvent webHookEvent, Collection<ServiceConfiguration> serviceConfigurations,
 		FireEventListener fireEventListener);
 	
 	@Override

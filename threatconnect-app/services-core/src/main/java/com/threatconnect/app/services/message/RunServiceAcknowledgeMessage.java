@@ -6,8 +6,7 @@ public class RunServiceAcknowledgeMessage extends AcknowledgeMessage
 {
 	private Integer statusCode;
 	private boolean isBinary;
-	private String body;
-	private String bodyBinarySessionId;
+	private String bodyVariable;
 	private List<NameValuePair<String, String>> headers;
 	private String status;
 	
@@ -36,24 +35,14 @@ public class RunServiceAcknowledgeMessage extends AcknowledgeMessage
 		this.headers = headers;
 	}
 	
-	public String getBody()
+	public String getBodyVariable()
 	{
-		return body;
+		return bodyVariable;
 	}
 	
-	public void setBody(String body)
+	public void setBodyVariable(final String bodyVariable)
 	{
-		this.body = body;
-	}
-	
-	public String getBodyBinarySessionId()
-	{
-		return bodyBinarySessionId;
-	}
-	
-	public void setBodyBinarySessionId(String bodyBinarySessionId)
-	{
-		this.bodyBinarySessionId = bodyBinarySessionId;
+		this.bodyVariable = bodyVariable;
 	}
 	
 	public boolean isBinary()

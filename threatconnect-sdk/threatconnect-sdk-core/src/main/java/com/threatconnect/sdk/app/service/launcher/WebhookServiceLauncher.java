@@ -1,9 +1,8 @@
 package com.threatconnect.sdk.app.service.launcher;
 
 import com.threatconnect.app.apps.AppConfig;
-import com.threatconnect.app.services.message.CommandMessage;
 import com.threatconnect.app.services.message.CommandType;
-import com.threatconnect.app.services.message.WebHookEvent;
+import com.threatconnect.app.services.message.WebhookEvent;
 import com.threatconnect.playbooks.service.ServiceConfiguration;
 import com.threatconnect.playbooks.service.webhook.WebhookService;
 import com.threatconnect.sdk.app.exception.AppInitializationException;
@@ -26,8 +25,8 @@ public class WebhookServiceLauncher extends PlaybookServiceLauncher<WebhookServi
 	{
 		switch (command)
 		{
-			case WebHookEvent:
-				handleWebhookEvent(gson.fromJson(message, WebHookEvent.class));
+			case WebhookEvent:
+				handleWebhookEvent(gson.fromJson(message, WebhookEvent.class));
 				break;
 			default:
 				//forward the message up the chain
@@ -36,7 +35,7 @@ public class WebhookServiceLauncher extends PlaybookServiceLauncher<WebhookServi
 		}
 	}
 	
-	private void handleWebhookEvent(final WebHookEvent webHookEvent)
+	private void handleWebhookEvent(final WebhookEvent webHookEvent)
 	{
 		Collection<ServiceConfiguration> serviceConfigurations = getService().getServiceConfigurations().values();
 		if (!serviceConfigurations.isEmpty())

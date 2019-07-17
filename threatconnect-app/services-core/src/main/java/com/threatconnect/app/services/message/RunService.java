@@ -9,10 +9,7 @@ public class RunService extends AbstractCommandConfig
 	private List<NameValuePair<String, String>> queryParams;
 	private String path;
 	
-	private boolean isBinary;
-	private String body;
-	private String bodyBinarySessionId;
-	private String responseBinarySessionId;
+	private String bodyVariable;
 	
 	public RunService()
 	{
@@ -22,26 +19,6 @@ public class RunService extends AbstractCommandConfig
 	public RunService(CommandType command)
 	{
 		super(command);
-	}
-	
-	public String getBodyBinarySessionId()
-	{
-		return bodyBinarySessionId;
-	}
-	
-	public void setBodyBinarySessionId(String bodyBinarySessionId)
-	{
-		this.bodyBinarySessionId = bodyBinarySessionId;
-	}
-	
-	public String getResponseBinarySessionId()
-	{
-		return responseBinarySessionId;
-	}
-	
-	public void setResponseBinarySessionId(String responseBinarySessionId)
-	{
-		this.responseBinarySessionId = responseBinarySessionId;
 	}
 	
 	public String getMethod()
@@ -54,24 +31,14 @@ public class RunService extends AbstractCommandConfig
 		this.method = method;
 	}
 	
-	public boolean isBinary()
+	public String getBodyVariable()
 	{
-		return isBinary;
+		return bodyVariable;
 	}
 	
-	public void setBinary(boolean binary)
+	public void setBodyVariable(final String bodyVariable)
 	{
-		isBinary = binary;
-	}
-	
-	public String getBody()
-	{
-		return body;
-	}
-	
-	public void setBody(String body)
-	{
-		this.body = body;
+		this.bodyVariable = bodyVariable;
 	}
 	
 	public String getPath()

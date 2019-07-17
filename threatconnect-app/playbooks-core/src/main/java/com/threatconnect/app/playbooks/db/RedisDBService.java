@@ -16,19 +16,22 @@ public class RedisDBService implements DBService
 	
 	public RedisDBService(final PlaybooksAppConfig playbooksAppConfig)
 	{
-		//building the redis connection object
-		String host = playbooksAppConfig.getDBPath();
-		int port = playbooksAppConfig.getDBPort(DEFAULT_REDIS_PORT);
-		logger.trace("Building RedisDBService on {}:{}", host, port);
-		this.redis = new Jedis(host, port);
-		
-		this.contextKey = playbooksAppConfig.getDBContext();
+		this(playbooksAppConfig.getDBPath(), playbooksAppConfig.getDBPort(DEFAULT_REDIS_PORT), playbooksAppConfig.getDBContext());
 	}
 	
 	public RedisDBService(final PlaybooksAppConfig playbooksAppConfig, final Jedis jedis)
 	{
 		this.redis = jedis;
 		this.contextKey = playbooksAppConfig.getDBContext();
+	}
+	
+	public RedisDBService(final String host, final int port, final String contextKey)
+	{
+		//building the redis connection object
+		logger.trace("Building RedisDBService on {}:{}", host, port);
+		this.redis = new Jedis(host, port);
+		
+		this.contextKey = contextKey;
 	}
 	
 	@Override

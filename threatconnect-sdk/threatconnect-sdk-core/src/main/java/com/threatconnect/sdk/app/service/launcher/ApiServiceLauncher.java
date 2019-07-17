@@ -1,10 +1,12 @@
 package com.threatconnect.sdk.app.service.launcher;
 
 import com.threatconnect.app.apps.AppConfig;
+import com.threatconnect.app.playbooks.db.DBService;
+import com.threatconnect.app.playbooks.db.DBServiceFactory;
+import com.threatconnect.app.playbooks.db.DBWriteException;
 import com.threatconnect.app.services.api.ApiService;
 import com.threatconnect.app.services.api.mapping.ApiNotFoundException;
 import com.threatconnect.app.services.api.mapping.ApiRouter;
-import com.threatconnect.app.services.message.CommandMessage;
 import com.threatconnect.app.services.message.CommandType;
 import com.threatconnect.app.services.message.ListServiceAcknowledgeMessage;
 import com.threatconnect.app.services.message.ListServices;
@@ -15,19 +17,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Base64;
 
 public class ApiServiceLauncher extends ServiceLauncher<ApiService>
 {
 	private static final Logger logger = LoggerFactory.getLogger(ApiServiceLauncher.class);
 	
 	private final ApiRouter apiRouter;
+	private final DBService dbService;
 	
 	public ApiServiceLauncher(final AppConfig appConfig, final ApiService apiService) throws AppInitializationException
 	{
 		super(appConfig, apiService);
 		
 		this.apiRouter = new ApiRouter(apiService);
+		this.dbService = DBServiceFactory.buildFromAppConfig(appConfig);
 	}
 	
 	@Override
@@ -72,7 +75,7 @@ public class ApiServiceLauncher extends ServiceLauncher<ApiService>
 			response.setStatus("Not Found");
 			response.setStatusCode(404);
 		}
-		catch (InvocationTargetException | IllegalAccessException e)
+		catch (InvocationTargetException | IllegalAccessException | DBWriteException e)
 		{
 			logger.error(e.getMessage(), e);
 			response.setStatus("Error");
@@ -82,25 +85,21 @@ public class ApiServiceLauncher extends ServiceLauncher<ApiService>
 		sendMessage(response);
 	}
 	
-	private void writeBody(final RunServiceAcknowledgeMessage runServiceAcknowledgeMessage, final Object object)
+	private void writeBody(final RunServiceAcknowledgeMessage runServiceAcknowledgeMessage, final Object object) throws DBWriteException
 	{
 		if (null != object)
 		{
+			final String key = "response.body";
+			runServiceAcknowledgeMessage.setBodyVariable(key);
+			
 			if (object instanceof byte[])
 			{
-				runServiceAcknowledgeMessage.setBody(Base64.getEncoder().encodeToString((byte[]) object));
-				runServiceAcknowledgeMessage.setBinary(true);
+				dbService.saveValue(key, (byte[]) object);
 			}
 			else
 			{
-				runServiceAcknowledgeMessage.setBody(object.toString());
-				runServiceAcknowledgeMessage.setBinary(false);
+				dbService.saveValue(key, object.toString().getBytes());
 			}
-		}
-		else
-		{
-			runServiceAcknowledgeMessage.setBody(null);
-			runServiceAcknowledgeMessage.setBinary(false);
 		}
 	}
 }

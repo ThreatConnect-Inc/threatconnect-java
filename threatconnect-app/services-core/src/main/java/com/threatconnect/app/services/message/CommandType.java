@@ -12,7 +12,7 @@ public enum CommandType
 	Launch,
 	StartSession,
 	FireEvent,
-	WebHookEvent,
+	WebhookEvent,
 	MailEvent,
 	Acknowledge,
 	Ready,
