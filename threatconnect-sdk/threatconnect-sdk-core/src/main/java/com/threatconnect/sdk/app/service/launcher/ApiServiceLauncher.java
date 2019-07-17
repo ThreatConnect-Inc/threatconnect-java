@@ -1,9 +1,11 @@
 package com.threatconnect.sdk.app.service.launcher;
 
 import com.threatconnect.app.apps.AppConfig;
+import com.threatconnect.app.playbooks.app.PlaybooksAppConfig;
 import com.threatconnect.app.playbooks.db.DBService;
 import com.threatconnect.app.playbooks.db.DBServiceFactory;
 import com.threatconnect.app.playbooks.db.DBWriteException;
+import com.threatconnect.app.playbooks.db.RedisDBService;
 import com.threatconnect.app.services.api.ApiService;
 import com.threatconnect.app.services.api.mapping.ApiNotFoundException;
 import com.threatconnect.app.services.api.mapping.ApiRouter;
@@ -23,14 +25,12 @@ public class ApiServiceLauncher extends ServiceLauncher<ApiService>
 	private static final Logger logger = LoggerFactory.getLogger(ApiServiceLauncher.class);
 	
 	private final ApiRouter apiRouter;
-	private final DBService dbService;
 	
 	public ApiServiceLauncher(final AppConfig appConfig, final ApiService apiService) throws AppInitializationException
 	{
 		super(appConfig, apiService);
 		
 		this.apiRouter = new ApiRouter(apiService);
-		this.dbService = DBServiceFactory.buildFromAppConfig(appConfig);
 	}
 	
 	@Override
@@ -72,6 +72,7 @@ public class ApiServiceLauncher extends ServiceLauncher<ApiService>
 		}
 		catch (ApiNotFoundException e)
 		{
+			logger.error(e.getMessage(), e);
 			response.setStatus("Not Found");
 			response.setStatusCode(404);
 		}
@@ -82,6 +83,7 @@ public class ApiServiceLauncher extends ServiceLauncher<ApiService>
 			response.setStatusCode(500);
 		}
 		
+		logger.trace("RunServiceAcknowledgeMessage response complete, sending response...");
 		sendMessage(response);
 	}
 	
@@ -91,6 +93,10 @@ public class ApiServiceLauncher extends ServiceLauncher<ApiService>
 		{
 			final String key = "response.body";
 			runServiceAcknowledgeMessage.setBodyVariable(key);
+			
+			//create the db service to write the response
+			DBService dbService = new RedisDBService(getAppConfig().getString(PlaybooksAppConfig.PARAM_DB_PATH),
+				getAppConfig().getInteger(PlaybooksAppConfig.PARAM_DB_PORT), runServiceAcknowledgeMessage.getRequestKey());
 			
 			if (object instanceof byte[])
 			{

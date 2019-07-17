@@ -91,6 +91,10 @@ public abstract class MQTTServiceCommunicationClient extends ServiceCommunicatio
 			final MqttMessage mqttMessage = new MqttMessage(gson.toJson(message).getBytes());
 			runW(() -> mqttClient.publish(getPublishTopic(), mqttMessage));
 		}
+		else
+		{
+			logger.warn("Cannot send message, mqttClient is null.");
+		}
 	}
 	
 	protected void onConnected(final boolean reconnect)
