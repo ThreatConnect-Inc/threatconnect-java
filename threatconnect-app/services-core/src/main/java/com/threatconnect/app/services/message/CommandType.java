@@ -16,5 +16,6 @@ public enum CommandType
 	MailEvent,
 	Acknowledge,
 	Ready,
-	AppUpdated
+	AppUpdated,
+	LoggingChange
 }
