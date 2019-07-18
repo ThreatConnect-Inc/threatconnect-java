@@ -3,6 +3,7 @@ package com.threatconnect.app.services.message;
 public class Shutdown extends AbstractCommandConfig
 {
     private String sessionId;
+    private String reason;
 
     public Shutdown()
     {
@@ -17,6 +18,16 @@ public class Shutdown extends AbstractCommandConfig
     public void setSessionId(String sessionId)
     {
         this.sessionId = sessionId;
+    }
+    
+    public String getReason()
+    {
+        return reason;
+    }
+    
+    public void setReason(final String reason)
+    {
+        this.reason = reason;
     }
 }
 
