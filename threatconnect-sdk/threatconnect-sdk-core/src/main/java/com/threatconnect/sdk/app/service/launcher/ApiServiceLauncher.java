@@ -3,7 +3,6 @@ package com.threatconnect.sdk.app.service.launcher;
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.playbooks.app.PlaybooksAppConfig;
 import com.threatconnect.app.playbooks.db.DBService;
-import com.threatconnect.app.playbooks.db.DBServiceFactory;
 import com.threatconnect.app.playbooks.db.DBWriteException;
 import com.threatconnect.app.playbooks.db.RedisDBService;
 import com.threatconnect.app.services.api.ApiService;
@@ -19,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Base64;
 
 public class ApiServiceLauncher extends ServiceLauncher<ApiService>
 {
@@ -100,11 +100,11 @@ public class ApiServiceLauncher extends ServiceLauncher<ApiService>
 			
 			if (object instanceof byte[])
 			{
-				dbService.saveValue(key, (byte[]) object);
+				dbService.saveValue(key, Base64.getEncoder().encode((byte[]) object));
 			}
 			else
 			{
-				dbService.saveValue(key, object.toString().getBytes());
+				dbService.saveValue(key, Base64.getEncoder().encode(object.toString().getBytes()));
 			}
 		}
 	}
