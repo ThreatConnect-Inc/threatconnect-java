@@ -157,11 +157,24 @@ public abstract class MQTTServiceCommunicationClient extends ServiceCommunicatio
 		@Override
 		public void messageArrived(final String topic, final MqttMessage message)
 		{
-			logger.trace("** messageArrived: topic={}, msg={}", topic, message);
-			final String payload = new String(message.getPayload());
-			final CommandType command = CommandMessage.getCommandFromMessage(payload);
-			
-			onMessageReceived(command, payload);
+			try
+			{
+				logger.trace("** messageArrived: topic={}, msg={}", topic, message);
+				final String payload = new String(message.getPayload());
+				final CommandType command = CommandMessage.getCommandFromMessage(payload);
+				
+				//make sure the command is not null
+				if (null != command)
+				{
+					onMessageReceived(command, payload);
+				}
+			}
+			catch (Exception e)
+			{
+				//catch any uncaught exception so that this thread does not crash. Any uncaught exceptions from inside this thread will cause
+				//the entire app to fail.
+				logger.error(e.getMessage(), e);
+			}
 		}
 		
 		@Override
