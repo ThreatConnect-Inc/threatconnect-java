@@ -8,6 +8,7 @@ public class RunService extends AbstractCommandConfig
 	private List<NameValuePair<String, String>> headers;
 	private List<NameValuePair<String, String>> queryParams;
 	private String path;
+	private String apiToken;
 	
 	private String bodyVariable;
 	
@@ -51,6 +52,16 @@ public class RunService extends AbstractCommandConfig
 		this.path = path;
 	}
 	
+	public void setApiToken(final String apiToken)
+	{
+		this.apiToken = apiToken;
+	}
+	
+	public String getApiToken()
+	{
+		return apiToken;
+	}
+	
 	public List<NameValuePair<String, String>> getHeaders()
 	{
 		return headers;
@@ -70,6 +81,5 @@ public class RunService extends AbstractCommandConfig
 	{
 		this.queryParams = queryParams;
 	}
-	
 }
 
