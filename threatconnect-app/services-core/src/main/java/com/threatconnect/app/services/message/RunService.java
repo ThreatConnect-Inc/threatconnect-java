@@ -1,5 +1,6 @@
 package com.threatconnect.app.services.message;
 
+import java.util.Date;
 import java.util.List;
 
 public class RunService extends AbstractCommandConfig
@@ -9,6 +10,7 @@ public class RunService extends AbstractCommandConfig
 	private List<NameValuePair<String, String>> queryParams;
 	private String path;
 	private String apiToken;
+	private Date apiTokenExpires;
 	
 	private String bodyVariable;
 	

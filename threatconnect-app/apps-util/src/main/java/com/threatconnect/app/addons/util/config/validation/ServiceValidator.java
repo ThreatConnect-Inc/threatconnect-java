@@ -5,7 +5,7 @@ import com.threatconnect.app.addons.util.config.install.RunLevelType;
 
 public class ServiceValidator extends Validator<Install>
 {
-	private static final String DISPLAY_PATH_REGEX = "[a-zA-Z0-9\\_\\.]+";
+	public static final String DISPLAY_PATH_REGEX = "[a-zA-Z0-9\\_\\.]+";
 	
 	@Override
 	public void validate(final Install install) throws ValidationException
