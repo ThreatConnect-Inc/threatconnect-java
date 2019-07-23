@@ -1,6 +1,5 @@
 package com.threatconnect.app.services.message;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,7 +7,8 @@ public abstract class UpdateCommandConfig extends AbstractCommandConfig
 {
 	private final Map<String, Object> config;
 	private String apiToken;
-	private Date apiTokenExpires;
+	private String retryToken;
+	private long expireSeconds;
 	
 	public UpdateCommandConfig()
 	{
@@ -31,14 +31,24 @@ public abstract class UpdateCommandConfig extends AbstractCommandConfig
 		this.apiToken = apiToken;
 	}
 	
-	public Date getApiTokenExpires()
+	public String getRetryToken()
 	{
-		return apiTokenExpires;
+		return retryToken;
 	}
 	
-	public void setApiTokenExpires(final Date apiTokenExpires)
+	public void setRetryToken(final String retryToken)
 	{
-		this.apiTokenExpires = apiTokenExpires;
+		this.retryToken = retryToken;
+	}
+	
+	public long getExpireSeconds()
+	{
+		return expireSeconds;
+	}
+	
+	public void setExpireSeconds(final long expireSeconds)
+	{
+		this.expireSeconds = expireSeconds;
 	}
 }
 

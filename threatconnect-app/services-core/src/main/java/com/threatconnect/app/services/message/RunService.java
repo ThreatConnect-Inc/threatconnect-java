@@ -1,6 +1,5 @@
 package com.threatconnect.app.services.message;
 
-import java.util.Date;
 import java.util.List;
 
 public class RunService extends AbstractCommandConfig
@@ -10,7 +9,8 @@ public class RunService extends AbstractCommandConfig
 	private List<NameValuePair<String, String>> queryParams;
 	private String path;
 	private String apiToken;
-	private Date apiTokenExpires;
+	private String retryToken;
+	private long expireSeconds;
 	
 	private String bodyVariable;
 	
@@ -82,6 +82,26 @@ public class RunService extends AbstractCommandConfig
 	public void setQueryParams(List<NameValuePair<String, String>> queryParams)
 	{
 		this.queryParams = queryParams;
+	}
+	
+	public String getRetryToken()
+	{
+		return retryToken;
+	}
+	
+	public void setRetryToken(final String retryToken)
+	{
+		this.retryToken = retryToken;
+	}
+	
+	public long getExpireSeconds()
+	{
+		return expireSeconds;
+	}
+	
+	public void setExpireSeconds(final long expireSeconds)
+	{
+		this.expireSeconds = expireSeconds;
 	}
 }
 
