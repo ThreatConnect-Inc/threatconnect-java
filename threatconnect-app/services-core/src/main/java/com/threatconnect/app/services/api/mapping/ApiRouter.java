@@ -3,7 +3,7 @@ package com.threatconnect.app.services.api.mapping;
 import com.threatconnect.app.services.api.ApiService;
 import com.threatconnect.app.services.message.NameValuePair;
 import com.threatconnect.app.services.message.RunService;
-import com.threatconnect.app.services.message.RunServiceAcknowledgeMessage;
+import com.threatconnect.app.services.message.RunServiceAcknowledgedMessage;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -23,7 +23,7 @@ public class ApiRouter extends ApiMapper
 		this.apiService = apiService;
 	}
 	
-	public Object routeApiEvent(final RunService runService, final RunServiceAcknowledgeMessage response)
+	public Object routeApiEvent(final RunService runService, final RunServiceAcknowledgedMessage response)
 		throws ApiNotFoundException, InvocationTargetException, IllegalAccessException
 	{
 		//look up the method and path to find a matching api endpoint

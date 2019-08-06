@@ -1,14 +1,14 @@
 package com.threatconnect.app.services.message;
 
-public class AcknowledgeMessage extends AbstractCommandConfig
+public class AcknowledgedMessage extends AbstractCommandConfig
 {
 	private CommandType type;
 	private String message;
 	private String status;
 	
-	public AcknowledgeMessage(final CommandType type)
+	public AcknowledgedMessage(final CommandType type)
 	{
-		super(CommandType.Acknowledge);
+		super(CommandType.Acknowledged);
 		this.type = type;
 	}
 	

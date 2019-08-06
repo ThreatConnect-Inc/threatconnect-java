@@ -1,11 +1,11 @@
 package com.threatconnect.app.services.message;
 
-public class StartSessionAcknowledgeMessage extends AcknowledgeMessage
+public class StartSessionAcknowledgedMessage extends AcknowledgedMessage
 {
 	private String sessionId;
 	private String apiToken;
 	
-	public StartSessionAcknowledgeMessage()
+	public StartSessionAcknowledgedMessage()
 	{
 		super(CommandType.StartSession);
 	}

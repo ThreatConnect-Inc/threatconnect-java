@@ -9,10 +9,10 @@ import com.threatconnect.app.services.api.ApiService;
 import com.threatconnect.app.services.api.mapping.ApiNotFoundException;
 import com.threatconnect.app.services.api.mapping.ApiRouter;
 import com.threatconnect.app.services.message.CommandType;
-import com.threatconnect.app.services.message.ListServiceAcknowledgeMessage;
+import com.threatconnect.app.services.message.ListServiceAcknowledgedMessage;
 import com.threatconnect.app.services.message.ListServices;
 import com.threatconnect.app.services.message.RunService;
-import com.threatconnect.app.services.message.RunServiceAcknowledgeMessage;
+import com.threatconnect.app.services.message.RunServiceAcknowledgedMessage;
 import com.threatconnect.sdk.app.exception.AppInitializationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,14 +51,14 @@ public class ApiServiceLauncher extends ServiceLauncher<ApiService>
 	
 	private void handleListServices(final ListServices listServices)
 	{
-		ListServiceAcknowledgeMessage response = new ListServiceAcknowledgeMessage();
+		ListServiceAcknowledgedMessage response = new ListServiceAcknowledgedMessage();
 		response.setData(apiRouter.getServiceItems());
 		sendMessage(response);
 	}
 	
 	private void handleRunServiceEvent(final RunService runService)
 	{
-		RunServiceAcknowledgeMessage response = new RunServiceAcknowledgeMessage();
+		RunServiceAcknowledgedMessage response = new RunServiceAcknowledgedMessage();
 		response.setRequestKey(runService.getRequestKey());
 		
 		try
@@ -87,7 +87,7 @@ public class ApiServiceLauncher extends ServiceLauncher<ApiService>
 		sendMessage(response);
 	}
 	
-	private void writeBody(final RunServiceAcknowledgeMessage runServiceAcknowledgeMessage, final Object object) throws DBWriteException
+	private void writeBody(final RunServiceAcknowledgedMessage runServiceAcknowledgeMessage, final Object object) throws DBWriteException
 	{
 		if (null != object)
 		{

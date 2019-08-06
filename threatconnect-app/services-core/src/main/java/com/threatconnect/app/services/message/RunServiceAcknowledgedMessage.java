@@ -2,7 +2,7 @@ package com.threatconnect.app.services.message;
 
 import java.util.List;
 
-public class RunServiceAcknowledgeMessage extends AcknowledgeMessage
+public class RunServiceAcknowledgedMessage extends AcknowledgedMessage
 {
 	private Integer statusCode;
 	private boolean isBinary;
@@ -10,7 +10,7 @@ public class RunServiceAcknowledgeMessage extends AcknowledgeMessage
 	private List<NameValuePair<String, String>> headers;
 	private String status;
 	
-	public RunServiceAcknowledgeMessage()
+	public RunServiceAcknowledgedMessage()
 	{
 		super(CommandType.RunService);
 	}

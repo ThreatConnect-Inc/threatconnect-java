@@ -14,7 +14,7 @@ public enum CommandType
 	FireEvent,
 	WebhookEvent,
 	MailEvent,
-	Acknowledge,
+	Acknowledged,
 	Ready,
 	AppUpdated,
 	LoggingChange
