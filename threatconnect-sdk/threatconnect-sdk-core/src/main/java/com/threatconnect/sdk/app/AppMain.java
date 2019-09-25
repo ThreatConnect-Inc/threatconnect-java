@@ -67,15 +67,18 @@ public final class AppMain extends SDKAppLauncher<App>
 		finally
 		{
 			// flush the logs to the server
+			System.out.println("App Shutting Down. Flushing Logs...");
 			ServerLogger.getInstance(getAppConfig()).flushToServer();
 		}
 		
 		// exit the app with this exit status
+		System.out.println("App Exit: " + exitCode);
 		System.exit(exitCode);
 	}
 	
 	public static void main(String[] args) throws Exception
 	{
+		System.out.println("Initializing Application");
 		new AppMain().launch();
 	}
 }

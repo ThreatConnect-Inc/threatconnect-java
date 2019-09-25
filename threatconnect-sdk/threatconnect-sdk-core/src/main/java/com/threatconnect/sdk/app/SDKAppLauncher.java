@@ -33,6 +33,8 @@ public abstract class SDKAppLauncher<A> extends AppLauncher<A>
 	
 	public static AppConfig findAppConfig()
 	{
+		System.out.println("Initializing AppConfig");
+		
 		//create a new sdk app config to read the values
 		AppConfig appConfig;
 		
@@ -59,6 +61,7 @@ public abstract class SDKAppLauncher<A> extends AppLauncher<A>
 			throw new AppConfigInitializationException(e);
 		}
 		
+		System.out.println("AppConfig Initialized: " + appConfig.getClass());
 		return appConfig;
 	}
 	
