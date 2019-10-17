@@ -8,6 +8,7 @@ public class Feature
 	public static final String SECURE_PARAMS = "secureParams";
 	public static final String FILE_PARAMS = "fileParams";
 	public static final String SMTP_SETTINGS = "smtpSettings";
+	public static final String CAL_SETTINGS = "CALSettings";
 	public static final String RESTRICT_APP_BUILDER = "restrictAppBuilder";
 	public static final String APP_BUILDER_COMPLIANT = "appBuilderCompliant";
 	public static final String EMBEDDED_EXECUTION_ENABLED = "embeddedExecutionEnabled";

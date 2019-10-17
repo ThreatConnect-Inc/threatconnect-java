@@ -49,6 +49,9 @@ public abstract class AppConfig
 	public static final String TC_ACTION_CHANNEL = "tc_action_channel";
 	public static final String TC_TERMINATE_SECONDS = "tc_terminate_seconds";
 	public static final String TC_EXIT_CHANNEL = "tc_exit_channel";
+	public static final String TC_CAL_HOST = "tc_cal_host";
+	public static final String TC_CAL_TIMESTAMP = "tc_cal_timestamp";
+	public static final String TC_CAL_TOKEN = "tc_cal_token";
 	
 	public static final String TC_SMTP_HOST = "tc_smtp_host";
 	public static final String TC_SMTP_PORT = "tc_smtp_port";
