@@ -9,6 +9,7 @@ public class CreateCommandConfig extends AbstractCommandConfig
 	private String apiToken;
 	private String retryToken;
 	private long expireSeconds;
+	private String url;
 	
 	public CreateCommandConfig()
 	{
@@ -49,5 +50,15 @@ public class CreateCommandConfig extends AbstractCommandConfig
 	public void setExpireSeconds(final long expireSeconds)
 	{
 		this.expireSeconds = expireSeconds;
+	}
+	
+	public String getUrl()
+	{
+		return url;
+	}
+	
+	public void setUrl(final String url)
+	{
+		this.url = url;
 	}
 }
