@@ -4,24 +4,24 @@ import java.util.List;
 
 public class WebhookEventResponse extends AbstractCommandConfig
 {
-    private String method;
+    private String sessionId;
     private List<NameValuePair<String, String>> headers;
-    private List<NameValuePair<String, String>> queryParams;
     private String bodyVariable;
+    private int statusCode;
     
     public WebhookEventResponse()
     {
         super(CommandType.WebhookEvent);
     }
     
-    public String getMethod()
+    public String getSessionId()
     {
-        return method;
+        return sessionId;
     }
     
-    public void setMethod(final String method)
+    public void setSessionId(final String sessionId)
     {
-        this.method = method;
+        this.sessionId = sessionId;
     }
     
     public List<NameValuePair<String, String>> getHeaders()
@@ -34,16 +34,6 @@ public class WebhookEventResponse extends AbstractCommandConfig
         this.headers = headers;
     }
     
-    public List<NameValuePair<String, String>> getQueryParams()
-    {
-        return queryParams;
-    }
-    
-    public void setQueryParams(final List<NameValuePair<String, String>> queryParams)
-    {
-        this.queryParams = queryParams;
-    }
-    
     public String getBodyVariable()
     {
         return bodyVariable;
@@ -52,6 +42,16 @@ public class WebhookEventResponse extends AbstractCommandConfig
     public void setBodyVariable(final String bodyVariable)
     {
         this.bodyVariable = bodyVariable;
+    }
+    
+    public int getStatusCode()
+    {
+        return statusCode;
+    }
+    
+    public void setStatusCode(final int statusCode)
+    {
+        this.statusCode = statusCode;
     }
 }
 
