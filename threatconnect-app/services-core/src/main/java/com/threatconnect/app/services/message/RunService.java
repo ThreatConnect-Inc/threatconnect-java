@@ -18,11 +18,6 @@ public class RunService extends AbstractCommandConfig
 		super(CommandType.RunService);
 	}
 	
-	public RunService(CommandType command)
-	{
-		super(command);
-	}
-	
 	public String getMethod()
 	{
 		return method;
