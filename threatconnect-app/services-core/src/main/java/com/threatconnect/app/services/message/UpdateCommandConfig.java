@@ -7,7 +7,6 @@ public abstract class UpdateCommandConfig extends AbstractCommandConfig
 {
 	private final Map<String, Object> config;
 	private String apiToken;
-	private String retryToken;
 	private long expireSeconds;
 	
 	public UpdateCommandConfig()
@@ -29,16 +28,6 @@ public abstract class UpdateCommandConfig extends AbstractCommandConfig
 	public void setApiToken(final String apiToken)
 	{
 		this.apiToken = apiToken;
-	}
-	
-	public String getRetryToken()
-	{
-		return retryToken;
-	}
-	
-	public void setRetryToken(final String retryToken)
-	{
-		this.retryToken = retryToken;
 	}
 	
 	public long getExpireSeconds()
