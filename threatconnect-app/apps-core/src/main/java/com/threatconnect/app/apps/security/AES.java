@@ -7,7 +7,7 @@ import java.security.GeneralSecurityException;
 public class AES
 {
 	private static final String KEY_SPEC = "AES";
-	private static final String CIPHER = "AES/ECB/PKCS5Padding";
+	private static final String CIPHER = "AES/CBC/PKCS5Padding";
 	
 	public static byte[] encrypt(final String content, final String secret) throws GeneralSecurityException
 	{
