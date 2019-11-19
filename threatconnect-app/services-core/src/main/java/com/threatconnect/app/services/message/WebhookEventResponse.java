@@ -11,7 +11,7 @@ public class WebhookEventResponse extends AbstractCommandConfig
     
     public WebhookEventResponse()
     {
-        super(CommandType.WebhookEvent);
+        super(CommandType.WebHookEventResponse);
     }
     
     public String getSessionId()
