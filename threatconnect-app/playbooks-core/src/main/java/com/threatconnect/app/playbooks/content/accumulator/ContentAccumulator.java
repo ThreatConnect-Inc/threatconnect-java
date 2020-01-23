@@ -11,10 +11,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public abstract class ContentAccumulator<T>
 {
+	//we can assume any content over 1000 characters is not a playbook key. This is even being extremely conservative
+	private static final int KEY_SIZE_THRESHOLD = 1000;
+	
 	private static final Logger logger = LoggerFactory.getLogger(ContentAccumulator.class.getName());
 	
 	private final DBService dbService;
@@ -96,7 +101,7 @@ public abstract class ContentAccumulator<T>
 		try
 		{
 			//read the value from the database service as a raw byte array and check to see if the content is not null
-			byte[] content = dbService.getValue(verifyKey(key).toString().trim());
+			byte[] content = resolveValue(key, new HashSet<String>());
 			if (content == null)
 			{
 				return null;
@@ -107,6 +112,53 @@ public abstract class ContentAccumulator<T>
 		catch (DBReadException | ConversionException e)
 		{
 			throw new ContentException(e);
+		}
+	}
+	
+	private byte[] resolveValue(final String key, final Set<String> keySet) throws DBReadException
+	{
+		//make sure this key does not already exist in the stack
+		if (!keySet.contains(key))
+		{
+			//push this key onto the stack
+			keySet.add(key);
+			
+			//read the content from the database
+			byte[] content = dbService.getValue(verifyKey(key).toString().trim());
+			if (null != content)
+			{
+				//check to see if the content is within the threshold so we are not unnecessarily creating a string out of a very
+				//large binary file
+				if (content.length < KEY_SIZE_THRESHOLD)
+				{
+					//check to see if this is a content is another key
+					String contentString = new String(content).trim();
+					if (PlaybooksVariableUtil.isVariable(contentString))
+					{
+						//recurse until we find the value
+						return resolveValue(contentString, keySet);
+					}
+					else
+					{
+						//this content is not another key so return this instead
+						return content;
+					}
+				}
+				else
+				{
+					//this is a large piece of content, this should not be another key
+					return content;
+				}
+			}
+			else
+			{
+				//there is no value
+				return null;
+			}
+		}
+		else
+		{
+			throw new DBReadException("Infinite playbook key recursion detected.");
 		}
 	}
 	
