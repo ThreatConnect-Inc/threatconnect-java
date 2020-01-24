@@ -1115,13 +1115,6 @@ public abstract class EnhancedApp extends App
 		this.adversaryMap = adversaryMap;
 	}
 
-	public String basicEncoded(String user, String password)
-	{
-		String encoded = new sun.misc.BASE64Encoder().encode(String.format("%s:%s", user, password).getBytes());
-
-		return "Basic " + encoded;
-	}
-
 	public Map<String, Tag> getTagMap()
 	{
 		return tagMap;
