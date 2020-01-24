@@ -133,6 +133,16 @@ public abstract class ContentAccumulator<T>
 				{
 					//check to see if this is a content is another key
 					String contentString = new String(content).trim();
+					
+					//:FIXME: this is a horrible temporary solution to check for keys that are wrapped in a string
+					//:FIXME: this logic needs to be revisited
+					//check to see if the content is wrapped in a string
+					if (contentString.startsWith("\"") && contentString.endsWith("\"") && contentString.length() > 2)
+					{
+						//unwrap the string
+						contentString = contentString.substring(1, contentString.length() - 1);
+					}
+					
 					if (PlaybooksVariableUtil.isVariable(contentString))
 					{
 						//recurse until we find the value

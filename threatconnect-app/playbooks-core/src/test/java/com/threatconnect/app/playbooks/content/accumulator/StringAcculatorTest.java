@@ -68,33 +68,37 @@ public class StringAcculatorTest
 	}
 	
 	@Test
-	public void infiniteLoopEmbeddedStringVariables1() throws ContentException
+	public void infiniteLoopEmbeddedStringVariables1()
 	{
-		stringAccumulator.writeContent("#App:123:one!String", "#App:123:two!String");
-		stringAccumulator.writeContent("#App:123:two!String", "#App:123:one!String");
-		
-		String result = stringAccumulator.readContent("#App:123:one!String");
-		logger.info(result);
-		
-		// this should have resolved to StringAccumulator.CYCLICAL_VARIABLE_REFERENCE and then detected that each
-		// variable pointed to each other. At this point, a warning will be logged and it will make no further
-		// attempt to resolve the next variable.
-		Assert.assertEquals(StringAccumulator.CYCLICAL_VARIABLE_REFERENCE, result);
+		try
+		{
+			stringAccumulator.writeContent("#App:123:one!String", "#App:123:two!String");
+			stringAccumulator.writeContent("#App:123:two!String", "#App:123:one!String");
+			
+			stringAccumulator.readContent("#App:123:one!String");
+			Assert.fail();
+		}
+		catch (ContentException e)
+		{
+			Assert.assertEquals("Infinite playbook key recursion detected.", e.getCause().getMessage());
+		}
 	}
 	
 	@Test
-	public void infiniteLoopEmbeddedStringVariables2() throws ContentException
+	public void infiniteLoopEmbeddedStringVariables2()
 	{
-		stringAccumulator.writeContent("#App:123:one!String", "#App:123:two!String");
-		stringAccumulator.writeContent("#App:123:two!String", "#App:123:one!String");
-		
-		String result = stringAccumulator.readContent("#App:123:one!String and some other text");
-		logger.info(result);
-		
-		// this should have resolved to StringAccumulator.CYCLICAL_VARIABLE_REFERENCE and then detected that each
-		// variable pointed to each other. At this point, a warning will be logged and it will make no further
-		// attempt to resolve the next variable.
-		Assert.assertEquals(StringAccumulator.CYCLICAL_VARIABLE_REFERENCE + " and some other text", result);
+		try
+		{
+			stringAccumulator.writeContent("#App:123:one!String", "#App:123:two!String");
+			stringAccumulator.writeContent("#App:123:two!String", "#App:123:one!String");
+			
+			stringAccumulator.readContent("#App:123:one!String and some other text");
+			Assert.fail();
+		}
+		catch (ContentException e)
+		{
+			Assert.assertEquals("Infinite playbook key recursion detected.", e.getCause().getMessage());
+		}
 	}
 	
 	@Test
@@ -109,7 +113,7 @@ public class StringAcculatorTest
 		// this should have resolved to StringAccumulator.CYCLICAL_VARIABLE_REFERENCE and then detected that each
 		// variable pointed to each other. At this point, a warning will be logged and it will make no further
 		// attempt to resolve the next variable.
-		Assert.assertEquals(StringAccumulator.CYCLICAL_VARIABLE_REFERENCE + " extra text and some more text", result);
+		Assert.assertEquals(StringAccumulator.CYCLICAL_VARIABLE_REFERENCE + " extra text extra text and some more text", result);
 	}
 	
 	@Test
