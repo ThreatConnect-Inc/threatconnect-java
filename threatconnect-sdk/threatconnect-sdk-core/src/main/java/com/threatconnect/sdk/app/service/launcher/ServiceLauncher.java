@@ -56,6 +56,9 @@ public class ServiceLauncher<S extends Service> extends MQTTServiceCommunication
 		
 		this.appConfig = appConfig;
 		this.service = service;
+		
+		//register a termination request listener
+		this.service.addTerminationRequestListener(this::shutdown);
 	}
 	
 	public AppConfig getAppConfig()
@@ -145,6 +148,8 @@ public class ServiceLauncher<S extends Service> extends MQTTServiceCommunication
 	
 	private void shutdown()
 	{
+		logger.info("Shutting down service.");
+		
 		try
 		{
 			//notify the service that we are shutting down
@@ -158,6 +163,7 @@ public class ServiceLauncher<S extends Service> extends MQTTServiceCommunication
 		}
 		catch (Exception e)
 		{
+			logger.error(e.getMessage());
 			System.exit(1);
 		}
 		finally
