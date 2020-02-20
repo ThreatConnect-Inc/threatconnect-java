@@ -20,6 +20,12 @@ public abstract class WebhookService extends PlaybookService
 		FireEventListener fireEventListener);
 	
 	@Override
+	public void onStartUp()
+	{
+	
+	}
+	
+	@Override
 	public void onServiceConfigurationCreated(final ServiceConfiguration serviceConfiguration)
 	{
 	

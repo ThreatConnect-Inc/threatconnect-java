@@ -63,7 +63,7 @@ public final class ServiceMain extends SDKAppLauncher<Service>
 		service.init(getAppConfig());
 		
 		//create a new service executor and start the service
-		ServiceLauncher<?> serviceLauncher;
+		final ServiceLauncher<?> serviceLauncher;
 		
 		if (ApiService.class.isAssignableFrom(serviceClass))
 		{
@@ -79,7 +79,7 @@ public final class ServiceMain extends SDKAppLauncher<Service>
 		}
 		else
 		{
-			throw new AppInitializationException("Unsupported service: " + serviceClass.getName());
+			serviceLauncher = new ServiceLauncher<>(getAppConfig(), service);
 		}
 		
 		serviceLauncher.start();

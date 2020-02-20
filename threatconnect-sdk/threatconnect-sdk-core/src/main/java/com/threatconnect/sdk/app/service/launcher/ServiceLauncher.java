@@ -13,16 +13,13 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.net.ssl.SSLContext;
-import java.io.File;
-import java.security.NoSuchAlgorithmException;
 import java.util.Timer;
 import java.util.TimerTask;
 
 /**
  * @author Greg Marut
  */
-public abstract class ServiceLauncher<S extends Service> extends MQTTServiceCommunicationClient
+public class ServiceLauncher<S extends Service> extends MQTTServiceCommunicationClient
 {
 	private static final Logger logger = LoggerFactory.getLogger(ServiceLauncher.class);
 	
@@ -86,6 +83,9 @@ public abstract class ServiceLauncher<S extends Service> extends MQTTServiceComm
 			//send a ready message to the server to notify that this service has started
 			Ready ready = new Ready();
 			sendMessage(ready);
+			
+			//notify the service that it has started
+			service.onStartUp();
 		}
 	}
 	

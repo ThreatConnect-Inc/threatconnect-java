@@ -4,5 +4,9 @@ import com.threatconnect.app.services.Service;
 
 public abstract class ApiService extends Service
 {
+	@Override
+	public void onStartUp()
+	{
 	
+	}
 }

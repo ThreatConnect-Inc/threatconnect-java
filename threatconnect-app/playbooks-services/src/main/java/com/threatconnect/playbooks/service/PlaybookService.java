@@ -16,6 +16,12 @@ public abstract class PlaybookService extends Service
 		this.serviceConfigurations = new HashMap<Long, ServiceConfiguration>();
 	}
 	
+	@Override
+	public void onStartUp()
+	{
+	
+	}
+	
 	public final Map<Long, ServiceConfiguration> getServiceConfigurations()
 	{
 		return serviceConfigurations;

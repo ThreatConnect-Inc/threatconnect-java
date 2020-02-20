@@ -17,5 +17,7 @@ public abstract class Service
 		return appConfig;
 	}
 	
+	public abstract void onStartUp();
+	
 	public abstract void onShutdown();
 }
