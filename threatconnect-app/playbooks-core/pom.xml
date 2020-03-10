@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.threatconnect.app</groupId>
 		<artifactId>threatconnect-app</artifactId>
-		<version>2.12.0</version>
+		<version>2.12.1</version>
 	</parent>
 	<artifactId>playbooks-core</artifactId>
 	<name>Playbooks Core</name>
@@ -34,12 +34,7 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.5.4</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-			<version>2.5.4</version>
+			<version>${version.jackson}</version>
 		</dependency>
 		<dependency>
 			<groupId>redis.clients</groupId>
