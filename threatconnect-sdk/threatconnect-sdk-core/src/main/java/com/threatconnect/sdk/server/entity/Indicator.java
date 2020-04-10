@@ -4,22 +4,20 @@
  */
 package com.threatconnect.sdk.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.threatconnect.sdk.server.entity.format.DateSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.threatconnect.sdk.server.entity.format.DateTimeSerializer;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import java.util.Date;
+import java.util.Map;
+import java.util.TreeMap;
 
 
 /**
@@ -82,6 +80,8 @@ public class Indicator implements AttributeHolder
     private Double threatAssessRating;
     @XmlElement(name = "ThreatAssessConfidence", required = false)
     private Double threatAssessConfidence;
+    @XmlElement(name = "ThreatAssessScore", required = false)
+    private Integer threatAssessScore;
     @XmlElement(name = "WebLink", required = false)
     private String webLink;
     @XmlElement(name = "Source", required = false)
@@ -215,7 +215,17 @@ public class Indicator implements AttributeHolder
     {
         this.threatAssessConfidence = threatAssessConfidence;
     }
-
+    
+    public Integer getThreatAssessScore()
+    {
+        return threatAssessScore;
+    }
+    
+    public void setThreatAssessScore(final Integer threatAssessScore)
+    {
+        this.threatAssessScore = threatAssessScore;
+    }
+    
     public String getWebLink()
     {
         return webLink;
