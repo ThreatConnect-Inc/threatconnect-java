@@ -14,14 +14,15 @@ import com.threatconnect.sdk.exception.FailedResponseException;
 import com.threatconnect.sdk.server.response.entity.ApiEntitySingleResponse;
 import com.threatconnect.sdk.util.ApiFilterParser;
 import com.threatconnect.sdk.util.ApiFilterType;
+import org.apache.http.entity.ContentType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.Map;
 import java.util.Map.Entry;
-import org.apache.http.entity.ContentType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -138,27 +139,35 @@ public abstract class AbstractReaderAdapter extends AbstractClientAdapter
         throws IOException, FailedResponseException {
         return getItems(propName, responseType, itemType, null, null);
     }
-
+    
     protected IterableResponse getItems(String propName, Class responseType, Class itemType, String ownerName, Map<String, Object> paramMap)
-            throws IOException, FailedResponseException {
+        throws IOException, FailedResponseException
+    {
         return getItems(propName, responseType, itemType, ownerName, paramMap, null, false);
     }
-
-
-    protected IterableResponse getItems(String propName, Class responseType, Class itemType, String ownerName, Map<String, Object> paramMap, ApiFilterType[] filters, boolean orParams)
-        throws IOException, FailedResponseException {
-
+    
+    protected IterableResponse getItems(String propName, Class responseType, Class itemType, String ownerName, Map<String, Object> paramMap,
+        ApiFilterType[] filters, boolean orParams) throws IOException, FailedResponseException
+    {
+        return getItems(propName, responseType, itemType, ownerName, paramMap, filters, orParams, null);
+    }
+    
+    protected IterableResponse getItems(String propName, Class responseType, Class itemType, String ownerName, Map<String, Object> paramMap,
+        ApiFilterType[] filters, boolean orParams, Map<String, String> queryParams) throws IOException, FailedResponseException
+    {
         Integer resultLimit = getConn().getConfig().getResultLimit();
-        String url = getUrl(propName, ownerName);
-
-        if (this instanceof UrlTypeable) {
+        String url = getUrl(propName, ownerName, false, queryParams);
+        
+        if (this instanceof UrlTypeable)
+        {
             url = url.replace("{type}", ((UrlTypeable) this).getUrlType());
         }
-
+        
         logger.trace("Calling url={}", url);
-        if (paramMap != null) {
+        if (paramMap != null)
+        {
             logger.trace("paramMap={}", paramMap);
-            for(Entry<String,Object> entry : paramMap.entrySet()) {
+            for (Entry<String, Object> entry : paramMap.entrySet()) {
                 String value = URLEncoder.encode( entry.getValue().toString(), "UTF-8").replace("+", "%20");
                 url = url.replace(String.format("{%s}", entry.getKey()), value);
             }

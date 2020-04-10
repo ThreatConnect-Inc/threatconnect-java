@@ -51,10 +51,14 @@ public abstract class AbstractBaseReaderAdapter<T,P> extends AbstractReaderAdapt
     }
 
     public IterableResponse<T> getAll(String ownerName) throws IOException, FailedResponseException {
-
         return getItems(getUrlBasePrefix(), listType, singleItemType, ownerName, null);
     }
-
+    
+    public IterableResponse<T> getAll(String ownerName, Map<String, String> queryParams) throws IOException, FailedResponseException
+    {
+        return getItems(getUrlBasePrefix(), listType, singleItemType, ownerName, null, null, false, queryParams);
+    }
+    
     public IterableResponse<T> getForFilters(String owner, boolean orParams, ApiFilterType...filters) throws IOException, FailedResponseException {
         return getItems(getUrlBasePrefix(), listType, singleItemType, owner, null, filters, orParams);
     }
