@@ -39,6 +39,12 @@
 			<organization>ThreatConnect</organization>
 			<organizationUrl>https://www.threatconnect.com</organizationUrl>
 		</developer>
+		<developer>
+			<name>David Feezor</name>
+			<email>integrations@threatconnect.com</email>
+			<organization>ThreatConnect</organization>
+			<organizationUrl>https://www.threatconnect.com</organizationUrl>
+		</developer>
 	</developers>
 	<scm>
 		<url>https://github.com/ThreatConnect-Inc/threatconnect-java</url>
