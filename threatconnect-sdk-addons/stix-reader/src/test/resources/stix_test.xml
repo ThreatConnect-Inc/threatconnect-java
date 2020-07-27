@@ -1,649 +1,961 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<taxii_11:Poll_Response xmlns:taxii_11="http://taxii.mitre.org/messages/taxii_xml_binding-1.1" xmlns:xmldsig="http://www.w3.org/2000/09/xmldsig#" collection_name="A_ISAC_C10203" more="false" result_part_number="1" in_response_to="urn:uuid:d0ce4b45-03c9-4b00-a9ea-cd22ccf1adf5" message_id="6280102206866302997">
-   <taxii_11:Exclusive_Begin_Timestamp>2018-07-13T14:51:24Z</taxii_11:Exclusive_Begin_Timestamp>
-   <taxii_11:Inclusive_End_Timestamp>2018-07-13T21:31:01.184000Z</taxii_11:Inclusive_End_Timestamp>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<taxii_11:Poll_Response collection_name="ioc_feed" more="false" result_part_number="1" in_response_to="urn:uuid:8acc3e63-a527-42bb-aea6-016ab4bbd33b" message_id="6363014565642221572" xmlns:taxii_11="http://taxii.mitre.org/messages/taxii_xml_binding-1.1" xmlns:xmldsig="http://www.w3.org/2000/09/xmldsig#">
+   <taxii_11:Exclusive_Begin_Timestamp>2020-06-07T19:00:00Z</taxii_11:Exclusive_Begin_Timestamp>
+   <taxii_11:Inclusive_End_Timestamp>2020-06-08T19:00:00Z</taxii_11:Inclusive_End_Timestamp>
    <taxii_11:Content_Block>
-      <taxii_11:Content_Binding binding_id="urn:stix.mitre.org:xml:1.1.1" />
+      <taxii_11:Content_Binding binding_id="urn:stix.mitre.org:xml:1.2"/>
       <taxii_11:Content>
-         <stix:STIX_Package xmlns:stix="http://stix.mitre.org/stix-1" xmlns:AddressObj="http://cybox.mitre.org/objects#AddressObject-2" xmlns:DomainNameObj="http://cybox.mitre.org/objects#DomainNameObject-1" xmlns:FileObj="http://cybox.mitre.org/objects#FileObject-2" xmlns:URIObj="http://cybox.mitre.org/objects#URIObject-2" xmlns:cybox="http://cybox.mitre.org/cybox-2" xmlns:cyboxCommon="http://cybox.mitre.org/common-2" xmlns:cyboxVocabs="http://cybox.mitre.org/default_vocabularies-2" xmlns:indicator="http://stix.mitre.org/Indicator-2" xmlns:marking="http://data-marking.mitre.org/Marking-1" xmlns:stixCommon="http://stix.mitre.org/common-1" xmlns:stixVocabs="http://stix.mitre.org/default_vocabularies-1" xmlns:taxii="http://taxii.mitre.org/messages/taxii_xml_binding-1" xmlns:tdq="http://taxii.mitre.org/query/taxii_default_query-1" xmlns:threatstream="http://threatstream.com" xmlns:tlpMarking="http://data-marking.mitre.org/extensions/MarkingStructure#TLP-1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="threatstream:Package-f75e04b8-7014-4356-a7f1-2feadfb4834d" timestamp="2018-07-14T14:52:11.814035+00:00" version="1.1.1">
-            <stix:STIX_Header />
+
+         <stix:STIX_Package id="CSE-CST:package-727e4c8f-b3a9-abe4-b801-7a6c2612db4e" timestamp="2020-06-08T12:50:47.730233+00:00" version="1.2" xmlns:indicator="http://stix.mitre.org/Indicator-2" xmlns:tdq="http://taxii.mitre.org/query/taxii_default_query-1" xmlns:touMarking="http://data-marking.mitre.org/extensions/MarkingStructure#Terms_Of_Use-1" xmlns:AddressObj="http://cybox.mitre.org/objects#AddressObject-2" xmlns:stix="http://stix.mitre.org/stix-1" xmlns:CSE-CST="https://www.cse-cst.gc.ca/en/about-apropos" xmlns:stixVocabs="http://stix.mitre.org/default_vocabularies-1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stixCommon="http://stix.mitre.org/common-1" xmlns:marking="http://data-marking.mitre.org/Marking-1" xmlns:report="http://stix.mitre.org/Report-1" xmlns:taxii="http://taxii.mitre.org/messages/taxii_xml_binding-1" xmlns:cybox="http://cybox.mitre.org/cybox-2">
+
+            <stix:STIX_Header>
+
+               <stix:Title>"ioc_feed" block</stix:Title>
+
+               <stix:Information_Source>
+                  <stixCommon:Identity>
+                     <stixCommon:Name>This report contains Indicators of Compromise (IOC) identified by opening or executing malicious files in a dynamic malware analysis sandbox. The hostnames were extracted from the sandbox's network activity and validated against the following rules: Must not be in the Alexa 1 Million, Must have a valid Top Level Domain. These steps may not prevent legitimate hostnames from being included in these IOCs. However, if the IOCs include legitimate hostnames it means they are either compromised and used as accessory to malicious activities or used to evade dynamic analysis environments such as Internet connectivity checks. It is left to the recipient to evaluate the impact of blocking access to these sites. Please e-mail CCCS (contact@cyber.gc.ca) with any questions you may have related to the data in this report.</stixCommon:Name>
+                  </stixCommon:Identity>
+               </stix:Information_Source>
+            </stix:STIX_Header>
+
             <stix:Indicators>
-               <stix:Indicator id="threatstream:indicator-XXXXXXXX-bc97-4052-ac3d-c94470c0906b" timestamp="2018-07-14T14:52:11.814164+00:00" xsi:type="indicator:IndicatorType">
-                  <indicator:Title>mal_domain: asaparborcare.com</indicator:Title>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">C2</indicator:Type>
-                  <indicator:Description>TS ID: XXXXXXXX; iType: mal_domain; Date First: 2018-07-13T19:54:49.913Z; State: active; Org: Unified Layer; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
-                  <indicator:Observable id="threatstream:Observable-b27777fe-82f4-4cbb-8c86-29c8451f917c">
-                     <cybox:Title>mal_domain: asaparborcare.com</cybox:Title>
-                     <cybox:Keywords>
-                        <cybox:Keyword>very-high</cybox:Keyword>
-                     </cybox:Keywords>
-                     <cybox:Object id="threatstream:DomainName-d090f969-1ed5-4a34-aa11-77994df9931c">
-                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
-                           <DomainNameObj:Value>asaparborcare.com</DomainNameObj:Value>
+               <stix:Indicator id="CSE-CST:indicator-08aa4a3a-956c-341f-bbd8-62430e6dfc13" timestamp="2020-06-08T12:50:46.808000+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>Malicious IP Address</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">IP Watchlist</indicator:Type>
+                  <indicator:Observable id="CSE-CST:observable-08aa4a3a-956c-341f-bbd8-62430e6dfc13">
+                     <cybox:Title>IP_ADDRESS: 156.155.163.232</cybox:Title>
+                     <cybox:Object id="CSE-CST:object-08aa4a3a-956c-341f-bbd8-62430e6dfc13">
+                        <cybox:Properties xsi:type="AddressObj:AddressObjectType">
+                           <AddressObj:Address_Value>156.155.163.232</AddressObj:Address_Value>
                         </cybox:Properties>
                      </cybox:Object>
                   </indicator:Observable>
-                  <indicator:Handling>
-                     <marking:Marking>
-                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
-                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
-                     </marking:Marking>
-                  </indicator:Handling>
-                  <indicator:Confidence timestamp="2018-07-14T14:52:11.814696+00:00">
-                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">60</stixCommon:Value>
-                  </indicator:Confidence>
+                  <indicator:Indicated_TTP>
+                     <stixCommon:TTP idref="CSE-CST:ttp-280ab59a-b045-37ae-ba57-cbfa42f03552" timestamp="2020-01-16T20:05:48.477658+00:00"/>
+                  </indicator:Indicated_TTP>
                   <indicator:Producer>
-                     <stixCommon:Time>
-                        <cyboxCommon:Produced_Time>2018-07-13T19:54:49.913000+00:00</cyboxCommon:Produced_Time>
-                     </stixCommon:Time>
+                     <stixCommon:Description>entity is produced by incoming feed</stixCommon:Description>
+                     <stixCommon:Identity>
+                        <stixCommon:Name>ioc_feed</stixCommon:Name>
+                     </stixCommon:Identity>
                   </indicator:Producer>
                </stix:Indicator>
-               <stix:Indicator id="threatstream:indicator-86e3fb1c-ca7d-4660-8e54-5d0f13b88a5a" timestamp="2018-07-14T14:52:11.816320+00:00" xsi:type="indicator:IndicatorType">
-                  <indicator:Title>mal_email: cs@now.cn</indicator:Title>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Malicious E-mail</indicator:Type>
-                  <indicator:Description>TS ID: 51018686829; iType: mal_email; Date First: 2018-07-13T19:54:50.090Z; State: active; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
-                  <indicator:Observable id="threatstream:Observable-cae465a0-e840-4f9f-bb85-b40278621a1f">
-                     <cybox:Title>mal_email: cs@now.cn</cybox:Title>
-                     <cybox:Keywords>
-                        <cybox:Keyword>low</cybox:Keyword>
-                     </cybox:Keywords>
-                     <cybox:Object id="threatstream:EmailAddress-82822eb2-2bca-4a8f-b0a2-48c9f1ba6613">
-                        <cybox:Properties category="e-mail" xsi:type="AddressObj:AddressObjectType">
-                           <AddressObj:Address_Value>cs@now.cn</AddressObj:Address_Value>
+               <stix:Indicator id="CSE-CST:indicator-e17ea226-459a-335b-a0dd-b69ea389e2f2" timestamp="2020-06-08T12:50:46.840823+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>Malicious IP Address</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">IP Watchlist</indicator:Type>
+                  <indicator:Observable id="CSE-CST:observable-e17ea226-459a-335b-a0dd-b69ea389e2f2">
+                     <cybox:Title>IP_ADDRESS: 186.177.174.163</cybox:Title>
+                     <cybox:Object id="CSE-CST:object-e17ea226-459a-335b-a0dd-b69ea389e2f2">
+                        <cybox:Properties xsi:type="AddressObj:AddressObjectType">
+                           <AddressObj:Address_Value>186.177.174.163</AddressObj:Address_Value>
                         </cybox:Properties>
                      </cybox:Object>
                   </indicator:Observable>
-                  <indicator:Handling>
-                     <marking:Marking>
-                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
-                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
-                     </marking:Marking>
-                  </indicator:Handling>
-                  <indicator:Confidence timestamp="2018-07-14T14:52:11.816676+00:00">
-                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">60</stixCommon:Value>
-                  </indicator:Confidence>
+                  <indicator:Indicated_TTP>
+                     <stixCommon:TTP idref="CSE-CST:ttp-280ab59a-b045-37ae-ba57-cbfa42f03552" timestamp="2020-01-16T20:05:48.477658+00:00"/>
+                  </indicator:Indicated_TTP>
                   <indicator:Producer>
-                     <stixCommon:Time>
-                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.090000+00:00</cyboxCommon:Produced_Time>
-                     </stixCommon:Time>
-                  </indicator:Producer>
-               </stix:Indicator>
-               <stix:Indicator id="threatstream:indicator-e5a96a5f-d0e5-4565-ac06-b95ba31cc3ba" timestamp="2018-07-14T14:52:11.819622+00:00" xsi:type="indicator:IndicatorType">
-                  <indicator:Title>mal_domain: filerco.com</indicator:Title>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">C2</indicator:Type>
-                  <indicator:Description>TS ID: 51011042611; iType: mal_domain; Date First: 2018-07-12T15:30:05.001Z; State: active; Org: OVH SAS; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
-                  <indicator:Observable id="threatstream:Observable-91a1d902-c9ba-440b-864a-e1069543e046">
-                     <cybox:Title>mal_domain: filerco.com</cybox:Title>
-                     <cybox:Keywords>
-                        <cybox:Keyword>very-high</cybox:Keyword>
-                     </cybox:Keywords>
-                     <cybox:Object id="threatstream:DomainName-f0a05789-cbfe-436d-8999-3b537265dbdc">
-                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
-                           <DomainNameObj:Value>filerco.com</DomainNameObj:Value>
-                        </cybox:Properties>
-                     </cybox:Object>
-                  </indicator:Observable>
-                  <indicator:Handling>
-                     <marking:Marking>
-                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
-                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
-                     </marking:Marking>
-                  </indicator:Handling>
-                  <indicator:Confidence timestamp="2018-07-14T14:52:11.819978+00:00">
-                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">90</stixCommon:Value>
-                  </indicator:Confidence>
-                  <indicator:Producer>
-                     <stixCommon:Time>
-                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
-                     </stixCommon:Time>
-                  </indicator:Producer>
-               </stix:Indicator>
-               <stix:Indicator id="threatstream:indicator-8231e3da-1c58-47e8-89ae-7ad9bf6785e5" timestamp="2018-07-14T14:52:11.821384+00:00" xsi:type="indicator:IndicatorType">
-                  <indicator:Title>mal_url: https://filerco.com/drive.php</indicator:Title>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">URL Watchlist</indicator:Type>
-                  <indicator:Description>TS ID: 51011042620; iType: mal_url; Date First: 2018-07-12T15:30:05.423Z; State: active; Org: OVH SAS; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
-                  <indicator:Observable id="threatstream:Observable-0c722e6f-af0f-49b5-a89f-ff6abe710433">
-                     <cybox:Title>mal_url: https://filerco.com/drive.php</cybox:Title>
-                     <cybox:Keywords>
-                        <cybox:Keyword>very-high</cybox:Keyword>
-                     </cybox:Keywords>
-                     <cybox:Object id="threatstream:URI-a60bbfea-945c-4279-ad03-a5932221cb10">
-                        <cybox:Properties type="URL" xsi:type="URIObj:URIObjectType">
-                           <URIObj:Value>https://filerco.com/drive.php</URIObj:Value>
-                        </cybox:Properties>
-                     </cybox:Object>
-                  </indicator:Observable>
-                  <indicator:Handling>
-                     <marking:Marking>
-                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
-                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
-                     </marking:Marking>
-                  </indicator:Handling>
-                  <indicator:Confidence timestamp="2018-07-14T14:52:11.821736+00:00">
-                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">90</stixCommon:Value>
-                  </indicator:Confidence>
-                  <indicator:Producer>
-                     <stixCommon:Time>
-                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
-                     </stixCommon:Time>
-                  </indicator:Producer>
-               </stix:Indicator>
-               <stix:Indicator id="threatstream:indicator-b3840290-746b-475e-8345-5b1c31cc1b2c" timestamp="2018-07-14T14:52:11.823435+00:00" xsi:type="indicator:IndicatorType">
-                  <indicator:Title>mal_email: abuse@bluehost.com</indicator:Title>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Malicious E-mail</indicator:Type>
-                  <indicator:Description>TS ID: 51011042623; iType: mal_email; Date First: 2018-07-12T15:30:05.469Z; State: active; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
-                  <indicator:Observable id="threatstream:Observable-a67e50aa-570a-4ee7-bb94-276d0d531e70">
-                     <cybox:Title>mal_email: abuse@bluehost.com</cybox:Title>
-                     <cybox:Keywords>
-                        <cybox:Keyword>low</cybox:Keyword>
-                     </cybox:Keywords>
-                     <cybox:Object id="threatstream:EmailAddress-4bd32c1e-6c3b-4c91-8dab-ccb9171dba7b">
-                        <cybox:Properties category="e-mail" xsi:type="AddressObj:AddressObjectType">
-                           <AddressObj:Address_Value>abuse@bluehost.com</AddressObj:Address_Value>
-                        </cybox:Properties>
-                     </cybox:Object>
-                  </indicator:Observable>
-                  <indicator:Handling>
-                     <marking:Marking>
-                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
-                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
-                     </marking:Marking>
-                  </indicator:Handling>
-                  <indicator:Confidence timestamp="2018-07-14T14:52:11.823798+00:00">
-                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">60</stixCommon:Value>
-                  </indicator:Confidence>
-                  <indicator:Producer>
-                     <stixCommon:Time>
-                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
-                     </stixCommon:Time>
-                  </indicator:Producer>
-               </stix:Indicator>
-               <stix:Indicator id="threatstream:indicator-1196c3e5-fa21-4e22-a106-9961e3846d13" timestamp="2018-07-14T14:52:11.825112+00:00" xsi:type="indicator:IndicatorType">
-                  <indicator:Title>mal_email: danielle.chandler@asaparborcare.com</indicator:Title>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Malicious E-mail</indicator:Type>
-                  <indicator:Description>TS ID: 51011042624; iType: mal_email; Date First: 2018-07-12T15:30:05.481Z; State: active; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
-                  <indicator:Observable id="threatstream:Observable-c84ad475-8cf8-4589-957d-31fd60c6f038">
-                     <cybox:Title>mal_email: danielle.chandler@asaparborcare.com</cybox:Title>
-                     <cybox:Keywords>
-                        <cybox:Keyword>low</cybox:Keyword>
-                     </cybox:Keywords>
-                     <cybox:Object id="threatstream:EmailAddress-a988fcb9-b129-4dea-95f1-d06ccea71d71">
-                        <cybox:Properties category="e-mail" xsi:type="AddressObj:AddressObjectType">
-                           <AddressObj:Address_Value>danielle.chandler@asaparborcare.com</AddressObj:Address_Value>
-                        </cybox:Properties>
-                     </cybox:Object>
-                  </indicator:Observable>
-                  <indicator:Handling>
-                     <marking:Marking>
-                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
-                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
-                     </marking:Marking>
-                  </indicator:Handling>
-                  <indicator:Confidence timestamp="2018-07-14T14:52:11.825466+00:00">
-                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">60</stixCommon:Value>
-                  </indicator:Confidence>
-                  <indicator:Producer>
-                     <stixCommon:Time>
-                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
-                     </stixCommon:Time>
-                  </indicator:Producer>
-               </stix:Indicator>
-               <stix:Indicator id="threatstream:indicator-ea4ba0c0-33c1-4ad7-9247-76a44d108cbf" timestamp="2018-07-14T14:52:11.826716+00:00" xsi:type="indicator:IndicatorType">
-                  <indicator:Title>mal_md5: baff2d55e395f9d9b3fad76de080562324c9dd9b</indicator:Title>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">File Hash Watchlist</indicator:Type>
-                  <indicator:Description>TS ID: 51011042625; iType: mal_md5; Date First: 2018-07-12T15:30:05.496Z; State: active; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
-                  <indicator:Observable id="threatstream:Observable-1d399503-a2bf-49a3-a6e6-84cb8ad6bc88">
-                     <cybox:Title>mal_md5: baff2d55e395f9d9b3fad76de080562324c9dd9b</cybox:Title>
-                     <cybox:Keywords>
-                        <cybox:Keyword>very-high</cybox:Keyword>
-                     </cybox:Keywords>
-                     <cybox:Object id="threatstream:File-ca327d9a-d78d-4da0-920c-4092b509a1f9">
-                        <cybox:Properties xsi:type="FileObj:FileObjectType">
-                           <FileObj:Hashes>
-                              <cyboxCommon:Hash>
-                                 <cyboxCommon:Type xsi:type="cyboxVocabs:HashNameVocab-1.0">SHA1</cyboxCommon:Type>
-                                 <cyboxCommon:Simple_Hash_Value>baff2d55e395f9d9b3fad76de080562324c9dd9b</cyboxCommon:Simple_Hash_Value>
-                              </cyboxCommon:Hash>
-                           </FileObj:Hashes>
-                        </cybox:Properties>
-                     </cybox:Object>
-                  </indicator:Observable>
-                  <indicator:Handling>
-                     <marking:Marking>
-                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
-                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
-                     </marking:Marking>
-                  </indicator:Handling>
-                  <indicator:Confidence timestamp="2018-07-14T14:52:11.827068+00:00">
-                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">60</stixCommon:Value>
-                  </indicator:Confidence>
-                  <indicator:Producer>
-                     <stixCommon:Time>
-                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
-                     </stixCommon:Time>
-                  </indicator:Producer>
-               </stix:Indicator>
-               <stix:Indicator id="threatstream:indicator-34230459-e649-4051-9992-aa542d597d2b" timestamp="2018-07-14T14:52:11.828438+00:00" xsi:type="indicator:IndicatorType">
-                  <indicator:Title>mal_md5: 1a69af8cc240aaea0afb2c7d98afc61b</indicator:Title>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">File Hash Watchlist</indicator:Type>
-                  <indicator:Description>TS ID: 51011042628; iType: mal_md5; Date First: 2018-07-12T15:30:05.531Z; State: active; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
-                  <indicator:Observable id="threatstream:Observable-d3aff139-17e3-4399-a38e-ff7aefeb5fa8">
-                     <cybox:Title>mal_md5: 1a69af8cc240aaea0afb2c7d98afc61b</cybox:Title>
-                     <cybox:Keywords>
-                        <cybox:Keyword>very-high</cybox:Keyword>
-                     </cybox:Keywords>
-                     <cybox:Object id="threatstream:File-bee34d34-4f7c-4fd0-a539-f1d31d6571b4">
-                        <cybox:Properties xsi:type="FileObj:FileObjectType">
-                           <FileObj:Hashes>
-                              <cyboxCommon:Hash>
-                                 <cyboxCommon:Type xsi:type="cyboxVocabs:HashNameVocab-1.0">MD5</cyboxCommon:Type>
-                                 <cyboxCommon:Simple_Hash_Value>1a69af8cc240aaea0afb2c7d98afc61b</cyboxCommon:Simple_Hash_Value>
-                              </cyboxCommon:Hash>
-                           </FileObj:Hashes>
-                        </cybox:Properties>
-                     </cybox:Object>
-                  </indicator:Observable>
-                  <indicator:Handling>
-                     <marking:Marking>
-                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
-                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
-                     </marking:Marking>
-                  </indicator:Handling>
-                  <indicator:Confidence timestamp="2018-07-14T14:52:11.828807+00:00">
-                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">60</stixCommon:Value>
-                  </indicator:Confidence>
-                  <indicator:Producer>
-                     <stixCommon:Time>
-                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
-                     </stixCommon:Time>
-                  </indicator:Producer>
-               </stix:Indicator>
-               <stix:Indicator id="threatstream:indicator-b685595c-cda8-48f5-b3d2-c62f5cfb7fc1" timestamp="2018-07-14T14:52:11.830182+00:00" xsi:type="indicator:IndicatorType">
-                  <indicator:Title>mal_domain: xero-online.com</indicator:Title>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">C2</indicator:Type>
-                  <indicator:Description>TS ID: 51011042612; iType: mal_domain; Date First: 2018-07-12T15:30:05.017Z; State: active; Org: OVH SAS; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
-                  <indicator:Observable id="threatstream:Observable-0fd4e6cc-2325-4d76-8597-fa064c8dbdb5">
-                     <cybox:Title>mal_domain: xero-online.com</cybox:Title>
-                     <cybox:Keywords>
-                        <cybox:Keyword>very-high</cybox:Keyword>
-                     </cybox:Keywords>
-                     <cybox:Object id="threatstream:DomainName-9c76610c-0192-4aac-9e5c-baaf0ea22526">
-                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
-                           <DomainNameObj:Value>xero-online.com</DomainNameObj:Value>
-                        </cybox:Properties>
-                     </cybox:Object>
-                  </indicator:Observable>
-                  <indicator:Handling>
-                     <marking:Marking>
-                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
-                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
-                     </marking:Marking>
-                  </indicator:Handling>
-                  <indicator:Confidence timestamp="2018-07-14T14:52:11.830538+00:00">
-                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">29</stixCommon:Value>
-                  </indicator:Confidence>
-                  <indicator:Producer>
-                     <stixCommon:Time>
-                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
-                     </stixCommon:Time>
-                  </indicator:Producer>
-               </stix:Indicator>
-               <stix:Indicator id="threatstream:indicator-d1809efd-b09c-4dd7-94b7-1b5d6b1cc00b" timestamp="2018-07-14T14:52:11.831937+00:00" xsi:type="indicator:IndicatorType">
-                  <indicator:Title>mal_domain: FILERCO.COM</indicator:Title>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">C2</indicator:Type>
-                  <indicator:Description>TS ID: 51011042616; iType: mal_domain; Date First: 2018-07-12T15:30:05.288Z; State: active; Org: OVH SAS; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
-                  <indicator:Observable id="threatstream:Observable-fdf6d316-6e4f-4683-94d8-b6ab0168dfe6">
-                     <cybox:Title>mal_domain: FILERCO.COM</cybox:Title>
-                     <cybox:Keywords>
-                        <cybox:Keyword>very-high</cybox:Keyword>
-                     </cybox:Keywords>
-                     <cybox:Object id="threatstream:DomainName-6d959b51-f043-4955-83f8-5599ef092c07">
-                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
-                           <DomainNameObj:Value>FILERCO.COM</DomainNameObj:Value>
-                        </cybox:Properties>
-                     </cybox:Object>
-                  </indicator:Observable>
-                  <indicator:Handling>
-                     <marking:Marking>
-                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
-                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
-                     </marking:Marking>
-                  </indicator:Handling>
-                  <indicator:Confidence timestamp="2018-07-14T14:52:11.832313+00:00">
-                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">90</stixCommon:Value>
-                  </indicator:Confidence>
-                  <indicator:Producer>
-                     <stixCommon:Time>
-                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
-                     </stixCommon:Time>
-                  </indicator:Producer>
-               </stix:Indicator>
-               <stix:Indicator id="threatstream:indicator-4d050478-ff1a-4939-8dbb-0a99fa81020a" timestamp="2018-07-14T14:52:11.835750+00:00" xsi:type="indicator:IndicatorType">
-                  <indicator:Title>mal_url: https://zexswalloiw.ml/</indicator:Title>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">URL Watchlist</indicator:Type>
-                  <indicator:Description>TS ID: 51011042619; iType: mal_url; Date First: 2018-07-12T15:30:05.407Z; State: active; Org: Google; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
-                  <indicator:Observable id="threatstream:Observable-481654d1-d709-4227-9427-ed167b1fc3be">
-                     <cybox:Title>mal_url: https://zexswalloiw.ml/</cybox:Title>
-                     <cybox:Keywords>
-                        <cybox:Keyword>very-high</cybox:Keyword>
-                     </cybox:Keywords>
-                     <cybox:Object id="threatstream:URI-2397f7f3-ed2f-488d-88e8-ec8ee968e4fb">
-                        <cybox:Properties type="URL" xsi:type="URIObj:URIObjectType">
-                           <URIObj:Value>https://zexswalloiw.ml/</URIObj:Value>
-                        </cybox:Properties>
-                     </cybox:Object>
-                  </indicator:Observable>
-                  <indicator:Handling>
-                     <marking:Marking>
-                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
-                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
-                     </marking:Marking>
-                  </indicator:Handling>
-                  <indicator:Confidence timestamp="2018-07-14T14:52:11.836174+00:00">
-                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">90</stixCommon:Value>
-                  </indicator:Confidence>
-                  <indicator:Producer>
-                     <stixCommon:Time>
-                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
-                     </stixCommon:Time>
-                  </indicator:Producer>
-               </stix:Indicator>
-               <stix:Indicator id="threatstream:indicator-1efc366d-385b-45f9-98ea-5a36c653eb98" timestamp="2018-07-14T14:52:11.837492+00:00" xsi:type="indicator:IndicatorType">
-                  <indicator:Title>mal_url: https://xero-online.com/759d87528391c84b1b53d60787a6d5a032796c9b.html</indicator:Title>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">URL Watchlist</indicator:Type>
-                  <indicator:Description>TS ID: 51011042622; iType: mal_url; Date First: 2018-07-12T15:30:05.457Z; State: active; Org: OVH SAS; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
-                  <indicator:Observable id="threatstream:Observable-b09e2187-d584-4f2a-b36e-da1d60762f63">
-                     <cybox:Title>mal_url: https://xero-online.com/759d87528391c84b1b53d60787a6d5a032796c9b.html</cybox:Title>
-                     <cybox:Keywords>
-                        <cybox:Keyword>very-high</cybox:Keyword>
-                     </cybox:Keywords>
-                     <cybox:Object id="threatstream:URI-57927b47-11a0-43d5-9cfb-2606f208ac3e">
-                        <cybox:Properties type="URL" xsi:type="URIObj:URIObjectType">
-                           <URIObj:Value>https://xero-online.com/759d87528391c84b1b53d60787a6d5a032796c9b.html</URIObj:Value>
-                        </cybox:Properties>
-                     </cybox:Object>
-                  </indicator:Observable>
-                  <indicator:Handling>
-                     <marking:Marking>
-                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
-                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
-                     </marking:Marking>
-                  </indicator:Handling>
-                  <indicator:Confidence timestamp="2018-07-14T14:52:11.837851+00:00">
-                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">29</stixCommon:Value>
-                  </indicator:Confidence>
-                  <indicator:Producer>
-                     <stixCommon:Time>
-                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
-                     </stixCommon:Time>
-                  </indicator:Producer>
-               </stix:Indicator>
-               <stix:Indicator id="threatstream:indicator-ffa03b6a-cce0-4993-86ca-bdca0d23591f" timestamp="2018-07-14T14:52:11.839108+00:00" xsi:type="indicator:IndicatorType">
-                  <indicator:Title>mal_md5: aa4c7e6c0cb4131c5804ebfab8fa35d24c699fea01794e3f3334475186e2db12</indicator:Title>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">File Hash Watchlist</indicator:Type>
-                  <indicator:Description>TS ID: 51011042626; iType: mal_md5; Date First: 2018-07-12T15:30:05.508Z; State: active; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
-                  <indicator:Observable id="threatstream:Observable-84e00674-f942-415d-8245-f1a3b1795c4b">
-                     <cybox:Title>mal_md5: aa4c7e6c0cb4131c5804ebfab8fa35d24c699fea01794e3f3334475186e2db12</cybox:Title>
-                     <cybox:Keywords>
-                        <cybox:Keyword>very-high</cybox:Keyword>
-                     </cybox:Keywords>
-                     <cybox:Object id="threatstream:File-d05b3909-3caa-4ef6-9cff-45b5ce4cd0a5">
-                        <cybox:Properties xsi:type="FileObj:FileObjectType">
-                           <FileObj:Hashes>
-                              <cyboxCommon:Hash>
-                                 <cyboxCommon:Type xsi:type="cyboxVocabs:HashNameVocab-1.0">SHA256</cyboxCommon:Type>
-                                 <cyboxCommon:Simple_Hash_Value>aa4c7e6c0cb4131c5804ebfab8fa35d24c699fea01794e3f3334475186e2db12</cyboxCommon:Simple_Hash_Value>
-                              </cyboxCommon:Hash>
-                           </FileObj:Hashes>
-                        </cybox:Properties>
-                     </cybox:Object>
-                  </indicator:Observable>
-                  <indicator:Handling>
-                     <marking:Marking>
-                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
-                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
-                     </marking:Marking>
-                  </indicator:Handling>
-                  <indicator:Confidence timestamp="2018-07-14T14:52:11.839461+00:00">
-                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">60</stixCommon:Value>
-                  </indicator:Confidence>
-                  <indicator:Producer>
-                     <stixCommon:Time>
-                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
-                     </stixCommon:Time>
-                  </indicator:Producer>
-               </stix:Indicator>
-               <stix:Indicator id="threatstream:indicator-f2fd96db-8617-4574-add1-8e636737c74b" timestamp="2018-07-14T14:52:11.840746+00:00" xsi:type="indicator:IndicatorType">
-                  <indicator:Title>mal_md5: b2b64d8c3ff9f4980c765b37d42b4b7df440f42b</indicator:Title>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">File Hash Watchlist</indicator:Type>
-                  <indicator:Description>TS ID: 51011042629; iType: mal_md5; Date First: 2018-07-12T15:30:05.544Z; State: active; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
-                  <indicator:Observable id="threatstream:Observable-71593c95-cfdc-41f3-ba1e-7e9c53e448c4">
-                     <cybox:Title>mal_md5: b2b64d8c3ff9f4980c765b37d42b4b7df440f42b</cybox:Title>
-                     <cybox:Keywords>
-                        <cybox:Keyword>very-high</cybox:Keyword>
-                     </cybox:Keywords>
-                     <cybox:Object id="threatstream:File-ca1242c4-92f4-4c84-b047-19bfcc164699">
-                        <cybox:Properties xsi:type="FileObj:FileObjectType">
-                           <FileObj:Hashes>
-                              <cyboxCommon:Hash>
-                                 <cyboxCommon:Type xsi:type="cyboxVocabs:HashNameVocab-1.0">SHA1</cyboxCommon:Type>
-                                 <cyboxCommon:Simple_Hash_Value>b2b64d8c3ff9f4980c765b37d42b4b7df440f42b</cyboxCommon:Simple_Hash_Value>
-                              </cyboxCommon:Hash>
-                           </FileObj:Hashes>
-                        </cybox:Properties>
-                     </cybox:Object>
-                  </indicator:Observable>
-                  <indicator:Handling>
-                     <marking:Marking>
-                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
-                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
-                     </marking:Marking>
-                  </indicator:Handling>
-                  <indicator:Confidence timestamp="2018-07-14T14:52:11.841103+00:00">
-                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">60</stixCommon:Value>
-                  </indicator:Confidence>
-                  <indicator:Producer>
-                     <stixCommon:Time>
-                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
-                     </stixCommon:Time>
-                  </indicator:Producer>
-               </stix:Indicator>
-               <stix:Indicator id="threatstream:indicator-4b8b4a1f-bea2-4f11-90f0-c1cbd8e8f22e" timestamp="2018-07-14T14:52:11.842419+00:00" xsi:type="indicator:IndicatorType">
-                  <indicator:Title>mal_domain: zexswalloiw.ml</indicator:Title>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">C2</indicator:Type>
-                  <indicator:Description>TS ID: 51011042615; iType: mal_domain; Date First: 2018-07-12T15:30:05.235Z; State: active; Org: Google; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
-                  <indicator:Observable id="threatstream:Observable-50296d1f-610d-4e86-af34-6393e3b701d2">
-                     <cybox:Title>mal_domain: zexswalloiw.ml</cybox:Title>
-                     <cybox:Keywords>
-                        <cybox:Keyword>very-high</cybox:Keyword>
-                     </cybox:Keywords>
-                     <cybox:Object id="threatstream:DomainName-f53f0578-c603-4484-8447-85729f6c077b">
-                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
-                           <DomainNameObj:Value>zexswalloiw.ml</DomainNameObj:Value>
-                        </cybox:Properties>
-                     </cybox:Object>
-                  </indicator:Observable>
-                  <indicator:Handling>
-                     <marking:Marking>
-                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
-                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
-                     </marking:Marking>
-                  </indicator:Handling>
-                  <indicator:Confidence timestamp="2018-07-14T14:52:11.842787+00:00">
-                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">90</stixCommon:Value>
-                  </indicator:Confidence>
-                  <indicator:Producer>
-                     <stixCommon:Time>
-                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
-                     </stixCommon:Time>
-                  </indicator:Producer>
-               </stix:Indicator>
-               <stix:Indicator id="threatstream:indicator-0416292f-f251-4a14-977f-17979699b43f" timestamp="2018-07-14T14:52:11.844076+00:00" xsi:type="indicator:IndicatorType">
-                  <indicator:Title>mal_md5: b936e82ca7fd1ad7e0fbaaafa55f7680ae5c8768ae7145e2ae465ebb14a253ba</indicator:Title>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">File Hash Watchlist</indicator:Type>
-                  <indicator:Description>TS ID: 51011042630; iType: mal_md5; Date First: 2018-07-12T15:30:05.557Z; State: active; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
-                  <indicator:Observable id="threatstream:Observable-0c4b252b-4ab5-4b06-818b-4b40f62be68f">
-                     <cybox:Title>mal_md5: b936e82ca7fd1ad7e0fbaaafa55f7680ae5c8768ae7145e2ae465ebb14a253ba</cybox:Title>
-                     <cybox:Keywords>
-                        <cybox:Keyword>very-high</cybox:Keyword>
-                     </cybox:Keywords>
-                     <cybox:Object id="threatstream:File-02928684-f0cb-4e07-96b9-acc89119ba43">
-                        <cybox:Properties xsi:type="FileObj:FileObjectType">
-                           <FileObj:Hashes>
-                              <cyboxCommon:Hash>
-                                 <cyboxCommon:Type xsi:type="cyboxVocabs:HashNameVocab-1.0">SHA256</cyboxCommon:Type>
-                                 <cyboxCommon:Simple_Hash_Value>b936e82ca7fd1ad7e0fbaaafa55f7680ae5c8768ae7145e2ae465ebb14a253ba</cyboxCommon:Simple_Hash_Value>
-                              </cyboxCommon:Hash>
-                           </FileObj:Hashes>
-                        </cybox:Properties>
-                     </cybox:Object>
-                  </indicator:Observable>
-                  <indicator:Handling>
-                     <marking:Marking>
-                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
-                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
-                     </marking:Marking>
-                  </indicator:Handling>
-                  <indicator:Confidence timestamp="2018-07-14T14:52:11.844457+00:00">
-                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">60</stixCommon:Value>
-                  </indicator:Confidence>
-                  <indicator:Producer>
-                     <stixCommon:Time>
-                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
-                     </stixCommon:Time>
-                  </indicator:Producer>
-               </stix:Indicator>
-               <stix:Indicator id="threatstream:indicator-413ad84b-b972-4591-a753-9d1f0e6c4f73" timestamp="2018-07-14T14:52:11.846194+00:00" xsi:type="indicator:IndicatorType">
-                  <indicator:Title>mal_domain: ZEXSWALLOIW.ML</indicator:Title>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">C2</indicator:Type>
-                  <indicator:Description>TS ID: 51011042613; iType: mal_domain; Date First: 2018-07-12T15:30:05.153Z; State: active; Org: Google; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
-                  <indicator:Observable id="threatstream:Observable-6628579a-0a0d-44b6-b297-ecdccb738c1e">
-                     <cybox:Title>mal_domain: ZEXSWALLOIW.ML</cybox:Title>
-                     <cybox:Keywords>
-                        <cybox:Keyword>very-high</cybox:Keyword>
-                     </cybox:Keywords>
-                     <cybox:Object id="threatstream:DomainName-b37f6bc6-71c0-4274-a87e-b51853bd725d">
-                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
-                           <DomainNameObj:Value>ZEXSWALLOIW.ML</DomainNameObj:Value>
-                        </cybox:Properties>
-                     </cybox:Object>
-                  </indicator:Observable>
-                  <indicator:Handling>
-                     <marking:Marking>
-                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
-                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
-                     </marking:Marking>
-                  </indicator:Handling>
-                  <indicator:Confidence timestamp="2018-07-14T14:52:11.846548+00:00">
-                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">90</stixCommon:Value>
-                  </indicator:Confidence>
-                  <indicator:Producer>
-                     <stixCommon:Time>
-                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
-                     </stixCommon:Time>
-                  </indicator:Producer>
-               </stix:Indicator>
-               <stix:Indicator id="threatstream:indicator-e8638c16-3610-49db-95ba-a68303e67904" timestamp="2018-07-14T14:52:11.847794+00:00" xsi:type="indicator:IndicatorType">
-                  <indicator:Title>mal_domain: XERO-ONLINE.COM</indicator:Title>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">C2</indicator:Type>
-                  <indicator:Description>TS ID: 51011042614; iType: mal_domain; Date First: 2018-07-12T15:30:05.220Z; State: active; Org: OVH SAS; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
-                  <indicator:Observable id="threatstream:Observable-f5f2697e-2613-4793-a64d-417664b0c0ff">
-                     <cybox:Title>mal_domain: XERO-ONLINE.COM</cybox:Title>
-                     <cybox:Keywords>
-                        <cybox:Keyword>very-high</cybox:Keyword>
-                     </cybox:Keywords>
-                     <cybox:Object id="threatstream:DomainName-8b8941d3-33c4-427a-824b-5907c60422d6">
-                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
-                           <DomainNameObj:Value>XERO-ONLINE.COM</DomainNameObj:Value>
-                        </cybox:Properties>
-                     </cybox:Object>
-                  </indicator:Observable>
-                  <indicator:Handling>
-                     <marking:Marking>
-                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
-                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
-                     </marking:Marking>
-                  </indicator:Handling>
-                  <indicator:Confidence timestamp="2018-07-14T14:52:11.848188+00:00">
-                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">29</stixCommon:Value>
-                  </indicator:Confidence>
-                  <indicator:Producer>
-                     <stixCommon:Time>
-                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
-                     </stixCommon:Time>
-                  </indicator:Producer>
-               </stix:Indicator>
-               <stix:Indicator id="threatstream:indicator-a252c5ee-8dd2-47f1-8733-9606a80ffcd2" timestamp="2018-07-14T14:52:11.849528+00:00" xsi:type="indicator:IndicatorType">
-                  <indicator:Title>mal_domain: INV-03056.zip</indicator:Title>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">C2</indicator:Type>
-                  <indicator:Description>TS ID: 51011042617; iType: mal_domain; Date First: 2018-07-12T15:30:05.339Z; State: active; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
-                  <indicator:Observable id="threatstream:Observable-a1709f91-d6fe-42fa-9d1d-7a2cb0907681">
-                     <cybox:Title>mal_domain: INV-03056.zip</cybox:Title>
-                     <cybox:Keywords>
-                        <cybox:Keyword>very-high</cybox:Keyword>
-                     </cybox:Keywords>
-                     <cybox:Object id="threatstream:DomainName-bf2d57c5-6e88-4f56-8da4-14d70e60e62a">
-                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
-                           <DomainNameObj:Value>INV-03056.zip</DomainNameObj:Value>
-                        </cybox:Properties>
-                     </cybox:Object>
-                  </indicator:Observable>
-                  <indicator:Handling>
-                     <marking:Marking>
-                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
-                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
-                     </marking:Marking>
-                  </indicator:Handling>
-                  <indicator:Confidence timestamp="2018-07-14T14:52:11.849879+00:00">
-                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">78</stixCommon:Value>
-                  </indicator:Confidence>
-                  <indicator:Producer>
-                     <stixCommon:Time>
-                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
-                     </stixCommon:Time>
-                  </indicator:Producer>
-               </stix:Indicator>
-               <stix:Indicator id="threatstream:indicator-YYYYYY-6ea0-4fa6-a027-a1efd52aa029" timestamp="2018-07-14T14:52:11.851193+00:00" xsi:type="indicator:IndicatorType">
-                  <indicator:Title>mal_domain: ASAPARBORCARE.COM</indicator:Title>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
-                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">C2</indicator:Type>
-                  <indicator:Description>TS ID: YYYYYY; iType: mal_domain; Date First: 2018-07-12T15:30:05.395Z; State: active; Org: Unified Layer; Source: Aviation ISAC; MoreDetail: imported by user 6696</indicator:Description>
-                  <indicator:Observable id="threatstream:Observable-11b8857c-36f8-4f96-b27e-9b9749acf818">
-                     <cybox:Title>mal_domain: ASAPARBORCARE.COM</cybox:Title>
-                     <cybox:Keywords>
-                        <cybox:Keyword>very-high</cybox:Keyword>
-                     </cybox:Keywords>
-                     <cybox:Object id="threatstream:DomainName-4e02720f-4768-4389-9e46-4220fdce8fd6">
-                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
-                           <DomainNameObj:Value>ASAPARBORCARE.COM</DomainNameObj:Value>
-                        </cybox:Properties>
-                     </cybox:Object>
-                  </indicator:Observable>
-                  <indicator:Handling>
-                     <marking:Marking>
-                        <marking:Controlled_Structure>../../../descendant-or-self::node()</marking:Controlled_Structure>
-                        <marking:Marking_Structure color="AMBER" xsi:type="tlpMarking:TLPMarkingStructureType" />
-                     </marking:Marking>
-                  </indicator:Handling>
-                  <indicator:Confidence timestamp="2018-07-14T14:52:11.851552+00:00">
-                     <stixCommon:Value vocab_name="Percentage" vocab_reference="https://en.wikipedia.org/wiki/Percentage">27</stixCommon:Value>
-                  </indicator:Confidence>
-                  <indicator:Producer>
-                     <stixCommon:Time>
-                        <cyboxCommon:Produced_Time>2018-07-13T19:54:50.178000+00:00</cyboxCommon:Produced_Time>
-                     </stixCommon:Time>
+                     <stixCommon:Description>entity is produced by incoming feed</stixCommon:Description>
+                     <stixCommon:Identity>
+                        <stixCommon:Name>ioc_feed</stixCommon:Name>
+                     </stixCommon:Identity>
                   </indicator:Producer>
                </stix:Indicator>
             </stix:Indicators>
+
+            <stix:Reports>
+               <stix:Report id="CSE-CST:Report-9c939a85-b443-3c45-835f-e9dd4a39c28e" timestamp="2020-06-08T12:50:47.730233+00:00" xsi:type="report:ReportType">
+                  <report:Header>
+                     <report:Title>CCCS-IXR_2020_20756_1</report:Title>
+                     <report:Intent>Threat Report</report:Intent>
+                     <report:Description>Sharing of Emotet C2 Nodes as of 2020-06-08</report:Description>
+                     <report:Handling>
+                        <marking:Marking>
+                           <marking:Marking_Structure xsi:type="touMarking:TermsOfUseMarkingStructureType">
+                              <touMarking:Terms_Of_Use>CSE would like to know if any of these Indicators of Compromise (IOC) provide additional value to your organization and are temporally relevant.</touMarking:Terms_Of_Use>
+                           </marking:Marking_Structure>
+                        </marking:Marking>
+                     </report:Handling>
+                     <report:Information_Source>
+                        <stixCommon:Description>entity is produced by incoming feed</stixCommon:Description>
+                        <stixCommon:Identity>
+                           <stixCommon:Name>ioc_feed</stixCommon:Name>
+                        </stixCommon:Identity>
+                     </report:Information_Source>
+                  </report:Header>
+                  <report:Observables/>
+                  <report:Indicators>
+                     <report:Indicator idref="CSE-CST:indicator-56db7db1-fa99-3bba-8204-7310dd4e7cd6"/>
+                     <report:Indicator idref="CSE-CST:indicator-9098b081-3e77-3f53-9704-8b7b03e92fbc"/>
+                     <report:Indicator idref="CSE-CST:indicator-102d5b5f-b0e6-3a1c-9c72-c2f88d6a676a"/>
+                     <report:Indicator idref="CSE-CST:indicator-f7003148-7bf6-311f-8092-806a2bb1d42a"/>
+                     <report:Indicator idref="CSE-CST:indicator-1c35f3d2-1286-3737-9eaa-242804464747"/>
+                     <report:Indicator idref="CSE-CST:indicator-a0cd003e-27fb-3091-9dd4-c1d26ebb0a08"/>
+                     <report:Indicator idref="CSE-CST:indicator-cb6345d3-dd08-350d-b0de-505c7315c87d"/>
+                     <report:Indicator idref="CSE-CST:indicator-7a6a7725-8d98-3ebf-8e0b-436e0ce38cde"/>
+                     <report:Indicator idref="CSE-CST:indicator-407542cc-4045-3518-99dc-1f27f7dda5b7"/>
+                     <report:Indicator idref="CSE-CST:indicator-88bc3dc2-f4f8-3149-ad3c-41911b7f5691"/>
+                     <report:Indicator idref="CSE-CST:indicator-f078d0ff-e822-3c0a-830d-f451d5719476"/>
+                     <report:Indicator idref="CSE-CST:indicator-d2b87338-fd5f-3698-9e88-89db29b9c249"/>
+                     <report:Indicator idref="CSE-CST:indicator-8bbed9b7-bf36-37f5-a3ef-d7689eb05673"/>
+                     <report:Indicator idref="CSE-CST:indicator-399c324c-c0cf-327d-ba7b-5df96e55827f"/>
+                     <report:Indicator idref="CSE-CST:indicator-ae1aaadb-e7c3-3083-8940-8e35cee84f61"/>
+                     <report:Indicator idref="CSE-CST:indicator-af168432-0caa-381c-b8a6-a6b51a8a9bbc"/>
+                     <report:Indicator idref="CSE-CST:indicator-5ab6004c-e81c-34fa-be7b-4f1eef1f5bc1"/>
+                     <report:Indicator idref="CSE-CST:indicator-c3cc410d-3656-3de8-90c7-71205e3e1c01"/>
+                     <report:Indicator idref="CSE-CST:indicator-54eabee1-df3c-33a9-9844-aea496413d26"/>
+                     <report:Indicator idref="CSE-CST:indicator-75d7951a-7d96-3eb0-9ec6-1d2201e3842b"/>
+                     <report:Indicator idref="CSE-CST:indicator-2863b21d-a4b0-3ef4-8e3e-6ff7d8036cc6"/>
+                     <report:Indicator idref="CSE-CST:indicator-107eac6a-758c-350f-a4e5-2160e67f2ad8"/>
+                     <report:Indicator idref="CSE-CST:indicator-b020b21d-9a33-384b-8344-1c71985d66d4"/>
+                     <report:Indicator idref="CSE-CST:indicator-e5344c61-4c88-3efb-82e4-cd22cd63dd61"/>
+                     <report:Indicator idref="CSE-CST:indicator-7fd5fba7-0d24-3996-96ef-2e8b1ab8a9e6"/>
+                     <report:Indicator idref="CSE-CST:indicator-ef1ced88-ca29-39a6-9ccf-65b1d6bcb9a3"/>
+                     <report:Indicator idref="CSE-CST:indicator-08aa4a3a-956c-341f-bbd8-62430e6dfc13"/>
+                     <report:Indicator idref="CSE-CST:indicator-d9bbe258-11e4-3aad-8707-c42708dad2da"/>
+                     <report:Indicator idref="CSE-CST:indicator-ab3edaf5-1056-31a5-b26b-9265f26c3a02"/>
+                     <report:Indicator idref="CSE-CST:indicator-e17ea226-459a-335b-a0dd-b69ea389e2f2"/>
+                     <report:Indicator idref="CSE-CST:indicator-29c03033-5aeb-3751-a4a5-1a6efb460c4b"/>
+                     <report:Indicator idref="CSE-CST:indicator-a28db1fa-6e30-3d72-a2d4-d0a8b3c579b1"/>
+                     <report:Indicator idref="CSE-CST:indicator-18e5e518-48e0-3000-b9c5-bf6a761a765c"/>
+                     <report:Indicator idref="CSE-CST:indicator-a749c3c5-b1b0-3fe0-9594-e7bd4ee0e8ca"/>
+                     <report:Indicator idref="CSE-CST:indicator-dc93a2f3-a479-3c47-a42e-57f40ac2bb5d"/>
+                     <report:Indicator idref="CSE-CST:indicator-be8374f3-4013-33eb-be71-29becdfb0348"/>
+                     <report:Indicator idref="CSE-CST:indicator-f175640d-d88d-3e08-a1fd-f1dfe6e76768"/>
+                     <report:Indicator idref="CSE-CST:indicator-c959a999-683f-3c77-abf5-7b9d39dd7ef7"/>
+                     <report:Indicator idref="CSE-CST:indicator-a4faa9cb-9062-3725-9fe4-b7ee30b7f4dd"/>
+                     <report:Indicator idref="CSE-CST:indicator-eba58fd5-82cb-38b7-b77a-e09e412532a4"/>
+                     <report:Indicator idref="CSE-CST:indicator-56928bea-1a9b-36d6-8430-bcda353f43ac"/>
+                     <report:Indicator idref="CSE-CST:indicator-2c3fbd52-5f8f-377b-b047-108261ffd2f0"/>
+                     <report:Indicator idref="CSE-CST:indicator-1bcf7f4c-4399-3e8a-89ac-ac8739d9863f"/>
+                     <report:Indicator idref="CSE-CST:indicator-7b75e136-5a09-3943-94cf-a350023b43bd"/>
+                  </report:Indicators>
+                  <report:TTPs>
+                     <report:TTP idref="CSE-CST:ttp-280ab59a-b045-37ae-ba57-cbfa42f03552" timestamp="2020-01-16T20:05:48.477658+00:00"/>
+                  </report:TTPs>
+               </stix:Report>
+            </stix:Reports>
          </stix:STIX_Package>
       </taxii_11:Content>
+      <taxii_11:Timestamp_Label>2020-06-08T12:55:15.828283Z</taxii_11:Timestamp_Label>
+   </taxii_11:Content_Block>
+   <taxii_11:Content_Block>
+      <taxii_11:Content_Binding binding_id="urn:stix.mitre.org:xml:1.2"/>
+      <taxii_11:Content>
+
+         <stix:STIX_Package id="CSE-CST:package-e09a901f-cb82-c8d6-b6b4-2332e5bf7d08" timestamp="2020-06-08T15:21:21.132485+00:00" version="1.2" xmlns:indicator="http://stix.mitre.org/Indicator-2" xmlns:tdq="http://taxii.mitre.org/query/taxii_default_query-1" xmlns:touMarking="http://data-marking.mitre.org/extensions/MarkingStructure#Terms_Of_Use-1" xmlns:stix="http://stix.mitre.org/stix-1" xmlns:CSE-CST="https://www.cse-cst.gc.ca/en/about-apropos" xmlns:stixVocabs="http://stix.mitre.org/default_vocabularies-1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stixCommon="http://stix.mitre.org/common-1" xmlns:marking="http://data-marking.mitre.org/Marking-1" xmlns:report="http://stix.mitre.org/Report-1" xmlns:taxii="http://taxii.mitre.org/messages/taxii_xml_binding-1" xmlns:DomainNameObj="http://cybox.mitre.org/objects#DomainNameObject-1" xmlns:cybox="http://cybox.mitre.org/cybox-2">
+
+            <stix:STIX_Header>
+
+               <stix:Title>"ioc_feed" block</stix:Title>
+
+               <stix:Information_Source>
+                  <stixCommon:Identity>
+                     <stixCommon:Name>This report contains Indicators of Compromise (IOC) identified by opening or executing malicious files in a dynamic malware analysis sandbox. The hostnames were extracted from the sandbox's network activity and validated against the following rules: Must not be in the Alexa 1 Million, Must have a valid Top Level Domain. These steps may not prevent legitimate hostnames from being included in these IOCs. However, if the IOCs include legitimate hostnames it means they are either compromised and used as accessory to malicious activities or used to evade dynamic analysis environments such as Internet connectivity checks. It is left to the recipient to evaluate the impact of blocking access to these sites. Please e-mail CCCS (contact@cyber.gc.ca) with any questions you may have related to the data in this report.</stixCommon:Name>
+                  </stixCommon:Identity>
+               </stix:Information_Source>
+            </stix:STIX_Header>
+
+            <stix:Indicators>
+               <stix:Indicator id="CSE-CST:indicator-c55427f1-c7a1-3574-93bd-ec1b8e3fd13b" timestamp="2020-06-08T15:21:20.217216+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>Malicious Domain</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
+                  <indicator:Observable id="CSE-CST:observable-c55427f1-c7a1-3574-93bd-ec1b8e3fd13b">
+                     <cybox:Title>DOMAIN: clemglobal.com</cybox:Title>
+                     <cybox:Object id="CSE-CST:object-c55427f1-c7a1-3574-93bd-ec1b8e3fd13b">
+                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
+                           <DomainNameObj:Value>clemglobal.com</DomainNameObj:Value>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Indicated_TTP>
+                     <stixCommon:TTP idref="CSE-CST:ttp-23bb7d23-2bfb-3924-81ad-aeec37ddfa4b" timestamp="2019-12-20T19:42:30.679253+00:00"/>
+                  </indicator:Indicated_TTP>
+                  <indicator:Producer>
+                     <stixCommon:Description>entity is produced by incoming feed</stixCommon:Description>
+                     <stixCommon:Identity>
+                        <stixCommon:Name>ioc_feed</stixCommon:Name>
+                     </stixCommon:Identity>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="CSE-CST:indicator-dd2390f4-44a7-392f-9aae-3c68940761f7" timestamp="2020-06-08T15:21:20.284768+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>Malicious Domain</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
+                  <indicator:Observable id="CSE-CST:observable-dd2390f4-44a7-392f-9aae-3c68940761f7">
+                     <cybox:Title>DOMAIN: ronittzioni.co.il</cybox:Title>
+                     <cybox:Object id="CSE-CST:object-dd2390f4-44a7-392f-9aae-3c68940761f7">
+                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
+                           <DomainNameObj:Value>ronittzioni.co.il</DomainNameObj:Value>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Indicated_TTP>
+                     <stixCommon:TTP idref="CSE-CST:ttp-23bb7d23-2bfb-3924-81ad-aeec37ddfa4b" timestamp="2019-12-20T19:42:30.679253+00:00"/>
+                  </indicator:Indicated_TTP>
+                  <indicator:Producer>
+                     <stixCommon:Description>entity is produced by incoming feed</stixCommon:Description>
+                     <stixCommon:Identity>
+                        <stixCommon:Name>ioc_feed</stixCommon:Name>
+                     </stixCommon:Identity>
+                  </indicator:Producer>
+               </stix:Indicator>
+            </stix:Indicators>
+
+            <stix:Reports>
+               <stix:Report id="CSE-CST:Report-0a72e660-06f9-3097-95f9-6cec910fb795" timestamp="2020-06-08T15:21:21.132485+00:00" xsi:type="report:ReportType">
+                  <report:Header>
+                     <report:Title>CCCS-IXR_2020_20759_1</report:Title>
+                     <report:Intent>Threat Report</report:Intent>
+                     <report:Description>Malicious network indicators observed from 2020-06-08 11:00:00 to 2020-06-08 15:59:59</report:Description>
+                     <report:Handling>
+                        <marking:Marking>
+                           <marking:Marking_Structure xsi:type="touMarking:TermsOfUseMarkingStructureType">
+                              <touMarking:Terms_Of_Use>CSE would like to know if any of these Indicators of Compromise (IOC) provide additional value to your organization and are temporally relevant. Note: The First Seen column contains the date from which the Canadian Centre for Cyber Security began data retention.</touMarking:Terms_Of_Use>
+                           </marking:Marking_Structure>
+                        </marking:Marking>
+                     </report:Handling>
+                     <report:Information_Source>
+                        <stixCommon:Description>entity is produced by incoming feed</stixCommon:Description>
+                        <stixCommon:Identity>
+                           <stixCommon:Name>ioc_feed</stixCommon:Name>
+                        </stixCommon:Identity>
+                     </report:Information_Source>
+                  </report:Header>
+                  <report:Observables/>
+                  <report:Indicators>
+                     <report:Indicator idref="CSE-CST:indicator-c55427f1-c7a1-3574-93bd-ec1b8e3fd13b"/>
+                     <report:Indicator idref="CSE-CST:indicator-b68b923f-3945-3285-93e5-f1365f3bd913" timestamp="2019-12-20T19:39:52.563502+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-1bf825bf-5d0c-3de4-82c0-fa7c971fbba6"/>
+                     <report:Indicator idref="CSE-CST:indicator-ddb9e709-e26f-3d2d-9422-aebd8c60b82a" timestamp="2020-02-27T18:38:32.569803+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-76021e55-7f46-347f-847b-bb2d6bf4973f" timestamp="2020-02-03T18:44:15.000871+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-4a969e40-f07d-3469-a657-3e3ef3e1e544" timestamp="2019-12-20T19:37:10.144687+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-3088dbfd-2777-310f-9e09-f088e3c69ecd" timestamp="2019-12-20T19:43:38.096018+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-d1a14b3b-4820-3cd4-b353-7a5358bef168" timestamp="2019-12-20T19:40:08.546917+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-6d7fc957-dc4b-35e5-827b-d3018933ce88" timestamp="2019-12-20T19:40:35.937094+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-fea057ea-835a-3bd4-ae70-6514d066d8fd" timestamp="2019-12-20T19:44:06.277124+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-2e4d8c9e-3a59-30d8-9b49-4e183ac95fa3" timestamp="2019-12-20T19:42:12.274238+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-77ab4dfe-0bb6-3ac0-a789-c6dd25518596"/>
+                     <report:Indicator idref="CSE-CST:indicator-bf017739-7a16-35c1-9ef8-4008b493265e" timestamp="2019-12-20T19:40:37.307146+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-dd2390f4-44a7-392f-9aae-3c68940761f7"/>
+                     <report:Indicator idref="CSE-CST:indicator-dec1baa8-68b6-3f55-9daa-58938da1fc30" timestamp="2019-12-20T19:41:11.599994+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-44d23391-c27a-3062-914f-6a0ac6a56100"/>
+                     <report:Indicator idref="CSE-CST:indicator-573df106-389a-370d-99bd-85f35d3cdc57" timestamp="2019-12-20T19:43:16.811074+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-e47d07f4-b36a-37ac-b3d1-daef013a8d43" timestamp="2019-12-20T19:40:45.616320+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-08d0d41b-1396-33c1-be5f-201b1598d20e" timestamp="2020-01-16T20:09:46.418594+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-38948e8d-e204-34c9-a40a-41c6bc343ec3" timestamp="2019-12-20T19:39:39.006787+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-00d05185-6ef1-3a05-b6ed-740c6bfac5e8" timestamp="2019-12-20T19:39:11.788629+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-213bfff0-1fc7-32ac-9674-94d7a83ddb7d"/>
+                     <report:Indicator idref="CSE-CST:indicator-9f108487-51b1-3321-8ff1-0fc7880d33be"/>
+                     <report:Indicator idref="CSE-CST:indicator-f8d451c8-4aff-377a-8257-52065b3a01e9" timestamp="2019-12-20T19:37:49.551158+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-16efca3a-c95a-3f18-a0ce-632497fa568b" timestamp="2020-01-08T21:15:49.808440+00:00"/>
+                  </report:Indicators>
+                  <report:TTPs>
+                     <report:TTP idref="CSE-CST:ttp-ed825bf8-05e8-3800-9dca-d55b557fbb2b" timestamp="2019-12-20T19:43:23.758919+00:00"/>
+                     <report:TTP idref="CSE-CST:ttp-20eab238-73ee-3174-b1ad-c4bfcaa331ee" timestamp="2019-12-20T19:37:17.039109+00:00"/>
+                     <report:TTP idref="CSE-CST:ttp-23bb7d23-2bfb-3924-81ad-aeec37ddfa4b" timestamp="2019-12-20T19:42:30.679253+00:00"/>
+                     <report:TTP idref="CSE-CST:ttp-8285ee17-f53b-3d42-9404-152310deee34" timestamp="2019-12-20T19:44:10.228832+00:00"/>
+                  </report:TTPs>
+               </stix:Report>
+            </stix:Reports>
+         </stix:STIX_Package>
+      </taxii_11:Content>
+      <taxii_11:Timestamp_Label>2020-06-08T15:25:25.550945Z</taxii_11:Timestamp_Label>
+   </taxii_11:Content_Block>
+   <taxii_11:Content_Block>
+      <taxii_11:Content_Binding binding_id="urn:stix.mitre.org:xml:1.2"/>
+      <taxii_11:Content>
+
+         <stix:STIX_Package id="CSE-CST:package-25cb62a2-a7d8-21d3-6ce1-358fa9ae4d89" timestamp="2020-06-08T16:21:27.871119+00:00" version="1.2" xmlns:tdq="http://taxii.mitre.org/query/taxii_default_query-1" xmlns:touMarking="http://data-marking.mitre.org/extensions/MarkingStructure#Terms_Of_Use-1" xmlns:stix="http://stix.mitre.org/stix-1" xmlns:CSE-CST="https://www.cse-cst.gc.ca/en/about-apropos" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stixCommon="http://stix.mitre.org/common-1" xmlns:marking="http://data-marking.mitre.org/Marking-1" xmlns:report="http://stix.mitre.org/Report-1" xmlns:taxii="http://taxii.mitre.org/messages/taxii_xml_binding-1">
+
+            <stix:STIX_Header>
+
+               <stix:Title>"ioc_feed" block</stix:Title>
+
+               <stix:Information_Source>
+                  <stixCommon:Identity>
+                     <stixCommon:Name>This report contains Indicators of Compromise (IOC) identified by opening or executing malicious files in a dynamic malware analysis sandbox. The hostnames were extracted from the sandbox's network activity and validated against the following rules: Must not be in the Alexa 1 Million, Must have a valid Top Level Domain. These steps may not prevent legitimate hostnames from being included in these IOCs. However, if the IOCs include legitimate hostnames it means they are either compromised and used as accessory to malicious activities or used to evade dynamic analysis environments such as Internet connectivity checks. It is left to the recipient to evaluate the impact of blocking access to these sites. Please e-mail CCCS (contact@cyber.gc.ca) with any questions you may have related to the data in this report.</stixCommon:Name>
+                  </stixCommon:Identity>
+               </stix:Information_Source>
+            </stix:STIX_Header>
+
+            <stix:Reports>
+               <stix:Report id="CSE-CST:Report-58ad656f-71dd-39d3-a8fc-74f75020d292" timestamp="2020-06-08T16:21:27.871119+00:00" xsi:type="report:ReportType">
+                  <report:Header>
+                     <report:Title>CCCS-IXR_2020_20761_1</report:Title>
+                     <report:Intent>Threat Report</report:Intent>
+                     <report:Description>Malicious network indicators observed from 2020-06-08 12:00:00 to 2020-06-08 16:59:59</report:Description>
+                     <report:Handling>
+                        <marking:Marking>
+                           <marking:Marking_Structure xsi:type="touMarking:TermsOfUseMarkingStructureType">
+                              <touMarking:Terms_Of_Use>CSE would like to know if any of these Indicators of Compromise (IOC) provide additional value to your organization and are temporally relevant. Note: The First Seen column contains the date from which the Canadian Centre for Cyber Security began data retention.</touMarking:Terms_Of_Use>
+                           </marking:Marking_Structure>
+                        </marking:Marking>
+                     </report:Handling>
+                     <report:Information_Source>
+                        <stixCommon:Description>entity is produced by incoming feed</stixCommon:Description>
+                        <stixCommon:Identity>
+                           <stixCommon:Name>ioc_feed</stixCommon:Name>
+                        </stixCommon:Identity>
+                     </report:Information_Source>
+                  </report:Header>
+                  <report:Observables/>
+                  <report:Indicators>
+                     <report:Indicator idref="CSE-CST:indicator-c55427f1-c7a1-3574-93bd-ec1b8e3fd13b"/>
+                     <report:Indicator idref="CSE-CST:indicator-b68b923f-3945-3285-93e5-f1365f3bd913" timestamp="2019-12-20T19:39:52.563502+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-29abb87e-f683-340b-b5e6-2a9c5a980cdd"/>
+                     <report:Indicator idref="CSE-CST:indicator-6b5b459b-070f-31b7-9b58-ad061eb3cc29" timestamp="2019-12-20T19:40:03.410111+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-1bf825bf-5d0c-3de4-82c0-fa7c971fbba6"/>
+                     <report:Indicator idref="CSE-CST:indicator-ddb9e709-e26f-3d2d-9422-aebd8c60b82a" timestamp="2020-02-27T18:38:32.569803+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-0f591743-e4b4-33ac-8651-71b9baf62fd6"/>
+                     <report:Indicator idref="CSE-CST:indicator-c77ca653-752e-3fca-980c-9c7451fb45e1" timestamp="2019-12-20T19:40:52.548090+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-8145a7d5-5c96-3cf1-8244-0efde636ced5"/>
+                     <report:Indicator idref="CSE-CST:indicator-4cd667c0-ce09-3e62-b55e-6fd14d711615" timestamp="2020-03-11T14:56:25.747357+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-e7d5b9fe-d5ca-3f0a-ad87-b3f6c3e005b2" timestamp="2019-12-20T19:45:01.083696+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-e10b7e8d-a3fb-3956-b7cd-a2f91aab1c89" timestamp="2019-12-20T19:40:08.057231+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-76021e55-7f46-347f-847b-bb2d6bf4973f" timestamp="2020-02-03T18:44:15.000871+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-4a969e40-f07d-3469-a657-3e3ef3e1e544" timestamp="2019-12-20T19:37:10.144687+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-e84fcc04-7376-3367-a99c-4e2ed56f84db" timestamp="2020-01-21T19:47:06.098345+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-5666c5a7-16d0-3092-a0b0-66d448feb2c1"/>
+                     <report:Indicator idref="CSE-CST:indicator-133b50f6-bb93-3028-87be-4f1eb6d494a3" timestamp="2019-12-20T19:38:23.025242+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-3088dbfd-2777-310f-9e09-f088e3c69ecd" timestamp="2019-12-20T19:43:38.096018+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-7f38e380-e2d5-320a-b10b-0a4331fee921" timestamp="2019-12-20T19:42:00.702983+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-f5ce3024-8426-3ef3-84e3-4f7c4cd7135d"/>
+                     <report:Indicator idref="CSE-CST:indicator-6fbf1474-8777-3099-8525-ac99970b060f" timestamp="2020-01-08T21:18:42.737332+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-886e9cb4-59ad-358e-b541-0c2564fe0a26" timestamp="2019-12-20T19:40:18.840109+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-d5119d02-4a97-346a-9002-097d4c1ffb88"/>
+                     <report:Indicator idref="CSE-CST:indicator-a8dd68aa-8af4-39b1-9851-da7f6bb20a8b"/>
+                     <report:Indicator idref="CSE-CST:indicator-7b7480d0-926e-3b2a-885a-4655de875148" timestamp="2020-01-08T21:19:20.289536+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-cdd1d139-acb8-399c-a201-f9171960bae5" timestamp="2019-12-20T19:43:45.639120+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-91ef68a8-df37-3fc2-a59f-e4c587fee854" timestamp="2019-12-20T19:38:15.966142+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-96248448-39cd-3784-acae-05b288a4b13d"/>
+                     <report:Indicator idref="CSE-CST:indicator-d1a14b3b-4820-3cd4-b353-7a5358bef168" timestamp="2019-12-20T19:40:08.546917+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-6d7fc957-dc4b-35e5-827b-d3018933ce88" timestamp="2019-12-20T19:40:35.937094+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-1210ff24-abfe-345e-8756-b88ef20963e0" timestamp="2019-12-20T19:38:59.140888+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-77cbb7dc-3c81-34f6-814f-4dfbb94601bb"/>
+                     <report:Indicator idref="CSE-CST:indicator-2f84fb0a-4d7b-3ce7-974e-be488a28436c" timestamp="2020-01-24T01:04:12.178547+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-b1e268b4-f7bd-3d12-9fd3-38e3ad66864b" timestamp="2019-12-20T19:45:20.660483+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-fea057ea-835a-3bd4-ae70-6514d066d8fd" timestamp="2019-12-20T19:44:06.277124+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-8f48dd93-0f49-35d0-a522-ccd6bb67ef65" timestamp="2020-01-08T21:17:01.829020+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-c267a864-7d0b-3c5d-8956-e82b6febe902" timestamp="2020-01-16T20:10:53.544586+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-5f2d86a8-e881-3db0-928d-5c1e04e2ec29" timestamp="2019-12-20T19:45:02.144139+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-e03f8d6b-0cca-3b12-8fbf-5821ba88f502"/>
+                     <report:Indicator idref="CSE-CST:indicator-2e4d8c9e-3a59-30d8-9b49-4e183ac95fa3" timestamp="2019-12-20T19:42:12.274238+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-b72d9655-b1b4-32bc-a6af-9c4a2be32fca" timestamp="2019-12-20T19:40:50.757905+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-b2806e70-82c8-3694-ae41-0ca259adc891" timestamp="2019-12-20T19:39:10.322620+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-4b107a92-60a5-3479-a44e-21e2919b8338" timestamp="2020-02-04T15:46:49.832414+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-5516a666-226c-3e07-afe9-ecf6bfc53ed0" timestamp="2019-12-20T19:42:48.057404+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-77ab4dfe-0bb6-3ac0-a789-c6dd25518596"/>
+                     <report:Indicator idref="CSE-CST:indicator-bf017739-7a16-35c1-9ef8-4008b493265e" timestamp="2019-12-20T19:40:37.307146+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-faac8dfc-9b02-3177-82a7-118f9e16b033"/>
+                     <report:Indicator idref="CSE-CST:indicator-07691b10-ee0f-3df4-8b60-53a7a8373068" timestamp="2019-12-20T19:44:24.480091+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-5610303f-9b94-35c8-97bc-841f1839f601" timestamp="2019-12-20T19:38:29.513378+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-dd2390f4-44a7-392f-9aae-3c68940761f7"/>
+                     <report:Indicator idref="CSE-CST:indicator-dec1baa8-68b6-3f55-9daa-58938da1fc30" timestamp="2019-12-20T19:41:11.599994+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-35977378-7ba5-3edf-a2f9-4adb5e5607c8" timestamp="2019-12-20T19:44:13.829437+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-141117bd-2566-38d2-b3bf-21dc59940346" timestamp="2019-12-20T19:43:05.099340+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-44d23391-c27a-3062-914f-6a0ac6a56100"/>
+                     <report:Indicator idref="CSE-CST:indicator-d08f4b1f-8cef-36c0-9b2e-f89304158f2c"/>
+                     <report:Indicator idref="CSE-CST:indicator-573df106-389a-370d-99bd-85f35d3cdc57" timestamp="2019-12-20T19:43:16.811074+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-1b64a41c-2bd9-3b2d-8a84-7f35fd10df99"/>
+                     <report:Indicator idref="CSE-CST:indicator-e47d07f4-b36a-37ac-b3d1-daef013a8d43" timestamp="2019-12-20T19:40:45.616320+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-08d0d41b-1396-33c1-be5f-201b1598d20e" timestamp="2020-01-16T20:09:46.418594+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-38948e8d-e204-34c9-a40a-41c6bc343ec3" timestamp="2019-12-20T19:39:39.006787+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-00d05185-6ef1-3a05-b6ed-740c6bfac5e8" timestamp="2019-12-20T19:39:11.788629+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-4b35c746-1b92-3d22-9f85-20c4f13646b5" timestamp="2020-02-10T20:22:57.642138+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-5259e4b4-3cf7-3b0b-9183-e1a4e7f0ceb1" timestamp="2020-02-25T13:46:24.364271+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-fb764f86-f72e-3c25-a754-b2fe951415d3" timestamp="2019-12-20T19:45:18.662193+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-24d43c7e-3a8e-3022-bc5f-087ff14e81b5"/>
+                     <report:Indicator idref="CSE-CST:indicator-213bfff0-1fc7-32ac-9674-94d7a83ddb7d"/>
+                     <report:Indicator idref="CSE-CST:indicator-9f108487-51b1-3321-8ff1-0fc7880d33be"/>
+                     <report:Indicator idref="CSE-CST:indicator-2d3a2109-f128-348a-9c70-3197557b8eeb" timestamp="2019-12-20T19:38:22.785309+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-7e113710-1d7d-3382-8fbd-6d527afc824c" timestamp="2019-12-20T19:42:11.116035+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-f28a58eb-45ec-3e3e-8bb7-ee0dd07fb961" timestamp="2020-01-08T21:16:33.322482+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-f8d451c8-4aff-377a-8257-52065b3a01e9" timestamp="2019-12-20T19:37:49.551158+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-45ac8223-4d01-3fe3-8548-c02e37d22d9d"/>
+                     <report:Indicator idref="CSE-CST:indicator-129c0e48-9f83-35cc-8d8e-981bc744da7e" timestamp="2019-12-20T19:38:01.767655+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-16efca3a-c95a-3f18-a0ce-632497fa568b" timestamp="2020-01-08T21:15:49.808440+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-4eb332a8-0268-307c-9234-9a3050323156" timestamp="2019-12-20T19:44:49.899670+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-b41f1e5c-c69b-3e17-91f4-594019975987" timestamp="2019-12-20T19:39:48.301457+00:00"/>
+                  </report:Indicators>
+                  <report:TTPs>
+                     <report:TTP idref="CSE-CST:ttp-ed825bf8-05e8-3800-9dca-d55b557fbb2b" timestamp="2019-12-20T19:43:23.758919+00:00"/>
+                     <report:TTP idref="CSE-CST:ttp-20eab238-73ee-3174-b1ad-c4bfcaa331ee" timestamp="2019-12-20T19:37:17.039109+00:00"/>
+                     <report:TTP idref="CSE-CST:ttp-23bb7d23-2bfb-3924-81ad-aeec37ddfa4b" timestamp="2019-12-20T19:42:30.679253+00:00"/>
+                     <report:TTP idref="CSE-CST:ttp-5f267127-e4bc-3eff-bd03-264f02b0967d" timestamp="2019-12-20T19:43:12.759432+00:00"/>
+                     <report:TTP idref="CSE-CST:ttp-5a13897f-6fa1-36b1-8235-f2fad0f4429a" timestamp="2019-12-20T19:37:30.563973+00:00"/>
+                     <report:TTP idref="CSE-CST:ttp-8285ee17-f53b-3d42-9404-152310deee34" timestamp="2019-12-20T19:44:10.228832+00:00"/>
+                     <report:TTP idref="CSE-CST:ttp-5356d699-bb12-3f5a-ad5e-76e6a93057d9" timestamp="2019-12-20T19:45:16.899272+00:00"/>
+                  </report:TTPs>
+               </stix:Report>
+            </stix:Reports>
+         </stix:STIX_Package>
+      </taxii_11:Content>
+      <taxii_11:Timestamp_Label>2020-06-08T16:25:00.163947Z</taxii_11:Timestamp_Label>
+   </taxii_11:Content_Block>
+   <taxii_11:Content_Block>
+      <taxii_11:Content_Binding binding_id="urn:stix.mitre.org:xml:1.2"/>
+      <taxii_11:Content>
+
+         <stix:STIX_Package id="CSE-CST:package-4b206809-ff3d-c3fd-584a-e2de2e9064e7" timestamp="2020-06-08T17:21:32.783291+00:00" version="1.2" xmlns:tdq="http://taxii.mitre.org/query/taxii_default_query-1" xmlns:touMarking="http://data-marking.mitre.org/extensions/MarkingStructure#Terms_Of_Use-1" xmlns:stix="http://stix.mitre.org/stix-1" xmlns:CSE-CST="https://www.cse-cst.gc.ca/en/about-apropos" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stixCommon="http://stix.mitre.org/common-1" xmlns:marking="http://data-marking.mitre.org/Marking-1" xmlns:report="http://stix.mitre.org/Report-1" xmlns:taxii="http://taxii.mitre.org/messages/taxii_xml_binding-1">
+
+            <stix:STIX_Header>
+
+               <stix:Title>"ioc_feed" block</stix:Title>
+
+               <stix:Information_Source>
+                  <stixCommon:Identity>
+                     <stixCommon:Name>This report contains Indicators of Compromise (IOC) identified by opening or executing malicious files in a dynamic malware analysis sandbox. The hostnames were extracted from the sandbox's network activity and validated against the following rules: Must not be in the Alexa 1 Million, Must have a valid Top Level Domain. These steps may not prevent legitimate hostnames from being included in these IOCs. However, if the IOCs include legitimate hostnames it means they are either compromised and used as accessory to malicious activities or used to evade dynamic analysis environments such as Internet connectivity checks. It is left to the recipient to evaluate the impact of blocking access to these sites. Please e-mail CCCS (contact@cyber.gc.ca) with any questions you may have related to the data in this report.</stixCommon:Name>
+                  </stixCommon:Identity>
+               </stix:Information_Source>
+            </stix:STIX_Header>
+
+            <stix:Reports>
+               <stix:Report id="CSE-CST:Report-85e35227-11e5-3219-b342-e2d28a27415a" timestamp="2020-06-08T17:21:32.783291+00:00" xsi:type="report:ReportType">
+                  <report:Header>
+                     <report:Title>CCCS-IXR_2020_20763_1</report:Title>
+                     <report:Intent>Threat Report</report:Intent>
+                     <report:Description>Malicious network indicators observed from 2020-06-08 13:00:00 to 2020-06-08 17:59:59</report:Description>
+                     <report:Handling>
+                        <marking:Marking>
+                           <marking:Marking_Structure xsi:type="touMarking:TermsOfUseMarkingStructureType">
+                              <touMarking:Terms_Of_Use>CSE would like to know if any of these Indicators of Compromise (IOC) provide additional value to your organization and are temporally relevant. Note: The First Seen column contains the date from which the Canadian Centre for Cyber Security began data retention.</touMarking:Terms_Of_Use>
+                           </marking:Marking_Structure>
+                        </marking:Marking>
+                     </report:Handling>
+                     <report:Information_Source>
+                        <stixCommon:Description>entity is produced by incoming feed</stixCommon:Description>
+                        <stixCommon:Identity>
+                           <stixCommon:Name>ioc_feed</stixCommon:Name>
+                        </stixCommon:Identity>
+                     </report:Information_Source>
+                  </report:Header>
+                  <report:Observables/>
+                  <report:Indicators>
+                     <report:Indicator idref="CSE-CST:indicator-c55427f1-c7a1-3574-93bd-ec1b8e3fd13b"/>
+                     <report:Indicator idref="CSE-CST:indicator-6745546f-1bb6-37f0-b7c3-f9037002a082"/>
+                     <report:Indicator idref="CSE-CST:indicator-b68b923f-3945-3285-93e5-f1365f3bd913" timestamp="2019-12-20T19:39:52.563502+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-29abb87e-f683-340b-b5e6-2a9c5a980cdd"/>
+                     <report:Indicator idref="CSE-CST:indicator-6b5b459b-070f-31b7-9b58-ad061eb3cc29" timestamp="2019-12-20T19:40:03.410111+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-1bf825bf-5d0c-3de4-82c0-fa7c971fbba6"/>
+                     <report:Indicator idref="CSE-CST:indicator-ddb9e709-e26f-3d2d-9422-aebd8c60b82a" timestamp="2020-02-27T18:38:32.569803+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-0f591743-e4b4-33ac-8651-71b9baf62fd6"/>
+                     <report:Indicator idref="CSE-CST:indicator-c77ca653-752e-3fca-980c-9c7451fb45e1" timestamp="2019-12-20T19:40:52.548090+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-8145a7d5-5c96-3cf1-8244-0efde636ced5"/>
+                     <report:Indicator idref="CSE-CST:indicator-4cd667c0-ce09-3e62-b55e-6fd14d711615" timestamp="2020-03-11T14:56:25.747357+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-e7d5b9fe-d5ca-3f0a-ad87-b3f6c3e005b2" timestamp="2019-12-20T19:45:01.083696+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-d27e1258-6b3c-3d3c-9dbc-ce459ef014c4" timestamp="2019-12-20T19:43:35.609296+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-e10b7e8d-a3fb-3956-b7cd-a2f91aab1c89" timestamp="2019-12-20T19:40:08.057231+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-76021e55-7f46-347f-847b-bb2d6bf4973f" timestamp="2020-02-03T18:44:15.000871+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-4a969e40-f07d-3469-a657-3e3ef3e1e544" timestamp="2019-12-20T19:37:10.144687+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-e84fcc04-7376-3367-a99c-4e2ed56f84db" timestamp="2020-01-21T19:47:06.098345+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-69024740-15e7-3600-a2bd-963cc3a18248" timestamp="2019-12-20T19:43:58.312235+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-5666c5a7-16d0-3092-a0b0-66d448feb2c1"/>
+                     <report:Indicator idref="CSE-CST:indicator-133b50f6-bb93-3028-87be-4f1eb6d494a3" timestamp="2019-12-20T19:38:23.025242+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-3088dbfd-2777-310f-9e09-f088e3c69ecd" timestamp="2019-12-20T19:43:38.096018+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-7f38e380-e2d5-320a-b10b-0a4331fee921" timestamp="2019-12-20T19:42:00.702983+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-f5ce3024-8426-3ef3-84e3-4f7c4cd7135d"/>
+                     <report:Indicator idref="CSE-CST:indicator-6fbf1474-8777-3099-8525-ac99970b060f" timestamp="2020-01-08T21:18:42.737332+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-886e9cb4-59ad-358e-b541-0c2564fe0a26" timestamp="2019-12-20T19:40:18.840109+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-d5119d02-4a97-346a-9002-097d4c1ffb88"/>
+                     <report:Indicator idref="CSE-CST:indicator-a8dd68aa-8af4-39b1-9851-da7f6bb20a8b"/>
+                     <report:Indicator idref="CSE-CST:indicator-9285ba86-3c5c-33e5-9b46-e5e7262976a8"/>
+                     <report:Indicator idref="CSE-CST:indicator-65a6ed4e-92de-325b-adba-76cf71e3aa03" timestamp="2019-12-20T19:37:06.801870+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-7b7480d0-926e-3b2a-885a-4655de875148" timestamp="2020-01-08T21:19:20.289536+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-cdd1d139-acb8-399c-a201-f9171960bae5" timestamp="2019-12-20T19:43:45.639120+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-91ef68a8-df37-3fc2-a59f-e4c587fee854" timestamp="2019-12-20T19:38:15.966142+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-96248448-39cd-3784-acae-05b288a4b13d"/>
+                     <report:Indicator idref="CSE-CST:indicator-529a3df9-b8bc-3f14-989b-881da0df32f8"/>
+                     <report:Indicator idref="CSE-CST:indicator-3c5b6686-3057-344e-adb1-b8645f38b6d6" timestamp="2020-01-21T00:53:02.519597+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-d1a14b3b-4820-3cd4-b353-7a5358bef168" timestamp="2019-12-20T19:40:08.546917+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-e0fa8b90-4f77-3f6b-9417-8865ef7386eb" timestamp="2019-12-20T19:39:26.588895+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-6d7fc957-dc4b-35e5-827b-d3018933ce88" timestamp="2019-12-20T19:40:35.937094+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-1210ff24-abfe-345e-8756-b88ef20963e0" timestamp="2019-12-20T19:38:59.140888+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-77cbb7dc-3c81-34f6-814f-4dfbb94601bb"/>
+                     <report:Indicator idref="CSE-CST:indicator-2f84fb0a-4d7b-3ce7-974e-be488a28436c" timestamp="2020-01-24T01:04:12.178547+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-b1e268b4-f7bd-3d12-9fd3-38e3ad66864b" timestamp="2019-12-20T19:45:20.660483+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-fea057ea-835a-3bd4-ae70-6514d066d8fd" timestamp="2019-12-20T19:44:06.277124+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-8f48dd93-0f49-35d0-a522-ccd6bb67ef65" timestamp="2020-01-08T21:17:01.829020+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-c267a864-7d0b-3c5d-8956-e82b6febe902" timestamp="2020-01-16T20:10:53.544586+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-5f2d86a8-e881-3db0-928d-5c1e04e2ec29" timestamp="2019-12-20T19:45:02.144139+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-e03f8d6b-0cca-3b12-8fbf-5821ba88f502"/>
+                     <report:Indicator idref="CSE-CST:indicator-2e4d8c9e-3a59-30d8-9b49-4e183ac95fa3" timestamp="2019-12-20T19:42:12.274238+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-b72d9655-b1b4-32bc-a6af-9c4a2be32fca" timestamp="2019-12-20T19:40:50.757905+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-b2806e70-82c8-3694-ae41-0ca259adc891" timestamp="2019-12-20T19:39:10.322620+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-4b107a92-60a5-3479-a44e-21e2919b8338" timestamp="2020-02-04T15:46:49.832414+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-5516a666-226c-3e07-afe9-ecf6bfc53ed0" timestamp="2019-12-20T19:42:48.057404+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-77ab4dfe-0bb6-3ac0-a789-c6dd25518596"/>
+                     <report:Indicator idref="CSE-CST:indicator-eed73196-68c9-39ff-972b-b991e0c3daa0" timestamp="2019-12-20T19:37:30.328133+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-bf017739-7a16-35c1-9ef8-4008b493265e" timestamp="2019-12-20T19:40:37.307146+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-f15af35d-fd12-36ea-9d2c-09ef8c0f10de"/>
+                     <report:Indicator idref="CSE-CST:indicator-faac8dfc-9b02-3177-82a7-118f9e16b033"/>
+                     <report:Indicator idref="CSE-CST:indicator-07691b10-ee0f-3df4-8b60-53a7a8373068" timestamp="2019-12-20T19:44:24.480091+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-5610303f-9b94-35c8-97bc-841f1839f601" timestamp="2019-12-20T19:38:29.513378+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-dd2390f4-44a7-392f-9aae-3c68940761f7"/>
+                     <report:Indicator idref="CSE-CST:indicator-dec1baa8-68b6-3f55-9daa-58938da1fc30" timestamp="2019-12-20T19:41:11.599994+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-35977378-7ba5-3edf-a2f9-4adb5e5607c8" timestamp="2019-12-20T19:44:13.829437+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-141117bd-2566-38d2-b3bf-21dc59940346" timestamp="2019-12-20T19:43:05.099340+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-44d23391-c27a-3062-914f-6a0ac6a56100"/>
+                     <report:Indicator idref="CSE-CST:indicator-d08f4b1f-8cef-36c0-9b2e-f89304158f2c"/>
+                     <report:Indicator idref="CSE-CST:indicator-573df106-389a-370d-99bd-85f35d3cdc57" timestamp="2019-12-20T19:43:16.811074+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-1b64a41c-2bd9-3b2d-8a84-7f35fd10df99"/>
+                     <report:Indicator idref="CSE-CST:indicator-e47d07f4-b36a-37ac-b3d1-daef013a8d43" timestamp="2019-12-20T19:40:45.616320+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-08d0d41b-1396-33c1-be5f-201b1598d20e" timestamp="2020-01-16T20:09:46.418594+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-38948e8d-e204-34c9-a40a-41c6bc343ec3" timestamp="2019-12-20T19:39:39.006787+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-00d05185-6ef1-3a05-b6ed-740c6bfac5e8" timestamp="2019-12-20T19:39:11.788629+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-4b35c746-1b92-3d22-9f85-20c4f13646b5" timestamp="2020-02-10T20:22:57.642138+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-5259e4b4-3cf7-3b0b-9183-e1a4e7f0ceb1" timestamp="2020-02-25T13:46:24.364271+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-fb764f86-f72e-3c25-a754-b2fe951415d3" timestamp="2019-12-20T19:45:18.662193+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-24d43c7e-3a8e-3022-bc5f-087ff14e81b5"/>
+                     <report:Indicator idref="CSE-CST:indicator-213bfff0-1fc7-32ac-9674-94d7a83ddb7d"/>
+                     <report:Indicator idref="CSE-CST:indicator-9f108487-51b1-3321-8ff1-0fc7880d33be"/>
+                     <report:Indicator idref="CSE-CST:indicator-2d3a2109-f128-348a-9c70-3197557b8eeb" timestamp="2019-12-20T19:38:22.785309+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-7e113710-1d7d-3382-8fbd-6d527afc824c" timestamp="2019-12-20T19:42:11.116035+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-f28a58eb-45ec-3e3e-8bb7-ee0dd07fb961" timestamp="2020-01-08T21:16:33.322482+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-f8d451c8-4aff-377a-8257-52065b3a01e9" timestamp="2019-12-20T19:37:49.551158+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-45ac8223-4d01-3fe3-8548-c02e37d22d9d"/>
+                     <report:Indicator idref="CSE-CST:indicator-129c0e48-9f83-35cc-8d8e-981bc744da7e" timestamp="2019-12-20T19:38:01.767655+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-16efca3a-c95a-3f18-a0ce-632497fa568b" timestamp="2020-01-08T21:15:49.808440+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-57d5b869-ef16-30d5-ba5a-574c4e891724"/>
+                     <report:Indicator idref="CSE-CST:indicator-4eb332a8-0268-307c-9234-9a3050323156" timestamp="2019-12-20T19:44:49.899670+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-b41f1e5c-c69b-3e17-91f4-594019975987" timestamp="2019-12-20T19:39:48.301457+00:00"/>
+                  </report:Indicators>
+                  <report:TTPs>
+                     <report:TTP idref="CSE-CST:ttp-ed825bf8-05e8-3800-9dca-d55b557fbb2b" timestamp="2019-12-20T19:43:23.758919+00:00"/>
+                     <report:TTP idref="CSE-CST:ttp-20eab238-73ee-3174-b1ad-c4bfcaa331ee" timestamp="2019-12-20T19:37:17.039109+00:00"/>
+                     <report:TTP idref="CSE-CST:ttp-23bb7d23-2bfb-3924-81ad-aeec37ddfa4b" timestamp="2019-12-20T19:42:30.679253+00:00"/>
+                     <report:TTP idref="CSE-CST:ttp-5f267127-e4bc-3eff-bd03-264f02b0967d" timestamp="2019-12-20T19:43:12.759432+00:00"/>
+                     <report:TTP idref="CSE-CST:ttp-5a13897f-6fa1-36b1-8235-f2fad0f4429a" timestamp="2019-12-20T19:37:30.563973+00:00"/>
+                     <report:TTP idref="CSE-CST:ttp-8285ee17-f53b-3d42-9404-152310deee34" timestamp="2019-12-20T19:44:10.228832+00:00"/>
+                     <report:TTP idref="CSE-CST:ttp-5356d699-bb12-3f5a-ad5e-76e6a93057d9" timestamp="2019-12-20T19:45:16.899272+00:00"/>
+                  </report:TTPs>
+               </stix:Report>
+            </stix:Reports>
+         </stix:STIX_Package>
+      </taxii_11:Content>
+      <taxii_11:Timestamp_Label>2020-06-08T17:25:04.142879Z</taxii_11:Timestamp_Label>
+   </taxii_11:Content_Block>
+   <taxii_11:Content_Block>
+      <taxii_11:Content_Binding binding_id="urn:stix.mitre.org:xml:1.2"/>
+      <taxii_11:Content>
+
+         <stix:STIX_Package id="CSE-CST:package-75fac236-5110-b2e4-00b2-6c59dd2b5777" timestamp="2020-06-08T18:52:16.490523+00:00" version="1.2" xmlns:indicator="http://stix.mitre.org/Indicator-2" xmlns:tdq="http://taxii.mitre.org/query/taxii_default_query-1" xmlns:touMarking="http://data-marking.mitre.org/extensions/MarkingStructure#Terms_Of_Use-1" xmlns:stix="http://stix.mitre.org/stix-1" xmlns:CSE-CST="https://www.cse-cst.gc.ca/en/about-apropos" xmlns:stixVocabs="http://stix.mitre.org/default_vocabularies-1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stixCommon="http://stix.mitre.org/common-1" xmlns:marking="http://data-marking.mitre.org/Marking-1" xmlns:report="http://stix.mitre.org/Report-1" xmlns:taxii="http://taxii.mitre.org/messages/taxii_xml_binding-1" xmlns:DomainNameObj="http://cybox.mitre.org/objects#DomainNameObject-1" xmlns:cybox="http://cybox.mitre.org/cybox-2">
+
+            <stix:STIX_Header>
+
+               <stix:Title>"ioc_feed" block</stix:Title>
+
+               <stix:Information_Source>
+                  <stixCommon:Identity>
+                     <stixCommon:Name>This report contains Indicators of Compromise (IOC) identified by opening or executing malicious files in a dynamic malware analysis sandbox. The hostnames were extracted from the sandbox's network activity and validated against the following rules: Must not be in the Alexa 1 Million, Must have a valid Top Level Domain. These steps may not prevent legitimate hostnames from being included in these IOCs. However, if the IOCs include legitimate hostnames it means they are either compromised and used as accessory to malicious activities or used to evade dynamic analysis environments such as Internet connectivity checks. It is left to the recipient to evaluate the impact of blocking access to these sites. Please e-mail CCCS (contact@cyber.gc.ca) with any questions you may have related to the data in this report.</stixCommon:Name>
+                  </stixCommon:Identity>
+               </stix:Information_Source>
+            </stix:STIX_Header>
+
+            <stix:Indicators>
+               <stix:Indicator id="CSE-CST:indicator-80d9d35b-1210-3eca-a799-c142bce33fd1" timestamp="2020-06-08T18:52:10.365763+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>Malicious Domain</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
+                  <indicator:Observable id="CSE-CST:observable-80d9d35b-1210-3eca-a799-c142bce33fd1">
+                     <cybox:Title>DOMAIN: priorincludeswith.ru</cybox:Title>
+                     <cybox:Object id="CSE-CST:object-80d9d35b-1210-3eca-a799-c142bce33fd1">
+                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
+                           <DomainNameObj:Value>priorincludeswith.ru</DomainNameObj:Value>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Indicated_TTP>
+                     <stixCommon:TTP idref="CSE-CST:ttp-5f267127-e4bc-3eff-bd03-264f02b0967d" timestamp="2019-12-20T19:43:12.759432+00:00"/>
+                  </indicator:Indicated_TTP>
+                  <indicator:Producer>
+                     <stixCommon:Description>entity is produced by incoming feed</stixCommon:Description>
+                     <stixCommon:Identity>
+                        <stixCommon:Name>ioc_feed</stixCommon:Name>
+                     </stixCommon:Identity>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="CSE-CST:indicator-03486237-2250-381d-9773-f4cf210c5b2c" timestamp="2020-06-08T18:52:10.227728+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>Malicious Domain</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
+                  <indicator:Observable id="CSE-CST:observable-03486237-2250-381d-9773-f4cf210c5b2c">
+                     <cybox:Title>DOMAIN: liketechnoprogaddit.ru</cybox:Title>
+                     <cybox:Object id="CSE-CST:object-03486237-2250-381d-9773-f4cf210c5b2c">
+                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
+                           <DomainNameObj:Value>liketechnoprogaddit.ru</DomainNameObj:Value>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Indicated_TTP>
+                     <stixCommon:TTP idref="CSE-CST:ttp-5f267127-e4bc-3eff-bd03-264f02b0967d" timestamp="2019-12-20T19:43:12.759432+00:00"/>
+                  </indicator:Indicated_TTP>
+                  <indicator:Producer>
+                     <stixCommon:Description>entity is produced by incoming feed</stixCommon:Description>
+                     <stixCommon:Identity>
+                        <stixCommon:Name>ioc_feed</stixCommon:Name>
+                     </stixCommon:Identity>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="CSE-CST:indicator-9a2428a2-8e4c-3fcc-ba1a-ce7041c03815" timestamp="2020-06-08T18:52:10.280051+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>Malicious Domain</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
+                  <indicator:Observable id="CSE-CST:observable-9a2428a2-8e4c-3fcc-ba1a-ce7041c03815">
+                     <cybox:Title>DOMAIN: kakoloidkaborn.com</cybox:Title>
+                     <cybox:Object id="CSE-CST:object-9a2428a2-8e4c-3fcc-ba1a-ce7041c03815">
+                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
+                           <DomainNameObj:Value>kakoloidkaborn.com</DomainNameObj:Value>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Indicated_TTP>
+                     <stixCommon:TTP idref="CSE-CST:ttp-eb096775-31d1-3384-9071-62c25067389b" timestamp="2019-12-20T19:38:35.898491+00:00"/>
+                  </indicator:Indicated_TTP>
+                  <indicator:Producer>
+                     <stixCommon:Description>entity is produced by incoming feed</stixCommon:Description>
+                     <stixCommon:Identity>
+                        <stixCommon:Name>ioc_feed</stixCommon:Name>
+                     </stixCommon:Identity>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="CSE-CST:indicator-c683ab72-09d7-30f2-bf0e-2994ef1f8b98" timestamp="2020-06-08T18:52:10.146535+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>Malicious Domain</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
+                  <indicator:Observable id="CSE-CST:observable-c683ab72-09d7-30f2-bf0e-2994ef1f8b98">
+                     <cybox:Title>DOMAIN: rfcmayrsystemcodnst.com</cybox:Title>
+                     <cybox:Object id="CSE-CST:object-c683ab72-09d7-30f2-bf0e-2994ef1f8b98">
+                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
+                           <DomainNameObj:Value>rfcmayrsystemcodnst.com</DomainNameObj:Value>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Indicated_TTP>
+                     <stixCommon:TTP idref="CSE-CST:ttp-5f267127-e4bc-3eff-bd03-264f02b0967d" timestamp="2019-12-20T19:43:12.759432+00:00"/>
+                  </indicator:Indicated_TTP>
+                  <indicator:Producer>
+                     <stixCommon:Description>entity is produced by incoming feed</stixCommon:Description>
+                     <stixCommon:Identity>
+                        <stixCommon:Name>ioc_feed</stixCommon:Name>
+                     </stixCommon:Identity>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="CSE-CST:indicator-ea19aa6a-6695-3d2d-b2d7-6ed81444c7cd" timestamp="2020-06-08T18:52:10.518801+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>Malicious Domain</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
+                  <indicator:Observable id="CSE-CST:observable-ea19aa6a-6695-3d2d-b2d7-6ed81444c7cd">
+                     <cybox:Title>DOMAIN: t-mk.me</cybox:Title>
+                     <cybox:Object id="CSE-CST:object-ea19aa6a-6695-3d2d-b2d7-6ed81444c7cd">
+                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
+                           <DomainNameObj:Value>t-mk.me</DomainNameObj:Value>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Indicated_TTP>
+                     <stixCommon:TTP idref="CSE-CST:ttp-23bb7d23-2bfb-3924-81ad-aeec37ddfa4b" timestamp="2019-12-20T19:42:30.679253+00:00"/>
+                  </indicator:Indicated_TTP>
+                  <indicator:Producer>
+                     <stixCommon:Description>entity is produced by incoming feed</stixCommon:Description>
+                     <stixCommon:Identity>
+                        <stixCommon:Name>ioc_feed</stixCommon:Name>
+                     </stixCommon:Identity>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="CSE-CST:indicator-1f7c12c2-ef99-37a5-b5c0-da4ea33707af" timestamp="2020-06-08T18:52:10.328759+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>Malicious Domain</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
+                  <indicator:Observable id="CSE-CST:observable-1f7c12c2-ef99-37a5-b5c0-da4ea33707af">
+                     <cybox:Title>DOMAIN: establishment.xyz</cybox:Title>
+                     <cybox:Object id="CSE-CST:object-1f7c12c2-ef99-37a5-b5c0-da4ea33707af">
+                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
+                           <DomainNameObj:Value>establishment.xyz</DomainNameObj:Value>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Indicated_TTP>
+                     <stixCommon:TTP idref="CSE-CST:ttp-5f267127-e4bc-3eff-bd03-264f02b0967d" timestamp="2019-12-20T19:43:12.759432+00:00"/>
+                  </indicator:Indicated_TTP>
+                  <indicator:Producer>
+                     <stixCommon:Description>entity is produced by incoming feed</stixCommon:Description>
+                     <stixCommon:Identity>
+                        <stixCommon:Name>ioc_feed</stixCommon:Name>
+                     </stixCommon:Identity>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="CSE-CST:indicator-938ab29a-dc7f-35ba-abe6-64ec6f01ea48" timestamp="2020-06-08T18:52:10.402956+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>Malicious Domain</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
+                  <indicator:Observable id="CSE-CST:observable-938ab29a-dc7f-35ba-abe6-64ec6f01ea48">
+                     <cybox:Title>DOMAIN: suchthisviatheincl.ru</cybox:Title>
+                     <cybox:Object id="CSE-CST:object-938ab29a-dc7f-35ba-abe6-64ec6f01ea48">
+                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
+                           <DomainNameObj:Value>suchthisviatheincl.ru</DomainNameObj:Value>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Indicated_TTP>
+                     <stixCommon:TTP idref="CSE-CST:ttp-5f267127-e4bc-3eff-bd03-264f02b0967d" timestamp="2019-12-20T19:43:12.759432+00:00"/>
+                  </indicator:Indicated_TTP>
+                  <indicator:Producer>
+                     <stixCommon:Description>entity is produced by incoming feed</stixCommon:Description>
+                     <stixCommon:Identity>
+                        <stixCommon:Name>ioc_feed</stixCommon:Name>
+                     </stixCommon:Identity>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="CSE-CST:indicator-c64c231d-fcfa-32ab-93d6-51cc8d115571" timestamp="2020-06-08T18:52:10.439914+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>Malicious Domain</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
+                  <indicator:Observable id="CSE-CST:observable-c64c231d-fcfa-32ab-93d6-51cc8d115571">
+                     <cybox:Title>DOMAIN: fromcoveredtimecondi.ru</cybox:Title>
+                     <cybox:Object id="CSE-CST:object-c64c231d-fcfa-32ab-93d6-51cc8d115571">
+                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
+                           <DomainNameObj:Value>fromcoveredtimecondi.ru</DomainNameObj:Value>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Indicated_TTP>
+                     <stixCommon:TTP idref="CSE-CST:ttp-5f267127-e4bc-3eff-bd03-264f02b0967d" timestamp="2019-12-20T19:43:12.759432+00:00"/>
+                  </indicator:Indicated_TTP>
+                  <indicator:Producer>
+                     <stixCommon:Description>entity is produced by incoming feed</stixCommon:Description>
+                     <stixCommon:Identity>
+                        <stixCommon:Name>ioc_feed</stixCommon:Name>
+                     </stixCommon:Identity>
+                  </indicator:Producer>
+               </stix:Indicator>
+               <stix:Indicator id="CSE-CST:indicator-d1498985-6ae9-3779-aaa3-b0e95dc773d2" timestamp="2020-06-08T18:52:10.478340+00:00" xsi:type="indicator:IndicatorType">
+                  <indicator:Title>Malicious Domain</indicator:Title>
+                  <indicator:Type xsi:type="stixVocabs:IndicatorTypeVocab-1.1">Domain Watchlist</indicator:Type>
+                  <indicator:Observable id="CSE-CST:observable-d1498985-6ae9-3779-aaa3-b0e95dc773d2">
+                     <cybox:Title>DOMAIN: termsindivnot.ru</cybox:Title>
+                     <cybox:Object id="CSE-CST:object-d1498985-6ae9-3779-aaa3-b0e95dc773d2">
+                        <cybox:Properties xsi:type="DomainNameObj:DomainNameObjectType">
+                           <DomainNameObj:Value>termsindivnot.ru</DomainNameObj:Value>
+                        </cybox:Properties>
+                     </cybox:Object>
+                  </indicator:Observable>
+                  <indicator:Indicated_TTP>
+                     <stixCommon:TTP idref="CSE-CST:ttp-5f267127-e4bc-3eff-bd03-264f02b0967d" timestamp="2019-12-20T19:43:12.759432+00:00"/>
+                  </indicator:Indicated_TTP>
+                  <indicator:Producer>
+                     <stixCommon:Description>entity is produced by incoming feed</stixCommon:Description>
+                     <stixCommon:Identity>
+                        <stixCommon:Name>ioc_feed</stixCommon:Name>
+                     </stixCommon:Identity>
+                  </indicator:Producer>
+               </stix:Indicator>
+            </stix:Indicators>
+
+            <stix:Reports>
+               <stix:Report id="CSE-CST:Report-650d082a-dcc7-3965-b6ee-b68d88cf8548" timestamp="2020-06-08T18:52:16.490523+00:00" xsi:type="report:ReportType">
+                  <report:Header>
+                     <report:Title>CCCS-IXR_2020_20764_1</report:Title>
+                     <report:Intent>Threat Report</report:Intent>
+                     <report:Description>Malicious network indicators observed from 2020-06-08 14:00:00 to 2020-06-08 18:59:59</report:Description>
+                     <report:Handling>
+                        <marking:Marking>
+                           <marking:Marking_Structure xsi:type="touMarking:TermsOfUseMarkingStructureType">
+                              <touMarking:Terms_Of_Use>CSE would like to know if any of these Indicators of Compromise (IOC) provide additional value to your organization and are temporally relevant. Note: The First Seen column contains the date from which the Canadian Centre for Cyber Security began data retention.</touMarking:Terms_Of_Use>
+                           </marking:Marking_Structure>
+                        </marking:Marking>
+                     </report:Handling>
+                     <report:Information_Source>
+                        <stixCommon:Description>entity is produced by incoming feed</stixCommon:Description>
+                        <stixCommon:Identity>
+                           <stixCommon:Name>ioc_feed</stixCommon:Name>
+                        </stixCommon:Identity>
+                     </report:Information_Source>
+                  </report:Header>
+                  <report:Observables/>
+                  <report:Indicators>
+                     <report:Indicator idref="CSE-CST:indicator-c55427f1-c7a1-3574-93bd-ec1b8e3fd13b"/>
+                     <report:Indicator idref="CSE-CST:indicator-6745546f-1bb6-37f0-b7c3-f9037002a082"/>
+                     <report:Indicator idref="CSE-CST:indicator-727c2351-157b-3625-a51a-efc66e05380a" timestamp="2020-02-28T16:57:39.614836+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-17356d4b-9144-311f-9aeb-ed09fce61d90"/>
+                     <report:Indicator idref="CSE-CST:indicator-2418f901-4b40-30cd-aca5-694b6594ef95" timestamp="2019-12-20T19:43:05.657465+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-b68b923f-3945-3285-93e5-f1365f3bd913" timestamp="2019-12-20T19:39:52.563502+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-29abb87e-f683-340b-b5e6-2a9c5a980cdd"/>
+                     <report:Indicator idref="CSE-CST:indicator-6b5b459b-070f-31b7-9b58-ad061eb3cc29" timestamp="2019-12-20T19:40:03.410111+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-1bf825bf-5d0c-3de4-82c0-fa7c971fbba6"/>
+                     <report:Indicator idref="CSE-CST:indicator-6c5c0162-c51f-330c-82eb-559e64f1f732" timestamp="2019-12-20T19:44:33.795404+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-5e297a94-8b09-356d-a46c-cb61a3179bbc"/>
+                     <report:Indicator idref="CSE-CST:indicator-35461387-5e7e-39fc-b420-53007931fedb"/>
+                     <report:Indicator idref="CSE-CST:indicator-ddb9e709-e26f-3d2d-9422-aebd8c60b82a" timestamp="2020-02-27T18:38:32.569803+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-d1d1cb1b-1d5c-39bb-830e-f076f647ac56"/>
+                     <report:Indicator idref="CSE-CST:indicator-80d9d35b-1210-3eca-a799-c142bce33fd1"/>
+                     <report:Indicator idref="CSE-CST:indicator-0f591743-e4b4-33ac-8651-71b9baf62fd6"/>
+                     <report:Indicator idref="CSE-CST:indicator-c77ca653-752e-3fca-980c-9c7451fb45e1" timestamp="2019-12-20T19:40:52.548090+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-f8445cd2-d894-3a57-bf54-31e8036dec40" timestamp="2020-02-25T15:38:10.230323+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-bc279b82-89ab-34a4-aefc-743f0b17cd80" timestamp="2019-12-20T19:43:58.584824+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-8145a7d5-5c96-3cf1-8244-0efde636ced5"/>
+                     <report:Indicator idref="CSE-CST:indicator-4f1810f1-cb3b-3ef9-8ae2-37e58ec4955b" timestamp="2019-12-20T19:43:49.928603+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-7154603b-2d8d-3387-a60b-88d40499eb99" timestamp="2019-12-20T19:39:00.924409+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-9fb9c5d7-05d5-3e5d-91fb-60e0c1acc9ab"/>
+                     <report:Indicator idref="CSE-CST:indicator-4cd667c0-ce09-3e62-b55e-6fd14d711615" timestamp="2020-03-11T14:56:25.747357+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-e7d5b9fe-d5ca-3f0a-ad87-b3f6c3e005b2" timestamp="2019-12-20T19:45:01.083696+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-7d5566a0-04c5-3122-a490-3318e7cff845" timestamp="2019-12-20T19:42:57.122893+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-d27e1258-6b3c-3d3c-9dbc-ce459ef014c4" timestamp="2019-12-20T19:43:35.609296+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-3ed07aea-6be4-32cf-b723-522625a94e6a" timestamp="2019-12-20T19:43:04.114360+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-84f86226-276b-3997-966b-93223aad5b6f"/>
+                     <report:Indicator idref="CSE-CST:indicator-e10b7e8d-a3fb-3956-b7cd-a2f91aab1c89" timestamp="2019-12-20T19:40:08.057231+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-76021e55-7f46-347f-847b-bb2d6bf4973f" timestamp="2020-02-03T18:44:15.000871+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-4a969e40-f07d-3469-a657-3e3ef3e1e544" timestamp="2019-12-20T19:37:10.144687+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-03486237-2250-381d-9773-f4cf210c5b2c"/>
+                     <report:Indicator idref="CSE-CST:indicator-e84fcc04-7376-3367-a99c-4e2ed56f84db" timestamp="2020-01-21T19:47:06.098345+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-f34309e8-dac7-36e7-ada7-1e53af10001e"/>
+                     <report:Indicator idref="CSE-CST:indicator-f6b17688-39fc-314a-90a8-d0bfce00bdfc" timestamp="2020-01-08T21:15:51.140589+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-b3541b8d-a22a-3821-af32-4396bee4c139" timestamp="2019-12-20T19:41:54.492846+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-8170eb14-1cd6-3ee5-b4bf-fcd493c4c5d1" timestamp="2019-12-20T19:41:18.067395+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-31365900-bc6a-3a81-872f-1681e495c87f" timestamp="2019-12-20T19:42:14.042787+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-69024740-15e7-3600-a2bd-963cc3a18248" timestamp="2019-12-20T19:43:58.312235+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-5666c5a7-16d0-3092-a0b0-66d448feb2c1"/>
+                     <report:Indicator idref="CSE-CST:indicator-4b051dbd-68e7-3db6-83dc-f7015aa62cdf" timestamp="2019-12-20T19:37:26.516757+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-133b50f6-bb93-3028-87be-4f1eb6d494a3" timestamp="2019-12-20T19:38:23.025242+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-dbbb9ecc-b31f-3cf1-b9e2-04ea19982a2f" timestamp="2019-12-20T19:43:18.959408+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-194f8e42-12fc-3c06-b9a9-c16b32180b8b" timestamp="2019-12-20T19:40:03.947925+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-d8a2b37a-2c8a-3eee-8646-6ee9d0a6d218"/>
+                     <report:Indicator idref="CSE-CST:indicator-3088dbfd-2777-310f-9e09-f088e3c69ecd" timestamp="2019-12-20T19:43:38.096018+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-7f38e380-e2d5-320a-b10b-0a4331fee921" timestamp="2019-12-20T19:42:00.702983+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-62cb006a-c7f4-3600-982e-c7a67f5f785b" timestamp="2019-12-20T19:44:22.871229+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-f5ce3024-8426-3ef3-84e3-4f7c4cd7135d"/>
+                     <report:Indicator idref="CSE-CST:indicator-717e4b43-5c7e-3656-aa25-55b80b06913c"/>
+                     <report:Indicator idref="CSE-CST:indicator-40282a96-c362-3c0d-942f-8f9d3be70078" timestamp="2019-12-20T19:37:57.390722+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-6fbf1474-8777-3099-8525-ac99970b060f" timestamp="2020-01-08T21:18:42.737332+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-3a099e3f-311d-35a2-968a-7bbee2f6ddcf" timestamp="2020-03-09T18:42:06.042957+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-2d0148f8-780b-31ac-aa3b-fee4d48ad6f8"/>
+                     <report:Indicator idref="CSE-CST:indicator-886e9cb4-59ad-358e-b541-0c2564fe0a26" timestamp="2019-12-20T19:40:18.840109+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-24eb2e8f-6d1b-3c91-a7ea-8ebe092bdc5a" timestamp="2019-12-20T19:39:36.235948+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-f2f302ef-2aca-3d5c-bb5a-a4756a11134d" timestamp="2020-03-05T18:18:32.731465+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-72df63fa-b8cc-3629-905a-3764680b313c" timestamp="2020-02-10T20:22:25.483610+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-d5119d02-4a97-346a-9002-097d4c1ffb88"/>
+                     <report:Indicator idref="CSE-CST:indicator-a8dd68aa-8af4-39b1-9851-da7f6bb20a8b"/>
+                     <report:Indicator idref="CSE-CST:indicator-9285ba86-3c5c-33e5-9b46-e5e7262976a8"/>
+                     <report:Indicator idref="CSE-CST:indicator-65a6ed4e-92de-325b-adba-76cf71e3aa03" timestamp="2019-12-20T19:37:06.801870+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-7b7480d0-926e-3b2a-885a-4655de875148" timestamp="2020-01-08T21:19:20.289536+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-cdd1d139-acb8-399c-a201-f9171960bae5" timestamp="2019-12-20T19:43:45.639120+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-9a2428a2-8e4c-3fcc-ba1a-ce7041c03815"/>
+                     <report:Indicator idref="CSE-CST:indicator-9223021a-83aa-3535-a36d-31550104729a" timestamp="2019-12-20T19:37:23.583196+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-c16c6e0f-02ec-3098-bcc5-f4a1b6af6457"/>
+                     <report:Indicator idref="CSE-CST:indicator-cd3f34c8-9e8a-3ccc-92f4-0dfd7b962905" timestamp="2019-12-20T19:38:02.110623+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-e9027423-e8a0-3d45-b91e-6d8033df2dd0" timestamp="2019-12-20T19:40:55.369367+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-91ef68a8-df37-3fc2-a59f-e4c587fee854" timestamp="2019-12-20T19:38:15.966142+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-96248448-39cd-3784-acae-05b288a4b13d"/>
+                     <report:Indicator idref="CSE-CST:indicator-ef18a60e-9674-3d17-b54f-010e69847385" timestamp="2019-12-20T19:39:51.525210+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-5a789f19-4930-3e6b-82f2-a7d7e2f52f13" timestamp="2019-12-20T19:43:39.350303+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-529a3df9-b8bc-3f14-989b-881da0df32f8"/>
+                     <report:Indicator idref="CSE-CST:indicator-3c5b6686-3057-344e-adb1-b8645f38b6d6" timestamp="2020-01-21T00:53:02.519597+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-d1a14b3b-4820-3cd4-b353-7a5358bef168" timestamp="2019-12-20T19:40:08.546917+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-756331bb-c687-3469-8b9f-e254f1f3b815"/>
+                     <report:Indicator idref="CSE-CST:indicator-e0fa8b90-4f77-3f6b-9417-8865ef7386eb" timestamp="2019-12-20T19:39:26.588895+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-6d7fc957-dc4b-35e5-827b-d3018933ce88" timestamp="2019-12-20T19:40:35.937094+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-d53aac0e-89c1-3183-8e02-abd9b31ecb85"/>
+                     <report:Indicator idref="CSE-CST:indicator-1210ff24-abfe-345e-8756-b88ef20963e0" timestamp="2019-12-20T19:38:59.140888+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-50f6abc3-8c3f-3e13-89e2-4f79a9c326bf"/>
+                     <report:Indicator idref="CSE-CST:indicator-77cbb7dc-3c81-34f6-814f-4dfbb94601bb"/>
+                     <report:Indicator idref="CSE-CST:indicator-2f84fb0a-4d7b-3ce7-974e-be488a28436c" timestamp="2020-01-24T01:04:12.178547+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-b1e268b4-f7bd-3d12-9fd3-38e3ad66864b" timestamp="2019-12-20T19:45:20.660483+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-fea057ea-835a-3bd4-ae70-6514d066d8fd" timestamp="2019-12-20T19:44:06.277124+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-c683ab72-09d7-30f2-bf0e-2994ef1f8b98"/>
+                     <report:Indicator idref="CSE-CST:indicator-8f48dd93-0f49-35d0-a522-ccd6bb67ef65" timestamp="2020-01-08T21:17:01.829020+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-6a04b2ca-a7f1-347a-b05a-ab34f6041a8a" timestamp="2020-02-13T18:15:05.253880+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-db6e18bf-6499-31f6-a388-70ebae846663"/>
+                     <report:Indicator idref="CSE-CST:indicator-01d050ba-5fd5-3b9b-8f12-c91faf53a2ba" timestamp="2019-12-20T19:40:04.739831+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-ea19aa6a-6695-3d2d-b2d7-6ed81444c7cd"/>
+                     <report:Indicator idref="CSE-CST:indicator-3605d05d-78ad-3e5d-86d6-70a28f6bd2f7" timestamp="2020-01-24T16:16:32.884878+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-f1dd1c16-fea6-343e-bdc7-9e55ef42b6ff" timestamp="2019-12-20T19:38:39.656262+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-bc2359e6-fe3a-3ab1-b906-66d9d594ca3d"/>
+                     <report:Indicator idref="CSE-CST:indicator-c267a864-7d0b-3c5d-8956-e82b6febe902" timestamp="2020-01-16T20:10:53.544586+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-5f2d86a8-e881-3db0-928d-5c1e04e2ec29" timestamp="2019-12-20T19:45:02.144139+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-e03f8d6b-0cca-3b12-8fbf-5821ba88f502"/>
+                     <report:Indicator idref="CSE-CST:indicator-a77b1af4-ccb4-3034-ac00-f7694aeb5817" timestamp="2020-01-16T20:10:46.047598+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-2e4d8c9e-3a59-30d8-9b49-4e183ac95fa3" timestamp="2019-12-20T19:42:12.274238+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-b72d9655-b1b4-32bc-a6af-9c4a2be32fca" timestamp="2019-12-20T19:40:50.757905+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-b2806e70-82c8-3694-ae41-0ca259adc891" timestamp="2019-12-20T19:39:10.322620+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-4b107a92-60a5-3479-a44e-21e2919b8338" timestamp="2020-02-04T15:46:49.832414+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-d756bee7-d063-30bd-a5d3-8f675d40609b" timestamp="2020-01-08T21:15:35.356632+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-053c0af2-3276-3691-9c41-987dc2a8f8cb" timestamp="2020-02-25T15:35:31.529466+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-5516a666-226c-3e07-afe9-ecf6bfc53ed0" timestamp="2019-12-20T19:42:48.057404+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-77ab4dfe-0bb6-3ac0-a789-c6dd25518596"/>
+                     <report:Indicator idref="CSE-CST:indicator-b062c2af-c14d-34b8-aa49-2f2faa83b459" timestamp="2020-01-08T21:19:13.257888+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-eed73196-68c9-39ff-972b-b991e0c3daa0" timestamp="2019-12-20T19:37:30.328133+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-8531a380-a361-35c0-a71f-538ed2622064" timestamp="2019-12-20T19:44:17.017288+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-bf017739-7a16-35c1-9ef8-4008b493265e" timestamp="2019-12-20T19:40:37.307146+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-f15af35d-fd12-36ea-9d2c-09ef8c0f10de"/>
+                     <report:Indicator idref="CSE-CST:indicator-faac8dfc-9b02-3177-82a7-118f9e16b033"/>
+                     <report:Indicator idref="CSE-CST:indicator-07691b10-ee0f-3df4-8b60-53a7a8373068" timestamp="2019-12-20T19:44:24.480091+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-f4eaaf7c-50a6-3f92-8eff-b8108e3ed48b" timestamp="2019-12-20T19:37:35.655516+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-62be6889-a2ae-3bbc-a1a3-b79feb21e18e" timestamp="2019-12-20T19:37:43.085081+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-5610303f-9b94-35c8-97bc-841f1839f601" timestamp="2019-12-20T19:38:29.513378+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-dd2390f4-44a7-392f-9aae-3c68940761f7"/>
+                     <report:Indicator idref="CSE-CST:indicator-dec1baa8-68b6-3f55-9daa-58938da1fc30" timestamp="2019-12-20T19:41:11.599994+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-35977378-7ba5-3edf-a2f9-4adb5e5607c8" timestamp="2019-12-20T19:44:13.829437+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-141117bd-2566-38d2-b3bf-21dc59940346" timestamp="2019-12-20T19:43:05.099340+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-1f7c12c2-ef99-37a5-b5c0-da4ea33707af"/>
+                     <report:Indicator idref="CSE-CST:indicator-d52db2f0-557a-320a-b3ac-16894756326a"/>
+                     <report:Indicator idref="CSE-CST:indicator-c1620ec2-16fc-36e9-9f7b-2e526af460c0" timestamp="2020-02-25T17:12:32.256758+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-b851b6b3-8ae8-3565-80d1-bfd237a560d2"/>
+                     <report:Indicator idref="CSE-CST:indicator-44d23391-c27a-3062-914f-6a0ac6a56100"/>
+                     <report:Indicator idref="CSE-CST:indicator-938ab29a-dc7f-35ba-abe6-64ec6f01ea48"/>
+                     <report:Indicator idref="CSE-CST:indicator-d08f4b1f-8cef-36c0-9b2e-f89304158f2c"/>
+                     <report:Indicator idref="CSE-CST:indicator-2d166fab-3432-304c-92ab-984ee7505263" timestamp="2020-01-08T21:15:36.160905+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-573df106-389a-370d-99bd-85f35d3cdc57" timestamp="2019-12-20T19:43:16.811074+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-116e02e4-179b-30f6-b6c0-b2aa304e2955" timestamp="2019-12-20T19:42:35.753764+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-1b64a41c-2bd9-3b2d-8a84-7f35fd10df99"/>
+                     <report:Indicator idref="CSE-CST:indicator-31c25f3d-f75d-3782-9926-a2e73f15e500" timestamp="2019-12-20T19:43:04.373969+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-e47d07f4-b36a-37ac-b3d1-daef013a8d43" timestamp="2019-12-20T19:40:45.616320+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-b1fe0c0c-1154-36b1-a6f7-c88d8be918bd"/>
+                     <report:Indicator idref="CSE-CST:indicator-86de0241-93eb-3158-b9e2-9ebe532598c6" timestamp="2019-12-20T19:42:39.970391+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-c64c231d-fcfa-32ab-93d6-51cc8d115571"/>
+                     <report:Indicator idref="CSE-CST:indicator-33208806-2f83-3fa6-81ef-9220e3265e26" timestamp="2019-12-20T19:42:00.204236+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-08d0d41b-1396-33c1-be5f-201b1598d20e" timestamp="2020-01-16T20:09:46.418594+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-78060551-6b50-32fb-a8d7-69f53303a831" timestamp="2019-12-20T19:41:27.649328+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-014cdbfe-9fdd-3f11-ad6a-1d5c24b8b5f1" timestamp="2019-12-20T19:38:22.047182+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-38948e8d-e204-34c9-a40a-41c6bc343ec3" timestamp="2019-12-20T19:39:39.006787+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-00d05185-6ef1-3a05-b6ed-740c6bfac5e8" timestamp="2019-12-20T19:39:11.788629+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-524c080e-1336-37ad-bdc5-697b5c311b4c" timestamp="2019-12-20T19:40:19.645873+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-7541f63b-a942-34d5-abf1-532d23637823"/>
+                     <report:Indicator idref="CSE-CST:indicator-4b35c746-1b92-3d22-9f85-20c4f13646b5" timestamp="2020-02-10T20:22:57.642138+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-6ebac36a-75be-3ade-b8d4-e1476e5a4819" timestamp="2020-01-21T01:37:58.098272+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-5259e4b4-3cf7-3b0b-9183-e1a4e7f0ceb1" timestamp="2020-02-25T13:46:24.364271+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-b6b29012-2fc2-35c3-a1cf-9c2d0687a7f6" timestamp="2019-12-20T19:44:26.524515+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-fb764f86-f72e-3c25-a754-b2fe951415d3" timestamp="2019-12-20T19:45:18.662193+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-24d43c7e-3a8e-3022-bc5f-087ff14e81b5"/>
+                     <report:Indicator idref="CSE-CST:indicator-fd81c93f-8799-379f-9dba-133c32a81561" timestamp="2020-03-05T18:01:44.942190+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-213bfff0-1fc7-32ac-9674-94d7a83ddb7d"/>
+                     <report:Indicator idref="CSE-CST:indicator-060a1c1e-dcfe-32af-8d05-3749e7498aa9" timestamp="2020-01-08T21:16:46.692837+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-9f108487-51b1-3321-8ff1-0fc7880d33be"/>
+                     <report:Indicator idref="CSE-CST:indicator-2d3a2109-f128-348a-9c70-3197557b8eeb" timestamp="2019-12-20T19:38:22.785309+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-7e113710-1d7d-3382-8fbd-6d527afc824c" timestamp="2019-12-20T19:42:11.116035+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-f28a58eb-45ec-3e3e-8bb7-ee0dd07fb961" timestamp="2020-01-08T21:16:33.322482+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-f8d451c8-4aff-377a-8257-52065b3a01e9" timestamp="2019-12-20T19:37:49.551158+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-627e7c24-2696-3813-912d-ac5b73840380" timestamp="2019-12-20T19:38:38.123611+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-45ac8223-4d01-3fe3-8548-c02e37d22d9d"/>
+                     <report:Indicator idref="CSE-CST:indicator-129c0e48-9f83-35cc-8d8e-981bc744da7e" timestamp="2019-12-20T19:38:01.767655+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-35e2efdc-933b-3fd3-9e7f-9252cbbf3b6c"/>
+                     <report:Indicator idref="CSE-CST:indicator-16efca3a-c95a-3f18-a0ce-632497fa568b" timestamp="2020-01-08T21:15:49.808440+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-57d5b869-ef16-30d5-ba5a-574c4e891724"/>
+                     <report:Indicator idref="CSE-CST:indicator-0132aa2d-31ff-3c6b-a92c-1535716c2635" timestamp="2020-03-09T18:14:51.872922+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-724fcf73-bfce-3908-a24b-af428dbdcb06" timestamp="2019-12-20T19:39:50.766630+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-8125d302-2b8c-34a1-893c-5e01f0cd8300"/>
+                     <report:Indicator idref="CSE-CST:indicator-4eb332a8-0268-307c-9234-9a3050323156" timestamp="2019-12-20T19:44:49.899670+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-b41f1e5c-c69b-3e17-91f4-594019975987" timestamp="2019-12-20T19:39:48.301457+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-39b8f90a-5585-3ae0-a827-35a470b7162b" timestamp="2019-12-20T19:42:58.610077+00:00"/>
+                     <report:Indicator idref="CSE-CST:indicator-d1498985-6ae9-3779-aaa3-b0e95dc773d2"/>
+                  </report:Indicators>
+                  <report:TTPs>
+                     <report:TTP idref="CSE-CST:ttp-c2278e80-78ff-3a42-807c-0b2766868fd9" timestamp="2019-12-20T19:44:07.028843+00:00"/>
+                     <report:TTP idref="CSE-CST:ttp-ed825bf8-05e8-3800-9dca-d55b557fbb2b" timestamp="2019-12-20T19:43:23.758919+00:00"/>
+                     <report:TTP idref="CSE-CST:ttp-2b58894d-8e2e-35cf-8608-967aa65fe19d" timestamp="2019-12-20T19:39:31.703114+00:00"/>
+                     <report:TTP idref="CSE-CST:ttp-20eab238-73ee-3174-b1ad-c4bfcaa331ee" timestamp="2019-12-20T19:37:17.039109+00:00"/>
+                     <report:TTP idref="CSE-CST:ttp-23bb7d23-2bfb-3924-81ad-aeec37ddfa4b" timestamp="2019-12-20T19:42:30.679253+00:00"/>
+                     <report:TTP idref="CSE-CST:ttp-5f267127-e4bc-3eff-bd03-264f02b0967d" timestamp="2019-12-20T19:43:12.759432+00:00"/>
+                     <report:TTP idref="CSE-CST:ttp-eb096775-31d1-3384-9071-62c25067389b" timestamp="2019-12-20T19:38:35.898491+00:00"/>
+                     <report:TTP idref="CSE-CST:ttp-5a13897f-6fa1-36b1-8235-f2fad0f4429a" timestamp="2019-12-20T19:37:30.563973+00:00"/>
+                     <report:TTP idref="CSE-CST:ttp-8285ee17-f53b-3d42-9404-152310deee34" timestamp="2019-12-20T19:44:10.228832+00:00"/>
+                     <report:TTP idref="CSE-CST:ttp-5356d699-bb12-3f5a-ad5e-76e6a93057d9" timestamp="2019-12-20T19:45:16.899272+00:00"/>
+                  </report:TTPs>
+               </stix:Report>
+            </stix:Reports>
+         </stix:STIX_Package>
+      </taxii_11:Content>
+      <taxii_11:Timestamp_Label>2020-06-08T18:55:09.974529Z</taxii_11:Timestamp_Label>
    </taxii_11:Content_Block>
 </taxii_11:Poll_Response>
