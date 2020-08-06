@@ -53,6 +53,14 @@ public abstract class AppConfig
 	public static final String TC_CAL_TIMESTAMP = "tc_cal_timestamp";
 	public static final String TC_CAL_TOKEN = "tc_cal_token";
 	
+	public static final String PARAM_KVSTORE_TYPE = "tc_kvstore_type";
+	public static final String PARAM_KVSTORE_HOST = "tc_kvstore_host";
+	public static final String PARAM_KVSTORE_PORT = "tc_kvstore_port";
+	public static final String PARAM_CACHE_KVSTORE_ID = "tc_cache_kvstore_id";
+	public static final String PARAM_PB_KVSTORE_ID = "tc_playbook_kvstore_id";
+	public static final String PARAM_PB_KVSTORE_CONTEXT = "tc_playbook_kvstore_context";
+	public static final String PARAM_PB_OUT_VARS = "tc_playbook_out_variables";
+	
 	public static final String TC_SMTP_HOST = "tc_smtp_host";
 	public static final String TC_SMTP_PORT = "tc_smtp_port";
 	public static final String TC_SMTP_USERNAME = "tc_smtp_username";

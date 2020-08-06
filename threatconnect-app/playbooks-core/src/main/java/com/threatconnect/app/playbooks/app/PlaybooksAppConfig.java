@@ -4,7 +4,11 @@ import com.threatconnect.app.apps.AppConfig;
 
 /**
  * @author Greg Marut
+ *
+ * Deprecated: this really is not needed anymore since these values are always being sent to all apps
+ * New values are in {@link AppConfig} with the prefix "tc_cache" and "tc_kvstore"
  */
+@Deprecated
 public class PlaybooksAppConfig
 {
 	public static final String PARAM_DB_TYPE = "tc_playbook_db_type";
