@@ -7,6 +7,7 @@ public class RunService extends AbstractCommandConfig
 	private String method;
 	private List<NameValuePair<String, String>> headers;
 	private List<NameValuePair<String, String>> queryParams;
+	private List<NameValuePair<String, String>> userConfig;
 	private String path;
 	private String apiToken;
 	private long expireSeconds;
@@ -78,6 +79,16 @@ public class RunService extends AbstractCommandConfig
 	public void setQueryParams(List<NameValuePair<String, String>> queryParams)
 	{
 		this.queryParams = queryParams;
+	}
+	
+	public List<NameValuePair<String, String>> getUserConfig()
+	{
+		return userConfig;
+	}
+	
+	public void setUserConfig(final List<NameValuePair<String, String>> userConfig)
+	{
+		this.userConfig = userConfig;
 	}
 	
 	public long getExpireSeconds()

@@ -14,7 +14,7 @@ public class Feature
 	public static final String EMBEDDED_EXECUTION_ENABLED = "embeddedExecutionEnabled";
 	public static final String AOT_EXECUTION_ENABLED = "aotExecutionEnabled";
 	public static final String WEBHOOK_RESPONSE_MARSHALL = "webHookResponseMarshall";
-	public static final String EXPOSE_PUBLIC_SERVICE_ENDPOINT = "exposePublicServiceEndpoint";
+	public static final String WEBHOOK_PUBLIC_ENDPOINT = "webhookPublicEndpoint";
 	
 	public static final String CREATES_INDICATOR = "CreatesIndicator";
 	public static final String CREATES_GROUP = "CreatesGroup";
