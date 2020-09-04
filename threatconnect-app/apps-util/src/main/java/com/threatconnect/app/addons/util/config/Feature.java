@@ -15,6 +15,7 @@ public class Feature
 	public static final String AOT_EXECUTION_ENABLED = "aotExecutionEnabled";
 	public static final String WEBHOOK_RESPONSE_MARSHALL = "webhookResponseMarshall";
 	public static final String WEBHOOK_SERVICE_ENDPOINT = "webhookServiceEndpoint";
+	public static final String WEBHOOK_DEACTIVATE_RESPONSE = "webhookDeactivateResponse";
 	
 	public static final String CREATES_INDICATOR = "CreatesIndicator";
 	public static final String CREATES_GROUP = "CreatesGroup";
