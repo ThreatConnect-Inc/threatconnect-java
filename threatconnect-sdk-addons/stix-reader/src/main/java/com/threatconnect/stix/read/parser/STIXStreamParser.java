@@ -12,7 +12,6 @@ import com.threatconnect.sdk.parser.ParserException;
 import com.threatconnect.sdk.parser.source.DataSource;
 import com.threatconnect.sdk.parser.source.FileDataSource;
 import com.threatconnect.stix.read.parser.exception.InvalidObservableException;
-import com.threatconnect.stix.read.parser.exception.ObservableNotFoundException;
 import com.threatconnect.stix.read.parser.exception.UnsupportedObservableTypeException;
 import com.threatconnect.stix.read.parser.map.MappingContainer;
 import com.threatconnect.stix.read.parser.map.cybox.object.CyboxObjectMapping;
@@ -20,7 +19,6 @@ import com.threatconnect.stix.read.parser.map.stix.IncidentMapping;
 import com.threatconnect.stix.read.parser.map.stix.IndicatorMapping;
 import com.threatconnect.stix.read.parser.map.stix.ThreatActorMapping;
 import com.threatconnect.stix.read.parser.observer.ItemObserver;
-import com.threatconnect.stix.read.parser.observer.Observer;
 import com.threatconnect.stix.read.parser.resolver.NodeResolver;
 import com.threatconnect.stix.read.parser.resolver.ObservableNodeResolver;
 import com.threatconnect.stix.read.parser.resolver.Resolver;
@@ -618,11 +616,7 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 				{
 					// split the indicator parts
 					String category = Constants.XPATH_UTIL.getString("@category", propertiesNode);
-					if (category.equals("ipv4-addr"))
-					{
-						return getMappingContainer().getIPv4Mapping();
-					}
-					else if (category.equals("e-mail"))
+					if (category.equals("e-mail"))
 					{
 						return getMappingContainer().getEmailMapping();
 					}
@@ -632,8 +626,8 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 					}
 					else
 					{
-						throw new UnsupportedObservableTypeException(
-							"Could not identify the AddressObj:AddressObjectType category: " + category);
+						//default to ipv4
+						return getMappingContainer().getIPv4Mapping();
 					}
 				}
 				else if (type.equals("URIObj:URIObjectType"))
