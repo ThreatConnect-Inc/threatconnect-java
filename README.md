@@ -13,7 +13,7 @@ This SDK provides a high-level abstraction layer of the ThreatConnect&trade; RES
 </dependency>
 ```
 
-> This README provides a quick-start on the Java SDK. For detailed documentation, visit the "Java Development" section of the ThreatConnect&trade; SDK documentation:<br/>https://threatconnect-inc.github.io/tc-exchange/java/sdk/start/
+> This README provides a quick-start on the Java SDK. For detailed documentation, visit the "Java Development" section of the ThreatConnect&trade; SDK documentation:<br/>https://docs.threatconnect.com/en/latest/java/java_sdk.html
 
 ## threatconnect-sdk-addons
 This project contains additional addons that are outside of the core SDK
