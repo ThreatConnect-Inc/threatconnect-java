@@ -72,7 +72,7 @@
 		<log4j.version>2.6.1</log4j.version>
 
 		<!-- Test Dependency Versions -->
-		<version.junit>4.12</version.junit>
+		<version.junit>4.13.1</version.junit>
 		<version.test-beangen>2.5-RELEASE</version.test-beangen>
 	</properties>
 
