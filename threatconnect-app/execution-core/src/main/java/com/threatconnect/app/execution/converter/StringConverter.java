@@ -1,4 +1,4 @@
-package com.threatconnect.app.playbooks.content.converter;
+package com.threatconnect.app.execution.converter;
 
 public class StringConverter extends DefaultContentConverter<String>
 {

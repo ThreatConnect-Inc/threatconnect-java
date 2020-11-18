@@ -1,4 +1,4 @@
-package com.threatconnect.app.playbooks.content.entity;
+package com.threatconnect.app.execution.entity;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

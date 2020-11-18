@@ -1,6 +1,6 @@
-package com.threatconnect.app.playbooks.content.converter;
+package com.threatconnect.app.execution.converter;
 
-import com.threatconnect.app.playbooks.content.entity.KeyValue;
+import com.threatconnect.app.execution.entity.KeyValue;
 
 import java.util.List;
 import java.util.regex.Matcher;

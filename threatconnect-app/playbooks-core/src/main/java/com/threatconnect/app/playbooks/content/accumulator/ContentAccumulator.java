@@ -1,7 +1,7 @@
 package com.threatconnect.app.playbooks.content.accumulator;
 
-import com.threatconnect.app.playbooks.content.converter.ContentConverter;
-import com.threatconnect.app.playbooks.content.converter.ConversionException;
+import com.threatconnect.app.execution.converter.ContentConverter;
+import com.threatconnect.app.execution.converter.ConversionException;
 import com.threatconnect.app.playbooks.db.DBReadException;
 import com.threatconnect.app.playbooks.db.DBService;
 import com.threatconnect.app.playbooks.db.DBWriteException;

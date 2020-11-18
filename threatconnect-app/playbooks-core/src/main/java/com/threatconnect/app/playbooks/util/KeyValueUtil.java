@@ -1,8 +1,8 @@
 package com.threatconnect.app.playbooks.util;
 
+import com.threatconnect.app.execution.entity.KeyValue;
 import com.threatconnect.app.playbooks.content.accumulator.ContentException;
 import com.threatconnect.app.playbooks.content.accumulator.StringAccumulator;
-import com.threatconnect.app.playbooks.content.entity.KeyValue;
 
 /**
  * @author Greg Marut

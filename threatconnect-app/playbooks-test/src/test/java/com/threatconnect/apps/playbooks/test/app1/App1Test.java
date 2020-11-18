@@ -1,7 +1,7 @@
 package com.threatconnect.apps.playbooks.test.app1;
 
 import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
-import com.threatconnect.app.playbooks.content.entity.KeyValue;
+import com.threatconnect.app.execution.entity.KeyValue;
 import com.threatconnect.apps.playbooks.test.config.PlaybooksTestConfiguration;
 import com.threatconnect.apps.playbooks.test.orc.PlaybooksOrchestrationBuilder;
 import org.junit.Before;

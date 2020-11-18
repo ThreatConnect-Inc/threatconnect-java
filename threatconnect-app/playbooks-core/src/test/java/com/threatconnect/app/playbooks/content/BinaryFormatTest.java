@@ -1,8 +1,8 @@
 package com.threatconnect.app.playbooks.content;
 
 import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
+import com.threatconnect.app.execution.entity.KeyValue;
 import com.threatconnect.app.playbooks.content.accumulator.ContentException;
-import com.threatconnect.app.playbooks.content.entity.KeyValue;
 import com.threatconnect.app.playbooks.db.DBReadException;
 import com.threatconnect.app.playbooks.db.EmbeddedMapDBService;
 import com.threatconnect.sdk.model.Address;

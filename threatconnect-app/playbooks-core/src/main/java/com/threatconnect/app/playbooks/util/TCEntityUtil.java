@@ -1,6 +1,6 @@
 package com.threatconnect.app.playbooks.util;
 
-import com.threatconnect.app.playbooks.content.entity.TCEntity;
+import com.threatconnect.app.execution.entity.TCEntity;
 import com.threatconnect.sdk.model.Indicator;
 
 /**

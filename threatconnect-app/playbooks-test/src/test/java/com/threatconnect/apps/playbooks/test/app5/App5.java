@@ -2,9 +2,9 @@ package com.threatconnect.apps.playbooks.test.app5;
 
 import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.app.apps.ExitStatus;
+import com.threatconnect.app.execution.entity.KeyValue;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
 import com.threatconnect.app.playbooks.app.PlaybooksAppConfig;
-import com.threatconnect.app.playbooks.content.entity.KeyValue;
 
 import java.util.List;
 

@@ -8,7 +8,6 @@ import com.threatconnect.app.apps.ExitStatus;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
 import com.threatconnect.app.playbooks.app.PlaybooksAppConfig;
 import com.threatconnect.app.playbooks.content.ContentService;
-import com.threatconnect.app.playbooks.content.converter.ContentConverter;
 import com.threatconnect.app.playbooks.db.RedisDBService;
 import com.threatconnect.sdk.app.aot.AOTMessage;
 import org.slf4j.Logger;

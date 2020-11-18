@@ -1,4 +1,4 @@
-package com.threatconnect.app.playbooks.content.converter;
+package com.threatconnect.app.execution.converter;
 
 /**
  * @author Greg Marut

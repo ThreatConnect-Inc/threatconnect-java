@@ -1,6 +1,6 @@
-package com.threatconnect.app.playbooks.content.converter;
+package com.threatconnect.app.execution.converter;
 
-import com.threatconnect.app.playbooks.content.entity.TCEntity;
+import com.threatconnect.app.execution.entity.TCEntity;
 
 public class TCEntityListConverter extends ListContentConverter<TCEntity>
 {

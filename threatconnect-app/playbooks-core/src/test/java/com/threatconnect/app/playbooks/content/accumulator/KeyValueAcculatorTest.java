@@ -1,7 +1,7 @@
 package com.threatconnect.app.playbooks.content.accumulator;
 
 import com.threatconnect.app.apps.AppConfig;
-import com.threatconnect.app.playbooks.content.entity.KeyValue;
+import com.threatconnect.app.execution.entity.KeyValue;
 import com.threatconnect.app.playbooks.db.DBService;
 import com.threatconnect.app.playbooks.db.EmbeddedMapDBService;
 import org.junit.Assert;

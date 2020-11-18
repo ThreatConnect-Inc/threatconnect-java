@@ -1,9 +1,9 @@
 package com.threatconnect.app.playbooks.content;
 
 import com.gregmarut.support.beangenerator.BeanPropertyGenerator;
+import com.threatconnect.app.execution.entity.KeyValue;
+import com.threatconnect.app.execution.entity.TCEntity;
 import com.threatconnect.app.playbooks.content.accumulator.ContentException;
-import com.threatconnect.app.playbooks.content.entity.KeyValue;
-import com.threatconnect.app.playbooks.content.entity.TCEntity;
 import com.threatconnect.app.playbooks.db.EmbeddedMapDBService;
 import org.junit.Assert;
 import org.junit.Before;

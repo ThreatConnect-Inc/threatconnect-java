@@ -1,4 +1,4 @@
-package com.threatconnect.app.playbooks.content.entity;
+package com.threatconnect.app.execution.entity;
 
 import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.sdk.model.Item;

@@ -1,11 +1,11 @@
 package com.threatconnect.apps.playbooks.test.orc;
 
 import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
+import com.threatconnect.app.execution.entity.KeyValue;
+import com.threatconnect.app.execution.entity.TCEntity;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
 import com.threatconnect.app.playbooks.content.ContentService;
 import com.threatconnect.app.playbooks.content.accumulator.ContentException;
-import com.threatconnect.app.playbooks.content.entity.KeyValue;
-import com.threatconnect.app.playbooks.content.entity.TCEntity;
 import com.threatconnect.app.playbooks.util.PlaybooksVariableUtil;
 import com.threatconnect.apps.playbooks.test.config.PlaybookConfig;
 import com.threatconnect.sdk.model.Item;
