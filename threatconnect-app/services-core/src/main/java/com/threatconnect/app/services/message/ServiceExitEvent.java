@@ -4,6 +4,7 @@ public class ServiceExitEvent extends AbstractCommandConfig
 {
 	private Integer exitValue;
 	private String sessionId;
+	private String launchId;
 	
 	public ServiceExitEvent()
 	{
@@ -28,5 +29,15 @@ public class ServiceExitEvent extends AbstractCommandConfig
 	public void setSessionId(final String sessionId)
 	{
 		this.sessionId = sessionId;
+	}
+	
+	public String getLaunchId()
+	{
+		return launchId;
+	}
+	
+	public void setLaunchId(final String launchId)
+	{
+		this.launchId = launchId;
 	}
 }
