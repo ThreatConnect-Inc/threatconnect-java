@@ -11,8 +11,8 @@ public class Install
 {
 	private static final String DEFAULT_LIST_DELIMITER = "|";
 	
-        private String appId;
-        private String programName;
+	private String appId;
+	private String programName;
 	private String applicationName;
 	private String displayName;
 	private String programVersion;
@@ -57,14 +57,16 @@ public class Install
 		this.labels = new HashSet<String>();
 		this.listDelimiter = DEFAULT_LIST_DELIMITER;
 	}
-
-        public String getAppId() {
-            return appId;
-        }
-
-        public void setAppId(String appId) {
-            this.appId = appId;
-        }                
+	
+	public String getAppId()
+	{
+		return appId;
+	}
+	
+	public void setAppId(String appId)
+	{
+		this.appId = appId;
+	}
 	
 	public String getProgramName()
 	{
