@@ -1,5 +1,7 @@
 package com.threatconnect.sdk.model;
 
+import com.threatconnect.sdk.model.util.CharacterUtil;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -28,7 +30,14 @@ public abstract class Group extends Item
 	
 	public void setName(String name)
 	{
-		this.name = name;
+		if (null != name)
+		{
+			this.name = CharacterUtil.replaceSpecialCharacters(name);
+		}
+		else
+		{
+			this.name = null;
+		}
 	}
 	
 	@Override
