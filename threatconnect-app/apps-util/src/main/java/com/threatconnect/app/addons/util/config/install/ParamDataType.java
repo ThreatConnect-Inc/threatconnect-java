@@ -11,6 +11,7 @@ public enum ParamDataType
 	String,
 	Boolean,
 	Choice,
+	EditChoice,
 	MultiChoice,
 	StringMixed,
 	KeyValueList;
