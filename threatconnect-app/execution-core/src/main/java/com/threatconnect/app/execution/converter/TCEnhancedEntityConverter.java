@@ -2,6 +2,7 @@ package com.threatconnect.app.execution.converter;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.sdk.model.Item;
 import com.threatconnect.sdk.model.serialize.BatchItemDeserializer;
 import com.threatconnect.sdk.model.serialize.BatchItemSerializer;
@@ -12,7 +13,7 @@ public class TCEnhancedEntityConverter extends DefaultContentConverter<Item>
 {
 	public TCEnhancedEntityConverter()
 	{
-		super(Item.class);
+		super(Item.class, StandardPlaybookType.TCEnhancedEntity);
 	}
 	
 	@Override

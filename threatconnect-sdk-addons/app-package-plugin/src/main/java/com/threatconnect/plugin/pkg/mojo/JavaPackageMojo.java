@@ -79,6 +79,9 @@ public class JavaPackageMojo extends AbstractAppPackageMojo
 			install.getFeatures().add(Feature.SECURE_PARAMS);
 		}
 		
+		//add the features that this sdk supports
+		install.getFeatures().add(Feature.FILE_PARAMS);
+		
 		//set the sdk version
 		install.setSdkVersion(loadAppPackagerVersion());
 		

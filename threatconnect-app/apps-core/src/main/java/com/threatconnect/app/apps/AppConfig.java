@@ -52,6 +52,7 @@ public abstract class AppConfig
 	public static final String TC_CAL_HOST = "tc_cal_host";
 	public static final String TC_CAL_TIMESTAMP = "tc_cal_timestamp";
 	public static final String TC_CAL_TOKEN = "tc_cal_token";
+	public static final String TC_ACTION = "tc_action";
 	
 	public static final String PARAM_KVSTORE_TYPE = "tc_kvstore_type";
 	public static final String PARAM_KVSTORE_HOST = "tc_kvstore_host";
