@@ -11,6 +11,7 @@ public class PlaybookOutputVariable
 	private String name;
 	private String type;
 	private final List<String> intelType;
+	private boolean sensitive;
 	
 	public PlaybookOutputVariable()
 	{
@@ -40,5 +41,15 @@ public class PlaybookOutputVariable
 	public List<String> getIntelType()
 	{
 		return intelType;
+	}
+	
+	public boolean isSensitive()
+	{
+		return sensitive;
+	}
+	
+	public void setSensitive(final boolean sensitive)
+	{
+		this.sensitive = sensitive;
 	}
 }
