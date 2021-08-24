@@ -3,6 +3,7 @@ package com.threatconnect.app.services.message;
 public class ServiceExitEvent extends AbstractCommandConfig
 {
 	private Integer exitValue;
+	private String exitMessage;
 	private String sessionId;
 	private String launchId;
 	
@@ -19,6 +20,16 @@ public class ServiceExitEvent extends AbstractCommandConfig
 	public void setExitValue(final Integer exitValue)
 	{
 		this.exitValue = exitValue;
+	}
+	
+	public String getExitMessage()
+	{
+		return exitMessage;
+	}
+	
+	public void setExitMessage(final String exitMessage)
+	{
+		this.exitMessage = exitMessage;
 	}
 	
 	public String getSessionId()
