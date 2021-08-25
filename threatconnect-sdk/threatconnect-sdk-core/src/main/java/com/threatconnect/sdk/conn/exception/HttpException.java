@@ -13,8 +13,7 @@ public class HttpException extends RuntimeException
 		super(message);
 	}
 	
-	public
-	HttpException(final Throwable cause)
+	public HttpException(final Throwable cause)
 	{
 		super(cause);
 	}

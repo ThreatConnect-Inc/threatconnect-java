@@ -7,6 +7,7 @@ import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.sdk.app.SdkAppConfig;
 import com.threatconnect.sdk.conn.exception.HttpException;
 import com.threatconnect.sdk.conn.exception.HttpResourceNotFoundException;
+import com.threatconnect.sdk.conn.exception.HttpUnauthorizedException;
 import com.threatconnect.sdk.conn.exception.TokenRenewException;
 import com.threatconnect.sdk.util.StringUtil;
 import com.threatconnect.sdk.util.UploadMethodType;
@@ -205,19 +206,27 @@ public class HttpRequestExecutor extends AbstractRequestExecutor
 					httpResponse.setStatusCode(response.getStatusLine().getStatusCode());
 					httpResponse.setStatusLine(response.getStatusLine().toString());
 					
-					logger.trace(httpResponse.getStatusLine());
-					HttpEntity entity = response.getEntity();
-					if (entity != null)
+					//check to see if the status code is a 401
+					if(response.getStatusLine().getStatusCode() == 401)
 					{
-						logger.trace("Response Headers: " + Arrays.toString(response.getAllHeaders()));
-						logger.trace("Content Encoding: " + entity.getContentEncoding());
-						
-						httpResponse.setEntity(IOUtils.toByteArray(entity.getContent()));
-						logger.trace("Result:" + httpResponse.getEntityAsString());
-						EntityUtils.consume(entity);
+						throw new HttpUnauthorizedException("Server responded with error code: 401");
 					}
-					
-					return httpResponse;
+					else
+					{
+						logger.trace(httpResponse.getStatusLine());
+						HttpEntity entity = response.getEntity();
+						if (entity != null)
+						{
+							logger.trace("Response Headers: " + Arrays.toString(response.getAllHeaders()));
+							logger.trace("Content Encoding: " + entity.getContentEncoding());
+							
+							httpResponse.setEntity(IOUtils.toByteArray(entity.getContent()));
+							logger.trace("Result:" + httpResponse.getEntityAsString());
+							EntityUtils.consume(entity);
+						}
+						
+						return httpResponse;
+					}
 				}
 			}
 		}
