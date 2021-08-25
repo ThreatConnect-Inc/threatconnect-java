@@ -75,7 +75,7 @@
 		<version.slf4j>1.7.12</version.slf4j>
 
 		<!-- Test Dependency Versions -->
-		<version.junit>4.12</version.junit>
+		<version.junit>4.13.1</version.junit>
 	</properties>
 
 	<dependencies>
