@@ -20,5 +20,6 @@ public enum CommandType
 	Ready,
 	AppUpdated,
 	LoggingChange,
-	ServiceExitEvent
+	ServiceExitEvent,
+	ServiceStoppedEvent
 }
