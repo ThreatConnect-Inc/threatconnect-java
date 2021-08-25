@@ -630,31 +630,31 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 						return getMappingContainer().getIPv4Mapping();
 					}
 				}
-				else if (type.equals("URIObj:URIObjectType"))
+				else if (type.equals("URIObj:URIObjectType") || type.equals("URIObject:URIObjectType"))
 				{
 					return getMappingContainer().getUrlMapping();
 				}
-				else if (type.equals("LinkObj:LinkObjectType"))
+				else if (type.equals("LinkObj:LinkObjectType") || type.equals("LinkObject:LinkObjectType"))
 				{
 					return getMappingContainer().getUrlMapping();
 				}
-				else if (type.equals("FileObj:FileObjectType"))
+				else if (type.equals("FileObj:FileObjectType") || type.equals("FileObject:FileObjectType"))
 				{
 					return getMappingContainer().getFileMapping();
 				}
-				else if (type.equals("EmailMessageObj:EmailMessageObjectType"))
+				else if (type.equals("EmailMessageObj:EmailMessageObjectType") || type.equals("EmailMessageObject:EmailMessageObjectType"))
 				{
 					return getMappingContainer().getEmailMapping();
 				}
-				else if (type.equals("DomainNameObj:DomainNameObjectType"))
+				else if (type.equals("DomainNameObj:DomainNameObjectType") || type.equals("DomainNameObject:DomainNameObjectType"))
 				{
 					return getMappingContainer().getDomainNameMapping();
 				}
-				else if (type.equals("DNSRecordObj:DNSRecordObjectType"))
+				else if (type.equals("DNSRecordObj:DNSRecordObjectType") || type.equals("DNSRecordObject:DNSRecordObjectType"))
 				{
 					return getMappingContainer().getDnsRecordMapping();
 				}
-				else if (type.equals("MutexObj:MutexObjectType"))
+				else if (type.equals("MutexObj:MutexObjectType") || type.equals("MutexObject:MutexObjectType"))
 				{
 					return getMappingContainer().getMutexMapping();
 				}

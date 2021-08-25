@@ -11,7 +11,7 @@ public class CommandMessage
 	
 	private static final String FIELD_COMMAND = "command";
 	
-	private Long appId;
+	private String appXid;
 	private CommandType command;
 	
 	public CommandMessage()
@@ -24,14 +24,14 @@ public class CommandMessage
 		this.command = command;
 	}
 	
-	public Long getAppId()
+	public String getAppXid()
 	{
-		return appId;
+		return appXid;
 	}
 	
-	public void setAppId(final Long appId)
+	public void setAppXid(final String appXid)
 	{
-		this.appId = appId;
+		this.appXid = appXid;
 	}
 	
 	public CommandType getCommand()

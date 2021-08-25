@@ -41,4 +41,10 @@ public class AcknowledgedMessage extends AbstractCommandConfig
 	{
 		this.status = status;
 	}
+	
+	@Override
+	protected String generateRequestKey()
+	{
+		return getTriggerId() + type.toString();
+	}
 }

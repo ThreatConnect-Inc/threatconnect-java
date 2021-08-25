@@ -74,15 +74,23 @@ public class BatchApiSaveService implements SaveService
 			// create a new batch indicator writer
 			BatchWriter batchWriter = createBatchWriter(connection, items);
 			
-			// save the indicators
-			SaveResults batchSaveResults = batchWriter.save(ownerName, attributeWriteType);
-			
 			Set<Group> groups = new HashSet<Group>();
 			Set<Indicator> indicators = new HashSet<Indicator>();
 			ItemUtil.separateGroupsAndIndicators(items, groups, indicators);
 			
 			//upload the documents
 			Set<Document> documents = GroupUtil.extractIndicatorSet(groups, Document.class);
+			documents.forEach(d -> {
+				//check if the filename on this document is too long
+				if (null != d.getFileName() && d.getFileName().length() > 100)
+				{
+					//limit it to 100 characters or the api will reject it
+					d.setFileName(d.getFileName().substring(0, 100));
+				}
+			});
+			
+			// save the indicators
+			SaveResults batchSaveResults = batchWriter.save(ownerName, attributeWriteType);
 			
 			//for each of the documents
 			for (Document document : documents)

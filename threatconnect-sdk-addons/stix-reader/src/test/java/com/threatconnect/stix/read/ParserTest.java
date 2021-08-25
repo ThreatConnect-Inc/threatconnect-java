@@ -9,6 +9,6 @@ public class ParserTest extends AbstractParserTest
 	public void test() throws ParserException
 	{
 		// parse the list of items
-		parse("MIFR-10128830_TLP_WHITE_stix.xml");
+		parse("stix_test.xml");
 	}
 }

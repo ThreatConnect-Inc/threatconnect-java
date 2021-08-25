@@ -1,5 +1,6 @@
 package com.threatconnect.app.playbooks.content.converter;
 
+import com.threatconnect.app.addons.util.config.install.StandardPlaybookType;
 import com.threatconnect.app.playbooks.content.entity.KeyValue;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class KeyValueListConverter extends ListContentConverter<KeyValue>
 	
 	public KeyValueListConverter()
 	{
-		super(KeyValue.class);
+		super(KeyValue.class, StandardPlaybookType.KeyValueArray);
 	}
 	
 	@Override

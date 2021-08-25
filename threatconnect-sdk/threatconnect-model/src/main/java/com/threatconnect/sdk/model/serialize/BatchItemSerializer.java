@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.threatconnect.sdk.model.Attribute;
 import com.threatconnect.sdk.model.CustomIndicator;
+import com.threatconnect.sdk.model.Document;
 import com.threatconnect.sdk.model.Email;
 import com.threatconnect.sdk.model.File;
 import com.threatconnect.sdk.model.FileOccurrence;
@@ -143,11 +144,16 @@ public class BatchItemSerializer
 		
 		groupJsonObject.add("securityLabel", buildSecurityLabelArray(group.getSecurityLabels()));
 		
-		//check to see if this indicator is a file
 		if (group instanceof Email)
 		{
-			//write additional data for this file
+			//write additional data for this email
 			writeAdditionalData((Email) group, groupJsonObject);
+		}
+		
+		if (group instanceof Document)
+		{
+			//write additional data for this document
+			writeAdditionalData((Document) group, groupJsonObject);
 		}
 		
 		//for each of the associations on this group
@@ -263,6 +269,11 @@ public class BatchItemSerializer
 		groupJsonObject.addProperty("score", email.getScore());
 		groupJsonObject.addProperty("subject", email.getSubject());
 		groupJsonObject.addProperty("to", email.getTo());
+	}
+	
+	private void writeAdditionalData(final Document document, final JsonObject groupJsonObject)
+	{
+		groupJsonObject.addProperty("fileName", document.getFileName());
 	}
 	
 	private void addTagsAndAttributes(final JsonObject jsonObject, final Item item)

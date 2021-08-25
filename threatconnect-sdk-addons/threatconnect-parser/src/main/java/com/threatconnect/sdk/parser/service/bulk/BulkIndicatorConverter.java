@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public class BulkIndicatorConverter
 {
@@ -143,7 +144,9 @@ public class BulkIndicatorConverter
 		Attribute attribute = new Attribute();
 		attribute.setType(jsonObject.get("type").getAsString());
 		attribute.setValue(jsonObject.get("value").getAsString());
-		attribute.setSource(jsonObject.get("source").getAsString());
+		
+		Optional.ofNullable(jsonObject.get("source")).ifPresent(s ->
+			attribute.setSource(s.getAsString()));
 		
 		return attribute;
 	}

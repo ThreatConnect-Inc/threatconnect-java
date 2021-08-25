@@ -13,10 +13,12 @@ public enum CommandType
 	StartSession,
 	FireEvent,
 	WebhookEvent,
+	WebhookMarshallEvent,
 	WebhookEventResponse,
 	MailEvent,
 	Acknowledged,
 	Ready,
 	AppUpdated,
-	LoggingChange
+	LoggingChange,
+	ServiceExitEvent
 }
