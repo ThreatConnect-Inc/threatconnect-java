@@ -612,7 +612,7 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 				String type = typeNodeList.item(i).getTextContent();
 				types.add(type);
 				
-				if (type.equals("AddressObj:AddressObjectType") || type.equals("AddressObject:AddressObjectType"))
+				if (type.endsWith(":AddressObjectType"))
 				{
 					// split the indicator parts
 					String category = Constants.XPATH_UTIL.getString("@category", propertiesNode);
@@ -634,31 +634,31 @@ public class STIXStreamParser extends AbstractXMLStreamParser<Item>
 							"Could not identify the AddressObj:AddressObjectType category: " + category);
 					}
 				}
-				else if (type.equals("URIObj:URIObjectType") || type.equals("URIObject:URIObjectType"))
+				else if (type.endsWith(":URIObjectType"))
 				{
 					return getMappingContainer().getUrlMapping();
 				}
-				else if (type.equals("LinkObj:LinkObjectType") || type.equals("LinkObject:LinkObjectType"))
+				else if (type.endsWith(":LinkObjectType"))
 				{
 					return getMappingContainer().getUrlMapping();
 				}
-				else if (type.equals("FileObj:FileObjectType") || type.equals("FileObject:FileObjectType"))
+				else if (type.endsWith(":FileObjectType"))
 				{
 					return getMappingContainer().getFileMapping();
 				}
-				else if (type.equals("EmailMessageObj:EmailMessageObjectType") || type.equals("EmailMessageObject:EmailMessageObjectType"))
+				else if (type.endsWith(":EmailMessageObjectType"))
 				{
 					return getMappingContainer().getEmailMapping();
 				}
-				else if (type.equals("DomainNameObj:DomainNameObjectType") || type.equals("DomainNameObject:DomainNameObjectType"))
+				else if (type.endsWith(":DomainNameObjectType"))
 				{
 					return getMappingContainer().getDomainNameMapping();
 				}
-				else if (type.equals("DNSRecordObj:DNSRecordObjectType") || type.equals("DNSRecordObject:DNSRecordObjectType"))
+				else if (type.endsWith(":DNSRecordObjectType"))
 				{
 					return getMappingContainer().getDnsRecordMapping();
 				}
-				else if (type.equals("MutexObj:MutexObjectType") || type.equals("MutexObject:MutexObjectType"))
+				else if (type.endsWith(":MutexObjectType"))
 				{
 					return getMappingContainer().getMutexMapping();
 				}
