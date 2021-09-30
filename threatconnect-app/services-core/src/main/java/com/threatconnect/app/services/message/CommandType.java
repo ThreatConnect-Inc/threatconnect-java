@@ -21,5 +21,6 @@ public enum CommandType
 	AppUpdated,
 	LoggingChange,
 	ServiceExitEvent,
-	ServiceStoppedEvent
+	ServiceStoppedEvent,
+	UpdateTriggerValue
 }
