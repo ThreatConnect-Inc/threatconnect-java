@@ -11,7 +11,7 @@ public class PlaybookOutputVariable
 	private String name;
 	private String type;
 	private final List<String> intelType;
-	private boolean sensitive;
+	private boolean encrypt;
 	
 	public PlaybookOutputVariable()
 	{
@@ -43,13 +43,13 @@ public class PlaybookOutputVariable
 		return intelType;
 	}
 	
-	public boolean isSensitive()
+	public boolean isEncrypt()
 	{
-		return sensitive;
+		return encrypt;
 	}
 	
-	public void setSensitive(final boolean sensitive)
+	public void setEncrypt(final boolean encrypt)
 	{
-		this.sensitive = sensitive;
+		this.encrypt = encrypt;
 	}
 }
