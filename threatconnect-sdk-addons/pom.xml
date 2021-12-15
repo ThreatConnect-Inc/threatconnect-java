@@ -69,7 +69,6 @@
 		<version.gson>2.8.0</version.gson>
 		<version.jsonpath>2.4.0</version.jsonpath>
 		<version.opencsv>3.8</version.opencsv>
-		<log4j.version>2.6.1</log4j.version>
 
 		<!-- Test Dependency Versions -->
 		<version.junit>4.12</version.junit>
@@ -77,13 +76,6 @@
 	</properties>
 
 	<dependencies>
-		<!-- Logging -->
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-slf4j-impl</artifactId>
-			<version>${log4j.version}</version>
-		</dependency>
-
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>

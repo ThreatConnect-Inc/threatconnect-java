@@ -67,7 +67,6 @@
 		<!-- Dependency Versions -->
 		<version.commons-io>2.4</version.commons-io>
 		<version.commons-lang>3.4</version.commons-lang>
-		<log4j.version>2.14.0</log4j.version>
 		<version.apache-http>4.4.1</version.apache-http>
 		<version.apache-commons>3.6</version.apache-commons>
 		<version.jedis>2.9.0</version.jedis>
@@ -79,13 +78,6 @@
 	</properties>
 
 	<dependencies>
-		<!-- Logging -->
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-slf4j-impl</artifactId>
-			<version>${log4j.version}</version>
-		</dependency>
-
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>

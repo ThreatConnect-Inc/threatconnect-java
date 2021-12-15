@@ -52,6 +52,19 @@
 		<developerConnection>scm:git:git@github.com:ThreatConnect-Inc/threatconnect-java.git</developerConnection>
 	</scm>
 
+	<properties>
+		<version.slf4j>1.7.32</version.slf4j>
+		<version.log4j>2.16.0</version.log4j>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${version.slf4j}</version>
+		</dependency>
+	</dependencies>
+
 	<profiles>
 		<profile>
 			<id>sign</id>
