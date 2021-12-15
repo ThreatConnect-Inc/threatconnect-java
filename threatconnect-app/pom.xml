@@ -71,21 +71,7 @@
 		<version.apache-commons>3.6</version.apache-commons>
 		<version.jedis>2.9.0</version.jedis>
 		<version.jackson>2.9.10.3</version.jackson>
-
-		<!-- Test Dependency Versions -->
-		<version.junit>4.12</version.junit>
-		<version.test-beangen>2.5-RELEASE</version.test-beangen>
 	</properties>
-
-	<dependencies>
-		<!-- Test -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${version.junit}</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
 
 	<profiles>
 		<profile>

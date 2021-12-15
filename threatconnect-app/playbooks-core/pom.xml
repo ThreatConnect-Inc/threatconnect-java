@@ -51,14 +51,5 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>${version.apache-commons}</version>
 		</dependency>
-
-
-		<!-- Testing -->
-		<dependency>
-			<groupId>com.gregmarut.support</groupId>
-			<artifactId>test-beangen</artifactId>
-			<version>2.5-RELEASE</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 </project>

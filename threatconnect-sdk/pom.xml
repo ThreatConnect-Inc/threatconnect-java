@@ -69,23 +69,7 @@
 		<version.jedis>2.9.0</version.jedis>
 		<es.version>2.3.4</es.version>
 		<version.gson>2.6.2</version.gson>
-
-		<!-- Logging Versions -->
-		<version.slf4j>1.7.12</version.slf4j>
-
-		<!-- Test Dependency Versions -->
-		<version.junit>4.12</version.junit>
 	</properties>
-
-	<dependencies>
-		<!-- Test -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${version.junit}</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
 
 	<profiles>
 		<profile>

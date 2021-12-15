@@ -69,21 +69,7 @@
 		<version.gson>2.8.0</version.gson>
 		<version.jsonpath>2.4.0</version.jsonpath>
 		<version.opencsv>3.8</version.opencsv>
-
-		<!-- Test Dependency Versions -->
-		<version.junit>4.12</version.junit>
-		<version.test-beangen>2.5-RELEASE</version.test-beangen>
 	</properties>
-
-	<dependencies>
-		<!-- Test -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${version.junit}</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
 
 	<profiles>
 		<profile>

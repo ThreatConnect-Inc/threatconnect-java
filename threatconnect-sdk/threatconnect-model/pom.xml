@@ -12,23 +12,11 @@
 
 	<artifactId>threatconnect-model</artifactId>
 
-	<properties>
-		<version.test-beangen>2.5-RELEASE</version.test-beangen>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>${version.gson}</version>
-		</dependency>
-
-		<!-- Test -->
-		<dependency>
-			<groupId>com.gregmarut.support</groupId>
-			<artifactId>test-beangen</artifactId>
-			<version>${version.test-beangen}</version>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

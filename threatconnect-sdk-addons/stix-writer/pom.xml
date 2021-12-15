@@ -27,12 +27,5 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
-		<dependency>
-			<groupId>com.gregmarut.support</groupId>
-			<artifactId>test-beangen</artifactId>
-			<version>${version.test-beangen}</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 </project>
