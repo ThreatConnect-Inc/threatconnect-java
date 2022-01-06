@@ -43,6 +43,7 @@ public class Install
 	private final List<String> repeatingMinutes;
 	private final List<String> publishOutFiles;
 	private final List<RuntimeContextType> runtimeContext;
+	private final List<String> deprecatesApps;
 	private final Set<String> features;
 	private final Set<String> labels;
 	
@@ -53,6 +54,7 @@ public class Install
 		this.repeatingMinutes = new ArrayList<String>();
 		this.publishOutFiles = new ArrayList<String>();
 		this.runtimeContext = new ArrayList<RuntimeContextType>();
+		this.deprecatesApps = new ArrayList<>();
 		this.features = new HashSet<String>();
 		this.labels = new HashSet<String>();
 		this.listDelimiter = DEFAULT_LIST_DELIMITER;
@@ -311,6 +313,11 @@ public class Install
 	public List<RuntimeContextType> getRuntimeContext()
 	{
 		return runtimeContext;
+	}
+	
+	public List<String> getDeprecatesApps()
+	{
+		return deprecatesApps;
 	}
 	
 	public Set<String> getFeatures()
