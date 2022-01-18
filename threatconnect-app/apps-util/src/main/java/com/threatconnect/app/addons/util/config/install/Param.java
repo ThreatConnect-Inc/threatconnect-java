@@ -26,6 +26,7 @@ public class Param
 	private Integer sequence;
 	private String exposePlaybookKeyAs;
 	private boolean serviceConfig;
+	private String display;
 	
 	/**
 	 * Deprecated: use "serviceConfig"
@@ -135,6 +136,16 @@ public class Param
 	public void setServiceConfig(final boolean serviceConfig)
 	{
 		this.serviceConfig = serviceConfig;
+	}
+	
+	public String getDisplay()
+	{
+		return display;
+	}
+	
+	public void setDisplay(final String display)
+	{
+		this.display = display;
 	}
 	
 	public boolean isSetup()
