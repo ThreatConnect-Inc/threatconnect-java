@@ -12,6 +12,7 @@ import com.threatconnect.sdk.server.response.entity.BatchStatusResponse;
 import com.threatconnect.sdk.server.response.entity.data.BatchStatusResponseData;
 import com.threatconnect.sdk.util.UploadMethodType;
 import org.apache.http.HttpEntity;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.StringBody;
 
@@ -68,8 +69,8 @@ public abstract class AbstractBatchWriterAdapter<T> extends AbstractWriterAdapte
 		String contents, UploadMethodType uploadMethodType) throws IOException, FailedResponseException
 	{
 		HttpEntity multiPartEntity = MultipartEntityBuilder.create()
-			.addPart("config", new StringBody(new Gson().toJson(batchConfig)))
-			.addPart("content",new StringBody(contents))
+			.addPart("config", new StringBody(new Gson().toJson(batchConfig), ContentType.APPLICATION_JSON))
+			.addPart("content", new StringBody(contents, ContentType.APPLICATION_JSON))
 			.build();
 		
 		ApiEntitySingleResponse<BatchStatus, BatchStatusResponseData> data =
