@@ -1,23 +1,23 @@
 package com.threatconnect.app.addons.util.config.validation;
 
-import com.threatconnect.app.addons.util.config.im.IntegrationManagerDefinition;
+import com.threatconnect.app.addons.util.config.im.IntegrationManifest;
 import com.threatconnect.app.addons.util.config.im.Section;
 import com.threatconnect.app.addons.util.config.install.Param;
 
 /**
  * @author Greg Marut
  */
-public class IntegrationManagerDefinitionValidator extends Validator<IntegrationManagerDefinition>
+public class IntegrationManifestValidator extends Validator<IntegrationManifest>
 {
 	private final Validator<Param> paramValidator;
 	
-	public IntegrationManagerDefinitionValidator()
+	public IntegrationManifestValidator()
 	{
 		this.paramValidator = new ParamValidator();
 	}
 	
 	@Override
-	public void validate(final IntegrationManagerDefinition object) throws ValidationException
+	public void validate(final IntegrationManifest object) throws ValidationException
 	{
 		//validate the product name
 		if (null == object.getProductName())

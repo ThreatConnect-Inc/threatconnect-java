@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import com.threatconnect.app.addons.util.config.install.serialize.InvalidEnumException;
 import com.threatconnect.app.addons.util.config.install.serialize.ParamDataTypeJsonSerializer;
-import com.threatconnect.app.addons.util.config.validation.IntegrationManagerDefinitionValidator;
+import com.threatconnect.app.addons.util.config.validation.IntegrationManifestValidator;
 import com.threatconnect.app.addons.util.config.validation.ValidationException;
 
 import java.io.ByteArrayInputStream;
@@ -18,24 +18,24 @@ import java.io.InputStreamReader;
 /**
  * @author Greg Marut
  */
-public class IntegrationManagerUtil
+public class IntegrationManifestUtil
 {
 	private static final boolean VALIDATE_BY_DEFAULT = true;
 	
-	public static IntegrationManagerDefinition load(final String json) throws ValidationException
+	public static IntegrationManifest load(final String json) throws ValidationException
 	{
 		return load(json, VALIDATE_BY_DEFAULT);
 	}
 	
-	public static IntegrationManagerDefinition load(final String json, final boolean validate) throws ValidationException
+	public static IntegrationManifest load(final String json, final boolean validate) throws ValidationException
 	{
 		try
 		{
-			IntegrationManagerDefinition IntegrationManagerDefinition = createGson().fromJson(json, IntegrationManagerDefinition.class);
+			IntegrationManifest IntegrationManagerDefinition = createGson().fromJson(json, IntegrationManifest.class);
 			
 			if (validate)
 			{
-				new IntegrationManagerDefinitionValidator().validate(IntegrationManagerDefinition);
+				new IntegrationManifestValidator().validate(IntegrationManagerDefinition);
 			}
 			
 			return IntegrationManagerDefinition;
@@ -46,12 +46,12 @@ public class IntegrationManagerUtil
 		}
 	}
 	
-	public static IntegrationManagerDefinition load(final byte[] bytes) throws IOException, ValidationException
+	public static IntegrationManifest load(final byte[] bytes) throws IOException, ValidationException
 	{
 		return load(bytes, VALIDATE_BY_DEFAULT);
 	}
 	
-	public static IntegrationManagerDefinition load(final byte[] bytes, final boolean validate) throws IOException, ValidationException
+	public static IntegrationManifest load(final byte[] bytes, final boolean validate) throws IOException, ValidationException
 	{
 		try (InputStream inputStream = new ByteArrayInputStream(bytes))
 		{
@@ -59,12 +59,12 @@ public class IntegrationManagerUtil
 		}
 	}
 	
-	public static IntegrationManagerDefinition load(final File file) throws IOException, ValidationException
+	public static IntegrationManifest load(final File file) throws IOException, ValidationException
 	{
 		return load(file, VALIDATE_BY_DEFAULT);
 	}
 	
-	public static IntegrationManagerDefinition load(final File file, final boolean validate) throws IOException, ValidationException
+	public static IntegrationManifest load(final File file, final boolean validate) throws IOException, ValidationException
 	{
 		try (InputStream inputStream = new FileInputStream(file))
 		{
@@ -72,8 +72,8 @@ public class IntegrationManagerUtil
 		}
 	}
 	
-	public static IntegrationManagerDefinition load(final File file,
-		final IntegrationManagerDefinitionValidator IntegrationManagerDefinitionValidator) throws IOException, ValidationException
+	public static IntegrationManifest load(final File file,
+		final IntegrationManifestValidator IntegrationManagerDefinitionValidator) throws IOException, ValidationException
 	{
 		try (InputStream inputStream = new FileInputStream(file))
 		{
@@ -81,23 +81,23 @@ public class IntegrationManagerUtil
 		}
 	}
 	
-	public static IntegrationManagerDefinition load(final InputStream inputStream) throws ValidationException
+	public static IntegrationManifest load(final InputStream inputStream) throws ValidationException
 	{
 		return load(inputStream, VALIDATE_BY_DEFAULT);
 	}
 	
-	public static IntegrationManagerDefinition load(final InputStream inputStream, final boolean validate) throws ValidationException
+	public static IntegrationManifest load(final InputStream inputStream, final boolean validate) throws ValidationException
 	{
-		return load(inputStream, (validate ? new IntegrationManagerDefinitionValidator() : null));
+		return load(inputStream, (validate ? new IntegrationManifestValidator() : null));
 	}
 	
-	public static IntegrationManagerDefinition load(final InputStream inputStream,
-		final IntegrationManagerDefinitionValidator IntegrationManagerDefinitionValidator) throws ValidationException
+	public static IntegrationManifest load(final InputStream inputStream,
+		final IntegrationManifestValidator IntegrationManagerDefinitionValidator) throws ValidationException
 	{
 		try
 		{
-			IntegrationManagerDefinition IntegrationManagerDefinition =
-				createGson().fromJson(new InputStreamReader(inputStream), IntegrationManagerDefinition.class);
+			IntegrationManifest IntegrationManagerDefinition =
+				createGson().fromJson(new InputStreamReader(inputStream), IntegrationManifest.class);
 			
 			if (null != IntegrationManagerDefinitionValidator)
 			{

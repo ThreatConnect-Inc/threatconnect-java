@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class IntegrationManagerDefinition
+public class IntegrationManifest
 {
 	private String note;
 	private String productName;
@@ -16,7 +16,7 @@ public class IntegrationManagerDefinition
 	private final List<Section> sections;
 	private final List<Metric> metrics;
 	
-	public IntegrationManagerDefinition()
+	public IntegrationManifest()
 	{
 		programNames = new HashSet<>();
 		sections = new ArrayList<>();
