@@ -9,6 +9,8 @@ public class IntegrationManifest
 {
 	private String note;
 	private String productName;
+	private String version;
+	private String category;
 	private String svgIcon;
 	private ConnectionTest connectionTest;
 	
@@ -41,6 +43,26 @@ public class IntegrationManifest
 	public void setProductName(final String productName)
 	{
 		this.productName = productName;
+	}
+	
+	public String getVersion()
+	{
+		return version;
+	}
+	
+	public void setVersion(final String version)
+	{
+		this.version = version;
+	}
+	
+	public String getCategory()
+	{
+		return category;
+	}
+	
+	public void setCategory(final String category)
+	{
+		this.category = category;
 	}
 	
 	public String getSvgIcon()
