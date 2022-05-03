@@ -17,6 +17,7 @@ public class Feature
 	public static final String WEBHOOK_SERVICE_ENDPOINT = "webhookServiceEndpoint";
 	public static final String WEBHOOK_DEACTIVATE_RESPONSE = "webhookDeactivateResponse";
 	public static final String RUNTIME_VARIABLES = "runtimeVariables";
+	public static final String INSTANCE_UUID = "instanceUUID";
 	
 	public static final String CREATES_INDICATOR = "CreatesIndicator";
 	public static final String CREATES_GROUP = "CreatesGroup";
