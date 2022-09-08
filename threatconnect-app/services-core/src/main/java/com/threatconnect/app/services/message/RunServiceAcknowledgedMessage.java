@@ -8,7 +8,6 @@ public class RunServiceAcknowledgedMessage extends AcknowledgedMessage
 	private boolean isBinary;
 	private String bodyVariable;
 	private List<NameValuePair<String, String>> headers;
-	private String status;
 	
 	public RunServiceAcknowledgedMessage()
 	{
@@ -53,15 +52,5 @@ public class RunServiceAcknowledgedMessage extends AcknowledgedMessage
 	public void setBinary(boolean binary)
 	{
 		isBinary = binary;
-	}
-	
-	public String getStatus()
-	{
-		return status;
-	}
-	
-	public void setStatus(final String status)
-	{
-		this.status = status;
 	}
 }
