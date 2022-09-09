@@ -1,6 +1,8 @@
 package com.threatconnect.app.playbooks.db;
 
 import com.threatconnect.app.apps.AppConfig;
+import com.threatconnect.app.apps.db.DBService;
+import com.threatconnect.app.apps.db.RedisDBService;
 import com.threatconnect.app.playbooks.app.PlaybooksAppConfig;
 import com.threatconnect.app.playbooks.db.tcapi.TCApiDBService;
 
@@ -16,22 +18,21 @@ public class DBServiceFactory
 	public static final String DB_TYPE_TC_API = "TCKeyValueAPI";
 	
 	//holds the map which will store customized db service objects
-	private static final Map<String, DBService> customDBServiceMap = new HashMap<String, DBService>();
+	private static final Map<String, DBService> customDBServiceMap = new HashMap<>();
 	
 	public static DBService buildFromAppConfig(final AppConfig appConfig)
 	{
 		//retrieve the reference to the playbooks config
-		final PlaybooksAppConfig playbooksAppConfig = new PlaybooksAppConfig(appConfig);
-		final String dbType = playbooksAppConfig.getDBType();
+		final String dbType = appConfig.getDBType();
 		
 		//check to see if the database is a distributed
 		if (DB_TYPE_DISTRIBUTED.equals(dbType))
 		{
-			return new RedisDBService(playbooksAppConfig);
+			return new RedisDBService(appConfig);
 		}
 		else if (DB_TYPE_TC_API.equals(dbType))
 		{
-			return new TCApiDBService(playbooksAppConfig);
+			return new TCApiDBService(appConfig);
 		}
 		//check to see if there is a custom database that was registered
 		else if (customDBServiceMap.containsKey(dbType))

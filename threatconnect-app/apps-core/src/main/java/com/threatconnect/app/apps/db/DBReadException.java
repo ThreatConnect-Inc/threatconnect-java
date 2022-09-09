@@ -1,4 +1,4 @@
-package com.threatconnect.app.playbooks.db;
+package com.threatconnect.app.apps.db;
 
 /**
  * @author Greg Marut

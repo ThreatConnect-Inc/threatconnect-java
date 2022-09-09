@@ -5,11 +5,9 @@ import com.google.gson.JsonSyntaxException;
 import com.threatconnect.app.apps.App;
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.ExitStatus;
+import com.threatconnect.app.apps.db.RedisDBService;
 import com.threatconnect.app.playbooks.app.PlaybooksApp;
-import com.threatconnect.app.playbooks.app.PlaybooksAppConfig;
 import com.threatconnect.app.playbooks.content.ContentService;
-import com.threatconnect.app.playbooks.content.converter.ContentConverter;
-import com.threatconnect.app.playbooks.db.RedisDBService;
 import com.threatconnect.sdk.app.aot.AOTMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +44,7 @@ public class AOTAppExecutor extends DefaultAppExecutor
 		final int port = appConfig.getInteger(PARAM_DB_PORT);
 		logger.trace("Building Redis connection on {}:{}", host, port);
 		jedis = new Jedis(host, port);
-		contentService = new ContentService(new RedisDBService(new PlaybooksAppConfig(getAppConfig()), jedis));
+		contentService = new ContentService(new RedisDBService(getAppConfig(), jedis));
 		
 		//retrieve the timeout
 		timeoutSeconds = appConfig.getInteger(AppConfig.TC_TERMINATE_SECONDS, DEFAULT_AOT_TIMEOUT_SECONDS);

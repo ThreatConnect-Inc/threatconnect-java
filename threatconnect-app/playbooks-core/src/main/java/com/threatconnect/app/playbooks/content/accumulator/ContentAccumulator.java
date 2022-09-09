@@ -2,9 +2,9 @@ package com.threatconnect.app.playbooks.content.accumulator;
 
 import com.threatconnect.app.playbooks.content.converter.ContentConverter;
 import com.threatconnect.app.playbooks.content.converter.ConversionException;
-import com.threatconnect.app.playbooks.db.DBReadException;
-import com.threatconnect.app.playbooks.db.DBService;
-import com.threatconnect.app.playbooks.db.DBWriteException;
+import com.threatconnect.app.apps.db.DBReadException;
+import com.threatconnect.app.apps.db.DBService;
+import com.threatconnect.app.apps.db.DBWriteException;
 import com.threatconnect.app.playbooks.util.PlaybooksVariableUtil;
 import com.threatconnect.app.playbooks.variable.PlaybooksVariable;
 import org.slf4j.Logger;

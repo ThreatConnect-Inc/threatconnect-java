@@ -3,10 +3,9 @@ package com.threatconnect.app.playbooks.db.tcapi;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.threatconnect.app.apps.AppConfig;
-import com.threatconnect.app.playbooks.app.PlaybooksAppConfig;
-import com.threatconnect.app.playbooks.db.DBReadException;
-import com.threatconnect.app.playbooks.db.DBService;
-import com.threatconnect.app.playbooks.db.DBWriteException;
+import com.threatconnect.app.apps.db.DBReadException;
+import com.threatconnect.app.apps.db.DBService;
+import com.threatconnect.app.apps.db.DBWriteException;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -38,13 +37,11 @@ public class TCApiDBService implements DBService
 	private static final String NEW_TOKEN_EXPIRES = "apiTokenExpires";
 	private static final String SUCCESS_IND = "success";
 	
-	private final PlaybooksAppConfig playbooksAppConfig;
 	private final AppConfig appConfig;
 	
-	public TCApiDBService(final PlaybooksAppConfig playbooksAppConfig)
+	public TCApiDBService(final AppConfig appConfig)
 	{
-		this.playbooksAppConfig = playbooksAppConfig;
-		this.appConfig = playbooksAppConfig.getAppConfig();
+		this.appConfig = appConfig;
 	}
 	
 	@Override
@@ -106,7 +103,7 @@ public class TCApiDBService implements DBService
 	{
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append(playbooksAppConfig.getDBPath());
+		sb.append(appConfig.getKVStorePath());
 		
 		if (!sb.toString().endsWith("/"))
 		{

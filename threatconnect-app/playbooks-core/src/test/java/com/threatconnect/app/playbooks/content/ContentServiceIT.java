@@ -3,7 +3,7 @@ package com.threatconnect.app.playbooks.content;
 import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.SystemPropertiesAppConfig;
 import com.threatconnect.app.playbooks.content.accumulator.ContentException;
-import com.threatconnect.app.playbooks.db.DBService;
+import com.threatconnect.app.apps.db.DBService;
 import com.threatconnect.app.playbooks.db.DBServiceFactory;
 import org.junit.Assert;
 import org.junit.Before;

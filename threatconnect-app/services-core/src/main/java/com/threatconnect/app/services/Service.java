@@ -1,6 +1,10 @@
 package com.threatconnect.app.services;
 
 import com.threatconnect.app.apps.AppConfig;
+import com.threatconnect.app.apps.db.DBService;
+import com.threatconnect.app.apps.db.RedisDBService;
+import com.threatconnect.app.services.message.AbstractCommandConfig;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +38,12 @@ public abstract class Service
 	public final void addTerminationRequestListener(final Runnable runnable)
 	{
 		this.terminationRequestListeners.add(runnable);
+	}
+	
+	protected DBService getDBService(final AbstractCommandConfig commandConfig)
+	{
+		return new RedisDBService(getAppConfig().getString(AppConfig.PARAM_KVSTORE_HOST),
+			getAppConfig().getInteger(AppConfig.PARAM_KVSTORE_PORT), commandConfig.getRequestKey());
 	}
 	
 	/**

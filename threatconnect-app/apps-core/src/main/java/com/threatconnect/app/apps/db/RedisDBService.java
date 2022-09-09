@@ -1,6 +1,6 @@
-package com.threatconnect.app.playbooks.db;
+package com.threatconnect.app.apps.db;
 
-import com.threatconnect.app.playbooks.app.PlaybooksAppConfig;
+import com.threatconnect.app.apps.AppConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
@@ -14,15 +14,15 @@ public class RedisDBService implements DBService
 	private final Jedis redis;
 	private final String contextKey;
 	
-	public RedisDBService(final PlaybooksAppConfig playbooksAppConfig)
+	public RedisDBService(final AppConfig appConfig)
 	{
-		this(playbooksAppConfig.getDBPath(), playbooksAppConfig.getDBPort(DEFAULT_REDIS_PORT), playbooksAppConfig.getDBContext());
+		this(appConfig.getKVStorePath(), appConfig.getKVStorePort(DEFAULT_REDIS_PORT), appConfig.getString(AppConfig.PARAM_PB_KVSTORE_CONTEXT));
 	}
 	
-	public RedisDBService(final PlaybooksAppConfig playbooksAppConfig, final Jedis jedis)
+	public RedisDBService(final AppConfig appConfig, final Jedis jedis)
 	{
 		this.redis = jedis;
-		this.contextKey = playbooksAppConfig.getDBContext();
+		this.contextKey = appConfig.getString(AppConfig.PARAM_PB_KVSTORE_CONTEXT);
 	}
 	
 	public RedisDBService(final String host, final int port, final String contextKey)

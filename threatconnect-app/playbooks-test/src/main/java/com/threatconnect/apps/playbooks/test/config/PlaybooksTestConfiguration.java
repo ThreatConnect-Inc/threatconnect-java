@@ -81,6 +81,7 @@ public class PlaybooksTestConfiguration
 		//register the inmemory database
 		DBServiceFactory.registerCustomDBService("Memory", new EmbeddedMapDBService());
 		globalAppConfig.set(PlaybooksAppConfig.PARAM_DB_TYPE, "Memory");
+		globalAppConfig.set(AppConfig.PARAM_KVSTORE_TYPE, "Memory");
 	}
 	
 	public void setGlobalAppParam(final String name, final String value)

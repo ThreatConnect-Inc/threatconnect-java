@@ -360,6 +360,31 @@ public abstract class AppConfig
 		return getInteger(TC_SVC_HEARTBEAT_TIMEOUT_SECONDS);
 	}
 	
+	public String getDBType()
+	{
+		return getString(PARAM_KVSTORE_TYPE);
+	}
+	
+	public String getKVStorePath()
+	{
+		return getString(PARAM_KVSTORE_HOST);
+	}
+	
+	public Integer getKVStorePort()
+	{
+		return getInteger(PARAM_KVSTORE_PORT);
+	}
+	
+	public int getKVStorePort(final int defaultValue)
+	{
+		return getInteger(PARAM_KVSTORE_PORT, defaultValue);
+	}
+	
+	public String getDBContext()
+	{
+		return getString(PARAM_PB_KVSTORE_CONTEXT);
+	}
+	
 	/**
 	 * Returns a system property as a string
 	 *

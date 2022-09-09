@@ -17,7 +17,7 @@ import com.threatconnect.app.playbooks.content.converter.TCEntityConverter;
 import com.threatconnect.app.playbooks.content.converter.TCEntityListConverter;
 import com.threatconnect.app.playbooks.content.entity.KeyValue;
 import com.threatconnect.app.playbooks.content.entity.TCEntity;
-import com.threatconnect.app.playbooks.db.DBService;
+import com.threatconnect.app.apps.db.DBService;
 import com.threatconnect.app.playbooks.util.PlaybooksVariableUtil;
 import com.threatconnect.app.playbooks.variable.PlaybooksVariable;
 import com.threatconnect.sdk.model.Item;

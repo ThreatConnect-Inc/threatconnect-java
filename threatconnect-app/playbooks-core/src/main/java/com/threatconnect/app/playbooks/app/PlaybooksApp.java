@@ -8,7 +8,7 @@ import com.threatconnect.app.playbooks.content.ContentService;
 import com.threatconnect.app.playbooks.content.accumulator.ContentException;
 import com.threatconnect.app.playbooks.content.entity.KeyValue;
 import com.threatconnect.app.playbooks.content.entity.TCEntity;
-import com.threatconnect.app.playbooks.db.DBService;
+import com.threatconnect.app.apps.db.DBService;
 import com.threatconnect.app.playbooks.db.DBServiceFactory;
 import com.threatconnect.app.playbooks.util.PlaybooksVariableUtil;
 import com.threatconnect.sdk.model.Item;
