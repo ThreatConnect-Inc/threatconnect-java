@@ -26,6 +26,20 @@ public class ApiRouterTest
 	}
 	
 	@Test
+	public void simpleTestNoLeadingSlash() throws IllegalAccessException, InvocationTargetException, ApiNotFoundException
+	{
+		SimpleApiService simpleApiService = new SimpleApiService();
+		ApiRouter apiRouter = new ApiRouter(simpleApiService);
+		
+		RunService runService = new RunService();
+		runService.setMethod("GET");
+		runService.setPath("say/hi");
+		
+		Object result = apiRouter.routeApiEvent(runService, new RunServiceAcknowledgedMessage());
+		Assert.assertEquals(result, "Hi");
+	}
+	
+	@Test
 	public void variableTest1() throws IllegalAccessException, InvocationTargetException, ApiNotFoundException
 	{
 		SimpleApiService simpleApiService = new SimpleApiService();

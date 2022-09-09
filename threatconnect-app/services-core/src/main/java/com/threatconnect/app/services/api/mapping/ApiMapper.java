@@ -84,7 +84,7 @@ public class ApiMapper
 		for (Map.Entry<ApiMethodPath, Method> entry : apiMap.entrySet())
 		{
 			//check to see if this api method and path match what was given
-			if (entry.getKey().getMethod().equals(method) && entry.getKey().getApiPath().matches(path))
+			if (entry.getKey().getMethod().equals(method) && entry.getKey().getApiPath().matches(ApiPath.normalize(path)))
 			{
 				return entry;
 			}

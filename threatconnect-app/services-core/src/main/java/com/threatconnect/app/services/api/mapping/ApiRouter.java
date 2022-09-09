@@ -4,6 +4,8 @@ import com.threatconnect.app.services.api.ApiService;
 import com.threatconnect.app.services.message.NameValuePair;
 import com.threatconnect.app.services.message.RunService;
 import com.threatconnect.app.services.message.RunServiceAcknowledgedMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -15,6 +17,8 @@ import java.util.stream.Collectors;
 
 public class ApiRouter extends ApiMapper
 {
+	private static final Logger logger = LoggerFactory.getLogger(ApiRouter.class);
+	
 	private final ApiService apiService;
 	
 	public ApiRouter(final ApiService apiService)
@@ -77,6 +81,7 @@ public class ApiRouter extends ApiMapper
 		}
 		else
 		{
+			logger.warn("Unmapped request: " + runService.getPath());
 			throw new ApiNotFoundException();
 		}
 	}
