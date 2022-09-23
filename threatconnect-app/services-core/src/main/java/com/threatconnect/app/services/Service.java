@@ -4,11 +4,11 @@ import com.threatconnect.app.apps.AppConfig;
 import com.threatconnect.app.apps.db.DBService;
 import com.threatconnect.app.apps.db.RedisDBService;
 import com.threatconnect.app.services.message.AbstractCommandConfig;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class Service
@@ -62,4 +62,9 @@ public abstract class Service
 	public abstract void onStartUp();
 	
 	public abstract void onShutdown();
+	
+	public List<String> getDiscoveryTypes()
+	{
+		return Collections.emptyList();
+	}
 }

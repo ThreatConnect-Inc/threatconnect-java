@@ -85,6 +85,7 @@ public class ServiceLauncher<S extends Service> extends MQTTServiceCommunication
 		{
 			//send a ready message to the server to notify that this service has started
 			Ready ready = new Ready();
+			ready.setDiscoveryTypes(service.getDiscoveryTypes());
 			sendMessage(ready);
 			
 			//notify the service that it has started
