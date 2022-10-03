@@ -11,7 +11,7 @@ public class ServiceValidator extends Validator<Install>
 	public void validate(final Install install) throws ValidationException
 	{
 		//check to see if this is an api service
-		if (RunLevelType.ApiService == install.getRuntimeLevel())
+		if (RunLevelType.ApiService == install.getRuntimeLevel() || RunLevelType.FeedApiService == install.getRuntimeLevel())
 		{
 			//make sure there is a displayPath
 			if(null == install.getDisplayPath() || !install.getDisplayPath().matches(DISPLAY_PATH_REGEX))

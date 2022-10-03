@@ -376,6 +376,7 @@ public class Install
 	public boolean isService()
 	{
 		return RunLevelType.ApiService == getRuntimeLevel() ||
+			RunLevelType.FeedApiService == getRuntimeLevel() ||
 			RunLevelType.TriggerService == getRuntimeLevel() ||
 			RunLevelType.WebHookTriggerService == getRuntimeLevel();
 	}
