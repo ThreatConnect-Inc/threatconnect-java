@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Optional;
 
 public class ApiServiceLauncher extends ServiceLauncher<ApiService>
 {
@@ -65,8 +66,16 @@ public class ApiServiceLauncher extends ServiceLauncher<ApiService>
 			//route this webhook event to the correct method
 			Object result = apiRouter.routeApiEvent(runService, response);
 			
-			response.setStatus("OK");
-			response.setStatusCode(200);
+			if(null == response.getStatus())
+			{
+				response.setStatus("OK");
+			}
+			
+			if(null == response.getStatusCode())
+			{
+				response.setStatusCode(200);
+			}
+			
 			writeBody(response, result);
 		}
 		catch (ApiNotFoundException e)

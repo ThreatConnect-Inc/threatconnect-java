@@ -66,6 +66,10 @@ public class ApiRouter extends ApiMapper
 				{
 					args[i] = runService;
 				}
+				else if (RunServiceAcknowledgedMessage.class.isAssignableFrom(type))
+				{
+					args[i] = response;
+				}
 				else if (null != pathVariable)
 				{
 					ApiPath apiPath = apiMethodPath.getApiPath();
