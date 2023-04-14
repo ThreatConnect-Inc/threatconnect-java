@@ -16,20 +16,35 @@ public class RedisDBService implements DBService
 	
 	public RedisDBService(final AppConfig appConfig)
 	{
-		this(appConfig.getKVStorePath(), appConfig.getKVStorePort(DEFAULT_REDIS_PORT), appConfig.getString(AppConfig.PARAM_PB_KVSTORE_CONTEXT));
+		this(appConfig.getKVStorePath(), appConfig.getKVStorePort(DEFAULT_REDIS_PORT),
+				appConfig.getString(AppConfig.PARAM_PB_KVSTORE_CONTEXT),
+				appConfig.getString(AppConfig.PARAM_KVSTORE_USERNAME),
+				appConfig.getString(AppConfig.PARAM_KVSTORE_PASSWORD));
 	}
 	
 	public RedisDBService(final AppConfig appConfig, final Jedis jedis)
 	{
 		this.redis = jedis;
+		if(appConfig.getString(AppConfig.PARAM_KVSTORE_PASSWORD) != null) {
+			this.redis.auth(appConfig.getString(AppConfig.PARAM_KVSTORE_PASSWORD));
+			if(appConfig.getString(AppConfig.PARAM_KVSTORE_USERNAME) != null) {
+				this.redis.auth(appConfig.getString(AppConfig.PARAM_KVSTORE_USERNAME), appConfig.getString(AppConfig.PARAM_KVSTORE_PASSWORD));
+			}
+		}
 		this.contextKey = appConfig.getString(AppConfig.PARAM_PB_KVSTORE_CONTEXT);
 	}
 	
-	public RedisDBService(final String host, final int port, final String contextKey)
+	public RedisDBService(final String host, final int port, final String contextKey, final String username, final String password)
 	{
 		//building the redis connection object
 		logger.trace("Building RedisDBService on {}:{}", host, port);
 		this.redis = new Jedis(host, port);
+		if(password != null) {
+			this.redis.auth(password);
+			if(username != null) {
+				this.redis.auth(username, password);
+			}
+		}
 		
 		this.contextKey = contextKey;
 	}

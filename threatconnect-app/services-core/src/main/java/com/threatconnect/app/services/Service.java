@@ -43,7 +43,9 @@ public abstract class Service
 	protected DBService getDBService(final AbstractCommandConfig commandConfig)
 	{
 		return new RedisDBService(getAppConfig().getString(AppConfig.PARAM_KVSTORE_HOST),
-			getAppConfig().getInteger(AppConfig.PARAM_KVSTORE_PORT), commandConfig.getRequestKey());
+			getAppConfig().getInteger(AppConfig.PARAM_KVSTORE_PORT), commandConfig.getRequestKey(),
+			getAppConfig().getString(AppConfig.PARAM_KVSTORE_USERNAME),
+			getAppConfig().getString(AppConfig.PARAM_KVSTORE_PASSWORD));
 	}
 	
 	/**

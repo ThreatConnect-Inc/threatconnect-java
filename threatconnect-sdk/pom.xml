@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.threatconnect</groupId>
 		<artifactId>sdk</artifactId>
-		<version>2.17.0-SNAPSHOT</version>
+		<version>2.18.0-SNAPSHOT</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
@@ -66,7 +66,7 @@
 		<version.apache-http>4.4.1</version.apache-http>
 		<version.jackson>2.9.10.3</version.jackson>
 		<version.reflections>0.9.10</version.reflections>
-		<version.jedis>2.9.0</version.jedis>
+		<version.jedis>3.9.0</version.jedis>
 		<es.version>2.3.4</es.version>
 		<version.gson>2.6.2</version.gson>
 	</properties>

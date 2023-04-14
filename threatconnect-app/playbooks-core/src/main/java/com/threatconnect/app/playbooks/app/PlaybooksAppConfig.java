@@ -15,6 +15,8 @@ public class PlaybooksAppConfig
 	public static final String PARAM_DB_CONTEXT = "tc_playbook_db_context";
 	public static final String PARAM_DB_PATH = "tc_playbook_db_path";
 	public static final String PARAM_DB_PORT = "tc_playbook_db_port";
+	public static final String PARAM_DB_USERNAME = "tc_playbook_db_username";
+	public static final String PARAM_DB_PASSWORD = "tc_playbook_db_password";
 	public static final String PARAM_OUT_VARS = "tc_playbook_out_variables";
 	
 	private final AppConfig appConfig;
@@ -47,6 +49,16 @@ public class PlaybooksAppConfig
 	public int getDBPort(final int defaultValue)
 	{
 		return getAppConfig().getInteger(PARAM_DB_PORT, defaultValue);
+	}
+	
+	public String getDBUsername()
+	{
+		return getAppConfig().getString(PARAM_DB_USERNAME);
+	}
+	
+	public String getDBPassword()
+	{
+		return getAppConfig().getString(PARAM_DB_PASSWORD);
 	}
 	
 	public String getOutputVars()

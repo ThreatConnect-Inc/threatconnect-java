@@ -104,7 +104,10 @@ public class ApiServiceLauncher extends ServiceLauncher<ApiService>
 			
 			//create the db service to write the response
 			DBService dbService = new RedisDBService(getAppConfig().getString(PlaybooksAppConfig.PARAM_DB_PATH),
-				getAppConfig().getInteger(PlaybooksAppConfig.PARAM_DB_PORT), runServiceAcknowledgeMessage.getRequestKey());
+				getAppConfig().getInteger(PlaybooksAppConfig.PARAM_DB_PORT),
+				runServiceAcknowledgeMessage.getRequestKey(),
+				getAppConfig().getString(PlaybooksAppConfig.PARAM_DB_USERNAME),
+				getAppConfig().getString(PlaybooksAppConfig.PARAM_DB_PASSWORD));
 			
 			if (object instanceof byte[])
 			{
