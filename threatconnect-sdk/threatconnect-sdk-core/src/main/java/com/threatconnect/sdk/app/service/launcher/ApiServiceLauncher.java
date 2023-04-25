@@ -1,10 +1,10 @@
 package com.threatconnect.sdk.app.service.launcher;
 
 import com.threatconnect.app.apps.AppConfig;
-import com.threatconnect.app.playbooks.app.PlaybooksAppConfig;
 import com.threatconnect.app.apps.db.DBService;
 import com.threatconnect.app.apps.db.DBWriteException;
 import com.threatconnect.app.apps.db.RedisDBService;
+import com.threatconnect.app.playbooks.app.PlaybooksAppConfig;
 import com.threatconnect.app.services.api.ApiService;
 import com.threatconnect.app.services.api.mapping.ApiNotFoundException;
 import com.threatconnect.app.services.api.mapping.ApiRouter;
@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Optional;
 
 public class ApiServiceLauncher extends ServiceLauncher<ApiService>
 {
@@ -66,12 +65,12 @@ public class ApiServiceLauncher extends ServiceLauncher<ApiService>
 			//route this webhook event to the correct method
 			Object result = apiRouter.routeApiEvent(runService, response);
 			
-			if(null == response.getStatus())
+			if (null == response.getStatus())
 			{
 				response.setStatus("OK");
 			}
 			
-			if(null == response.getStatusCode())
+			if (null == response.getStatusCode())
 			{
 				response.setStatusCode(200);
 			}
