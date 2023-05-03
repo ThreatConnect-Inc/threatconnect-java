@@ -28,7 +28,7 @@ public class ParamFileAppConfig extends AppConfig
 	protected String loadSetting(final String key)
 	{
 		JsonElement element = jsonObject.get(key);
-		return (null != element ? element.getAsString() : null);
+		return ((null != element && !element.isJsonNull()) ? element.getAsString() : null);
 	}
 	
 	/**
