@@ -109,12 +109,12 @@ public class InstallValidator extends Validator<Install>
 		//check to see if this app supports the smtp settings feature
 		if (object.getFeatures().contains(Feature.SMTP_SETTINGS))
 		{
-			//any app that supports smtp settings must also support secure params
-			if (!object.getFeatures().contains(Feature.SECURE_PARAMS))
+			//any app that supports smtp settings must also support secure params or file params
+			if (!object.getFeatures().contains(Feature.SECURE_PARAMS) && !object.getFeatures().contains(Feature.FILE_PARAMS))
 			{
 				throw new ValidationException(
-					"Any app that supports the \"" + Feature.SMTP_SETTINGS + "\" feature must also specify the \""
-						+ Feature.SECURE_PARAMS + "\" feature.");
+					"Any app that supports the \"" + Feature.SMTP_SETTINGS + "\" feature must also specify either the \""
+						+ Feature.FILE_PARAMS + " or " + Feature.SECURE_PARAMS + "\" feature.");
 			}
 		}
 		
