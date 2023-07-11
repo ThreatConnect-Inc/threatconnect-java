@@ -20,6 +20,7 @@ public class Feature
 	public static final String INSTANCE_UUID = "instanceUUID";
 	public static final String LINK_API_PATH = "linkApiPath";
 	public static final String REDIS_PASSWORD_SUPPORT = "redisPasswordSupport";
+	public static final String PLAYBOOK_SCOPE_VARIABLES = "playbookScopeVariables";
 	
 	public static final String CREATES_INDICATOR = "CreatesIndicator";
 	public static final String CREATES_GROUP = "CreatesGroup";
