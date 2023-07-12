@@ -77,6 +77,7 @@ public abstract class AppConfig
 	
 	//service specific items
 	public static final String TC_SVC_BROKER_CRT_FILE = "tc_svc_broker_cert_file";
+	public static final String TC_SVC_BROKER_KEY_FILE = "tc_svc_broker_key_file";
 	public static final String TC_SVC_BROKER_CA_CRT_FILE = "tc_svc_broker_cacert_file";
 	public static final String TC_SVC_BROKER_JKS_FILE = "tc_svc_broker_jks_file";
 	public static final String TC_SVC_BROKER_JKS_PASSWORD = "tc_svc_broker_jks_pwd";
@@ -323,6 +324,11 @@ public abstract class AppConfig
 	public String getTcSvcBrokerCrtFile()
 	{
 		return getString(TC_SVC_BROKER_CRT_FILE);
+	}
+	
+	public String getTcSvcBrokerKeyFile()
+	{
+		return getString(TC_SVC_BROKER_KEY_FILE);
 	}
 	
 	public String getTcSvcBrokerJksFile()
