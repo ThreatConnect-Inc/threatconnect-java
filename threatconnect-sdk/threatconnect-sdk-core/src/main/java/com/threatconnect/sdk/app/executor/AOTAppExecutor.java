@@ -29,23 +29,18 @@ public class AOTAppExecutor extends DefaultAppExecutor
 	private static final int DEFAULT_AOT_TIMEOUT_SECONDS = 60;
 	
 	private final Gson gson;
-	private final Jedis jedis;
 	private final int timeoutSeconds;
 	private final ContentService contentService;
+	private final Jedis jedis;
 	
 	public AOTAppExecutor(final AppConfig appConfig, final Class<? extends App> appClass)
 	{
 		super(appConfig, appClass);
 		
 		this.gson = new Gson();
-		
-		//building the redis connection object
-		final String host = appConfig.getString(PARAM_DB_PATH);
-		final int port = appConfig.getInteger(PARAM_DB_PORT);
-		logger.trace("Building Redis connection on {}:{}", host, port);
-		jedis = new Jedis(host, port);
-		contentService = new ContentService(new RedisDBService(getAppConfig(), jedis));
-		
+		RedisDBService dbService= new RedisDBService(getAppConfig());
+		contentService = new ContentService(dbService);
+		this.jedis = dbService.getRedis();
 		//retrieve the timeout
 		timeoutSeconds = appConfig.getInteger(AppConfig.TC_TERMINATE_SECONDS, DEFAULT_AOT_TIMEOUT_SECONDS);
 	}
@@ -55,7 +50,7 @@ public class AOTAppExecutor extends DefaultAppExecutor
 	{
 		//make a blocking call to wait for the result from redis
 		logger.trace("Waiting for message on channel: " + getAppConfig().getTcActionChannel());
-		List<String> results = jedis.blpop(timeoutSeconds, getAppConfig().getTcActionChannel());
+		List<String> results = this.jedis.blpop(timeoutSeconds, getAppConfig().getTcActionChannel());
 		
 		//check to see if we got a valid response (no timeout)
 		if (null != results && results.size() == 2)
@@ -164,7 +159,7 @@ public class AOTAppExecutor extends DefaultAppExecutor
 	private void sendExitCode(final int exitCode)
 	{
 		logger.trace("Sending AOT Exit Code: " + exitCode);
-		jedis.rpush(getAppConfig().getTcExitChannel(), Integer.toString(exitCode));
+		this.jedis.rpush(getAppConfig().getTcExitChannel(), Integer.toString(exitCode));
 	}
 	
 	@Override

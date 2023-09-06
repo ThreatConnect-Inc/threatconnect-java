@@ -48,6 +48,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -1117,7 +1118,7 @@ public abstract class EnhancedApp extends App
 
 	public String basicEncoded(String user, String password)
 	{
-		String encoded = new sun.misc.BASE64Encoder().encode(String.format("%s:%s", user, password).getBytes());
+		String encoded = Base64.getEncoder().encodeToString(String.format("%s:%s", user, password).getBytes());
 
 		return "Basic " + encoded;
 	}

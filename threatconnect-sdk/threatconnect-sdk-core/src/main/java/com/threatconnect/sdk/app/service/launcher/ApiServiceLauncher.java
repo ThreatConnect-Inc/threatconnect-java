@@ -106,7 +106,11 @@ public class ApiServiceLauncher extends ServiceLauncher<ApiService>
 				getAppConfig().getInteger(PlaybooksAppConfig.PARAM_DB_PORT),
 				runServiceAcknowledgeMessage.getRequestKey(),
 				getAppConfig().getString(AppConfig.PARAM_KVSTORE_USERNAME),
-				getAppConfig().getString(AppConfig.PARAM_KVSTORE_PASSWORD));
+				getAppConfig().getString(AppConfig.PARAM_KVSTORE_PASSWORD),
+				getAppConfig().getBoolean(AppConfig.PARAM_KVSTORE_TLS_ENABLED),
+				getAppConfig().getInteger(AppConfig.PARAM_KVSTORE_TLS_PORT),
+				getAppConfig().getTcSvcBrokerJksFile(),
+				getAppConfig().getTcSvcBrokerJksPassword());
 			
 			if (object instanceof byte[])
 			{

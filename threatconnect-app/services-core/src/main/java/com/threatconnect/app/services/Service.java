@@ -45,7 +45,11 @@ public abstract class Service
 		return new RedisDBService(getAppConfig().getString(AppConfig.PARAM_KVSTORE_HOST),
 			getAppConfig().getInteger(AppConfig.PARAM_KVSTORE_PORT), commandConfig.getRequestKey(),
 			getAppConfig().getString(AppConfig.PARAM_KVSTORE_USERNAME),
-			getAppConfig().getString(AppConfig.PARAM_KVSTORE_PASSWORD));
+			getAppConfig().getString(AppConfig.PARAM_KVSTORE_PASSWORD),
+			getAppConfig().getBoolean(AppConfig.PARAM_KVSTORE_TLS_ENABLED),
+			getAppConfig().getInteger(AppConfig.PARAM_KVSTORE_TLS_PORT),
+			getAppConfig().getTcSvcBrokerJksFile(),
+			getAppConfig().getTcSvcBrokerJksPassword());
 	}
 	
 	/**

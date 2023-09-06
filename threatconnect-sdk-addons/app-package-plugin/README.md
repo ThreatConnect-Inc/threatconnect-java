@@ -9,7 +9,7 @@ Add the following entries to your pom file (git clone not required):
 ```xml
 
    <properties>
-		<threatconnect-sdk.version>2.17.0-SNAPSHOT</threatconnect-sdk.version>
+		<threatconnect-sdk.version>2.19.0-SNAPSHOT</threatconnect-sdk.version>
 	</properties>
 
 	<build>

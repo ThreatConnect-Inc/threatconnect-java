@@ -64,6 +64,8 @@ public abstract class AppConfig
 	public static final String PARAM_KVSTORE_PORT = "tc_kvstore_port";
 	public static final String PARAM_KVSTORE_USERNAME = "tc_kvstore_user";
 	public static final String PARAM_KVSTORE_PASSWORD = "tc_kvstore_pass";
+	public static final String PARAM_KVSTORE_TLS_ENABLED = "tc_kvstore_tls_enabled";
+	public static final String PARAM_KVSTORE_TLS_PORT = "tc_kvstore_tls_port";
 	public static final String PARAM_CACHE_KVSTORE_ID = "tc_cache_kvstore_id";
 	public static final String PARAM_PB_KVSTORE_ID = "tc_playbook_kvstore_id";
 	public static final String PARAM_PB_KVSTORE_CONTEXT = "tc_playbook_kvstore_context";
