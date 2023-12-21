@@ -2,20 +2,14 @@ package com.threatconnect.app.apps.db;
 
 import com.threatconnect.app.apps.AppConfig;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.GeneralSecurityException;
-import java.security.KeyStore;
-import java.security.SecureRandom;
-import java.util.logging.Level;
-
-import javax.net.ssl.KeyManagerFactory;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManagerFactory;
 
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
+import org.apache.http.ssl.SSLContexts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
@@ -58,8 +52,11 @@ public class RedisDBService implements DBService
 		logger.trace("Building RedisDBService: keystorePassword: {}", keystorePassword);
 		SSLSocketFactory sslSocketFactory = null;
 		try {
-			sslSocketFactory = buildSSLContext(keystorePath, keystorePassword).getSocketFactory();
-		} catch (IOException e) {
+            SSLContext sslContext = SSLContexts.custom()
+                    .loadTrustMaterial(TrustSelfSignedStrategy.INSTANCE)
+                    .build();
+			sslSocketFactory = sslContext.getSocketFactory();
+		} catch (KeyManagementException | NoSuchAlgorithmException | KeyStoreException e) {
 			logger.error("ERROR: Could not build SSLSocketFactory", e);
 		}
 		this.redis = new Jedis(host,
@@ -100,51 +97,4 @@ public class RedisDBService implements DBService
 		logger.trace("Value received: {}", (value == null ? "NULL" : new String(value)));
 		return value;
 	}
-    /**
-     * Creates an SSLContext that trusts all certificates in the keystore
-     */
-	public SSLContext buildSSLContext(String keystorePath, String password) throws IOException 
-    {
-        KeyStore keystore;
-        SSLContext sslContext;
-        
-        try 
-        {
-    		File keystoreFile = new File(keystorePath);
-            
-            // set default type for in-memory keystore
-            keystore = KeyStore.getInstance(KeyStore.getDefaultType());
-
-            // read keystore file into memory stream
-            try (InputStream in = new FileInputStream(keystoreFile)) 
-            {
-                // load keystore into memory
-                keystore.load(in, password.toCharArray());
-
-            	in.close();
-
-                // set the KeyManager to the configure keystore
-                KeyManagerFactory keyManagerFactory
-                        = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-                keyManagerFactory.init(keystore, password.toCharArray());
-
-                TrustManagerFactory trustManagerFactory
-                	= TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-                trustManagerFactory.init(keystore);
-
-                sslContext = SSLContext.getInstance("TLS");
-                sslContext.init(keyManagerFactory.getKeyManagers(),
-                		trustManagerFactory.getTrustManagers(),
-                		new SecureRandom());
-
-                return sslContext;            
-            }
-        } 
-        catch (GeneralSecurityException ex) 
-        {
-            java.util.logging.Logger.getLogger(RedisDBService.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return null;
-    }
 }

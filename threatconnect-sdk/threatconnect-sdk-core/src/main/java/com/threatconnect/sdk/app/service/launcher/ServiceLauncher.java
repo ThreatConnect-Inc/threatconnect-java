@@ -9,12 +9,19 @@ import com.threatconnect.app.services.message.Ready;
 import com.threatconnect.sdk.app.exception.AppInitializationException;
 import com.threatconnect.sdk.log.ServerLogger;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
+import org.apache.http.ssl.SSLContexts;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.net.ssl.SSLContext;
 
 /**
  * @author Greg Marut
@@ -181,16 +188,20 @@ public class ServiceLauncher<S extends Service> extends MQTTServiceCommunication
 	
 	private static MqttConnectOptions createMqttConnectOptions(final AppConfig appConfig)
 	{
-		//set the trust store for the connection
-		System.setProperty("javax.net.ssl.trustStore", appConfig.getTcSvcBrokerJksFile());
-		System.setProperty("javax.net.ssl.trustStorePassword", appConfig.getTcSvcBrokerJksPassword());
-		
 		//build the mqtt connection options
 		MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
 		mqttConnectOptions.setSSLHostnameVerifier(new NoopHostnameVerifier());
 		mqttConnectOptions.setHttpsHostnameVerificationEnabled(false);
 		mqttConnectOptions.setUserName("");
 		mqttConnectOptions.setPassword(appConfig.getTcSvcBrokerToken().toCharArray());
+		try {
+            SSLContext sslContext = SSLContexts.custom()
+                    .loadTrustMaterial(TrustSelfSignedStrategy.INSTANCE)
+                    .build();
+			mqttConnectOptions.setSocketFactory(sslContext.getSocketFactory());
+		} catch (KeyManagementException | NoSuchAlgorithmException | KeyStoreException e) {
+			logger.error("Could not build SSL Context", e);
+		}
 		return mqttConnectOptions;
 	}
 }
