@@ -21,8 +21,10 @@ public class LogWriterAdapter extends AbstractWriterAdapter
 	public Integer writeLogEntires(final LogEntry... logEntries) throws IOException, FailedResponseException
 	{
 		LogEntryResponse data = createItem("v2.logs.app", LogEntryResponse.class, logEntries);
-		
-		return data.getData().getData();
+		if(data!=null&&data.getData()!=null)
+			return data.getData().getData();
+		else
+			return null;
 	}
 	
 	@Override

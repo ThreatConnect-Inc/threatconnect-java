@@ -58,6 +58,7 @@ public abstract class AppConfig
 	public static final String TC_OWNER = "tc_owner";
 	public static final String TC_WRITABLE_PLAYBOOK_SCOPE_VARIABLES = "tc_psv_writable";
 	public static final String TC_ALL_PLAYBOOK_SCOPE_VARIABLES = "tc_psv_all";
+	public static final String TC_JOB_ID = "tc_job_id";
 	
 	public static final String PARAM_KVSTORE_TYPE = "tc_kvstore_type";
 	public static final String PARAM_KVSTORE_HOST = "tc_kvstore_host";
