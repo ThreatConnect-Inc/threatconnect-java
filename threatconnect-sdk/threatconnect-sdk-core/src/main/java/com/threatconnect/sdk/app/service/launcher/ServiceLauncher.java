@@ -15,13 +15,20 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.security.KeyManagementException;
+import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
 
 /**
  * @author Greg Marut
@@ -188,20 +195,66 @@ public class ServiceLauncher<S extends Service> extends MQTTServiceCommunication
 	
 	private static MqttConnectOptions createMqttConnectOptions(final AppConfig appConfig)
 	{
-		//build the mqtt connection options
 		MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
 		mqttConnectOptions.setSSLHostnameVerifier(new NoopHostnameVerifier());
 		mqttConnectOptions.setHttpsHostnameVerificationEnabled(false);
 		mqttConnectOptions.setUserName("");
 		mqttConnectOptions.setPassword(appConfig.getTcSvcBrokerToken().toCharArray());
 		try {
-            SSLContext sslContext = SSLContexts.custom()
-                    .loadTrustMaterial(TrustSelfSignedStrategy.INSTANCE)
-                    .build();
+            SSLContext sslContext = buildSSLContext(appConfig.getTcSvcBrokerJksFile(), appConfig.getTcSvcBrokerJksPassword());
 			mqttConnectOptions.setSocketFactory(sslContext.getSocketFactory());
-		} catch (KeyManagementException | NoSuchAlgorithmException | KeyStoreException e) {
+		} catch (IOException e) {
 			logger.error("Could not build SSL Context", e);
 		}
 		return mqttConnectOptions;
 	}
+    public static SSLContext buildSSLContext(String keystorePath, String keystorePassword) throws IOException 
+    {
+        logger.trace("Building sslContext");
+    	KeyStore keystore;
+        SSLContext sslContext;
+        
+        try 
+        {
+            File keystoreFile = new File(keystorePath);
+            
+            // set default type for in-memory keystore
+            keystore = KeyStore.getInstance(KeyStore.getDefaultType());
+
+            // read keystore file into memory stream
+            try (java.io.InputStream in = new java.io.FileInputStream(keystoreFile)) 
+            {
+                // load keystore into memory
+                keystore.load(in, keystorePassword.toCharArray());
+
+                // set the KeyManager to the configure keystore
+                KeyManagerFactory keyManagerFactory
+                        = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+                keyManagerFactory.init(keystore, keystorePassword.toCharArray());
+
+                TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+	            trustManagerFactory.init(keystore);
+	            // set socket protocol of SSL context
+                sslContext = SSLContext.getInstance("TLS");
+
+                // initialize SSL context with the configured keystore 
+                sslContext.init(
+                        keyManagerFactory.getKeyManagers(),
+                        trustManagerFactory.getTrustManagers(),
+                        new SecureRandom());  
+
+
+                logger.trace("keystore.getDefaultType()=" + keystore.getDefaultType());
+                logger.trace("keystore.containsAlias(\"tc\")=" + keystore.containsAlias("tc"));
+
+                return sslContext;            
+            }
+        } 
+        catch (GeneralSecurityException ex) 
+        {
+            logger.error("Error building sslContext", ex);
+        }
+
+        return null;
+    }
 }

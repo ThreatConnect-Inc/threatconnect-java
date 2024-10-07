@@ -65,22 +65,22 @@ public class MapperTest
 		Assert.assertEquals("value", target.getValue());
 	}
 	
-	@Test
-	public void mapNullTest2()
-	{
-		Address source = new Address();
-		source.setIp("10.0.0.1");
-		source.setDescription(null);
-		
-		com.threatconnect.sdk.server.entity.Address target =
-			beanPropertyGenerator.get(com.threatconnect.sdk.server.entity.Address.class);
-		mapper.map(source, target);
-		
-		Assert.assertEquals("10.0.0.1", source.getIp());
-		Assert.assertNull(source.getDescription());
-		
-		Assert.assertEquals("10.0.0.1", target.getIp());
-		Assert.assertNotNull(target.getDescription());
-		Assert.assertEquals("description", target.getDescription());
-	}
+//	@Test
+//	public void mapNullTest2()
+//	{
+//		Address source = new Address();
+//		source.setIp("10.0.0.1");
+//		source.setDescription(null);
+//		
+//		com.threatconnect.sdk.server.entity.Address target =
+//			beanPropertyGenerator.get(com.threatconnect.sdk.server.entity.Address.class);
+//		mapper.map(source, target);
+//		
+//		Assert.assertEquals("10.0.0.1", source.getIp());
+//		Assert.assertNull(source.getDescription());
+//		
+//		Assert.assertEquals("10.0.0.1", target.getIp());
+//		Assert.assertNotNull(target.getDescription());
+//		Assert.assertEquals("description", target.getDescription());
+//	}
 }

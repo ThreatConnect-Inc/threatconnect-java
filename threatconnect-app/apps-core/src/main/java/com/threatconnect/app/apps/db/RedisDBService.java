@@ -2,11 +2,19 @@ package com.threatconnect.app.apps.db;
 
 import com.threatconnect.app.apps.AppConfig;
 
+import java.io.File;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.security.KeyManagementException;
+import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+
+import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManagerFactory;
 
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.ssl.SSLContexts;
@@ -52,11 +60,9 @@ public class RedisDBService implements DBService
 		logger.trace("Building RedisDBService: keystorePassword: {}", keystorePassword);
 		SSLSocketFactory sslSocketFactory = null;
 		try {
-            SSLContext sslContext = SSLContexts.custom()
-                    .loadTrustMaterial(TrustSelfSignedStrategy.INSTANCE)
-                    .build();
-			sslSocketFactory = sslContext.getSocketFactory();
-		} catch (KeyManagementException | NoSuchAlgorithmException | KeyStoreException e) {
+            SSLContext sslContext = buildSSLContext(keystorePath, keystorePassword);
+            sslSocketFactory = sslContext.getSocketFactory();
+		} catch (IOException e) {
 			logger.error("ERROR: Could not build SSLSocketFactory", e);
 		}
 		this.redis = new Jedis(host,
@@ -97,4 +103,53 @@ public class RedisDBService implements DBService
 		logger.trace("Value received: {}", (value == null ? "NULL" : new String(value)));
 		return value;
 	}
+    public SSLContext buildSSLContext(String keystorePath, String keystorePassword) throws IOException 
+    {
+        logger.trace("Building sslContext");
+    	KeyStore keystore;
+        SSLContext sslContext;
+        
+        try 
+        {
+            File keystoreFile = new File(keystorePath);
+            
+            // set default type for in-memory keystore
+            keystore = KeyStore.getInstance(KeyStore.getDefaultType());
+
+            // read keystore file into memory stream
+            try (java.io.InputStream in = new java.io.FileInputStream(keystoreFile)) 
+            {
+                // load keystore into memory
+                keystore.load(in, keystorePassword.toCharArray());
+
+                // set the KeyManager to the configure keystore
+                KeyManagerFactory keyManagerFactory
+                        = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+                keyManagerFactory.init(keystore, keystorePassword.toCharArray());
+
+                TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+	            trustManagerFactory.init(keystore);
+	            // set socket protocol of SSL context
+                sslContext = SSLContext.getInstance("TLS");
+
+                // initialize SSL context with the configured keystore 
+                sslContext.init(
+                        keyManagerFactory.getKeyManagers(),
+                        trustManagerFactory.getTrustManagers(),
+                        new SecureRandom());  
+
+
+                logger.trace("keystore.getDefaultType()=" + keystore.getDefaultType());
+                logger.trace("keystore.containsAlias(\"tc\")=" + keystore.containsAlias("tc"));
+
+                return sslContext;            
+            }
+        } 
+        catch (GeneralSecurityException ex) 
+        {
+            logger.error("Error building sslContext", ex);
+        }
+
+        return null;
+    }
 }

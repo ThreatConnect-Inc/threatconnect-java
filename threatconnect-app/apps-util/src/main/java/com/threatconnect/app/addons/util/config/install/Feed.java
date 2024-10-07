@@ -9,6 +9,7 @@ import java.util.List;
 public class Feed
 {
 	private String sourceName;
+	private String sourceDefaultRole;
 	private String feedDisplayName;
 	private String sourceCategory;
 	private String sourceDescription;
@@ -125,5 +126,13 @@ public class Feed
 	public List<ParamOverride> getFirstRunParams()
 	{
 		return firstRunParams;
+	}
+
+	public String getSourceDefaultRole() {
+		return sourceDefaultRole;
+	}
+
+	public void setSourceDefaultRole(String sourceDefaultRole) {
+		this.sourceDefaultRole = sourceDefaultRole;
 	}
 }
