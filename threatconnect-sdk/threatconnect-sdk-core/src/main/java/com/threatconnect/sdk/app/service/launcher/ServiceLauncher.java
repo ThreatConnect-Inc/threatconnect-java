@@ -233,7 +233,7 @@ public class ServiceLauncher<S extends Service> extends MQTTServiceCommunication
                 keyManagerFactory.init(keystore, keystorePassword.toCharArray());
 
                 TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-	            trustManagerFactory.init(keystore);
+	            trustManagerFactory.init((KeyStore) null);
 	            // set socket protocol of SSL context
                 sslContext = SSLContext.getInstance("TLS");
 

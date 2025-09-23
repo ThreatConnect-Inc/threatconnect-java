@@ -128,7 +128,7 @@ public class RedisDBService implements DBService
                 keyManagerFactory.init(keystore, keystorePassword.toCharArray());
 
                 TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-	            trustManagerFactory.init(keystore);
+	            trustManagerFactory.init((KeyStore) null);
 	            // set socket protocol of SSL context
                 sslContext = SSLContext.getInstance("TLS");
 
