@@ -14,7 +14,8 @@ public enum ParamDataType
 	EditChoice,
 	MultiChoice,
 	StringMixed,
-	KeyValueList;
+	KeyValueList,
+	KnowledgeKVList;
 	
 	private static final Logger logger = LoggerFactory.getLogger(ParamDataType.class);
 	
