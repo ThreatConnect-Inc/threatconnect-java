@@ -5,5 +5,5 @@ package com.threatconnect.app.playbooks.variable;
  */
 public enum PlaybooksVariableNamespace
 {
-	App, Trigger, Global
+	App, Trigger, Global, Knowledge
 }
