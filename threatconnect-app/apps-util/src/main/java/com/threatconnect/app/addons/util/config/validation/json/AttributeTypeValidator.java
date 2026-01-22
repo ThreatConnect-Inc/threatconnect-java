@@ -43,6 +43,11 @@ public class AttributeTypeValidator extends Validator<AttributeType>
 		{
 			throw new ValidationException("AttributeType errorMessage cannot be empty.");
 		}
+        
+        if (object.getMaxLength() > 500 && object.isGroupByEnabled())
+        {
+			throw new ValidationException("AttributeType groupByEnabled cannot be set if the maxLength is greater than 500 characters.");
+        }
 		
 		//check to see if this attribute has a validation rule
 		if (null != object.getValidationRule())

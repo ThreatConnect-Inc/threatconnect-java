@@ -17,6 +17,7 @@ public class AttributeType
 	private int maxLength;
 	private boolean allowMarkdown;
 	private boolean system;
+	private boolean groupByEnabled;
 	private int version;
 	private AttributeValidationRule validationRule;
 	
@@ -95,7 +96,17 @@ public class AttributeType
 	{
 		this.system = system;
 	}
-	
+
+    public boolean isGroupByEnabled()
+    {
+        return groupByEnabled;
+    }
+
+    public void setGroupByEnabled(boolean groupByEnabled)
+    {
+        this.groupByEnabled = groupByEnabled;
+    }
+    
 	public int getVersion()
 	{
 		return version;

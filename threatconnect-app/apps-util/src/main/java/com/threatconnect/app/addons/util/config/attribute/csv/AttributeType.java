@@ -15,6 +15,7 @@ public class AttributeType
 	private String errorMessage;
 	private int maxSize;
 	private boolean allowMarkdown;
+	private boolean groupByEnabled;
 	
 	public AttributeType()
 	{
@@ -75,4 +76,14 @@ public class AttributeType
 	{
 		this.allowMarkdown = allowMarkdown;
 	}
+
+    public boolean isGroupByEnabled()
+    {
+        return groupByEnabled;
+    }
+
+    public void setGroupByEnabled(boolean groupByEnabled)
+    {
+        this.groupByEnabled = groupByEnabled;
+    }
 }

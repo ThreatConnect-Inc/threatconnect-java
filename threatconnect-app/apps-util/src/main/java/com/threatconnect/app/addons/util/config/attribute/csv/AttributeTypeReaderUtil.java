@@ -26,6 +26,7 @@ public class AttributeTypeReaderUtil
 	private static final int INDEX_MAX_LENGTH = 3;
 	private static final int INDEX_TYPES = 4;
 	private static final int INDEX_ALLOW_MARKDOWN = 5;
+	private static final int INDEX_GROUPBY_ENABLED = 6;
 	
 	private static final String SPLIT_REGEX = ",(?=([^\\\"]*\\\"[^\\\"]*\\\")*[^\\\"]*$)";
 	private static final String FIELD_DELIMITER = "|";
@@ -167,6 +168,29 @@ public class AttributeTypeReaderUtil
 			{
 				throw new InvalidCsvLineException(
 					"Invalid value \"" + allowMarkdown + "\" for field \"allowMarkdown\" from line " + rowNum
+						+ ". Valid values are \"true\" or \"false\"");
+			}
+		}
+        
+        //read the optional field for groupByEnabled
+		final String groupByEnabled = get(parts, INDEX_GROUPBY_ENABLED);
+		if (null != groupByEnabled)
+		{
+			//make sure the allow markdown field is either true or false
+			if (groupByEnabled.equalsIgnoreCase("true") || groupByEnabled.equalsIgnoreCase("false"))
+			{
+				//parse the boolean value and assign it to the field
+				attributeType.setGroupByEnabled(Boolean.parseBoolean(groupByEnabled));
+                if (attributeType.isGroupByEnabled() && attributeType.getMaxSize() > 500)
+                {
+                    throw new InvalidCsvLineException(
+                        "The value for \"groupByEnabled\" from line " + rowNum + " cannot be TRUE if maxSize is greater than 500.");
+                }
+			}
+			else
+			{
+				throw new InvalidCsvLineException(
+					"Invalid value \"" + groupByEnabled + "\" for field \"groupByEnabled\" from line " + rowNum
 						+ ". Valid values are \"true\" or \"false\"");
 			}
 		}
