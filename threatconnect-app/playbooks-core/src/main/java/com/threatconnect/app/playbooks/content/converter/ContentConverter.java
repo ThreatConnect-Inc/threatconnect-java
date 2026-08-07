@@ -1,5 +1,6 @@
 package com.threatconnect.app.playbooks.content.converter;
 
+import com.fasterxml.jackson.core.StreamReadConstraints;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +21,10 @@ public abstract class ContentConverter<T>
 	{
 		mapper.setDateFormat(DEFAULT_DATE_FORMATTER);
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		mapper.getFactory().setStreamReadConstraints(
+				StreamReadConstraints.builder()
+						.maxStringLength(Integer.getInteger("com.threatconnect.playbooks.maxStringLength", 100_000_000))
+						.build());
 	}
 	
 	private final StandardPlaybookType standardPlaybookType;
