@@ -198,8 +198,20 @@ public class ServiceLauncher<S extends Service> extends MQTTServiceCommunication
 		MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
 		mqttConnectOptions.setSSLHostnameVerifier(new NoopHostnameVerifier());
 		mqttConnectOptions.setHttpsHostnameVerificationEnabled(false);
-		mqttConnectOptions.setUserName("");
-		mqttConnectOptions.setPassword(appConfig.getTcSvcBrokerToken().toCharArray());
+		// external broker with credentials required: connect as the supplied user, otherwise
+		// fall back to an empty username with the broker token as the password
+		final String brokerUser = appConfig.getTcSvcBrokerUser();
+		final String brokerPassword = appConfig.getTcSvcBrokerPassword();
+		if (brokerUser != null && !brokerUser.isEmpty() && brokerPassword != null)
+		{
+			mqttConnectOptions.setUserName(brokerUser);
+			mqttConnectOptions.setPassword(brokerPassword.toCharArray());
+		}
+		else
+		{
+			mqttConnectOptions.setUserName("");
+			mqttConnectOptions.setPassword(appConfig.getTcSvcBrokerToken().toCharArray());
+		}
 		try {
             SSLContext sslContext = buildSSLContext(appConfig.getTcSvcBrokerJksFile(), appConfig.getTcSvcBrokerJksPassword());
 			mqttConnectOptions.setSocketFactory(sslContext.getSocketFactory());

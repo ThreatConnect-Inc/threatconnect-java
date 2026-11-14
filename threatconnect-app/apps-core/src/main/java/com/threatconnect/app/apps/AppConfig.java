@@ -85,6 +85,8 @@ public abstract class AppConfig
 	public static final String TC_SVC_BROKER_JKS_FILE = "tc_svc_broker_jks_file";
 	public static final String TC_SVC_BROKER_JKS_PASSWORD = "tc_svc_broker_jks_pwd";
 	public static final String TC_SVC_BROKER_TOKEN = "tc_svc_broker_token";
+	public static final String TC_SVC_BROKER_USER = "tc_svc_broker_user";
+	public static final String TC_SVC_BROKER_PASSWORD = "tc_svc_broker_password";
 	public static final String TC_SVC_BROKER_HOST = "tc_svc_broker_host";
 	public static final String TC_SVC_BROKER_PORT = "tc_svc_broker_port";
 	public static final String TC_SVC_SERVER_TOPIC = "tc_svc_server_topic";
@@ -347,6 +349,16 @@ public abstract class AppConfig
 	public String getTcSvcBrokerToken()
 	{
 		return getString(TC_SVC_BROKER_TOKEN);
+	}
+
+	public String getTcSvcBrokerUser()
+	{
+		return getString(TC_SVC_BROKER_USER);
+	}
+
+	public String getTcSvcBrokerPassword()
+	{
+		return getString(TC_SVC_BROKER_PASSWORD);
 	}
 	
 	public String getTcSvcBrokerHost()
